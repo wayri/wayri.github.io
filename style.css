@@ -20,6 +20,24 @@ header {
     margin: auto;
     align-items: center;
 }
+footer{
+    display: flex;
+    background-color: rgb(188, 188, 252);
+    width: 90%;
+    height: 5vh;
+    margin: auto;
+    align-items: center;
+    
+}
+.footer{
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+}
+
+.footer p{
+    text-align: center;
+}
 .logo-container,.nav-links{
     display: flex;
 }
@@ -28,7 +46,7 @@ header {
     flex:1;
 }
 .logo{
-    font-size: 50px;
+    font-size: 40px;
     font-weight: 4000;
     margin: 5px;
 }
@@ -53,10 +71,18 @@ nav{
     min-height: 80px;
     align-items: center;
 }
-.cover img{
+.cover {
+    flex: 1;
+    display: flex;
+    justify-content: right;
     height: 150vh;
+}
+.cover img{
+    height: 100%;
     margin-top: 20px;
     margin-right: 80%;
+    filter: drop-shadow(0px 5px 5px teal);
+    animation: animate 1.5s ease;
 }
 .brief{
     flex: 1;
@@ -77,7 +103,7 @@ nav{
     color: rgb(61, 52, 52);
 }
 .cta{
-    padding: 50px 0px 0px 0px;
+    padding: 100px 0px 200px 0px;
 }
 .cta-select{
     border: 2px solid rgb(255, 0, 85);
@@ -99,9 +125,51 @@ nav{
     margin: 30px 0px 0px 30px;
 }
 
+
 .back {
     position: absolute;
     top: 0px;
     z-index: -1;
     opacity: 60%;
+    width: 100%;
+   
+}
+
+@keyframes animate{
+    0%{
+        opacity: 0;
+        transform: translateY(-80px);
+    }
+    100%{
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+@media screen and (max-width:1000px) {
+    .presentation{
+        flex-direction: column;
+    }
+    .presentation{
+    margin-top: 5vh;
+    text-align: center;
+    }
+    .brief-text h1{
+        font-size: 30px;
+    }
+    .brief-text p{
+        font-size: 20px;
+    }
+    .cta {
+        padding: 10px 0px 0px 0px;
+    }
+    .cover img{
+        height: 90%;
+    }
+    .back{
+       width: 0px;
+    }
+    body{
+        background-color: rgb(201, 255, 147);
+    }
 }
