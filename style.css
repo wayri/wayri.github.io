@@ -4,9 +4,11 @@
     box-sizing: border-box;
 
 }
-
+html {}
+}
 body {
     font-family: 'Lato', sans-serif;
+    height: 95vh;
 }
 
 button{
