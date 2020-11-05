@@ -14,7 +14,7 @@ button{
 }
 header {
     display: flex;
-    background: linear-gradient(to bottom,rgb(23, 116, 255),rgb(223, 231, 245));
+    background: white;
     width: 90%;
     height: 10vh;
     margin: auto;
@@ -34,7 +34,7 @@ header {
 }
 
 nav{
-    background: rgba(134, 134, 134, 0.938);
+    background:white;
     flex: 2;
 }
 .nav-links{
