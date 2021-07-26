@@ -1,176 +1,84 @@
-* {
-    margin: 0px;
-    padding: 0px;
-    box-sizing: border-box;
-
-}
-html,
-body {
-    font-family: 'Lato', sans-serif;
-    height: 95vh;
+body{
+    font-family: 'Montserrat', sans-serif;
+    padding-left: 6%;
+     padding-right: 6%;
 }
 
-button{
-    font-family: 'Lato', sans-serif;
-}
-header {
-    display: flex;
-    background: white;
-    width: 90%;
-    height: 10vh;
-    margin: auto;
-    align-items: center;
-}
-footer{
-    display: flex;
-    background-color: rgb(188, 188, 252);
-    width: 90%;
-    height: 5vh;
-    margin: auto;
-    align-items: center;
+#title{
+    background-color:skyblue;
     
 }
-.footer{
-    display: flex;
-    justify-content: space-around;
-    list-style: none;
+
+.container-fluid{
+    padding: 3% 6%;
 }
 
-.footer p{
-    text-align: center;
+h3{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3rem;
+    line-height: 1.5;
+    font-weight: 700; /* black */
+    color: #262A53;
 }
-.logo-container,.nav-links{
-    display: flex;
+#designpad{
+    padding: 30px;
 }
-.logo-container {
-    background: white;
-    flex:1;
+iframe{
+    overflow: hidden;
 }
-.logo{
-    font-size: 40px;
-    font-weight: 4000;
-    margin: 5px;
-}
-
-nav{
-    background:white;
-    flex: 2;
-}
-.nav-links{
-    justify-content: space-around;
-    list-style: none;
-}
-.nav-link{
-    color: black;
-    font-size: 20px;
-    text-decoration: none;
-}
-.presentation{
-    display: flex;
-    margin: auto;
-    width: 90%;
-    min-height: 80px;
-    align-items: center;
-}
-.cover {
-    flex: 1;
-    display: flex;
-    justify-content: right;
-    height: 150vh;
-}
-.cover img{
-    height: 100%;
-    margin-top: 20px;
-    margin-right: 80%;
-    filter: drop-shadow(0px 5px 5px teal);
-    animation: animate 1.5s ease;
-}
-.brief{
-    flex: 1;
-}
-.brief-text h1{
-    font-size: 24px;
-    font-weight: 500;
-    width: auto;
-    color: white;
-    background: linear-gradient(to right, #494964, #62626e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.brief-text p{
-    margin-top: 5px;
-    font-size: 22px;
-    color: rgb(61, 52, 52);
-}
-.cta{
-    padding: 100px 0px 200px 0px;
-}
-.cta-select{
-    border: 2px solid rgb(255, 0, 85);
-    background: transparent;
-    color: rgb(56, 0, 19);
-    width: 150px;
-    height: 50px;
-    cursor: pointer;
-    font-size: 16px;
-}
-.cta-more{
-    border: none;
-    background: rgb(255, 141, 179);
-    color: white;
-    width: 150px;
-    height: 50px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 30px 0px 0px 30px;
-}
-
-
-.back {
+.overlay{
     position: absolute;
-    top: 0px;
-    z-index: -1;
-    opacity: 60%;
-    width: 100%;
-   
+    bottom: 180px;
+    left: 47%;
+}
+.link-hover:hover{
+    text-decoration: none;
+    color: aqua;
+}
+#wayri{
+    font-size: x-large;
+    font-weight: 500;
 }
 
-@keyframes animate{
-    0%{
-        opacity: 0;
-        transform: translateY(-80px);
-    }
-    100%{
-        opacity: 1;
-        transform: translateY(0px);
-    }
+.blur{
+    -webkit-filter: blur(10px);
+  -moz-filter: blur(10px);
+  -o-filter: blur(10px);
+  -ms-filter: blur(10px);
+  filter: blur(10px);
+  width: 100%;
+  height: 30px;
+  background-color: #ccc;
 }
-
-@media screen and (max-width:1000px) {
-    .presentation{
-        flex-direction: column;
-    }
-    .presentation{
-    margin-top: 5vh;
-    text-align: center;
-    }
-    .brief-text h1{
-        font-size: 30px;
-    }
-    .brief-text p{
-        font-size: 20px;
-    }
-    .cta {
-        padding: 10px 0px 0px 0px;
-    }
-    .cover img{
-        height: 90%;
-    }
-    .back{
-       width: 0px;
-    }
-    body{
-        background-color: rgb(201, 255, 147);
-    }
-}
+.arrow {
+    box-sizing: border-box;
+    height: 40px;
+    width: 40px;
+    border-style: solid;
+    border-color: rgb(17, 0, 0);
+    border-width: 0px 1px 1px 0px;
+    transform: rotate(45deg);
+    transition: border-width 150ms ease-in-out;
+  }
+  
+  .arrow:hover {
+    border-bottom-width: 4px;
+    border-right-width: 4px;
+  }
+  
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color:transparent;
+    height: 40px;
+  }
+  .size-icon{
+      font-size: xx-large;
+  }
+  .link-hover{
+      color: aqua;
+  }
+  .read-more:hover{color:aqua;}
+  
+ 

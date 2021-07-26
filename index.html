@@ -1,75 +1,96 @@
 <!DOCTYPE html>
-<html lang="en"
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, 
-        user-scalable=no" >
-        <meta http-equiv="X-UA-Compatible" content="ie=edge"
-        <meta type="text" name="Description" content="This is my website">
-        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-        <link rel="stylesheet"  type="text/css" href="style.css">
-        <title> Wayri </title>
-    </head> 
-    <body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <header>
-            <div class="logo-container">
-                <h4 class="logo">Wayri</h4>
-            </div>
-            <nav>
-                <ul class="nav-links">
-                    <li ><a class="nav-link" href="https://github.com/wayri?tab=repositories">Projects</a></li>
-                    <li ><a class="nav-link" href="eetools.html">EE Tools</a></li>
-                    <li ><a class="nav-link" href="games.html">Pong</a></li>
-                </ul>
-            </nav>
-        </header>
-       
-        
-        <main>
-            <section class="presentation">
-                <div class="brief">
-                    <div class="brief-text">
-                        <h1>Hey this is Wayri(Yawar)</h1>
-                        <p> 
-                            <br>Projects and Works<hr style="margin-bottom: 5px;">
-                            There are also tools for Electrical
-                            Engineering related Design
-                        </p>
-                    </div>
-                    <div class="cta">
-                        <a href="eetools.html"><button class="cta-select">EE Tools<br>Design</button></a>
-                        <a href="https://github.com/wayri/"><button class="cta-more">Visit Github <br><small>More Projects</small></button></a>
-                    </div>
-                </div>
-                <div class="cover">
-                    <img src="svg/circuits.svg" alt="project-image" />
-                </div>
-                <div class="brief">
-                    <div class="brief-text">
-                        <h2>Following are a few listed projects</h2>
-                    </div>
-                </div>    
-                <div class="cover">
-                      <img src="https://raw.githubusercontent.com/wayri/DACard-Basic/master/dacard-diagnostic.jpeg" alt="project-DACard" />                                               
-                </div>
-                <div class="cover">
-                        <img src="https://raw.githubusercontent.com/wayri/Arduino-Oscilloscope/master/Working_Pictures/working_ungrounded.jpg" alt="project-Arduino-Oscilloscope"/>                                               
-                </div>                                                    
-                
-            </section>
-            <img class="back" src="svg/back.png" alt="bck" >
+    <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
 
-        </main>
+    <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+  <!-- CSS Styles -->
+  <link rel="stylesheet" href="style.css">
+  <!-- FontAwesome -->
+  <script src="https://kit.fontawesome.com/c93b4c1568.js" crossorigin="anonymous"></script>
 
-        <footer>
-            
-            <div class="footer">
-                <p style="align:center;">This website is the landing page for Wayri's Projects.   All Rights Reserved</p>
-            </div>
-        </footer>
-      
-
-    </body>
+  <!-- Bootstrap scripts -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+   
+    <title>WAYRI</title>
+</head>
+<body>
+    <section id="title">
+        <div class = "container-fluid">
     
+        <!-- Nav Bar -->
+    <nav style="font-size: x-large;"class = "navbar navbar-expand-lg navbar-light">
+          <a class = "navbar-brand" id="wayri" style="font-size: xx-large;" href = "/">WAYRI</a>
+    
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+        <div class = "collapse navbar-collapse" id = "navbarTogglerDemo02">
+        
+          <ul class = "navbar-nav ml-auto">
+              <li class = "nav-item">
+                  <a class = "nav-link" href = "https://www.linkedin.com/authwall?trk=bf&trkInfo=AQEqMXpCBm6C9AAAAXrjiBgoX-6Lwo_fb0WSDkx9fxw4jgRA7sHgkJQsDNpzu3o82fGtUQjmn3L6SOxt78OZ8crBJ8fTsBhC_d0wwKDfkuZecedzkYk78qy3Nm4l_zKFkaTH6iY=&originalReferer=&sessionRedirect=https%3A%2F%2Fin.linkedin.com%2Fin%2Fyawar-badri%3Ftrk%3Dpublic_profile_browsemap_profile-result-card_result-card_full-click"><i class="fab fa-linkedin size-icon" style=" color: rgb(0, 0, 0);"></i></a>
+              </li>
+              <li class = "nav-item">
+                  <a class = "nav-link" href = "blog.html">BLOG</a>
+              </li>
+              <li class = "nav-item">
+                  <a class = "nav-link" href = "">TOOLS</a>
+              </li>
+          </ul>
+      </div>
+    </nav>
+    
+    <br><br>
+    
+        <!-- Title -->
+      <div class="row designintro">
+        <div class="col-lg-9">
+          <h5 style = "color: #0366d6; line-height: 2;"class="intro">Hello, This is Wayri.</h5>
+          
+        </div>
+    
+        <div class="col-lg-3">
+                    <div class="row">
+          <a href="https://www.github.com/wayri" class="link-hover">
+          <button class="btn btn-dark btn-lg" style="color:aqua;"><i class="fab fa-github" style="color: aqua;"></i> GitHub</button></a>
+        </div>
+        </div>
+      </div>
+    </div>
+      </section>
+      <br><br>
+      
+      <div style="text-align:center;">
+      <iframe class="restrict"src="blog.html" scrolling="no" frameborder="0" width="100%" height="250px"></iframe>
+      <div class="blur"></div>
+      <div class="container">
+        <a data-scroll href="#full">
+          <div class="arrow"></div>
+        </a>
+      </div>
+      <br>
+      <a href="blog.html" class="read-more"style="text-decoration: none;">Read More</a>
+      </div>
+      <br><br>
+      
+<hr style="border: solid 5px;background-color: rgb(24, 42, 143);color: rgb(24, 42, 143);">
+      <footer>
+        <div class="cfooter" style="background-color: rgb(255, 255, 255); text-align: center; width: 100%; padding-top: 10px; padding-bottom: 1px;padding-right: 0px; padding-left:0px;">
+          <p style="color: rgb(0, 0, 0); font-size: small; line-height: 0.25;">COPYRIGHT 2021 - WAYRI</p>
+          <p style="color: rgb(0, 0, 0); font-size: small;">Designed by <span style="color: #0366d6;">Naqsh</span></p>
+        </div>
+      </footer>
+    
+ 
+</body>
 </html>
