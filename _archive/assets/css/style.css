@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    /* Light Theme */
+    --bg-color: #fcfcfc;
+    --text-color: #111111;
+    --grid-color: #d1d5db;
+    --accent-color: #0055ff;
+    --border-color: #111111;
+    --container-bg: #ffffff;
+    --muted-text: #4b5563;
+    --input-bg: #ffffff;
+}
+
+[data-theme="dark"] {
+    /* Dark Theme */
+    --bg-color: #080808;
+    --text-color: #e5e5e5;
+    --grid-color: rgba(212, 175, 55, 0.08);
+    --accent-color: #D4AF37;
+    --border-color: #D4AF37;
+    --container-bg: #0f0f0f;
+    --muted-text: #888888;
+    --input-bg: #1a1a1a;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    background-image: radial-gradient(var(--grid-color) 1px, transparent 1px);
+    background-size: 32px 32px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.doc-container {
+    background-color: var(--container-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 4px 4px 0px var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.img-preview {
+    background-color: var(--input-bg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.img-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.doc-container:hover .img-preview img {
+    transform: scale(1.05);
+    opacity: 1;
+}
+
+input:focus, select:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: -1px;
+}
+
+input[type="number"], select, input[type="text"], input[type="password"] {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-color); border-left: 1px solid var(--border-color); }
+::-webkit-scrollbar-thumb { background: var(--accent-color); }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.steampunk-glow {
+    box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+.collapse-i {
+    transform: scaleY(0.2) translateY(12px) !important;
+    transition: transform 0.15s ease-in;
+}
+
+/* Rocket Pong Styles */
+.pong-container {
+    image-rendering: pixelated;
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8), 0 0 20px var(--accent-color);
+    border: 4px solid var(--accent-color);
+    position: relative;
+}
+
+.pong-badge {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 2px;
+}
+.pong-badge.tracking { background-color: #ff3333; box-shadow: 0 0 4px #ff3333; }
+.pong-badge.normal { background-color: #0ea5e9; box-shadow: 0 0 4px #0ea5e9; }

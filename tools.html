@@ -1,0 +1,538 @@
+---
+layout: default
+title: Engineering Tools
+---
+
+<main class="flex-grow pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+    <div class="border-b-2 border-themeBorder pb-6 mb-8">
+        <h1 class="text-4xl font-bold tracking-tight text-themeText font-mono"><i class="fa-solid fa-toolbox mr-4 text-themeAccent"></i>Engineering Tools</h1>
+        <p class="mt-2 text-themeMuted">A collection of interactive engineering calculators and simulators.</p>
+    </div>
+
+    <!-- TABLE OF CONTENTS -->
+    <div class="mb-8 p-4 border border-themeBorder bg-themeBg/50 rounded shadow-sm">
+        <h2 class="text-lg font-bold font-mono mb-3 text-themeText border-b border-themeBorder/30 pb-2"><i class="fa-solid fa-list-ul mr-2 text-themeAccent"></i>Table of Contents</h2>
+        <div class="flex flex-wrap gap-2 font-mono">
+            <a href="#tool-resistor-divider" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">Resistor Divider</a><a href="#tool-loop-compensator-p-z" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">Loop Compensator (P/Z)</a><a href="#tool-smps-topology-ratio" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">SMPS Topology & Ratio</a><a href="#tool-voltage-margining-dac" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">Voltage Margining (DAC)</a><a href="#tool-awg-wire-ampacity" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">AWG Wire Ampacity</a><a href="#tool-battery-pack-s-p-config" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">Battery Pack (S/P) Config</a><a href="#tool-ac-motor-dynamics" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">AC Motor Dynamics</a><a href="#tool-ipc-2221-trace-width" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">IPC-2221 Trace Width</a><a href="#tool-filter-designer" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">Filter Designer</a><a href="#tool-e-series-finder" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">E-Series Finder</a><a href="#tool-thermistor-r-t-curve-ntc" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">Thermistor R-T Curve (NTC)</a><a href="#tool-pv-yield-simulator" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">PV Yield Simulator</a><a href="#tool-web-serial-interface" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">Web Serial Interface</a><a href="#tool-magnetics-harness" class="text-xs hover:text-themeAccent hover:underline py-1 px-2 border border-themeBorder/30 rounded bg-themeContainer/50 transition-colors">Magnetics & Harness</a>
+        </div>
+    </div>
+
+    <!-- TOOLS GRID -->
+    <div class="grid grid-cols-1 gap-6">
+        <div  id="tool-resistor-divider" class="doc-container flex flex-col">
+        <div class="h-32 bg-themeBg border-b border-themeBorder overflow-hidden flex justify-center items-center"><img src="/assets/images/divider.png" class="h-full opacity-80 diagram-img" alt="Divider Circuit"></div>
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <i class="fa-solid fa-bolt"></i>
+            <h3 class="font-bold font-mono">Resistor Divider</h3>
+        </div>
+        <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+            <div class="flex gap-3 mb-2 pb-3 border-b border-themeBorder/20 text-xs text-themeMuted font-bold">
+                <span>SOLVE:</span>
+                <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="vin" onchange="setupDividerMode()"> Vin</label>
+                <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="r1" onchange="setupDividerMode()"> R1</label>
+                <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="r2" onchange="setupDividerMode()"> R2</label>
+                <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="vout" checked onchange="setupDividerMode()"> Vout</label>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <label class="w-20">Vin (V)</label>
+                <input type="number" id="calc-vin" value="12" step="0.1" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
+            </div>
+            <div class="flex justify-between items-center">
+                <label class="w-20">R1 (Ω)</label>
+                <div class="flex flex-col items-end w-32">
+                    <input type="number" id="calc-r1" value="10000" class="w-full border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
+                    <span id="sug-r1" class="text-[9px] text-themeAccent cursor-pointer hover:underline mt-0.5 opacity-0 h-0 transition-opacity whitespace-nowrap" onclick="applyVal('calc-r1', this.dataset.val); runSmartDivider();"></span>
+                </div>
+            </div>
+            <div class="flex justify-between items-center">
+                <label class="w-20">R2 (Ω)</label>
+                <div class="flex flex-col items-end w-32">
+                    <input type="number" id="calc-r2" value="4700" class="w-full border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
+                    <span id="sug-r2" class="text-[9px] text-themeAccent cursor-pointer hover:underline mt-0.5 opacity-0 h-0 transition-opacity whitespace-nowrap" onclick="applyVal('calc-r2', this.dataset.val); runSmartDivider();"></span>
+                </div>
+            </div>
+            <div class="flex justify-between items-center">
+                <label class="w-20 text-themeAccent font-bold">Vout (V)</label>
+                <input type="number" id="calc-vout" class="w-32 border-2 border-themeAccent px-2 py-1 text-right font-bold text-themeAccent bg-opacity-10 bg-themeAccent" readonly oninput="runSmartDivider()">
+            </div>
+            <div class="pt-3 mt-3 border-t border-themeBorder/20 text-xs">
+                <div class="grid grid-cols-2 gap-2 text-themeMuted">
+                    <div class="bg-themeBorder/5 p-2 border border-themeBorder/10">
+                        <span>P(R1): <span id="pow-r1" class="font-bold text-themeText">0.00 mW</span></span>
+                        <div id="pkg-r1" class="text-themeAccent mt-1">0402</div>
+                    </div>
+                    <div class="bg-themeBorder/5 p-2 border border-themeBorder/10">
+                        <span>P(R2): <span id="pow-r2" class="font-bold text-themeText">0.00 mW</span></span>
+                        <div id="pkg-r2" class="text-themeAccent mt-1">0402</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div  id="tool-loop-compensator-p-z" class="doc-container flex flex-col">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <h3 class="font-bold font-mono">Loop Compensator (P/Z)</h3>
+                </div>
+                <div class="p-4 space-y-2 font-mono text-sm flex-grow">
+                    
+                      <div class="mb-4 w-full aspect-video bg-[#050505] flex items-center justify-center border border-themeBorder/30">
+                          <img id="comp-img-type2" src="/assets/images/comp_type2.png" class="max-h-full max-w-full object-contain" alt="Type II Compensator">
+                          <img id="comp-img-type3" src="/assets/images/comp_type3.png" class="max-h-full max-w-full object-contain hidden" alt="Type III Compensator">
+                      </div>
+                      <select id="comp-type" class="w-full border border-themeBorder px-2 py-1 mb-2 font-bold" onchange="runCompensator(); document.getElementById('comp-img-type2').classList.toggle('hidden', this.value==='type3'); document.getElementById('comp-img-type3').classList.toggle('hidden', this.value==='type2');">
+                        <option value="type2">Type II compensator</option>
+                        <option value="type3">Type III compensator</option>
+                    </select>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs"><label>R1 (k&Omega;)</label><input type="number" id="comp-r1" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()"></div>
+                            <div class="flex justify-between text-xs"><label>R2 (k&Omega;)</label><input type="number" id="comp-r2" value="22" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()"></div>
+                            <div class="flex justify-between text-xs opacity-50 transition-opacity" id="comp-r3-grp"><label>R3 (k&Omega;)</label><input type="number" id="comp-r3" value="1" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()" disabled></div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs"><label>c1 (nF)</label><input type="number" id="comp-c1" value="1" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()"></div>
+                            <div class="flex justify-between text-xs"><label>c2 (nF)</label><input type="number" id="comp-c2" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()"></div>
+                            <div class="flex justify-between text-xs opacity-50 transition-opacity" id="comp-c3-grp"><label>c3 (nF)</label><input type="number" id="comp-c3" value="2.2" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()" disabled></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-1 text-xs">
+                        <div class="flex justify-between"><span class="text-themeMuted">Zero 1 (Fz1)</span><span id="comp-fz1" class="font-bold text-themeAccent">0 hz</span></div>
+                        <div class="flex justify-between"><span class="text-themeMuted">Pole 1 (Fp1)</span><span id="comp-fp1" class="font-bold text-themeAccent">0 hz</span></div>
+                        <div class="flex justify-between opacity-50" id="comp-fz2-grp"><span class="text-themeMuted">Zero 2 (Fz2)</span><span id="comp-fz2" class="font-bold text-themeAccent">-- hz</span></div>
+                        <div class="flex justify-between opacity-50" id="comp-fp2-grp"><span class="text-themeMuted">Pole 2 (Fp2)</span><span id="comp-fp2" class="font-bold text-themeAccent">-- hz</span></div>
+                    </div>
+                </div>
+            </div>
+
+            
+<div  id="tool-smps-topology-ratio" class="doc-container flex flex-col">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <i class="fa-solid fa-transformer"></i>
+                    <h3 class="font-bold font-mono">SMPS Topology & Ratio</h3>
+                </div>
+                <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+                    <select id="smps-type" class="w-full border border-themeBorder px-2 py-1 mb-2 font-bold" onchange="setupSMPSMode()">
+                        <option value="buck">Buck (Step-Down)</option>
+                        <option value="boost">Boost (Step-Up)</option>
+                        <option value="buck-boost">Buck-Boost (Inverting)</option>
+                        <option value="flyback">Isolated Flyback</option>
+                        <option value="forward">Forward Converter</option>
+                        <option value="push-pull">Push-Pull</option>
+                        <option value="half-bridge">Half-Bridge</option>
+                        <option value="full-bridge">Full-Bridge</option>
+                    </select>
+
+                    <div class="flex gap-2 mb-2 pb-2 border-b border-themeBorder/20 text-[10px] text-themeMuted font-bold" id="smps-solve-group">
+                        <!-- Solvers injected by JS -->
+                    </div>
+                    
+                    <div id="smps-inputs" class="flex flex-col gap-2">
+                        <!-- Inputs injected by JS -->
+                    </div>
+
+                    <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-2 text-xs">
+                        <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                            <span class="text-themeMuted">Result</span>
+                            <span id="smps-result" class="font-bold text-themeAccent text-lg">-</span>
+                        </div>
+                        <div class="flex justify-between pb-1 opacity-50" id="smps-ratio-grp">
+                            <span class="text-themeMuted" title="Assuming typical Duty constraint for Vor">Req. Turns Ratio (Np/Ns)</span>
+                            <span id="smps-ratio" class="font-bold text-themeText">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+<div  id="tool-voltage-margining-dac" class="doc-container flex flex-col">
+                <div class="h-32 bg-themeBg border-b border-themeBorder overflow-hidden flex justify-center items-center"><img src="assets/images/margining.png" class="h-full opacity-80 diagram-img" alt="Margining Circuit" onerror="this.style.display='none'"></div>
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <i class="fa-solid fa-arrows-to-dot"></i>
+                    <h3 class="font-bold font-mono">Voltage/Current Margining</h3>
+                </div>
+                <div class="p-4 space-y-2 font-mono text-sm flex-grow">
+                    <select id="margin-type" class="border border-themeBorder px-2 py-1 mb-2 font-bold w-full" onchange="setupMarginMode()">
+                        <option value="voltage">Voltage Margining (DAC Injection)</option>
+                        <option value="current">Current Margining (IDAC)</option>
+                    </select>
+
+                    <div class="flex gap-2 mb-2 pb-2 border-b border-themeBorder/20 text-[10px] text-themeMuted font-bold" id="margin-solve-group">
+                        <!-- Solvers injected by JS -->
+                    </div>
+
+                    <div id="margin-inputs" class="grid grid-cols-2 gap-4">
+                        <!-- Inputs injected by JS -->
+                    </div>
+
+                    <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-1 text-xs">
+                        <div class="flex justify-between"><span class="text-themeMuted">Nominal Vout</span><span id="vm-vnom" class="font-bold text-themeText">3.32 V</span></div>
+                        <div class="flex justify-between"><span class="text-themeMuted" id="vm-result-lbl">Margined Vout</span><span id="vm-vmarg" class="font-bold text-themeAccent text-sm">3.13 V</span></div>
+                    </div>
+                </div>
+            </div>
+
+            
+<div  id="tool-awg-wire-ampacity" class="doc-container flex flex-col">
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <i class="fa-solid fa-plug-circle-bolt"></i>
+            <h3 class="font-bold font-mono">AWG Wire Ampacity</h3>
+        </div>
+        <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+            <div class="flex justify-between items-center">
+                <label class="w-24">Wire AWG</label>
+                <input type="number" id="awg-val" value="12" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runAWG()">
+            </div>
+            
+            <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-2 text-xs">
+                <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                    <span class="text-themeMuted">Chassis Wiring (Free Air)</span>
+                    <span id="awg-chassis" class="font-bold text-themeAccent">41.0 A</span>
+                </div>
+                <div class="flex justify-between pb-1">
+                    <span class="text-themeMuted">Power Transmission (Bundled)</span>
+                    <span id="awg-power" class="font-bold text-themeText">9.3 A</span>
+                </div>
+                <div class="flex justify-between text-[10px] opacity-70">
+                    <span>Resistance (per 1000ft)</span>
+                    <span id="awg-res">1.588 Ω</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div  id="tool-battery-pack-s-p-config" class="doc-container flex flex-col">
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <i class="fa-solid fa-car-battery"></i>
+            <h3 class="font-bold font-mono">Battery Pack (S/P) Config</h3>
+        </div>
+        <div class="p-4 space-y-2 font-mono text-sm flex-grow">
+            <div class="grid grid-cols-2 gap-4 border-b border-themeBorder/20 pb-3 mb-2">
+                <div>
+                    <div class="text-[10px] text-themeMuted mb-1">CELL SPECS</div>
+                    <div class="flex justify-between text-xs"><label>V_nom (V)</label><input type="number" id="bat-v" value="3.7" step="0.1" class="w-14 border border-themeBorder px-1 text-right" oninput="runBattery()"></div>
+                    <div class="flex justify-between text-xs mt-1"><label>Cap (Ah)</label><input type="number" id="bat-ah" value="3.2" step="0.1" class="w-14 border border-themeBorder px-1 text-right" oninput="runBattery()"></div>
+                </div>
+                <div class="border-l border-themeBorder/20 pl-4">
+                    <div class="text-[10px] text-themeMuted mb-1">PACK CONFIG</div>
+                    <div class="flex justify-between text-xs"><label>Series (S)</label><input type="number" id="bat-s" value="14" class="w-14 border border-themeBorder px-1 text-right" oninput="runBattery()"></div>
+                    <div class="flex justify-between text-xs mt-1"><label>Parallel (P)</label><input type="number" id="bat-p" value="4" class="w-14 border border-themeBorder px-1 text-right" oninput="runBattery()"></div>
+                </div>
+            </div>
+
+            <div class="space-y-1 text-xs">
+                <div class="flex justify-between"><span class="text-themeMuted">Nominal Voltage</span><span id="bat-vnom" class="font-bold text-themeText">51.8 V</span></div>
+                <div class="flex justify-between"><span class="text-themeMuted">Total Capacity</span><span id="bat-cap" class="font-bold text-themeText">12.8 Ah</span></div>
+                <div class="flex justify-between border-t border-themeBorder/10 pt-1 mt-1"><span class="text-themeMuted">Total Energy</span><span id="bat-kwh" class="font-bold text-themeAccent">663 Wh</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div  id="tool-ac-motor-dynamics" class="doc-container flex flex-col">
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <i class="fa-solid fa-gear"></i>
+            <h3 class="font-bold font-mono">AC Motor Dynamics</h3>
+        </div>
+        <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+            <div class="flex gap-2 mb-2 pb-2 border-b border-themeBorder/20 text-[10px] text-themeMuted font-bold" id="motor-solve-group">
+                <!-- Solvers injected by JS -->
+            </div>
+            
+            <div id="motor-inputs" class="grid grid-cols-2 gap-4">
+                <!-- Inputs injected by JS -->
+            </div>
+
+            <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-2 text-[10px]">
+                <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                    <span class="text-themeMuted">Synchronous Speed</span>
+                    <span id="mot-rpm" class="font-bold text-themeText">- RPM</span>
+                </div>
+                <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                    <span class="text-themeMuted">Mechanical Power</span>
+                    <span class="font-bold text-themeAccent"><span id="mot-kw">-</span> kW / <span id="mot-hp">-</span> HP</span>
+                </div>
+                <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                    <span class="text-themeMuted">Rotor Speed</span>
+                    <span id="mot-rotor" class="font-bold text-themeText">- RPM</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-themeMuted">V/f Ratio (V/Hz)</span>
+                    <span id="mot-vf" class="font-bold text-themeText">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div  id="tool-ipc-2221-trace-width" class="doc-container flex flex-col">
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <i class="fa-solid fa-ruler-horizontal"></i>
+            <h3 class="font-bold font-mono">IPC-2221 Trace Width</h3>
+        </div>
+        <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+            <div class="flex justify-between items-center">
+                <label class="w-32">Current (A)</label>
+                <input type="number" id="pcb-i" value="1" step="0.1" class="w-24 border border-themeBorder px-2 py-1 text-right" oninput="runPCBTrace()">
+            </div>
+            <div class="flex justify-between items-center">
+                <label class="w-32 text-xs" title="Max allowable temp rise">Temp Rise (Δ°C)</label>
+                <input type="number" id="pcb-dt" value="10" step="1" class="w-24 border border-themeBorder px-2 py-1 text-right" oninput="runPCBTrace()">
+            </div>
+            <div class="flex justify-between items-center">
+                <label class="w-32 text-xs">Cu Weight (oz)</label>
+                <input type="number" id="pcb-th" value="1" step="0.5" class="w-24 border border-themeBorder px-2 py-1 text-right" oninput="runPCBTrace()">
+            </div>
+
+            <div class="pt-3 mt-3 border-t border-themeBorder/20">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="font-bold text-themeText text-xs">Required Width (Ext)</label>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-center text-lg font-bold text-themeAccent">
+                    <div class="bg-themeBorder/5 border border-themeBorder/10 p-2" id="pcb-w-mil">11.8 mil</div>
+                    <div class="bg-themeBorder/5 border border-themeBorder/10 p-2" id="pcb-w-mm">0.30 mm</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+            <!-- Filter Designer -->
+            <div  id="tool-filter-designer" class="doc-container flex flex-col ">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-filter"></i><h3 class="font-bold font-mono">Filter Designer</h3></div>
+                </div>
+                <div class="p-4 space-y-2 font-mono text-sm flex-grow">
+                    <select id="filter-type" class="border border-themeBorder px-2 py-1 mb-2 font-bold w-full" onchange="setupFilterMode()">
+                        <option value="rc">RC (Low-Pass)</option>
+                        <option value="rl">RL (Low-Pass)</option>
+                        <option value="lc">LC (Low-Pass)</option>
+                        <option value="lcl">LCL (T-Filter)</option>
+                        <option value="clc">CLC (Pi-Filter)</option>
+                    </select>
+                    <div class="flex gap-2 mb-2 pb-2 border-b border-themeBorder/20 text-[10px] text-themeMuted font-bold" id="filter-solve-group">
+                        <!-- Solvers injected by JS -->
+                    </div>
+                    
+                    <div id="filter-inputs" class="flex flex-col gap-2">
+                        <!-- Inputs injected by JS -->
+                    </div>
+                    
+                    <div class="flex justify-between font-bold text-themeAccent mt-2 pt-2 border-t border-themeBorder/20">
+                        <label>Cutoff fc (Hz)</label>
+                        <input type="number" id="calc-filter-fc" value="1590" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()">
+                    </div>
+                    
+                    <div class="relative w-full flex-grow mt-4 border border-themeBorder/30 bg-themeContainer min-h-[200px]">
+                        <canvas id="filter-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+<div  id="tool-e-series-finder" class="doc-container flex flex-col">
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <i class="fa-solid fa-list-ol"></i>
+            <h3 class="font-bold font-mono">E-Series Finder</h3>
+        </div>
+        <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+            <div class="flex justify-between items-center">
+                <label class="w-24">Target R/C</label>
+                <input type="number" id="eseries-in" value="4850" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runESeries()">
+            </div>
+            <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-2 text-xs">
+                <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                    <span class="text-themeMuted">Nearest E12 (10%)</span>
+                    <span id="eseries-e12" class="font-bold text-themeText">4700 Ω</span>
+                </div>
+                <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                    <span class="text-themeMuted">Nearest E24 (5%)</span>
+                    <span id="eseries-e24" class="font-bold text-themeAccent">4700 Ω</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-themeMuted">Nearest E96 (1%)</span>
+                    <span id="eseries-e96" class="font-bold text-themeAccent">4870 Ω</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div  id="tool-thermistor-r-t-curve-ntc" class="doc-container flex flex-col ">
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <i class="fa-solid fa-temperature-half"></i>
+            <h3 class="font-bold font-mono">Thermistor R-T Curve (NTC)</h3>
+        </div>
+        <div class="p-4 flex gap-4 font-mono text-sm flex-grow">
+            <div class="w-1/2 flex flex-col space-y-3">
+                <select id="ntc-type" class="border border-themeBorder px-2 py-1 font-bold w-full text-xs" onchange="setupNTCMode()">
+                    <option value="beta">Beta Equation</option>
+                    <option value="steinhart">Steinhart-Hart</option>
+                </select>
+
+                <div class="flex gap-2 pb-1 border-b border-themeBorder/20 text-[9px] text-themeMuted font-bold" id="ntc-solve-group">
+                    <!-- Solvers injected by JS -->
+                </div>
+
+                <div id="ntc-inputs" class="flex flex-col gap-2 flex-grow">
+                    <!-- Inputs injected by JS -->
+                </div>
+                
+                <div class="pt-2 mt-2 border-t border-themeBorder/20 text-xs">
+                    <div class="flex justify-between items-center">
+                        <span class="text-themeMuted">Result</span>
+                        <span id="ntc-result" class="font-bold text-themeAccent text-sm">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-1/2 relative border border-themeBorder bg-themeBg">
+                <span class="absolute top-1 right-1 text-[9px] text-themeMuted font-mono z-10">-40°C to 125°C (Log R)</span>
+                <canvas id="ntc-canvas" class="w-full h-full absolute inset-0"></canvas>
+            </div>
+        </div>
+    </div>
+
+
+    <div  id="tool-pv-yield-simulator" class="doc-container flex flex-col ">
+                  <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                      <div class="flex items-center gap-2"><i class="fa-solid fa-solar-panel"></i><h3 class="font-bold font-mono">PV Yield Simulator</h3></div>
+                      <span class="font-mono text-[10px] opacity-70">click map OR set location • Adjust month & time</span>
+                  </div>
+                  <div class="p-4 font-mono text-sm flex flex-col flex-grow">
+                      <div class="flex flex-col md:flex-row gap-4 mb-4 flex-grow">
+                          <div class="flex-grow flex flex-col gap-2">
+                              <div class="flex gap-2 text-xs items-center">
+                                  <label>Lat: <input type="number" id="pv-lat" class="w-16 bg-transparent border-b border-themeBorder px-1" value="0"></label>
+                                  <label>Lng: <input type="number" id="pv-lng" class="w-16 bg-transparent border-b border-themeBorder px-1" value="0"></label>
+                                  <button onclick="updatePVFromInputs()" class="border border-themeBorder px-2 hover:bg-themeBorder hover:text-themeBg">SET</button>
+                              </div>
+                              <!-- The Canvas for Map -->
+                              <canvas id="solar-canvas" class="w-full h-48 flex-grow border border-themeBorder/30 cursor-crosshair opacity-80" width="800" height="400"></canvas>
+                          </div>
+                          <div class="w-full md:w-64 space-y-4">
+                              <div class="space-y-1">
+                                  <div class="flex justify-between text-xs text-themeMuted mb-1"><span>Month</span><span id="pv-month-val" class="font-bold text-themeAccent">Jun</span></div>
+                                  <div class="grid grid-cols-6 gap-1 text-[10px]" id="pv-month-buttons">
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(0)">Jan</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(1)">Feb</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(2)">Mar</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(3)">Apr</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(4)">May</button>
+                                      <button class="border border-themeBorder bg-themeAccent text-themeBg" onclick="setSolarMonth(5)">Jun</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(6)">Jul</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(7)">Aug</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(8)">Sep</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(9)">Oct</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(10)">Nov</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(11)">Dec</button>
+                                  </div>
+                              </div>
+                              <div class="space-y-1 pt-2 border-t border-themeBorder/20">
+                                  <div class="flex justify-between text-xs text-themeMuted"><span>Time (Solar)</span><span id="pv-time-val" class="font-bold text-themeAccent">12:00</span></div>
+                                  <input type="range" id="pv-time" min="0" max="24" step="0.5" value="12" class="w-full accent-themeAccent">
+                              </div>
+                              <div class="pt-2 border-t border-themeBorder/20">
+                                  <div class="flex justify-between items-center text-xs text-themeMuted mb-1"><span>Current Yield</span><span id="pv-yield" class="text-xl font-bold text-themeAccent">0 W</span></div>
+                                  <div class="flex justify-between items-center text-[10px] text-themeMuted"><span>Optimum Tilt</span><span id="pv-tilt" class="font-bold text-themeText">0A</span></div>
+                                  <div class="flex justify-between items-center text-[10px] text-themeMuted mt-1"><span>Custom Tilt</span><div class="flex items-center gap-1"><input type="number" id="pv-custom-tilt" class="w-10 bg-transparent border-b border-themeBorder text-right" value="0"><button id="pv-link-tilt" onclick="toggleTiltLink()" class="text-themeAccent" title="Link to Optimum Tilt"><i class="fa-solid fa-link"></i></button></div></div>
+                                  <div class="flex justify-between items-center text-[10px] text-themeMuted mt-2"><span>Est. Daily Energy</span><span id="pv-daily" class="font-bold text-themeText">0 Wh</span></div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="border-t border-themeBorder/20 pt-4 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow">
+                          <div class="flex flex-col">
+                              <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-themeMuted">GENERATION vs TIME</span><label class="text-[10px] flex items-center gap-1 cursor-pointer hover:text-themeAccent"><input type="checkbox" id="pv-all-months" class="accent-themeAccent"> Show All Months</label></div>
+                              <div class="relative w-full min-h-[200px] flex-grow bg-themeContainer border border-themeBorder/30"><canvas id="pv-time-chart"></canvas></div>
+                          </div>
+                          <div class="flex flex-col">
+                              <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-themeMuted">MONTHLY ENERGY YIELD (kWh)</span><span class="text-[10px] text-themeAccent" id="pv-annual">Annual: 0 kWh</span></div>
+                              <div class="relative w-full min-h-[200px] flex-grow bg-themeContainer border border-themeBorder/30"><canvas id="pv-hist-chart"></canvas></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+    <div  id="tool-web-serial-interface" class="doc-container flex flex-col  ">
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <div class="flex items-center gap-2">
+                <i class="fa-brands fa-usb"></i>
+                <h3 class="font-bold font-mono">Web Serial Interface</h3>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="clearSerial()" class="border border-themeBg text-themeBg px-3 py-1 text-xs font-mono hover:bg-themeBg hover:text-themeBorder transition-colors">CLEAR</button>
+                <button id="serial-btn" onclick="toggleSerial()" class="border border-themeBg text-themeBg px-3 py-1 text-xs font-mono font-bold hover:bg-themeBg hover:text-themeBorder transition-colors shadow-[2px_2px_0px_#fff]">CONNECT</button>
+            </div>
+        </div>
+
+        <div class="p-4 flex-grow flex flex-col gap-4">
+            <div class="flex gap-2 text-xs font-mono">
+                <div class="flex flex-grow gap-2">
+                    <input type="number" id="baud-rate" list="baud-list" value="115200" class="border border-themeBorder p-1 w-24 bg-themeBg text-themeText" placeholder="custom baud">
+                    <datalist id="baud-list">
+                        <option value="9600"></option>
+                        <option value="115200"></option>
+                        <option value="921600"></option>
+                    </datalist>
+                    <button onclick="saveSerialLog()" class="border border-themeBorder text-themeMuted px-2 hover:bg-themeBorder hover:text-themeBg transition-colors text-[10px]">SAVE LOG</button>
+                </div>
+                <span id="serial-status" class="border border-themeBorder text-themeMuted p-1 px-4 text-center min-w-[120px]">OFFLINE</span>
+            </div>
+            
+            <div class="flex gap-2">
+                <input type="text" id="serial-send-input" class="border border-themeBorder p-1 flex-grow bg-themeBg text-themeText font-mono text-xs" placeholder="Enter string to send..." onkeypress="if(event.key==='Enter') sendSerial()">
+                <button onclick="sendSerial()" class="bg-themeAccent text-themeBg px-4 font-bold hover:opacity-90 transition-colors">SEND</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-48">
+                <textarea id="serial-monitor" readonly class="w-full h-full border border-themeBorder p-2 text-xs font-mono bg-themeBg text-green-500 resize-none focus:outline-none" placeholder="Awaiting hardware serial stream..."></textarea>
+                
+                <div class="relative w-full h-full border border-themeBorder bg-themeBg">
+                    <span class="absolute top-1 right-1 text-[10px] font-mono text-themeMuted">AUTO-SCALE PLOT</span>
+                    <canvas id="plotter-canvas" class="w-full h-full"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW TOOL: Magnetics & Harness Drop -->
+    <div id="tool-magnetics-harness" class="doc-container flex flex-col">
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <div class="flex items-center gap-2"><i class="fa-solid fa-magnet"></i><h3 class="font-bold font-mono">Magnetics & Harness</h3></div>
+        </div>
+        <div class="p-4 space-y-4 font-mono text-sm flex-grow">
+            <!-- Magnetic Field Section -->
+            <div class="border border-themeBorder p-3 relative">
+                <span class="absolute -top-3 left-2 bg-themeBg px-1 font-bold text-xs">Magnetic Field (B)</span>
+                <div class="space-y-2 mt-2">
+                    <div class="flex justify-between text-xs"><label>Turns (N)</label><input type="number" id="mag-turns" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runMagnetics()"></div>
+                    <div class="flex justify-between text-xs"><label>Current (A)</label><input type="number" id="mag-current" value="1" class="w-16 border border-themeBorder px-1 text-right" oninput="runMagnetics()"></div>
+                    <div class="flex justify-between text-xs"><label>Length (mm)</label><input type="number" id="mag-length" value="50" class="w-16 border border-themeBorder px-1 text-right" oninput="runMagnetics()"></div>
+                    <div class="flex justify-between text-xs"><label>Core &mu;r</label><input type="number" id="mag-mu" value="1" class="w-16 border border-themeBorder px-1 text-right" oninput="runMagnetics()"></div>
+                    <div class="flex justify-between text-sm font-bold pt-2 border-t border-themeBorder/30">
+                        <span class="text-themeAccent">B Field:</span><span id="mag-bfield">12.57 mT</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Harness Drop Section -->
+            <div class="border border-themeBorder p-3 relative">
+                <span class="absolute -top-3 left-2 bg-themeBg px-1 font-bold text-xs">Harness Voltage Drop</span>
+                <div class="space-y-2 mt-2">
+                    <div class="flex justify-between text-xs"><label>AWG</label>
+                        <select id="mag-awg" class="w-16 border border-themeBorder px-1 text-right" onchange="runMagnetics()">
+                            <option value="4">4</option><option value="6">6</option><option value="8">8</option><option value="10">10</option>
+                            <option value="12" selected>12</option><option value="14">14</option><option value="16">16</option>
+                            <option value="18">18</option><option value="20">20</option><option value="22">22</option><option value="24">24</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-between text-xs"><label>Length (m)</label><input type="number" id="mag-wirelen" value="1" class="w-16 border border-themeBorder px-1 text-right" oninput="runMagnetics()"></div>
+                    <div class="flex justify-between text-xs"><label>Current (A)</label><input type="number" id="mag-wirecurrent" value="1" class="w-16 border border-themeBorder px-1 text-right" oninput="runMagnetics()"></div>
+                    <div class="flex justify-between text-sm font-bold pt-2 border-t border-themeBorder/30">
+                        <span class="text-themeAccent">V Drop:</span><span id="mag-vdrop">0.002 V</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+              <!-- Solar PV Yield Simulator (World Map) -->
+              
+    </div>

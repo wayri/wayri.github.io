@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark-gold">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYS_RST: Rocket Pong | Yawar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter','sans-serif'], mono: ['JetBrains Mono','monospace'] }, colors: { themeBg:'var(--bg-color)', themeText:'var(--text-color)', themeAccent:'var(--accent-color)', themeBorder:'var(--border-color)', themeContainer:'var(--container-bg)', themeMuted:'var(--muted-text)' } } } }
+    </script>
+    <style>
+        :root { --bg-color:#fcfcfc; --text-color:#111111; --accent-color:#0055ff; --border-color:#111111; --container-bg:#ffffff; --muted-text:#4b5563; --input-bg:#ffffff; }
+        [data-theme="dark-gold"] { --bg-color:#080808; --text-color:#e5e5e5; --accent-color:#D4AF37; --border-color:#D4AF37; --container-bg:#0f0f0f; --muted-text:#888888; --input-bg:#1a1a1a; }
+        body { background-color:var(--bg-color); color:var(--text-color); font-family:'Inter',sans-serif; }
+        .doc-container { background-color:var(--container-bg); border:1px solid var(--border-color); box-shadow:4px 4px 0px var(--border-color); }
+        input { background-color:var(--input-bg); color:var(--text-color); }
+        .pong-container { border: 2px solid var(--border-color); box-shadow: 0 0 20px rgba(212,175,55,0.3); }
+        .pong-badge { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:4px; }
+        .pong-badge.normal { background: #ff8c00; }
+        .pong-badge.tracking { background: #ff3333; box-shadow: 0 0 6px #ff3333; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Nav -->
+    <nav class="fixed top-0 w-full z-50 bg-themeBg border-b-2 border-themeBorder">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14">
+            <a href="index.html" class="font-bold tracking-tight text-lg uppercase flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left text-sm text-themeMuted"></i> YAWAR
+            </a>
+            <span class="font-mono text-xs text-themeMuted animate-pulse">SYS_RST // ENCRYPTED MODULE</span>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full">
+        <div class="border-b-2 border-themeBorder pb-6 mb-8 flex flex-col md:flex-row justify-between md:items-end gap-4">
+            <div>
+                <h1 class="text-4xl font-bold tracking-tight mb-2 uppercase text-themeText">SYS_RST: <span class="text-themeAccent">Rocket Pong</span></h1>
+                <p class="text-lg font-mono text-themeMuted">Encrypted payload. Enter decryption key to proceed.</p>
+            </div>
+            <div class="font-mono text-xs text-themeMuted text-right">
+                <i class="fa-solid fa-lock text-themeAccent"></i> Encrypted
+            </div>
+        </div>
+
+        <div id="gate-ui" class="doc-container p-10 max-w-lg mx-auto text-center flex flex-col items-center gap-6">
+            <i class="fa-solid fa-user-secret text-6xl text-themeMuted mb-4"></i>
+            <h2 class="font-bold text-xl text-themeText font-mono">AUTH REQUIRED</h2>
+            <p class="text-sm text-themeMuted font-mono">Enter the physical layer key to decrypt the engine.</p>
+            <input type="password" id="decryption-key"
+                class="w-full border border-themeBorder px-4 py-2 text-center font-mono tracking-widest bg-[#0a0a0a] text-themeAccent focus:outline-none focus:border-themeAccent"
+                placeholder="ENTER KEY"
+                onkeypress="if(event.key==='Enter') decryptEngine()">
+            <button onclick="decryptEngine()" class="bg-themeBorder text-themeBg px-8 py-2 font-bold font-mono hover:bg-themeAccent transition-colors w-full uppercase tracking-widest">
+                Decrypt
+            </button>
+            <p id="auth-error" class="text-xs text-[#ff3333] font-mono h-4 opacity-0 transition-opacity">INVALID KEY</p>
+        </div>
+
+        <div id="game-ui" class="hidden flex-col items-center gap-4 w-full">
+            <div class="w-full flex justify-between items-center bg-themeBorder text-themeBg px-4 py-2 font-mono font-bold">
+                <div class="flex items-center gap-4">
+                    <span>P1 [W/S, D=Fire]</span>
+                    <div id="p1-rockets" class="flex gap-1"></div>
+                </div>
+                <div id="score" class="text-2xl text-themeAccent drop-shadow-[0_0_5px_#fff]">0 : 0</div>
+                <div class="flex items-center gap-4">
+                    <div id="p2-rockets" class="flex gap-1"></div>
+                    <span>P2 [&uarr;/&darr;, &larr;=Fire]</span>
+                </div>
+            </div>
+            <div class="w-full flex justify-between items-center text-xs font-mono text-themeMuted px-2">
+                <div class="flex gap-4 items-center">
+                    <button onclick="window.togglePause&&window.togglePause()" class="border border-themeBorder px-3 py-1 hover:text-themeAccent">PAUSE (P)</button>
+                    <button id="mute-btn" onclick="window.toggleMute&&window.toggleMute()" class="border border-themeBorder px-3 py-1 hover:text-themeAccent">MUTE</button>
+                    <button onclick="window.resetGame&&window.resetGame()" class="border border-themeBorder px-3 py-1 hover:text-themeAccent">RESET (Spc)</button>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label>WIN SCORE:</label>
+                    <select id="win-score" class="border border-themeBorder bg-[#0a0a0a] px-2 py-1" onchange="window.resetGame&&window.resetGame()">
+                        <option value="10">10</option><option value="20">20</option><option value="30">30</option>
+                        <option value="40">40</option><option value="50">50</option><option value="100">100</option>
+                    </select>
+                </div>
+            </div>
+            <canvas id="pong-canvas" width="800" height="400" class="w-full pong-container bg-[#0a0a0a]"></canvas>
+            <div class="w-full grid grid-cols-2 gap-4 text-[10px] font-mono text-themeMuted border border-themeBorder/20 p-4 bg-[#050505]">
+                <div>
+                    <span class="pong-badge normal"></span> Non-Tracking Rocket: Maintains Y-offset.<br>
+                    <span class="pong-badge tracking"></span> Tracking Rocket: Homes in on opponent paddle.
+                </div>
+                <div class="text-right">Max 6 rockets per minute. Hit opponent paddle to freeze score. Hit ball to redirect speed.</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t-2 border-themeBorder bg-themeContainer py-6 font-mono text-xs text-themeMuted text-center">
+        &copy; <span id="yr"></span> Yawar. Physical Layer Engineering.
+    </footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// Apply saved theme
+const t = localStorage.getItem('theme');
+if(t !== 'light-hasl') document.documentElement.setAttribute('data-theme','dark-gold');
+else document.documentElement.removeAttribute('data-theme');
+
+const payload = "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";
+
+function decryptEngine() {
+    const key = document.getElementById('decryption-key').value;
+    const err = document.getElementById('auth-error');
+    if(key.length < 5) { err.classList.remove('opacity-0'); setTimeout(()=>err.classList.add('opacity-0'),2000); return; }
+    try {
+        const decoded = atob(payload);
+        let s = '';
+        for(let i=0;i<decoded.length;i++) s += String.fromCharCode(decoded.charCodeAt(i) ^ key.charCodeAt(i%key.length));
+        if(s.includes('const canvas') && s.includes('getElementById')) {
+            document.getElementById('gate-ui').style.display='none';
+            const gui = document.getElementById('game-ui');
+            gui.classList.remove('hidden'); gui.style.display='flex';
+            const el = document.createElement('script');
+            el.textContent = s;
+            document.body.appendChild(el);
+        } else { throw new Error('Bad key'); }
+    } catch(e) { err.classList.remove('opacity-0'); setTimeout(()=>err.classList.add('opacity-0'),2000); }
+}
+</script>
+</body>
+</html>

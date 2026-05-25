@@ -1,0 +1,32 @@
+---
+layout: default
+---
+
+<article class="doc-container p-6 md:p-10">
+    <header class="mb-10 border-b border-themeBorder pb-6">
+        <div class="font-mono text-xs text-themeAccent font-bold mb-3 uppercase tracking-wider">{{ page.category | default: "Engineering Log" }}</div>
+        <h1 class="text-3xl md:text-5xl font-bold text-themeText mb-4">{{ page.title }}</h1>
+        <div class="flex items-center text-xs font-mono text-themeMuted gap-4">
+            <span><i class="fa-regular fa-calendar"></i> {{ page.date | date: "%B %d, %Y" }}</span>
+            <span><i class="fa-regular fa-clock"></i> {% assign words = content | number_of_words %} {% if words < 360 %} 1 min read {% else %} {{ words | divided_by:180 }} min read {% endif %}</span>
+        </div>
+    </header>
+
+    <div class="prose prose-invert max-w-none text-themeText">
+        <style>
+            .prose h1, .prose h2, .prose h3 { color: var(--text-color); font-weight: bold; margin-top: 1.5em; margin-bottom: 0.5em; }
+            .prose a { color: var(--accent-color); text-decoration: underline; }
+            .prose p { margin-bottom: 1.2em; line-height: 1.7; }
+            .prose code { background: var(--input-bg); color: var(--text-color); padding: 0.2em 0.4em; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 0.9em; border: 1px solid var(--border-color); }
+            .prose pre { background: #0a0a0a; border: 1px solid var(--border-color); padding: 1em; overflow-x: auto; margin-bottom: 1.5em; }
+            .prose pre code { background: none; border: none; padding: 0; color: #e5e5e5; }
+            .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1.5em; }
+            .prose img { border: 1px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); max-width: 100%; }
+        </style>
+        {{ content }}
+    </div>
+
+    <footer class="mt-12 pt-6 border-t border-themeBorder text-center font-mono text-sm text-themeMuted">
+        <a href="{{ '/blog.html' | relative_url }}" class="hover:text-themeAccent transition-colors"><i class="fa-solid fa-arrow-left"></i> Return to Logs</a>
+    </footer>
+</article>

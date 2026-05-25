@@ -1,0 +1,1076 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" data-theme="dark-gold">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yawar | Engineering the Physical Layer</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        themeBg: 'var(--bg-color)',
+                        themeText: 'var(--text-color)',
+                        themeAccent: 'var(--accent-color)',
+                        themeBorder: 'var(--border-color)',
+                        themecontainer: 'var(--container-bg)',
+                        themeMuted: 'var(--muted-text)',
+                        themeInput: 'var(--input-bg)',
+                    },
+                    keyframes: {
+                        pingpong: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '50%': { transform: 'translateX(calc(100vw - 4rem))' },
+                        },
+                        bounceX: {
+                            '0%, 100%': { transform: 'translateX(-5px)' },
+                            '50%': { transform: 'translateX(15px)' },
+                        }
+                    },
+                    animation: {
+                        pingpong: 'pingpong 6s linear infinite',
+                        bounceX: 'bounceX 1.5s infinite ease-in-out',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            /* Light-hASL Theme */
+            --bg-color: #fcfcfc;
+            --text-color: #111111;
+            --grid-color: #d1d5db;
+            --accent-color: #0055ff;
+            --border-color: #111111;
+            --container-bg: #ffffff;
+            --muted-text: #4b5563;
+            --input-bg: #ffffff;
+        }
+
+        [data-theme="dark-gold"] {
+            /* Dark-Gold Theme */
+            --bg-color: #080808;
+            --text-color: #e5e5e5;
+            --grid-color: rgba(212, 175, 55, 0.08);
+            --accent-color: #D4AF37;
+            --border-color: #D4AF37;
+            --container-bg: #0f0f0f;
+            --muted-text: #888888;
+            --input-bg: #1a1a1a;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            background-image: radial-gradient(var(--grid-color) 1px, transparent 1px);
+            background-size: 32px 32px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .doc-container {
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 4px 4px 0px var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .img-preview {
+            background-color: var(--input-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .img-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .doc-container:hover .img-preview img {
+            transform: scale(1.05);
+            opacity: 1;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid var(--accent-color);
+            outline-offset: -1px;
+        }
+
+        input[type="number"], select {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border-color: var(--border-color);
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); border-left: 1px solid var(--border-color); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-color); }
+        
+        .page-view { display: none; }
+        .page-view.active { display: block; animation: fadeIn 0.4s ease-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Steampunk Glow Effects */
+        .steampunk-glow {
+            box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+
+        /* Glitch squash animation for the 'I' turning into '.' */
+        .collapse-i {
+            transform: scaleY(0.2) translateY(12px) !important;
+            transition: transform 0.15s ease-in;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/main.js"></script>
+</head>
+<body class="antialiased selection:bg-themeAccent selection:text-themeBg flex flex-col min-h-screen transition-colors duration-300">
+
+    <!-- Global Time of Day Indicator -->
+    <div id="global-time-indicator" class="fixed top-0 left-0 w-full h-1.5 z-[100] bg-themeBg border-b border-themeBorder overflow-hidden hidden md:block">
+        <div class="absolute inset-0 bg-gradient-to-r from-themeBorder via-yellow-400 to-themeBorder opacity-20"></div>
+        
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 md:top-1.5 w-full z-50 bg-themeBg border-b-2 border-themeBorder transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14">
+                <div class="flex-shrink-0 font-bold tracking-tight text-lg uppercase cursor-pointer flex items-center gap-2" onclick="navigate('home')">
+                    YAWAR
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex space-x-6 font-mono text-sm items-center">
+                    <button onclick="toggleTheme()" class="hover:text-themeAccent flex items-center gap-2 text-themeMuted transition-colors group" title="Toggle Theme">
+                        <i class="fa-solid fa-layer-group group-hover:rotate-180 transition-transform duration-500"></i> 
+                        <span id="theme-label" class="w-24 text-left">Dark-Gold</span>
+                    </button>
+                    <span class="text-themeBorder opacity-30">|</span>
+                    <a href="#home" onclick="navigate('home')" class="hover:text-themeAccent nav-link transition-colors" data-target="home">Overview</a>
+                    <a href="#blog" onclick="navigate('blog')" class="hover:text-themeAccent nav-link transition-colors" data-target="blog">Blog_Notes</a>
+                    <a href="{{ '/products/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors">Products</a>
+                    <a href="{{ '/tools/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors">EE_Tools</a>
+                    <a href="pong.html" class="hover:text-themeAccent transition-colors font-bold tracking-wider text-themeAccent/60 animate-pulse" title="???">SYS_RST</a>
+                    <a href="https://linkedin.com/" target="_blank" class="bg-themeBorder text-themeBg px-3 py-1 hover:bg-themeAccent hover:text-white transition-colors flex items-center gap-2 font-bold shadow-[2px_2px_0px_var(--accent-color)]">
+                        <i class="fa-brands fa-linkedin"></i> connect
+                    </a>
+                </div>
+
+                <!-- Mobile Action Buttons -->
+                <div class="flex md:hidden items-center gap-2">
+                    <button onclick="toggleTheme()" class="hover:text-themeAccent p-2 text-themeMuted focus:outline-none" title="Toggle Theme">
+                        <i class="fa-solid fa-layer-group text-lg"></i>
+                    </button>
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-themeText hover:text-themeAccent focus:outline-none p-2" aria-label="Toggle Menu">
+                        <i id="menu-icon" class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-themeBorder bg-themeBg px-4 py-4 space-y-4 font-mono text-sm shadow-md transition-colors duration-300">
+            <a href="#home" onclick="navigate('home'); toggleMobileMenu()" class="block hover:text-themeAccent py-1 nav-link" data-target="home">Overview</a>
+            <a href="#blog" onclick="navigate('blog'); toggleMobileMenu()" class="block hover:text-themeAccent py-1 nav-link" data-target="blog">Blog_Notes</a>
+            <a href="{{ '/products/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">Products</a>
+            <a href="{{ '/tools/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">EE_Tools</a>
+            <a href="pong.html" class="block hover:text-themeAccent py-1 text-themeAccent/60 font-bold">SYS_RST</a>
+            <div class="border-t border-themeBorder/10 pt-3">
+                <a href="https://linkedin.com/" target="_blank" class="block bg-themeBorder text-themeBg py-2 text-center hover:bg-themeAccent hover:text-white transition-colors font-bold shadow-[2px_2px_0px_var(--accent-color)]">
+                    <i class="fa-brands fa-linkedin text-sm mr-2"></i>connect on LinkedIn
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN PORTFOLIO VIEW -->
+    <main id="home-page" class="page-view active flex-grow pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
+        
+        <!-- header / Intro -->
+        <header class="mb-16">
+            <div class="border-b-2 border-themeBorder pb-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                <div>
+                    <!-- Animated Name -->
+                    <h1 class="text-5xl sm:text-7xl font-bold tracking-tight mb-2 uppercase text-themeText flex items-end relative">
+                        <span id="hero-y" class="inline-block transition-transform duration-500 ease-in-out z-20">Y</span>
+                        <span id="hero-a1" class="inline-block transition-all duration-500 ease-in-out z-20">A</span>
+                        <span id="hero-w" class="inline-block transition-transform duration-500 ease-in-out z-10">W</span>
+                        <span id="hero-a2" class="inline-block transition-transform duration-500 ease-in-out z-10">A</span>
+                        <span id="hero-r" class="inline-block transition-transform duration-500 ease-in-out z-10">R</span>
+                        <span id="hero-dot" class="text-themeAccent inline-block transition-all duration-300 origin-bottom z-10">.</span>
+                    </h1>
+                    <p class="text-xl sm:text-2xl font-mono text-themeAccent font-semibold">
+                        Engineering the Physical Layer.
+                    </p>
+                    
+                    <!-- Engineering Philosophy Quote -->
+                    <div class="mt-5 mb-2 border-t border-b border-themeBorder/20 py-2 inline-block">
+                        <p class="text-[10px] sm:text-[11px] font-mono text-themeMuted tracking-widest uppercase">
+                            "The physical layer is unforgiving; it demands absolute truth in design."
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="font-mono text-themeMuted text-right text-sm mt-4 md:mt-0">
+                    <p>high-Rel Systems Architecture</p>
+                    <p>Power Electronics & PLM</p>
+                    <a href="https://github.com/wayri" target="_blank" class="hover:text-themeAccent transition-colors mt-2 inline-block"><i class="fa-brands fa-github"></i> github.com/wayri</a>
+                </div>
+            </div>
+
+            
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                <div class="lg:col-span-2 text-themeText leading-relaxed space-y-4 text-lg font-light">
+                    <p class="font-semibold text-xl">
+                        I architect end-to-end hardware systems, engineering the bridge between complex physical domains and reliable control logic.
+                    </p>
+                    <p>
+                        My foundation is rooted in complete product lifecycle management (PLM), with deep specializations in power electronics, instrumentation, and electro-mechanical integration. I have led the end-to-end electronic subsystem design for multiple satellites, engineering high-reliability systems and Battery Management Systems (BMS) built to operate predictably in hazardous orbital environments.
+                    </p>
+                    <p>
+                        My trajectory spans from component-level aerospace design and creating custom desktop client applications, to steering multi-lakh R&D initiatives and advising on state-level infrastructure for electric vehicles and renewable energy grids.
+                    </p>
+                </div>
+                
+                <!-- Steampunk Glitch Widget (click to trigger anomaly & name animation) -->
+                <div class="doc-container p-4 flex flex-col w-full bg-[#0a0a0a] border-[#D4AF37] steampunk-glow shadow-[4px_4px_0px_#D4AF37] cursor-pointer group" onclick="triggerAnomaly()">
+                    <div class="flex justify-between items-center mb-2 border-b border-[#D4AF37]/30 pb-2">
+                        <span class="font-mono text-xs font-bold text-[#D4AF37]">SYS_cLOcK_PROBE</span>
+                        <span class="font-mono text-[10px] text-[#ff8c00] animate-pulse uppercase tracking-widest group-hover:text-[#ff3333] transition-colors">Monitoring</span>
+                    </div>
+                    
+                    <div class="relative w-full h-32 mb-2 bg-[#050505] overflow-hidden rounded-sm border border-[#D4AF37]/20 flex">
+                        <!-- Left: Digital Segment clock -->
+                        <div class="w-2/5 h-full border-r border-[#D4AF37]/20 flex items-center justify-center relative bg-gradient-to-b from-[#111] to-[#000]">
+                            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#ff8c00] to-transparent pointer-events-none"></div>
+                            <span id="steampunk-clock-text" class="font-mono text-2xl font-bold text-[#ffb703] drop-shadow-[0_0_5px_#ff8c00] tracking-widest transition-transform duration-75 relative z-10 select-none">
+                                00:00
+                            </span>
+                        </div>
+                        
+                        <!-- Right: Analog Trace Scope -->
+                        <div class="w-3/5 h-full relative">
+                            <canvas id="steampunk-canvas" class="w-full h-full absolute inset-0"></canvas>
+                        </div>
+                    </div>
+                    
+                    <p class="text-[9px] font-mono text-[#D4AF37]/60 text-center uppercase tracking-wider select-none">click to inject anomaly</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- core capabilities (Professional Skills Section) -->
+        <section class="mb-20">
+            <h2 class="text-2xl font-bold mb-8 text-themeText border-b border-themeBorder pb-2">core capabilities & Technical Scope</h2>
+            
+            <div class="space-y-8">
+                <!-- Leadership & Architecture -->
+                <div class="flex flex-col md:flex-row gap-4 items-start">
+                    <div class="md:w-1/4 font-mono text-sm font-bold text-themeAccent uppercase tracking-wider pt-1">
+                        Architecture & Leadership
+                    </div>
+                    <div class="md:w-3/4">
+                        <p class="text-themeMuted mb-2">
+                            Directed complete Product Lifecycle Management (PLM) for complex hardware deployments. Managed multi-lakh R&D budgets, leading cross-functional teams in bridging high-level algorithmic concepts with physical hardware realization. Demonstrated experience in strategic technical consulting for state-level infrastructural planning.
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs font-mono mt-3">
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">End-to-End PLM</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Technical Strategy</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">cross-functional Leadership</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">R&D Budgeting</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full h-px bg-themeBorder/20"></div>
+
+                <!-- hardware & high Rel -->
+                <div class="flex flex-col md:flex-row gap-4 items-start">
+                    <div class="md:w-1/4 font-mono text-sm font-bold text-themeAccent uppercase tracking-wider pt-1">
+                        hardware & high-Rel
+                    </div>
+                    <div class="md:w-3/4">
+                        <p class="text-themeMuted mb-2">
+                            Design of high-reliability, space-grade electronic subsystems engineered for hazardous environments. Expertise in mixed-signal hDI routing, EMI/EMc mitigation, and robust power electronics encompassing BMS architecture, Grid-Tied Inverters, and Motor Drives. Extensive work developing Electrical Ground Support Equipment (EGSE).
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs font-mono mt-3">
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Altium Designer</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Kicad</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">SolidWorks (3D cAD)</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Power Electronics</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Space-Grade BMS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full h-px bg-themeBorder/20"></div>
+
+                <!-- Software & Firmware -->
+                <div class="flex flex-col md:flex-row gap-4 items-start">
+                    <div class="md:w-1/4 font-mono text-sm font-bold text-themeAccent uppercase tracking-wider pt-1">
+                        Software & Firmware
+                    </div>
+                    <div class="md:w-3/4">
+                        <p class="text-themeMuted mb-2">
+                            comprehensive programming stack bridging bare-metal hardware interaction with desktop visualization. Development of interrupt-driven RTOS firmware for microcontrollers, alongside custom desktop client applications (Telemetry & Logging Suites) for data acquisition and analysis. 
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs font-mono mt-3">
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText font-bold">c / c++</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText font-bold">c#</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText font-bold">Python</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText font-bold">Bash</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">RTOS</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">MATLAB / Simulink</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full h-px bg-themeBorder/20"></div>
+
+                <!-- Lab & Validation -->
+                <div class="flex flex-col md:flex-row gap-4 items-start">
+                    <div class="md:w-1/4 font-mono text-sm font-bold text-themeAccent uppercase tracking-wider pt-1">
+                        Lab & Validation
+                    </div>
+                    <div class="md:w-3/4">
+                        <p class="text-themeMuted mb-2">
+                            Rigorous physical verification of electronics. Extensive utilization of advanced lab instrumentation to profile signal integrity, characterize power transient responses, and conduct extreme environmental and thermal chamber testing for orbital qualification.
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs font-mono mt-3">
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Mixed-Domain Oscilloscopes</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Spectrum Analyzers</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Logic Analyzers</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">hardware-in-the-Loop (hIL)</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Thermal Validation</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Work Experience -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-bold mb-6 border-b border-themeBorder pb-2 text-themeText">Experience Timeline</h2>
+            
+            <div class="space-y-6 pl-2">
+                <!-- Role 1 -->
+                <div class="relative pl-6 border-l-2 border-themeAccent pb-6">
+                    <div class="absolute w-3 h-3 bg-themeAccent rounded-full -left-[7px] top-1.5"></div>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-1">
+                        <h3 class="text-xl font-bold text-themeText">Senior Electrical Engineer</h3>
+                        <span class="font-mono text-xs bg-themeAccent text-themeBg font-bold px-2 py-1 mt-2 sm:mt-0">current</span>
+                    </div>
+                    <div class="font-mono text-sm text-themeMuted mb-3 font-semibold">Pixxel Space</div>
+                    <p class="text-themeText text-sm mb-3">
+                        Leading the end-to-end electronic subsystem design for multiple satellites. Specializing in high-reliability (high-rel) electronics engineered to operate in hazardous orbital environments.
+                    </p>
+                    <ul class="list-disc list-inside text-sm text-themeMuted space-y-1">
+                        <li>Architecting satellite voltage regulation networks and power distribution.</li>
+                        <li>Designing robust Battery Management Systems (BMS) for spaceflight conditions.</li>
+                        <li>Developing Electrical Ground Support Equipment (EGSE), power loggers, input protection devices, and constant current solar cell simulators for rigorous subsystem verification.</li>
+                        <li>Managing full PLM from conceptual schematics through flight-ready hardware integration.</li>
+                    </ul>
+                </div>
+
+                <!-- Role 2 -->
+                <div class="relative pl-6 border-l-2 border-themeBorder pb-6">
+                    <div class="absolute w-3 h-3 bg-themeBg border-2 border-themeBorder rounded-full -left-[7px] top-1.5"></div>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-1">
+                        <h3 class="text-xl font-bold text-themeText">Technical Advisor</h3>
+                    </div>
+                    <div class="font-mono text-sm text-themeMuted mb-3 font-semibold">Kashmir University TIDE center for Entrepreneurship</div>
+                    <p class="text-themeText text-sm">
+                        Providing strategic technical architecture guidance to emerging hardware startups. Mentoring engineering founders on prototyping-to-production pipelines, component supply chain constraints, and embedded systems integration.
+                    </p>
+                </div>
+
+                <!-- Role 3 -->
+                <div class="relative pl-6 border-l-2 border-themeBorder pb-6">
+                    <div class="absolute w-3 h-3 bg-themeBg border-2 border-themeBorder rounded-full -left-[7px] top-1.5"></div>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-1">
+                        <h3 class="text-xl font-bold text-themeText">Project Associate (R&D Architecture)</h3>
+                    </div>
+                    <div class="font-mono text-sm text-themeMuted mb-2 font-semibold">NIT Srinagar</div>
+                    <div class="font-mono text-xs text-themeText/70 mb-3 uppercase tracking-wider">Budget Scope: Ã¢â€šÂ¹10L - Ã¢â€šÂ¹20L</div>
+                    <p class="text-themeText text-sm mb-3">
+                        Directed the hardware architecture and systems integration for an experimental grid-tied inverter testbed. Engineered the hardware-software ecosystem required for PhD researchers to deploy and benchmark novel power control algorithms safely.
+                    </p>
+                    <ul class="list-disc list-inside text-sm text-themeMuted space-y-1">
+                        <li>Designed custom signal isolation and DAQ pathways.</li>
+                        <li>Bridged high-level MATLAB/Simulink models with bare-metal PWM execution.</li>
+                        <li>conducted applied workshops teaching systems-level hardware interaction.</li>
+                    </ul>
+                </div>
+
+                <!-- Role 4 -->
+                <div class="relative pl-6 border-l-2 border-transparent">
+                    <div class="absolute w-3 h-3 bg-themeBg border-2 border-themeBorder rounded-full -left-[7px] top-1.5"></div>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-1">
+                        <h3 class="text-xl font-bold text-themeText">Research Analyst / Associate</h3>
+                    </div>
+                    <div class="font-mono text-sm text-themeMuted mb-2 font-semibold">University of Kashmir (Sponsored by J&K Govt.)</div>
+                    <div class="font-mono text-xs text-themeText/70 mb-3 uppercase tracking-wider">EV Feasibility & Grid Impact Study</div>
+                    <p class="text-themeText text-sm">
+                        Analyzed electrical distribution constraints for emerging EV infrastructure. Synthesized deep technical findings into actionable policy recommendations for the state electricity regulator, resulting in subsequent integration into active state infrastructural policy.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Publications -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-bold mb-6 border-b border-themeBorder pb-2 text-themeText flex items-center gap-2">
+                <i class="fa-solid fa-book-journal-whills text-themeMuted text-lg"></i> Publications & Research
+            </h2>
+            <div class="space-y-4">
+                
+                <a href="https://www.sciencedirect.com/science/article/abs/pii/S2352152X23025987?via%3Dihub" target="_blank" class="block group">
+                    <div class="doc-container p-4 hover:border-themeAccent transition-colors">
+                        <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors">Ultracapacitor Integration with Regenerative Braking Systems in Electric Drive Trains</h3>
+                        <p class="text-sm font-mono text-themeMuted mt-1">ScienceDirect / Elsevier | DOI: S2352152X23025987</p>
+                    </div>
+                </a>
+
+                <a href="https://ieeexplore.ieee.org/document/9851081" target="_blank" class="block group">
+                    <div class="doc-container p-4 hover:border-themeAccent transition-colors">
+                        <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors">Application of V2V Energy Sharing in Electric Vehicles with Source Switching</h3>
+                        <p class="text-sm font-mono text-themeMuted mt-1">IEEE Xplore | Document: 9851081</p>
+                    </div>
+                </a>
+
+                <a href="https://link.springer.com/article/10.1007/s12652-023-04578-w" target="_blank" class="block group">
+                    <div class="doc-container p-4 hover:border-themeAccent transition-colors">
+                        <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors">Experimental Implementation of Optimally Tuned Multifunctional RLMLS Driven VSc Tied to Single Phase Voltage Weak Distribution Grid</h3>
+                        <p class="text-sm font-mono text-themeMuted mt-1">Springer Link | DOI: 10.1007/s12652-023-04578-w</p>
+                    </div>
+                </a>
+                
+                <a href="https://link.springer.com/chapter/10.1007/978-981-16-1186-5_8" target="_blank" class="block group">
+                    <div class="doc-container p-4 hover:border-themeAccent transition-colors">
+                        <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors">A New Modular Multilevel converter Topology Using Flying Ultra-capacitor and cascaded h-bridges</h3>
+                        <p class="text-sm font-mono text-themeMuted mt-1">Springer Book chapter | DOI: 10.1007/978-981-16-1186-5_8</p>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- Projects Portfolio -->
+        <div class="mb-16">
+            <h2 class="text-2xl font-bold mb-6 border-b border-themeBorder pb-2 text-themeText">Somethings I have worked on / built</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- hARDWARE cOLOR cODED PROJEcTS -->
+                <div class="space-y-4">
+                    <a href="https://github.com/wayri/3-Phase-inverter-board" target="_blank" class="doc-container p-4 block hover:border-themeAccent transition-colors border-l-4 border-l-themeAccent">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">3-Phase Grid-Tied Inverter</h4>
+                            <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase">hardware</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">hardware design layout for 3-phase grid-tied power conversion, engineered to support active and reactive power injection algorithms.</p>
+                    </a>
+
+                    <a href="https://github.com/wayri/8-channel-optocoupler-board-kicAD" target="_blank" class="doc-container p-4 block hover:border-themeAccent transition-colors border-l-4 border-l-themeAccent">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">8-channel Optocoupler Board</h4>
+                            <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase">hardware</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">Industrial isolation interface designed in KicAD. Utilizes an EL817 array with onboard inverted channel logic specifically meant for control isolation.</p>
+                    </a>
+
+                    <div class="doc-container p-4 border-l-4 border-l-themeAccent">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">Spacecraft & Orbital Systems</h4>
+                            <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase">hardware / Space</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">Flight-ready satellites, bespoke partial satellite subsystems, and highly reliable ground support infrastructure for orbital tracking.</p>
+                    </div>
+
+                    <div class="doc-container p-4 border-l-4 border-l-themeAccent">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">Power Electronics & Testing</h4>
+                            <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase">hardware</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">Development of linear power supplies, solar cell characterization simulators, and custom battery packs incorporating stringent BMS safety architectures.</p>
+                    </div>
+                </div>
+
+                <!-- SOFTWARE / FIRMWARE cOLOR cODED PROJEcTS -->
+                <div class="space-y-4">
+                    <a href="https://github.com/wayri/KiWay" target="_blank" class="doc-container p-4 block hover:border-themeBorder transition-colors border-l-4 border-l-themeBorder">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">KiWay</h4>
+                            <span class="text-[10px] font-mono bg-themeBorder/10 text-themeText border border-themeBorder/20 px-2 py-0.5 uppercase">Software / EDA</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">PcB Design and Layout routing framework for automating redundant constraints and programmatic schematic compilation.</p>
+                    </a>
+
+                    <a href="https://github.com/wayri/Arduino-Oscilloscope" target="_blank" class="doc-container p-4 block hover:border-themeBorder transition-colors border-l-4 border-l-themeBorder">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">Dual-channel Oscilloscope</h4>
+                            <span class="text-[10px] font-mono bg-themeBorder/10 text-themeText border border-themeBorder/20 px-2 py-0.5 uppercase">Firmware / c++</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">Ported and modified Norkiaki Mitsunaga's code for an ATmega2560. Features a TFT touch interface, engineered specifically for teaching ADc interrupts.</p>
+                    </a>
+
+                    <a href="https://github.com/wayri/sigLib" target="_blank" class="doc-container p-4 block hover:border-themeBorder transition-colors border-l-4 border-l-themeBorder">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">sigLib</h4>
+                            <span class="text-[10px] font-mono bg-themeBorder/10 text-themeText border border-themeBorder/20 px-2 py-0.5 uppercase">Software / DSP</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">c++ Signal Processing Library containing algorithms tailored for real-time waveform conditioning, smoothing, and analysis on embedded targets.</p>
+                    </a>
+
+                    <a href="https://github.com/wayri/Gauss_Siedel_Load_Flow_Analyser" target="_blank" class="doc-container p-4 block hover:border-themeBorder transition-colors border-l-4 border-l-themeBorder">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">Gauss-Seidel Load Flow</h4>
+                            <span class="text-[10px] font-mono bg-themeBorder/10 text-themeText border border-themeBorder/20 px-2 py-0.5 uppercase">Software / c++</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">console-based numerical analyzer for calculating power distribution flows across N-bus non-linear electrical networks.</p>
+                    </a>
+                </div>
+
+            </div>
+            
+            <!-- Additional context -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div class="doc-container p-4 border-l-4 border-l-themeBorder border-dashed">
+                    <h4 class="font-bold text-themeText">DFIG Simulator Setup</h4>
+                    <p class="text-xs font-mono text-themeMuted mt-1">hardware/software testbed for profiling Doubly Fed Induction Generators under varied load dynamics.</p>
+                </div>
+                <div class="doc-container p-4 border-l-4 border-l-themeBorder border-dashed">
+                    <h4 class="font-bold text-themeText">home Automation Modules</h4>
+                    <p class="text-xs font-mono text-themeMuted mt-1">custom embedded control nodes handling decentralized sensor data integration.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- contact hint & Blog Link -->
+        <section class="mb-10 flex flex-col md:flex-row justify-between items-center gap-6 border-t-2 border-themeBorder pt-8">
+            <div class="flex-grow">
+                <p class="text-lg font-semibold text-themeText mb-1">I occasionally discuss engineering challenges.</p>
+                <p class="text-sm font-mono text-themeMuted">If you want to talk about systems architecture, hardware pipelines, or other projects, you can reach out via the linked contacts below.</p>
+            </div>
+            <button onclick="navigate('blog')" class="bg-themeBorder text-themeBg px-6 py-3 font-bold hover:bg-themeAccent hover:text-white transition-colors shadow-[4px_4px_0px_var(--accent-color)] whitespace-nowrap">
+                ENTER BLOG DIREcTORY <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+        </section>
+
+    </main>
+
+    <!-- BLOG PAGE VIEW -->
+    <main id="blog-page" class="page-view flex-grow pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
+        <div class="border-b-2 border-themeBorder pb-6 mb-8 flex flex-col md:flex-row justify-between md:items-end gap-4">
+            <div>
+                <h1 class="text-4xl font-bold tracking-tight mb-2 uppercase text-themeText">Engineering <span class="text-themeAccent">Logs</span></h1>
+                <p class="text-lg font-mono text-themeMuted">Technical write-ups, architecture teardowns, and personal notes.</p>
+            </div>
+            <div class="font-mono text-xs text-themeMuted text-right">
+                <i class="fa-solid fa-folder-open"></i> /sys/blogs/
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for post in site.posts %}
+            <a href="{{ post.url | relative_url }}" class="doc-container p-6 hover:border-themeAccent transition-colors block group">
+                <div class="font-mono text-xs text-themeAccent font-bold mb-2">{{ post.date | date: "%Y-%m-%d" }}</div>
+                <h3 class="font-bold text-themeText text-xl mb-3 group-hover:text-themeAccent transition-colors">{{ post.title }}</h3>
+                <p class="text-sm text-themeMuted">{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
+            </a>
+            {% endfor %}
+            
+            {% if site.posts.size == 0 %}
+            <div class="doc-container p-6 border-dashed border-themeBorder/50 flex flex-col justify-center items-center text-center opacity-70">
+                <i class="fa-solid fa-pen-nib text-3xl mb-3 text-themeMuted"></i>
+                <h3 class="font-bold text-themeText">More entries pending publication</h3>
+                <p class="text-sm font-mono text-themeMuted mt-1">check back later for new technical logs.</p>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- TOOLS PAGE VIEW -->
+    <main id="tools-page" class="page-view flex-grow pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div class="border-b-2 border-themeBorder pb-6 mb-8 flex flex-col md:flex-row justify-between md:items-end gap-4">
+            <div>
+                <h1 class="text-4xl font-bold tracking-tight mb-2 uppercase text-themeText">EE_Tools <span class="text-themeAccent">Suite</span></h1>
+                <p class="text-lg font-mono text-themeMuted">client-side synthesis and analysis utilities.</p>
+            </div>
+
+<div class="mb-6 mt-4 border border-themeAccent/30 bg-themeAccent/5 p-4 text-xs font-mono text-themeMuted">
+            <strong class="text-themeAccent uppercase">Technical Disclaimer:</strong> client-side calculators, simulation widgets, and parameter synthesis tools hosted on this domain are provided strictly for preliminary conceptualization and educational reference. computed values do not account for absolute component tolerances, parasitic inductance/capacitance, environmental derating, or dynamic PcB layout constraints. <strong>Do not utilize these tools to authorize flight-critical, high-rel, medical, or life-safety hardware architectures without rigorous independent simulation and empirical lab validation.</strong>
+        </div>
+
+            <div class="font-mono text-xs text-themeMuted text-right">
+                <i class="fa-solid fa-server"></i> Executing Locally
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            
+            <!-- 1. Smart Voltage Divider -->
+            <div class="doc-container flex flex-col">
+                  <div class="h-32 bg-themeBg border-b border-themeBorder overflow-hidden flex justify-center items-center"><img src="assets/images/divider.png" class="h-full opacity-80 mix-blend-screen" alt="Divider Circuit"></div>
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex items-center gap-2" onclick="toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <i class="fa-solid fa-bolt"></i>
+                    <h3 class="font-bold font-mono">Resistor Divider</h3>
+                </div>
+                <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+                    <div class="flex gap-3 mb-2 pb-3 border-b border-themeBorder/20 text-xs text-themeMuted font-bold">
+                        <span>SOLVE:</span>
+                        <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="vin" onchange="setupDividerMode()"> Vin</label>
+                        <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="r1" onchange="setupDividerMode()"> R1</label>
+                        <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="r2" onchange="setupDividerMode()"> R2</label>
+                        <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="vout" checked onchange="setupDividerMode()"> Vout</label>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <label class="w-20">Vin (V)</label>
+                        <input type="number" id="calc-vin" value="12" step="0.1" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <label class="w-20">R1 (&Omega;)</label>
+                        <div class="flex flex-col items-end w-32">
+                            <input type="number" id="calc-r1" value="10000" class="w-full border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
+                            <span id="sug-r1" class="text-[9px] text-themeAccent cursor-pointer hover:underline mt-0.5 opacity-0 h-0 transition-opacity whitespace-nowrap" onclick="applyVal('calc-r1', this.dataset.val); runSmartDivider();"></span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <label class="w-20">R2 (&Omega;)</label>
+                        <div class="flex flex-col items-end w-32">
+                            <input type="number" id="calc-r2" value="4700" class="w-full border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
+                            <span id="sug-r2" class="text-[9px] text-themeAccent cursor-pointer hover:underline mt-0.5 opacity-0 h-0 transition-opacity whitespace-nowrap" onclick="applyVal('calc-r2', this.dataset.val); runSmartDivider();"></span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <label class="w-20 text-themeAccent font-bold">Vout (V)</label>
+                        <input type="number" id="calc-vout" class="w-32 border-2 border-themeAccent px-2 py-1 text-right font-bold text-themeAccent bg-opacity-10 bg-themeAccent" readonly>
+                    </div>
+                    <div class="pt-3 mt-3 border-t border-themeBorder/20 text-xs">
+                        <div class="grid grid-cols-2 gap-2 text-themeMuted">
+                            <div class="bg-themeBorder/5 p-2 border border-themeBorder/10">
+                                <span>P(R1): <span id="pow-r1" class="font-bold text-themeText">0.00 mW</span></span>
+                                <div id="pkg-r1" class="text-themeAccent mt-1">0402</div>
+                            </div>
+                            <div class="bg-themeBorder/5 p-2 border border-themeBorder/10">
+                                <span>P(R2): <span id="pow-r2" class="font-bold text-themeText">0.00 mW</span></span>
+                                <div id="pkg-r2" class="text-themeAccent mt-1">0402</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. compensator Pole/Zero (Type II & III) -->
+            <div class="doc-container flex flex-col">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex items-center gap-2" onclick="toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <h3 class="font-bold font-mono">Loop compensator (P/Z)</h3>
+                </div>
+                <div class="p-4 space-y-2 font-mono text-sm flex-grow">
+                    
+                      <div class="mb-4 w-full aspect-video bg-[#050505] flex items-center justify-center border border-themeBorder/30">
+                          <img id="comp-img-type2" src="assets/images/comp_type2.png" class="max-h-full max-w-full object-contain" alt="Type II Compensator">
+                          <img id="comp-img-type3" src="assets/images/comp_type3.png" class="max-h-full max-w-full object-contain hidden" alt="Type III Compensator">
+                      </div>
+                      <select id="comp-type" class="w-full border border-themeBorder px-2 py-1 mb-2 font-bold" onchange="runcompensator(); document.getElementById('comp-img-type2').classList.toggle('hidden', this.value==='type3'); document.getElementById('comp-img-type3').classList.toggle('hidden', this.value==='type2');">
+                        <option value="type2">Type II compensator</option>
+                        <option value="type3">Type III compensator</option>
+                    </select>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs"><label>R1 (k&Omega;)</label><input type="number" id="comp-r1" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runcompensator()"></div>
+                            <div class="flex justify-between text-xs"><label>R2 (k&Omega;)</label><input type="number" id="comp-r2" value="22" class="w-16 border border-themeBorder px-1 text-right" oninput="runcompensator()"></div>
+                            <div class="flex justify-between text-xs opacity-50 transition-opacity" id="comp-r3-grp"><label>R3 (k&Omega;)</label><input type="number" id="comp-r3" value="1" class="w-16 border border-themeBorder px-1 text-right" oninput="runcompensator()" disabled></div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs"><label>c1 (nF)</label><input type="number" id="comp-c1" value="1" class="w-16 border border-themeBorder px-1 text-right" oninput="runcompensator()"></div>
+                            <div class="flex justify-between text-xs"><label>c2 (nF)</label><input type="number" id="comp-c2" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runcompensator()"></div>
+                            <div class="flex justify-between text-xs opacity-50 transition-opacity" id="comp-c3-grp"><label>c3 (nF)</label><input type="number" id="comp-c3" value="2.2" class="w-16 border border-themeBorder px-1 text-right" oninput="runcompensator()" disabled></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-1 text-xs">
+                        <div class="flex justify-between"><span class="text-themeMuted">Zero 1 (Fz1)</span><span id="comp-fz1" class="font-bold text-themeAccent">0 hz</span></div>
+                        <div class="flex justify-between"><span class="text-themeMuted">Pole 1 (Fp1)</span><span id="comp-fp1" class="font-bold text-themeAccent">0 hz</span></div>
+                        <div class="flex justify-between opacity-50" id="comp-fz2-grp"><span class="text-themeMuted">Zero 2 (Fz2)</span><span id="comp-fz2" class="font-bold text-themeAccent">-- hz</span></div>
+                        <div class="flex justify-between opacity-50" id="comp-fp2-grp"><span class="text-themeMuted">Pole 2 (Fp2)</span><span id="comp-fp2" class="font-bold text-themeAccent">-- hz</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. SMPS / Transformer Ratio -->
+            <div class="doc-container flex flex-col">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex items-center gap-2" onclick="toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <i class="fa-solid fa-transformer"></i>
+                    <h3 class="font-bold font-mono">SMPS Topology & Ratio</h3>
+                </div>
+                <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+                    <select id="smps-type" class="w-full border border-themeBorder px-2 py-1 mb-2 font-bold" onchange="runSMPS()">
+                        <option value="buck">Buck (Step-Down)</option>
+                        <option value="boost">Boost (Step-Up)</option>
+                        <option value="flyback">Isolated Flyback</option>
+                    </select>
+
+                    <div class="flex justify-between items-center">
+                        <label class="w-24">Vin (V)</label>
+                        <input type="number" id="smps-vin" value="24" step="1" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runSMPS()">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <label class="w-24">Vout (V)</label>
+                        <input type="number" id="smps-vout" value="5" step="0.1" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runSMPS()">
+                    </div>
+
+                    <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-2 text-xs">
+                        <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                            <span class="text-themeMuted">Ideal Duty cycle (D)</span>
+                            <span id="smps-duty" class="font-bold text-themeText">20.8%</span>
+                        </div>
+                        <div class="flex justify-between pb-1 opacity-50" id="smps-ratio-grp">
+                            <span class="text-themeMuted" title="Assuming typical Duty constraint for Vor">Req. Turns Ratio (Np/Ns)</span>
+                            <span id="smps-ratio" class="font-bold text-themeAccent">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Voltage Margining / DAc Injection -->
+            <div class="doc-container flex flex-col">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex items-center gap-2" onclick="toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <i class="fa-solid fa-arrows-to-dot"></i>
+                    <h3 class="font-bold font-mono">Voltage Margining (DAc)</h3>
+                </div>
+                <div class="p-4 space-y-2 font-mono text-sm flex-grow">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs"><label>V_ref (V)</label><input type="number" id="vm-vref" value="0.6" step="0.1" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
+                            <div class="flex justify-between text-xs"><label>R_top (k&Omega;)</label><input type="number" id="vm-rtop" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
+                            <div class="flex justify-between text-xs"><label>R_bot (k&Omega;)</label><input type="number" id="vm-rbot" value="2.2" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
+                        </div>
+                        <div class="space-y-2 border-l border-themeBorder/20 pl-4">
+                            <div class="flex justify-between text-xs"><label class="text-themeAccent">V_dac (V)</label><input type="number" id="vm-vdac" value="1.5" step="0.1" class="w-16 border border-themeBorder px-1 text-right bg-themeAccent/10" oninput="runMargin()"></div>
+                            <div class="flex justify-between text-xs"><label>R_inj (k&Omega;)</label><input type="number" id="vm-rinj" value="47" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-1 text-xs">
+                        <div class="flex justify-between"><span class="text-themeMuted">Nominal Vout (No DAc)</span><span id="vm-vnom" class="font-bold text-themeText">3.32 V</span></div>
+                        <div class="flex justify-between"><span class="text-themeMuted">Margined Vout</span><span id="vm-vmarg" class="font-bold text-themeAccent text-sm">3.13 V</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Motor Dynamics -->
+            <div class="doc-container flex flex-col">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex items-center gap-2" onclick="toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <i class="fa-solid fa-gear"></i>
+                    <h3 class="font-bold font-mono">Ac Motor Dynamics</h3>
+                </div>
+                <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+                    <div class="flex justify-between items-center">
+                        <label class="w-24">Poles (P)</label>
+                        <input type="number" id="mot-p" value="4" step="2" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runMotor()">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <label class="w-24">Freq (hz)</label>
+                        <input type="number" id="mot-f" value="50" step="1" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runMotor()">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <label class="w-24">Torque (Nm)</label>
+                        <input type="number" id="mot-t" value="15" step="0.5" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runMotor()">
+                    </div>
+
+                    <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-2 text-xs">
+                        <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                            <span class="text-themeMuted">Synchronous Speed</span>
+                            <span id="mot-rpm" class="font-bold text-themeText">1500 RPM</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-themeMuted">Mechanical Power</span>
+                            <span class="font-bold text-themeAccent"><span id="mot-kw">2.36</span> kW / <span id="mot-hp">3.16</span> hP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. IPc-2221 Trace Width -->
+            <div class="doc-container flex flex-col">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex items-center gap-2" onclick="toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <i class="fa-solid fa-ruler-horizontal"></i>
+                    <h3 class="font-bold font-mono">IPc-2221 Trace Width</h3>
+                </div>
+                <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+                    <div class="flex justify-between items-center">
+                        <label class="w-32">current (A)</label>
+                        <input type="number" id="pcb-i" value="1" step="0.1" class="w-24 border border-themeBorder px-2 py-1 text-right" oninput="runPcBTrace()">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <label class="w-32 text-xs" title="Max allowable temp rise">Temp Rise (&Delta;Ã‚Âc)</label>
+                        <input type="number" id="pcb-dt" value="10" step="1" class="w-24 border border-themeBorder px-2 py-1 text-right" oninput="runPcBTrace()">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <label class="w-32 text-xs">cu Weight (oz)</label>
+                        <input type="number" id="pcb-th" value="1" step="0.5" class="w-24 border border-themeBorder px-2 py-1 text-right" oninput="runPcBTrace()">
+                    </div>
+
+                    <div class="pt-3 mt-3 border-t border-themeBorder/20">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="font-bold text-themeText text-xs">Required Width (Ext)</label>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-center text-lg font-bold text-themeAccent">
+                            <div class="bg-themeBorder/5 border border-themeBorder/10 p-2" id="pcb-w-mil">11.8 mil</div>
+                            <div class="bg-themeBorder/5 border border-themeBorder/10 p-2" id="pcb-w-mm">0.30 mm</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <!-- Filter Designer -->
+            <div class="doc-container flex flex-col xl:col-span-2">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-filter"></i><h3 class="font-bold font-mono">Filter Designer</h3></div>
+                    <select id="filter-type" class="border border-themeBg text-themeBg bg-themeBorder text-xs font-mono font-bold hover:bg-themeBg hover:text-themeBorder transition-colors shadow-[2px_2px_0px_#fff]" onchange="setupFilterMode(); event.stopPropagation();">
+                        <option value="rc">RC (Low-Pass)</option>
+                        <option value="rl">RL (Low-Pass)</option>
+                        <option value="lc">LC (Low-Pass)</option>
+                        <option value="lcl">LCL (T-Filter)</option>
+                        <option value="clc">CLC (Pi-Filter)</option>
+                    </select>
+                </div>
+                <div class="p-4 flex-grow flex flex-col gap-4 font-mono text-sm">
+                    <div class="flex gap-2 mb-2 pb-2 border-b border-themeBorder/20 text-[10px] text-themeMuted font-bold" id="filter-solve-group">
+                        <!-- Solvers injected by JS -->
+                    </div>
+                    
+                    <div id="filter-inputs" class="flex flex-col gap-2">
+                        <!-- Inputs injected by JS -->
+                    </div>
+                    
+                    <div class="flex justify-between font-bold text-themeAccent mt-2 pt-2 border-t border-themeBorder/20">
+                        <label>Cutoff fc (Hz)</label>
+                        <input type="number" id="calc-filter-fc" value="1590" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()">
+                    </div>
+                    
+                    <div class="relative w-full flex-grow mt-4 border border-themeBorder/30 bg-[#111] min-h-[200px]">
+                        <canvas id="filter-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+<!-- 9. E-Series calculator -->
+            <div class="doc-container flex flex-col">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex items-center gap-2" onclick="toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <i class="fa-solid fa-list-ol"></i>
+                    <h3 class="font-bold font-mono">E-Series Finder</h3>
+                </div>
+                <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+                    <div class="flex justify-between items-center">
+                        <label class="w-24">Target R/c</label>
+                        <input type="number" id="eseries-in" value="4850" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runESeries()">
+                    </div>
+                    <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-2 text-xs">
+                        <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                            <span class="text-themeMuted">Nearest E12 (10%)</span>
+                            <span id="eseries-e12" class="font-bold text-themeText">4700 &Omega;</span>
+                        </div>
+                        <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                            <span class="text-themeMuted">Nearest E24 (5%)</span>
+                            <span id="eseries-e24" class="font-bold text-themeAccent">4700 &Omega;</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-themeMuted">Nearest E96 (1%)</span>
+                            <span id="eseries-e96" class="font-bold text-themeAccent">4870 &Omega;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. Thermistor calculator & Plot -->
+            <div class="doc-container flex flex-col lg:col-span-2">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex items-center gap-2" onclick="toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <i class="fa-solid fa-temperature-half"></i>
+                    <h3 class="font-bold font-mono">Thermistor R-T curve (NTc)</h3>
+                </div>
+                <div class="p-4 flex gap-4 font-mono text-sm flex-grow">
+                    <div class="w-1/2 space-y-3">
+                        <div class="flex justify-between items-center text-xs">
+                            <label>R_nom (&Omega; @ 25&deg;C)</label>
+                            <input type="number" id="ntc-r25" value="10000" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <label>Beta (&beta;)</label>
+                            <input type="number" id="ntc-beta" value="3950" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <label class="text-themeAccent">Target Temp (&deg;C)</label>
+                            <input type="number" id="ntc-t" value="85" class="w-24 border border-themeBorder px-1 text-right bg-themeAccent/10" oninput="runThermistor()">
+                        </div>
+                        <div class="pt-2 mt-2 border-t border-themeBorder/20 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-themeMuted">Resistance at T</span>
+                                <span id="ntc-r" class="font-bold text-themeAccent text-sm">1451.3 &Omega;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-1/2 relative border border-themeBorder bg-[#0a0a0a]">
+                        <span class="absolute top-1 right-1 text-[9px] text-themeMuted font-mono z-10">-40&deg;C to 125&deg;C (Log R)</span>
+                        <canvas id="ntc-canvas" class="w-full h-full absolute inset-0 cursor-crosshair"></canvas>
+                    </div>
+                </div>
+            </div>
+
+              <!-- Solar PV Yield Simulator (World Map) -->
+              <div class="doc-container flex flex-col lg:col-span-3">
+                  <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex items-center justify-between" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                      <div class="flex items-center gap-2"><i class="fa-solid fa-solar-panel"></i><h3 class="font-bold font-mono">PV Yield Simulator</h3></div>
+                      <span class="font-mono text-[10px] opacity-70">click map OR set location • Adjust month & time</span>
+                  </div>
+                  <div class="p-4 font-mono text-sm flex flex-col flex-grow">
+                      <div class="flex flex-col md:flex-row gap-4 mb-4 flex-grow">
+                          <div class="flex-grow flex flex-col gap-2">
+                              <div class="flex gap-2 text-xs items-center">
+                                  <label>Lat: <input type="number" id="pv-lat" class="w-16 bg-transparent border-b border-themeBorder px-1" value="0"></label>
+                                  <label>Lng: <input type="number" id="pv-lng" class="w-16 bg-transparent border-b border-themeBorder px-1" value="0"></label>
+                                  <button onclick="updatePVFromInputs()" class="border border-themeBorder px-2 hover:bg-themeBorder hover:text-themeBg">SET</button>
+                              </div>
+                              <!-- The Canvas for Map -->
+                              <canvas id="solar-canvas" class="w-full h-48 flex-grow border border-themeBorder/30 cursor-crosshair opacity-80" width="800" height="400"></canvas>
+                          </div>
+                          <div class="w-full md:w-64 space-y-4">
+                              <div class="space-y-1">
+                                  <div class="flex justify-between text-xs text-themeMuted mb-1"><span>Month</span><span id="pv-month-val" class="font-bold text-themeAccent">Jun</span></div>
+                                  <div class="grid grid-cols-6 gap-1 text-[10px]" id="pv-month-buttons">
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(0)">Jan</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(1)">Feb</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(2)">Mar</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(3)">Apr</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(4)">May</button>
+                                      <button class="border border-themeBorder bg-themeAccent text-themeBg" onclick="setSolarMonth(5)">Jun</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(6)">Jul</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(7)">Aug</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(8)">Sep</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(9)">Oct</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(10)">Nov</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(11)">Dec</button>
+                                  </div>
+                              </div>
+                              <div class="space-y-1 pt-2 border-t border-themeBorder/20">
+                                  <div class="flex justify-between text-xs text-themeMuted"><span>Time (Solar)</span><span id="pv-time-val" class="font-bold text-themeAccent">12:00</span></div>
+                                  <input type="range" id="pv-time" min="0" max="24" step="0.5" value="12" class="w-full accent-themeAccent">
+                              </div>
+                              <div class="pt-2 border-t border-themeBorder/20">
+                                  <div class="flex justify-between items-center text-xs text-themeMuted mb-1"><span>Current Yield</span><span id="pv-yield" class="text-xl font-bold text-themeAccent">0 W</span></div>
+                                  <div class="flex justify-between items-center text-[10px] text-themeMuted"><span>Optimum Tilt</span><span id="pv-tilt" class="font-bold text-themeText">0&deg;</span></div>
+                                  <div class="flex justify-between items-center text-[10px] text-themeMuted mt-1"><span>Custom Tilt</span><div class="flex items-center gap-1"><input type="number" id="pv-custom-tilt" class="w-10 bg-transparent border-b border-themeBorder text-right" value="0"><button id="pv-link-tilt" onclick="toggleTiltLink()" class="text-themeAccent" title="Link to Optimum Tilt"><i class="fa-solid fa-link"></i></button></div></div>
+                                  <div class="flex justify-between items-center text-[10px] text-themeMuted mt-2"><span>Est. Daily Energy</span><span id="pv-daily" class="font-bold text-themeText">0 Wh</span></div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="border-t border-themeBorder/20 pt-4 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow">
+                          <div class="flex flex-col">
+                              <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-themeMuted">GENERATION vs TIME</span><label class="text-[10px] flex items-center gap-1 cursor-pointer hover:text-themeAccent"><input type="checkbox" id="pv-all-months" class="accent-themeAccent"> Show All Months</label></div>
+                              <div class="relative w-full min-h-[200px] flex-grow bg-[#111] border border-themeBorder/30"><canvas id="pv-time-chart"></canvas></div>
+                          </div>
+                          <div class="flex flex-col">
+                              <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-themeMuted">MONTHLY ENERGY YIELD (kWh)</span><span class="text-[10px] text-themeAccent" id="pv-annual">Annual: 0 kWh</span></div>
+                              <div class="relative w-full min-h-[200px] flex-grow bg-[#111] border border-themeBorder/30"><canvas id="pv-hist-chart"></canvas></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+                            <!-- Web Serial Interface (Advanced) -->
+              <div class="doc-container flex flex-col lg:col-span-3">
+                  <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                      <div class="flex items-center gap-2"><i class="fa-brands fa-usb"></i><h3 class="font-bold font-mono">Web Serial Interface</h3></div>
+                      <button id="serial-btn" onclick="toggleSerial(); event.stopPropagation();" class="border border-themeBg text-themeBg px-3 py-1 text-xs font-mono font-bold hover:bg-themeBg hover:text-themeBorder transition-colors shadow-[2px_2px_0px_#fff]">CONNECT</button>
+                  </div>
+                  <div class="p-4 flex flex-col gap-4 flex-grow font-mono text-sm">
+                      <div class="grid grid-cols-2 md:grid-cols-6 gap-2">
+                          <input type="number" id="serial-baud" value="115200" placeholder="Baud Rate" class="border border-themeBorder bg-themeBg px-2 py-1 col-span-2 text-themeText" title="Custom Baud Rate">
+                          <select id="serial-data" class="border border-themeBorder bg-themeBg px-2 py-1 text-themeText" title="Data Bits"><option value="8">8 Bits</option><option value="7">7 Bits</option></select>
+                          <select id="serial-stop" class="border border-themeBorder bg-themeBg px-2 py-1 text-themeText" title="Stop Bits"><option value="1">1 Stop</option><option value="2">2 Stop</option></select>
+                          <select id="serial-parity" class="border border-themeBorder bg-themeBg px-2 py-1 text-themeText" title="Parity"><option value="none">None</option><option value="even">Even</option><option value="odd">Odd</option></select>
+                          <select id="serial-flow" class="border border-themeBorder bg-themeBg px-2 py-1 text-themeText" title="Flow Control"><option value="none">No Flow</option><option value="hardware">RTS/CTS</option></select>
+                      </div>
+                      <div class="flex gap-2">
+                          <input type="text" id="serial-send-input" placeholder="Enter string to send..." class="flex-grow border border-themeBorder bg-transparent px-3 py-2 text-themeText placeholder-themeMuted outline-none focus:border-themeAccent">
+                          <select id="serial-crlf" class="border border-themeBorder bg-themeBg px-2 py-1 text-themeText"><option value="none">No CR/LF</option><option value="cr">CR (\r)</option><option value="lf">LF (\n)</option><option value="crlf">CR/LF (\r\n)</option></select>
+                          <button onclick="sendSerialString()" class="bg-themeAccent text-themeBg font-bold px-4 hover:opacity-90">SEND</button>
+                      </div>
+                      <div class="flex flex-col flex-col gap-4 flex-grow min-h-[500px]">
+                          <div class="w-full h-1/2 flex flex-col">
+                              <div class="flex justify-between items-center mb-1"><span class="text-xs text-themeMuted">TERMINAL</span><div class="flex gap-2"><button onclick="document.getElementById('serial-rx').textContent=''" class="text-[10px] text-themeAccent hover:underline">Clear</button></div></div>
+                              <div id="serial-rx" class="w-full flex-grow border border-themeBorder/50 bg-themeBg p-2 text-xs overflow-y-auto whitespace-pre-wrap text-themeAccent/80">Awaiting hardware serial stream...</div>
+                          </div>
+                          <div class="w-full h-1/2 flex flex-col relative">
+                              <div class="absolute top-2 right-2 flex gap-2 z-10"><button id="serial-pause-btn" onclick="toggleSerialPause()" class="text-[10px] font-bold text-themeBg bg-themeAccent px-2 py-0.5 opacity-70 hover:opacity-100">PAUSE</button><button onclick="clearSerialGraph()" class="text-[10px] font-bold text-themeBg bg-themeAccent px-2 py-0.5 opacity-70 hover:opacity-100">CLEAR</button></div>
+                              <div class="w-full h-full border border-themeBorder/50 bg-[#111] relative"><canvas id="serial-canvas-chart"></canvas></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </main>
+
+    <!-- Global Footer -->
+    <footer class="mt-auto border-t-2 border-themeBorder bg-themecontainer py-8 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col space-y-6">
+            
+            <div class="border-b border-themeBorder/10 pb-6 relative overflow-hidden flex items-center">
+                <div class="absolute w-3 h-3 bg-themeText opacity-30 animate-bounceX rounded-full"></div>
+                <p class="text-sm font-mono text-themeMuted z-10 w-full text-center">
+                    Before engineering physical layers, I engineered digital sprites. Ask me about <a href="pong.html" class="font-bold text-themeAccent font-sans tracking-widest uppercase ml-1 animate-pulse hover:underline">Rocket Pong</a>.
+                    <span class="block text-[10px] text-themeMuted/40 mt-1">[SYS_cLUE: The key is where the engineering begins, capitalized and underscored with the final decade of the 1900s]</span>
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="font-mono text-sm text-themeMuted">
+                    &copy; <span id="year"></span> Yawar. Physical Layer Engineering.
+                </div>
+                <div class="flex space-x-6">
+                    <a href="mailto:contact@yourdomain.com" class="text-themeMuted hover:text-themeAccent transition-colors">
+                        <i class="fa-solid fa-envelope text-xl"></i>
+                    </a>
+                    <a href="https://github.com/wayri" target="_blank" class="text-themeMuted hover:text-themeAccent transition-colors">
+                        <i class="fa-brands fa-github text-xl"></i>
+                    </a>
+                    <a href="https://linkedin.com/" target="_blank" class="text-themeMuted hover:text-themeAccent transition-colors">
+                        <i class="fa-brands fa-linkedin text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/tools.js"></script>
+</body>
+</html>
+
+

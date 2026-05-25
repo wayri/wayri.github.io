@@ -1,0 +1,91 @@
+---
+layout: default
+title: Rocket Pong
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYS_RST: Rocket Pong | Yawar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter','sans-serif'], mono: ['JetBrains Mono','monospace'] }, colors: { themeBg:'var(--bg-color)', themeText:'var(--text-color)', themeAccent:'var(--accent-color)', themeBorder:'var(--border-color)', themeContainer:'var(--container-bg)', themeMuted:'var(--muted-text)' } } } }
+    </script>
+    
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Nav -->
+    <nav class="fixed top-0 w-full z-50 bg-themeBg border-b-2 border-themeBorder">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14">
+            <a href="index.html" class="font-bold tracking-tight text-lg uppercase flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left text-sm text-themeMuted"></i> YAWAR
+            </a>
+            <span class="font-mono text-xs text-themeMuted animate-pulse">SYS_RST // ENCRYPTED MODULE</span>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full">
+        <div class="border-b-2 border-themeBorder pb-6 mb-8 flex flex-col md:flex-row justify-between md:items-end gap-4">
+            <div>
+                <h1 class="text-4xl font-bold tracking-tight mb-2 uppercase text-themeText">SYS_RST: <span class="text-themeAccent">Rocket Pong</span></h1>
+                <p class="text-lg font-mono text-themeMuted">Encrypted payload. Enter decryption key to proceed.</p>
+            </div>
+            <div class="font-mono text-xs text-themeMuted text-right">
+                <i class="fa-solid fa-lock text-themeAccent"></i> Encrypted
+            </div>
+        </div>
+
+        <div id="gate-ui" class="doc-container p-10 max-w-lg mx-auto text-center flex flex-col items-center gap-6">
+            <i class="fa-solid fa-user-secret text-6xl text-themeMuted mb-4"></i>
+            <h2 class="font-bold text-xl text-themeText font-mono">AUTH REQUIRED</h2>
+            <p class="text-sm text-themeMuted font-mono">Enter the physical layer key to decrypt the engine.</p>
+            <input type="password" id="decryption-key"
+                class="w-full border border-themeBorder px-4 py-2 text-center font-mono tracking-widest bg-[#0a0a0a] text-themeAccent focus:outline-none focus:border-themeAccent"
+                placeholder="ENTER KEY"
+                onkeypress="if(event.key==='Enter') decryptEngine()">
+            <button onclick="decryptEngine()" class="bg-themeBorder text-themeBg px-8 py-2 font-bold font-mono hover:bg-themeAccent transition-colors w-full uppercase tracking-widest">
+                Decrypt
+            </button>
+            <p id="auth-error" class="text-xs text-[#ff3333] font-mono h-4 opacity-0 transition-opacity">INVALID KEY</p>
+        </div>
+
+        <div id="game-ui" class="hidden flex-col items-center gap-4 w-full">
+            <div class="w-full flex justify-between items-center bg-themeBorder text-themeBg px-4 py-2 font-mono font-bold">
+                <div class="flex items-center gap-4">
+                    <span>P1 [W/S, D=Fire]</span>
+                    <div id="p1-rockets" class="flex gap-1"></div>
+                </div>
+                <div id="score" class="text-2xl text-themeAccent drop-shadow-[0_0_5px_#fff]">0 : 0</div>
+                <div class="flex items-center gap-4">
+                    <div id="p2-rockets" class="flex gap-1"></div>
+                    <span>P2 [&uarr;/&darr;, &larr;=Fire]</span>
+                </div>
+            </div>
+            <div class="w-full flex justify-between items-center text-xs font-mono text-themeMuted px-2">
+                <div class="flex gap-4 items-center">
+                    <button onclick="window.togglePause&&window.togglePause()" class="border border-themeBorder px-3 py-1 hover:text-themeAccent">PAUSE (P)</button>
+                    <button id="mute-btn" onclick="window.toggleMute&&window.toggleMute()" class="border border-themeBorder px-3 py-1 hover:text-themeAccent">MUTE</button>
+                    <button onclick="window.resetGame&&window.resetGame()" class="border border-themeBorder px-3 py-1 hover:text-themeAccent">RESET (Spc)</button>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label>WIN SCORE:</label>
+                    <select id="win-score" class="border border-themeBorder bg-[#0a0a0a] px-2 py-1" onchange="window.resetGame&&window.resetGame()">
+                        <option value="10">10</option><option value="20">20</option><option value="30">30</option>
+                        <option value="40">40</option><option value="50">50</option><option value="100">100</option>
+                    </select>
+                </div>
+            </div>
+            <canvas id="pong-canvas" width="800" height="400" class="w-full pong-container bg-[#0a0a0a]"></canvas>
+            <div class="w-full grid grid-cols-2 gap-4 text-[10px] font-mono text-themeMuted border border-themeBorder/20 p-4 bg-[#050505]">
+                <div>
+                    <span class="pong-badge normal"></span> Non-Tracking Rocket: Maintains Y-offset.<br>
+                    <span class="pong-badge tracking"></span> Tracking Rocket: Homes in on opponent paddle.
+                </div>
+                <div class="text-right">Max 6 rockets per minute. Hit opponent paddle to freeze score. Hit ball to redirect speed.</div>
+            </div>
+        </div>

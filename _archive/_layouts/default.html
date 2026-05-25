@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title | default: site.title }}</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Shared Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        themeBg: 'var(--bg-color)',
+                        themeText: 'var(--text-color)',
+                        themeAccent: 'var(--accent-color)',
+                        themeBorder: 'var(--border-color)',
+                        themeContainer: 'var(--container-bg)',
+                        themeMuted: 'var(--muted-text)',
+                        themeInput: 'var(--input-bg)',
+                    },
+                    keyframes: {
+                        pingpong: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '50%': { transform: 'translateX(calc(100vw - 4rem))' },
+                        },
+                        bounceX: {
+                            '0%, 100%': { transform: 'translateX(-5px)' },
+                            '50%': { transform: 'translateX(15px)' },
+                        }
+                    },
+                    animation: {
+                        pingpong: 'pingpong 6s linear infinite',
+                        bounceX: 'bounceX 1.5s infinite ease-in-out',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/tools.js' | relative_url }}"></script>
+    {% if page.custom_js %}
+    <script src="{{ page.custom_js | relative_url }}"></script>
+    {% endif %}
+</head>
+<body class="antialiased selection:bg-themeAccent selection:text-themeBg flex flex-col min-h-screen transition-colors duration-300">
+
+    <!-- Global Time of Day Indicator -->
+    <div id="global-time-indicator" class="fixed top-0 left-0 w-full h-1.5 z-[100] bg-themeBg border-b border-themeBorder overflow-hidden hidden md:block">
+        <div class="absolute inset-0 bg-gradient-to-r from-themeBorder via-yellow-400 to-themeBorder opacity-20"></div>
+        
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 md:top-1.5 w-full z-50 bg-themeBg border-b-2 border-themeBorder transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14">
+                <div class="flex-shrink-0 font-bold tracking-tight text-lg uppercase cursor-pointer flex items-center gap-2" onclick="window.location.href='{{ '/' | relative_url }}'">
+                    YAWAR
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex space-x-6 font-mono text-sm items-center">
+                    <button onclick="toggleTheme()" class="hover:text-themeAccent flex items-center gap-2 text-themeMuted transition-colors group" title="Toggle Theme">
+                        <i class="fa-solid fa-layer-group group-hover:rotate-180 transition-transform duration-500"></i> 
+                        <span id="theme-label" class="w-16 text-left">Dark</span>
+                    </button>
+                    <span class="text-themeBorder opacity-30">|</span>
+                    <a href="{{ '/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url == '/' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">Overview</a>
+                    <a href="{{ '/blog/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url contains '/blog' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">Blog_Notes</a>
+                    <a href="{{ '/products/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url contains '/products' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">Products</a>
+                    <a href="{{ '/tools/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url contains '/tools' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">EE_Tools</a>
+                    <a href="https://linkedin.com/" target="_blank" class="bg-themeBorder text-themeBg px-3 py-1 hover:bg-themeAccent hover:text-white transition-colors flex items-center gap-2 font-bold shadow-[2px_2px_0px_var(--accent-color)]">
+                        <i class="fa-brands fa-linkedin"></i> Connect
+                    </a>
+                </div>
+
+                <!-- Mobile Action Buttons -->
+                <div class="flex md:hidden items-center gap-2">
+                    <button onclick="toggleTheme()" class="hover:text-themeAccent p-2 text-themeMuted focus:outline-none" title="Toggle Theme">
+                        <i class="fa-solid fa-layer-group text-lg"></i>
+                    </button>
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-themeText hover:text-themeAccent focus:outline-none p-2" aria-label="Toggle Menu">
+                        <i id="menu-icon" class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-themeBorder bg-themeBg px-4 py-4 space-y-4 font-mono text-sm shadow-md transition-colors duration-300">
+            <a href="{{ '/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">Overview</a>
+            <a href="{{ '/blog/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">Blog_Notes</a>
+            <a href="{{ '/products/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">Products</a>
+            <a href="{{ '/tools/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">EE_Tools</a>
+            <div class="border-t border-themeBorder/10 pt-3">
+                <a href="https://linkedin.com/" target="_blank" class="block bg-themeBorder text-themeBg py-2 text-center hover:bg-themeAccent hover:text-white transition-colors font-bold shadow-[2px_2px_0px_var(--accent-color)]">
+                    <i class="fa-brands fa-linkedin text-sm mr-2"></i>Connect on LinkedIn
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
+        {{ content }}
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="mt-auto border-t-2 border-themeBorder bg-themeContainer py-8 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col space-y-6">
+            
+            <div class="border-b border-themeBorder/10 pb-6 relative overflow-hidden flex items-center">
+                <div class="absolute w-3 h-3 bg-themeText opacity-30 animate-bounceX rounded-full"></div>
+                <p class="text-sm font-mono text-themeMuted z-10 w-full text-center">
+                    Before engineering physical layers, I engineered digital sprites. Ask me about <a href="{{ '/pong.html' | relative_url }}" class="font-bold text-themeAccent font-sans tracking-widest uppercase ml-1 animate-pulse hover:underline">Rocket Pong</a>.
+                    <span class="block mt-2 text-[9px] opacity-20 hover:opacity-100 transition-opacity">SYS_RST [CLUE: The key is where the engineering begins, capitalized and underscored with the final decade of the 1900s]</span>
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="font-mono text-sm text-themeMuted">
+                    &copy; <span id="year"></span> Yawar. Physical Layer Engineering.
+                </div>
+                <div class="flex space-x-6">
+                    <a href="mailto:contact@yourdomain.com" class="text-themeMuted hover:text-themeAccent transition-colors">
+                        <i class="fa-solid fa-envelope text-xl"></i>
+                    </a>
+                    <a href="https://github.com/wayri" target="_blank" class="text-themeMuted hover:text-themeAccent transition-colors">
+                        <i class="fa-brands fa-github text-xl"></i>
+                    </a>
+                    <a href="https://linkedin.com/" target="_blank" class="text-themeMuted hover:text-themeAccent transition-colors">
+                        <i class="fa-brands fa-linkedin text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

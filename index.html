@@ -1,0 +1,376 @@
+---
+layout: default
+title: Yawar | Engineering the Physical Layer
+---
+
+<!-- header / Intro -->
+        <header class="mb-16">
+            <div class="border-b-2 border-themeBorder pb-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                <div>
+                    <!-- Animated Name -->
+                    <h1 class="text-5xl sm:text-7xl font-bold tracking-tight mb-2 uppercase text-themeText flex items-end relative">
+                        <span id="hero-y" class="inline-block transition-transform duration-500 ease-in-out z-20">Y</span>
+                        <span id="hero-a1" class="inline-block transition-all duration-500 ease-in-out z-20">A</span>
+                        <span id="hero-w" class="inline-block transition-transform duration-500 ease-in-out z-10">W</span>
+                        <span id="hero-a2" class="inline-block transition-transform duration-500 ease-in-out z-10">A</span>
+                        <span id="hero-r" class="inline-block transition-transform duration-500 ease-in-out z-10">R</span>
+                        <span id="hero-dot" class="text-themeAccent inline-block transition-all duration-300 origin-bottom z-10">.</span>
+                    </h1>
+                    <p class="text-xl sm:text-2xl font-mono text-themeAccent font-semibold">
+                        Engineering the Physical Layer.
+                    </p>
+                    
+                    <!-- Engineering Philosophy Quote -->
+                    <div class="mt-5 mb-2 border-t border-b border-themeBorder/20 py-2 inline-block">
+                        <p class="text-[10px] sm:text-[11px] font-mono text-themeMuted tracking-widest uppercase">
+                            "The physical layer is unforgiving; it demands absolute truth in design."
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="font-mono text-themeMuted text-right text-sm mt-4 md:mt-0">
+                    <p>high-Rel Systems Architecture</p>
+                    <p>Power Electronics & PLM</p>
+                    <a href="https://github.com/wayri" target="_blank" class="hover:text-themeAccent transition-colors mt-2 inline-block"><i class="fa-brands fa-github"></i> github.com/wayri</a>
+                </div>
+            </div>
+
+            
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                <div class="lg:col-span-2 text-themeText leading-relaxed space-y-4 text-lg font-light">
+                    <p class="font-semibold text-xl">
+                        I architect end-to-end hardware systems, engineering the bridge between complex physical domains and reliable control logic.
+                    </p>
+                    <p>
+                        My foundation is rooted in complete product lifecycle management (PLM), with deep specializations in power electronics, instrumentation, and electro-mechanical integration. I have led the end-to-end electronic subsystem design for multiple satellites, engineering high-reliability systems and Battery Management Systems (BMS) built to operate predictably in hazardous orbital environments.
+                    </p>
+                    <p>
+                        My trajectory spans from component-level aerospace design and creating custom desktop client applications, to steering multi-lakh R&D initiatives and advising on state-level infrastructure for electric vehicles and renewable energy grids.
+                    </p>
+                </div>
+                
+                <!-- Steampunk Glitch Widget (click to trigger anomaly & name animation) -->
+                <div class="doc-container p-4 flex flex-col w-full bg-[#0a0a0a] border-[#D4AF37] steampunk-glow shadow-[4px_4px_0px_#D4AF37] cursor-pointer group" onclick="triggerAnomaly()">
+                    <div class="flex justify-between items-center mb-2 border-b border-[#D4AF37]/30 pb-2">
+                        <span class="font-mono text-xs font-bold text-[#D4AF37]">SYS_cLOcK_PROBE</span>
+                        <span class="font-mono text-[10px] text-[#ff8c00] animate-pulse uppercase tracking-widest group-hover:text-[#ff3333] transition-colors">Monitoring</span>
+                    </div>
+                    
+                    <div class="relative w-full h-32 mb-2 bg-[#050505] overflow-hidden rounded-sm border border-[#D4AF37]/20 flex">
+                        <!-- Left: Digital Segment clock -->
+                        <div class="w-2/5 h-full border-r border-[#D4AF37]/20 flex items-center justify-center relative bg-gradient-to-b from-[#111] to-[#000]">
+                            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#ff8c00] to-transparent pointer-events-none"></div>
+                            <span id="steampunk-clock-text" class="font-mono text-2xl font-bold text-[#ffb703] drop-shadow-[0_0_5px_#ff8c00] tracking-widest transition-transform duration-75 relative z-10 select-none">
+                                00:00
+                            </span>
+                        </div>
+                        
+                        <!-- Right: Analog Trace Scope -->
+                        <div class="w-3/5 h-full relative">
+                            <canvas id="steampunk-canvas" class="w-full h-full absolute inset-0"></canvas>
+                        </div>
+                    </div>
+                    
+                    <p class="text-[9px] font-mono text-[#D4AF37]/60 text-center uppercase tracking-wider select-none">click to inject anomaly</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- core capabilities (Professional Skills Section) -->
+        <section class="mb-20">
+            <h2 class="text-2xl font-bold mb-8 text-themeText border-b border-themeBorder pb-2">core capabilities & Technical Scope</h2>
+            
+            <div class="space-y-8">
+                <!-- Leadership & Architecture -->
+                <div class="flex flex-col md:flex-row gap-4 items-start">
+                    <div class="md:w-1/4 font-mono text-sm font-bold text-themeAccent uppercase tracking-wider pt-1">
+                        Architecture & Leadership
+                    </div>
+                    <div class="md:w-3/4">
+                        <p class="text-themeMuted mb-2">
+                            Directed complete Product Lifecycle Management (PLM) for complex hardware deployments. Managed multi-lakh R&D budgets, leading cross-functional teams in bridging high-level algorithmic concepts with physical hardware realization. Demonstrated experience in strategic technical consulting for state-level infrastructural planning.
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs font-mono mt-3">
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">End-to-End PLM</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Technical Strategy</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">cross-functional Leadership</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">R&D Budgeting</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full h-px bg-themeBorder/20"></div>
+
+                <!-- hardware & high Rel -->
+                <div class="flex flex-col md:flex-row gap-4 items-start">
+                    <div class="md:w-1/4 font-mono text-sm font-bold text-themeAccent uppercase tracking-wider pt-1">
+                        hardware & high-Rel
+                    </div>
+                    <div class="md:w-3/4">
+                        <p class="text-themeMuted mb-2">
+                            Design of high-reliability, space-grade electronic subsystems engineered for hazardous environments. Expertise in mixed-signal hDI routing, EMI/EMc mitigation, and robust power electronics encompassing BMS architecture, Grid-Tied Inverters, and Motor Drives. Extensive work developing Electrical Ground Support Equipment (EGSE).
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs font-mono mt-3">
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Altium Designer</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Kicad</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">SolidWorks (3D cAD)</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Power Electronics</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Space-Grade BMS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full h-px bg-themeBorder/20"></div>
+
+                <!-- Software & Firmware -->
+                <div class="flex flex-col md:flex-row gap-4 items-start">
+                    <div class="md:w-1/4 font-mono text-sm font-bold text-themeAccent uppercase tracking-wider pt-1">
+                        Software & Firmware
+                    </div>
+                    <div class="md:w-3/4">
+                        <p class="text-themeMuted mb-2">
+                            comprehensive programming stack bridging bare-metal hardware interaction with desktop visualization. Development of interrupt-driven RTOS firmware for microcontrollers, alongside custom desktop client applications (Telemetry & Logging Suites) for data acquisition and analysis. 
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs font-mono mt-3">
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText font-bold">c / c++</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText font-bold">c#</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText font-bold">Python</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText font-bold">Bash</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">RTOS</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">MATLAB / Simulink</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full h-px bg-themeBorder/20"></div>
+
+                <!-- Lab & Validation -->
+                <div class="flex flex-col md:flex-row gap-4 items-start">
+                    <div class="md:w-1/4 font-mono text-sm font-bold text-themeAccent uppercase tracking-wider pt-1">
+                        Lab & Validation
+                    </div>
+                    <div class="md:w-3/4">
+                        <p class="text-themeMuted mb-2">
+                            Rigorous physical verification of electronics. Extensive utilization of advanced lab instrumentation to profile signal integrity, characterize power transient responses, and conduct extreme environmental and thermal chamber testing for orbital qualification.
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs font-mono mt-3">
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Mixed-Domain Oscilloscopes</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Spectrum Analyzers</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Logic Analyzers</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">hardware-in-the-Loop (hIL)</span>
+                            <span class="bg-themeBorder/10 border border-themeBorder/20 px-2 py-1 text-themeText">Thermal Validation</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Work Experience -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-bold mb-6 border-b border-themeBorder pb-2 text-themeText">Experience Timeline</h2>
+            
+            <div class="space-y-6 pl-2">
+                <!-- Role 1 -->
+                <div class="relative pl-6 border-l-2 border-themeAccent pb-6">
+                    <div class="absolute w-3 h-3 bg-themeAccent rounded-full -left-[7px] top-1.5"></div>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-1">
+                        <h3 class="text-xl font-bold text-themeText">Senior Electrical Engineer</h3>
+                        <span class="font-mono text-xs bg-themeAccent text-themeBg font-bold px-2 py-1 mt-2 sm:mt-0">current</span>
+                    </div>
+                    <div class="font-mono text-sm text-themeMuted mb-3 font-semibold">Pixxel Space</div>
+                    <p class="text-themeText text-sm mb-3">
+                        Leading the end-to-end electronic subsystem design for multiple satellites. Specializing in high-reliability (high-rel) electronics engineered to operate in hazardous orbital environments.
+                    </p>
+                    <ul class="list-disc list-inside text-sm text-themeMuted space-y-1">
+                        <li>Architecting satellite voltage regulation networks and power distribution.</li>
+                        <li>Designing robust Battery Management Systems (BMS) for spaceflight conditions.</li>
+                        <li>Developing Electrical Ground Support Equipment (EGSE), power loggers, input protection devices, and constant current solar cell simulators for rigorous subsystem verification.</li>
+                        <li>Managing full PLM from conceptual schematics through flight-ready hardware integration.</li>
+                    </ul>
+                </div>
+
+                <!-- Role 2 -->
+                <div class="relative pl-6 border-l-2 border-themeBorder pb-6">
+                    <div class="absolute w-3 h-3 bg-themeBg border-2 border-themeBorder rounded-full -left-[7px] top-1.5"></div>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-1">
+                        <h3 class="text-xl font-bold text-themeText">Technical Advisor</h3>
+                    </div>
+                    <div class="font-mono text-sm text-themeMuted mb-3 font-semibold">Kashmir University TIDE center for Entrepreneurship</div>
+                    <p class="text-themeText text-sm">
+                        Providing strategic technical architecture guidance to emerging hardware startups. Mentoring engineering founders on prototyping-to-production pipelines, component supply chain constraints, and embedded systems integration.
+                    </p>
+                </div>
+
+                <!-- Role 3 -->
+                <div class="relative pl-6 border-l-2 border-themeBorder pb-6">
+                    <div class="absolute w-3 h-3 bg-themeBg border-2 border-themeBorder rounded-full -left-[7px] top-1.5"></div>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-1">
+                        <h3 class="text-xl font-bold text-themeText">Project Associate (R&D Architecture)</h3>
+                    </div>
+                    <div class="font-mono text-sm text-themeMuted mb-2 font-semibold">NIT Srinagar</div>
+                    <div class="font-mono text-xs text-themeText/70 mb-3 uppercase tracking-wider">Budget Scope: Ã¢â€šÂ¹10L - Ã¢â€šÂ¹20L</div>
+                    <p class="text-themeText text-sm mb-3">
+                        Directed the hardware architecture and systems integration for an experimental grid-tied inverter testbed. Engineered the hardware-software ecosystem required for PhD researchers to deploy and benchmark novel power control algorithms safely.
+                    </p>
+                    <ul class="list-disc list-inside text-sm text-themeMuted space-y-1">
+                        <li>Designed custom signal isolation and DAQ pathways.</li>
+                        <li>Bridged high-level MATLAB/Simulink models with bare-metal PWM execution.</li>
+                        <li>conducted applied workshops teaching systems-level hardware interaction.</li>
+                    </ul>
+                </div>
+
+                <!-- Role 4 -->
+                <div class="relative pl-6 border-l-2 border-transparent">
+                    <div class="absolute w-3 h-3 bg-themeBg border-2 border-themeBorder rounded-full -left-[7px] top-1.5"></div>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-1">
+                        <h3 class="text-xl font-bold text-themeText">Research Analyst / Associate</h3>
+                    </div>
+                    <div class="font-mono text-sm text-themeMuted mb-2 font-semibold">University of Kashmir (Sponsored by J&K Govt.)</div>
+                    <div class="font-mono text-xs text-themeText/70 mb-3 uppercase tracking-wider">EV Feasibility & Grid Impact Study</div>
+                    <p class="text-themeText text-sm">
+                        Analyzed electrical distribution constraints for emerging EV infrastructure. Synthesized deep technical findings into actionable policy recommendations for the state electricity regulator, resulting in subsequent integration into active state infrastructural policy.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Publications -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-bold mb-6 border-b border-themeBorder pb-2 text-themeText flex items-center gap-2">
+                <i class="fa-solid fa-book-journal-whills text-themeMuted text-lg"></i> Publications & Research
+            </h2>
+            <div class="space-y-4">
+                
+                <a href="https://www.sciencedirect.com/science/article/abs/pii/S2352152X23025987?via%3Dihub" target="_blank" class="block group">
+                    <div class="doc-container p-4 hover:border-themeAccent transition-colors">
+                        <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors">Ultracapacitor Integration with Regenerative Braking Systems in Electric Drive Trains</h3>
+                        <p class="text-sm font-mono text-themeMuted mt-1">ScienceDirect / Elsevier | DOI: S2352152X23025987</p>
+                    </div>
+                </a>
+
+                <a href="https://ieeexplore.ieee.org/document/9851081" target="_blank" class="block group">
+                    <div class="doc-container p-4 hover:border-themeAccent transition-colors">
+                        <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors">Application of V2V Energy Sharing in Electric Vehicles with Source Switching</h3>
+                        <p class="text-sm font-mono text-themeMuted mt-1">IEEE Xplore | Document: 9851081</p>
+                    </div>
+                </a>
+
+                <a href="https://link.springer.com/article/10.1007/s12652-023-04578-w" target="_blank" class="block group">
+                    <div class="doc-container p-4 hover:border-themeAccent transition-colors">
+                        <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors">Experimental Implementation of Optimally Tuned Multifunctional RLMLS Driven VSc Tied to Single Phase Voltage Weak Distribution Grid</h3>
+                        <p class="text-sm font-mono text-themeMuted mt-1">Springer Link | DOI: 10.1007/s12652-023-04578-w</p>
+                    </div>
+                </a>
+                
+                <a href="https://link.springer.com/chapter/10.1007/978-981-16-1186-5_8" target="_blank" class="block group">
+                    <div class="doc-container p-4 hover:border-themeAccent transition-colors">
+                        <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors">A New Modular Multilevel converter Topology Using Flying Ultra-capacitor and cascaded h-bridges</h3>
+                        <p class="text-sm font-mono text-themeMuted mt-1">Springer Book chapter | DOI: 10.1007/978-981-16-1186-5_8</p>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- Projects Portfolio -->
+        <div class="mb-16">
+            <h2 class="text-2xl font-bold mb-6 border-b border-themeBorder pb-2 text-themeText">Somethings I have worked on / built</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- hARDWARE cOLOR cODED PROJEcTS -->
+                <div class="space-y-4">
+                    <a href="https://github.com/wayri/3-Phase-inverter-board" target="_blank" class="doc-container p-4 block hover:border-themeAccent transition-colors border-l-4 border-l-themeAccent">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">3-Phase Grid-Tied Inverter</h4>
+                            <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase">hardware</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">hardware design layout for 3-phase grid-tied power conversion, engineered to support active and reactive power injection algorithms.</p>
+                    </a>
+
+                    <a href="https://github.com/wayri/8-channel-optocoupler-board-kicAD" target="_blank" class="doc-container p-4 block hover:border-themeAccent transition-colors border-l-4 border-l-themeAccent">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">8-channel Optocoupler Board</h4>
+                            <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase">hardware</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">Industrial isolation interface designed in KicAD. Utilizes an EL817 array with onboard inverted channel logic specifically meant for control isolation.</p>
+                    </a>
+
+                    <div class="doc-container p-4 border-l-4 border-l-themeAccent">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">Spacecraft & Orbital Systems</h4>
+                            <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase">hardware / Space</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">Flight-ready satellites, bespoke partial satellite subsystems, and highly reliable ground support infrastructure for orbital tracking.</p>
+                    </div>
+
+                    <div class="doc-container p-4 border-l-4 border-l-themeAccent">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">Power Electronics & Testing</h4>
+                            <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase">hardware</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">Development of linear power supplies, solar cell characterization simulators, and custom battery packs incorporating stringent BMS safety architectures.</p>
+                    </div>
+                </div>
+
+                <!-- SOFTWARE / FIRMWARE cOLOR cODED PROJEcTS -->
+                <div class="space-y-4">
+                    <a href="https://github.com/wayri/KiWay" target="_blank" class="doc-container p-4 block hover:border-themeBorder transition-colors border-l-4 border-l-themeBorder">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">KiWay</h4>
+                            <span class="text-[10px] font-mono bg-themeBorder/10 text-themeText border border-themeBorder/20 px-2 py-0.5 uppercase">Software / EDA</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">PcB Design and Layout routing framework for automating redundant constraints and programmatic schematic compilation.</p>
+                    </a>
+
+                    <a href="https://github.com/wayri/Arduino-Oscilloscope" target="_blank" class="doc-container p-4 block hover:border-themeBorder transition-colors border-l-4 border-l-themeBorder">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">Dual-channel Oscilloscope</h4>
+                            <span class="text-[10px] font-mono bg-themeBorder/10 text-themeText border border-themeBorder/20 px-2 py-0.5 uppercase">Firmware / c++</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">Ported and modified Norkiaki Mitsunaga's code for an ATmega2560. Features a TFT touch interface, engineered specifically for teaching ADc interrupts.</p>
+                    </a>
+
+                    <a href="https://github.com/wayri/sigLib" target="_blank" class="doc-container p-4 block hover:border-themeBorder transition-colors border-l-4 border-l-themeBorder">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">sigLib</h4>
+                            <span class="text-[10px] font-mono bg-themeBorder/10 text-themeText border border-themeBorder/20 px-2 py-0.5 uppercase">Software / DSP</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">c++ Signal Processing Library containing algorithms tailored for real-time waveform conditioning, smoothing, and analysis on embedded targets.</p>
+                    </a>
+
+                    <a href="https://github.com/wayri/Gauss_Siedel_Load_Flow_Analyser" target="_blank" class="doc-container p-4 block hover:border-themeBorder transition-colors border-l-4 border-l-themeBorder">
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-themeText text-lg">Gauss-Seidel Load Flow</h4>
+                            <span class="text-[10px] font-mono bg-themeBorder/10 text-themeText border border-themeBorder/20 px-2 py-0.5 uppercase">Software / c++</span>
+                        </div>
+                        <p class="text-sm text-themeMuted mt-1">console-based numerical analyzer for calculating power distribution flows across N-bus non-linear electrical networks.</p>
+                    </a>
+                </div>
+
+            </div>
+            
+            <!-- Additional context -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div class="doc-container p-4 border-l-4 border-l-themeBorder border-dashed">
+                    <h4 class="font-bold text-themeText">DFIG Simulator Setup</h4>
+                    <p class="text-xs font-mono text-themeMuted mt-1">hardware/software testbed for profiling Doubly Fed Induction Generators under varied load dynamics.</p>
+                </div>
+                <div class="doc-container p-4 border-l-4 border-l-themeBorder border-dashed">
+                    <h4 class="font-bold text-themeText">home Automation Modules</h4>
+                    <p class="text-xs font-mono text-themeMuted mt-1">custom embedded control nodes handling decentralized sensor data integration.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- contact hint & Blog Link -->
+        <section class="mb-10 flex flex-col md:flex-row justify-between items-center gap-6 border-t-2 border-themeBorder pt-8">
+            <div class="flex-grow">
+                <p class="text-lg font-semibold text-themeText mb-1">I occasionally discuss engineering challenges.</p>
+                <p class="text-sm font-mono text-themeMuted">If you want to talk about systems architecture, hardware pipelines, or other projects, you can reach out via the linked contacts below.</p>
+            </div>
+            <button onclick="navigate('blog')" class="bg-themeBorder text-themeBg px-6 py-3 font-bold hover:bg-themeAccent hover:text-white transition-colors shadow-[4px_4px_0px_var(--accent-color)] whitespace-nowrap">
+                ENTER BLOG DIREcTORY <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+        </section>

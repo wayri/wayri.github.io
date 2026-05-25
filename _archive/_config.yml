@@ -1,0 +1,29 @@
+title: Yawar | Engineering the Physical Layer
+description: High-Rel Systems Architecture, Power Electronics & PLM
+baseurl: ""
+url: ""
+
+markdown: kramdown
+highlighter: rouge
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+permalink: /blog/:year/:month/:day/:title/
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - Dockerfile
+  - docker-compose.yml
+  - build_local.py
+  - warya_recovery.txt
+  - warya_recovery_utf8.txt
+  - warya_recovery2.txt
+  - warya_recovery2_utf8.txt
+  - tool_responses.txt
+  - "*.py"
+  - "*.txt"
+  - node_modules
+  - vendor
