@@ -963,3 +963,11 @@ window.runFilter = function() {
     filterBodeChart.update();
 };
 
+
+window.updatePVFromInputs = function() {
+  let lat = parseFloat(document.getElementById("pv-lat").value) || 0;
+  let lng = parseFloat(document.getElementById("pv-lng").value) || 0;
+  _solarLat = lat;
+  _solarLon = lng;
+  if (window.calculateSolarMath) window.calculateSolarMath();
+};

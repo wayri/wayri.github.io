@@ -1,4 +1,6 @@
-// Circuit diagram SVG strings injected into tool cards on page load
+const fs = require('fs');
+
+const diagrams = `// Circuit diagram SVG strings injected into tool cards on page load
 (function() {
     var TOOL_DIAGRAMS = {
         'tool-smps-topology-ratio': '<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;color:var(--accent-color,#D4AF37)"><g stroke="currentColor" stroke-width="2" fill="none" font-family="monospace" font-size="12"><line x1="20" y1="30" x2="20" y2="90"/><line x1="15" y1="30" x2="25" y2="30"/><line x1="17" y1="90" x2="23" y2="90"/><text x="0" y="65" fill="currentColor" font-size="12">Vin</text><line x1="20" y1="30" x2="80" y2="30"/><rect x="80" y="20" width="30" height="20" rx="2" fill="var(--bg-color,#0a0a0a)" stroke="currentColor"/><text x="86" y="34" fill="currentColor" font-size="10">SW</text><line x1="110" y1="30" x2="160" y2="30"/><line x1="160" y1="30" x2="160" y2="50"/><polygon points="152,50 168,50 160,65" fill="currentColor" stroke="currentColor"/><line x1="150" y1="65" x2="170" y2="65"/><line x1="160" y1="65" x2="160" y2="90"/><line x1="160" y1="30" x2="220" y2="30"/><path d="M220,30 q8,-12 16,0 q8,-12 16,0 q8,-12 16,0" stroke="currentColor" fill="none"/><text x="240" y="20" fill="currentColor">L</text><line x1="268" y1="30" x2="310" y2="30"/><line x1="310" y1="30" x2="310" y2="55"/><line x1="295" y1="55" x2="325" y2="55"/><line x1="295" y1="65" x2="325" y2="65"/><line x1="310" y1="65" x2="310" y2="90"/><text x="330" y="65" fill="currentColor">C</text><line x1="310" y1="30" x2="370" y2="30"/><line x1="370" y1="30" x2="370" y2="55"/><line x1="360" y1="55" x2="380" y2="55"/><line x1="360" y1="65" x2="380" y2="65"/><line x1="370" y1="65" x2="370" y2="90"/><text x="380" y="65" fill="currentColor" font-size="10">Load</text><line x1="20" y1="90" x2="370" y2="90"/></g></svg>',
@@ -33,4 +35,6 @@
     } else {
         injectDiagrams();
     }
-})();
+})();`;
+
+fs.writeFileSync('assets/js/diagrams.js', diagrams);
