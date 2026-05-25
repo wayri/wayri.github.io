@@ -109,15 +109,16 @@ function setupMotorMode() {
     const inputs = document.getElementById('motor-inputs');
     if(!solveGroup || !inputs) return;
 
-    solveGroup.innerHTML = `n        <span>SOLVE:</span>
+    solveGroup.innerHTML = `        <span>SOLVE:</span>
         <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="mot_solve" value="rpm" onchange="runMotor()" checked> Ns (RPM)</label>
         <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="mot_solve" value="torque" onchange="runMotor()"> Torque</label>
         <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="mot_solve" value="power" onchange="runMotor()"> Power</label>
         <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="mot_solve" value="slip" onchange="runMotor()"> Slip</label>
         <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="mot_solve" value="eff" onchange="runMotor()"> Eff</label>
-    ;
+    `;
 
-    inputs.innerHTML = `n        <div class="space-y-2">
+    inputs.innerHTML = `
+        <div class="space-y-2">
             <div class="flex justify-between text-[10px]"><label>Poles (P)</label><input type="number" id="mot-p" value="4" step="2" class="w-16 border border-themeBorder px-1 text-right" oninput="runMotor()"></div>
             <div class="flex justify-between text-[10px]"><label>Freq (Hz)</label><input type="number" id="mot-f" value="50" step="1" class="w-16 border border-themeBorder px-1 text-right" oninput="runMotor()"></div>
             <div class="flex justify-between text-[10px]"><label>Voltage (V)</label><input type="number" id="mot-v" value="400" step="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runMotor()"></div>
@@ -128,7 +129,7 @@ function setupMotorMode() {
             <div class="flex justify-between text-[10px]"><label>P_mech (kW)</label><input type="number" id="mot-pm" value="2.3" step="0.1" class="w-16 border border-themeBorder px-1 text-right" oninput="runMotor()"></div>
             <div class="flex justify-between text-[10px]"><label>P_elec (kW)</label><input type="number" id="mot-pe" value="2.5" step="0.1" class="w-16 border border-themeBorder px-1 text-right" oninput="runMotor()"></div>
         </div>
-    ;
+    `;
     runMotor();
 }
 
@@ -189,25 +190,25 @@ function setupSMPSMode() {
     const inputs = document.getElementById('smps-inputs');
     if(!solveGroup || !inputs) return;
 
-    solveGroup.innerHTML = `n        <span>SOLVE:</span>
+    solveGroup.innerHTML = `        <span>SOLVE:</span>
         <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="smps_solve" value="vin" onchange="runSMPS()"> Vin</label>
         <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="smps_solve" value="vout" onchange="runSMPS()"> Vout</label>
         <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="smps_solve" value="duty" checked onchange="runSMPS()"> Duty (D)</label>
-    ;
+    `;
 
     let extra = '';
     if(['flyback', 'forward', 'push-pull', 'half-bridge', 'full-bridge'].includes(type)) {
-        extra = `n            <div class="flex justify-between items-center text-xs">
+        extra = `            <div class="flex justify-between items-center text-xs">
                 <label class="w-24">Ratio (Np/Ns)</label>
                 <input type="number" id="smps-n" value="1" step="0.1" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runSMPS()">
             </div>
-        ;
+    `;
         document.getElementById('smps-ratio-grp').classList.remove('opacity-50');
     } else {
         document.getElementById('smps-ratio-grp').classList.add('opacity-50');
     }
 
-    inputs.innerHTML = `n        <div class="flex justify-between items-center text-xs">
+    inputs.innerHTML = `        <div class="flex justify-between items-center text-xs">
             <label class="w-24">Vin (V)</label>
             <input type="number" id="smps-vin" value="24" step="1" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runSMPS()">
         </div>
@@ -220,7 +221,7 @@ function setupSMPSMode() {
             <input type="number" id="smps-d" value="0.5" step="0.05" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runSMPS()">
         </div>
         
-    ;
+    `;
     runSMPS();
 }
 
@@ -298,22 +299,22 @@ function setupFilterMode() {
     const inputs = document.getElementById('filter-inputs');
     if(!solveGroup || !inputs) return;
 
-    solveGroup.innerHTML = `n        <span>SOLVE:</span>
+    solveGroup.innerHTML = `        <span>SOLVE:</span>
         <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="filter_solve" value="r1" onchange="runSmartFilter()"> R1 / L1</label>
         <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="filter_solve" value="c1" onchange="runSmartFilter()"> C1</label>
         <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="filter_solve" value="fc" checked onchange="runSmartFilter()"> Fc (Hz)</label>
-    ;
+    `;
 
     let extra = '';
     if(type === 'lcl' || type === 'clc') {
-        extra = `n            <div class="flex justify-between items-center text-xs">
+        extra = `            <div class="flex justify-between items-center text-xs">
                 <label></label>
                 <input type="number" id="filter-c2" value="10" class="w-24 border border-themeBorder px-1 text-right" oninput="runSmartFilter()">
             </div>
-        ;
+    `;
     }
 
-    inputs.innerHTML = `n        <div class="flex justify-between items-center text-xs">
+    inputs.innerHTML = `        <div class="flex justify-between items-center text-xs">
             <label></label>
             <input type="number" id="filter-r1" value="1000" class="w-24 border border-themeBorder px-1 text-right" oninput="runSmartFilter()">
         </div>
@@ -322,7 +323,7 @@ function setupFilterMode() {
             <input type="number" id="filter-c1" value="0.1" class="w-24 border border-themeBorder px-1 text-right" oninput="runSmartFilter()">
         </div>
         
-    ;
+    `;
     runSmartFilter();
 }
 
@@ -426,35 +427,35 @@ function setupNTCMode() {
 
     let solvers = '';
     if(type === 'beta') {
-        solvers = `n            <span>SOLVE:</span>
+        solvers = `            <span>SOLVE:</span>
             <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="r25" onchange="runThermistor()"> R25</label>
             <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="beta" onchange="runThermistor()"> Beta</label>
-            <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="temp" onchange="runThermistor()"> Temp (°C)</label>
+            <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="temp" onchange="runThermistor()"> Temp (Â°C)</label>
             <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="rt" checked onchange="runThermistor()"> Rt (O)</label>
-        ;
-        inputs.innerHTML = `n            <div class="flex justify-between items-center text-xs">
-                <label>R_nom (O @ 25°C)</label>
+    `;
+        inputs.innerHTML = `            <div class="flex justify-between items-center text-xs">
+                <label>R_nom (O @ 25Â°C)</label>
                 <input type="number" id="ntc-r25" value="10000" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
-                <label>Beta (ß)</label>
+                <label>Beta (ÃŸ)</label>
                 <input type="number" id="ntc-beta" value="3950" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
-                <label>Target Temp (°C)</label>
+                <label>Target Temp (Â°C)</label>
                 <input type="number" id="ntc-t" value="85" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
                 <label>R at Target (O)</label>
                 <input type="number" id="ntc-rt" value="1451" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
-        ;
+    `;
     } else {
-        solvers = `n            <span>SOLVE:</span>
-            <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="temp" onchange="runThermistor()"> Temp (°C)</label>
+        solvers = `            <span>SOLVE:</span>
+            <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="temp" onchange="runThermistor()"> Temp (Â°C)</label>
             <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="rt" checked onchange="runThermistor()"> Rt (O)</label>
-        ;
-        inputs.innerHTML = `n            <div class="flex justify-between items-center text-[10px]">
+    `;
+        inputs.innerHTML = `            <div class="flex justify-between items-center text-[10px]">
                 <label>A</label>
                 <input type="number" id="ntc-a" value="1.129148e-3" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
@@ -467,14 +468,14 @@ function setupNTCMode() {
                 <input type="number" id="ntc-c" value="8.76741e-8" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs mt-1">
-                <label>Target Temp (°C)</label>
+                <label>Target Temp (Â°C)</label>
                 <input type="number" id="ntc-t" value="85" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
                 <label>R at Target (O)</label>
                 <input type="number" id="ntc-rt" value="1451" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
-        ;
+    `;
     }
     solveGroup.innerHTML = solvers;
     runThermistor();
@@ -546,7 +547,7 @@ function runThermistor() {
         }
     }
 
-    document.getElementById('ntc-result').textContent = solveTarget === 'rt' ? (rt ? rt.toFixed(1) + " O" : "-") : (temp ? temp.toFixed(2) + " °C" : "-");
+    document.getElementById('ntc-result').textContent = solveTarget === 'rt' ? (rt ? rt.toFixed(1) + " O" : "-") : (temp ? temp.toFixed(2) + " Â°C" : "-");
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -698,7 +699,7 @@ window.updateSolarSim = function() {
     // Simple model based on latitude and month
     const dec = -23.45 * Math.cos((360/365) * (_solarMonth*30 + 15) * Math.PI/180);
     let optTilt = Math.abs(_solarLat - dec);
-    document.getElementById('pv-tilt').textContent = optTilt.toFixed(1) + "°";
+    document.getElementById('pv-tilt').textContent = optTilt.toFixed(1) + "Â°";
     
     let cTilt = document.getElementById('pv-custom-tilt')?.value;
     if(document.getElementById('pv-link-tilt')?.classList.contains('text-themeAccent')) {
@@ -719,12 +720,12 @@ window.updateSolarSim = function() {
         // simplified projection
         yieldW = 1000 * Math.sin(alt*Math.PI/180);
     }
-    document.getElementById('pv-yield').textContent = yieldW.toFixed(0) + " W/m²";
+    document.getElementById('pv-yield').textContent = yieldW.toFixed(0) + " W/mÂ²";
     
     // approx daily integral
     let daily = yieldW * 6; // highly simplified
-    document.getElementById('pv-daily').textContent = (daily/1000).toFixed(2) + " kWh/m²";
-    document.getElementById('pv-annual').textContent = "Annual: " + ((daily/1000)*365).toFixed(0) + " kWh/m²";
+    document.getElementById('pv-daily').textContent = (daily/1000).toFixed(2) + " kWh/mÂ²";
+    document.getElementById('pv-annual').textContent = "Annual: " + ((daily/1000)*365).toFixed(0) + " kWh/mÂ²";
 };
 
 window.toggleTiltLink = function() {
