@@ -1,4 +1,4 @@
-// EE Tools Suite Expansion Pack
+﻿// EE Tools Suite Expansion Pack
 
 // ==========================================
 // 1. VOLTAGE & CURRENT MARGINING
@@ -430,19 +430,19 @@ function setupNTCMode() {
         solvers = `            <span>SOLVE:</span>
             <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="r25" onchange="runThermistor()"> R25</label>
             <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="beta" onchange="runThermistor()"> Beta</label>
-            <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="temp" onchange="runThermistor()"> Temp (°C)</label>
+            <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="temp" onchange="runThermistor()"> Temp (Â°C)</label>
             <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="rt" checked onchange="runThermistor()"> Rt (O)</label>
     `;
         inputs.innerHTML = `            <div class="flex justify-between items-center text-xs">
-                <label>R_nom (O @ 25°C)</label>
+                <label>R_nom (O @ 25Â°C)</label>
                 <input type="number" id="ntc-r25" value="10000" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
-                <label>Beta (ß)</label>
+                <label>Beta (ÃŸ)</label>
                 <input type="number" id="ntc-beta" value="3950" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
-                <label>Target Temp (°C)</label>
+                <label>Target Temp (Â°C)</label>
                 <input type="number" id="ntc-t" value="85" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
@@ -452,7 +452,7 @@ function setupNTCMode() {
     `;
     } else {
         solvers = `            <span>SOLVE:</span>
-            <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="temp" onchange="runThermistor()"> Temp (°C)</label>
+            <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="temp" onchange="runThermistor()"> Temp (Â°C)</label>
             <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="rt" checked onchange="runThermistor()"> Rt (O)</label>
     `;
         inputs.innerHTML = `            <div class="flex justify-between items-center text-[10px]">
@@ -468,7 +468,7 @@ function setupNTCMode() {
                 <input type="number" id="ntc-c" value="8.76741e-8" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs mt-1">
-                <label>Target Temp (°C)</label>
+                <label>Target Temp (Â°C)</label>
                 <input type="number" id="ntc-t" value="85" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
@@ -547,7 +547,7 @@ function runThermistor() {
         }
     }
 
-    document.getElementById('ntc-result').textContent = solveTarget === 'rt' ? (rt ? rt.toFixed(1) + " O" : "-") : (temp ? temp.toFixed(2) + " °C" : "-");
+    document.getElementById('ntc-result').textContent = solveTarget === 'rt' ? (rt ? rt.toFixed(1) + " O" : "-") : (temp ? temp.toFixed(2) + " Â°C" : "-");
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -555,9 +555,94 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// 6. WEB SERIAL INTERFACE FIXES
+// NEW WEB SERIAL INTERFACE (CHART.JS)
 // ==========================================
-async function readSerialLoop() {
+let serialChart = null;
+let serialPlotData = [];
+let serialPlotLabels = [];
+
+function initSerialChart() {
+    const ctx = document.getElementById('serial-plot-canvas');
+    if(!ctx) return;
+    if(serialChart) serialChart.destroy();
+    
+    serialChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: serialPlotLabels,
+            datasets: [{
+                label: 'Telemetry',
+                data: serialPlotData,
+                borderColor: '#D4AF37',
+                borderWidth: 2,
+                tension: 0.1,
+                pointRadius: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            scales: {
+                x: { display: false },
+                y: {
+                    display: true,
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    ticks: { color: 'rgba(255, 255, 255, 0.5)' }
+                }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    initSerialChart();
+});
+
+window.toggleSerial = async function() {
+    const btn = document.getElementById('serial-btn');
+    const status = document.getElementById('serial-status');
+    
+    if (port && port.readable) {
+        try {
+            if(reader) { await reader.cancel(); reader = null; }
+            await port.close(); port = null;
+        } catch (e) { console.error(e); }
+        
+        btn.textContent = "CONNECT";
+        status.textContent = "OFFLINE";
+        status.classList.remove('text-[#4ade80]', 'border-[#4ade80]');
+        return;
+    }
+
+    try {
+        if (!navigator.serial) {
+            alert("Web Serial API is not supported in this browser. Please use Chrome or Edge on desktop.");
+            return;
+        }
+        
+        let baud = parseInt(document.getElementById('serial-baud').value) || 115200;
+        let dataBits = parseInt(document.getElementById('serial-data').value) || 8;
+        let stopBits = parseInt(document.getElementById('serial-stop').value) || 1;
+        let parity = document.getElementById('serial-parity').value || 'none';
+        
+        port = await navigator.serial.requestPort();
+        await port.open({ baudRate: baud, dataBits: dataBits, stopBits: stopBits, parity: parity });
+        
+        btn.textContent = "DISCONNECT";
+        status.textContent = "CONNECTED";
+        status.classList.add('text-[#4ade80]', 'border-[#4ade80]');
+        
+        window.readSerialLoopChart();
+    } catch (err) {
+        console.error("Serial error:", err);
+    }
+};
+
+window.readSerialLoopChart = async function() {
     const monitor = document.getElementById('serial-monitor');
     while (port && port.readable) {
         reader = port.readable.getReader();
@@ -570,7 +655,7 @@ async function readSerialLoop() {
                 monitor.value += chunk;
                 serialBuffer += chunk;
                 
-                if(monitor.value.length > 3000) monitor.value = monitor.value.substring(monitor.value.length - 1500);
+                if(monitor.value.length > 5000) monitor.value = monitor.value.substring(monitor.value.length - 2500);
                 monitor.scrollTop = monitor.scrollHeight;
 
                 let lines = serialBuffer.split('\n');
@@ -579,14 +664,18 @@ async function readSerialLoop() {
                         let line = lines[i].trim();
                         if(line) {
                             let vals = line.split(',').map(v => parseFloat(v.trim()));
-                            if(vals.length > 0 && !vals.some(isNaN)) {
-                                plotData.push(vals[0]);
-                                if(plotData.length > 100) plotData.shift();
+                            if(vals.length > 0 && !isNaN(vals[0])) {
+                                serialPlotData.push(vals[0]);
+                                serialPlotLabels.push('');
+                                if(serialPlotData.length > 100) {
+                                    serialPlotData.shift();
+                                    serialPlotLabels.shift();
+                                }
                             }
                         }
                     }
                     serialBuffer = lines[lines.length-1];
-                    drawPlot();
+                    if(serialChart) serialChart.update();
                 }
             }
         } catch (error) {
@@ -595,144 +684,266 @@ async function readSerialLoop() {
             reader.releaseLock();
         }
     }
-}
-
-// ==========================================
-// 7. SOLAR PV FIXES
-// ==========================================
-function drawSolarWidget() {
-    const canvas = document.getElementById('solar-canvas');
-    if(!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if(canvas.width !== canvas.clientWidth) canvas.width = canvas.clientWidth;
-    if(canvas.height !== canvas.clientHeight) canvas.height = canvas.clientHeight;
-
-    const w = canvas.width, h = canvas.height;
-    ctx.clearRect(0,0,w,h);
-
-    // Draw Map (simple equirectangular grid)
-    ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--theme-border') || '#333';
-    ctx.lineWidth = 1;
-    ctx.globalAlpha = 0.5;
-    ctx.beginPath();
-    for(let lon=-180; lon<=180; lon+=30) { let x = (lon+180)/360 * w; ctx.moveTo(x, 0); ctx.lineTo(x, h); }
-    for(let lat=-90; lat<=90; lat+=30) { let y = (90-lat)/180 * h; ctx.moveTo(0, y); ctx.lineTo(w, y); }
-    ctx.stroke();
-    ctx.globalAlpha = 1.0;
-
-    // Continents rough outline placeholder
-    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--theme-border') || '#333';
-    ctx.globalAlpha = 0.2;
-    ctx.fillRect(w*0.4, h*0.2, w*0.3, h*0.4); // Eurasia/Africa
-    ctx.fillRect(w*0.1, h*0.2, w*0.2, h*0.3); // Americas
-    ctx.fillRect(w*0.8, h*0.6, w*0.15, h*0.2); // Oceania
-    ctx.globalAlpha = 1.0;
-
-    // Draw Marker
-    let px = (_solarLon + 180) / 360 * w;
-    let py = (90 - _solarLat) / 180 * h;
-    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--theme-accent') || '#ff9900';
-    ctx.beginPath();
-    ctx.arc(px, py, 4, 0, Math.PI*2);
-    ctx.fill();
-    
-    // Calculate and update fields
-    updateSolarSim();
-}
-
-function initSolarWidget() {
-    const canvas = document.getElementById('solar-canvas');
-    if(!canvas) return;
-    
-    if(typeof _solarLat === 'undefined') {
-        window._solarLat = 0;
-        window._solarLon = 0;
-        window._solarMonth = 5;
-    }
-
-    if(!canvas.hasAttribute('data-solar-attached')) {
-        canvas.setAttribute('data-solar-attached','1');
-        canvas.addEventListener('click', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            _solarLon = ((e.clientX - rect.left) / canvas.clientWidth) * 360 - 180;
-            _solarLat = 90 - ((e.clientY - rect.top) / canvas.clientHeight) * 180;
-            document.getElementById('pv-lat').value = _solarLat.toFixed(1);
-            document.getElementById('pv-lng').value = _solarLon.toFixed(1);
-            drawSolarWidget();
-        });
-        
-        document.getElementById('pv-time')?.addEventListener('input', () => {
-            let t = parseFloat(document.getElementById('pv-time').value);
-            let hrs = Math.floor(t);
-            let mins = (t - hrs)*60;
-            document.getElementById('pv-time-val').textContent = hrs.toString().padStart(2,'0') + ':' + mins.toString().padStart(2,'0');
-            updateSolarSim();
-        });
-    }
-    drawSolarWidget();
-}
-
-window.updatePVFromInputs = function() {
-    _solarLat = parseFloat(document.getElementById('pv-lat').value) || 0;
-    _solarLon = parseFloat(document.getElementById('pv-lng').value) || 0;
-    drawSolarWidget();
 };
 
-window.setSolarMonth = function(m) {
-    _solarMonth = m;
-    const mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    document.getElementById('pv-month-val').textContent = mn[m];
-    let btns = document.getElementById('pv-month-buttons').querySelectorAll('button');
-    btns.forEach((b, i) => {
-        if(i === m) {
-            b.classList.remove('hover:bg-themeAccent', 'hover:text-themeBg');
-            b.classList.add('bg-themeAccent', 'text-themeBg');
-        } else {
-            b.classList.add('hover:bg-themeAccent', 'hover:text-themeBg');
-            b.classList.remove('bg-themeAccent', 'text-themeBg');
+window.sendSerial = async function() {
+    if(!port || !port.writable) return;
+    const input = document.getElementById('serial-send-input');
+    let data = input.value;
+    if(!data) return;
+    
+    let lineEnding = document.getElementById('serial-line').value;
+    if(lineEnding === 'cr') data += "\r";
+    else if(lineEnding === 'lf') data += "\n";
+    else if(lineEnding === 'crlf') data += "\r\n";
+    
+    try {
+        const encoder = new TextEncoder();
+        const writer = port.writable.getWriter();
+        await writer.write(encoder.encode(data));
+        writer.releaseLock();
+        input.value = '';
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+window.clearSerial = function() {
+    document.getElementById('serial-monitor').value = '';
+};
+
+window.clearSerialPlot = function() {
+    serialPlotData.length = 0;
+    serialPlotLabels.length = 0;
+    if(serialChart) serialChart.update();
+};
+
+window.saveSerialLog = function() {
+    const text = document.getElementById('serial-monitor').value;
+    if(!text) return;
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'serial_log.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+};
+
+window.saveSerialPlot = function() {
+    const canvas = document.getElementById('serial-plot-canvas');
+    if(!canvas) return;
+    const link = document.createElement('a');
+    link.download = 'serial_plot.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+};
+
+// Override old readSerialLoop just in case
+window.readSerialLoop = window.readSerialLoopChart;
+
+// ==========================================
+// NEW SOLAR PV SIMULATOR (CHART.JS)
+// ==========================================
+let pvTimeChart = null;
+let pvHistChart = null;
+
+function initPVCharts() {
+    const ctxTime = document.getElementById('pv-time-chart');
+    const ctxHist = document.getElementById('pv-hist-chart');
+    if(!ctxTime || !ctxHist) return;
+
+    pvTimeChart = new Chart(ctxTime, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Generation (W/m²)',
+                data: [],
+                borderColor: '#D4AF37',
+                backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    ticks: { color: 'rgba(255, 255, 255, 0.5)' }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    ticks: { color: 'rgba(255, 255, 255, 0.5)' },
+                    max: 1100
+                }
+            },
+            plugins: { legend: { display: false } }
         }
     });
-    drawSolarWidget();
-};
+
+    pvHistChart = new Chart(ctxHist, {
+        type: 'bar',
+        data: {
+            labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            datasets: [{
+                label: 'Monthly Yield (kWh/m²)',
+                data: [],
+                backgroundColor: '#D4AF37',
+                borderRadius: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: 'rgba(255, 255, 255, 0.5)' }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    ticks: { color: 'rgba(255, 255, 255, 0.5)' }
+                }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    initPVCharts();
+});
 
 window.updateSolarSim = function() {
-    // Simple model based on latitude and month
-    const dec = -23.45 * Math.cos((360/365) * (_solarMonth*30 + 15) * Math.PI/180);
-    let optTilt = Math.abs(_solarLat - dec);
-    document.getElementById('pv-tilt').textContent = optTilt.toFixed(1) + "°";
+    if(!pvTimeChart || !pvHistChart) return;
     
-    let cTilt = document.getElementById('pv-custom-tilt')?.value;
-    if(document.getElementById('pv-link-tilt')?.classList.contains('text-themeAccent')) {
-        cTilt = optTilt;
-        if(document.getElementById('pv-custom-tilt')) document.getElementById('pv-custom-tilt').value = optTilt.toFixed(1);
+    let lat = parseFloat(document.getElementById('pv-lat').value) || 0;
+    let m = _solarMonth;
+    
+    const decs = [-20.9, -13.0, -2.4, 9.4, 18.8, 23.1, 21.2, 13.5, 2.2, -9.6, -18.9, -23.0];
+    let monthlyYields = [];
+    let annual = 0;
+    
+    for(let i=0; i<12; i++) {
+        let dec = decs[i];
+        let d = dec * Math.PI/180;
+        let l = lat * Math.PI/180;
+        
+        let ws = Math.acos( -Math.tan(l) * Math.tan(d) );
+        if(isNaN(ws)) ws = (Math.tan(l)*Math.tan(d) > 0) ? Math.PI : 0;
+        
+        let dayLen = (24/Math.PI) * ws;
+        
+        let peakAlt = Math.asin( Math.sin(l)*Math.sin(d) + Math.cos(l)*Math.cos(d) );
+        let peakYield = Math.max(0, 1000 * Math.sin(peakAlt));
+        
+        let daily = (peakYield * dayLen * 0.6) / 1000; 
+        let mo = daily * 30;
+        monthlyYields.push(mo);
+        annual += mo;
     }
-
-    // Time of day
-    let t = parseFloat(document.getElementById('pv-time')?.value) || 12;
-    let hrAngle = (t - 12) * 15; // degrees
     
-    // Altitude angle
-    let sinAlt = Math.sin(_solarLat*Math.PI/180)*Math.sin(dec*Math.PI/180) + Math.cos(_solarLat*Math.PI/180)*Math.cos(dec*Math.PI/180)*Math.cos(hrAngle*Math.PI/180);
-    let alt = Math.asin(sinAlt) * 180/Math.PI;
-
-    let yieldW = 0;
-    if(alt > 0) {
-        // simplified projection
-        yieldW = 1000 * Math.sin(alt*Math.PI/180);
+    pvHistChart.data.datasets[0].data = monthlyYields;
+    let colors = Array(12).fill('rgba(212, 175, 55, 0.3)');
+    colors[m] = '#D4AF37';
+    pvHistChart.data.datasets[0].backgroundColor = colors;
+    pvHistChart.update();
+    
+    document.getElementById('pv-annual').textContent = "Annual: " + annual.toFixed(0) + " kWh/m²";
+    
+    let dec = decs[m] * Math.PI/180;
+    let l = lat * Math.PI/180;
+    
+    let timeLabels = [];
+    let timeData = [];
+    for(let h=0; h<=24; h+=0.5) {
+        let hrAngle = (h - 12) * 15 * Math.PI/180;
+        let alt = Math.asin( Math.sin(l)*Math.sin(dec) + Math.cos(l)*Math.cos(dec)*Math.cos(hrAngle) );
+        let y = alt > 0 ? 1000 * Math.sin(alt) : 0;
+        timeLabels.push(Math.floor(h) + (h%1===0 ? ':00' : ':30'));
+        timeData.push(y);
     }
-    document.getElementById('pv-yield').textContent = yieldW.toFixed(0) + " W/m²";
-    
-    // approx daily integral
-    let daily = yieldW * 6; // highly simplified
-    document.getElementById('pv-daily').textContent = (daily/1000).toFixed(2) + " kWh/m²";
-    document.getElementById('pv-annual').textContent = "Annual: " + ((daily/1000)*365).toFixed(0) + " kWh/m²";
+    pvTimeChart.data.labels = timeLabels;
+    pvTimeChart.data.datasets[0].data = timeData;
+    pvTimeChart.update();
 };
 
-window.toggleTiltLink = function() {
-    let btn = document.getElementById('pv-link-tilt');
-    if(!btn) return;
-    btn.classList.toggle('text-themeAccent');
-    btn.classList.toggle('text-themeMuted');
-    updateSolarSim();
-};
+// ==========================================
+// NEW FILTER DESIGNER BODE PLOT (CHART.JS)
+// ==========================================
+let filterBodeChart = null;
 
+function initFilterBodeChart() {
+    const ctx = document.getElementById('filter-canvas');
+    if(!ctx) return;
+    if(filterBodeChart) filterBodeChart.destroy();
+
+    filterBodeChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Magnitude (dB)',
+                data: [],
+                borderColor: '#D4AF37',
+                borderWidth: 2,
+                tension: 0.1,
+                pointRadius: 0,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            scales: {
+                x: {
+                    title: { display: true, text: 'Frequency', color: 'rgba(255,255,255,0.6)' },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    ticks: { color: 'rgba(255, 255, 255, 0.5)', maxTicksLimit: 10 }
+                },
+                y: {
+                    title: { display: true, text: 'Magnitude (dB)', color: 'rgba(255,255,255,0.6)' },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    ticks: { color: 'rgba(255, 255, 255, 0.5)' },
+                    min: -60, max: 5
+                }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+}
+
+window.addEventListener('DOMContentLoaded', function() { initFilterBodeChart(); });
+
+// Override runFilter to use Chart.js
+var _origRunFilter = (typeof runFilter === 'function') ? runFilter : null;
+window.runFilter = function() {
+    const fc = parseFloat(document.getElementById('calc-filter-fc')?.value);
+    if(!fc || !filterBodeChart) { if(_origRunFilter) _origRunFilter(); return; }
+
+    let type = document.getElementById('filter-type')?.value || 'rc';
+    let order = (type==='lc') ? 2 : (type==='lcl'||type==='clc') ? 3 : 1;
+
+    let labels = [];
+    let data = [];
+    for(let i=0; i<=200; i++) {
+        let freq = fc * Math.pow(10, -2 + (i/200)*4);
+        let ratio = freq / fc;
+        let mag = 1 / Math.sqrt(1 + Math.pow(ratio, 2 * order));
+        let db = 20 * Math.log10(mag);
+        let lbl = freq >= 1e6 ? (freq/1e6).toFixed(1)+'MHz' : freq >= 1000 ? (freq/1000).toFixed(1)+'kHz' : freq.toFixed(0)+'Hz';
+        labels.push(lbl);
+        data.push(db);
+    }
+    filterBodeChart.data.labels = labels;
+    filterBodeChart.data.datasets[0].data = data;
+    filterBodeChart.update();
+};

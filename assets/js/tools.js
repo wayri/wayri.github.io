@@ -1,4 +1,4 @@
-
+﻿
 const E12 = [1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2];
 const E24 = [1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7, 3.0, 3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1];
 const AWG_DATA = {4:{dia:5.189,res:0.2485,amp:95},6:{dia:4.115,res:0.3951,amp:75},8:{dia:3.264,res:0.6282,amp:55},10:{dia:2.588,res:0.9989,amp:30},12:{dia:2.053,res:1.588,amp:20},14:{dia:1.628,res:2.525,amp:15},16:{dia:1.291,res:4.016,amp:10},18:{dia:1.024,res:6.385,amp:7},20:{dia:0.812,res:10.15,amp:5},22:{dia:0.645,res:16.14,amp:3},24:{dia:0.511,res:25.67,amp:2}};
@@ -150,10 +150,10 @@ function toggleMobileMenu() {
             if (menu.classList.contains('hidden')) {
                 menu.classList.remove('hidden');
                 icon.classList.remove('fa-bars');
-                icon.classList.add('fa-xmarkΩ');
+                icon.classList.add('fa-xmarkÎ©');
             } else {
                 menu.classList.add('hidden');
-                icon.classList.remove('fa-xmarkΩ');
+                icon.classList.remove('fa-xmarkÎ©');
                 icon.classList.add('fa-bars');
             }
         }
@@ -190,7 +190,7 @@ function getNearestE96(val) {
 
 function formatUnit(v) {
             if(v >= 1e6) return (v/1e6).toFixed(2) + ' M';
-            if(v >= 1e3) return (v/1e3).toFixed(2) + ' kΩ';
+            if(v >= 1e3) return (v/1e3).toFixed(2) + ' kÎ©';
             return parseFloat(v.toFixed(2));
         }
 
@@ -203,7 +203,7 @@ function updateSuggestion(id, val) {
             if(val > 0 && sug) {
                 let e = getNearest(val, E24);
                 sug.dataset.val = e.val;
-                sug.textContent = `Set nearest E24: ${formatUnit(e.val)}Ω`;
+                sug.textContent = `Set nearest E24: ${formatUnit(e.val)}Î©`;
                 sug.classList.remove('opacity-0', 'h-0');
             } else if (sug) {
                 sug.classList.add('opacity-0', 'h-0');
@@ -219,9 +219,9 @@ function runESeries() {
             const e24 = getNearest(val, E24);
             const e96 = getNearestE96(val);
             
-            document.getElementById('eseries-e12').textContent = `${formatUnit(e12.val)}Ω (${e12.err>0?'+':''}${e12.err.toFixed(1)}%)`;
-            document.getElementById('eseries-e24').textContent = `${formatUnit(e24.val)}Ω (${e24.err>0?'+':''}${e24.err.toFixed(1)}%)`;
-            document.getElementById('eseries-e96').textContent = `${formatUnit(e96.val)}Ω (${e96.err>0?'+':''}${e96.err.toFixed(1)}%)`;
+            document.getElementById('eseries-e12').textContent = `${formatUnit(e12.val)}Î© (${e12.err>0?'+':''}${e12.err.toFixed(1)}%)`;
+            document.getElementById('eseries-e24').textContent = `${formatUnit(e24.val)}Î© (${e24.err>0?'+':''}${e24.err.toFixed(1)}%)`;
+            document.getElementById('eseries-e96').textContent = `${formatUnit(e96.val)}Î© (${e96.err>0?'+':''}${e96.err.toFixed(1)}%)`;
         }
 
 function setupDividerMode() {
@@ -426,7 +426,7 @@ function runSMPS() {
                 }
                 duty = 1 - (vin / vout);
             }
-            else if (type === 'flybackΩ') {
+            else if (type === 'flybackÎ©') {
                 ratioGrp.classList.remove('opacity-50');
                 duty = 0.4; 
                 const vor = (duty / (1 - duty)) * vin;
@@ -487,7 +487,7 @@ function runThermistor() {
 
             const tK = tc + 273.15;
             const r = r25 * Math.exp(beta * (1/tK - 1/298.15));
-            document.getElementById('ntc-r').textContent = formatUnit(r) + 'Ω';
+            document.getElementById('ntc-r').textContent = formatUnit(r) + 'Î©';
             
             drawThermistorPlot(r25, beta);
         }
@@ -650,9 +650,9 @@ function updateSolarSim() {
             const hh=Math.floor(hour), mm=Math.round((hour-hh)*60);
             if(labelEl) labelEl.textContent=hh.toString().padStart(2,'0')+':'+mm.toString().padStart(2,'0');
             if(_solarLat===null) {
-                if(locEl) locEl.textContent='— Select on map';
-                if(tiltEl) tiltEl.textContent='—';
-                if(irrEl) irrEl.textContent='0 W/m²';
+                if(locEl) locEl.textContent='â€” Select on map';
+                if(tiltEl) tiltEl.textContent='â€”';
+                if(irrEl) irrEl.textContent='0 W/mÂ²';
                 if(pwrEl) pwrEl.textContent='0.0 W';
                 return;
             }
@@ -661,9 +661,9 @@ function updateSolarSim() {
             const alt=_solarAlt(_solarLat,decl,hour);
             const irr=_pvIrr(alt);
             const pwr=irr*1.6*0.20;
-            if(locEl) locEl.textContent=_solarLat.toFixed(1)+'°, '+_solarLon.toFixed(1)+'°';
-            if(tiltEl) tiltEl.textContent=tilt+'°';
-            if(irrEl) irrEl.textContent=Math.round(irr)+' W/m²';
+            if(locEl) locEl.textContent=_solarLat.toFixed(1)+'Â°, '+_solarLon.toFixed(1)+'Â°';
+            if(tiltEl) tiltEl.textContent=tilt+'Â°';
+            if(irrEl) irrEl.textContent=Math.round(irr)+' W/mÂ²';
             if(pwrEl) pwrEl.textContent=pwr.toFixed(1)+' W';
             drawSolarMap();
         }
@@ -673,22 +673,6 @@ function initPlotter() {
             if(!plotEl) return;
             plotctx = plotEl.getContext('2d');
             drawPlot();
-        }
-
-async function sendSerial() {
-            if(!port || !port.writable) return;
-            const input = document.getElementById('serial-tx-input');
-            const data = input.value;
-            if(!data) return;
-            try {
-                const encoder = new TextEncoder();
-                const writer = port.writable.getWriter();
-                await writer.write(encoder.encode(data + "\r\n"));
-                writer.releaseLock();
-                input.value = '';
-            } catch (err) {
-                console.error(err);
-            }
         }
 
 function addGraphCursor(canvasId, valueFormatter) {
@@ -740,126 +724,6 @@ function addGraphCursor(canvasId, valueFormatter) {
                 const ctx = overlayCanvas.getContext('2d');
                 ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
             });
-        }
-
-async function toggleSerial() {
-            const btn = document.getElementById('serial-btn');
-            const status = document.getElementById('serial-status');
-            
-            if (port && port.readable) {
-                try {
-                    if(reader) { await reader.cancel(); reader = null; }
-                    await port.close(); port = null;
-                } catch (e) { console.error(e); }
-                
-                btn.textContent = "CONNECT";
-                status.textContent = "OFFLINE";
-                status.classList.remove('text-[#4ade80]', 'border-[#4ade80]');
-                return;
-            }
-
-            try {
-                if (!navigator.serial) {
-                    alert("Web Serial API is not supported in this browser. Please use Chrome or Edge on desktop.");
-                    return;
-                }
-                let baudVal = document.getElementById('baud-rate').value;
-            let baud = baudVal === 'custom' ? parseInt(document.getElementById('custom-baud').value) : parseInt(baudVal);
-            if(!baud || isNaN(baud)) baud = 115200;
-                port = await navigator.serial.requestPort();
-                await port.open({ baudRate: baud });
-                
-                btn.textContent = "DISCONNECT";
-                status.textContent = "CONNECTED";
-                status.classList.add('text-[#4ade80]', 'border-[#4ade80]');
-                
-                readSerialLoop();
-            } catch (err) {
-                console.error("Serial error:", err);
-            }
-        }
-
-async function readSerialLoop() {
-            const monitor = document.getElementById('serial-monitor');
-            while (port && port.readable) {
-                reader = port.readable.getReader();
-                try {
-                    while (true) {
-                        const { value, done } = await reader.read();
-                        if (done) break;
-                        
-                        const chunk = new TextDecoder().decode(value);
-                        monitor.value += chunk;
-                        serialBuffer += chunk;
-                        
-                        if(monitor.value.length > 3000) monitor.value = monitor.value.substring(monitor.value.length - 1500);
-                        monitor.scrollTop = monitor.scrollHeight;
-
-                        let lines = serialBuffer.split('\n');
-                        if (lines.length > 1) {
-                            for(let i=0; i<lines.length-1; i++) {
-                                let val = parseFloat(lines[i].trim());
-                                if(!isNaN(val)) {
-                                    plotData.push(val);
-                                    plotData.shift();
-                                }
-                            }
-                            serialBuffer = lines[lines.length-1];
-                            drawPlot();
-                        }
-                    }
-                } catch (error) {
-                    console.error("Read error:", error);
-                } finally {
-                    reader.releaseLock();
-                }
-            }
-        }
-
-function drawPlot() {
-            if(!plotEl || !plotEl.offsetParent) return;
-            if(plotEl.width !== plotEl.clientWidth) plotEl.width = plotEl.clientWidth;
-            if(plotEl.height !== plotEl.clientHeight) plotEl.height = plotEl.clientHeight;
-
-            const w = plotEl.width;
-            const h = plotEl.height;
-
-            plotctx.clearRect(0, 0, w, h);
-            
-            plotctx.strokeStyle = '#1a1a1a';
-            plotctx.lineWidth = 1;
-            for(let i=0; i<w; i+=20) { plotctx.beginPath(); plotctx.moveTo(i,0); plotctx.lineTo(i,h); plotctx.stroke(); }
-            for(let i=0; i<h; i+=20) { plotctx.beginPath(); plotctx.moveTo(0,i); plotctx.lineTo(w,i); plotctx.stroke(); }
-
-            let min = Math.min(...plotData);
-            let max = Math.max(...plotData);
-            if(min === max) { min -= 1; max += 1; }
-            let range = max - min;
-            let padding = range * 0.1; 
-            min -= padding;
-            max += padding;
-            range = max - min;
-
-            const style = getComputedStyle(document.body);
-            const accentColor = style.getPropertyValue('--accent-color').trim() || '#0055ff';
-
-            plotctx.strokeStyle = accentColor; 
-            plotctx.lineWidth = 2;
-            plotctx.beginPath();
-
-            const stepX = w / (plotData.length - 1);
-            for(let i = 0; i < plotData.length; i++) {
-                const x = i * stepX;
-                const y = h - ((plotData[i] - min) / range * h);
-                if(i === 0) plotctx.moveTo(x, y);
-                else plotctx.lineTo(x, y);
-            }
-            plotctx.stroke();
-            
-            plotctx.fillStyle = '#9ca3af';
-            plotctx.font = '10px monospace';
-            plotctx.fillText(max.toFixed(2), 5, 12);
-            plotctx.fillText(min.toFixed(2), 5, h - 5);
         }
 
 function runBode() {
@@ -921,7 +785,7 @@ function runAWG(){
             const resEl=document.getElementById('awg-res');
             const ampEl=document.getElementById('awg-amp');
             if(diaEl) diaEl.textContent=d.dia.toFixed(3)+' mm';
-            if(resEl) resEl.textContent=d.res.toFixed(2)+' mΩ/m';
+            if(resEl) resEl.textContent=d.res.toFixed(2)+' mÎ©/m';
             if(ampEl) ampEl.textContent=d.amp+' A';
         }
 
@@ -937,7 +801,7 @@ function runInductor(){
             else{D=1-(vin/vout); const dIL=ripplePct*iout; L_uh=(vin*D)/(fsw*dIL)*1e6;}
             const lEl=document.getElementById('ind-l');
             const dEl=document.getElementById('ind-d');
-            if(lEl) lEl.textContent=(D>0&&D<1&&L_uh>0)?L_uh.toFixed(2)+' µH':'INVALID';
+            if(lEl) lEl.textContent=(D>0&&D<1&&L_uh>0)?L_uh.toFixed(2)+' ÂµH':'INVALID';
             if(dEl) dEl.textContent=(D>0&&D<1)?(D*100).toFixed(1)+'%':'INVALID';
         }
 
@@ -1020,13 +884,13 @@ window.setupFilterMode = function() {
         solveHtml += `<label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="r" onchange="runSmartFilter()"> R</label>
                       <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="c" onchange="runSmartFilter()"> C</label>
                       <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="fc" checked onchange="runSmartFilter()"> fc</label>`;
-        html = `<div class="flex justify-between"><label>R (Ω)</label><input type="number" id="f-r" value="1000" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()"></div>
+        html = `<div class="flex justify-between"><label>R (Î©)</label><input type="number" id="f-r" value="1000" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()"></div>
                 <div class="flex justify-between"><label>C (nF)</label><input type="number" id="f-c" value="100" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()"></div>`;
     } else if(type === 'rl') {
         solveHtml += `<label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="r" onchange="runSmartFilter()"> R</label>
                       <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="l" onchange="runSmartFilter()"> L</label>
                       <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="fc" checked onchange="runSmartFilter()"> fc</label>`;
-        html = `<div class="flex justify-between"><label>R (Ω)</label><input type="number" id="f-r" value="1000" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()"></div>
+        html = `<div class="flex justify-between"><label>R (Î©)</label><input type="number" id="f-r" value="1000" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()"></div>
                 <div class="flex justify-between"><label>L (uH)</label><input type="number" id="f-l" value="100" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()"></div>`;
     } else if(type === 'lc') {
         solveHtml += `<label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="l" onchange="runSmartFilter()"> L</label>
@@ -1406,7 +1270,7 @@ window.calculateSolarMath = function() {
                 let m = parseInt(document.getElementById('pv-month-val')?.dataset?.month) || 5;
                 let declination = 23.45 * Math.sin((360 / 365) * (284 + (m * 30)) * Math.PI / 180);
                 let optTilt = Math.abs(lat - declination);
-                document.getElementById('pv-tilt').textContent = optTilt.toFixed(1) + '°';
+                document.getElementById('pv-tilt').textContent = optTilt.toFixed(1) + 'Â°';
                 
                 let customInput = document.getElementById('pv-custom-tilt');
                 if(isTiltLinked && customInput) {

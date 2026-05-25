@@ -1,4 +1,4 @@
----
+﻿---
 layout: default
 title: Engineering Tools
 permalink: /tools/
@@ -40,14 +40,14 @@ permalink: /tools/
                 <input type="number" id="calc-vin" value="12" step="0.1" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
             </div>
             <div class="flex justify-between items-center">
-                <label class="w-20">R1 (Ω)</label>
+                <label class="w-20">R1 (Î©)</label>
                 <div class="flex flex-col items-end w-32">
                     <input type="number" id="calc-r1" value="10000" class="w-full border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
                     <span id="sug-r1" class="text-[9px] text-themeAccent cursor-pointer hover:underline mt-0.5 opacity-0 h-0 transition-opacity whitespace-nowrap" onclick="applyVal('calc-r1', this.dataset.val); runSmartDivider();"></span>
                 </div>
             </div>
             <div class="flex justify-between items-center">
-                <label class="w-20">R2 (Ω)</label>
+                <label class="w-20">R2 (Î©)</label>
                 <div class="flex flex-col items-end w-32">
                     <input type="number" id="calc-r2" value="4700" class="w-full border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
                     <span id="sug-r2" class="text-[9px] text-themeAccent cursor-pointer hover:underline mt-0.5 opacity-0 h-0 transition-opacity whitespace-nowrap" onclick="applyVal('calc-r2', this.dataset.val); runSmartDivider();"></span>
@@ -200,7 +200,7 @@ permalink: /tools/
                 </div>
                 <div class="flex justify-between text-[10px] opacity-70">
                     <span>Resistance (per 1000ft)</span>
-                    <span id="awg-res">1.588 Ω</span>
+                    <span id="awg-res">1.588 Î©</span>
                 </div>
             </div>
         </div>
@@ -279,7 +279,7 @@ permalink: /tools/
                 <input type="number" id="pcb-i" value="1" step="0.1" class="w-24 border border-themeBorder px-2 py-1 text-right" oninput="runPCBTrace()">
             </div>
             <div class="flex justify-between items-center">
-                <label class="w-32 text-xs" title="Max allowable temp rise">Temp Rise (Δ°C)</label>
+                <label class="w-32 text-xs" title="Max allowable temp rise">Temp Rise (Î”Â°C)</label>
                 <input type="number" id="pcb-dt" value="10" step="1" class="w-24 border border-themeBorder px-2 py-1 text-right" oninput="runPCBTrace()">
             </div>
             <div class="flex justify-between items-center">
@@ -345,15 +345,15 @@ permalink: /tools/
             <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-2 text-xs">
                 <div class="flex justify-between border-b border-themeBorder/10 pb-1">
                     <span class="text-themeMuted">Nearest E12 (10%)</span>
-                    <span id="eseries-e12" class="font-bold text-themeText">4700 Ω</span>
+                    <span id="eseries-e12" class="font-bold text-themeText">4700 Î©</span>
                 </div>
                 <div class="flex justify-between border-b border-themeBorder/10 pb-1">
                     <span class="text-themeMuted">Nearest E24 (5%)</span>
-                    <span id="eseries-e24" class="font-bold text-themeAccent">4700 Ω</span>
+                    <span id="eseries-e24" class="font-bold text-themeAccent">4700 Î©</span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-themeMuted">Nearest E96 (1%)</span>
-                    <span id="eseries-e96" class="font-bold text-themeAccent">4870 Ω</span>
+                    <span id="eseries-e96" class="font-bold text-themeAccent">4870 Î©</span>
                 </div>
             </div>
         </div>
@@ -387,7 +387,7 @@ permalink: /tools/
                 </div>
             </div>
             <div class="w-1/2 relative border border-themeBorder bg-themeBg">
-                <span class="absolute top-1 right-1 text-[9px] text-themeMuted font-mono z-10">-40°C to 125°C (Log R)</span>
+                <span class="absolute top-1 right-1 text-[9px] text-themeMuted font-mono z-10">-40Â°C to 125Â°C (Log R)</span>
                 <canvas id="ntc-canvas" class="w-full h-full absolute inset-0"></canvas>
             </div>
         </div>
@@ -397,7 +397,7 @@ permalink: /tools/
     <div  id="tool-pv-yield-simulator" class="doc-container flex flex-col ">
                   <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
                       <div class="flex items-center gap-2"><i class="fa-solid fa-solar-panel"></i><h3 class="font-bold font-mono">PV Yield Simulator</h3></div>
-                      <span class="font-mono text-[10px] opacity-70">click map OR set location • Adjust month & time</span>
+                      <span class="font-mono text-[10px] opacity-70">click map OR set location â€¢ Adjust month & time</span>
                   </div>
                   <div class="p-4 font-mono text-sm flex flex-col flex-grow">
                       <div class="flex flex-col md:flex-row gap-4 mb-4 flex-grow">
@@ -443,11 +443,11 @@ permalink: /tools/
                       <div class="border-t border-themeBorder/20 pt-4 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow">
                           <div class="flex flex-col">
                               <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-themeMuted">GENERATION vs TIME</span><label class="text-[10px] flex items-center gap-1 cursor-pointer hover:text-themeAccent"><input type="checkbox" id="pv-all-months" class="accent-themeAccent"> Show All Months</label></div>
-                              <div class="relative w-full min-h-[200px] flex-grow bg-themeContainer border border-themeBorder/30"><canvas id="pv-time-chart"></canvas></div>
+                              <div class="relative w-full h-[250px] bg-themeContainer border border-themeBorder/30"><canvas id="pv-time-chart"></canvas></div>
                           </div>
                           <div class="flex flex-col">
                               <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-themeMuted">MONTHLY ENERGY YIELD (kWh)</span><span class="text-[10px] text-themeAccent" id="pv-annual">Annual: 0 kWh</span></div>
-                              <div class="relative w-full min-h-[200px] flex-grow bg-themeContainer border border-themeBorder/30"><canvas id="pv-hist-chart"></canvas></div>
+                              <div class="relative w-full h-[250px] bg-themeContainer border border-themeBorder/30"><canvas id="pv-hist-chart"></canvas></div>
                           </div>
                       </div>
                   </div>
@@ -458,36 +458,69 @@ permalink: /tools/
                 <i class="fa-brands fa-usb"></i>
                 <h3 class="font-bold font-mono">Web Serial Interface</h3>
             </div>
-            <div class="flex gap-2">
-                <button onclick="clearSerial()" class="border border-themeBg text-themeBg px-3 py-1 text-xs font-mono hover:bg-themeBg hover:text-themeBorder transition-colors">CLEAR</button>
-                <button id="serial-btn" onclick="toggleSerial()" class="border border-themeBg text-themeBg px-3 py-1 text-xs font-mono font-bold hover:bg-themeBg hover:text-themeBorder transition-colors shadow-[2px_2px_0px_#fff]">CONNECT</button>
-            </div>
         </div>
 
         <div class="p-4 flex-grow flex flex-col gap-4">
-            <div class="flex gap-2 text-xs font-mono">
-                <div class="flex flex-grow gap-2">
-                    <input type="number" id="baud-rate" list="baud-list" value="115200" class="border border-themeBorder p-1 w-24 bg-themeBg text-themeText" placeholder="custom baud">
-                    <datalist id="baud-list">
-                        <option value="9600"></option>
-                        <option value="115200"></option>
-                        <option value="921600"></option>
-                    </datalist>
-                    <button onclick="saveSerialLog()" class="border border-themeBorder text-themeMuted px-2 hover:bg-themeBorder hover:text-themeBg transition-colors text-[10px]">SAVE LOG</button>
+            <div class="flex flex-wrap gap-2 text-xs font-mono justify-between items-center">
+                <div class="flex flex-wrap gap-2 items-center">
+                    <select id="serial-baud" class="border border-themeBorder p-1 bg-themeBg text-themeText">
+                        <option value="9600">9600</option>
+                        <option value="19200">19200</option>
+                        <option value="38400">38400</option>
+                        <option value="57600">57600</option>
+                        <option value="115200" selected>115200</option>
+                        <option value="921600">921600</option>
+                    </select>
+                    <select id="serial-data" class="border border-themeBorder p-1 bg-themeBg text-themeText" title="Data Bits">
+                        <option value="8" selected>8 Data</option>
+                        <option value="7">7 Data</option>
+                    </select>
+                    <select id="serial-parity" class="border border-themeBorder p-1 bg-themeBg text-themeText" title="Parity">
+                        <option value="none" selected>None</option>
+                        <option value="even">Even</option>
+                        <option value="odd">Odd</option>
+                    </select>
+                    <select id="serial-stop" class="border border-themeBorder p-1 bg-themeBg text-themeText" title="Stop Bits">
+                        <option value="1" selected>1 Stop</option>
+                        <option value="2">2 Stop</option>
+                    </select>
+                    <select id="serial-line" class="border border-themeBorder p-1 bg-themeBg text-themeText" title="Line Ending">
+                        <option value="none">No Ending</option>
+                        <option value="cr">CR</option>
+                        <option value="lf">LF</option>
+                        <option value="crlf" selected>CRLF</option>
+                    </select>
                 </div>
-                <span id="serial-status" class="border border-themeBorder text-themeMuted p-1 px-4 text-center min-w-[120px]">OFFLINE</span>
+                <div class="flex gap-2">
+                    <button id="serial-btn" onclick="toggleSerial()" class="bg-themeAccent text-themeBg px-4 py-1 text-xs font-mono font-bold hover:opacity-90 transition-colors shadow-[2px_2px_0px_var(--border-color)]">CONNECT</button>
+                    <span id="serial-status" class="border border-themeBorder text-themeMuted p-1 px-4 text-center min-w-[120px]">OFFLINE</span>
+                </div>
             </div>
             
             <div class="flex gap-2">
                 <input type="text" id="serial-send-input" class="border border-themeBorder p-1 flex-grow bg-themeBg text-themeText font-mono text-xs" placeholder="Enter string to send..." onkeypress="if(event.key==='Enter') sendSerial()">
-                <button onclick="sendSerial()" class="bg-themeAccent text-themeBg px-4 font-bold hover:opacity-90 transition-colors">SEND</button>
+                <button onclick="sendSerial()" class="bg-themeBorder text-themeBg px-4 font-bold hover:bg-themeAccent transition-colors">SEND</button>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-48">
-                <textarea id="serial-monitor" readonly class="w-full h-full border border-themeBorder p-2 text-xs font-mono bg-themeBg text-green-500 resize-none focus:outline-none" placeholder="Awaiting hardware serial stream..."></textarea>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-64">
+                <div class="relative w-full h-full">
+                    <textarea id="serial-monitor" readonly class="w-full h-full border border-themeBorder p-2 text-xs font-mono bg-themeBg text-green-500 resize-none focus:outline-none" placeholder="Awaiting hardware serial stream..."></textarea>
+                    <div class="absolute top-2 right-2 flex gap-1">
+                        <button onclick="clearSerial()" class="bg-themeContainer border border-themeBorder text-themeMuted px-2 py-1 text-[10px] hover:text-themeAccent" title="Clear Text"><i class="fa-solid fa-eraser"></i></button>
+                        <button onclick="saveSerialLog()" class="bg-themeContainer border border-themeBorder text-themeMuted px-2 py-1 text-[10px] hover:text-themeAccent" title="Save Log"><i class="fa-solid fa-download"></i></button>
+                    </div>
+                </div>
                 
-                <div class="relative w-full h-full border border-themeBorder bg-themeBg">
-                    <span class="absolute top-1 right-1 text-[10px] font-mono text-themeMuted">AUTO-SCALE PLOT</span>
-                    <canvas id="plotter-canvas" class="w-full h-full"></canvas>
+                <div class="relative w-full h-full border border-themeBorder bg-themeBg p-2 flex flex-col">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[10px] font-mono text-themeMuted">AUTO-SCALE PLOT</span>
+                        <div class="flex gap-1">
+                            <button onclick="clearSerialPlot()" class="text-[10px] text-themeMuted hover:text-themeAccent" title="Clear Plot"><i class="fa-solid fa-eraser"></i></button>
+                            <button onclick="saveSerialPlot()" class="text-[10px] text-themeMuted hover:text-themeAccent" title="Screenshot Plot"><i class="fa-solid fa-camera"></i></button>
+                        </div>
+                    </div>
+                    <div class="flex-grow relative w-full h-full">
+                        <canvas id="serial-plot-canvas"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
