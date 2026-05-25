@@ -581,8 +581,8 @@ function initSolarWidget() {
                     const rect = canvas.getBoundingClientRect();
                     _solarLon = ((e.clientX - rect.left) / canvas.clientWidth) * 360 - 180;
                     _solarLat = 90 - ((e.clientY - rect.top) / canvas.clientHeight) * 180;
-                    const latIn = document.getElementById('solar-lat-in');
-                    const lonIn = document.getElementById('solar-lon-in');
+                    const latIn = document.getElementById('pv-lat');
+                    const lonIn = document.getElementById('pv-lng');
                     if(latIn) latIn.value = _solarLat.toFixed(1);
                     if(lonIn) lonIn.value = _solarLon.toFixed(1);
                     const hint = document.getElementById('solar-map-hint');
@@ -594,8 +594,8 @@ function initSolarWidget() {
         }
 
 window.updateSolarFromInput = function() {
-            const latIn = document.getElementById('solar-lat-in');
-            const lonIn = document.getElementById('solar-lon-in');
+            const latIn = document.getElementById('pv-lat');
+            const lonIn = document.getElementById('pv-lng');
             if(latIn) _solarLat = parseFloat(latIn.value);
             if(lonIn) _solarLon = parseFloat(lonIn.value);
             
@@ -606,7 +606,7 @@ window.updateSolarFromInput = function() {
         }
 
 window.drawSolarMap = function() {
-    const canvas = document.getElementById('world-map');
+    const canvas = document.getElementById('solar-canvas');
     if(!canvas) return;
     const ctx = canvas.getContext('2d');
     const w = canvas.width;

@@ -1,4 +1,6 @@
-// Circuit diagram SVG strings injected into tool cards on page load
+const fs = require('fs');
+
+const diagrams = `// Circuit diagram SVG strings injected into tool cards on page load
 (function() {
     var TOOL_DIAGRAMS = {
         'tool-resistor-divider': '<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;color:var(--accent-color,#D4AF37)"><g stroke="currentColor" stroke-width="2" fill="none" font-family="monospace" font-size="12"><text x="140" y="25" fill="currentColor" stroke="none">Vin</text><line x1="150" y1="30" x2="150" y2="40"/><polyline points="140,45 160,50 140,55 160,60 140,65 150,70"/><text x="170" y="55" fill="currentColor" stroke="none">R1</text><line x1="150" y1="70" x2="150" y2="75"/><circle cx="150" cy="75" r="2" fill="currentColor"/><line x1="150" y1="75" x2="200" y2="75"/><circle cx="200" cy="75" r="2" fill="currentColor" stroke="none"/><text x="210" y="70" fill="currentColor" stroke="none">Vout</text><line x1="150" y1="75" x2="150" y2="85"/><polyline points="140,90 160,95 140,100 160,105 140,110 150,115"/><text x="170" y="105" fill="currentColor" stroke="none">R2</text><line x1="150" y1="115" x2="150" y2="120"/><line x1="135" y1="120" x2="165" y2="120"/><line x1="140" y1="125" x2="160" y2="125"/><line x1="145" y1="130" x2="155" y2="130"/></g></svg>',
@@ -62,4 +64,6 @@
     } else {
         injectDiagrams();
     }
-})();
+})();`;
+
+fs.writeFileSync('assets/js/diagrams.js', diagrams);
