@@ -856,7 +856,7 @@ window.updateSolarSim = function() {
     pvHistChart.data.datasets[0].backgroundColor = colors;
     pvHistChart.update();
     
-    document.getElementById('pv-annual').textContent = "Annual: " + annual.toFixed(0) + " kWh/m²";
+    document.getElementById('pv-annual').textContent = "Annual: " + annual.toFixed(0) + " kWh/m\u00B2";
     
     let dec = decs[m] * Math.PI/180;
     let l = lat * Math.PI/180;
@@ -873,6 +873,21 @@ window.updateSolarSim = function() {
     pvTimeChart.data.labels = timeLabels;
     pvTimeChart.data.datasets[0].data = timeData;
     pvTimeChart.update();
+
+    // Update text fields
+    let optTilt = Math.abs(lat - (decs[m]));
+    let el_tilt = document.getElementById('pv-tilt');
+    if(el_tilt) el_tilt.textContent = optTilt.toFixed(1) + '\u00B0';
+    let t = parseFloat(document.getElementById('pv-time')?.value) || 12;
+    let hrA = (t-12)*15*Math.PI/180;
+    let sinAlt = Math.sin(lat*Math.PI/180)*Math.sin(dec) + Math.cos(lat*Math.PI/180)*Math.cos(dec)*Math.cos(hrA);
+    let alt0 = Math.asin(Math.max(-1, Math.min(1, sinAlt)));
+    let yW = alt0 > 0 ? 1000*Math.sin(alt0) : 0;
+    let el_y = document.getElementById('pv-yield');
+    if(el_y) el_y.textContent = yW.toFixed(0) + ' W/m\u00B2';
+    let dailyE = monthlyYields[m] / 30;
+    let el_d = document.getElementById('pv-daily');
+    if(el_d) el_d.textContent = dailyE.toFixed(2) + ' kWh/m\u00B2';
 };
 
 // ==========================================
@@ -947,3 +962,4 @@ window.runFilter = function() {
     filterBodeChart.data.datasets[0].data = data;
     filterBodeChart.update();
 };
+
