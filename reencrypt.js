@@ -1,0 +1,11 @@
+const fs = require('fs');
+let content = fs.readFileSync('pong.html', 'utf8');
+const match = content.match(/const payload = \"([^\"]+)\";/);
+const key = 'PHYSICAL_LAYER_199X';
+let s = fs.readFileSync('payload.js', 'utf8');
+let s2 = '';
+for(let i=0;i<s.length;i++) s2 += String.fromCharCode(s.charCodeAt(i) ^ key.charCodeAt(i%key.length));
+const newPayload = btoa(s2);
+content = content.replace(match[1], newPayload);
+fs.writeFileSync('pong.html', content);
+console.log('Re-encrypted modified payload with PHYSICAL_LAYER_199X.');
