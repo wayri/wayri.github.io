@@ -629,6 +629,23 @@ window.drawSolarMap = function() {
             ctx.fill();
         }
     }
+    
+    // Draw Sun Line (Declination)
+    const decs = [-20.9, -13.0, -2.4, 9.4, 18.8, 23.1, 21.2, 13.5, 2.2, -9.6, -18.9, -23.0];
+    let m = _solarMonth !== undefined ? _solarMonth : 5;
+    let dec = decs[m];
+    let sunY = (90 - dec) * (h / 180);
+    ctx.strokeStyle = '#ffff00';
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 0.8;
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    ctx.moveTo(0, sunY);
+    ctx.lineTo(w, sunY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    
+    // Draw Location Dot
     let lat = parseFloat(document.getElementById('pv-lat')?.value) || 0;
     let lng = parseFloat(document.getElementById('pv-lng')?.value) || 0;
     let px = (lng + 180) * (w / 360);
@@ -1035,9 +1052,14 @@ window.setSolarMonth = function(m) {
             btns[i].className = (i === m) ? "border border-themeBorder bg-themeAccent text-themeBg" : "border border-themeBorder hover:bg-themeAccent hover:text-themeBg";
         }
     }
-    document.getElementById('pv-month-val').textContent = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m];
-    document.getElementById('pv-month-val').dataset.month = m;
-    if(window.calculateSolarMath) window.calculateSolarMath();
+    const valEl = document.getElementById('pv-month-val');
+    if(valEl) {
+        valEl.textContent = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m];
+        valEl.dataset.month = m;
+    }
+    _solarMonth = m;
+    if(window.drawSolarMap) window.drawSolarMap();
+    if(window.updateSolarSim) window.updateSolarSim();
 }
 
 window.setupIPCMode = function() {

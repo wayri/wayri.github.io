@@ -910,6 +910,12 @@ window.updateSolarSim = function() {
     let el_tilt = document.getElementById('pv-tilt');
     if(el_tilt) el_tilt.textContent = optTilt.toFixed(1) + '\u00B0';
     let t = parseFloat(document.getElementById('pv-time')?.value) || 12;
+    let timeValEl = document.getElementById('pv-time-val');
+    if(timeValEl) {
+        let hh = Math.floor(t);
+        let mm = t % 1 === 0 ? '00' : '30';
+        timeValEl.textContent = `${hh.toString().padStart(2, '0')}:${mm}`;
+    }
     let hrA = (t-12)*15*Math.PI/180;
     let sinAlt = Math.sin(lat*Math.PI/180)*Math.sin(dec) + Math.cos(lat*Math.PI/180)*Math.cos(dec)*Math.cos(hrA);
     let alt0 = Math.asin(Math.max(-1, Math.min(1, sinAlt)));
