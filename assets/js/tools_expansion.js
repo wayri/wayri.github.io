@@ -872,6 +872,7 @@ window.updateSolarSim = function() {
     }
     pvTimeChart.data.labels = timeLabels;
 
+    const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     let datasets = [];
     let l = lat * Math.PI/180;
     
@@ -886,18 +887,21 @@ window.updateSolarSim = function() {
             timeData.push(y);
         }
         let isSelected = (monthIdx === m);
+        let color = showAll ? `hsl(${monthIdx * 30}, 80%, 65%)` : '#D4AF37';
         datasets.push({
-            label: 'Month ' + (monthIdx+1),
+            label: monthNames[monthIdx],
             data: timeData,
-            borderColor: isSelected ? '#D4AF37' : 'rgba(255,255,255,0.2)',
-            backgroundColor: isSelected ? 'rgba(212, 175, 55, 0.1)' : 'transparent',
-            borderWidth: isSelected ? 2 : 1,
+            borderColor: color,
+            backgroundColor: isSelected ? (showAll ? `hsla(${monthIdx * 30}, 80%, 65%, 0.15)` : 'rgba(212, 175, 55, 0.15)') : 'transparent',
+            borderWidth: isSelected ? 3 : 1.5,
             fill: isSelected,
             tension: 0.4,
             pointRadius: 0,
             order: isSelected ? 0 : 1
         });
     }
+    pvTimeChart.options.plugins.legend.display = showAll;
+    pvTimeChart.options.plugins.legend.labels = { color: 'rgba(255,255,255,0.7)', font: { size: 10 } };
     pvTimeChart.data.datasets = datasets;
     pvTimeChart.update();
 
