@@ -936,7 +936,8 @@ let filterBodeChart = null;
 function initFilterBodeChart() {
     const ctx = document.getElementById('filter-canvas');
     if(!ctx) return;
-    if(filterBodeChart) filterBodeChart.destroy();
+    let existingChart = Chart.getChart(ctx);
+    if(existingChart) existingChart.destroy();
 
     filterBodeChart = new Chart(ctx, {
         type: 'line',
