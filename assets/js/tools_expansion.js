@@ -1,4 +1,4 @@
-﻿// EE Tools Suite Expansion Pack
+// EE Tools Suite Expansion Pack
 
 // ==========================================
 // 1. VOLTAGE & CURRENT MARGINING
@@ -305,21 +305,28 @@ function setupFilterMode() {
         <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="filter_solve" value="fc" checked onchange="runSmartFilter()"> Fc (Hz)</label>
     `;
 
+    let l1_label = 'R1 (Ω) / L1 (µH)';
+    let c1_label = 'C1 (µF) / R1 (Ω)';
+    if(type === 'rc') { l1_label = 'R (Ω)'; c1_label = 'C (µF)'; }
+    if(type === 'rl') { l1_label = 'L (µH)'; c1_label = 'R (Ω)'; }
+    if(type === 'lc' || type === 'lcl' || type === 'clc') { l1_label = 'L1 (µH)'; c1_label = 'C1 (µF)'; }
+
     let extra = '';
     if(type === 'lcl' || type === 'clc') {
+        let l2_label = type === 'lcl' ? 'L2 (µH)' : 'C2 (µF)';
         extra = `            <div class="flex justify-between items-center text-xs">
-                <label></label>
+                <label>${l2_label}</label>
                 <input type="number" id="filter-c2" value="10" class="w-24 border border-themeBorder px-1 text-right" oninput="runSmartFilter()">
             </div>
     `;
     }
 
     inputs.innerHTML = `        <div class="flex justify-between items-center text-xs">
-            <label></label>
+            <label>${l1_label}</label>
             <input type="number" id="filter-r1" value="1000" class="w-24 border border-themeBorder px-1 text-right" oninput="runSmartFilter()">
         </div>
         <div class="flex justify-between items-center text-xs">
-            <label></label>
+            <label>${c1_label}</label>
             <input type="number" id="filter-c1" value="0.1" class="w-24 border border-themeBorder px-1 text-right" oninput="runSmartFilter()">
         </div>
         
@@ -430,29 +437,29 @@ function setupNTCMode() {
         solvers = `            <span>SOLVE:</span>
             <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="r25" onchange="runThermistor()"> R25</label>
             <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="beta" onchange="runThermistor()"> Beta</label>
-            <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="temp" onchange="runThermistor()"> Temp (Â°C)</label>
+            <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="temp" onchange="runThermistor()"> Temp (°C)</label>
             <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="rt" checked onchange="runThermistor()"> Rt (O)</label>
     `;
         inputs.innerHTML = `            <div class="flex justify-between items-center text-xs">
-                <label>R_nom (O @ 25Â°C)</label>
+                <label>R_nom (Ω @ 25°C)</label>
                 <input type="number" id="ntc-r25" value="10000" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
-                <label>Beta (ÃŸ)</label>
+                <label>Beta (ß)</label>
                 <input type="number" id="ntc-beta" value="3950" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
-                <label>Target Temp (Â°C)</label>
+                <label>Target Temp (°C)</label>
                 <input type="number" id="ntc-t" value="85" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
-                <label>R at Target (O)</label>
+                <label>R at Target (Ω)</label>
                 <input type="number" id="ntc-rt" value="1451" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
     `;
     } else {
         solvers = `            <span>SOLVE:</span>
-            <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="temp" onchange="runThermistor()"> Temp (Â°C)</label>
+            <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="temp" onchange="runThermistor()"> Temp (°C)</label>
             <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="rt" checked onchange="runThermistor()"> Rt (O)</label>
     `;
         inputs.innerHTML = `            <div class="flex justify-between items-center text-[10px]">
@@ -468,11 +475,11 @@ function setupNTCMode() {
                 <input type="number" id="ntc-c" value="8.76741e-8" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs mt-1">
-                <label>Target Temp (Â°C)</label>
+                <label>Target Temp (°C)</label>
                 <input type="number" id="ntc-t" value="85" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
-                <label>R at Target (O)</label>
+                <label>R at Target (Ω)</label>
                 <input type="number" id="ntc-rt" value="1451" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
     `;
@@ -547,7 +554,7 @@ function runThermistor() {
         }
     }
 
-    document.getElementById('ntc-result').textContent = solveTarget === 'rt' ? (rt ? rt.toFixed(1) + " O" : "-") : (temp ? temp.toFixed(2) + " Â°C" : "-");
+    document.getElementById('ntc-result').textContent = solveTarget === 'rt' ? (rt ? rt.toFixed(1) + " Ω" : "-") : (temp ? temp.toFixed(2) + " °C" : "-");
 }
 
 window.addEventListener('DOMContentLoaded', () => {
