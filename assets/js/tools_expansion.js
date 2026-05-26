@@ -865,20 +865,40 @@ window.updateSolarSim = function() {
     
     document.getElementById('pv-annual').textContent = "Annual: " + annual.toFixed(0) + " kWh/m\u00B2";
     
-    let dec = decs[m] * Math.PI/180;
-    let l = lat * Math.PI/180;
-    
+    let showAll = document.getElementById('pv-all-months')?.checked;
     let timeLabels = [];
-    let timeData = [];
     for(let h=0; h<=24; h+=0.5) {
-        let hrAngle = (h - 12) * 15 * Math.PI/180;
-        let alt = Math.asin( Math.sin(l)*Math.sin(dec) + Math.cos(l)*Math.cos(dec)*Math.cos(hrAngle) );
-        let y = alt > 0 ? 1000 * Math.sin(alt) : 0;
         timeLabels.push(Math.floor(h) + (h%1===0 ? ':00' : ':30'));
-        timeData.push(y);
     }
     pvTimeChart.data.labels = timeLabels;
-    pvTimeChart.data.datasets[0].data = timeData;
+
+    let datasets = [];
+    let l = lat * Math.PI/180;
+    
+    for(let i=0; i<(showAll ? 12 : 1); i++) {
+        let monthIdx = showAll ? i : m;
+        let d = decs[monthIdx] * Math.PI/180;
+        let timeData = [];
+        for(let h=0; h<=24; h+=0.5) {
+            let hrAngle = (h - 12) * 15 * Math.PI/180;
+            let alt = Math.asin( Math.sin(l)*Math.sin(d) + Math.cos(l)*Math.cos(d)*Math.cos(hrAngle) );
+            let y = alt > 0 ? 1000 * Math.sin(alt) : 0;
+            timeData.push(y);
+        }
+        let isSelected = (monthIdx === m);
+        datasets.push({
+            label: 'Month ' + (monthIdx+1),
+            data: timeData,
+            borderColor: isSelected ? '#D4AF37' : 'rgba(255,255,255,0.2)',
+            backgroundColor: isSelected ? 'rgba(212, 175, 55, 0.1)' : 'transparent',
+            borderWidth: isSelected ? 2 : 1,
+            fill: isSelected,
+            tension: 0.4,
+            pointRadius: 0,
+            order: isSelected ? 0 : 1
+        });
+    }
+    pvTimeChart.data.datasets = datasets;
     pvTimeChart.update();
 
     // Update text fields
