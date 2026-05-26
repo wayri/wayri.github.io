@@ -1008,3 +1008,96 @@ window.updatePVFromInputs = function() {
   _solarLon = lng;
   if (window.calculateSolarMath) window.calculateSolarMath();
 };
+
+
+// ==========================================
+// GLOBAL STANDARD VALUE SUGGESTIONS
+// ==========================================
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        const allInputs = document.querySelectorAll('input[type="number"]');
+        allInputs.forEach(input => {
+            const id = input.id || '';
+            const labelEl = input.parentElement;
+            const textContent = labelEl ? labelEl.textContent : '';
+            
+            // Heuristic to detect Resistance or Capacitance
+            const isRes = textContent.includes('Ω') || id.match(/-r\d*$/i) || id.includes('-r-') || id.includes('rtop') || id.includes('rbot');
+            const isCap = textContent.includes('F') || id.match(/-c\d*$/i) || id.includes('-c-');
+            
+            // Ignore non-components like time, temp, turns, etc.
+            if ((isRes || isCap) && !id.includes('time') && !id.includes('temp')) {
+                let sugSpan = document.getElementById('sug-' + id);
+                if (!sugSpan) {
+                    sugSpan = document.createElement('span');
+                    sugSpan.id = 'sug-' + id;
+                    sugSpan.className = "text-[9px] text-themeAccent cursor-pointer hover:underline mt-0.5 opacity-0 h-0 transition-opacity whitespace-nowrap block";
+                    
+                    if (input.nextSibling) {
+                        input.parentElement.insertBefore(sugSpan, input.nextSibling);
+                    } else {
+                        input.parentElement.appendChild(sugSpan);
+                    }
+                    
+                    const pStyle = window.getComputedStyle(input.parentElement);
+                    if (pStyle.display === 'flex' && pStyle.flexDirection === 'row') {
+                        input.parentElement.style.flexWrap = 'wrap';
+                        sugSpan.style.width = '100%';
+                        sugSpan.style.textAlign = 'right';
+                    }
+                }
+                
+                const updateCb = () => {
+                    const val = parseFloat(input.value);
+                    if (val > 0) {
+                        let e, seriesName;
+                        if (isRes) {
+                            e = window.getNearest(val, window.E24);
+                            seriesName = 'E24';
+                        } else {
+                            e = window.getNearest(val, window.E12);
+                            seriesName = 'E12';
+                        }
+                        
+                        let unitStr = window.formatUnit ? window.formatUnit(e.val) : e.val;
+                        let suffix = isRes ? 'Ω' : 'F';
+                        let diff = Math.abs(e.val - val) / val;
+                        
+                        if (diff < 0.01) {
+                            sugSpan.textContent = `Standard ${seriesName}: ${unitStr}${suffix}`;
+                            sugSpan.dataset.val = e.val;
+                            sugSpan.classList.remove('opacity-0', 'h-0');
+                            sugSpan.classList.add('opacity-50'); // Dim if already standard
+                        } else {
+                            sugSpan.textContent = `Set nearest ${seriesName}: ${unitStr}${suffix}`;
+                            sugSpan.dataset.val = e.val;
+                            sugSpan.classList.remove('opacity-0', 'h-0', 'opacity-50');
+                        }
+                    } else {
+                        sugSpan.classList.add('opacity-0', 'h-0');
+                    }
+                };
+                
+                input.addEventListener('input', updateCb);
+                
+                let lastVal = input.value;
+                setInterval(() => {
+                    if (input.value !== lastVal) {
+                        lastVal = input.value;
+                        updateCb();
+                    }
+                }, 500);
+                
+                sugSpan.addEventListener('click', () => {
+                    input.value = sugSpan.dataset.val;
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                    if (input.oninput) {
+                        input.oninput({ target: input });
+                    }
+                });
+                
+                updateCb();
+            }
+        });
+    }, 1000);
+});

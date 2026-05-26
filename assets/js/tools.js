@@ -283,20 +283,16 @@ function runSmartDivider() {
                 if (target === 'vout' && vals.vin && vals.r1 && vals.r2) {
                     vals.vout = vals.vin * (vals.r2 / (vals.r1 + vals.r2));
                     if(divInputs.vout) divInputs.vout.value = vals.vout.toFixed(3);
-                    updateSuggestion('r1', 0); updateSuggestion('r2', 0);
-                } else if (target === 'vin' && vals.vout && vals.r1 && vals.r2) {
+                    } else if (target === 'vin' && vals.vout && vals.r1 && vals.r2) {
                     vals.vin = vals.vout / (vals.r2 / (vals.r1 + vals.r2));
                     if(divInputs.vin) divInputs.vin.value = vals.vin.toFixed(3);
-                    updateSuggestion('r1', 0); updateSuggestion('r2', 0);
-                } else if (target === 'r1' && vals.vin && vals.vout && vals.r2) {
+                    } else if (target === 'r1' && vals.vin && vals.vout && vals.r2) {
                     vals.r1 = vals.r2 * (vals.vin / vals.vout - 1);
                     if(divInputs.r1) divInputs.r1.value = vals.r1 > 0 ? vals.r1.toFixed(1) : "ERR";
-                    updateSuggestion('r1', vals.r1); updateSuggestion('r2', 0);
-                } else if (target === 'r2' && vals.vin && vals.vout && vals.r1) {
+                    } else if (target === 'r2' && vals.vin && vals.vout && vals.r1) {
                     vals.r2 = vals.vout * vals.r1 / (vals.vin - vals.vout);
                     if(divInputs.r2) divInputs.r2.value = vals.r2 > 0 ? vals.r2.toFixed(1) : "ERR";
-                    updateSuggestion('r2', vals.r2); updateSuggestion('r1', 0);
-                }
+                    }
 
                 if (vals.vin && vals.r1 > 0 && vals.r2 > 0) {
                     const current = vals.vin / (vals.r1 + vals.r2);
