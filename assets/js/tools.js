@@ -632,9 +632,9 @@ window.drawSolarMap = function() {
     let dec = decs[m];
     let sunY = (90 - dec) * (h / 180);
     ctx.strokeStyle = '#ffff00';
-    ctx.lineWidth = 1;
-    ctx.globalAlpha = 0.8;
-    ctx.setLineDash([5, 5]);
+    ctx.lineWidth = 2; // Increased visibility
+    ctx.globalAlpha = 1.0; // Increased visibility
+    ctx.setLineDash([8, 8]); // Better dash
     ctx.beginPath();
     ctx.moveTo(0, sunY);
     ctx.lineTo(w, sunY);

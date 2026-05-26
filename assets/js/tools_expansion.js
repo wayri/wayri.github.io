@@ -916,6 +916,7 @@ window.updateSolarSim = function() {
         let mm = t % 1 === 0 ? '00' : '30';
         timeValEl.textContent = `${hh.toString().padStart(2, '0')}:${mm}`;
     }
+    let dec = decs[m] * Math.PI/180;
     let hrA = (t-12)*15*Math.PI/180;
     let sinAlt = Math.sin(lat*Math.PI/180)*Math.sin(dec) + Math.cos(lat*Math.PI/180)*Math.cos(dec)*Math.cos(hrA);
     let alt0 = Math.asin(Math.max(-1, Math.min(1, sinAlt)));
