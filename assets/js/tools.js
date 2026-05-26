@@ -617,8 +617,9 @@ window.drawSolarMap = function() {
     ctx.fillRect(0,0,w,h);
     ctx.fillStyle = '#cda434';
     ctx.globalAlpha = 0.5;
-    if(typeof _WMAP !== 'undefined' && _WMAP.length) {
-        for(let poly of _WMAP) {
+    if(typeof _WMAP !== 'undefined') {
+        for(let key in _WMAP) {
+            let poly = _WMAP[key];
             ctx.beginPath();
             for(let i=0; i<poly.length; i++) {
                 let x = (poly[i][0] + 180) * (w / 360);
