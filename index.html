@@ -291,47 +291,79 @@ title: Yawar | Engineering the Physical Layer
             </h2>
             <div class="space-y-4">
                 
-                <a href="https://www.sciencedirect.com/science/article/abs/pii/S2352152X23025987?via%3Dihub" target="_blank" class="block group">
+                <a href="https://www.sciencedirect.com/science/article/abs/pii/S2352152X23025987?via%3Dihub" target="_blank" class="block group" data-openalex="search=Ultracapacitor Integration with Regenerative Braking Systems in Electric Drive Trains">
                     <div class="doc-container p-4 hover:border-themeAccent transition-colors">
                         <div class="flex justify-between items-start mb-1">
                             <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors">Ultracapacitor Integration with Regenerative Braking Systems in Electric Drive Trains</h3>
-                            <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase ml-4 mt-0.5 whitespace-nowrap">Journal</span>
+                            <div class="flex items-center gap-2 citation-container ml-4 mt-0.5">
+                                <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase whitespace-nowrap">Journal</span>
+                            </div>
                         </div>
                         <p class="text-sm font-mono text-themeMuted mt-1">ScienceDirect / Elsevier | 2023 | DOI: S2352152X23025987</p>
                     </div>
                 </a>
 
-                <a href="https://ieeexplore.ieee.org/document/9851081" target="_blank" class="block group">
+                <a href="https://ieeexplore.ieee.org/document/9851081" target="_blank" class="block group" data-openalex="search=Application of V2V Energy Sharing in Electric Vehicles with Source Switching">
                     <div class="doc-container p-4 hover:border-themeAccent transition-colors">
                         <div class="flex justify-between items-start mb-1">
                             <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors">Application of V2V Energy Sharing in Electric Vehicles with Source Switching</h3>
-                            <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase ml-4 mt-0.5 whitespace-nowrap">Conference</span>
+                            <div class="flex items-center gap-2 citation-container ml-4 mt-0.5">
+                                <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase whitespace-nowrap">Conference</span>
+                            </div>
                         </div>
                         <p class="text-sm font-mono text-themeMuted mt-1">IEEE Xplore | 2022 | Document: 9851081</p>
                     </div>
                 </a>
 
-                <a href="https://link.springer.com/article/10.1007/s12652-023-04578-w" target="_blank" class="block group">
+                <a href="https://link.springer.com/article/10.1007/s12652-023-04578-w" target="_blank" class="block group" data-openalex="filter=doi:10.1007/s12652-023-04578-w">
                     <div class="doc-container p-4 hover:border-themeAccent transition-colors">
                         <div class="flex justify-between items-start mb-1">
                             <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors">Experimental Implementation of Optimally Tuned Multifunctional RLMLS Driven VSc Tied to Single Phase Voltage Weak Distribution Grid</h3>
-                            <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase ml-4 mt-0.5 whitespace-nowrap">Journal</span>
+                            <div class="flex items-center gap-2 citation-container ml-4 mt-0.5">
+                                <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase whitespace-nowrap">Journal</span>
+                            </div>
                         </div>
                         <p class="text-sm font-mono text-themeMuted mt-1">Springer Link | 2023 | DOI: 10.1007/s12652-023-04578-w</p>
                     </div>
                 </a>
                 
-                <a href="https://link.springer.com/chapter/10.1007/978-981-16-1186-5_8" target="_blank" class="block group">
+                <a href="https://link.springer.com/chapter/10.1007/978-981-16-1186-5_8" target="_blank" class="block group" data-openalex="filter=doi:10.1007/978-981-16-1186-5_8">
                     <div class="doc-container p-4 hover:border-themeAccent transition-colors">
                         <div class="flex justify-between items-start mb-1">
                             <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors">A New Modular Multilevel converter Topology Using Flying Ultra-capacitor and cascaded h-bridges</h3>
-                            <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase ml-4 mt-0.5 whitespace-nowrap">Book Chapter</span>
+                            <div class="flex items-center gap-2 citation-container ml-4 mt-0.5">
+                                <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase whitespace-nowrap">Book Chapter</span>
+                            </div>
                         </div>
                         <p class="text-sm font-mono text-themeMuted mt-1">Springer Book chapter | 2021 | DOI: 10.1007/978-981-16-1186-5_8</p>
                     </div>
                 </a>
-
             </div>
+            
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const pubElements = document.querySelectorAll('[data-openalex]');
+                    pubElements.forEach(el => {
+                        const query = el.getAttribute('data-openalex');
+                        const url = 'https://api.openalex.org/works?' + query;
+                        fetch(url)
+                            .then(response => response.json())
+                            .then(data => {
+                                if(data.results && data.results.length > 0) {
+                                    const citations = data.results[0].cited_by_count;
+                                    if (citations > 0) {
+                                        const span = document.createElement('span');
+                                        span.className = 'text-[10px] font-mono bg-themeText/10 text-themeText border border-themeText/20 px-2 py-0.5 uppercase whitespace-nowrap inline-flex items-center gap-1';
+                                        span.innerHTML = `<i class="fa-solid fa-quote-right"></i> ${citations}`;
+                                        const container = el.querySelector('.citation-container');
+                                        if(container) container.appendChild(span);
+                                    }
+                                }
+                            })
+                            .catch(err => console.error("Error fetching citations:", err));
+                    });
+                });
+            </script>
         </section>
 
                 <!-- Projects Portfolio -->
