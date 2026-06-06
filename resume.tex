@@ -1,0 +1,158 @@
+\documentclass[10pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=0.6in}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{tabularx}
+
+% Colors
+\definecolor{primary}{HTML}{2B2B2B}
+\definecolor{accent}{HTML}{2563EB} % Modern blue accent
+\definecolor{muted}{HTML}{555555}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accent,
+    filecolor=accent,      
+    urlcolor=accent,
+}
+
+% Section formatting
+\titleformat{\section}{\Large\bfseries\color{primary}}{}{0em}{}[\vspace{-0.5ex}\color{accent}\titlerule\vspace{1ex}]
+\titlespacing*{\section}{0pt}{2ex}{1ex}
+
+% Custom commands
+\newcommand{\resumeItem}[1]{\item\small{#1}}
+\newcommand{\resumeSubheading}[4]{
+  \vspace{1ex}\item[]
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{\color{primary}#1} & \textbf{\color{primary}\small #2} \\
+      \textit{\color{muted}\small#3} & \textit{\color{muted}\small #4} \\
+    \end{tabular*}\vspace{-1ex}
+}
+\newcommand{\projectItem}[2]{
+    \item \textbf{\color{primary}#1:} \small{#2}
+}
+
+\begin{document}
+\pagestyle{empty}
+
+% HEADER
+\begin{center}
+    {\Huge \textbf{\color{primary}Yawar Badri}} \\
+    \vspace{0.4em}
+    {\Large \color{muted} Systems Engineering $|$ Hardware Architecture} \\
+    \vspace{0.4em}
+    \href{https://linkedin.com/in/yawar-badri}{linkedin.com/in/yawar-badri} $|$ 
+    \href{https://github.com/wayri}{github.com/wayri} $|$ 
+    Discord: sakha.lin
+\end{center}
+
+\vspace{0.5em}
+
+% SUMMARY
+\section*{Professional Summary}
+\small{Full-stack hardware architect specializing in complex systems, hardware pipelines, and emerging energy tech. Proven ability to architect, simulate, and deploy end-to-end solutions spanning from high-power analog frontends and complex PCB layouts to deeply embedded firmware and deterministic desktop host interfaces. Expert in transforming theoretical power concepts into highly reliable physical hardware.}
+
+% COMPETENCIES
+\section*{Core Competencies}
+\begin{itemize}[leftmargin=1.5em, rightmargin=0em, parsep=0pt, itemsep=2pt, topsep=0pt]
+    \item \textbf{Hardware \& EDA:} KiCad, Altium, Cadence, SolidWorks, SolidEdge, PCB Layout, Bed of Nails Design
+    \item \textbf{Simulation \& Modeling:} MATLAB, Simulink, LTspice, Qspice, Root Cause Analysis (RCA), FMECA, WCCA
+    \item \textbf{Languages \& Firmware:} C, C++, C\#, Python, JavaScript, STM32, ARM Cortex, Embedded DSP
+    \item \textbf{Test \& Measurement:} DSO, MSO, Logic Analyzer, LCR, Megger, PQA, DMM, Hardware-in-the-Loop (HIL)
+\end{itemize}
+
+% EXPERIENCE
+\section*{Experience}
+\begin{itemize}[leftmargin=0em, label={}]
+    \resumeSubheading
+      {Pixxel Space}{2022 -- Present}
+      {Senior Electrical Engineer}{Space / High-Rel Electronics}
+      \begin{itemize}[leftmargin=1.5em, itemsep=1pt, topsep=1pt]
+        \resumeItem{Leading the end-to-end electronic subsystem design for multiple satellites, specializing in high-reliability (high-rel) electronics engineered to operate in hazardous orbital environments.}
+        \resumeItem{Architecting full Electrical Power System (EPS) end to end, designing power regulation, distribution tiles, and high power density converters.}
+        \resumeItem{Developing Electrical Ground Support Equipment (EGSE), power loggers, input protection devices, and constant current solar cell simulators for rigorous subsystem verification.}
+        \resumeItem{Designed and built the hardware for an in-house GNSS simulator, contributing to vertical integration goals.}
+      \end{itemize}
+
+    \resumeSubheading
+      {Kashmir University}{}
+      {Technical Advisor}{Hardware Startups \& Prototyping}
+      \begin{itemize}[leftmargin=1.5em, itemsep=1pt, topsep=1pt]
+        \resumeItem{Providing strategic technical architecture guidance to emerging hardware startups.}
+        \resumeItem{Mentoring engineering founders on prototyping-to-production pipelines, component supply chain constraints, and embedded systems integration.}
+      \end{itemize}
+
+    \resumeSubheading
+      {NIT Srinagar}{}
+      {Project Associate (R\&D Architecture)}{Power Systems}
+      \begin{itemize}[leftmargin=1.5em, itemsep=1pt, topsep=1pt]
+        \resumeItem{Directed hardware architecture and systems integration for an experimental grid-tied inverter testbed.}
+        \resumeItem{Engineered the hardware-software ecosystem required for researchers to deploy and benchmark novel power control algorithms safely, bridging high-level MATLAB models with bare-metal PWM execution.}
+      \end{itemize}
+
+    \resumeSubheading
+      {University of Kashmir (Sponsored by J\&K Govt.)}{}
+      {Research Analyst / Associate}{EV Infrastructure Analysis}
+      \begin{itemize}[leftmargin=1.5em, itemsep=1pt, topsep=1pt]
+        \resumeItem{Analyzed electrical distribution constraints for emerging EV infrastructure, synthesizing deep technical findings into actionable state infrastructural policy.}
+      \end{itemize}
+\end{itemize}
+
+% HARDWARE PROJECTS
+\section*{Hardware Architecture \& Electronics}
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt, topsep=0pt]
+    \projectItem{10-Channel Power Logger}{Bidirectional DC power logger (100Vmax) featuring custom analog front-end hardware and STM32 USB 2.0 interface. Included hardware design, firmware, calibration, and desktop app.}
+    \projectItem{Power Conversion Suite}{Built a 100W linear supply, 100W 2-quadrant supply, and 150W electronic load. Worked on kilowatt-scale grid-integrated PV inverters.}
+    \projectItem{DACard-Basic HIL Interface}{Architected a full-stack hardware-in-the-loop testing ecosystem encompassing physical hardware, embedded firmware, host software, and custom Python libraries.}
+    \projectItem{Ground Energy Storage BMS}{Designed and deployed comprehensive battery management systems (BMS) for large-scale energy storage solutions.}
+    \projectItem{3-Phase Grid-Tied Inverter}{Hardware design layout for 3-phase grid-tied power conversion, engineered to support active and reactive power injection algorithms.}
+    \projectItem{DFIG Test Bench Hardware}{Architected a full Doubly Fed Induction Generator test bench suite through the full PCB layout and design phase.}
+    \projectItem{Dual-channel Oscilloscope}{Ported and modified code for an ATmega2560 featuring a TFT touch interface, engineered specifically for teaching ADC interrupts.}
+    \projectItem{8-channel Optocoupler Board}{Industrial isolation interface utilizing an EL817 array with onboard inverted channel logic specifically meant for control isolation.}
+\end{itemize}
+
+% SOFTWARE PROJECTS
+\section*{Software \& Embedded Tools}
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt, topsep=0pt]
+    \projectItem{CATS (CAN Automated Testing Software)}{Used to test hardware with a full command, read, verify, record cycle based on PCAN hardware as an interface.}
+    \projectItem{KiWay \& Transformer Tools}{PCB Design routing framework for automating redundant constraints, and internal CAD tools to calculate and paramaterize custom magnetic transformers.}
+    \projectItem{sigLib}{C++ DSP library tailored for real-time waveform conditioning, smoothing, and analysis on embedded targets.}
+    \projectItem{Gauss-Seidel Load Flow}{Console-based numerical analyzer for calculating power distribution flows across N-bus non-linear electrical networks.}
+    \projectItem{Custom DAQ \& Desktop Apps}{Developed bespoke desktop applications tailored for determining electrical load profiles, automated billing, and general data acquisition systems.}
+\end{itemize}
+
+% ENGINEERING UTILITIES
+\section*{Interactive Engineering Utilities (Web-Based)}
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt, topsep=0pt]
+    \item \small{\textbf{Power \& Systems Engineering:} Developed interactive tools for \textbf{SMPS Topology \& Ratio} solving, \textbf{Loop Compensators (P/Z)}, \textbf{AC Motor Dynamics}, \textbf{PV Yield Simulators}, and \textbf{Battery Pack (S/P) Configuration}.}
+    \item \small{\textbf{Electronics Design (EDA) Calculators:} Built advanced tools including \textbf{Filter Designers (RC/LC/Pi)}, \textbf{Resistor Divider} smart solvers, \textbf{Voltage/Current Margining (DAC)}, \textbf{Thermistor R-T Curves}, \textbf{IPC-2221 Trace Width}, \textbf{AWG Wire Ampacity}, \textbf{E-Series Finders}, and \textbf{Magnetics \& Harness} drop calculators.}
+    \item \small{\textbf{Hardware Interfacing:} \textbf{Web Serial Interface} providing real-time hardware stream monitoring and plotting directly in the browser.}
+\end{itemize}
+
+% EDUCATION
+\section*{Education}
+\begin{itemize}[leftmargin=0em, label={}]
+    \resumeSubheading
+      {Lovely Professional University (LPU)}{2022}
+      {Master of Technology (M.Tech) in Electrical Engineering (Power \& Renewable Energy)}{Grade: A}
+    \resumeSubheading
+      {University of Kashmir}{2019}
+      {Bachelor of Technology (B.Tech) in Electrical Engineering}{Grade: A}
+\end{itemize}
+
+% PUBLICATIONS
+\section*{Selected Publications}
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt, topsep=0pt]
+    \item \small{\textit{Ultracapacitor Integration with Regenerative Braking Systems in Electric Drive Trains} (ScienceDirect/Elsevier, 2023)}
+    \item \small{\textit{Experimental Implementation of Optimally Tuned Multifunctional RLMLS Driven VSc...} (Springer Link, 2023)}
+    \item \small{\textit{Application of V2V Energy Sharing in Electric Vehicles with Source Switching} (IEEE Xplore, 2022)}
+    \item \small{\textit{A New Modular Multilevel Converter Topology Using Flying Ultra-capacitor...} (Springer, 2021)}
+\end{itemize}
+
+\end{document}
