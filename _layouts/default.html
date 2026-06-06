@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page.title | default: site.title }}</title>
     
+    <!-- SEO & Social Meta Tags -->
+    <meta name="description" content="Portfolio of Yawar Badri - Senior Systems Engineer & Hardware Architect">
+    <meta property="og:title" content="{{ page.title | default: site.title }}">
+    <meta property="og:description" content="Portfolio of Yawar Badri - Senior Systems Engineer & Hardware Architect specializing in complex systems, hardware pipelines, and emerging energy tech.">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -83,6 +92,9 @@
                     <a href="{{ '/blog/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url contains '/blog' or page.url contains '/posts/' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">Blog_Notes</a>
                     <a href="{{ '/products/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url contains '/products' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">Products</a>
                     <a href="{{ '/tools/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url contains '/tools' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">EE_Tools</a>
+                    <a href="{{ '/assets/resume.pdf' | relative_url }}" target="_blank" class="text-themeAccent border border-themeAccent/30 hover:bg-themeAccent/10 px-3 py-1 ml-2 transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-file-pdf"></i> Resume
+                    </a>
                     <a href="#discord" class="text-themeMuted hover:text-themeAccent transition-colors ml-4">
                         <i class="fa-brands fa-discord text-xl"></i>
                     </a>
@@ -112,6 +124,7 @@
             <a href="{{ '/blog/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">Blog_Notes</a>
             <a href="{{ '/products/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">Products</a>
             <a href="{{ '/tools/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">EE_Tools</a>
+            <a href="{{ '/assets/resume.pdf' | relative_url }}" target="_blank" class="block text-themeAccent font-bold py-2"><i class="fa-solid fa-file-pdf mr-2"></i>Download Resume</a>
             <div class="border-t border-themeBorder/10 pt-4 pb-2 flex justify-center space-x-8">
                 <a href="#discord" class="text-themeMuted hover:text-themeAccent transition-colors">
                     <i class="fa-brands fa-discord text-2xl"></i>
