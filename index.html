@@ -81,60 +81,85 @@ title: Yawar | Engineering the Physical Layer
         
         <div id="skill-marquee-view" class="mb-16 overflow-hidden bg-themeBorder/10 border-y border-themeBorder/20 py-3 relative cursor-pointer hover:bg-themeBorder/20 transition-colors group" title="Click to view full matrix" onclick="document.getElementById('skill-marquee-view').classList.add('hidden'); document.getElementById('skill-table-view').classList.remove('hidden');">
             <div class="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-themeBg/80 transition-opacity font-mono text-sm text-themeAccent font-bold tracking-widest backdrop-blur-sm">CLICK TO EXPAND SKILL MATRIX</div>
-            <div class="animate-scroll text-themeText font-mono text-sm font-bold uppercase tracking-wider items-center opacity-100 group-hover:opacity-30 transition-opacity">
-                <div class="flex items-center">
-                    <span class="mx-4">Systems Architecture</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Cross-Functional Leadership</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Hardware Strategy</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">EPS Architecture</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Product Lifecycle (PLM)</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Requirements Engineering</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">NPI & Vendor Management</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">FMECA / WCCA / RCA</span><span class="text-themeMuted mx-2">•</span>
+            <div class="animate-scroll text-themeText font-mono text-sm font-bold uppercase tracking-wider items-center opacity-100 group-hover:opacity-30 transition-opacity whitespace-nowrap">
+                <div class="inline-flex items-center">
+                    <span class="text-themeAccent mx-4">Systems Architecture</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">EPS Architecture</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">Hardware Strategy</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">Product Lifecycle (PLM)</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">Cross-Functional Leadership</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">NPI & Vendor Management</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">Technical Mentorship</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">BMS Design</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">HIL / EGSE Architecture</span><span class="text-themeMuted mx-2">•</span>
                     <span class="mx-4">DFM / DFA</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Technical Mentorship</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">HIL / EGSE</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">BMS Design</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">MATLAB / Python</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">FMECA / RCA</span><span class="text-themeMuted mx-2">•</span>
                     <span class="mx-4">KiCad / Altium</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">Bare-Metal / RTOS</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">Bode Analyzer</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">DSO / MSO</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">Logic Analyzer</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">SCPI Scripting</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">MATLAB / Python</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">C/C++/C#</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">LTspice / Qspice</span><span class="text-themeMuted mx-2">•</span>
                 </div>
                 <!-- Duplicate for seamless loop -->
-                <div class="flex items-center">
-                    <span class="mx-4">Systems Architecture</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Cross-Functional Leadership</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Hardware Strategy</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">EPS Architecture</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Product Lifecycle (PLM)</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Requirements Engineering</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">NPI & Vendor Management</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">FMECA / WCCA / RCA</span><span class="text-themeMuted mx-2">•</span>
+                <div class="inline-flex items-center">
+                    <span class="text-themeAccent mx-4">Systems Architecture</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">EPS Architecture</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">Hardware Strategy</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">Product Lifecycle (PLM)</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">Cross-Functional Leadership</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">NPI & Vendor Management</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">Technical Mentorship</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">BMS Design</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="text-themeAccent mx-4">HIL / EGSE Architecture</span><span class="text-themeMuted mx-2">•</span>
                     <span class="mx-4">DFM / DFA</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Technical Mentorship</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">HIL / EGSE</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">BMS Design</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">FMECA / RCA</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">KiCad / Altium</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">Bare-Metal / RTOS</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">Bode Analyzer</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">DSO / MSO</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">Logic Analyzer</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">SCPI Scripting</span><span class="text-themeMuted mx-2">•</span>
                     <span class="mx-4">MATLAB / Python</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">KiCad / Altium</span>
+                    <span class="mx-4">C/C++/C#</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">LTspice / Qspice</span>
                 </div>
             </div>
         </div>
 
         <div id="skill-table-view" class="mb-16 hidden">
-            <div class="text-center mb-6"><span class="text-xs font-mono text-themeMuted uppercase tracking-widest border-b border-themeAccent/30 pb-1">Comprehensive Skill Matrix</span></div>
-            <div class="flex flex-wrap justify-center gap-3 max-w-5xl mx-auto">
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-sitemap animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> Systems Architecture</span>
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-chess-knight animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> Hardware Strategy</span>
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-users-gear animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> Cross-Functional Leadership</span>
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-list-check animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> Requirements Engineering</span>
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-rotate animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> Product Lifecycle (PLM)</span>
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-satellite animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> EPS Architecture</span>
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-handshake animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> NPI & Vendor Management</span>
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-users animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> Technical Mentorship</span>
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-industry animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> DFM / DFA</span>
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-shield-halved animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> FMECA / WCCA / RCA</span>
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-server animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> HIL / EGSE</span>
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-car-battery animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> BMS Design</span>
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-code animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> MATLAB / Python</span>
-                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-layer-group animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> KiCad / Altium</span>
+            <!-- Architecture & Leadership Segment -->
+            <div class="text-center mb-6"><span class="text-xs font-mono text-themeAccent uppercase tracking-widest border-b border-themeAccent/50 pb-1 shadow-[0_1px_0_var(--accent-color)]">Architecture & Leadership</span></div>
+            <div class="flex flex-wrap justify-center gap-3 max-w-5xl mx-auto mb-10">
+                <span class="bg-themeAccent/10 border border-themeAccent px-3 py-1.5 text-sm font-mono flex items-center gap-2 text-themeAccent transition-colors"><i class="fa-solid fa-sitemap animate-[spin_4s_linear_infinite] text-xs"></i> Systems Architecture</span>
+                <span class="bg-themeAccent/10 border border-themeAccent px-3 py-1.5 text-sm font-mono flex items-center gap-2 text-themeAccent transition-colors"><i class="fa-solid fa-satellite animate-[spin_4s_linear_infinite] text-xs"></i> EPS Architecture</span>
+                <span class="bg-themeAccent/10 border border-themeAccent px-3 py-1.5 text-sm font-mono flex items-center gap-2 text-themeAccent transition-colors"><i class="fa-solid fa-chess-knight animate-[spin_4s_linear_infinite] text-xs"></i> Hardware Strategy</span>
+                <span class="bg-themeAccent/10 border border-themeAccent px-3 py-1.5 text-sm font-mono flex items-center gap-2 text-themeAccent transition-colors"><i class="fa-solid fa-rotate animate-[spin_4s_linear_infinite] text-xs"></i> Product Lifecycle (PLM)</span>
+                <span class="bg-themeAccent/10 border border-themeAccent px-3 py-1.5 text-sm font-mono flex items-center gap-2 text-themeAccent transition-colors"><i class="fa-solid fa-users-gear animate-[spin_4s_linear_infinite] text-xs"></i> Cross-Functional Leadership</span>
+                <span class="bg-themeAccent/10 border border-themeAccent px-3 py-1.5 text-sm font-mono flex items-center gap-2 text-themeAccent transition-colors"><i class="fa-solid fa-handshake animate-[spin_4s_linear_infinite] text-xs"></i> NPI & Vendor Management</span>
+                <span class="bg-themeAccent/10 border border-themeAccent px-3 py-1.5 text-sm font-mono flex items-center gap-2 text-themeAccent transition-colors"><i class="fa-solid fa-users animate-[spin_4s_linear_infinite] text-xs"></i> Technical Mentorship</span>
+                <span class="bg-themeAccent/10 border border-themeAccent px-3 py-1.5 text-sm font-mono flex items-center gap-2 text-themeAccent transition-colors"><i class="fa-solid fa-list-check animate-[spin_4s_linear_infinite] text-xs"></i> Requirements Engineering</span>
+                <span class="bg-themeAccent/10 border border-themeAccent px-3 py-1.5 text-sm font-mono flex items-center gap-2 text-themeAccent transition-colors"><i class="fa-solid fa-car-battery animate-[spin_4s_linear_infinite] text-xs"></i> BMS Design</span>
+                <span class="bg-themeAccent/10 border border-themeAccent px-3 py-1.5 text-sm font-mono flex items-center gap-2 text-themeAccent transition-colors"><i class="fa-solid fa-server animate-[spin_4s_linear_infinite] text-xs"></i> HIL / EGSE Architecture</span>
+            </div>
+
+            <!-- Deep-Tech Execution & Instrumentation Segment -->
+            <div class="text-center mb-6"><span class="text-xs font-mono text-themeMuted uppercase tracking-widest border-b border-themeBorder pb-1">Deep-Tech Execution & Instrumentation</span></div>
+            <div class="flex flex-wrap justify-center gap-3 max-w-5xl mx-auto opacity-80">
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeText transition-colors"><i class="fa-solid fa-industry text-themeMuted text-xs"></i> DFM / DFA</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeText transition-colors"><i class="fa-solid fa-shield-halved text-themeMuted text-xs"></i> FMECA / RCA</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeText transition-colors"><i class="fa-solid fa-layer-group text-themeMuted text-xs"></i> KiCad / Altium</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeText transition-colors"><i class="fa-solid fa-microchip text-themeMuted text-xs"></i> Bare-Metal / RTOS</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeText transition-colors"><i class="fa-solid fa-wave-square text-themeMuted text-xs"></i> Bode Analyzer</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeText transition-colors"><i class="fa-solid fa-chart-line text-themeMuted text-xs"></i> DSO / MSO</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeText transition-colors"><i class="fa-solid fa-microchip text-themeMuted text-xs"></i> Logic Analyzer</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeText transition-colors"><i class="fa-solid fa-terminal text-themeMuted text-xs"></i> SCPI Scripting</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeText transition-colors"><i class="fa-solid fa-code text-themeMuted text-xs"></i> MATLAB / Python</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeText transition-colors"><i class="fa-solid fa-code text-themeMuted text-xs"></i> C/C++/C#</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeText transition-colors"><i class="fa-solid fa-bolt text-themeMuted text-xs"></i> LTspice / Qspice</span>
             </div>
         </div>
 
