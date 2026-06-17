@@ -3,13 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ page.title | default: site.title }}</title>
-    
-    <!-- SEO & Social Meta Tags -->
-    <meta name="description" content="Portfolio of Yawar Badri - Senior Systems Engineer & Hardware Architect">
-    <meta property="og:title" content="{{ page.title | default: site.title }}">
-    <meta property="og:description" content="Portfolio of Yawar Badri - Senior Systems Engineer & Hardware Architect specializing in complex systems, hardware pipelines, and emerging energy tech.">
-    <meta property="og:type" content="website">
+    {% seo %}
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
@@ -88,7 +82,7 @@
                     </button>
                     <span class="text-themeBorder opacity-30">|</span>
                     <a href="{{ '/index.html' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url == '/' or page.url == '/index.html' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">Overview</a>
-                    <a href="{{ '/blog/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url contains '/blog' or page.url contains '/posts/' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">Blog_Notes</a>
+                    <a href="{{ '/blog/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url contains '/blog' or page.url contains '/posts/' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">Engineering_Log</a>
 
                     <a href="{{ '/tools/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url contains '/tools' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">EE_Tools</a>
                     <a href="{{ '/assets/resume.pdf' | relative_url }}" target="_blank" class="text-themeAccent border border-themeAccent/30 hover:bg-themeAccent/10 px-3 py-1 ml-2 transition-colors flex items-center gap-2">
@@ -120,7 +114,7 @@
         <!-- Mobile Dropdown Menu -->
         <div id="mobile-menu" class="hidden md:hidden border-t border-themeBorder bg-themeBg px-4 py-4 space-y-4 font-mono text-sm shadow-md transition-colors duration-300">
             <a href="{{ '/index.html' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">Overview</a>
-            <a href="{{ '/blog/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">Blog_Notes</a>
+            <a href="{{ '/blog/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">Engineering_Log</a>
 
             <a href="{{ '/tools/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">EE_Tools</a>
             <a href="{{ '/assets/resume.pdf' | relative_url }}" target="_blank" class="block text-themeAccent font-bold py-2"><i class="fa-solid fa-file-pdf mr-2"></i>Download Resume</a>
