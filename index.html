@@ -8,13 +8,13 @@ title: Yawar | Engineering the Physical Layer
             <div class="border-b-2 border-themeBorder pb-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
                 <div>
                     <!-- Animated Name -->
-                    <h1 class="text-5xl sm:text-7xl font-bold tracking-tight mb-2 uppercase text-themeText flex items-end relative">
-                        <span id="hero-y" class="inline-block transition-transform duration-500 ease-in-out z-20">Y</span>
-                        <span id="hero-a1" class="inline-block transition-all duration-500 ease-in-out z-20">A</span>
-                        <span id="hero-w" class="inline-block transition-transform duration-500 ease-in-out z-10">W</span>
-                        <span id="hero-a2" class="inline-block transition-transform duration-500 ease-in-out z-10">A</span>
-                        <span id="hero-r" class="inline-block transition-transform duration-500 ease-in-out z-10">R</span>
-                        <span id="hero-dot" class="text-themeAccent inline-block transition-all duration-300 origin-bottom z-10">.</span>
+                    <h1 class="text-5xl sm:text-7xl font-bold tracking-tight mb-2 uppercase text-themeText flex items-end relative group cursor-default transition-all duration-700 hover:tracking-[0.2em]">
+                        <span id="hero-y" class="inline-block transition-transform duration-500 ease-in-out z-20 group-hover:-translate-y-2 group-hover:text-themeAccent">Y</span>
+                        <span id="hero-a1" class="inline-block transition-all duration-500 ease-in-out z-20 group-hover:translate-y-1">A</span>
+                        <span id="hero-w" class="inline-block transition-transform duration-500 ease-in-out z-10 group-hover:-translate-y-1 group-hover:text-themeAccent">W</span>
+                        <span id="hero-a2" class="inline-block transition-transform duration-500 ease-in-out z-10 group-hover:translate-y-2">A</span>
+                        <span id="hero-r" class="inline-block transition-transform duration-500 ease-in-out z-10 group-hover:-translate-y-1 group-hover:text-themeAccent">R</span>
+                        <span id="hero-dot" class="text-themeAccent inline-block transition-all duration-300 origin-bottom z-10 group-hover:rotate-12 group-hover:scale-150">.</span>
                     </h1>
                     <p class="text-xl sm:text-2xl font-mono text-themeAccent font-semibold">
                         Engineering the Physical Layer.
@@ -34,37 +34,17 @@ title: Yawar | Engineering the Physical Layer
             </div>
 
             
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-                                <div class="lg:col-span-2 text-themeText leading-relaxed space-y-4 text-lg font-light">
+<div class="mb-12">
+                <div class="text-themeText leading-relaxed space-y-4 text-lg font-light text-justify max-w-4xl">
                     <p class="font-semibold text-xl">
                         I believe in building high-reliability hardware from first principles, architecting the bridge between complex physical domains and robust control logic.
                     </p>
                     <p>
-                        My foundation is rooted in complete product lifecycle management (PLM), extending from initial design to DFM/DFA, vendor management, and rigorous reliability analysis (FMECA, FMEA, WCCA). I have led the end-to-end Electrical Power System (EPS) subsystem design for satellites and engineered robust Battery Management Systems (BMS) for ground-based energy storage solutions. My expertise also includes designing kilowatt-scale (10kW+) grid-tied inverters for integrating solar PV into the grid, alongside developing critical satellite ground support equipment (EGSE), logging, and protection instrumentation.
+                        My foundation spans the complete product lifecycle (PLM)—from initial design and rigorous reliability analysis (FMECA, WCCA) to DFM/DFA. I have led end-to-end EPS subsystem design for satellites and engineered robust Battery Management Systems for ground energy storage. My expertise extends to kilowatt-scale grid-tied inverters and critical aerospace ground support equipment (EGSE).
                     </p>
                     <p>
-                        My trajectory spans from component-level aerospace hardware and full Hardware-in-the-Loop (HIL) interface development, to creating custom desktop applications for DAQ and load billing, and acting as a technical advisor for projects that directly influence state-level infrastructure and policy.
+                        From component-level hardware and Hardware-in-the-Loop (HIL) interfaces to technical advisory for state-level infrastructure, my focus remains on bridging hardware systems with flawless execution.
                     </p>
-                </div>
-                
-                <!-- Status Telemetry Widget -->
-                <div class="doc-container p-4 w-full border-themeBorder bg-themeContainer shadow-[2px_2px_0px_var(--accent-color)]">
-                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-themeBorder/50">
-                        <span class="font-mono text-xs font-bold text-themeAccent">SYS_TELEMETRY</span>
-                        <div class="flex items-center gap-2">
-                            <span class="relative flex h-2 w-2">
-                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                              <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                            </span>
-                            <span class="font-mono text-[10px] text-green-500 tracking-widest uppercase">Nominal</span>
-                        </div>
-                    </div>
-                    <div class="font-mono text-xs text-themeMuted space-y-1">
-                        <div class="flex justify-between"><span>PWR_BUS:</span><span class="text-themeText font-semibold">100.0V REG</span></div>
-                        <div class="flex justify-between"><span>CORE_TEMP:</span><span class="text-themeText font-semibold">32.4°C</span></div>
-                        <div class="flex justify-between"><span>ATTITUDE:</span><span class="text-themeText font-semibold">LOCKED</span></div>
-                        <div class="flex justify-between"><span>DATA_LINK:</span><span class="text-themeText font-semibold">1.2 Gbps TX</span></div>
-                    </div>
                 </div>
             </div>
         </header>
@@ -698,7 +678,28 @@ title: Yawar | Engineering the Physical Layer
             </div>
         </div>
 
-
+        <!-- Subdued Telemetry Section -->
+        <section class="mb-10 flex justify-end">
+            <!-- Status Telemetry Widget -->
+            <div class="doc-container p-4 w-full md:w-1/3 border-themeBorder bg-themeContainer shadow-[2px_2px_0px_var(--accent-color)] opacity-70 hover:opacity-100 transition-opacity">
+                <div class="flex justify-between items-center mb-3 pb-2 border-b border-themeBorder/50">
+                    <span class="font-mono text-xs font-bold text-themeAccent">SYS_TELEMETRY</span>
+                    <div class="flex items-center gap-2">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        </span>
+                        <span class="font-mono text-[10px] text-green-500 tracking-widest uppercase">Nominal</span>
+                    </div>
+                </div>
+                <div class="font-mono text-xs text-themeMuted space-y-1">
+                    <div class="flex justify-between"><span>PWR_BUS:</span><span class="text-themeText font-semibold">100.0V REG</span></div>
+                    <div class="flex justify-between"><span>CORE_TEMP:</span><span class="text-themeText font-semibold">32.4°C</span></div>
+                    <div class="flex justify-between"><span>ATTITUDE:</span><span class="text-themeText font-semibold">LOCKED</span></div>
+                    <div class="flex justify-between"><span>DATA_LINK:</span><span class="text-themeText font-semibold">1.2 Gbps TX</span></div>
+                </div>
+            </div>
+        </section>
 
         <!-- Blog Link -->
         <section class="mb-10 flex flex-col md:flex-row justify-between items-center gap-6 border-t-2 border-themeBorder pt-8">
