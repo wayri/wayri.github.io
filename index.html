@@ -78,61 +78,57 @@ title: Yawar | Engineering the Physical Layer
             animation-play-state: paused;
         }
         </style>
-        <div class="mb-16 overflow-hidden bg-themeBorder/10 border-y border-themeBorder/20 py-3 relative">
-            <div class="animate-scroll text-themeText font-mono text-sm font-bold uppercase tracking-wider items-center">
+        
+        <div id="skill-marquee-view" class="mb-16 overflow-hidden bg-themeBorder/10 border-y border-themeBorder/20 py-3 relative cursor-pointer hover:bg-themeBorder/20 transition-colors group" title="Click to view full matrix" onclick="document.getElementById('skill-marquee-view').classList.add('hidden'); document.getElementById('skill-table-view').classList.remove('hidden');">
+            <div class="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-themeBg/80 transition-opacity font-mono text-sm text-themeAccent font-bold tracking-widest backdrop-blur-sm">CLICK TO EXPAND SKILL MATRIX</div>
+            <div class="animate-scroll text-themeText font-mono text-sm font-bold uppercase tracking-wider items-center opacity-100 group-hover:opacity-30 transition-opacity">
                 <div class="flex items-center">
                     <span class="mx-4">Bode Analyzer</span><span class="text-themeMuted mx-2">•</span>
                     <span class="mx-4">SCPI Scripting</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">DSO</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">MSO</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">DSO / MSO</span><span class="text-themeMuted mx-2">•</span>
                     <span class="mx-4">Logic Analyzer</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">LCR</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Megger</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">PQA</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">DMM</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">LCR / PQA / DMM</span><span class="text-themeMuted mx-2">•</span>
                     <span class="mx-4">C/C++/C#</span><span class="text-themeMuted mx-2">•</span>
                     <span class="mx-4">Python</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">KiCad</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Altium</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Cadence</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">SolidWorks</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">SolidEdge</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">MATLAB</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Simulink</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">LTspice</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Qspice</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">FMECA</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">FMEA</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">WCCA</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">RCA</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">KiCad / Altium</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">SolidWorks / Edge</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">MATLAB / Simulink</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">LTspice / Qspice</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">FMECA / WCCA / RCA</span><span class="text-themeMuted mx-2">•</span>
                 </div>
                 <!-- Duplicate for seamless loop -->
                 <div class="flex items-center">
                     <span class="mx-4">Bode Analyzer</span><span class="text-themeMuted mx-2">•</span>
                     <span class="mx-4">SCPI Scripting</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">DSO</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">MSO</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">DSO / MSO</span><span class="text-themeMuted mx-2">•</span>
                     <span class="mx-4">Logic Analyzer</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">LCR</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Megger</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">PQA</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">DMM</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">LCR / PQA / DMM</span><span class="text-themeMuted mx-2">•</span>
                     <span class="mx-4">C/C++/C#</span><span class="text-themeMuted mx-2">•</span>
                     <span class="mx-4">Python</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">KiCad</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Altium</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Cadence</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">SolidWorks</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">SolidEdge</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">MATLAB</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Simulink</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">LTspice</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">Qspice</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">FMECA</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">FMEA</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">WCCA</span><span class="text-themeMuted mx-2">•</span>
-                    <span class="mx-4">RCA</span>
+                    <span class="mx-4">KiCad / Altium</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">SolidWorks / Edge</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">MATLAB / Simulink</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">LTspice / Qspice</span><span class="text-themeMuted mx-2">•</span>
+                    <span class="mx-4">FMECA / WCCA / RCA</span>
                 </div>
+            </div>
+        </div>
+
+        <div id="skill-table-view" class="mb-16 hidden">
+            <div class="text-center mb-6"><span class="text-xs font-mono text-themeMuted uppercase tracking-widest border-b border-themeAccent/30 pb-1">Comprehensive Skill Matrix</span></div>
+            <div class="flex flex-wrap justify-center gap-3 max-w-5xl mx-auto">
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-wave-square animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> Bode Analyzer</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-terminal animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> SCPI Scripting</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-chart-line animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> DSO / MSO</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-microchip animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> Logic Analyzer</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-plug animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> LCR / DMM / PQA</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-brands fa-python animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> Python</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-code animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> C / C++ / C#</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-layer-group animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> KiCad / Altium</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-cube animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> SolidWorks / Edge</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-calculator animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> MATLAB / Simulink</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-bolt animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> LTspice / Qspice</span>
+                <span class="bg-themeContainer border border-themeBorder px-3 py-1.5 text-sm font-mono flex items-center gap-2 hover:border-themeAccent transition-colors"><i class="fa-solid fa-shield-halved animate-[spin_4s_linear_infinite] text-themeAccent text-xs"></i> FMECA / WCCA / RCA</span>
             </div>
         </div>
 
