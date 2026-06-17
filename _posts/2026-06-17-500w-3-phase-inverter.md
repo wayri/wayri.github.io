@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Case Study: Architecting a 500W 3-Phase Inverter Board"
-date: 2026-06-18
+date: 2026-06-17
 category: Power Electronics
 ---
 
