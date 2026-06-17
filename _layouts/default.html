@@ -83,9 +83,8 @@
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex space-x-6 font-mono text-sm items-center">
-                    <button onclick="toggleTheme()" class="hover:text-themeAccent flex items-center gap-2 text-themeMuted transition-colors group" title="Toggle Theme">
-                        <i class="fa-solid fa-layer-group group-hover:rotate-180 transition-transform duration-500"></i> 
-                        <span id="theme-label" class="w-16 text-left">Dark</span>
+                    <button onclick="toggleTheme()" class="hover:text-themeAccent flex items-center text-themeMuted transition-colors group" title="Toggle Theme">
+                        <i class="fa-solid fa-circle-half-stroke text-lg group-hover:rotate-180 transition-transform duration-500"></i> 
                     </button>
                     <span class="text-themeBorder opacity-30">|</span>
                     <a href="{{ '/index.html' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url == '/' or page.url == '/index.html' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">Overview</a>
@@ -109,7 +108,7 @@
                 <!-- Mobile Action Buttons -->
                 <div class="flex md:hidden items-center gap-2">
                     <button onclick="toggleTheme()" class="hover:text-themeAccent p-2 text-themeMuted focus:outline-none" title="Toggle Theme">
-                        <i class="fa-solid fa-layer-group text-lg"></i>
+                        <i class="fa-solid fa-circle-half-stroke text-lg"></i>
                     </button>
                     <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-themeText hover:text-themeAccent focus:outline-none p-2" aria-label="Toggle Menu">
                         <i id="menu-icon" class="fa-solid fa-bars text-lg"></i>
@@ -149,7 +148,6 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col space-y-6">
             
             <div class="border-b border-themeBorder/10 pb-6 relative overflow-hidden flex items-center">
-                <div class="absolute w-3 h-3 bg-themeText opacity-30 animate-bounceX rounded-full"></div>
                 <p class="text-sm font-mono text-themeMuted z-10 w-full text-center">
                     Before engineering physical layers, I engineered digital sprites. Ask me about <a href="{{ '/pong/' | relative_url }}" class="font-bold text-themeAccent font-sans tracking-widest uppercase ml-1 animate-pulse hover:underline">Rocket Pong</a>.
                     <span class="block mt-2 text-[9px] opacity-20 hover:opacity-100 transition-opacity">SYS_RST [CLUE: The key is where the engineering begins, capitalized and underscored with the final decade of the 1900s]</span>
