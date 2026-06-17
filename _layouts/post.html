@@ -29,4 +29,19 @@ layout: default
     <footer class="mt-12 pt-6 border-t border-themeBorder text-center font-mono text-sm text-themeMuted">
         <a href="{{ '/blog/' | relative_url }}" class="hover:text-themeAccent transition-colors"><i class="fa-solid fa-arrow-left"></i> Return to Logs</a>
     </footer>
+
+    <!-- Mermaid JS Integration -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+            // Convert Jekyll's <pre><code class="language-mermaid"> to <div class="mermaid">
+            document.querySelectorAll('pre code.language-mermaid').forEach(function(code) {
+                let div = document.createElement('div');
+                div.className = 'mermaid';
+                div.textContent = code.textContent;
+                code.parentNode.replaceWith(div);
+            });
+        });
+    </script>
 </article>
