@@ -71,8 +71,9 @@
     <nav class="fixed top-0 md:top-1.5 w-full z-50 bg-themeBg border-b-2 border-themeBorder transition-colors duration-300">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-14">
-                <div class="flex-shrink-0 font-bold tracking-tight text-lg uppercase cursor-pointer flex items-center gap-2" onclick="window.location.href='{{ '/index.html' | relative_url }}'">
-                    YAWAR
+                <div class="group relative flex-shrink-0 font-bold tracking-tight text-lg uppercase cursor-pointer flex items-center h-8 overflow-hidden" onclick="window.location.href='{{ '/index.html' | relative_url }}'">
+                    <span class="block transition-transform duration-500 group-hover:-translate-y-full">YAWAR</span>
+                    <span class="absolute top-0 left-0 block transition-transform duration-500 translate-y-full group-hover:translate-y-0 text-themeAccent font-mono tracking-widest">WAYRI</span>
                 </div>
                 
                 <!-- Desktop Navigation -->

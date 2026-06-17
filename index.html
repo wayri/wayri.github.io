@@ -47,29 +47,24 @@ title: Yawar | Engineering the Physical Layer
                     </p>
                 </div>
                 
-                <!-- Steampunk Glitch Widget (click to trigger anomaly & name animation) -->
-                <div class="doc-container p-4 flex flex-col w-full bg-[#0a0a0a] border-[#D4AF37] steampunk-glow shadow-[4px_4px_0px_#D4AF37] cursor-pointer group" onclick="triggerAnomaly()">
-                    <div class="flex justify-between items-center mb-2 border-b border-[#D4AF37]/30 pb-2">
-                        <span class="font-mono text-xs font-bold text-[#D4AF37]">SYS_cLOcK_PROBE</span>
-                        <span class="font-mono text-[10px] text-[#ff8c00] animate-pulse uppercase tracking-widest group-hover:text-[#ff3333] transition-colors">Monitoring</span>
-                    </div>
-                    
-                    <div class="relative w-full h-32 mb-2 bg-[#050505] overflow-hidden rounded-sm border border-[#D4AF37]/20 flex">
-                        <!-- Left: Digital Segment clock -->
-                        <div class="w-2/5 h-full border-r border-[#D4AF37]/20 flex items-center justify-center relative bg-gradient-to-b from-[#111] to-[#000]">
-                            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#ff8c00] to-transparent pointer-events-none"></div>
-                            <span id="steampunk-clock-text" class="font-mono text-2xl font-bold text-[#ffb703] drop-shadow-[0_0_5px_#ff8c00] tracking-widest transition-transform duration-75 relative z-10 select-none">
-                                00:00
+                <!-- Status Telemetry Widget -->
+                <div class="doc-container p-4 w-full border-themeBorder bg-themeContainer shadow-[2px_2px_0px_var(--accent-color)]">
+                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-themeBorder/50">
+                        <span class="font-mono text-xs font-bold text-themeAccent">SYS_TELEMETRY</span>
+                        <div class="flex items-center gap-2">
+                            <span class="relative flex h-2 w-2">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                             </span>
-                        </div>
-                        
-                        <!-- Right: Analog Trace Scope -->
-                        <div class="w-3/5 h-full relative">
-                            <canvas id="steampunk-canvas" class="w-full h-full absolute inset-0"></canvas>
+                            <span class="font-mono text-[10px] text-green-500 tracking-widest uppercase">Nominal</span>
                         </div>
                     </div>
-                    
-                    <p class="text-[9px] font-mono text-[#D4AF37]/60 text-center uppercase tracking-wider select-none">click to inject anomaly</p>
+                    <div class="font-mono text-xs text-themeMuted space-y-1">
+                        <div class="flex justify-between"><span>PWR_BUS:</span><span class="text-themeText font-semibold">100.0V REG</span></div>
+                        <div class="flex justify-between"><span>CORE_TEMP:</span><span class="text-themeText font-semibold">32.4°C</span></div>
+                        <div class="flex justify-between"><span>ATTITUDE:</span><span class="text-themeText font-semibold">LOCKED</span></div>
+                        <div class="flex justify-between"><span>DATA_LINK:</span><span class="text-themeText font-semibold">1.2 Gbps TX</span></div>
+                    </div>
                 </div>
             </div>
         </header>
