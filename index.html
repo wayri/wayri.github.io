@@ -77,9 +77,16 @@ title: Yawar | Engineering the Physical Layer
         .animate-scroll:hover {
             animation-play-state: paused;
         }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.4s ease-out forwards;
+        }
         </style>
         
-        <div id="skill-marquee-view" class="mb-16 overflow-hidden bg-themeBorder/10 border-y border-themeBorder/20 py-3 relative cursor-pointer hover:bg-themeBorder/20 transition-colors group" title="Click to view full matrix" onclick="document.getElementById('skill-marquee-view').classList.add('hidden'); document.getElementById('skill-table-view').classList.remove('hidden');">
+        <div id="skill-marquee-view" class="mb-16 overflow-hidden bg-themeBorder/10 border-y border-themeBorder/20 py-3 relative cursor-pointer hover:bg-themeBorder/20 transition-colors group" title="Click to view full matrix" onclick="if(typeof expandSkillMatrix === 'function') expandSkillMatrix();">
             <div class="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-themeBg/80 transition-opacity font-mono text-sm text-themeAccent font-bold tracking-widest backdrop-blur-sm">CLICK TO EXPAND SKILL MATRIX</div>
             <div class="animate-scroll text-themeText font-mono text-sm font-bold uppercase tracking-wider items-center opacity-100 group-hover:opacity-30 transition-opacity whitespace-nowrap">
                 <div class="inline-flex items-center">
@@ -750,28 +757,35 @@ title: Yawar | Engineering the Physical Layer
         </section>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+function expandSkillMatrix() {
     const marquee = document.getElementById('skill-marquee-view');
     const table = document.getElementById('skill-table-view');
+    if (!marquee || !table || marquee.classList.contains('hidden')) return;
     
-    if (marquee && table) {
-        // Expand automatically when marquee reaches the middle of the screen
+    marquee.style.transition = 'opacity 0.2s ease-out';
+    marquee.style.opacity = '0';
+    
+    setTimeout(() => {
+        marquee.classList.add('hidden');
+        table.classList.remove('hidden');
+        table.classList.add('animate-fade-in-up');
+    }, 200);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const marquee = document.getElementById('skill-marquee-view');
+    if (marquee) {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Trigger expansion
-                    marquee.classList.add('hidden');
-                    table.classList.remove('hidden');
-                    // Stop observing once triggered
+                    expandSkillMatrix();
                     observer.disconnect();
                 }
             });
         }, {
-            // Trigger when the element crosses the bottom 40% of the viewport
             rootMargin: '0px 0px -40% 0px',
             threshold: 0
         });
-        
         observer.observe(marquee);
     }
 });
