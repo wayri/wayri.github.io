@@ -748,3 +748,31 @@ title: Yawar | Engineering the Physical Layer
                 <p class="text-sm font-mono text-themeMuted">You can reach out to me on <a href="https://linkedin.com/in/yawar-badri" target="_blank" class="text-themeAccent hover:underline">linkedin</a> or <button onclick="navigator.clipboard.writeText('sakha.lin'); const old=this.innerText; this.innerText='copied!'; setTimeout(()=>this.innerText=old, 2000)" class="text-themeAccent hover:underline focus:outline-none cursor-pointer" title="Copy Discord Username">discord</button>.</p>
             </div>
         </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const marquee = document.getElementById('skill-marquee-view');
+    const table = document.getElementById('skill-table-view');
+    
+    if (marquee && table) {
+        // Expand automatically when marquee reaches the middle of the screen
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Trigger expansion
+                    marquee.classList.add('hidden');
+                    table.classList.remove('hidden');
+                    // Stop observing once triggered
+                    observer.disconnect();
+                }
+            });
+        }, {
+            // Trigger when the element crosses the bottom 40% of the viewport
+            rootMargin: '0px 0px -40% 0px',
+            threshold: 0
+        });
+        
+        observer.observe(marquee);
+    }
+});
+</script>
