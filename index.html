@@ -73,6 +73,8 @@ title: Yawar | Engineering the Physical Layer
             animation: scrollLeft 40s linear infinite;
             display: inline-flex;
             white-space: nowrap;
+            will-change: transform;
+            transform: translateZ(0);
         }
         .animate-scroll:hover {
             animation-play-state: paused;
@@ -87,7 +89,7 @@ title: Yawar | Engineering the Physical Layer
         </style>
         
         <div id="skill-marquee-view" class="mb-16 overflow-hidden bg-themeBorder/10 border-y border-themeBorder/20 py-3 relative cursor-pointer hover:bg-themeBorder/20 transition-colors group" title="Click to view full matrix" onclick="if(typeof expandSkillMatrix === 'function') expandSkillMatrix();">
-            <div class="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-themeBg/80 transition-opacity font-mono text-sm text-themeAccent font-bold tracking-widest backdrop-blur-sm">CLICK TO EXPAND SKILL MATRIX</div>
+            <div class="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-themeBg/90 transition-opacity font-mono text-sm text-themeAccent font-bold tracking-widest">CLICK TO EXPAND SKILL MATRIX</div>
             <div class="animate-scroll text-themeText font-mono text-sm font-bold uppercase tracking-wider items-center opacity-100 group-hover:opacity-30 transition-opacity whitespace-nowrap">
                 <div class="inline-flex items-center">
                     <span class="text-themeAccent mx-4">Systems Architecture</span><span class="text-themeMuted mx-2">•</span>
