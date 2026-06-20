@@ -796,14 +796,12 @@ function expandSkillMatrix() {
     const table = document.getElementById('skill-table-view');
     if (!marquee || !table || marquee.classList.contains('hidden')) return;
     
-    marquee.style.transition = 'opacity 0.2s ease-out';
-    marquee.style.opacity = '0';
+    // Swap instantly to prevent scroll jumping/glitching on fast scrolls
+    marquee.classList.add('hidden');
+    table.classList.remove('hidden');
     
-    setTimeout(() => {
-        marquee.classList.add('hidden');
-        table.classList.remove('hidden');
-        table.classList.add('animate-fade-in-up');
-    }, 200);
+    // Apply smooth fade-in to the new content
+    table.classList.add('animate-fade-in-up');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
