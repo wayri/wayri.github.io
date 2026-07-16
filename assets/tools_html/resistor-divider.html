@@ -18,14 +18,14 @@
                 <input type="number" id="calc-vin" value="12" step="0.1" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
             </div>
             <div class="flex justify-between items-center">
-                <label class="w-20">R1 (Î©)</label>
+                <label class="w-20">R1 (ohms)</label>
                 <div class="flex flex-col items-end w-32">
                     <input type="number" id="calc-r1" value="10000" class="w-full border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
                     <span id="sug-r1" class="text-[9px] text-themeAccent cursor-pointer hover:underline mt-0.5 opacity-0 h-0 transition-opacity whitespace-nowrap" onclick="applyVal('calc-r1', this.dataset.val); runSmartDivider();"></span>
                 </div>
             </div>
             <div class="flex justify-between items-center">
-                <label class="w-20">R2 (Î©)</label>
+                <label class="w-20">R2 (ohms)</label>
                 <div class="flex flex-col items-end w-32">
                     <input type="number" id="calc-r2" value="4700" class="w-full border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
                     <span id="sug-r2" class="text-[9px] text-themeAccent cursor-pointer hover:underline mt-0.5 opacity-0 h-0 transition-opacity whitespace-nowrap" onclick="applyVal('calc-r2', this.dataset.val); runSmartDivider();"></span>
@@ -56,7 +56,7 @@
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
         <div id="resistordivider-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Theory:</strong> Mathematical and theoretical details for this tool are used to ensure accurate results based on industry standards.</p>
+            <p><strong>Theory:</strong> A voltage divider uses two resistors in series to step down a voltage. \(V_{out} = V_{in} \times \frac{R_2}{R_1 + R_2}\). The code solves this standard equation. <a href='https://en.wikipedia.org/wiki/Voltage_divider' target='_blank' class='text-themeAccent underline'>Read more on Wikipedia</a></p>
         </div>
     </div>
 </div>

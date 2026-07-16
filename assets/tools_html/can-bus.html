@@ -9,8 +9,8 @@
     <div class="flex flex-grow relative overflow-hidden bg-themeBg font-mono">
         <div class="flex-grow relative overflow-auto p-6" id="can-canvas-container">
             <div id="can-bus-line" class="relative w-[800px] h-2 bg-themeAccent mt-10 rounded-full flex justify-between items-center px-4">
-                <div class="w-4 h-6 bg-themeBorder border-2 border-themeAccent absolute -left-2 rounded text-[8px] text-center text-themeText" title="120Ω Terminator">120<br>Ω</div>
-                <div class="w-4 h-6 bg-themeBorder border-2 border-themeAccent absolute -right-2 rounded text-[8px] text-center text-themeText" title="120Ω Terminator">120<br>Ω</div>
+                <div class="w-4 h-6 bg-themeBorder border-2 border-themeAccent absolute -left-2 rounded text-[8px] text-center text-themeText" title="120ohms Terminator">120<br>ohms</div>
+                <div class="w-4 h-6 bg-themeBorder border-2 border-themeAccent absolute -right-2 rounded text-[8px] text-center text-themeText" title="120ohms Terminator">120<br>ohms</div>
                 <!-- Nodes get injected here -->
             </div>
             
@@ -82,8 +82,8 @@ const CanBusApp = {
         const bus = document.getElementById('can-bus-line');
         // keep terminators
         bus.innerHTML = `
-            <div class="w-4 h-6 bg-themeBorder border-2 border-themeAccent absolute -left-2 rounded text-[8px] text-center text-themeText" title="120Ω Terminator">120<br>Ω</div>
-            <div class="w-4 h-6 bg-themeBorder border-2 border-themeAccent absolute -right-2 rounded text-[8px] text-center text-themeText" title="120Ω Terminator">120<br>Ω</div>
+            <div class="w-4 h-6 bg-themeBorder border-2 border-themeAccent absolute -left-2 rounded text-[8px] text-center text-themeText" title="120ohms Terminator">120<br>ohms</div>
+            <div class="w-4 h-6 bg-themeBorder border-2 border-themeAccent absolute -right-2 rounded text-[8px] text-center text-themeText" title="120ohms Terminator">120<br>ohms</div>
         `;
         
         if (this.nodes.length === 0) return;

@@ -12,14 +12,14 @@
                 <label class="text-xs font-bold text-themeMuted mb-2 block">PROTOCOL PRESET</label>
                 <select id="stackup-protocol" class="w-full bg-themeBg border border-themeBorder p-2 text-themeText focus:border-themeAccent outline-none" onchange="updateTargetsFromProtocol()">
                     <option value="custom">Custom...</option>
-                    <option value="usb">USB 2.0 / 3.0 (90&Omega; Diff)</option>
-                    <option value="eth">Ethernet 10/100/1G/10G (100&Omega; Diff)</option>
-                    <option value="can">CAN Bus (120&Omega; Diff)</option>
-                    <option value="pcie">PCIe Gen 1-5 (85&Omega; Diff)</option>
-                    <option value="ddr_se">DDR3/4/5 Single-Ended (40&Omega;)</option>
-                    <option value="ddr_diff">DDR Clock/Strobe (80&Omega; Diff)</option>
-                    <option value="xaui">XAUI / XPI / QPI (100&Omega; Diff)</option>
-                    <option value="rf50" selected>Generic RF / Clock (50&Omega; SE)</option>
+                    <option value="usb">USB 2.0 / 3.0 (90ohms Diff)</option>
+                    <option value="eth">Ethernet 10/100/1G/10G (100ohms Diff)</option>
+                    <option value="can">CAN Bus (120ohms Diff)</option>
+                    <option value="pcie">PCIe Gen 1-5 (85ohms Diff)</option>
+                    <option value="ddr_se">DDR3/4/5 Single-Ended (40ohms)</option>
+                    <option value="ddr_diff">DDR Clock/Strobe (80ohms Diff)</option>
+                    <option value="xaui">XAUI / XPI / QPI (100ohms Diff)</option>
+                    <option value="rf50" selected>Generic RF / Clock (50ohms SE)</option>
                 </select>
             </div>
             
@@ -28,14 +28,14 @@
                     <label class="text-xs font-bold text-themeMuted mb-2 block">Target Z0 (SE)</label>
                     <div class="flex">
                         <input type="number" id="target-z0" class="w-24 bg-themeBg border border-themeBorder p-2 text-themeText font-bold" value="50" oninput="document.getElementById('stackup-protocol').value='custom'; solveStackup()">
-                        <span class="bg-themeBorder text-themeBg p-2 text-xs flex items-center">&Omega;</span>
+                        <span class="bg-themeBorder text-themeBg p-2 text-xs flex items-center">ohms</span>
                     </div>
                 </div>
                 <div>
                     <label class="text-xs font-bold text-themeMuted mb-2 block">Target Zdiff</label>
                     <div class="flex">
                         <input type="number" id="target-zdiff" class="w-24 bg-themeBg border border-themeBorder p-2 text-themeText font-bold" value="" placeholder="N/A" oninput="document.getElementById('stackup-protocol').value='custom'; solveStackup()">
-                        <span class="bg-themeBorder text-themeBg p-2 text-xs flex items-center">&Omega;</span>
+                        <span class="bg-themeBorder text-themeBg p-2 text-xs flex items-center">ohms</span>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
         <div id="stackup-theory" class="hidden text-themeMuted mt-2 space-y-4 text-xs leading-relaxed">
             <div>
                 <h5 class="font-bold text-themeText">What this tool does</h5>
-                <p>Unlike standard calculators that ask for a trace width and output an impedance, this tool works in reverse. It acts as a <strong>multi-layer geometric solver</strong>. You select a target impedance (e.g., 90&Omega; Diff for USB), define the dielectric heights and copper weights of your stackup, and the engine calculates the exact Trace Width ($W$) and Pair Spacing ($S$) required on <em>every single routing layer</em> simultaneously.</p>
+                <p>Unlike standard calculators that ask for a trace width and output an impedance, this tool works in reverse. It acts as a <strong>multi-layer geometric solver</strong>. You select a target impedance (e.g., 90ohms Diff for USB), define the dielectric heights and copper weights of your stackup, and the engine calculates the exact Trace Width ($W$) and Pair Spacing ($S$) required on <em>every single routing layer</em> simultaneously.</p>
             </div>
             
             <div>

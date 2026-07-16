@@ -74,11 +74,11 @@
                         </div>
                         <div class="flex justify-between items-center border-b border-themeBorder/30 pb-2">
                             <span class="text-themeMuted">DC Resistance (20°C)</span>
-                            <span class="font-bold" id="res-rdc">- μΩ</span>
+                            <span class="font-bold" id="res-rdc">- μohms</span>
                         </div>
                         <div class="flex justify-between items-center border-b border-themeBorder/30 pb-2">
                             <span class="text-themeMuted">AC Resistance (Op. Temp)</span>
-                            <span class="font-bold" id="res-rac">- μΩ</span>
+                            <span class="font-bold" id="res-rac">- μohms</span>
                         </div>
                         <div class="flex justify-between items-center border-b border-themeBorder/30 pb-2">
                             <span class="text-themeMuted">Voltage Drop (total)</span>
@@ -142,7 +142,7 @@ const BusbarApp = {
 
         // DC Resistance at 20C
         const Rdc20 = mat.rho * L / A;
-        document.getElementById('res-rdc').innerText = (Rdc20 * 1e6).toFixed(1) + ' μΩ';
+        document.getElementById('res-rdc').innerText = (Rdc20 * 1e6).toFixed(1) + ' μohms';
 
         // AC Resistance at Tmax
         const Rdc_hot = Rdc20 * (1 + mat.alpha * (Tmax - 20));
@@ -161,7 +161,7 @@ const BusbarApp = {
         }
         
         const Rac = Rdc_hot * k_ac;
-        document.getElementById('res-rac').innerText = (Rac * 1e6).toFixed(1) + ' μΩ';
+        document.getElementById('res-rac').innerText = (Rac * 1e6).toFixed(1) + ' μohms';
 
         // Voltage Drop & Power
         const Vdrop = I * Rac;

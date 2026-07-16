@@ -15,10 +15,10 @@
                     <div class="w-1/2">
                         <div class="flex justify-between text-xs mb-1"><span>Conductor</span></div>
                         <select id="skin-mat" class="w-full bg-themeContainer border border-themeBorder p-1.5 text-themeText" onchange="updateSkin()">
-                            <option value="1.68e-8">Copper (1.68e-8 Ω·m)</option>
-                            <option value="2.82e-8">Aluminum (2.82e-8 Ω·m)</option>
-                            <option value="1.59e-8">Silver (1.59e-8 Ω·m)</option>
-                            <option value="2.44e-8">Gold (2.44e-8 Ω·m)</option>
+                            <option value="1.68e-8">Copper (1.68e-8 ohms·m)</option>
+                            <option value="2.82e-8">Aluminum (2.82e-8 ohms·m)</option>
+                            <option value="1.59e-8">Silver (1.59e-8 ohms·m)</option>
+                            <option value="2.44e-8">Gold (2.44e-8 ohms·m)</option>
                         </select>
                     </div>
                     <div class="w-1/2">
@@ -59,13 +59,13 @@
                     <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
                         <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2">DC Resistance</span>
                         <div class="text-xl font-bold text-themeText flex items-baseline gap-1">
-                            <span id="skin-rdc">0.00</span> <span class="text-xs text-themeAccent">mΩ</span>
+                            <span id="skin-rdc">0.00</span> <span class="text-xs text-themeAccent">mohms</span>
                         </div>
                     </div>
                     <div class="bg-themeBg border border-themeAccent/50 p-4 flex flex-col justify-center items-center text-center relative shadow-[inset_0_0_10px_rgba(212,175,55,0.1)]">
                         <span class="text-[10px] text-themeAccent uppercase tracking-wider mb-2 font-bold">AC Resistance</span>
                         <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
-                            <span id="skin-rac">0.00</span> <span class="text-sm text-themeAccent">mΩ</span>
+                            <span id="skin-rac">0.00</span> <span class="text-sm text-themeAccent">mohms</span>
                         </div>
                         <div class="absolute bottom-1 right-2 text-[8px] text-themeMuted" id="skin-ratio">Ratio: 1.0</div>
                     </div>

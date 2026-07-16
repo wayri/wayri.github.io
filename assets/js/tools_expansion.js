@@ -21,12 +21,12 @@ function setupMarginMode() {
         inputs.innerHTML = `
             <div class="space-y-2">
                 <div class="flex justify-between text-xs"><label>V_ref (V)</label><input type="number" id="vm-vref" value="0.6" step="0.1" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
-                <div class="flex justify-between text-xs"><label>R_top (k&Omega;)</label><input type="number" id="vm-rtop" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
-                <div class="flex justify-between text-xs"><label>R_bot (k&Omega;)</label><input type="number" id="vm-rbot" value="2.2" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
+                <div class="flex justify-between text-xs"><label>R_top (kohms)</label><input type="number" id="vm-rtop" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
+                <div class="flex justify-between text-xs"><label>R_bot (kohms)</label><input type="number" id="vm-rbot" value="2.2" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
             </div>
             <div class="space-y-2 border-l border-themeBorder/20 pl-4">
                 <div class="flex justify-between text-xs"><label class="text-themeAccent">V_dac (V)</label><input type="number" id="vm-vdac" value="1.5" step="0.1" class="w-16 border border-themeBorder px-1 text-right bg-themeAccent/10" oninput="runMargin()"></div>
-                <div class="flex justify-between text-xs"><label>R_inj (k&Omega;)</label><input type="number" id="vm-rinj" value="47" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
+                <div class="flex justify-between text-xs"><label>R_inj (kohms)</label><input type="number" id="vm-rinj" value="47" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
             </div>
         `;
     } else {
@@ -40,8 +40,8 @@ function setupMarginMode() {
         inputs.innerHTML = `
             <div class="space-y-2">
                 <div class="flex justify-between text-xs"><label>V_ref (V)</label><input type="number" id="vm-vref" value="0.6" step="0.1" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
-                <div class="flex justify-between text-xs"><label>R_top (k&Omega;)</label><input type="number" id="vm-rtop" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
-                <div class="flex justify-between text-xs"><label>R_bot (k&Omega;)</label><input type="number" id="vm-rbot" value="2.2" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
+                <div class="flex justify-between text-xs"><label>R_top (kohms)</label><input type="number" id="vm-rtop" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
+                <div class="flex justify-between text-xs"><label>R_bot (kohms)</label><input type="number" id="vm-rbot" value="2.2" class="w-16 border border-themeBorder px-1 text-right" oninput="runMargin()"></div>
             </div>
             <div class="space-y-2 border-l border-themeBorder/20 pl-4">
                 <div class="flex justify-between text-xs"><label class="text-themeAccent">I_dac (&mu;A)</label><input type="number" id="vm-idac" value="-5.0" step="0.1" class="w-16 border border-themeBorder px-1 text-right bg-themeAccent/10" oninput="runMargin()"></div>
@@ -305,10 +305,10 @@ function setupFilterMode() {
         <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="filter_solve" value="fc" checked onchange="runSmartFilter()"> Fc (Hz)</label>
     `;
 
-    let l1_label = 'R1 (Ω) / L1 (µH)';
-    let c1_label = 'C1 (µF) / R1 (Ω)';
-    if(type === 'rc') { l1_label = 'R (Ω)'; c1_label = 'C (µF)'; }
-    if(type === 'rl') { l1_label = 'L (µH)'; c1_label = 'R (Ω)'; }
+    let l1_label = 'R1 (ohms) / L1 (µH)';
+    let c1_label = 'C1 (µF) / R1 (ohms)';
+    if(type === 'rc') { l1_label = 'R (ohms)'; c1_label = 'C (µF)'; }
+    if(type === 'rl') { l1_label = 'L (µH)'; c1_label = 'R (ohms)'; }
     if(type === 'lc' || type === 'lcl' || type === 'clc') { l1_label = 'L1 (µH)'; c1_label = 'C1 (µF)'; }
 
     let extra = '';
@@ -441,7 +441,7 @@ function setupNTCMode() {
             <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="ntc_solve" value="rt" checked onchange="runThermistor()"> Rt (O)</label>
     `;
         inputs.innerHTML = `            <div class="flex justify-between items-center text-xs">
-                <label>R_nom (Ω @ 25°C)</label>
+                <label>R_nom (ohms @ 25°C)</label>
                 <input type="number" id="ntc-r25" value="10000" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
@@ -453,7 +453,7 @@ function setupNTCMode() {
                 <input type="number" id="ntc-t" value="85" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
-                <label>R at Target (Ω)</label>
+                <label>R at Target (ohms)</label>
                 <input type="number" id="ntc-rt" value="1451" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
     `;
@@ -479,7 +479,7 @@ function setupNTCMode() {
                 <input type="number" id="ntc-t" value="85" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
             <div class="flex justify-between items-center text-xs">
-                <label>R at Target (Ω)</label>
+                <label>R at Target (ohms)</label>
                 <input type="number" id="ntc-rt" value="1451" class="w-24 border border-themeBorder px-1 text-right" oninput="runThermistor()">
             </div>
     `;
@@ -554,7 +554,7 @@ function runThermistor() {
         }
     }
 
-    document.getElementById('ntc-result').textContent = solveTarget === 'rt' ? (rt ? rt.toFixed(1) + " Ω" : "-") : (temp ? temp.toFixed(2) + " °C" : "-");
+    document.getElementById('ntc-result').textContent = solveTarget === 'rt' ? (rt ? rt.toFixed(1) + " ohms" : "-") : (temp ? temp.toFixed(2) + " °C" : "-");
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -1024,7 +1024,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const textContent = labelEl ? labelEl.textContent : '';
             
             // Heuristic to detect Resistance or Capacitance
-            const isRes = textContent.includes('Ω') || id.match(/-r\d*$/i) || id.includes('-r-') || id.includes('rtop') || id.includes('rbot');
+            const isRes = textContent.includes('ohms') || id.match(/-r\d*$/i) || id.includes('-r-') || id.includes('rtop') || id.includes('rbot');
             const isCap = textContent.includes('F') || id.match(/-c\d*$/i) || id.includes('-c-');
             
             // Ignore non-components like time, temp, turns, etc.
@@ -1062,7 +1062,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         }
                         
                         let unitStr = window.formatUnit ? window.formatUnit(e.val) : e.val;
-                        let suffix = isRes ? 'Ω' : 'F';
+                        let suffix = isRes ? 'ohms' : 'F';
                         let diff = Math.abs(e.val - val) / val;
                         
                         if (diff < 0.01) {

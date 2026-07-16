@@ -82,9 +82,9 @@
                     <div class="bg-themeBorder/10 border border-themeBorder p-3 flex flex-col justify-center items-center text-center">
                         <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2">Required Resistor</span>
                         <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
-                            <span id="led-r-val">150</span> <span class="text-sm text-themeAccent">Ω</span>
+                            <span id="led-r-val">150</span> <span class="text-sm text-themeAccent">ohms</span>
                         </div>
-                        <span class="text-[9px] text-themeMuted mt-1">Nearest E12: <span id="led-r-e12" class="font-bold text-themeText">150 Ω</span></span>
+                        <span class="text-[9px] text-themeMuted mt-1">Nearest E12: <span id="led-r-e12" class="font-bold text-themeText">150 ohms</span></span>
                     </div>
                     <div class="bg-themeBorder/10 border border-themeBorder p-3 flex flex-col justify-center items-center text-center">
                         <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2">Power Dissipation</span>
@@ -189,7 +189,7 @@
         document.getElementById('led-p-val').innerText = P.toFixed(3);
         
         const e12 = getNearestE12(R);
-        document.getElementById('led-r-e12').innerText = e12 >= 1000 ? (e12/1000).toFixed(1) + " kΩ" : Math.round(e12) + " Ω";
+        document.getElementById('led-r-e12').innerText = e12 >= 1000 ? (e12/1000).toFixed(1) + " kohms" : Math.round(e12) + " ohms";
         document.getElementById('led-p-rating').innerText = getPowerRating(P);
 
         // Update Diagram

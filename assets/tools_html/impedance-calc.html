@@ -29,7 +29,7 @@
         <div class="pt-4 mt-2 border-t border-themeBorder/30">
             <div class="flex justify-between items-center text-lg font-bold text-themeAccent">
                 <span>Impedance (Z0)</span>
-                <span id="imp-z0">-- &Omega;</span>
+                <span id="imp-z0">-- ohms</span>
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
         <div id="impedancecalc-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Theory:</strong> Mathematical and theoretical details for this tool are used to ensure accurate results based on industry standards.</p>
+            <p><strong>Theory:</strong> PCB trace impedance depends on trace geometry and dielectric constant. It uses standard IPC-2141 approximations.</p>
         </div>
     </div>
 </div>
@@ -86,7 +86,7 @@ function runImpedanceCalc() {
     }
 
     if(z0 < 0 || isNaN(z0)) z0 = 0;
-    document.getElementById('imp-z0').innerText = z0.toFixed(2) + ' Ω';
+    document.getElementById('imp-z0').innerText = z0.toFixed(2) + ' ohms';
 }
 
 function updateImpedanceDiagram() {

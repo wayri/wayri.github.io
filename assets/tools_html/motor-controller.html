@@ -12,7 +12,7 @@
                 <h4 class="font-bold text-themeAccent border-b border-themeBorder/30 pb-1">Motor Parameters</h4>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="text-[10px] text-themeMuted mb-1 block">Rs (&Omega;)</label>
+                        <label class="text-[10px] text-themeMuted mb-1 block">Rs (ohms)</label>
                         <input type="number" id="mc-rs" value="0.05" step="0.01" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runMotorController()">
                     </div>
                     <div>
@@ -52,7 +52,7 @@
                 <h4 class="font-bold text-themeAccent border-b border-themeBorder/30 pb-1 pt-4">MOSFET Specs</h4>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="text-[10px] text-themeMuted mb-1 block">Rds_on (m&Omega;)</label>
+                        <label class="text-[10px] text-themeMuted mb-1 block">Rds_on (mohms)</label>
                         <input type="number" id="mc-rdson" value="1.5" step="0.1" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runMotorController()">
                     </div>
                     <div>
@@ -142,7 +142,7 @@
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
         <div id="motorcontroller-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Theory:</strong> Mathematical and theoretical details for this tool are used to ensure accurate results based on industry standards.</p>
+            <p><strong>Theory:</strong> Field Oriented Control (FOC) and motor dynamics rely on Clarke/Park transforms and PI control loops to regulate torque and flux independently.</p>
         </div>
     </div>
 </div>

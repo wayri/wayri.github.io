@@ -39,7 +39,7 @@
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
         <div id="harness-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Wire Resistance (R):</strong> Calculated based on standard AWG resistance per 1000m (e.g., 18 AWG &approx; 20.9 &Omega;/km). $R = \rho_{awg} \times L$</p>
+            <p><strong>Wire Resistance (R):</strong> Calculated based on standard AWG resistance per 1000m (e.g., 18 AWG &approx; 20.9 ohms/km). $R = \rho_{awg} \times L$</p>
             <p><strong>Voltage Drop (V_drop):</strong> Calculated via Ohm's Law $V = I \times R$, representing the expected line loss at peak steady-state current.</p>
             <p><strong>Bundling:</strong> When wires are bundled, thermal dissipation decreases. Standard derating factors (e.g., NEC 310.15) should be applied to the maximum allowable current, though this tool calculates raw electrical resistance independent of thermal throttling.</p>
         </div>
@@ -61,7 +61,7 @@
                         <tr class="border-b border-themeBorder">
                             <th class="p-3">Wire/Bundle ID</th><th class="p-3">From (Pin)</th><th class="p-3">To (Pin)</th>
                             <th class="p-3">AWG</th><th class="p-3">Length (m)</th><th class="p-3">Current (A)</th>
-                            <th class="p-3">R (&Omega;)</th><th class="p-3">V-Drop (V)</th>
+                            <th class="p-3">R (ohms)</th><th class="p-3">V-Drop (V)</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-themeBorder/20"></tbody>
@@ -515,7 +515,7 @@ const HarnessApp = {
                 </div>
 
                 <div class="mt-4 p-2 border border-themeBorder/50 bg-themeBg text-xs">
-                    <div class="flex justify-between"><span>Resistance:</span> <span class="text-themeAccent">${res.toFixed(4)} &Omega;</span></div>
+                    <div class="flex justify-between"><span>Resistance:</span> <span class="text-themeAccent">${res.toFixed(4)} ohms</span></div>
                     <div class="flex justify-between"><span>V-Drop:</span> <span class="${vdrop>1?'text-red-500':'text-themeAccent'} font-bold">${vdrop.toFixed(3)} V</span></div>
                 </div>
                 

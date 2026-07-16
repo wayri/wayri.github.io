@@ -67,7 +67,7 @@
                         <i class="fa-solid fa-capacitor absolute right-2 top-2 text-blue-500/20 text-4xl"></i>
                         <span class="text-[10px] text-blue-400 uppercase tracking-wider mb-2 font-bold">Capacitive Reactance ($X_C$)</span>
                         <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
-                            <span id="react-xc-val">0.00</span> <span id="react-xc-unit" class="text-sm text-blue-400">Ω</span>
+                            <span id="react-xc-val">0.00</span> <span id="react-xc-unit" class="text-sm text-blue-400">ohms</span>
                         </div>
                     </div>
                     
@@ -76,7 +76,7 @@
                         <i class="fa-solid fa-tape absolute right-2 top-2 text-red-500/20 text-4xl"></i> <!-- tape as makeshift inductor icon -->
                         <span class="text-[10px] text-red-400 uppercase tracking-wider mb-2 font-bold">Inductive Reactance ($X_L$)</span>
                         <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
-                            <span id="react-xl-val">0.00</span> <span id="react-xl-unit" class="text-sm text-red-400">Ω</span>
+                            <span id="react-xl-val">0.00</span> <span id="react-xl-unit" class="text-sm text-red-400">ohms</span>
                         </div>
                     </div>
                 </div>
@@ -115,10 +115,10 @@
 
 <script>
     function formatReactance(val) {
-        if(val >= 1e6) return { v: (val/1e6).toPrecision(4).replace(/\.0+$/,''), u: 'MΩ' };
-        if(val >= 1e3) return { v: (val/1e3).toPrecision(4).replace(/\.0+$/,''), u: 'kΩ' };
-        if(val < 1) return { v: (val*1000).toPrecision(4).replace(/\.0+$/,''), u: 'mΩ' };
-        return { v: val.toPrecision(4).replace(/\.0+$/,''), u: 'Ω' };
+        if(val >= 1e6) return { v: (val/1e6).toPrecision(4).replace(/\.0+$/,''), u: 'Mohms' };
+        if(val >= 1e3) return { v: (val/1e3).toPrecision(4).replace(/\.0+$/,''), u: 'kohms' };
+        if(val < 1) return { v: (val*1000).toPrecision(4).replace(/\.0+$/,''), u: 'mohms' };
+        return { v: val.toPrecision(4).replace(/\.0+$/,''), u: 'ohms' };
     }
 
     function formatFreq(val) {
@@ -160,7 +160,7 @@
 
         if(Xc === Infinity) {
             document.getElementById('react-xc-val').innerText = "∞";
-            document.getElementById('react-xc-unit').innerText = "Ω";
+            document.getElementById('react-xc-unit').innerText = "ohms";
         } else {
             const fXc = formatReactance(Xc);
             document.getElementById('react-xc-val').innerText = fXc.v;

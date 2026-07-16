@@ -26,7 +26,7 @@
                 <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
                     <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-1">Resistance</span>
                     <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
-                        <span id="smd-res-val">10</span> <span id="smd-res-unit" class="text-sm text-themeAccent">kΩ</span>
+                        <span id="smd-res-val">10</span> <span id="smd-res-unit" class="text-sm text-themeAccent">kohms</span>
                     </div>
                 </div>
                 <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
@@ -72,10 +72,10 @@
     };
 
     function formatRes(val) {
-        if(val >= 1e6) return { v: (val/1e6).toPrecision(4).replace(/\.0+$/,''), u: 'MΩ' };
-        if(val >= 1e3) return { v: (val/1e3).toPrecision(4).replace(/\.0+$/,''), u: 'kΩ' };
-        if(val < 1) return { v: (val*1000).toPrecision(4).replace(/\.0+$/,''), u: 'mΩ' };
-        return { v: val.toPrecision(4).replace(/\.0+$/,''), u: 'Ω' };
+        if(val >= 1e6) return { v: (val/1e6).toPrecision(4).replace(/\.0+$/,''), u: 'Mohms' };
+        if(val >= 1e3) return { v: (val/1e3).toPrecision(4).replace(/\.0+$/,''), u: 'kohms' };
+        if(val < 1) return { v: (val*1000).toPrecision(4).replace(/\.0+$/,''), u: 'mohms' };
+        return { v: val.toPrecision(4).replace(/\.0+$/,''), u: 'ohms' };
     }
 
     function decodeSMD() {
@@ -155,7 +155,7 @@
         if(valid) {
             if(tol === "Jumper") {
                 document.getElementById('smd-res-val').innerText = "0";
-                document.getElementById('smd-res-unit').innerText = "Ω";
+                document.getElementById('smd-res-unit').innerText = "ohms";
             } else {
                 const f = formatRes(res);
                 document.getElementById('smd-res-val').innerText = f.v;

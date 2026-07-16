@@ -151,10 +151,10 @@ function toggleMobileMenu() {
             if (menu.classList.contains('hidden')) {
                 menu.classList.remove('hidden');
                 icon.classList.remove('fa-bars');
-                icon.classList.add('fa-xmarkÎ©');
+                icon.classList.add('fa-xmarkohms');
             } else {
                 menu.classList.add('hidden');
-                icon.classList.remove('fa-xmarkÎ©');
+                icon.classList.remove('fa-xmarkohms');
                 icon.classList.add('fa-bars');
             }
         }
@@ -191,7 +191,7 @@ function getNearestE96(val) {
 
 function formatUnit(v) {
             if(v >= 1e6) return (v/1e6).toFixed(2) + ' M';
-            if(v >= 1e3) return (v/1e3).toFixed(2) + ' kÎ©';
+            if(v >= 1e3) return (v/1e3).toFixed(2) + ' kohms';
             return parseFloat(v.toFixed(2));
         }
 
@@ -204,7 +204,7 @@ function updateSuggestion(id, val) {
             if(val > 0 && sug) {
                 let e = getNearest(val, E24);
                 sug.dataset.val = e.val;
-                sug.textContent = `Set nearest E24: ${formatUnit(e.val)}Î©`;
+                sug.textContent = `Set nearest E24: ${formatUnit(e.val)}ohms`;
                 sug.classList.remove('opacity-0', 'h-0');
             } else if (sug) {
                 sug.classList.add('opacity-0', 'h-0');
@@ -220,9 +220,9 @@ function runESeries() {
             const e24 = getNearest(val, E24);
             const e96 = getNearestE96(val);
             
-            document.getElementById('eseries-e12').textContent = `${formatUnit(e12.val)}Î© (${e12.err>0?'+':''}${e12.err.toFixed(1)}%)`;
-            document.getElementById('eseries-e24').textContent = `${formatUnit(e24.val)}Î© (${e24.err>0?'+':''}${e24.err.toFixed(1)}%)`;
-            document.getElementById('eseries-e96').textContent = `${formatUnit(e96.val)}Î© (${e96.err>0?'+':''}${e96.err.toFixed(1)}%)`;
+            document.getElementById('eseries-e12').textContent = `${formatUnit(e12.val)}ohms (${e12.err>0?'+':''}${e12.err.toFixed(1)}%)`;
+            document.getElementById('eseries-e24').textContent = `${formatUnit(e24.val)}ohms (${e24.err>0?'+':''}${e24.err.toFixed(1)}%)`;
+            document.getElementById('eseries-e96').textContent = `${formatUnit(e96.val)}ohms (${e96.err>0?'+':''}${e96.err.toFixed(1)}%)`;
         }
 
 function setupDividerMode() {
@@ -423,7 +423,7 @@ function runSMPS() {
                 }
                 duty = 1 - (vin / vout);
             }
-            else if (type === 'flybackÎ©') {
+            else if (type === 'flybackohms') {
                 ratioGrp.classList.remove('opacity-50');
                 duty = 0.4; 
                 const vor = (duty / (1 - duty)) * vin;
@@ -484,7 +484,7 @@ function runThermistor() {
 
             const tK = tc + 273.15;
             const r = r25 * Math.exp(beta * (1/tK - 1/298.15));
-            document.getElementById('ntc-r').textContent = formatUnit(r) + 'Î©';
+            document.getElementById('ntc-r').textContent = formatUnit(r) + 'ohms';
             
             drawThermistorPlot(r25, beta);
         }
@@ -800,7 +800,7 @@ function runAWG(){
             const resEl=document.getElementById('awg-res');
             const ampEl=document.getElementById('awg-amp');
             if(diaEl) diaEl.textContent=d.dia.toFixed(3)+' mm';
-            if(resEl) resEl.textContent=d.res.toFixed(2)+' mÎ©/m';
+            if(resEl) resEl.textContent=d.res.toFixed(2)+' mohms/m';
             if(ampEl) ampEl.textContent=d.amp+' A';
         }
 
@@ -899,13 +899,13 @@ window.setupFilterMode = function() {
         solveHtml += `<label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="r" onchange="runSmartFilter()"> R</label>
                       <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="c" onchange="runSmartFilter()"> C</label>
                       <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="fc" checked onchange="runSmartFilter()"> fc</label>`;
-        html = `<div class="flex justify-between"><label>R (Î©)</label><input type="number" id="f-r" value="1000" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()"></div>
+        html = `<div class="flex justify-between"><label>R (ohms)</label><input type="number" id="f-r" value="1000" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()"></div>
                 <div class="flex justify-between"><label>C (nF)</label><input type="number" id="f-c" value="100" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()"></div>`;
     } else if(type === 'rl') {
         solveHtml += `<label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="r" onchange="runSmartFilter()"> R</label>
                       <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="l" onchange="runSmartFilter()"> L</label>
                       <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="fc" checked onchange="runSmartFilter()"> fc</label>`;
-        html = `<div class="flex justify-between"><label>R (Î©)</label><input type="number" id="f-r" value="1000" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()"></div>
+        html = `<div class="flex justify-between"><label>R (ohms)</label><input type="number" id="f-r" value="1000" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()"></div>
                 <div class="flex justify-between"><label>L (uH)</label><input type="number" id="f-l" value="100" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()"></div>`;
     } else if(type === 'lc') {
         solveHtml += `<label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_filt" value="l" onchange="runSmartFilter()"> L</label>
