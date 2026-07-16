@@ -17,11 +17,6 @@
                         <option value="diff">Differential</option>
                         <option value="error">Error Amplifier</option>
                         <option value="atten">Attenuator</option>
-                        <option value="adder">Adder</option>
-                        <option value="integrator">Integrator</option>
-                        <option value="diff_eq">Differentiator</option>
-                        <option value="relax">Relaxation Oscillator</option>
-                        <option value="log">Log Amplifier</option>
                         <option value="buffer">OpAmp Buffer</option>
                     </select>
                 </div>
@@ -181,13 +176,13 @@
     }
 
     function getResSvg() {
-        return \`<polyline points="0,0 2,-5 6,5 10,-5 14,5 18,-5 20,0" fill="none" stroke="currentColor" stroke-width="1.5"/>\`;
+        return `<polyline points="0,0 2,-5 6,5 10,-5 14,5 18,-5 20,0" fill="none" stroke="currentColor" stroke-width="1.5"/>`;
     }
 
     function drawNonInv() {
-        return \`
+        return `
             <svg width="100%" height="100%" viewBox="0 0 150 100" class="text-themeText" preserveAspectRatio="xMidYMid meet">
-                <polygon points="60,20 60,80 110,50" fill="var(--container-color)" stroke="var(--border-color)" stroke-width="2"/>
+                <polygon points="60,20 60,80 110,50" fill="var(--container-bg)" stroke="var(--border-color)" stroke-width="2"/>
                 <text x="65" y="40" font-size="12" fill="var(--text-color)">-</text>
                 <text x="65" y="70" font-size="12" fill="var(--text-color)">+</text>
                 <line x1="20" y1="65" x2="60" y2="65" stroke="var(--text-color)" stroke-width="2"/>
@@ -196,12 +191,12 @@
                 <line x1="60" y1="35" x2="40" y2="35" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="40" y1="35" x2="40" y2="10" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="40" y1="10" x2="70" y2="10" stroke="var(--text-color)" stroke-width="2"/>
-                <g transform="translate(70, 10)">\${getResSvg()}</g>
+                <g transform="translate(70, 10)">${getResSvg()}</g>
                 <text x="80" y="5" font-size="8" fill="var(--text-color)">Rf</text>
                 <line x1="90" y1="10" x2="130" y2="10" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="130" y1="10" x2="130" y2="50" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="40" y1="35" x2="40" y2="50" stroke="var(--text-color)" stroke-width="2"/>
-                <g transform="translate(30, 50) rotate(90 10 0)">\${getResSvg()}</g>
+                <g transform="translate(30, 50) rotate(90 10 0)">${getResSvg()}</g>
                 <text x="25" y="55" font-size="8" fill="var(--text-color)">R1</text>
                 <line x1="40" y1="70" x2="40" y2="85" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="30" y1="85" x2="50" y2="85" stroke="var(--text-color)" stroke-width="2"/>
@@ -209,19 +204,19 @@
                 <circle cx="140" cy="50" r="3" fill="var(--text-color)"/>
                 <text x="145" y="53" font-size="10" fill="var(--text-color)">Vout</text>
             </svg>
-        \`;
+        `;
     }
 
     function drawInv() {
-        return \`
+        return `
             <svg width="100%" height="100%" viewBox="0 0 150 100" class="text-themeText" preserveAspectRatio="xMidYMid meet">
-                <polygon points="60,20 60,80 110,50" fill="var(--container-color)" stroke="var(--border-color)" stroke-width="2"/>
+                <polygon points="60,20 60,80 110,50" fill="var(--container-bg)" stroke="var(--border-color)" stroke-width="2"/>
                 <text x="65" y="40" font-size="12" fill="var(--text-color)">-</text>
                 <text x="65" y="70" font-size="12" fill="var(--text-color)">+</text>
                 <line x1="10" y1="35" x2="20" y2="35" stroke="var(--text-color)" stroke-width="2"/>
                 <circle cx="10" cy="35" r="3" fill="var(--accent-color)"/>
                 <text x="0" y="32" font-size="10" fill="var(--accent-color)">Vin</text>
-                <g transform="translate(20, 35)">\${getResSvg()}</g>
+                <g transform="translate(20, 35)">${getResSvg()}</g>
                 <text x="30" y="30" font-size="8" fill="var(--text-color)">R1</text>
                 <line x1="40" y1="35" x2="60" y2="35" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="60" y1="65" x2="40" y2="65" stroke="var(--text-color)" stroke-width="2"/>
@@ -229,7 +224,7 @@
                 <line x1="30" y1="85" x2="50" y2="85" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="45" y1="35" x2="45" y2="10" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="45" y1="10" x2="70" y2="10" stroke="var(--text-color)" stroke-width="2"/>
-                <g transform="translate(70, 10)">\${getResSvg()}</g>
+                <g transform="translate(70, 10)">${getResSvg()}</g>
                 <text x="80" y="5" font-size="8" fill="var(--text-color)">Rf</text>
                 <line x1="90" y1="10" x2="130" y2="10" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="130" y1="10" x2="130" y2="50" stroke="var(--text-color)" stroke-width="2"/>
@@ -237,74 +232,74 @@
                 <circle cx="140" cy="50" r="3" fill="var(--text-color)"/>
                 <text x="145" y="53" font-size="10" fill="var(--text-color)">Vout</text>
             </svg>
-        \`;
+        `;
     }
 
     function drawDiff() {
-        return \`
+        return `
             <svg width="100%" height="100%" viewBox="0 0 150 100" class="text-themeText" preserveAspectRatio="xMidYMid meet">
-                <polygon points="60,20 60,80 110,50" fill="var(--container-color)" stroke="var(--border-color)" stroke-width="2"/>
+                <polygon points="60,20 60,80 110,50" fill="var(--container-bg)" stroke="var(--border-color)" stroke-width="2"/>
                 <text x="65" y="40" font-size="12" fill="var(--text-color)">-</text>
                 <text x="65" y="70" font-size="12" fill="var(--text-color)">+</text>
                 <line x1="10" y1="35" x2="20" y2="35" stroke="var(--text-color)" stroke-width="2"/>
                 <circle cx="10" cy="35" r="3" fill="var(--accent-color)"/>
-                <g transform="translate(20, 35)">\${getResSvg()}</g>
+                <g transform="translate(20, 35)">${getResSvg()}</g>
                 <line x1="40" y1="35" x2="60" y2="35" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="10" y1="65" x2="20" y2="65" stroke="var(--text-color)" stroke-width="2"/>
                 <circle cx="10" cy="65" r="3" fill="#4ade80"/>
-                <g transform="translate(20, 65)">\${getResSvg()}</g>
+                <g transform="translate(20, 65)">${getResSvg()}</g>
                 <line x1="40" y1="65" x2="60" y2="65" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="45" y1="35" x2="45" y2="10" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="45" y1="10" x2="70" y2="10" stroke="var(--text-color)" stroke-width="2"/>
-                <g transform="translate(70, 10)">\${getResSvg()}</g>
+                <g transform="translate(70, 10)">${getResSvg()}</g>
                 <line x1="90" y1="10" x2="130" y2="10" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="130" y1="10" x2="130" y2="50" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="45" y1="65" x2="45" y2="80" stroke="var(--text-color)" stroke-width="2"/>
-                <g transform="translate(45, 80)">\${getResSvg()}</g>
+                <g transform="translate(45, 80)">${getResSvg()}</g>
                 <line x1="65" y1="80" x2="80" y2="80" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="80" y1="80" x2="80" y2="90" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="75" y1="90" x2="85" y2="90" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="110" y1="50" x2="140" y2="50" stroke="var(--text-color)" stroke-width="2"/>
                 <circle cx="140" cy="50" r="3" fill="var(--text-color)"/>
             </svg>
-        \`;
+        `;
     }
 
     function drawError() {
-        return \`
+        return `
             <svg width="100%" height="100%" viewBox="0 0 150 100" class="text-themeText" preserveAspectRatio="xMidYMid meet">
-                <polygon points="60,20 60,80 110,50" fill="var(--container-color)" stroke="var(--border-color)" stroke-width="2"/>
+                <polygon points="60,20 60,80 110,50" fill="var(--container-bg)" stroke="var(--border-color)" stroke-width="2"/>
                 <text x="65" y="40" font-size="12" fill="var(--text-color)">-</text>
                 <text x="65" y="70" font-size="12" fill="var(--text-color)">+</text>
                 <line x1="10" y1="35" x2="20" y2="35" stroke="var(--text-color)" stroke-width="2"/>
                 <circle cx="10" cy="35" r="3" fill="var(--accent-color)"/>
-                <g transform="translate(20, 35)">\${getResSvg()}</g>
+                <g transform="translate(20, 35)">${getResSvg()}</g>
                 <line x1="40" y1="35" x2="60" y2="35" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="10" y1="65" x2="60" y2="65" stroke="var(--text-color)" stroke-width="2"/>
                 <circle cx="10" cy="65" r="3" fill="#4ade80"/>
                 <line x1="45" y1="35" x2="45" y2="10" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="45" y1="10" x2="70" y2="10" stroke="var(--text-color)" stroke-width="2"/>
-                <g transform="translate(70, 10)">\${getResSvg()}</g>
+                <g transform="translate(70, 10)">${getResSvg()}</g>
                 <line x1="90" y1="10" x2="130" y2="10" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="130" y1="10" x2="130" y2="50" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="110" y1="50" x2="140" y2="50" stroke="var(--text-color)" stroke-width="2"/>
                 <circle cx="140" cy="50" r="3" fill="var(--text-color)"/>
             </svg>
-        \`;
+        `;
     }
 
     function drawAtten() {
-        return \`
+        return `
             <svg width="100%" height="100%" viewBox="0 0 150 100" class="text-themeText" preserveAspectRatio="xMidYMid meet">
-                <polygon points="60,20 60,80 110,50" fill="var(--container-color)" stroke="var(--border-color)" stroke-width="2"/>
+                <polygon points="60,20 60,80 110,50" fill="var(--container-bg)" stroke="var(--border-color)" stroke-width="2"/>
                 <text x="65" y="40" font-size="12" fill="var(--text-color)">-</text>
                 <text x="65" y="70" font-size="12" fill="var(--text-color)">+</text>
                 <line x1="10" y1="65" x2="20" y2="65" stroke="var(--text-color)" stroke-width="2"/>
                 <circle cx="10" cy="65" r="3" fill="var(--accent-color)"/>
-                <g transform="translate(20, 65)">\${getResSvg()}</g>
+                <g transform="translate(20, 65)">${getResSvg()}</g>
                 <line x1="40" y1="65" x2="60" y2="65" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="45" y1="65" x2="45" y2="80" stroke="var(--text-color)" stroke-width="2"/>
-                <g transform="translate(45, 80)">\${getResSvg()}</g>
+                <g transform="translate(45, 80)">${getResSvg()}</g>
                 <line x1="65" y1="80" x2="80" y2="80" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="80" y1="80" x2="80" y2="90" stroke="var(--text-color)" stroke-width="2"/>
                 <line x1="75" y1="90" x2="85" y2="90" stroke="var(--text-color)" stroke-width="2"/>
@@ -315,7 +310,27 @@
                 <line x1="110" y1="50" x2="140" y2="50" stroke="var(--text-color)" stroke-width="2"/>
                 <circle cx="140" cy="50" r="3" fill="var(--text-color)"/>
             </svg>
-        \`;
+        `;
+    }
+
+    function drawBuffer() {
+        return `
+            <svg width="100%" height="100%" viewBox="0 0 150 100" class="text-themeText" preserveAspectRatio="xMidYMid meet">
+                <polygon points="60,20 60,80 110,50" fill="var(--container-bg)" stroke="var(--border-color)" stroke-width="2"/>
+                <text x="65" y="40" font-size="12" fill="var(--text-color)">-</text>
+                <text x="65" y="70" font-size="12" fill="var(--text-color)">+</text>
+                <line x1="10" y1="65" x2="60" y2="65" stroke="var(--text-color)" stroke-width="2"/>
+                <circle cx="10" cy="65" r="3" fill="var(--accent-color)"/>
+                <text x="0" y="62" font-size="10" fill="var(--accent-color)">Vin</text>
+                <line x1="45" y1="35" x2="60" y2="35" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="45" y1="35" x2="45" y2="10" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="45" y1="10" x2="130" y2="10" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="130" y1="10" x2="130" y2="50" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="110" y1="50" x2="140" y2="50" stroke="var(--text-color)" stroke-width="2"/>
+                <circle cx="140" cy="50" r="3" fill="var(--text-color)"/>
+                <text x="145" y="53" font-size="10" fill="var(--text-color)">Vout</text>
+            </svg>
+        `;
     }
 
     function updateOpAmp() {
@@ -366,6 +381,12 @@
             v2Cont.classList.add('hidden'); r34Cont.classList.add('hidden');
             diag.innerHTML = drawAtten();
             if ((R1 + R2) > 0) idealGain = R2 / (R1 + R2);
+            idealVout = Vin1 * idealGain;
+        }
+        else if (type === 'buffer') {
+            v2Cont.classList.add('hidden'); r34Cont.classList.add('hidden');
+            diag.innerHTML = drawBuffer();
+            idealGain = 1;
             idealVout = Vin1 * idealGain;
         }
 
