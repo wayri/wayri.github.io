@@ -1300,14 +1300,28 @@ function initHeatsink3D() {
     const container = document.getElementById('hs-3d-container');
     if (!container || hsRenderer) return;
 
+    let width = container.clientWidth || 300;
+    let height = container.clientHeight || 256;
+
     hsScene = new THREE.Scene();
-    hsCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    hsCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     hsCamera.position.set(100, 100, 150);
     hsCamera.lookAt(0, 0, 0);
 
     hsRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    hsRenderer.setSize(container.clientWidth, container.clientHeight);
+    hsRenderer.setSize(width, height);
     container.appendChild(hsRenderer.domElement);
+
+    const ro = new ResizeObserver(entries => {
+        for (let entry of entries) {
+            if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+                hsCamera.aspect = entry.contentRect.width / entry.contentRect.height;
+                hsCamera.updateProjectionMatrix();
+                hsRenderer.setSize(entry.contentRect.width, entry.contentRect.height);
+            }
+        }
+    });
+    ro.observe(container);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     hsScene.add(ambientLight);
@@ -1559,14 +1573,28 @@ function initXfmr3D() {
     const container = document.getElementById('xfmr-3d-container');
     if (!container || xfmrRenderer) return;
 
+    let width = container.clientWidth || 300;
+    let height = container.clientHeight || 256;
+
     xfmrScene = new THREE.Scene();
-    xfmrCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    xfmrCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     xfmrCamera.position.set(40, 30, 50);
     xfmrCamera.lookAt(0, 0, 0);
 
     xfmrRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    xfmrRenderer.setSize(container.clientWidth, container.clientHeight);
+    xfmrRenderer.setSize(width, height);
     container.appendChild(xfmrRenderer.domElement);
+
+    const ro = new ResizeObserver(entries => {
+        for (let entry of entries) {
+            if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+                xfmrCamera.aspect = entry.contentRect.width / entry.contentRect.height;
+                xfmrCamera.updateProjectionMatrix();
+                xfmrRenderer.setSize(entry.contentRect.width, entry.contentRect.height);
+            }
+        }
+    });
+    ro.observe(container);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     xfmrScene.add(ambientLight);
