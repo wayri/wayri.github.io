@@ -11,7 +11,7 @@
                 
                 <div>
                     <label class="text-[10px] font-bold text-themeMuted mb-1 block">CELL CHEMISTRY</label>
-                    <select id="bat-chem" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText font-bold" onchange="runBatterySuite()">
+                    <select id="bat-chem" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText font-bold" onchange="onChemChange()">
                         <option value="lfp">LFP (LiFePO4)</option>
                         <option value="nmc">NMC (LiNiMnCoO2)</option>
                         <option value="pb">Lead-Acid (Pb)</option>
@@ -24,23 +24,23 @@
                 
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="text-[10px] font-bold text-themeMuted mb-1 block">SERIES (S)</label>
-                        <input type="number" id="bat-s" value="14" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
+                        <label class="whitespace-nowrap text-[10px] font-bold text-themeMuted mb-1 block">SERIES (S)</label>
+                        <input type="number" id="bat-s" value="14" min="1" step="1" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
                     </div>
                     <div>
-                        <label class="text-[10px] font-bold text-themeMuted mb-1 block">PARALLEL (P)</label>
-                        <input type="number" id="bat-p" value="4" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
+                        <label class="whitespace-nowrap text-[10px] font-bold text-themeMuted mb-1 block">PARALLEL (P)</label>
+                        <input type="number" id="bat-p" value="4" min="1" step="1" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="text-[10px] font-bold text-themeMuted mb-1 block">CELL CAP (Ah)</label>
-                        <input type="number" id="bat-cap" value="3.2" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
+                        <label class="whitespace-nowrap text-[10px] font-bold text-themeMuted mb-1 block">CELL CAP (Ah)</label>
+                        <input type="number" id="bat-cap" value="3.2" min="0.01" step="0.1" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
                     </div>
                     <div>
-                        <label class="text-[10px] font-bold text-themeMuted mb-1 block">TEMP (&deg;C)</label>
-                        <input type="number" id="bat-temp" value="25" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
+                        <label class="whitespace-nowrap text-[10px] font-bold text-themeMuted mb-1 block">TEMP (&deg;C)</label>
+                        <input type="number" id="bat-temp" value="25" min="-40" max="80" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
                     </div>
                 </div>
 
@@ -134,6 +134,18 @@ const BAT_MODELS = {
 
 let batCurveChart = null;
 let batAgingChart = null;
+
+function onChemChange() {
+    const chem = document.getElementById('bat-chem').value;
+    if(chem === 'lfp') { document.getElementById('bat-cap').value = 3.2; document.getElementById('bat-crate').max = 5; }
+    else if(chem === 'nmc') { document.getElementById('bat-cap').value = 4.0; document.getElementById('bat-crate').max = 10; }
+    else if(chem === 'pb') { document.getElementById('bat-cap').value = 50.0; document.getElementById('bat-crate').max = 1; }
+    else if(chem === 'na') { document.getElementById('bat-cap').value = 3.0; document.getElementById('bat-crate').max = 3; }
+    else if(chem === 'nimh') { document.getElementById('bat-cap').value = 2.0; document.getElementById('bat-crate').max = 2; }
+    else if(chem === 'nicd') { document.getElementById('bat-cap').value = 1.5; document.getElementById('bat-crate').max = 10; }
+    else if(chem === 'agzn') { document.getElementById('bat-cap').value = 0.5; document.getElementById('bat-crate').max = 2; }
+    runBatterySuite();
+}
 
 function runBatterySuite() {
     const chem = document.getElementById('bat-chem').value;
