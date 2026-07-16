@@ -1106,3 +1106,184 @@ document.addEventListener('toolLoaded', () => {
         });
     }, 1000);
 });
+
+
+// ==========================================
+// PLANAR SPIRAL INDUCTOR (ADVANCED 3D)
+// ==========================================
+
+const K_COEFFS = {
+    'square': { k1: 2.34, k2: 2.75 },
+    'hexagonal': { k1: 2.33, k2: 3.82 },
+    'octagonal': { k1: 2.25, k2: 3.55 }
+};
+
+let inductorScene, inductorCamera, inductorRenderer, inductorMesh;
+let inductorReqId = null;
+
+function initPlanarInductor3D() {
+    const container = document.getElementById('ind-3d-container');
+    if (!container || inductorRenderer) return; // already init
+
+    inductorScene = new THREE.Scene();
+    inductorCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    inductorCamera.position.set(0, -50, 50);
+    inductorCamera.lookAt(0, 0, 0);
+
+    inductorRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    inductorRenderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(inductorRenderer.domElement);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    inductorScene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(20, 20, 50);
+    inductorScene.add(dirLight);
+
+    inductorMesh = new THREE.Group();
+    inductorScene.add(inductorMesh);
+
+    // Grid helper
+    const gridHelper = new THREE.GridHelper(100, 10, 0x444444, 0x222222);
+    gridHelper.rotation.x = Math.PI / 2;
+    inductorScene.add(gridHelper);
+
+    updateInductor();
+
+    const animate = function () {
+        inductorReqId = requestAnimationFrame(animate);
+        inductorMesh.rotation.z += 0.005;
+        inductorRenderer.render(inductorScene, inductorCamera);
+    };
+    animate();
+}
+
+window.updateInductor = function() {
+    if (!document.getElementById('ind-shape')) return;
+
+    const shape = document.getElementById('ind-shape').value;
+    const N = parseFloat(document.getElementById('ind-n').value) || 1;
+    const D_out = parseFloat(document.getElementById('ind-dout').value) || 10;
+    const W = parseFloat(document.getElementById('ind-w').value) || 0.5;
+    const S = parseFloat(document.getElementById('ind-s').value) || 0.2;
+    const t = parseFloat(document.getElementById('ind-t').value) || 0.035;
+    
+    const M = parseInt(document.getElementById('ind-layers').value) || 1;
+    const layer_conn = document.getElementById('ind-connection').value;
+    const h = parseFloat(document.getElementById('ind-h').value) || 0.2;
+    const mu_r = parseFloat(document.getElementById('ind-mur').value) || 1;
+
+    const wall_thickness = (N * W) + ((N - 1) * S);
+    const D_in = D_out - (2 * wall_thickness);
+
+    const warningsEl = document.getElementById('ind-warnings');
+    if (D_in <= 0) {
+        warningsEl.innerHTML = `<span class="text-red-400"><i class="fa-solid fa-triangle-exclamation"></i> Invalid geometry: Inner diameter is &le; 0.</span>`;
+        document.getElementById('ind-l').innerText = "0.0";
+        document.getElementById('ind-din').innerText = D_in.toFixed(2) + " mm";
+        return;
+    } else {
+        warningsEl.innerHTML = `<span class="text-green-400"><i class="fa-solid fa-check"></i> Geometry valid.</span>`;
+    }
+
+    const D_avg = (D_out + D_in) / 2;
+    const rho = (D_out - D_in) / (D_out + D_in);
+
+    const k1 = K_COEFFS[shape].k1;
+    const k2 = K_COEFFS[shape].k2;
+    const mu0 = 4 * Math.PI * 1e-7;
+
+    const D_avg_m = D_avg / 1000;
+    
+    // Single layer inductance
+    const L_single = k1 * mu0 * (N * N) * D_avg_m / (1 + k2 * rho);
+    
+    // Approximation for effective permeability for a core sandwich
+    // For a fully closed core, mu_eff approaches mu_r. For open planar, it's heavily air-gapped.
+    // We'll use a simplified weighted mu_eff based on mu_r.
+    const mu_eff = 1 + (mu_r - 1) * 0.5; 
+
+    let L_tot = L_single * mu_eff;
+    let DCR_single = 0;
+    
+    // Approx trace length
+    let len_mm = 0;
+    if(shape === 'square') len_mm = 4 * N * D_avg;
+    else if (shape === 'hexagonal') len_mm = 3 * N * D_avg;
+    else len_mm = Math.PI * N * D_avg;
+
+    // Copper resistivity (ohms*mm^2 / m) -> 0.0171
+    // R = rho * L / A
+    const trace_area = W * t; // mm^2
+    DCR_single = (0.0171 * (len_mm / 1000)) / trace_area;
+
+    let DCR_tot = DCR_single;
+
+    if (M > 1) {
+        if (layer_conn === 'series') {
+            // Simplified mutual inductance: M_layers ~ L_single * M^1.6 (empirical for tightly coupled planar)
+            L_tot = L_tot * Math.pow(M, 1.6);
+            DCR_tot = DCR_single * M;
+        } else {
+            // Parallel: L drops slightly due to mutual coupling canceling self inductance if closely spaced,
+            // but primarily acts as 1/M. Let's use roughly L_tot ~ L_single / (M^0.1) assuming perfectly identical.
+            // Wait, for parallel identical inductors with coupling k ~ 1, L_tot = L_single!
+            // But realistically k < 1, so L_tot is slightly less. We'll approximate as L_single * 0.95.
+            L_tot = L_tot * (1 - 0.05 * (M - 1));
+            DCR_tot = DCR_single / M;
+        }
+    }
+
+    let L_display = L_tot * 1e9; // nH
+    let unit = "nH";
+    if (L_display > 1000) {
+        L_display /= 1000;
+        unit = "&micro;H";
+    }
+
+    document.getElementById('ind-l').innerText = L_display.toFixed(2);
+    document.getElementById('ind-l-unit').innerHTML = unit;
+    document.getElementById('ind-din').innerText = D_in.toFixed(2) + " mm";
+    document.getElementById('ind-rho').innerText = rho.toFixed(3);
+    document.getElementById('ind-dcr').innerHTML = DCR_tot.toFixed(3) + " &Omega;";
+    document.getElementById('ind-mueff').innerText = mu_eff.toFixed(2);
+
+    // Update 3D Model
+    if (inductorMesh && typeof THREE !== 'undefined') {
+        // clear old
+        while(inductorMesh.children.length > 0) { 
+            inductorMesh.remove(inductorMesh.children[0]); 
+        }
+
+        const material = new THREE.MeshStandardMaterial({ color: 0xb87333, metalness: 0.8, roughness: 0.2 }); // Copper
+        
+        for (let m = 0; m < M; m++) {
+            const z_offset = (m - (M-1)/2) * h;
+            
+            // Build spiral path
+            const points = [];
+            const segments = (shape === 'square') ? 4 : (shape === 'hexagonal') ? 6 : 32;
+            const angleStep = (2 * Math.PI) / segments;
+            const radiusStep = (W + S) / segments;
+            
+            let currentRadius = D_out / 2;
+            
+            for (let i = 0; i <= N * segments; i++) {
+                const theta = i * angleStep;
+                const x = currentRadius * Math.cos(theta);
+                const y = currentRadius * Math.sin(theta);
+                points.push(new THREE.Vector3(x, y, z_offset));
+                currentRadius -= radiusStep;
+            }
+
+            const path = new THREE.CatmullRomCurve3(points);
+            const tubeGeo = new THREE.TubeGeometry(path, points.length * 2, W / 2, 8, false);
+            const tubeMesh = new THREE.Mesh(tubeGeo, material);
+            inductorMesh.add(tubeMesh);
+        }
+        
+        // Scale to fit camera
+        const scale = 30 / D_out;
+        inductorMesh.scale.set(scale, scale, scale);
+    }
+}
