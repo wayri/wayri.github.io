@@ -1,0 +1,144 @@
+<div class="doc-container flex flex-col w-full h-full min-h-[600px]">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Balun & Unun Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-infinity"></i><h3 class="font-bold font-mono">Balun & Unun Calculator</h3></div>
+        <span class="font-mono text-[10px] opacity-70">TLT Topology & Impedance</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">DESIGN PARAMETERS</h4>
+                
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label class="whitespace-nowrap text-[10px] mb-1 block">Device Type</label>
+                        <select id="bal-type" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText focus:border-themeAccent outline-none" onchange="updateBalun()">
+                            <option value="balun" selected>Balun (Balanced to Unbalanced)</option>
+                            <option value="unun">Unun (Unbalanced to Unbalanced)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="whitespace-nowrap text-[10px] mb-1 block">Topology</label>
+                        <select id="bal-topology" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText focus:border-themeAccent outline-none" onchange="updateBalun()">
+                            <option value="guanella" selected>Guanella (Current/Choke)</option>
+                            <option value="ruthroff">Ruthroff (Voltage)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="whitespace-nowrap text-[10px] mb-1 block">Impedance Ratio (Z_in : Z_out)</label>
+                        <select id="bal-ratio" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText focus:border-themeAccent outline-none" onchange="updateBalun()">
+                            <option value="1">1:1</option>
+                            <option value="4" selected>1:4</option>
+                            <option value="9">1:9</option>
+                        </select>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Input Impedance ($Z_{in}$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="bal-zin" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="50" min="1" step="1" oninput="updateBalun()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">&Omega;</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(59,130,246,0.1)] flex-grow">
+                    <div class="w-full grid grid-cols-2 gap-4 mb-4">
+                        <div class="flex flex-col border-r border-themeBorder/20 pr-4">
+                            <span class="whitespace-nowrap text-[10px] text-themeAccent uppercase tracking-wider mb-1 font-bold">Output Impedance ($Z_{out}$)</span>
+                            <div class="text-3xl font-bold text-themeText flex items-baseline justify-center gap-1">
+                                <span id="bal-out-zout">200</span> <span class="text-sm text-themeAccent">&Omega;</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="whitespace-nowrap text-[10px] text-green-400 uppercase tracking-wider mb-1 font-bold">Optimal TL $Z_0$</span>
+                            <div class="text-3xl font-bold text-themeText flex items-baseline justify-center gap-1">
+                                <span id="bal-out-z0">100</span> <span class="text-sm text-green-400">&Omega;</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full mt-4 p-3 bg-themeBg border border-themeBorder/30 text-xs text-left text-themeMuted leading-relaxed">
+                        <strong class="text-themeText block mb-1">Implementation Notes:</strong>
+                        <span id="bal-notes">Requires 2 identical transmission lines (bifilar windings) connected in series-parallel arrangement.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('bal-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="bal-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Transmission Line Transformers (TLT):</strong></p>
+            <ul class="list-disc pl-4 space-y-1">
+                <li><strong>Optimal Characteristic Impedance:</strong> $Z_0 = \sqrt{Z_{in} \cdot rac{Z_{out}}{N_{lines}}}$ depending on topology. Usually, $Z_0 = \sqrt{Z_{in} \cdot Z_{out}}$ for standard 1:4.</li>
+                <li><strong>Guanella (Current):</strong> Focuses on providing high common-mode choking impedance. Excellent bandwidth and balance.</li>
+                <li><strong>Ruthroff (Voltage):</strong> Uses bootstrap voltage addition. Tends to have less high-frequency bandwidth than Guanella due to phase delay.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateBalun() {
+        const type = document.getElementById('bal-type').value;
+        const topology = document.getElementById('bal-topology').value;
+        const ratio = parseInt(document.getElementById('bal-ratio').value) || 1;
+        const zin = parseFloat(document.getElementById('bal-zin').value) || 50;
+
+        const zout = zin * ratio;
+        let z0 = 50;
+        let notes = "";
+
+        if (ratio === 1) {
+            z0 = zin;
+            if (type === 'balun') {
+                notes = (topology === 'guanella') ? 
+                    "1:1 Guanella Current Balun (Choke). Use a single coaxial or bifilar line wound on a ferrite core to suppress common mode currents." : 
+                    "1:1 Ruthroff Voltage Balun. Less common than Guanella 1:1. Often wound as a trifilar winding on a toroid.";
+            } else {
+                notes = "1:1 Unun is simply a 1:1 choke. A standard coaxial choke works well.";
+            }
+        } else if (ratio === 4) {
+            z0 = Math.sqrt(zin * zout) / 2; // Actually for a 1:4 Guanella it requires 2 lines of Z0 = 2*Zin = Zout/2
+            // Wait, for 1:4 Guanella, we use 2 lines of Z0 = sqrt((2*Zin)*(Zout/2))? No, Z0 = 100 for 50->200.
+            z0 = Math.sqrt(zin * zout);
+            
+            if (type === 'balun') {
+                notes = (topology === 'guanella') ? 
+                    "1:4 Guanella Current Balun. Requires two identical bifilar transmission lines (or coax) wound on separate cores (or opposite sides of one core) with Z0 = " + z0.toFixed(1) + " ohms. Input is parallel, output is series." :
+                    "1:4 Ruthroff Voltage Balun. Requires a single bifilar winding on one core. Z0 = " + z0.toFixed(1) + " ohms. Bootstrap connection.";
+            } else {
+                notes = (topology === 'guanella') ?
+                    "1:4 Guanella Unun. Requires two bifilar lines. Input parallel, output series, with one side grounded." :
+                    "1:4 Ruthroff Unun. Very common. Single bifilar winding on one core. Series-connected.";
+            }
+        } else if (ratio === 9) {
+            // 1:9 usually requires Z0 = Zin * 3 for Guanella
+            z0 = zin * 3;
+            if (type === 'balun') {
+                notes = "1:9 Balun. Typically Guanella using three transmission lines. Z0 = " + z0.toFixed(1) + " ohms.";
+            } else {
+                notes = "1:9 Ruthroff Unun. Common for end-fed random wires. Requires a trifilar winding. Z0 = " + z0.toFixed(1) + " ohms.";
+            }
+        }
+
+        document.getElementById('bal-out-zout').innerText = zout;
+        document.getElementById('bal-out-z0').innerText = z0.toFixed(1);
+        document.getElementById('bal-notes').innerText = notes;
+    }
+    
+    // Initial run
+    setTimeout(updateBalun, 100);
+</script>
