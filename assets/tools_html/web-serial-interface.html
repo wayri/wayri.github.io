@@ -1,0 +1,73 @@
+<div id="tool-web-serial-interface" class="doc-container flex flex-col  ">
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <div class="flex items-center gap-2">
+                <i class="fa-brands fa-usb"></i>
+                <h3 class="font-bold font-mono">Web Serial Interface</h3>
+            </div>
+        </div>
+
+        <div class="p-4 flex-grow flex flex-col gap-4">
+            <div class="flex flex-wrap gap-2 text-xs font-mono justify-between items-center">
+                <div class="flex flex-wrap gap-2 items-center">
+                    <select id="serial-baud" class="border border-themeBorder p-1 bg-themeBg text-themeText">
+                        <option value="9600">9600</option>
+                        <option value="19200">19200</option>
+                        <option value="38400">38400</option>
+                        <option value="57600">57600</option>
+                        <option value="115200" selected>115200</option>
+                        <option value="921600">921600</option>
+                    </select>
+                    <select id="serial-data" class="border border-themeBorder p-1 bg-themeBg text-themeText" title="Data Bits">
+                        <option value="8" selected>8 Data</option>
+                        <option value="7">7 Data</option>
+                    </select>
+                    <select id="serial-parity" class="border border-themeBorder p-1 bg-themeBg text-themeText" title="Parity">
+                        <option value="none" selected>None</option>
+                        <option value="even">Even</option>
+                        <option value="odd">Odd</option>
+                    </select>
+                    <select id="serial-stop" class="border border-themeBorder p-1 bg-themeBg text-themeText" title="Stop Bits">
+                        <option value="1" selected>1 Stop</option>
+                        <option value="2">2 Stop</option>
+                    </select>
+                    <select id="serial-line" class="border border-themeBorder p-1 bg-themeBg text-themeText" title="Line Ending">
+                        <option value="none">No Ending</option>
+                        <option value="cr">CR</option>
+                        <option value="lf">LF</option>
+                        <option value="crlf" selected>CRLF</option>
+                    </select>
+                </div>
+                <div class="flex gap-2">
+                    <button id="serial-btn" onclick="toggleSerial()" class="bg-themeAccent text-themeBg px-4 py-1 text-xs font-mono font-bold hover:opacity-90 transition-colors shadow-[2px_2px_0px_var(--border-color)]">CONNECT</button>
+                    <span id="serial-status" class="border border-themeBorder text-themeMuted p-1 px-4 text-center min-w-[120px]">OFFLINE</span>
+                </div>
+            </div>
+            
+            <div class="flex gap-2">
+                <input type="text" id="serial-send-input" class="border border-themeBorder p-1 flex-grow bg-themeBg text-themeText font-mono text-xs" placeholder="Enter string to send..." onkeypress="if(event.key==='Enter') sendSerial()">
+                <button onclick="sendSerial()" class="bg-themeBorder text-themeBg px-4 font-bold hover:bg-themeAccent transition-colors">SEND</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-64">
+                <div class="relative w-full h-full">
+                    <textarea id="serial-monitor" readonly class="w-full h-full border border-themeBorder p-2 text-xs font-mono bg-themeBg text-green-500 resize-none focus:outline-none" placeholder="Awaiting hardware serial stream..."></textarea>
+                    <div class="absolute top-2 right-2 flex gap-1">
+                        <button onclick="clearSerial()" class="bg-themeContainer border border-themeBorder text-themeMuted px-2 py-1 text-[10px] hover:text-themeAccent" title="Clear Text"><i class="fa-solid fa-eraser"></i></button>
+                        <button onclick="saveSerialLog()" class="bg-themeContainer border border-themeBorder text-themeMuted px-2 py-1 text-[10px] hover:text-themeAccent" title="Save Log"><i class="fa-solid fa-download"></i></button>
+                    </div>
+                </div>
+                
+                <div class="relative w-full h-full border border-themeBorder bg-themeBg p-2 flex flex-col">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[10px] font-mono text-themeMuted">AUTO-SCALE PLOT</span>
+                        <div class="flex gap-1">
+                            <button onclick="clearSerialPlot()" class="text-[10px] text-themeMuted hover:text-themeAccent" title="Clear Plot"><i class="fa-solid fa-eraser"></i></button>
+                            <button onclick="saveSerialPlot()" class="text-[10px] text-themeMuted hover:text-themeAccent" title="Screenshot Plot"><i class="fa-solid fa-camera"></i></button>
+                        </div>
+                    </div>
+                    <div class="flex-grow relative w-full h-full">
+                        <canvas id="serial-plot-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,51 @@
+<div id="tool-resistor-divider" class="doc-container flex flex-col">
+        <div class="h-32 bg-themeBg border-b border-themeBorder overflow-hidden flex justify-center items-center"><img src="/assets/images/divider.png" class="h-full opacity-80 diagram-img" alt="Divider Circuit"></div>
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <i class="fa-solid fa-bolt"></i>
+            <h3 class="font-bold font-mono">Resistor Divider</h3>
+        </div>
+        <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+            <div class="flex gap-3 mb-2 pb-3 border-b border-themeBorder/20 text-xs text-themeMuted font-bold">
+                <span>SOLVE:</span>
+                <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="vin" onchange="setupDividerMode()"> Vin</label>
+                <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="r1" onchange="setupDividerMode()"> R1</label>
+                <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="r2" onchange="setupDividerMode()"> R2</label>
+                <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="vout" checked onchange="setupDividerMode()"> Vout</label>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <label class="w-20">Vin (V)</label>
+                <input type="number" id="calc-vin" value="12" step="0.1" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
+            </div>
+            <div class="flex justify-between items-center">
+                <label class="w-20">R1 (Î©)</label>
+                <div class="flex flex-col items-end w-32">
+                    <input type="number" id="calc-r1" value="10000" class="w-full border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
+                    <span id="sug-r1" class="text-[9px] text-themeAccent cursor-pointer hover:underline mt-0.5 opacity-0 h-0 transition-opacity whitespace-nowrap" onclick="applyVal('calc-r1', this.dataset.val); runSmartDivider();"></span>
+                </div>
+            </div>
+            <div class="flex justify-between items-center">
+                <label class="w-20">R2 (Î©)</label>
+                <div class="flex flex-col items-end w-32">
+                    <input type="number" id="calc-r2" value="4700" class="w-full border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
+                    <span id="sug-r2" class="text-[9px] text-themeAccent cursor-pointer hover:underline mt-0.5 opacity-0 h-0 transition-opacity whitespace-nowrap" onclick="applyVal('calc-r2', this.dataset.val); runSmartDivider();"></span>
+                </div>
+            </div>
+            <div class="flex justify-between items-center">
+                <label class="w-20 text-themeAccent font-bold">Vout (V)</label>
+                <input type="number" id="calc-vout" class="w-32 border-2 border-themeAccent px-2 py-1 text-right font-bold text-themeAccent bg-opacity-10 bg-themeAccent" readonly oninput="runSmartDivider()">
+            </div>
+            <div class="pt-3 mt-3 border-t border-themeBorder/20 text-xs">
+                <div class="grid grid-cols-2 gap-2 text-themeMuted">
+                    <div class="bg-themeBorder/5 p-2 border border-themeBorder/10">
+                        <span>P(R1): <span id="pow-r1" class="font-bold text-themeText">0.00 mW</span></span>
+                        <div id="pkg-r1" class="text-themeAccent mt-1">0402</div>
+                    </div>
+                    <div class="bg-themeBorder/5 p-2 border border-themeBorder/10">
+                        <span>P(R2): <span id="pow-r2" class="font-bold text-themeText">0.00 mW</span></span>
+                        <div id="pkg-r2" class="text-themeAccent mt-1">0402</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

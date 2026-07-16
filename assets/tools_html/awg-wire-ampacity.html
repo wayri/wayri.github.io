@@ -1,0 +1,27 @@
+<div id="tool-awg-wire-ampacity" class="doc-container flex flex-col">
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <i class="fa-solid fa-plug-circle-bolt"></i>
+            <h3 class="font-bold font-mono">AWG Wire Ampacity</h3>
+        </div>
+        <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+            <div class="flex justify-between items-center">
+                <label class="w-24">Wire AWG</label>
+                <input type="number" id="awg-val" value="12" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runAWG()">
+            </div>
+            
+            <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-2 text-xs">
+                <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                    <span class="text-themeMuted">Chassis Wiring (Free Air)</span>
+                    <span id="awg-chassis" class="font-bold text-themeAccent">41.0 A</span>
+                </div>
+                <div class="flex justify-between pb-1">
+                    <span class="text-themeMuted">Power Transmission (Bundled)</span>
+                    <span id="awg-power" class="font-bold text-themeText">9.3 A</span>
+                </div>
+                <div class="flex justify-between text-[10px] opacity-70">
+                    <span>Resistance (per 1000ft)</span>
+                    <span id="awg-res">1.588 Î©</span>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,239 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Full Battery Pack Designer Suite">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-car-battery"></i><h3 class="font-bold font-mono">Full Battery Pack Designer Suite</h3></div>
+    </div>
+    
+    <div class="flex flex-col md:flex-row flex-grow bg-themeBg font-mono text-sm overflow-hidden">
+        
+        <!-- Controls Panel -->
+        <div class="w-full md:w-80 border-r border-themeBorder bg-themeContainer flex flex-col overflow-y-auto">
+            <div class="p-4 space-y-4">
+                
+                <div>
+                    <label class="text-[10px] font-bold text-themeMuted mb-1 block">CELL CHEMISTRY</label>
+                    <select id="bat-chem" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText font-bold" onchange="runBatterySuite()">
+                        <option value="lfp">LFP (LiFePO4)</option>
+                        <option value="nmc">NMC (LiNiMnCoO2)</option>
+                        <option value="pb">Lead-Acid (Pb)</option>
+                        <option value="na">Na-ion (Sodium-ion)</option>
+                        <option value="nimh">NiMH</option>
+                        <option value="nicd">NiCd</option>
+                        <option value="agzn">Silver-Zinc (AgZn)</option>
+                    </select>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] font-bold text-themeMuted mb-1 block">SERIES (S)</label>
+                        <input type="number" id="bat-s" value="14" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-themeMuted mb-1 block">PARALLEL (P)</label>
+                        <input type="number" id="bat-p" value="4" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] font-bold text-themeMuted mb-1 block">CELL CAP (Ah)</label>
+                        <input type="number" id="bat-cap" value="3.2" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-themeMuted mb-1 block">TEMP (&deg;C)</label>
+                        <input type="number" id="bat-temp" value="25" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold text-themeMuted mb-1 block">C-RATE (Discharge)</label>
+                    <input type="range" id="bat-crate" min="0.1" max="5" step="0.1" value="0.5" class="w-full accent-themeAccent" oninput="document.getElementById('crate-val').innerText = this.value + 'C'; runBatterySuite()">
+                    <div class="text-right text-themeAccent text-xs font-bold" id="crate-val">0.5C</div>
+                </div>
+
+                <div class="pt-4 border-t border-themeBorder/20 space-y-2">
+                    <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                        <span class="text-themeMuted">Nominal Pack Voltage</span>
+                        <span id="pack-vnom" class="font-bold text-themeText">-- V</span>
+                    </div>
+                    <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                        <span class="text-themeMuted">Max Pack Voltage</span>
+                        <span id="pack-vmax" class="font-bold text-themeAccent">-- V</span>
+                    </div>
+                    <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                        <span class="text-themeMuted">Total Capacity</span>
+                        <span id="pack-ah" class="font-bold text-themeText">-- Ah</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Total Energy</span>
+                        <span id="pack-kwh" class="font-bold text-themeAccent">-- Wh</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- Charts Area -->
+        <div class="flex-grow p-4 flex flex-col gap-4 overflow-y-auto">
+            <!-- Discharge Curve -->
+            <div class="bg-themeContainer border border-themeBorder/30 flex-grow relative min-h-[250px] p-2 flex flex-col">
+                <h4 class="text-xs font-bold text-themeMuted absolute top-2 left-2">DISCHARGE CURVE (OCV vs SOC)</h4>
+                <div class="flex-grow relative mt-6">
+                    <canvas id="bat-curve-chart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Cycle Life & DOD -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-64 flex-shrink-0">
+                <div class="bg-themeContainer border border-themeBorder/30 relative p-2 flex flex-col">
+                    <h4 class="text-xs font-bold text-themeMuted absolute top-2 left-2">CYCLE LIFE vs DOD</h4>
+                    <div class="flex-grow relative mt-6">
+                        <canvas id="bat-aging-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="bg-themeContainer border border-themeBorder/30 relative p-4 flex flex-col text-xs space-y-2">
+                    <h4 class="font-bold text-themeAccent mb-2">Thermal & Aging Impacts</h4>
+                    <p class="text-themeMuted flex-grow">
+                        Operation at <span id="txt-temp" class="text-themeText font-bold">25°C</span> results in a cycle life multiplier of <span id="txt-temp-mult" class="text-themeAccent font-bold">1.0x</span>.
+                        <br><br>
+                        Higher C-rates (<span id="txt-crate" class="text-themeText">0.5C</span>) increase internal I&sup2;R heating and voltage sag, reducing usable capacity.
+                    </p>
+                    <div class="border-t border-themeBorder/20 pt-2 flex justify-between">
+                        <span class="text-themeMuted">Est. Cycle Life (80% DOD):</span>
+                        <span id="txt-life" class="font-bold text-themeAccent">-- Cycles</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+// Battery Chemistry Models (Simplified for visual accuracy)
+const BAT_MODELS = {
+    lfp: { v_nom: 3.2, v_max: 3.65, v_min: 2.5, curve: [3.65, 3.35, 3.3, 3.25, 3.2, 3.2, 3.2, 3.15, 3.0, 2.5], base_cycles: 3000 },
+    nmc: { v_nom: 3.7, v_max: 4.2, v_min: 2.8, curve: [4.2, 4.0, 3.9, 3.8, 3.7, 3.6, 3.5, 3.4, 3.2, 2.8], base_cycles: 1000 },
+    pb: { v_nom: 2.0, v_max: 2.4, v_min: 1.75, curve: [2.4, 2.1, 2.05, 2.0, 1.95, 1.9, 1.85, 1.8, 1.78, 1.75], base_cycles: 500 },
+    na: { v_nom: 3.1, v_max: 3.95, v_min: 1.5, curve: [3.95, 3.5, 3.3, 3.1, 2.9, 2.7, 2.5, 2.2, 1.8, 1.5], base_cycles: 2000 },
+    nimh: { v_nom: 1.2, v_max: 1.45, v_min: 1.0, curve: [1.45, 1.35, 1.25, 1.2, 1.2, 1.2, 1.15, 1.1, 1.05, 1.0], base_cycles: 800 },
+    nicd: { v_nom: 1.2, v_max: 1.4, v_min: 1.0, curve: [1.4, 1.3, 1.22, 1.2, 1.2, 1.2, 1.18, 1.15, 1.1, 1.0], base_cycles: 1500 },
+    agzn: { v_nom: 1.5, v_max: 1.86, v_min: 1.2, curve: [1.86, 1.6, 1.55, 1.5, 1.5, 1.5, 1.45, 1.3, 1.25, 1.2], base_cycles: 150 }
+};
+
+let batCurveChart = null;
+let batAgingChart = null;
+
+function runBatterySuite() {
+    const chem = document.getElementById('bat-chem').value;
+    const s = parseInt(document.getElementById('bat-s').value) || 1;
+    const p = parseInt(document.getElementById('bat-p').value) || 1;
+    const cap = parseFloat(document.getElementById('bat-cap').value) || 1;
+    const temp = parseFloat(document.getElementById('bat-temp').value) || 25;
+    const crate = parseFloat(document.getElementById('bat-crate').value) || 0.5;
+
+    const model = BAT_MODELS[chem];
+    
+    const packVNom = model.v_nom * s;
+    const packVMax = model.v_max * s;
+    const packAh = cap * p;
+    const packWh = packVNom * packAh;
+
+    document.getElementById('pack-vnom').innerText = packVNom.toFixed(2) + ' V';
+    document.getElementById('pack-vmax').innerText = packVMax.toFixed(2) + ' V';
+    document.getElementById('pack-ah').innerText = packAh.toFixed(1) + ' Ah';
+    document.getElementById('pack-kwh').innerText = packWh >= 1000 ? (packWh/1000).toFixed(2) + ' kWh' : packWh.toFixed(0) + ' Wh';
+
+    // Thermal Impact (Arrhenius approx)
+    let tempMult = 1.0;
+    if (temp > 25) tempMult = Math.pow(0.5, (temp - 25) / 10); // Halves every 10C above 25C
+    else if (temp < 10) tempMult = 0.8; // Cold temp degradation
+    if (tempMult > 1.2) tempMult = 1.2;
+    
+    document.getElementById('txt-temp').innerText = temp + '°C';
+    document.getElementById('txt-temp-mult').innerText = tempMult.toFixed(2) + 'x';
+    document.getElementById('txt-crate').innerText = crate + 'C';
+
+    const estCycles = Math.round(model.base_cycles * tempMult * (1 / Math.max(1, crate*0.8)));
+    document.getElementById('txt-life').innerText = estCycles + ' Cycles';
+
+    updateBatCharts(model, s, temp, crate, estCycles);
+}
+
+function updateBatCharts(model, series, temp, crate, estCycles) {
+    // Generate Curve Data (0% to 100% SOC)
+    const socLabels = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0];
+    const vDropCrate = crate * 0.05 * series; // Simple IR drop approx
+    
+    const voltages = model.curve.map(v => {
+        let sag = vDropCrate;
+        if(temp < 10) sag *= 1.5; // More sag at cold temps
+        return Math.max((v * series) - sag, model.v_min * series);
+    });
+
+    const ctxCurve = document.getElementById('bat-curve-chart').getContext('2d');
+    if(batCurveChart) batCurveChart.destroy();
+    
+    batCurveChart = new Chart(ctxCurve, {
+        type: 'line',
+        data: {
+            labels: socLabels,
+            datasets: [{
+                label: `Pack Voltage (${crate}C)`,
+                data: voltages,
+                borderColor: '#f59e0b',
+                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { title: { display: true, text: 'State of Charge (%)', color: '#9ca3af' }, reverse: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                y: { title: { display: true, text: 'Voltage (V)', color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    // Aging Chart Data (Exponential relation to DOD)
+    const dodLabels = [100, 90, 80, 70, 60, 50, 40, 30, 20];
+    const cyclesData = dodLabels.map(dod => {
+        // Simple model: Life increases exponentially as DOD decreases
+        return Math.round(estCycles * Math.pow(100/dod, 1.5));
+    });
+
+    const ctxAging = document.getElementById('bat-aging-chart').getContext('2d');
+    if(batAgingChart) batAgingChart.destroy();
+
+    batAgingChart = new Chart(ctxAging, {
+        type: 'bar',
+        data: {
+            labels: dodLabels,
+            datasets: [{
+                label: 'Cycle Life',
+                data: cyclesData,
+                backgroundColor: '#3b82f6',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { title: { display: true, text: 'Depth of Discharge (%)', color: '#9ca3af' }, grid: { display: false } },
+                y: { type: 'logarithmic', title: { display: true, text: 'Cycles', color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+}
+
+// Initial Run
+setTimeout(() => {
+    runBatterySuite();
+}, 100);
+</script>

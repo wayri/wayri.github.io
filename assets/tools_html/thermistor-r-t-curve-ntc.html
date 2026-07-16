@@ -1,0 +1,33 @@
+<div id="tool-thermistor-r-t-curve-ntc" class="doc-container flex flex-col ">
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <i class="fa-solid fa-temperature-half"></i>
+            <h3 class="font-bold font-mono">Thermistor R-T Curve (NTC)</h3>
+        </div>
+        <div class="p-4 flex gap-4 font-mono text-sm flex-grow">
+            <div class="w-1/2 flex flex-col space-y-3">
+                <select id="ntc-type" class="border border-themeBorder px-2 py-1 font-bold w-full text-xs" onchange="setupNTCMode()">
+                    <option value="beta">Beta Equation</option>
+                    <option value="steinhart">Steinhart-Hart</option>
+                </select>
+
+                <div class="flex gap-2 pb-1 border-b border-themeBorder/20 text-[9px] text-themeMuted font-bold" id="ntc-solve-group">
+                    <!-- Solvers injected by JS -->
+                </div>
+
+                <div id="ntc-inputs" class="flex flex-col gap-2 flex-grow">
+                    <!-- Inputs injected by JS -->
+                </div>
+                
+                <div class="pt-2 mt-2 border-t border-themeBorder/20 text-xs">
+                    <div class="flex justify-between items-center">
+                        <span class="text-themeMuted">Result</span>
+                        <span id="ntc-result" class="font-bold text-themeAccent text-sm">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-1/2 relative border border-themeBorder bg-themeBg">
+                <span class="absolute top-1 right-1 text-[9px] text-themeMuted font-mono z-10">-40°C to 125°C (Log R)</span>
+                <canvas id="ntc-canvas" class="w-full h-full absolute inset-0"></canvas>
+            </div>
+        </div>
+    </div>

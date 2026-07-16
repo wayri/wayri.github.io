@@ -1,0 +1,26 @@
+<div id="tool-battery-pack-s-p-config" class="doc-container flex flex-col">
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <i class="fa-solid fa-car-battery"></i>
+            <h3 class="font-bold font-mono">Battery Pack (S/P) Config</h3>
+        </div>
+        <div class="p-4 space-y-2 font-mono text-sm flex-grow">
+            <div class="grid grid-cols-2 gap-4 border-b border-themeBorder/20 pb-3 mb-2">
+                <div>
+                    <div class="text-[10px] text-themeMuted mb-1">CELL SPECS</div>
+                    <div class="flex justify-between text-xs"><label>V_nom (V)</label><input type="number" id="bat-v" value="3.7" step="0.1" class="w-14 border border-themeBorder px-1 text-right" oninput="runBattery()"></div>
+                    <div class="flex justify-between text-xs mt-1"><label>Cap (Ah)</label><input type="number" id="bat-ah" value="3.2" step="0.1" class="w-14 border border-themeBorder px-1 text-right" oninput="runBattery()"></div>
+                </div>
+                <div class="border-l border-themeBorder/20 pl-4">
+                    <div class="text-[10px] text-themeMuted mb-1">PACK CONFIG</div>
+                    <div class="flex justify-between text-xs"><label>Series (S)</label><input type="number" id="bat-s" value="14" class="w-14 border border-themeBorder px-1 text-right" oninput="runBattery()"></div>
+                    <div class="flex justify-between text-xs mt-1"><label>Parallel (P)</label><input type="number" id="bat-p" value="4" class="w-14 border border-themeBorder px-1 text-right" oninput="runBattery()"></div>
+                </div>
+            </div>
+
+            <div class="space-y-1 text-xs">
+                <div class="flex justify-between"><span class="text-themeMuted">Nominal Voltage</span><span id="bat-vnom" class="font-bold text-themeText">51.8 V</span></div>
+                <div class="flex justify-between"><span class="text-themeMuted">Total Capacity</span><span id="bat-cap" class="font-bold text-themeText">12.8 Ah</span></div>
+                <div class="flex justify-between border-t border-themeBorder/10 pt-1 mt-1"><span class="text-themeMuted">Total Energy</span><span id="bat-kwh" class="font-bold text-themeAccent">663 Wh</span></div>
+            </div>
+        </div>
+    </div>

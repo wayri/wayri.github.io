@@ -1,0 +1,30 @@
+<div id="tool-ipc-2221-trace-width" class="doc-container flex flex-col">
+        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+            <i class="fa-solid fa-ruler-horizontal"></i>
+            <h3 class="font-bold font-mono">IPC-2221 Trace Width</h3>
+        </div>
+        <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+            <div class="flex justify-between items-center">
+                <label class="w-32">Current (A)</label>
+                <input type="number" id="pcb-i" value="1" step="0.1" class="w-24 border border-themeBorder px-2 py-1 text-right" oninput="runPCBTrace()">
+            </div>
+            <div class="flex justify-between items-center">
+                <label class="w-32 text-xs" title="Max allowable temp rise">Temp Rise (Δ°C)</label>
+                <input type="number" id="pcb-dt" value="10" step="1" class="w-24 border border-themeBorder px-2 py-1 text-right" oninput="runPCBTrace()">
+            </div>
+            <div class="flex justify-between items-center">
+                <label class="w-32 text-xs">Cu Weight (oz)</label>
+                <input type="number" id="pcb-th" value="1" step="0.5" class="w-24 border border-themeBorder px-2 py-1 text-right" oninput="runPCBTrace()">
+            </div>
+
+            <div class="pt-3 mt-3 border-t border-themeBorder/20">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="font-bold text-themeText text-xs">Required Width (Ext)</label>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-center text-lg font-bold text-themeAccent">
+                    <div class="bg-themeBorder/5 border border-themeBorder/10 p-2" id="pcb-w-mil">11.8 mil</div>
+                    <div class="bg-themeBorder/5 border border-themeBorder/10 p-2" id="pcb-w-mm">0.30 mm</div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,58 @@
+<div id="tool-pv-yield-simulator" class="doc-container flex flex-col ">
+                  <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                      <div class="flex items-center gap-2"><i class="fa-solid fa-solar-panel"></i><h3 class="font-bold font-mono">PV Yield Simulator</h3></div>
+                      <span class="font-mono text-[10px] opacity-70">click map OR set location &bull; Adjust month & time</span>
+                  </div>
+                  <div class="p-4 font-mono text-sm flex flex-col flex-grow">
+                      <div class="flex flex-col md:flex-row gap-4 mb-4 flex-grow">
+                          <div class="flex-grow flex flex-col gap-2">
+                              <div class="flex gap-2 text-xs items-center">
+                                  <label>Lat: <input type="number" id="pv-lat" class="w-16 bg-transparent border-b border-themeBorder px-1" value="0"></label>
+                                  <label>Lng: <input type="number" id="pv-lng" class="w-16 bg-transparent border-b border-themeBorder px-1" value="0"></label>
+                                  <button onclick="updateSolarFromInput()" class="border border-themeBorder px-2 hover:bg-themeBorder hover:text-themeBg">SET</button>
+                              </div>
+                              <!-- The Canvas for Map -->
+                              <canvas id="solar-canvas" class="w-full h-48 flex-grow border border-themeBorder/30 cursor-crosshair opacity-80" width="800" height="400"></canvas>
+                          </div>
+                          <div class="w-full md:w-64 space-y-4">
+                              <div class="space-y-1">
+                                  <div class="flex justify-between text-xs text-themeMuted mb-1"><span>Month</span><span id="pv-month-val" class="font-bold text-themeAccent">Jun</span></div>
+                                  <div class="grid grid-cols-6 gap-1 text-[10px]" id="pv-month-buttons">
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(0)">Jan</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(1)">Feb</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(2)">Mar</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(3)">Apr</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(4)">May</button>
+                                      <button class="border border-themeBorder bg-themeAccent text-themeBg" onclick="setSolarMonth(5)">Jun</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(6)">Jul</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(7)">Aug</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(8)">Sep</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(9)">Oct</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(10)">Nov</button>
+                                      <button class="border border-themeBorder hover:bg-themeAccent hover:text-themeBg" onclick="setSolarMonth(11)">Dec</button>
+                                  </div>
+                              </div>
+                              <div class="space-y-1 pt-2 border-t border-themeBorder/20">
+                                  <div class="flex justify-between text-xs text-themeMuted"><span>Time (Solar)</span><span id="pv-time-val" class="font-bold text-themeAccent">12:00</span></div>
+                                  <input type="range" id="pv-time" min="0" max="24" step="0.5" value="12" class="w-full accent-themeAccent" oninput="updateSolarSim()">
+                              </div>
+                              <div class="pt-2 border-t border-themeBorder/20">
+                                  <div class="flex justify-between items-center text-xs text-themeMuted mb-1"><span>Current Yield</span><span id="pv-yield" class="text-xl font-bold text-themeAccent">0 W</span></div>
+                                  <div class="flex justify-between items-center text-[10px] text-themeMuted"><span>Optimum Tilt</span><span id="pv-tilt" class="font-bold text-themeText">0A</span></div>
+                                  <div class="flex justify-between items-center text-[10px] text-themeMuted mt-1"><span>Custom Tilt</span><div class="flex items-center gap-1"><input type="number" id="pv-custom-tilt" class="w-10 bg-transparent border-b border-themeBorder text-right" value="0"><button id="pv-link-tilt" onclick="toggleTiltLink()" class="text-themeAccent" title="Link to Optimum Tilt"><i class="fa-solid fa-link"></i></button></div></div>
+                                  <div class="flex justify-between items-center text-[10px] text-themeMuted mt-2"><span>Est. Daily Energy</span><span id="pv-daily" class="font-bold text-themeText">0 Wh</span></div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="border-t border-themeBorder/20 pt-4 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow">
+                          <div class="flex flex-col">
+                              <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-themeMuted">GENERATION vs TIME</span><label class="text-[10px] flex items-center gap-1 cursor-pointer hover:text-themeAccent"><input type="checkbox" id="pv-all-months" class="accent-themeAccent" onchange="updateSolarSim()"> Show All Months</label></div>
+                              <div class="relative w-full h-[250px] bg-themeContainer border border-themeBorder/30"><canvas id="pv-time-chart"></canvas></div>
+                          </div>
+                          <div class="flex flex-col">
+                              <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-themeMuted">MONTHLY ENERGY YIELD (kWh)</span><span class="text-[10px] text-themeAccent" id="pv-annual">Annual: 0 kWh</span></div>
+                              <div class="relative w-full h-[250px] bg-themeContainer border border-themeBorder/30"><canvas id="pv-hist-chart"></canvas></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>

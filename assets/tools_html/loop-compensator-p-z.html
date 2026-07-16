@@ -1,0 +1,37 @@
+<div id="tool-loop-compensator-p-z" class="doc-container flex flex-col">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <h3 class="font-bold font-mono">Loop Compensator (P/Z)</h3>
+                </div>
+                <div class="p-4 space-y-2 font-mono text-sm flex-grow">
+                    
+                      <div class="mb-4 w-full aspect-video bg-[#050505] flex items-center justify-center border border-themeBorder/30">
+                          <img id="comp-img-type2" src="/assets/images/comp_type2.png" class="max-h-full max-w-full object-contain" alt="Type II Compensator">
+                          <img id="comp-img-type3" src="/assets/images/comp_type3.png" class="max-h-full max-w-full object-contain hidden" alt="Type III Compensator">
+                      </div>
+                      <select id="comp-type" class="w-full border border-themeBorder px-2 py-1 mb-2 font-bold" onchange="runCompensator(); document.getElementById('comp-img-type2').classList.toggle('hidden', this.value==='type3'); document.getElementById('comp-img-type3').classList.toggle('hidden', this.value==='type2');">
+                        <option value="type2">Type II compensator</option>
+                        <option value="type3">Type III compensator</option>
+                    </select>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs"><label>R1 (k&Omega;)</label><input type="number" id="comp-r1" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()"></div>
+                            <div class="flex justify-between text-xs"><label>R2 (k&Omega;)</label><input type="number" id="comp-r2" value="22" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()"></div>
+                            <div class="flex justify-between text-xs opacity-50 transition-opacity" id="comp-r3-grp"><label>R3 (k&Omega;)</label><input type="number" id="comp-r3" value="1" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()" disabled></div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs"><label>c1 (nF)</label><input type="number" id="comp-c1" value="1" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()"></div>
+                            <div class="flex justify-between text-xs"><label>c2 (nF)</label><input type="number" id="comp-c2" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()"></div>
+                            <div class="flex justify-between text-xs opacity-50 transition-opacity" id="comp-c3-grp"><label>c3 (nF)</label><input type="number" id="comp-c3" value="2.2" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()" disabled></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-1 text-xs">
+                        <div class="flex justify-between"><span class="text-themeMuted">Zero 1 (Fz1)</span><span id="comp-fz1" class="font-bold text-themeAccent">0 hz</span></div>
+                        <div class="flex justify-between"><span class="text-themeMuted">Pole 1 (Fp1)</span><span id="comp-fp1" class="font-bold text-themeAccent">0 hz</span></div>
+                        <div class="flex justify-between opacity-50" id="comp-fz2-grp"><span class="text-themeMuted">Zero 2 (Fz2)</span><span id="comp-fz2" class="font-bold text-themeAccent">-- hz</span></div>
+                        <div class="flex justify-between opacity-50" id="comp-fp2-grp"><span class="text-themeMuted">Pole 2 (Fp2)</span><span id="comp-fp2" class="font-bold text-themeAccent">-- hz</span></div>
+                    </div>
+                </div>
+            </div>

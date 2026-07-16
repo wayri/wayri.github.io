@@ -1,0 +1,121 @@
+<div class="doc-container flex flex-col w-full">
+    <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="High Speed Design">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-tachometer-fast"></i><h3 class="font-bold font-mono">High Speed Design Guidelines</h3></div>
+    </div>
+    <div class="p-4 space-y-4 font-mono text-sm flex-grow bg-themeBg">
+        <div class="flex gap-2 pb-2 border-b border-themeBorder/20 text-xs">
+            <button class="bg-themeBorder/10 px-2 py-1 hover:text-themeAccent text-themeText" onclick="hsShow('crosstalk')">Crosstalk (3W Rule)</button>
+            <button class="bg-themeBorder/10 px-2 py-1 hover:text-themeAccent text-themeMuted" onclick="hsShow('length')">Length Matching</button>
+            <button class="bg-themeBorder/10 px-2 py-1 hover:text-themeAccent text-themeMuted" onclick="hsShow('vias')">Via Stub (Backdrilling)</button>
+        </div>
+
+        <div id="hs-crosstalk" class="hs-section">
+            <h4 class="font-bold text-themeAccent mb-2">Crosstalk & Spacing</h4>
+            <p class="text-xs text-themeMuted mb-2">To minimize crosstalk, maintain a spacing of at least 3W (where W is trace width) between adjacent parallel traces.</p>
+            <div class="flex justify-between items-center text-xs mb-1">
+                <label>Trace Width (W, mil)</label>
+                <input type="number" id="hs-w" value="5" class="w-16 border border-themeBorder px-1 text-right bg-transparent" oninput="runHS()">
+            </div>
+            <div class="flex justify-between items-center text-xs mt-4 pt-2 border-t border-themeBorder/20">
+                <span class="font-bold text-themeText">Minimum Spacing (3W)</span>
+                <span id="hs-3w" class="font-bold text-themeAccent">15 mil</span>
+            </div>
+            <div class="flex justify-between items-center text-xs">
+                <span class="font-bold text-themeText">Ideal Spacing (5W)</span>
+                <span id="hs-5w" class="font-bold text-themeAccent">25 mil</span>
+            </div>
+        </div>
+
+        <div id="hs-length" class="hs-section hidden">
+            <h4 class="font-bold text-themeAccent mb-2">Length Matching & Skew</h4>
+            <p class="text-xs text-themeMuted mb-2">Calculate allowable length mismatch based on timing skew requirements and propagation delay.</p>
+            <div class="flex justify-between items-center text-xs mb-1">
+                <label>Max Allowed Skew (ps)</label>
+                <input type="number" id="hs-skew" value="10" class="w-16 border border-themeBorder px-1 text-right bg-transparent" oninput="runHS()">
+            </div>
+            <div class="flex justify-between items-center text-xs mb-1">
+                <label>Dielectric Constant (Er)</label>
+                <input type="number" id="hs-er" value="4.4" class="w-16 border border-themeBorder px-1 text-right bg-transparent" oninput="runHS()">
+            </div>
+            <div class="flex justify-between items-center text-xs mt-4 pt-2 border-t border-themeBorder/20">
+                <span class="font-bold text-themeText">Prop. Delay (t_pd)</span>
+                <span id="hs-tpd" class="text-themeAccent">143 ps/in</span>
+            </div>
+            <div class="flex justify-between items-center text-xs">
+                <span class="font-bold text-themeText">Max Length Mismatch</span>
+                <span id="hs-len-mismatch" class="font-bold text-themeAccent">70 mil</span>
+            </div>
+        </div>
+
+        <div id="hs-vias" class="hs-section hidden">
+            <h4 class="font-bold text-themeAccent mb-2">Via Stub Resonance</h4>
+            <p class="text-xs text-themeMuted mb-2">Calculate the resonant frequency of an unused via stub (causes deep signal nulls).</p>
+            <div class="flex justify-between items-center text-xs mb-1">
+                <label>Stub Length (mil)</label>
+                <input type="number" id="hs-stub" value="40" class="w-16 border border-themeBorder px-1 text-right bg-transparent" oninput="runHS()">
+            </div>
+            <div class="flex justify-between items-center text-xs mb-1">
+                <label>Dielectric Constant (Er)</label>
+                <input type="number" id="hs-stub-er" value="4.4" class="w-16 border border-themeBorder px-1 text-right bg-transparent" oninput="runHS()">
+            </div>
+            <div class="flex justify-between items-center text-xs mt-4 pt-2 border-t border-themeBorder/20">
+                <span class="font-bold text-themeText">Resonant Frequency (f_null)</span>
+                <span id="hs-fnull" class="font-bold text-red-500">35.0 GHz</span>
+            </div>
+            <div class="text-[10px] text-themeMuted mt-1">If f_null is close to the signal's Nyquist frequency, backdrilling is required.</div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function hsShow(sectionId) {
+    document.querySelectorAll('.hs-section').forEach(el => el.classList.add('hidden'));
+    document.getElementById('hs-' + sectionId).classList.remove('hidden');
+    
+    // Update button styles
+    const buttons = document.querySelectorAll('#tool-high-speed-design button');
+    if(buttons.length > 0) {
+        buttons.forEach(b => {
+            b.classList.remove('text-themeText');
+            b.classList.add('text-themeMuted');
+        });
+        event.currentTarget.classList.remove('text-themeMuted');
+        event.currentTarget.classList.add('text-themeText');
+    }
+}
+
+function runHS() {
+    // Crosstalk
+    const w = parseFloat(document.getElementById('hs-w').value) || 0;
+    document.getElementById('hs-3w').innerText = (3 * w).toFixed(1) + ' mil';
+    document.getElementById('hs-5w').innerText = (5 * w).toFixed(1) + ' mil';
+
+    // Length
+    const skew = parseFloat(document.getElementById('hs-skew').value) || 0;
+    const er = parseFloat(document.getElementById('hs-er').value) || 1;
+    // t_pd (ps/in) = 84.72 * sqrt(Er)  (approx for stripline)
+    const tpd = 84.72 * Math.sqrt(er);
+    document.getElementById('hs-tpd').innerText = tpd.toFixed(1) + ' ps/in';
+    const mismatch = (skew / tpd) * 1000; // in mils
+    document.getElementById('hs-len-mismatch').innerText = mismatch.toFixed(1) + ' mil';
+
+    // Via Stub
+    const stub = parseFloat(document.getElementById('hs-stub').value) || 0;
+    const erStub = parseFloat(document.getElementById('hs-stub-er').value) || 1;
+    // v = c / sqrt(Er)
+    // stub is lambda/4 resonator. f = v / (4 * stub_length)
+    // stub_length in meters = stub * 2.54e-5
+    const c = 2.998e8;
+    const v = c / Math.sqrt(erStub);
+    const stubM = stub * 2.54e-5;
+    let fnull = 0;
+    if (stubM > 0) {
+        fnull = v / (4 * stubM);
+    }
+    const fnullGHz = fnull / 1e9;
+    document.getElementById('hs-fnull').innerText = fnullGHz.toFixed(1) + ' GHz';
+}
+
+setTimeout(runHS, 100);
+</script>

@@ -1,0 +1,201 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Motor Controller Designer">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-microchip"></i><h3 class="font-bold font-mono">Motor Controller Design</h3></div>
+    </div>
+    
+    <div class="flex flex-col md:flex-row flex-grow bg-themeBg font-mono text-sm overflow-hidden">
+        
+        <!-- Controls Panel -->
+        <div class="w-full md:w-80 border-r border-themeBorder bg-themeContainer flex flex-col overflow-y-auto">
+            <div class="p-4 space-y-4">
+                
+                <h4 class="font-bold text-themeAccent border-b border-themeBorder/30 pb-1">Motor Parameters</h4>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-1 block">Rs (&Omega;)</label>
+                        <input type="number" id="mc-rs" value="0.05" step="0.01" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runMotorController()">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-1 block">Ls (mH)</label>
+                        <input type="number" id="mc-ls" value="0.2" step="0.01" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runMotorController()">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-1 block">Pole Pairs (p)</label>
+                        <input type="number" id="mc-p" value="4" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runMotorController()">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-1 block">Flux (&psi;m, Wb)</label>
+                        <input type="number" id="mc-flux" value="0.01" step="0.001" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runMotorController()">
+                    </div>
+                </div>
+
+                <h4 class="font-bold text-themeAccent border-b border-themeBorder/30 pb-1 pt-4">Inverter Specs</h4>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-1 block">V_DC (V)</label>
+                        <input type="number" id="mc-vdc" value="48" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runMotorController()">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-1 block">I_RMS (A)</label>
+                        <input type="number" id="mc-irms" value="50" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runMotorController()">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-1 block">f_PWM (kHz)</label>
+                        <input type="number" id="mc-fpwm" value="20" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runMotorController()">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-1 block">Deadtime (us)</label>
+                        <input type="number" id="mc-dt" value="1.0" step="0.1" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runMotorController()">
+                    </div>
+                </div>
+                
+                <h4 class="font-bold text-themeAccent border-b border-themeBorder/30 pb-1 pt-4">MOSFET Specs</h4>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-1 block">Rds_on (m&Omega;)</label>
+                        <input type="number" id="mc-rdson" value="1.5" step="0.1" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runMotorController()">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-1 block">E_on+off (mJ)</label>
+                        <input type="number" id="mc-swloss" value="0.2" step="0.05" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runMotorController()">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- Results Area -->
+        <div class="flex-grow p-4 overflow-y-auto flex flex-col gap-4">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <!-- FOC Tuning -->
+                <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col space-y-3">
+                    <h4 class="font-bold text-themeAccent border-b border-themeBorder/30 pb-2">FOC Current Loop Tuning</h4>
+                    <p class="text-[10px] text-themeMuted">Calculated PI gains for zero-pole cancellation (bandwidth = f_PWM / 10).</p>
+                    
+                    <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                        <span class="text-themeMuted text-xs">Target Bandwidth (&omega;c)</span>
+                        <span id="mc-bw" class="font-bold text-themeText">-- rad/s</span>
+                    </div>
+                    <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                        <span class="text-themeMuted text-xs">Kp (Proportional Gain)</span>
+                        <span id="mc-kp" class="font-bold text-themeAccent">-- V/A</span>
+                    </div>
+                    <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                        <span class="text-themeMuted text-xs">Ki (Integral Gain)</span>
+                        <span id="mc-ki" class="font-bold text-themeAccent">-- V/(A&middot;s)</span>
+                    </div>
+                    
+                    <p class="text-[10px] text-themeMuted mt-2">Electrical Time Constant (Te = Ls/Rs): <span id="mc-te">--</span> ms</p>
+                </div>
+
+                <!-- Inverter Losses -->
+                <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col space-y-3">
+                    <h4 class="font-bold text-themeAccent border-b border-themeBorder/30 pb-2">Inverter Losses (per Switch)</h4>
+                    <p class="text-[10px] text-themeMuted">Estimated conduction and switching losses for thermal sizing.</p>
+                    
+                    <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                        <span class="text-themeMuted text-xs">Conduction Loss (P_cond)</span>
+                        <span id="mc-pcond" class="font-bold text-themeText">-- W</span>
+                    </div>
+                    <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                        <span class="text-themeMuted text-xs">Switching Loss (P_sw)</span>
+                        <span id="mc-psw" class="font-bold text-themeText">-- W</span>
+                    </div>
+                    <div class="flex justify-between font-bold border-b border-themeBorder/10 pb-1">
+                        <span class="text-themeAccent text-xs">Total Loss (per FET)</span>
+                        <span id="mc-ptot" class="text-themeAccent">-- W</span>
+                    </div>
+                    <div class="flex justify-between font-bold text-red-400">
+                        <span class="text-xs">Total Inverter Loss (6 FETs)</span>
+                        <span id="mc-pinv">-- W</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- FOC Block Diagram -->
+            <div class="bg-themeContainer border border-themeBorder flex-grow min-h-[200px] flex items-center justify-center p-4 relative">
+                <h4 class="text-xs font-bold text-themeMuted absolute top-2 left-2">FOC CURRENT LOOP</h4>
+                <div class="flex text-xs items-center gap-2 overflow-x-auto w-full justify-center">
+                    <div class="border border-themeBorder px-2 py-1 bg-themeBg">I*_dq</div>
+                    <div class="text-themeAccent"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="border border-themeAccent px-2 py-1 bg-themeAccent/10 text-center">PI Controller<br><span id="diag-kp" class="font-bold text-[10px]">Kp=--</span></div>
+                    <div class="text-themeAccent"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="border border-themeBorder px-2 py-1 bg-themeBg">V*_dq</div>
+                    <div class="text-themeAccent"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="border border-themeBorder px-2 py-1 bg-themeBg text-center">Inv / Motor<br><span id="diag-tf" class="text-[10px]">1/(sL+R)</span></div>
+                    <div class="text-themeAccent"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="border border-themeBorder px-2 py-1 bg-themeBg">I_dq</div>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+</div>
+
+<script>
+function runMotorController() {
+    // Motor
+    const rs = parseFloat(document.getElementById('mc-rs').value) || 0;
+    const ls_mH = parseFloat(document.getElementById('mc-ls').value) || 0;
+    const p = parseFloat(document.getElementById('mc-p').value) || 1;
+    const flux = parseFloat(document.getElementById('mc-flux').value) || 0;
+    
+    // Inverter
+    const vdc = parseFloat(document.getElementById('mc-vdc').value) || 0;
+    const irms = parseFloat(document.getElementById('mc-irms').value) || 0;
+    const fpwm_khz = parseFloat(document.getElementById('mc-fpwm').value) || 1;
+    
+    // FET
+    const rdson_m = parseFloat(document.getElementById('mc-rdson').value) || 0;
+    const swloss_mj = parseFloat(document.getElementById('mc-swloss').value) || 0;
+
+    const ls = ls_mH * 1e-3;
+    const fpwm = fpwm_khz * 1e3;
+    
+    // FOC Tuning (Zero-Pole Cancellation)
+    // BW = fpwm / 10 is typical for current loop
+    const bw_hz = fpwm / 10;
+    const bw_rad = bw_hz * 2 * Math.PI;
+    
+    const kp = bw_rad * ls;
+    const ki = bw_rad * rs;
+    const te_ms = (ls / rs) * 1000;
+
+    document.getElementById('mc-bw').innerText = Math.round(bw_rad);
+    document.getElementById('mc-kp').innerText = kp.toFixed(3);
+    document.getElementById('mc-ki').innerText = ki.toFixed(1);
+    document.getElementById('mc-te').innerText = te_ms.toFixed(2);
+    
+    document.getElementById('diag-kp').innerText = 'Kp=' + kp.toFixed(2);
+
+    // Inverter Losses
+    const rdson = rdson_m * 1e-3;
+    
+    // P_cond per switch = I_rms^2 * Rds_on (simplified half bridge duty avg)
+    // Actually for a 3-phase sine PWM, P_cond ~ I_rms^2 * Rds_on
+    // Because each switch conducts half the time, but I_rms is the total phase RMS.
+    // P_cond_total = 3 * I_rms^2 * Rds_on, per switch = (3/6) * I_rms^2 * Rds_on = 0.5 * I_rms^2 * Rds_on
+    const pcond = 0.5 * irms * irms * rdson;
+    
+    // P_sw per switch = E_sw * f_pwm
+    // E_sw is given in mJ at some current, we assume it scales linearly with current for simplicity,
+    // but here we just use the user input directly as the average switching energy.
+    // Note: In SPWM, switching energy varies sinusoidally. Average is usually (2/pi)*E_sw_peak
+    const e_sw = swloss_mj * 1e-3;
+    const psw = (2 / Math.PI) * e_sw * fpwm; // Approximation
+
+    const ptot = pcond + psw;
+    const pinv = ptot * 6;
+
+    document.getElementById('mc-pcond').innerText = pcond.toFixed(1);
+    document.getElementById('mc-psw').innerText = psw.toFixed(1);
+    document.getElementById('mc-ptot').innerText = ptot.toFixed(1);
+    document.getElementById('mc-pinv').innerText = pinv.toFixed(1);
+}
+
+setTimeout(runMotorController, 100);
+</script>

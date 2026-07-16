@@ -1,0 +1,30 @@
+<div id="tool-filter-designer" class="doc-container flex flex-col ">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-filter"></i><h3 class="font-bold font-mono">Filter Designer</h3></div>
+                </div>
+                <div class="p-4 space-y-2 font-mono text-sm flex-grow">
+                    <select id="filter-type" class="border border-themeBorder px-2 py-1 mb-2 font-bold w-full" onchange="setupFilterMode()">
+                        <option value="rc">RC (Low-Pass)</option>
+                        <option value="rl">RL (Low-Pass)</option>
+                        <option value="lc">LC (Low-Pass)</option>
+                        <option value="lcl">LCL (T-Filter)</option>
+                        <option value="clc">CLC (Pi-Filter)</option>
+                    </select>
+                    <div class="flex gap-2 mb-2 pb-2 border-b border-themeBorder/20 text-[10px] text-themeMuted font-bold" id="filter-solve-group">
+                        <!-- Solvers injected by JS -->
+                    </div>
+                    
+                    <div id="filter-inputs" class="flex flex-col gap-2">
+                        <!-- Inputs injected by JS -->
+                    </div>
+                    
+                    <div class="flex justify-between font-bold text-themeAccent mt-2 pt-2 border-t border-themeBorder/20">
+                        <label>Cutoff fc (Hz)</label>
+                        <input type="number" id="calc-filter-fc" value="1590" class="w-24 bg-transparent border-b border-themeBorder text-right" oninput="runSmartFilter()">
+                    </div>
+                    
+                    <div class="relative w-full flex-grow mt-4 border border-themeBorder/30 bg-themeContainer min-h-[200px]">
+                        <canvas id="filter-canvas"></canvas>
+                    </div>
+                </div>
+            </div>

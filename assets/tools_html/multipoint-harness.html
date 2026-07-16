@@ -1,0 +1,331 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Multipoint Harness Designer">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-network-wired"></i><h3 class="font-bold font-mono">Multipoint Harness Designer</h3></div>
+        <div class="flex gap-2">
+            <button class="px-2 py-1 bg-themeBg text-themeText text-xs font-bold hover:opacity-80" onclick="harnessAddNode()">+ Add Connector</button>
+            <button class="px-2 py-1 bg-themeAccent text-themeBg text-xs font-bold hover:opacity-80" onclick="harnessAddWireMode()">+ Route Wire / Bundle</button>
+            <button class="px-2 py-1 border border-themeBg text-themeBg text-xs font-bold hover:bg-themeBg hover:text-themeText" onclick="harnessGenerateTable()">Generate Table</button>
+        </div>
+    </div>
+    
+    <div class="flex flex-grow relative overflow-hidden bg-themeBg font-mono">
+        <!-- Canvas Area -->
+        <div class="flex-grow relative cursor-crosshair" id="harness-canvas-container">
+            <canvas id="harness-canvas" class="absolute inset-0 w-full h-full"></canvas>
+            
+            <div id="harness-tooltip" class="absolute hidden bg-themeContainer border border-themeAccent p-2 text-xs text-themeText z-10 pointer-events-none whitespace-nowrap shadow-lg"></div>
+        </div>
+        
+        <!-- Properties Panel -->
+        <div class="w-64 border-l border-themeBorder bg-themeContainer flex flex-col flex-shrink-0" id="harness-props">
+            <div class="p-2 border-b border-themeBorder font-bold text-xs bg-themeBorder/10">Properties</div>
+            <div class="p-3 space-y-3 flex-grow overflow-y-auto text-xs" id="harness-props-content">
+                <div class="text-themeMuted text-center mt-10">Select an item to view properties.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table Modal -->
+    <div id="harness-table-modal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-8">
+        <div class="bg-themeBg border border-themeBorder w-full max-w-4xl max-h-[80vh] flex flex-col">
+            <div class="p-3 border-b border-themeBorder flex justify-between items-center bg-themeBorder/10">
+                <h3 class="font-bold font-mono text-themeAccent">Harness Netlist / Wire List</h3>
+                <button class="hover:text-red-500" onclick="document.getElementById('harness-table-modal').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-4 overflow-auto flex-grow text-xs font-mono">
+                <table class="w-full text-left border-collapse" id="harness-table">
+                    <thead>
+                        <tr class="border-b-2 border-themeBorder">
+                            <th class="p-2">Wire ID</th><th class="p-2">From</th><th class="p-2">To</th>
+                            <th class="p-2">AWG</th><th class="p-2">Length (m)</th><th class="p-2">Current (A)</th>
+                            <th class="p-2">V-Drop (V)</th><th class="p-2">Type</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Lightweight Canvas Engine for Harness Designer
+const H = {
+    nodes: [],
+    wires: [],
+    selectedNode: null,
+    selectedWire: null,
+    draggingNode: null,
+    mode: 'select', // select, add_wire
+    wireStartNode: null,
+    offsetX: 0, offsetY: 0,
+    
+    // Standard AWG resistances (Ohms / 1000m) approx
+    awgRes: {
+        '4': 0.815, '6': 1.296, '8': 2.06, '10': 3.28, '12': 5.21,
+        '14': 8.28, '16': 13.17, '18': 20.9, '20': 33.3, '22': 53.0, '24': 84.2, '26': 133.9
+    }
+};
+
+function initHarness() {
+    const canvas = document.getElementById('harness-canvas');
+    const container = document.getElementById('harness-canvas-container');
+    const ctx = canvas.getContext('2d');
+    
+    function resize() {
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+        drawHarness();
+    }
+    window.addEventListener('resize', resize);
+    resize();
+    
+    // Add initial nodes
+    H.nodes.push({id: 'J1', x: 100, y: 150, pins: 4, name: 'Main Power'});
+    H.nodes.push({id: 'J2', x: 400, y: 100, pins: 2, name: 'Motor A'});
+    H.nodes.push({id: 'J3', x: 400, y: 200, pins: 2, name: 'Motor B'});
+    
+    // Initial wires
+    H.wires.push({id: 'W1', from: 'J1', to: 'J2', awg: '14', len: 1.5, i: 10, type: 'twisted'});
+    H.wires.push({id: 'W2', from: 'J1', to: 'J3', awg: '14', len: 1.5, i: 10, type: 'single'});
+    
+    // Mouse events
+    canvas.addEventListener('mousedown', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        
+        let clickedNode = H.nodes.find(n => Math.hypot(n.x - mx, n.y - my) < 30);
+        let clickedWire = null;
+        
+        if(!clickedNode) {
+            // Check wires (approximate distance to line segment)
+            clickedWire = H.wires.find(w => {
+                const n1 = H.nodes.find(n => n.id === w.from);
+                const n2 = H.nodes.find(n => n.id === w.to);
+                if(!n1 || !n2) return false;
+                const dist = pointToLineDistance(mx, my, n1.x, n1.y, n2.x, n2.y);
+                return dist < 10;
+            });
+        }
+        
+        if(H.mode === 'add_wire') {
+            if(clickedNode) {
+                if(!H.wireStartNode) {
+                    H.wireStartNode = clickedNode;
+                } else if(H.wireStartNode.id !== clickedNode.id) {
+                    H.wires.push({
+                        id: 'W' + (H.wires.length + 1),
+                        from: H.wireStartNode.id, to: clickedNode.id,
+                        awg: '18', len: 1.0, i: 1, type: 'single'
+                    });
+                    H.mode = 'select';
+                    H.wireStartNode = null;
+                }
+            }
+        } else {
+            H.selectedNode = clickedNode || null;
+            H.selectedWire = clickedWire || null;
+            if(H.selectedNode) {
+                H.draggingNode = H.selectedNode;
+                H.offsetX = mx - H.selectedNode.x;
+                H.offsetY = my - H.selectedNode.y;
+            }
+            showHarnessProps();
+        }
+        drawHarness();
+    });
+    
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        
+        if(H.draggingNode) {
+            H.draggingNode.x = mx - H.offsetX;
+            H.draggingNode.y = my - H.offsetY;
+            drawHarness();
+        } else if (H.mode === 'add_wire' && H.wireStartNode) {
+            drawHarness(mx, my);
+        }
+        
+        // Tooltip logic
+        let hoverNode = H.nodes.find(n => Math.hypot(n.x - mx, n.y - my) < 30);
+        const tt = document.getElementById('harness-tooltip');
+        if(hoverNode) {
+            tt.innerHTML = `<b>${hoverNode.id}</b>: ${hoverNode.name}<br>${hoverNode.pins} pins`;
+            tt.style.left = (mx + 15) + 'px';
+            tt.style.top = (my + 15) + 'px';
+            tt.classList.remove('hidden');
+        } else {
+            tt.classList.add('hidden');
+        }
+    });
+    
+    canvas.addEventListener('mouseup', () => { H.draggingNode = null; });
+    canvas.addEventListener('mouseleave', () => { H.draggingNode = null; });
+    
+    drawHarness();
+}
+
+function pointToLineDistance(x, y, x1, y1, x2, y2) {
+    const A = x - x1, B = y - y1, C = x2 - x1, D = y2 - y1;
+    const dot = A * C + B * D;
+    const len_sq = C * C + D * D;
+    let param = -1;
+    if (len_sq !== 0) param = dot / len_sq;
+    let xx, yy;
+    if (param < 0) { xx = x1; yy = y1; }
+    else if (param > 1) { xx = x2; yy = y2; }
+    else { xx = x1 + param * C; yy = y1 + param * D; }
+    return Math.hypot(x - xx, y - yy);
+}
+
+function drawHarness(mouseX = null, mouseY = null) {
+    const canvas = document.getElementById('harness-canvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw Grid
+    ctx.strokeStyle = '#222';
+    ctx.lineWidth = 1;
+    for(let i=0; i<canvas.width; i+=20) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,canvas.height); ctx.stroke(); }
+    for(let i=0; i<canvas.height; i+=20) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(canvas.width,i); ctx.stroke(); }
+    
+    // Draw Wires
+    H.wires.forEach(w => {
+        const n1 = H.nodes.find(n => n.id === w.from);
+        const n2 = H.nodes.find(n => n.id === w.to);
+        if(n1 && n2) {
+            ctx.beginPath();
+            ctx.moveTo(n1.x, n1.y);
+            ctx.lineTo(n2.x, n2.y);
+            ctx.lineWidth = w.type === 'bundled' ? 6 : (w.type === 'twisted' ? 4 : 2);
+            ctx.strokeStyle = H.selectedWire && H.selectedWire.id === w.id ? '#f59e0b' : (w.type === 'twisted' ? '#3b82f6' : '#9ca3af');
+            ctx.stroke();
+            
+            // Draw length text
+            const cx = (n1.x + n2.x)/2;
+            const cy = (n1.y + n2.y)/2;
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = '10px monospace';
+            ctx.fillText(`${w.len}m (${w.awg}AWG)`, cx, cy - 10);
+        }
+    });
+    
+    // Draw active drawing wire
+    if(H.mode === 'add_wire' && H.wireStartNode && mouseX !== null) {
+        ctx.beginPath();
+        ctx.moveTo(H.wireStartNode.x, H.wireStartNode.y);
+        ctx.lineTo(mouseX, mouseY);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#f59e0b';
+        ctx.setLineDash([5, 5]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+    }
+    
+    // Draw Nodes
+    H.nodes.forEach(n => {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, 20, 0, Math.PI*2);
+        ctx.fillStyle = H.selectedNode && H.selectedNode.id === n.id ? '#f59e0b' : '#1f2937';
+        ctx.fill();
+        ctx.strokeStyle = '#4b5563';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 12px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(n.id, n.x, n.y);
+    });
+}
+
+function harnessAddNode() {
+    H.mode = 'select';
+    H.nodes.push({
+        id: 'J' + (H.nodes.length + 1),
+        x: 100 + Math.random()*200, y: 100 + Math.random()*200,
+        pins: 2, name: 'New Connector'
+    });
+    drawHarness();
+}
+
+function harnessAddWireMode() {
+    H.mode = 'add_wire';
+    H.wireStartNode = null;
+    H.selectedNode = null;
+    H.selectedWire = null;
+    showHarnessProps();
+    drawHarness();
+}
+
+function showHarnessProps() {
+    const p = document.getElementById('harness-props-content');
+    if(H.selectedNode) {
+        const n = H.selectedNode;
+        p.innerHTML = `
+            <div class="mb-2"><label class="text-themeMuted">ID</label><input type="text" class="w-full bg-themeBg border border-themeBorder p-1" value="${n.id}" onchange="H.selectedNode.id=this.value; drawHarness()"></div>
+            <div class="mb-2"><label class="text-themeMuted">Name</label><input type="text" class="w-full bg-themeBg border border-themeBorder p-1" value="${n.name}" onchange="H.selectedNode.name=this.value;"></div>
+            <div class="mb-2"><label class="text-themeMuted">Pins</label><input type="number" class="w-full bg-themeBg border border-themeBorder p-1" value="${n.pins}" onchange="H.selectedNode.pins=this.value;"></div>
+            <button class="mt-4 w-full border border-red-500 text-red-500 hover:bg-red-500 hover:text-white p-1" onclick="H.nodes=H.nodes.filter(x=>x.id!=='${n.id}'); H.wires=H.wires.filter(w=>w.from!=='${n.id}'&&w.to!=='${n.id}'); H.selectedNode=null; showHarnessProps(); drawHarness();">Delete Node</button>
+        `;
+    } else if (H.selectedWire) {
+        const w = H.selectedWire;
+        const res = (H.awgRes[w.awg] || 0) * w.len / 1000;
+        const vdrop = res * w.i;
+        p.innerHTML = `
+            <div class="mb-2"><label class="text-themeMuted">ID</label><input type="text" class="w-full bg-themeBg border border-themeBorder p-1" value="${w.id}" onchange="H.selectedWire.id=this.value; drawHarness()"></div>
+            <div class="mb-2"><label class="text-themeMuted">AWG</label>
+                <select class="w-full bg-themeBg border border-themeBorder p-1" onchange="H.selectedWire.awg=this.value; showHarnessProps(); drawHarness()">
+                    ${Object.keys(H.awgRes).map(k => `<option value="${k}" ${w.awg===k?'selected':''}>${k} AWG</option>`).join('')}
+                </select>
+            </div>
+            <div class="mb-2"><label class="text-themeMuted">Length (m)</label><input type="number" class="w-full bg-themeBg border border-themeBorder p-1" value="${w.len}" step="0.1" onchange="H.selectedWire.len=parseFloat(this.value); showHarnessProps(); drawHarness()"></div>
+            <div class="mb-2"><label class="text-themeMuted">Current (A)</label><input type="number" class="w-full bg-themeBg border border-themeBorder p-1" value="${w.i}" step="0.5" onchange="H.selectedWire.i=parseFloat(this.value); showHarnessProps(); drawHarness()"></div>
+            <div class="mb-2"><label class="text-themeMuted">Type</label>
+                <select class="w-full bg-themeBg border border-themeBorder p-1" onchange="H.selectedWire.type=this.value; drawHarness()">
+                    <option value="single" ${w.type==='single'?'selected':''}>Single</option>
+                    <option value="twisted" ${w.type==='twisted'?'selected':''}>Twisted Pair</option>
+                    <option value="bundled" ${w.type==='bundled'?'selected':''}>Bundled</option>
+                </select>
+            </div>
+            <div class="mt-4 p-2 border border-themeBorder/50 bg-themeBg text-xs">
+                <div class="flex justify-between"><span>Resistance:</span> <span class="text-themeAccent">${res.toFixed(4)} &Omega;</span></div>
+                <div class="flex justify-between"><span>V-Drop:</span> <span class="text-red-400 font-bold">${vdrop.toFixed(3)} V</span></div>
+            </div>
+            <button class="mt-4 w-full border border-red-500 text-red-500 hover:bg-red-500 hover:text-white p-1" onclick="H.wires=H.wires.filter(x=>x.id!=='${w.id}'); H.selectedWire=null; showHarnessProps(); drawHarness();">Delete Wire</button>
+        `;
+    } else {
+        p.innerHTML = `<div class="text-themeMuted text-center mt-10">Select an item to view properties.</div>`;
+    }
+}
+
+function harnessGenerateTable() {
+    const tbody = document.querySelector('#harness-table tbody');
+    tbody.innerHTML = '';
+    H.wires.forEach(w => {
+        const res = (H.awgRes[w.awg] || 0) * w.len / 1000;
+        const vdrop = res * w.i;
+        tbody.innerHTML += `
+            <tr class="border-b border-themeBorder/20 hover:bg-themeBorder/10">
+                <td class="p-2 text-themeAccent font-bold">${w.id}</td>
+                <td class="p-2">${w.from}</td><td class="p-2">${w.to}</td>
+                <td class="p-2">${w.awg}</td><td class="p-2">${w.len}</td><td class="p-2">${w.i}</td>
+                <td class="p-2 ${vdrop > 0.5 ? 'text-red-500' : 'text-green-500'} font-bold">${vdrop.toFixed(3)}</td>
+                <td class="p-2">${w.type}</td>
+            </tr>
+        `;
+    });
+    document.getElementById('harness-table-modal').classList.remove('hidden');
+    document.getElementById('harness-table-modal').classList.add('flex');
+}
+
+// Initial Run
+setTimeout(() => {
+    initHarness();
+}, 100);
+</script>

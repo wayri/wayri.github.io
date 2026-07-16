@@ -1,0 +1,37 @@
+<div id="tool-smps-topology-ratio" class="doc-container flex flex-col">
+                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                    <i class="fa-solid fa-transformer"></i>
+                    <h3 class="font-bold font-mono">SMPS Topology & Ratio</h3>
+                </div>
+                <div class="p-4 space-y-3 font-mono text-sm flex-grow">
+                    <select id="smps-type" class="w-full border border-themeBorder px-2 py-1 mb-2 font-bold" onchange="setupSMPSMode()">
+                        <option value="buck">Buck (Step-Down)</option>
+                        <option value="boost">Boost (Step-Up)</option>
+                        <option value="buck-boost">Buck-Boost (Inverting)</option>
+                        <option value="flyback">Isolated Flyback</option>
+                        <option value="forward">Forward Converter</option>
+                        <option value="push-pull">Push-Pull</option>
+                        <option value="half-bridge">Half-Bridge</option>
+                        <option value="full-bridge">Full-Bridge</option>
+                    </select>
+
+                    <div class="flex gap-2 mb-2 pb-2 border-b border-themeBorder/20 text-[10px] text-themeMuted font-bold" id="smps-solve-group">
+                        <!-- Solvers injected by JS -->
+                    </div>
+                    
+                    <div id="smps-inputs" class="flex flex-col gap-2">
+                        <!-- Inputs injected by JS -->
+                    </div>
+
+                    <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-2 text-xs">
+                        <div class="flex justify-between border-b border-themeBorder/10 pb-1">
+                            <span class="text-themeMuted">Result</span>
+                            <span id="smps-result" class="font-bold text-themeAccent text-lg">-</span>
+                        </div>
+                        <div class="flex justify-between pb-1 opacity-50" id="smps-ratio-grp">
+                            <span class="text-themeMuted" title="Assuming typical Duty constraint for Vor">Req. Turns Ratio (Np/Ns)</span>
+                            <span id="smps-ratio" class="font-bold text-themeText">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
