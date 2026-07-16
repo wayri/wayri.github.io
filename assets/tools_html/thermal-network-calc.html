@@ -1,0 +1,379 @@
+<div class="doc-container flex flex-col w-full h-full min-h-[750px]">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Thermal Network Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-fire-flame-curved"></i><h3 class="font-bold font-mono">Thermal Network Calculator</h3></div>
+        <div class="flex items-center gap-3">
+            <span class="font-mono text-[10px] opacity-70">Series • Parallel • MPS-Style</span>
+            <button class="px-2 py-1 bg-themeAccent text-themeBg text-[10px] font-bold hover:opacity-80 rounded" onclick="thermalCalc()"><i class="fa-solid fa-play mr-1"></i>Calculate</button>
+        </div>
+    </div>
+
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto bg-themeBg">
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 h-full">
+
+            <!-- Left: Network Builder -->
+            <div class="flex flex-col gap-4">
+                <!-- Power & Ambient -->
+                <div class="bg-themeContainer border border-themeBorder/30 p-4 shadow-inner">
+                    <h4 class="text-[10px] font-bold text-themeAccent mb-3">POWER SOURCE & AMBIENT</h4>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <div class="text-[10px] text-themeMuted mb-1">Power Dissipation ($P_d$)</div>
+                            <div class="flex">
+                                <input type="number" id="th-pd" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-orange-400" value="10" step="0.1" oninput="thermalCalc()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">W</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-themeMuted mb-1">Ambient Temp ($T_a$)</div>
+                            <div class="flex">
+                                <input type="number" id="th-ta" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="25" step="5" oninput="thermalCalc()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">°C</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-themeMuted mb-1">Max Junction Temp ($T_{j,max}$)</div>
+                            <div class="flex">
+                                <input type="number" id="th-tjmax" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-red-400 font-bold" value="125" step="5">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">°C</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thermal Network Builder -->
+                <div class="bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex-grow">
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="text-[10px] font-bold text-themeAccent">THERMAL RESISTANCE NETWORK</h4>
+                        <div class="flex gap-2">
+                            <button onclick="thermalAddNode('series')" class="px-2 py-1 bg-themeBg border border-themeAccent text-themeAccent text-[9px] font-bold hover:bg-themeAccent hover:text-themeBg transition-colors rounded">+ Series</button>
+                            <button onclick="thermalAddNode('parallel')" class="px-2 py-1 bg-themeBg border border-blue-500/50 text-blue-400 text-[9px] font-bold hover:bg-blue-500 hover:text-white transition-colors rounded">+ Parallel</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Network visual (SVG) -->
+                    <div id="th-network-svg" class="mb-3 bg-themeBg border border-themeBorder/30 rounded p-2 min-h-[60px]">
+                        <svg id="th-svg" width="100%" height="60"></svg>
+                    </div>
+                    
+                    <!-- Node list -->
+                    <div id="th-nodes" class="space-y-2 max-h-64 overflow-y-auto">
+                        <!-- Populated by JS -->
+                    </div>
+                    
+                    <div class="mt-2 text-[9px] text-themeMuted">
+                        <span class="text-themeAccent font-bold">Legend:</span>
+                        Series = single path (e.g. Rθ junction-to-case).
+                        Parallel = two paths sharing the same nodes (e.g. heatsink + PCB pour).
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Results & Diagram -->
+            <div class="flex flex-col gap-4">
+                <!-- MPS-Style Thermal Chain -->
+                <div class="bg-themeContainer border border-themeBorder/30 p-4 shadow-inner">
+                    <h4 class="text-[10px] font-bold text-themeAccent mb-3">MPS-STYLE THERMAL CHAIN</h4>
+                    
+                    <!-- Fixed MPS shortcuts -->
+                    <div class="grid grid-cols-2 gap-2 text-[9px] mb-3">
+                        <button onclick="thermalLoadPreset('jc')" class="p-2 bg-themeBg border border-themeBorder hover:border-themeAccent text-themeMuted hover:text-themeAccent rounded text-left">
+                            <i class="fa-solid fa-microchip mr-1 text-themeAccent"></i><strong>Preset: J→C→S→A</strong><br>Junction→Case→Sink→Ambient
+                        </button>
+                        <button onclick="thermalLoadPreset('pcb')" class="p-2 bg-themeBg border border-themeBorder hover:border-blue-500 text-themeMuted hover:text-blue-400 rounded text-left">
+                            <i class="fa-solid fa-layer-group mr-1 text-blue-400"></i><strong>Preset: J→PCB→A</strong><br>Junction→PCB thermal via→Ambient
+                        </button>
+                        <button onclick="thermalLoadPreset('dualpath')" class="p-2 bg-themeBg border border-themeBorder hover:border-orange-500 text-themeMuted hover:text-orange-400 rounded text-left">
+                            <i class="fa-solid fa-arrows-split-up-and-left mr-1 text-orange-400"></i><strong>Preset: Dual Path</strong><br>Heatsink ∥ PCB pour (parallel)
+                        </button>
+                        <button onclick="thermalLoadPreset('module')" class="p-2 bg-themeBg border border-themeBorder hover:border-purple-500 text-themeMuted hover:text-purple-400 rounded text-left">
+                            <i class="fa-solid fa-server mr-1 text-purple-400"></i><strong>Preset: Power Module</strong><br>J→C→TIM→Baseplate→A
+                        </button>
+                    </div>
+                    
+                    <!-- Visual resistance chain (MPS-style) -->
+                    <div id="th-chain-visual" class="bg-themeBg border border-themeBorder/30 p-3 rounded overflow-x-auto">
+                        <div id="th-chain-boxes" class="flex items-center gap-0 min-w-max">
+                            <!-- Populated by thermalCalc() -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results Panel -->
+                <div class="bg-themeContainer border border-themeBorder/30 p-4 shadow-inner">
+                    <h4 class="text-[10px] font-bold text-themeAccent mb-3">TEMPERATURE RESULTS</h4>
+                    
+                    <div class="grid grid-cols-2 gap-3 mb-3">
+                        <div class="bg-themeBg border border-themeAccent/40 p-3 text-center">
+                            <div class="text-[9px] text-themeMuted mb-1">Junction Temp ($T_j$)</div>
+                            <div class="text-2xl font-bold text-themeText" id="th-tj">--°C</div>
+                        </div>
+                        <div class="bg-themeBg border border-themeBorder/50 p-3 text-center">
+                            <div class="text-[9px] text-themeMuted mb-1">Total $R_{\theta JA}$</div>
+                            <div class="text-2xl font-bold text-themeText" id="th-rja">--°C/W</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Per-node temperature drop table -->
+                    <div id="th-node-temps" class="space-y-1 text-xs">
+                        <!-- Populated by thermalCalc() -->
+                    </div>
+
+                    <!-- Status bar -->
+                    <div id="th-status" class="mt-3 p-2 rounded text-center text-[10px] font-bold hidden"></div>
+
+                    <!-- Thermal Derating Tip -->
+                    <div class="mt-3 p-2 bg-themeBg border border-themeBorder/30 rounded text-[9px] text-themeMuted">
+                        <strong class="text-themeAccent">MPS Derating Method:</strong>
+                        $T_j = T_a + P_d \times R_{\theta JA}$, where $R_{\theta JA} = \sum R_{series} + \frac{1}{\sum \frac{1}{R_{parallel}}}$.
+                        Derate at 2°C/W margin for reliability.
+                    </div>
+                </div>
+
+                <!-- Formula reference -->
+                <div class="bg-themeContainer border border-themeBorder/30 p-3 text-[9px] text-themeMuted">
+                    <strong class="text-themeAccent block mb-1">KEY FORMULAS</strong>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>Series: $R_{total} = \sum_{i} R_i$</div>
+                        <div>Parallel: $R_{total} = \frac{1}{\sum_i \frac{1}{R_i}}$</div>
+                        <div>$\Delta T = P \times R_\theta$</div>
+                        <div>$T_j = T_a + P_d \cdot R_{\theta JA}$</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theory -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('th-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Thermal Math & MPS Methodology</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="th-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>MPS (Monolithic Power Systems) defines thermal resistance</strong> as a chain of $R_\theta$ values that must be summed from junction to ambient. Each resistor represents a physical interface or material.</p>
+            <ul class="list-disc pl-4 space-y-1">
+                <li><strong>$R_{\theta JC}$</strong>: Junction-to-Case — from die to package surface. Datasheet value, cannot be reduced.</li>
+                <li><strong>$R_{\theta CS}$</strong>: Case-to-Sink — thermal interface material (TIM/grease). Minimize with good TIM and torque.</li>
+                <li><strong>$R_{\theta SA}$</strong>: Sink-to-Ambient — heatsink performance. Depends on fin count, airflow (LFM).</li>
+                <li><strong>$R_{\theta JA}$ (JEDEC)</strong>: Total junction-to-ambient. Used for single-layer PCB with no heatsink reference.</li>
+            </ul>
+            <p><strong>Parallel paths:</strong> When heat can flow via multiple routes (heatsink + PCB copper pour), combine as parallel resistances: $\frac{1}{R_{eff}} = \frac{1}{R_1} + \frac{1}{R_2}$.</p>
+            <p><strong>Derating:</strong> MPS recommends keeping $T_j \leq T_{j,max} - 20°C$ for full reliability. Design margin is $P_{derate} = \frac{T_{j,max} - T_a}{R_{\theta JA}}$.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    let thermalNodes = [];
+
+    const PRESETS = {
+        jc: [
+            { name: 'Rθ Junction-Case (Rθjc)', type: 'series', value: 3.2 },
+            { name: 'Rθ Case-Sink (TIM)', type: 'series', value: 0.5 },
+            { name: 'Rθ Sink-Ambient (Rθsa)', type: 'series', value: 8.0 }
+        ],
+        pcb: [
+            { name: 'Rθ Junction-PCB (Rθjb)', type: 'series', value: 10.0 },
+            { name: 'Rθ PCB-Ambient (copper + FR4)', type: 'series', value: 25.0 }
+        ],
+        dualpath: [
+            { name: 'Rθ Junction-Case (Rθjc)', type: 'series', value: 3.2 },
+            { name: 'Rθ Heatsink Path', type: 'parallel', value: 5.0 },
+            { name: 'Rθ PCB Pour Path', type: 'parallel', value: 20.0 }
+        ],
+        module: [
+            { name: 'Rθ Junction-Case', type: 'series', value: 1.5 },
+            { name: 'Rθ Case-TIM Interface', type: 'series', value: 0.3 },
+            { name: 'Rθ TIM-Baseplate', type: 'series', value: 0.2 },
+            { name: 'Rθ Baseplate-Ambient', type: 'series', value: 4.0 }
+        ]
+    };
+
+    window.thermalLoadPreset = function(key) {
+        thermalNodes = PRESETS[key].map((n, i) => ({ ...n, id: i }));
+        renderThermalNodes();
+        thermalCalc();
+    };
+
+    window.thermalAddNode = function(type) {
+        thermalNodes.push({
+            id: Date.now(),
+            name: type === 'series' ? 'Rθ Series (e.g. heatsink)' : 'Rθ Parallel path',
+            type: type,
+            value: type === 'series' ? 5.0 : 20.0
+        });
+        renderThermalNodes();
+        thermalCalc();
+    };
+
+    window.thermalRemoveNode = function(idx) {
+        thermalNodes.splice(idx, 1);
+        renderThermalNodes();
+        thermalCalc();
+    };
+
+    window.thermalUpdateNode = function(idx, field, val) {
+        if(field === 'value') thermalNodes[idx].value = parseFloat(val) || 0;
+        else thermalNodes[idx][field] = val;
+        thermalCalc();
+    };
+
+    function renderThermalNodes() {
+        const container = document.getElementById('th-nodes');
+        if(!container) return;
+        container.innerHTML = thermalNodes.map((n, i) => `
+            <div class="flex gap-2 items-center bg-themeBg border border-themeBorder p-2 rounded group">
+                <span class="text-[9px] font-bold px-1 rounded ${n.type === 'series' ? 'bg-themeAccent/20 text-themeAccent' : 'bg-blue-500/20 text-blue-400'}">${n.type === 'series' ? 'SER' : 'PAR'}</span>
+                <input type="text" value="${n.name}" class="flex-grow bg-transparent text-themeText text-[10px] outline-none border-b border-themeBorder/30 focus:border-themeAccent" onchange="thermalUpdateNode(${i}, 'name', this.value)">
+                <div class="flex items-center gap-1 flex-shrink-0">
+                    <input type="number" value="${n.value}" step="0.1" class="w-16 bg-themeBg border border-themeBorder p-0.5 text-themeText text-[10px] text-right" onchange="thermalUpdateNode(${i}, 'value', this.value)">
+                    <span class="text-[9px] text-themeMuted">°C/W</span>
+                </div>
+                <button onclick="thermalRemoveNode(${i})" class="text-red-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity text-xs">✕</button>
+            </div>
+        `).join('');
+    }
+
+    window.thermalCalc = function() {
+        const pd = parseFloat(document.getElementById('th-pd')?.value) || 0;
+        const ta = parseFloat(document.getElementById('th-ta')?.value) || 25;
+        const tjmax = parseFloat(document.getElementById('th-tjmax')?.value) || 125;
+
+        if(thermalNodes.length === 0) {
+            document.getElementById('th-tj').textContent = ta.toFixed(1) + '°C';
+            document.getElementById('th-rja').textContent = '0 °C/W';
+            document.getElementById('th-node-temps').innerHTML = '';
+            updateThermalChain([]);
+            return;
+        }
+
+        // Compute effective R: group parallel nodes together
+        // Strategy: consecutive parallel nodes form one group, series are standalone
+        const groups = [];
+        let i = 0;
+        while(i < thermalNodes.length) {
+            if(thermalNodes[i].type === 'parallel') {
+                const group = [];
+                while(i < thermalNodes.length && thermalNodes[i].type === 'parallel') {
+                    group.push(thermalNodes[i]);
+                    i++;
+                }
+                groups.push({ type: 'parallel', nodes: group });
+            } else {
+                groups.push({ type: 'series', nodes: [thermalNodes[i]] });
+                i++;
+            }
+        }
+
+        let totalR = 0;
+        const groupResults = groups.map(g => {
+            let rEff;
+            if(g.type === 'parallel') {
+                const sum = g.nodes.reduce((a, n) => a + (n.value > 0 ? 1/n.value : 0), 0);
+                rEff = sum > 0 ? 1/sum : Infinity;
+            } else {
+                rEff = g.nodes[0].value;
+            }
+            totalR += rEff;
+            return { ...g, rEff };
+        });
+
+        const tj = ta + pd * totalR;
+
+        // Output
+        document.getElementById('th-tj').textContent = tj.toFixed(2) + '°C';
+        document.getElementById('th-tj').className = 'text-2xl font-bold ' + (tj > tjmax ? 'text-red-400' : (tj > tjmax - 20 ? 'text-yellow-400' : 'text-green-400'));
+        document.getElementById('th-rja').textContent = totalR.toFixed(2) + ' °C/W';
+
+        // Per-group temperature breakdown
+        let tCurrent = ta;
+        const nodeHtml = groupResults.map((g, gi) => {
+            const dT = pd * g.rEff;
+            const tNext = tCurrent + dT;
+            const label = g.type === 'parallel'
+                ? g.nodes.map(n => n.name).join(' ∥ ')
+                : g.nodes[0].name;
+            const row = `
+                <div class="flex justify-between items-center py-0.5 border-b border-themeBorder/10">
+                    <span class="text-[9px] text-themeMuted truncate max-w-[60%]">${gi + 1}. ${label}</span>
+                    <span class="text-[9px] font-bold text-themeAccent">${tCurrent.toFixed(1)}°C → ${tNext.toFixed(1)}°C</span>
+                    <span class="text-[9px] text-themeMuted">ΔT=${dT.toFixed(2)}°C</span>
+                </div>`;
+            tCurrent = tNext;
+            return row;
+        });
+        document.getElementById('th-node-temps').innerHTML = nodeHtml.join('');
+
+        // Status badge
+        const status = document.getElementById('th-status');
+        status.classList.remove('hidden');
+        if(tj > tjmax) {
+            status.className = 'mt-3 p-2 rounded text-center text-[10px] font-bold bg-red-600/30 border border-red-500 text-red-300';
+            status.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i>THERMAL FAILURE — Tj (${tj.toFixed(1)}°C) exceeds Tj,max (${tjmax}°C)`;
+        } else if(tj > tjmax - 20) {
+            status.className = 'mt-3 p-2 rounded text-center text-[10px] font-bold bg-yellow-600/20 border border-yellow-500 text-yellow-300';
+            status.innerHTML = `<i class="fa-solid fa-exclamation-circle mr-1"></i>WARNING — Within 20°C of limit. Derate for reliability.`;
+        } else {
+            status.className = 'mt-3 p-2 rounded text-center text-[10px] font-bold bg-green-600/20 border border-green-500 text-green-300';
+            status.innerHTML = `<i class="fa-solid fa-check-circle mr-1"></i>THERMALLY SAFE — Tj (${tj.toFixed(1)}°C) is ${(tjmax - tj).toFixed(1)}°C below limit.`;
+        }
+
+        updateThermalChain(groupResults, ta, pd, tj);
+        if(typeof MathJax !== 'undefined') MathJax.typesetPromise([document.getElementById('th-status')]);
+    };
+
+    function updateThermalChain(groups, ta, pd, tj) {
+        const container = document.getElementById('th-chain-boxes');
+        if(!container) return;
+
+        if(!groups || groups.length === 0) {
+            container.innerHTML = '<div class="text-[9px] text-themeMuted p-2">Add nodes to build the thermal chain</div>';
+            return;
+        }
+
+        let tCurrent = ta || 25;
+        let html = `<div class="flex flex-col text-center p-2 min-w-[60px]">
+            <div class="w-10 h-10 rounded-full bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center mx-auto mb-1 text-[8px] font-bold text-blue-400">T_a</div>
+            <div class="text-[8px] text-blue-400 font-bold">${tCurrent.toFixed(0)}°C</div>
+        </div>`;
+
+        groups.forEach((g, gi) => {
+            const dT = (pd || 0) * g.rEff;
+            const tNext = tCurrent + dT;
+            const label = g.type === 'parallel' ? 'R∥' : 'R';
+            const isHot = dT > 10;
+            const borderColor = isHot ? '#ef4444' : '#D4AF37';
+            const textColor = isHot ? 'text-red-400' : 'text-themeAccent';
+
+            html += `
+                <div class="flex items-center">
+                    <div class="flex flex-col items-center">
+                        <div class="h-px w-6 bg-themeMuted/50"></div>
+                        <div class="text-[7px] text-themeMuted">${g.rEff.toFixed(1)}</div>
+                        <div class="text-[7px] text-themeMuted">°C/W</div>
+                    </div>
+                    <div class="border-2 rounded px-1.5 py-1 min-w-[50px] text-center" style="border-color:${borderColor}">
+                        <div class="text-[7px] font-bold ${textColor}">${label}${gi+1}</div>
+                        <div class="text-[7px] text-themeMuted mt-0.5">ΔT=${dT.toFixed(1)}</div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="h-px w-6 bg-themeMuted/50"></div>
+                    </div>
+                </div>
+                <div class="flex flex-col text-center p-1 min-w-[50px]">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-0.5 text-[7px] font-bold border-2" style="border-color:${tNext > 100 ? '#ef4444' : '#22c55e'};color:${tNext > 100 ? '#ef4444' : '#22c55e'};background:transparent">
+                        ${tNext.toFixed(0)}
+                    </div>
+                    <div class="text-[7px] text-themeMuted">°C</div>
+                </div>`;
+            tCurrent = tNext;
+        });
+
+        container.innerHTML = html;
+    }
+
+    // Load default preset on startup
+    setTimeout(() => {
+        thermalLoadPreset('jc');
+    }, 100);
+</script>

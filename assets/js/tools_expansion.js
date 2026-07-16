@@ -1361,7 +1361,7 @@ window.updateInductor = function() {
 // HEATSINK THERMAL SIMULATOR (3D)
 // ==========================================
 
-let hsScene, hsCamera, hsRenderer, hsGroup;
+let hsScene, hsCamera, hsRenderer, hsGroup, hsControls;
 let hsReqId = null;
 
 function initHeatsink3D() {
@@ -1379,6 +1379,12 @@ function initHeatsink3D() {
     hsRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     hsRenderer.setSize(width, height);
     container.appendChild(hsRenderer.domElement);
+
+    if (typeof THREE.OrbitControls !== 'undefined') {
+        hsControls = new THREE.OrbitControls(hsCamera, hsRenderer.domElement);
+        hsControls.enableDamping = true;
+        hsControls.dampingFactor = 0.05;
+    }
 
     const ro = new ResizeObserver(entries => {
         for (let entry of entries) {
@@ -1408,7 +1414,7 @@ function initHeatsink3D() {
 
     const animate = function () {
         hsReqId = requestAnimationFrame(animate);
-        hsGroup.rotation.y += 0.005;
+        if (hsControls) hsControls.update();
         hsRenderer.render(hsScene, hsCamera);
     };
     animate();
@@ -1440,6 +1446,8 @@ window.updateHeatsink = function() {
     } else {
         warningsEl.innerHTML = `<span class="text-green-400"><i class="fa-solid fa-check"></i> Geometry valid.</span>`;
     }
+    
+    const tjmax = parseFloat(document.getElementById('hs-tjmax')?.value) || 125;
 
     // Thermal Resistance Calculation Approximation
     // 1. Surface Area
@@ -1490,18 +1498,13 @@ window.updateHeatsink = function() {
             hsGroup.remove(hsGroup.children[0]); 
         }
 
-        // We will build the heatsink geometry and map colors
-        // Red = hot (base), Blue = cold (ambient)
-        // Map Tj (max) to red, Ta to blue
-        const maxTempColor = new THREE.Color(0xff3333); // Red
-        const minTempColor = new THREE.Color(0x3333ff); // Blue
+        // Red = hot, Blue = cold
+        const maxTempColor = new THREE.Color(0xff3333);
+        const minTempColor = new THREE.Color(0x3333ff);
         
         // Base geometry
         const baseGeo = new THREE.BoxGeometry(W, tb, L);
-        const baseMat = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, metalness: 0.5, roughness: 0.5 });
-        // Actually, let's just make it a single color based on Ts
-        // We'll interpolate between ambient (blue) and max danger (e.g. 150C)
-        const t_ratio = Math.min((Ts - ta) / (120 - ta), 1.0);
+        const t_ratio = Math.min((Ts - ta) / (tjmax - ta), 1.0);
         const baseColor = minTempColor.clone().lerp(maxTempColor, t_ratio);
         const coloredBaseMat = new THREE.MeshStandardMaterial({ color: baseColor, metalness: 0.5, roughness: 0.5 });
         
@@ -1511,36 +1514,134 @@ window.updateHeatsink = function() {
         
         // Fins geometry
         const finSpacing = (W - (N * tf)) / (N - 1);
+        const tipTemp = Ts - (Ts - ta)*(1 - fin_eff);
+        
         for (let i = 0; i < N; i++) {
-            const finGeo = new THREE.BoxGeometry(tf, hf, L);
-            // Fin tips are slightly cooler (fin efficiency)
-            const tipTemp = Ts - (Ts - ta)*(1 - fin_eff);
-            const tipRatio = Math.min((tipTemp - ta) / (120 - ta), 1.0);
-            const tipColor = minTempColor.clone().lerp(maxTempColor, tipRatio);
-            const finMat = new THREE.MeshStandardMaterial({ color: tipColor, metalness: 0.5, roughness: 0.5 });
+            const finGeo = new THREE.BoxGeometry(tf, hf, L, 1, 4, 1);
+            const count = finGeo.attributes.position.count;
+            finGeo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(count * 3), 3));
+            const pos = finGeo.attributes.position;
+            const col = finGeo.attributes.color;
+            for(let j=0; j<count; j++) {
+                const py = pos.getY(j);
+                const normY = (py + hf/2) / hf;
+                const vertTemp = Ts - (Ts - tipTemp)*normY;
+                const vRatio = Math.max(0, Math.min((vertTemp - ta) / (tjmax - ta), 1.0));
+                const vColor = minTempColor.clone().lerp(maxTempColor, vRatio);
+                col.setXYZ(j, vColor.r, vColor.g, vColor.b);
+            }
             
+            const finMat = new THREE.MeshStandardMaterial({ vertexColors: true, metalness: 0.5, roughness: 0.5 });
             const finMesh = new THREE.Mesh(finGeo, finMat);
             const x_pos = -W/2 + (tf/2) + i * (tf + finSpacing);
             finMesh.position.set(x_pos, tb + (hf/2), 0);
             hsGroup.add(finMesh);
         }
         
-        // Add a heat source component at the bottom
+        // Heat source (Die/Package)
         const compGeo = new THREE.BoxGeometry(W * 0.4, 2, L * 0.4);
-        const tjRatio = Math.min((Tj - ta) / (150 - ta), 1.0);
+        const tjRatio = Math.min((Tj - ta) / (tjmax - ta), 1.0);
         const tjColor = minTempColor.clone().lerp(new THREE.Color(0xff0000), tjRatio);
-        const compMat = new THREE.MeshStandardMaterial({ color: tjColor, metalness: 0.8, roughness: 0.2 });
+        // Make it look like a black chip with a glowing hot center dot on top
+        const compMat = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.8, roughness: 0.2 });
         const compMesh = new THREE.Mesh(compGeo, compMat);
         compMesh.position.y = -1;
         hsGroup.add(compMesh);
         
+        // Add a glowing "junction" indicator
+        const juncGeo = new THREE.PlaneGeometry(W * 0.2, L * 0.2);
+        const juncMat = new THREE.MeshBasicMaterial({ color: tjColor, side: THREE.DoubleSide });
+        const juncMesh = new THREE.Mesh(juncGeo, juncMat);
+        juncMesh.rotation.x = -Math.PI / 2;
+        juncMesh.position.y = 0.05; // just above package
+        compMesh.add(juncMesh);
+        
+        // Airflow Arrows
+        if (lfm > 0) {
+            const dir = new THREE.Vector3(0, 0, -1);
+            const arrowLen = L * 1.5;
+            for(let j=1; j<N; j+=Math.max(1, Math.floor(N/3))) {
+                const startPos = new THREE.Vector3(-W/2 + j*(tf + finSpacing) - finSpacing/2, tb + hf/2, L/2 + 10);
+                const arrow = new THREE.ArrowHelper(dir, startPos, arrowLen, 0x3b82f6, 10, 5);
+                hsGroup.add(arrow);
+            }
+        }
+        
         // Scale to fit camera nicely
         const scale = 80 / Math.max(W, L);
         hsGroup.scale.set(scale, scale, scale);
-        // Center it slightly
         hsGroup.position.y = -10;
     }
 }
+
+window.runHeatsinkSim = function() {
+    updateHeatsink();
+    const pd = parseFloat(document.getElementById('hs-pd').value) || 50;
+    const ta = parseFloat(document.getElementById('hs-ta').value) || 25;
+    const tjmax = parseFloat(document.getElementById('hs-tjmax').value) || 125;
+    const W = parseFloat(document.getElementById('hs-w').value) || 50;
+    const L = parseFloat(document.getElementById('hs-l').value) || 50;
+    const tb = parseFloat(document.getElementById('hs-tb').value) || 5;
+    const hf = parseFloat(document.getElementById('hs-hf').value) || 20;
+    const tf = parseFloat(document.getElementById('hs-tf').value) || 1.5;
+    const N = parseInt(document.getElementById('hs-n').value) || 10;
+    const lfm = parseFloat(document.getElementById('hs-lfm').value) || 0;
+    const rjc = parseFloat(document.getElementById('hs-rjc').value) || 0;
+    const rcs = parseFloat(document.getElementById('hs-rcs').value) || 0;
+    const k_mat = parseFloat(document.getElementById('hs-mat').value) || 205;
+    
+    // Function to calculate Rsa given parameters
+    const calcRsa = (nf, height, flow) => {
+        const bArea = W*L/100;
+        const fArea = (height*L*2)/100 + (tf*L)/100;
+        let h_c = 5; if(flow>0) h_c = 5 + 4*Math.sqrt(flow/100);
+        const m_fin = Math.sqrt((2*h_c)/(k_mat*(tf/1000)));
+        let f_eff = Math.tanh(m_fin*(height/1000))/(m_fin*(height/1000));
+        if(isNaN(f_eff) || f_eff>1) f_eff=1;
+        const a_eff = (bArea/10000) + (nf*(fArea/10000)*f_eff);
+        return 1/(h_c*a_eff);
+    };
+    
+    const currRsa = calcRsa(N, hf, lfm);
+    const currTj = ta + pd*(currRsa + rcs + rjc);
+    
+    const recPanel = document.getElementById('hs-recommendation-panel');
+    const recText = document.getElementById('hs-recommendation-text');
+    recPanel.classList.remove('hidden');
+    
+    let recommendations = [];
+    
+    if(currTj > tjmax) {
+        recommendations.push(`<span class="text-red-400 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Thermal Failure:</span> Current $T_j$ (${currTj.toFixed(1)}&deg;C) exceeds maximum of ${tjmax}&deg;C.`);
+        // Try increasing LFM
+        if(lfm < 100) {
+            let neededLFM = 100;
+            while(neededLFM < 1000 && (ta + pd*(calcRsa(N, hf, neededLFM) + rcs + rjc)) > tjmax) neededLFM += 50;
+            if(neededLFM < 1000) recommendations.push(`- <strong class="text-blue-400">Increase Airflow:</strong> Providing ${neededLFM} LFM solves the thermal issue.`);
+            else recommendations.push(`- Airflow alone cannot solve this. A larger heatsink or better TIM is required.`);
+        }
+        // Try increasing fins
+        const maxFins = Math.floor(W/tf) - 1;
+        if(N < maxFins) {
+            let optFins = N;
+            while(optFins < maxFins && (ta + pd*(calcRsa(optFins, hf, lfm) + rcs + rjc)) > tjmax) optFins++;
+            if(optFins < maxFins) recommendations.push(`- <strong class="text-themeAccent">Increase Fins:</strong> Adding fins to N=${optFins} solves the thermal issue.`);
+        }
+    } else {
+        recommendations.push(`<span class="text-green-400 font-bold"><i class="fa-solid fa-check-circle"></i> Thermally Stable:</span> Current $T_j$ is safely below ${tjmax}&deg;C.`);
+    }
+    
+    // Diminishing returns check for Fins
+    const maxFins = Math.floor(W/tf) - 1;
+    if(N < maxFins) {
+        const nextRsa = calcRsa(N+2, hf, lfm);
+        const improvement = ((currRsa - nextRsa)/currRsa)*100;
+        if(improvement < 5) recommendations.push(`- Adding more fins yields <strong>diminishing returns</strong> (<5% improvement). Current fin count is optimal or saturated for this width.`);
+    }
+    
+    recText.innerHTML = recommendations.join('<br><br>');
+    if(typeof MathJax !== 'undefined') MathJax.typesetPromise([recText]);
+};
 
 
 // ==========================================
@@ -1634,24 +1735,58 @@ window.updateMagCore = function() {
 // TRANSFORMER DESIGNER & EXTRACTOR
 // ==========================================
 
-let xfmrScene, xfmrCamera, xfmrRenderer, xfmrGroup;
+let xfmrScene, xfmrCamera, xfmrRenderer, xfmrGroup, xfmrControls;
 let xfmrReqId = null;
+let xfmrCoreMeshes = [];
+let xfmrFieldLines = [];
+let xfmrLeakageArrows = [];
+let xfmrRaycaster, xfmrMouse;
+let xfmrProbeObjects = [];
+
+const AWG_DIAMETER_MM = {
+    10:2.588, 12:2.053, 14:1.628, 16:1.291, 18:1.024, 20:0.812,
+    22:0.644, 24:0.511, 26:0.405, 28:0.321, 30:0.255, 32:0.202,
+    34:0.160, 36:0.127, 38:0.101, 40:0.0799
+};
 
 function initXfmr3D() {
     const container = document.getElementById('xfmr-3d-container');
     if (!container || xfmrRenderer) return;
 
-    let width = container.clientWidth || 300;
-    let height = container.clientHeight || 256;
+    let width = container.clientWidth || 400;
+    let height = container.clientHeight || 288;
 
     xfmrScene = new THREE.Scene();
     xfmrCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    xfmrCamera.position.set(40, 30, 50);
+    xfmrCamera.position.set(60, 45, 80);
     xfmrCamera.lookAt(0, 0, 0);
 
     xfmrRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     xfmrRenderer.setSize(width, height);
+    xfmrRenderer.shadowMap.enabled = true;
     container.appendChild(xfmrRenderer.domElement);
+
+    // OrbitControls
+    if (typeof THREE.OrbitControls !== 'undefined') {
+        xfmrControls = new THREE.OrbitControls(xfmrCamera, xfmrRenderer.domElement);
+        xfmrControls.enableDamping = true;
+        xfmrControls.dampingFactor = 0.07;
+        xfmrControls.target.set(0, 0, 0);
+    }
+
+    // Raycaster for probe
+    xfmrRaycaster = new THREE.Raycaster();
+    xfmrMouse = new THREE.Vector2();
+    xfmrRenderer.domElement.addEventListener('mousemove', (e) => {
+        const rect = xfmrRenderer.domElement.getBoundingClientRect();
+        xfmrMouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        xfmrMouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        xfmrDoProbe(e);
+    });
+    xfmrRenderer.domElement.addEventListener('mouseleave', () => {
+        const probe = document.getElementById('xfmr-probe-info');
+        if(probe) probe.classList.add('hidden');
+    });
 
     const ro = new ResizeObserver(entries => {
         for (let entry of entries) {
@@ -1664,70 +1799,229 @@ function initXfmr3D() {
     });
     ro.observe(container);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     xfmrScene.add(ambientLight);
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    dirLight.position.set(20, 50, 20);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    dirLight.position.set(30, 60, 40);
+    dirLight.castShadow = true;
     xfmrScene.add(dirLight);
+    const fillLight = new THREE.DirectionalLight(0x6699ff, 0.3);
+    fillLight.position.set(-30, -20, -30);
+    xfmrScene.add(fillLight);
 
     xfmrGroup = new THREE.Group();
     xfmrScene.add(xfmrGroup);
 
-    // Build a basic E-Core representation
-    const coreMat = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.3, roughness: 0.7 });
-    const wireMatPri = new THREE.MeshStandardMaterial({ color: 0xb87333, metalness: 0.8, roughness: 0.2 });
-    const wireMatSec = new THREE.MeshStandardMaterial({ color: 0xc4522f, metalness: 0.8, roughness: 0.2 });
-
-    // E-Core Back
-    const backGeo = new THREE.BoxGeometry(30, 20, 5);
-    const backMesh = new THREE.Mesh(backGeo, coreMat);
-    backMesh.position.z = -5;
-    xfmrGroup.add(backMesh);
-
-    // Legs
-    const outerLegGeo = new THREE.BoxGeometry(5, 20, 15);
-    const centerLegGeo = new THREE.BoxGeometry(10, 20, 15);
-    
-    const leftLeg = new THREE.Mesh(outerLegGeo, coreMat);
-    leftLeg.position.set(-12.5, 0, 5);
-    xfmrGroup.add(leftLeg);
-    
-    const rightLeg = new THREE.Mesh(outerLegGeo, coreMat);
-    rightLeg.position.set(12.5, 0, 5);
-    xfmrGroup.add(rightLeg);
-    
-    const centerLeg = new THREE.Mesh(centerLegGeo, coreMat);
-    centerLeg.position.set(0, 0, 5);
-    xfmrGroup.add(centerLeg);
-
-    // Primary Winding (Inner)
-    const priGeo = new THREE.CylinderGeometry(8, 8, 16, 16, 1, true);
-    const priMesh = new THREE.Mesh(priGeo, wireMatPri);
-    priMesh.rotation.x = Math.PI / 2;
-    priMesh.position.z = 5;
-    priMesh.scale.set(1, 1, 1.2);
-    xfmrGroup.add(priMesh);
-
-    // Secondary Winding (Outer)
-    const secGeo = new THREE.CylinderGeometry(10, 10, 14, 16, 1, true);
-    const secMesh = new THREE.Mesh(secGeo, wireMatSec);
-    secMesh.rotation.x = Math.PI / 2;
-    secMesh.position.z = 5;
-    secMesh.scale.set(1, 1, 1.3);
-    xfmrGroup.add(secMesh);
-
-    // Grid helper
-    const gridHelper = new THREE.GridHelper(100, 10, 0x444444, 0x222222);
-    gridHelper.position.y = -15;
+    const gridHelper = new THREE.GridHelper(120, 12, 0x333333, 0x1a1a1a);
+    gridHelper.position.y = -20;
     xfmrScene.add(gridHelper);
 
-    const animate = function () {
+    buildXfmr3D();
+
+    const animate = () => {
         xfmrReqId = requestAnimationFrame(animate);
-        xfmrGroup.rotation.y += 0.005;
+        if (xfmrControls) xfmrControls.update();
         xfmrRenderer.render(xfmrScene, xfmrCamera);
     };
     animate();
 }
+
+function xfmrDoProbe(e) {
+    if (!xfmrRaycaster || !xfmrProbeObjects.length) return;
+    xfmrRaycaster.setFromCamera(xfmrMouse, xfmrCamera);
+    const hits = xfmrRaycaster.intersectObjects(xfmrProbeObjects, false);
+    const probe = document.getElementById('xfmr-probe-info');
+    if(!probe) return;
+    if (hits.length > 0) {
+        const obj = hits[0].object;
+        const info = obj.userData.probeInfo || '';
+        probe.textContent = info;
+        probe.classList.remove('hidden');
+    } else {
+        probe.classList.add('hidden');
+    }
+}
+
+function xfmrClearGroup() {
+    if(!xfmrGroup) return;
+    while(xfmrGroup.children.length > 0) {
+        const c = xfmrGroup.children[0];
+        if(c.geometry) c.geometry.dispose();
+        if(c.material) c.material.dispose();
+        xfmrGroup.remove(c);
+    }
+    xfmrProbeObjects = [];
+    xfmrFieldLines = [];
+    xfmrLeakageArrows = [];
+}
+
+window.buildXfmr3D = function(bRatio) {
+    if(!xfmrGroup) return;
+    xfmrClearGroup();
+    const shape = (typeof xfmrCoreShape !== 'undefined') ? xfmrCoreShape : 'EE';
+    const showField = (typeof xfmrShowField !== 'undefined') ? xfmrShowField : false;
+    const showLeakage = (typeof xfmrShowLeakage !== 'undefined') ? xfmrShowLeakage : false;
+    const showSat = (typeof xfmrShowSaturation !== 'undefined') ? xfmrShowSaturation : false;
+    const satRatio = bRatio !== undefined ? bRatio : 0.7;
+
+    // Color core based on saturation
+    const coreBaseColor = showSat
+        ? new THREE.Color().lerpColors(new THREE.Color(0x1a1a2e), new THREE.Color(0xff2200), Math.min(satRatio, 1.0))
+        : new THREE.Color(0x1c1c2e);
+    
+    const coreMat = new THREE.MeshStandardMaterial({ color: coreBaseColor, metalness: 0.6, roughness: 0.5 });
+    const priMat = new THREE.MeshStandardMaterial({ color: 0xb87333, metalness: 0.8, roughness: 0.2 }); // copper
+    const secMat = new THREE.MeshStandardMaterial({ color: 0xc4a052, metalness: 0.7, roughness: 0.3 }); // gold
+    const leakMat = new THREE.MeshBasicMaterial({ color: 0xffaa00, transparent: true, opacity: 0.6, side: THREE.DoubleSide });
+
+    const addMesh = (geo, mat, pos, rot, label) => {
+        const m = new THREE.Mesh(geo, mat);
+        if(pos) m.position.set(...pos);
+        if(rot) m.rotation.set(...rot);
+        m.castShadow = true;
+        if(label) {
+            m.userData.probeInfo = label;
+            xfmrProbeObjects.push(m);
+        }
+        xfmrGroup.add(m);
+        return m;
+    };
+
+    if(shape === 'EE' || shape === 'EI') {
+        // E Core: back plate + 3 legs
+        addMesh(new THREE.BoxGeometry(40, 25, 6), coreMat, [0,0,-8], null, 'Core Back Yoke — E' + shape);
+        addMesh(new THREE.BoxGeometry(6, 25, 20), coreMat, [-17,0,2], null, 'Outer Leg (Left)');
+        addMesh(new THREE.BoxGeometry(6, 25, 20), coreMat, [17,0,2], null, 'Outer Leg (Right)');
+        addMesh(new THREE.BoxGeometry(10, 25, 20), coreMat, [0,0,2], null, 'Center Leg (Primary flux path)');
+        // I Core (mirror) or E mirror
+        if(shape === 'EI') {
+            addMesh(new THREE.BoxGeometry(40, 25, 6), coreMat, [0,0,22], null, 'I Core — return plate');
+        } else {
+            // Mirror E
+            addMesh(new THREE.BoxGeometry(40, 25, 6), coreMat, [0,0,22], null, 'E Core (back) — mirrored half');
+            addMesh(new THREE.BoxGeometry(6, 25, 20), coreMat, [-17,0,12], null, 'Outer Leg (Left) — mirror');
+            addMesh(new THREE.BoxGeometry(6, 25, 20), coreMat, [17,0,12], null, 'Outer Leg (Right) — mirror');
+            addMesh(new THREE.BoxGeometry(10, 25, 20), coreMat, [0,0,12], null, 'Center Leg — mirror');
+        }
+        // Primary winding — inner
+        const priGeo = new THREE.TorusGeometry(6, 2.5, 8, 24);
+        const priMesh = addMesh(priGeo, priMat, [0,0,7], [Math.PI/2,0,0], 'Primary Winding — copper (inner layer)');
+        // Secondary winding — outer
+        const secGeo = new THREE.TorusGeometry(9, 2, 8, 24);
+        addMesh(secGeo, secMat, [0,0,7], [Math.PI/2,0,0], 'Secondary Winding — gold (outer layer)');
+
+    } else if(shape === 'Toroid') {
+        // Toroid core
+        const toroidCore = new THREE.TorusGeometry(18, 6, 16, 32);
+        addMesh(toroidCore, coreMat, [0,0,0], [Math.PI/2,0,0], 'Toroid Core — closed flux path, zero leakage');
+        // Windings as smaller toroids
+        for(let i=0; i<8; i++) {
+            const angle = (i/8) * Math.PI * 2;
+            const r = 18;
+            const wx = Math.cos(angle) * r;
+            const wz = Math.sin(angle) * r;
+            const wGeo = new THREE.TorusGeometry(3.5, 0.8, 6, 12);
+            const wMat = (i < 4) ? priMat.clone() : secMat.clone();
+            const wMesh = new THREE.Mesh(wGeo, wMat);
+            wMesh.position.set(wx, 0, wz);
+            wMesh.lookAt(new THREE.Vector3(0,0,0));
+            wMesh.rotateY(Math.PI/2);
+            wMesh.userData.probeInfo = (i < 4 ? 'Primary' : 'Secondary') + ' turn ' + (i+1);
+            xfmrProbeObjects.push(wMesh);
+            xfmrGroup.add(wMesh);
+        }
+
+    } else if(shape === 'Pot') {
+        // Pot core — cylindrical outer, inner post
+        const outerGeo = new THREE.CylinderGeometry(20, 20, 15, 32, 1, false);
+        addMesh(outerGeo, coreMat, [0,0,0], null, 'Pot Core Outer Shell');
+        const innerCutGeo = new THREE.CylinderGeometry(14, 14, 15, 32, 1, false);
+        const innerCut = new THREE.Mesh(innerCutGeo, new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }));
+        innerCut.position.set(0,0,0);
+        xfmrGroup.add(innerCut);
+        addMesh(new THREE.CylinderGeometry(5, 5, 15, 20), coreMat, [0,0,0], null, 'Pot Core Center Post (flux path)');
+        // Toroidal winding in gap
+        const wGeo = new THREE.TorusGeometry(9.5, 2, 8, 24);
+        addMesh(wGeo, priMat, [0,0,0], null, 'Primary Winding');
+        const wGeo2 = new THREE.TorusGeometry(9.5, 1.2, 8, 24);
+        const wOffset = new THREE.Mesh(wGeo2, secMat);
+        wOffset.position.set(0,3.5,0);
+        wOffset.userData.probeInfo = 'Secondary Winding';
+        xfmrProbeObjects.push(wOffset);
+        xfmrGroup.add(wOffset);
+
+    } else if(shape === 'UI') {
+        // U + I core
+        addMesh(new THREE.BoxGeometry(6, 30, 6), coreMat, [-14,0,0], null, 'U Core Left Leg');
+        addMesh(new THREE.BoxGeometry(6, 30, 6), coreMat, [14,0,0], null, 'U Core Right Leg');
+        addMesh(new THREE.BoxGeometry(34, 6, 6), coreMat, [0,-12,0], null, 'U Core Bottom Yoke');
+        addMesh(new THREE.BoxGeometry(34, 6, 6), coreMat, [0,12,0], null, 'I Core Top Plate');
+        // Winding on legs
+        const wGeo = new THREE.TorusGeometry(5, 2, 8, 16);
+        addMesh(wGeo, priMat, [-14,0,0], [0,0,Math.PI/2], 'Primary Winding (left leg)');
+        addMesh(wGeo.clone(), secMat, [14,0,0], [0,0,Math.PI/2], 'Secondary Winding (right leg)');
+
+    } else if(shape === 'RM') {
+        // RM core — rectangular base with round center post
+        addMesh(new THREE.BoxGeometry(30, 5, 30), coreMat, [0,-8,0], null, 'RM Base Plate');
+        addMesh(new THREE.BoxGeometry(30, 5, 30), coreMat, [0,8,0], null, 'RM Top Plate');
+        addMesh(new THREE.CylinderGeometry(7, 7, 16, 20), coreMat, [0,0,0], null, 'RM Center Post');
+        // Outer pillars
+        addMesh(new THREE.BoxGeometry(4, 16, 4), coreMat, [-12,0,-12], null, 'RM Corner Post');
+        addMesh(new THREE.BoxGeometry(4, 16, 4), coreMat, [12,0,-12], null, 'RM Corner Post');
+        addMesh(new THREE.BoxGeometry(4, 16, 4), coreMat, [-12,0,12], null, 'RM Corner Post');
+        addMesh(new THREE.BoxGeometry(4, 16, 4), coreMat, [12,0,12], null, 'RM Corner Post');
+        // Windings
+        const wGeo = new THREE.TorusGeometry(9, 2, 8, 24);
+        addMesh(wGeo, priMat, [0,-2,0], null, 'Primary Winding');
+        addMesh(wGeo.clone(), secMat, [0,2,0], null, 'Secondary Winding');
+    }
+
+    // --- Magnetic Field Lines (simplified toroidal arcs through core) ---
+    if(showField) {
+        const fieldColor = new THREE.Color(0x00bfff);
+        const fieldMat = new THREE.LineBasicMaterial({ color: fieldColor, transparent: true, opacity: 0.7 });
+        for(let j=0; j<6; j++) {
+            const pts = [];
+            const offset = (j - 2.5) * 3;
+            for(let t=0; t<=64; t++) {
+                const angle = (t/64) * Math.PI * 2;
+                const rx = 12 + offset * 0.3;
+                const ry = 10;
+                pts.push(new THREE.Vector3(
+                    Math.cos(angle) * rx,
+                    Math.sin(angle) * ry,
+                    offset
+                ));
+            }
+            const geo = new THREE.BufferGeometry().setFromPoints(pts);
+            const line = new THREE.Line(geo, fieldMat.clone());
+            xfmrGroup.add(line);
+            xfmrFieldLines.push(line);
+        }
+        // Arrow to show direction
+        const arrowDir = new THREE.Vector3(0, 1, 0);
+        const arrowOrigin = new THREE.Vector3(0, -10, 0);
+        const arrow = new THREE.ArrowHelper(arrowDir, arrowOrigin, 8, 0x00bfff, 3, 2);
+        xfmrGroup.add(arrow);
+    }
+
+    // --- Leakage Field Visualization ---
+    if(showLeakage) {
+        // Show fringing flux as disk planes between primary and secondary
+        const leakGeo = new THREE.PlaneGeometry(8, 20, 1, 4);
+        for(let lk=-1; lk<=1; lk+=2) {
+            const lkMesh = new THREE.Mesh(leakGeo, leakMat);
+            lkMesh.position.set(lk * 7.5, 0, 7);
+            lkMesh.rotation.y = Math.PI / 2;
+            lkMesh.userData.probeInfo = 'Leakage flux region — flux not fully coupled between windings';
+            xfmrProbeObjects.push(lkMesh);
+            xfmrGroup.add(lkMesh);
+        }
+    }
+
+    xfmrGroup.position.y = 5;
+};
 
 window.updateXfmrUI = function() {
     const mode = document.getElementById('xfmr-mode').value;
@@ -1743,11 +2037,10 @@ window.updateXfmrUI = function() {
         document.getElementById('xfmr-res-extract').classList.add('hidden');
     }
     updateXfmr();
-}
+};
 
 window.updateXfmr = function() {
     if (!document.getElementById('xfmr-mode')) return;
-
     const mode = document.getElementById('xfmr-mode').value;
 
     if (mode === 'design') {
@@ -1755,70 +2048,144 @@ window.updateXfmr = function() {
         const vs = parseFloat(document.getElementById('xfmr-vs').value) || 24;
         const s = parseFloat(document.getElementById('xfmr-s').value) || 100;
         const f = parseFloat(document.getElementById('xfmr-f').value) || 50;
-        
-        const ae = parseFloat(document.getElementById('xfmr-ae').value) || 12; // cm^2
+        const ae = parseFloat(document.getElementById('xfmr-ae').value) || 12;
         const bmax = parseFloat(document.getElementById('xfmr-bmax').value) || 1.2;
-        const aw = parseFloat(document.getElementById('xfmr-aw').value) || 15; // cm^2
+        const aw = parseFloat(document.getElementById('xfmr-aw').value) || 15;
         const kw = parseFloat(document.getElementById('xfmr-kw').value) || 0.4;
-        
-        // Vrms = 4.44 * f * N * Bmax * Ae
-        // Ae needs to be in m^2 for standard SI, but let's do it cleanly:
+        const lg_mm = parseFloat(document.getElementById('xfmr-lg').value) || 0;
+        const awg = parseInt(document.getElementById('xfmr-awg')?.value) || 24;
+        const bobbinH = parseFloat(document.getElementById('xfmr-bh')?.value) || 30;
+        const ta = parseFloat(document.getElementById('xfmr-ta')?.value) || 25;
+        const rca = parseFloat(document.getElementById('xfmr-rca')?.value) || 15;
+        const rwc = parseFloat(document.getElementById('xfmr-rwc')?.value) || 5;
+        const twMax = parseFloat(document.getElementById('xfmr-twmax')?.value) || 130;
+
         const ae_m2 = ae / 10000;
-        
-        // Volts per turn
         const vpt = 4.44 * f * bmax * ae_m2;
-        
-        const np = Math.round(vp / vpt);
-        const ns = Math.round(vs / vpt * 1.05); // 5% regulation margin
-
+        const np = Math.max(1, Math.round(vp / vpt));
+        const ns = Math.max(1, Math.round((vs / vpt) * 1.05));
         const ip = s / vp;
-        const is = s / vs;
+        const is_a = s / vs;
 
-        // Area Product Ap = S / (4.44 * f * Bmax * kw * J)
-        // Assume J = 3 A/mm^2 = 300 A/cm^2
-        const J_cm2 = 300; 
-        const required_ap = s / (4.44 * f * bmax * kw * J_cm2); // cm^4
+        // Winding fit
+        const wireDia_mm = AWG_DIAMETER_MM[awg] || 0.511;
+        const wireDia_cm = wireDia_mm / 10;
+        const wireArea_cm2 = Math.PI * (wireDia_cm/2) ** 2;
+        const totalTurns = np + ns;
+        const totalWireArea = totalTurns * wireArea_cm2;
+        const usableWindow = aw * kw;
+        const windowFill = (totalWireArea / usableWindow) * 100;
+        const turnsPerLayer = Math.floor(bobbinH / wireDia_mm);
+        const layers = turnsPerLayer > 0 ? Math.ceil(totalTurns / turnsPerLayer) : 99;
+        const windingThick_mm = layers * wireDia_mm;
+        const fits = windowFill <= 100;
+
+        // Area Product check
+        const J_cm2 = 300;
+        const required_ap = s / (4.44 * f * bmax * kw * J_cm2);
         const actual_ap = ae * aw;
 
-        // Air Gap & Inductance
-        const lg_mm = parseFloat(document.getElementById('xfmr-lg').value) || 0;
-        let lp_mH = 0;
-        if(np > 0) {
-            const mu0 = 4 * Math.PI * 1e-7;
-            const le_m = Math.sqrt(ae_m2) * 4; // Very rough approximation for magnetic path length
-            const mu_r = 2500; // typical ferrite
-            const lg_m = lg_mm / 1000;
-            const reluctance = (lg_m > 0) ? (lg_m / (mu0 * ae_m2) + le_m / (mu0 * mu_r * ae_m2)) : (le_m / (mu0 * mu_r * ae_m2));
-            const lp_H = (np * np) / reluctance;
-            lp_mH = lp_H * 1000;
-        }
+        // Inductance
+        const mu0 = 4 * Math.PI * 1e-7;
+        const le_m = Math.sqrt(ae_m2) * 4;
+        const mu_r = 2500;
+        const lg_m = lg_mm / 1000;
+        const reluctance = lg_m > 0
+            ? (lg_m / (mu0 * ae_m2) + le_m / (mu0 * mu_r * ae_m2))
+            : (le_m / (mu0 * mu_r * ae_m2));
+        const lp_mH = ((np * np) / reluctance) * 1000;
 
-        document.getElementById('xfmr-out-np').innerText = isNaN(np) || !isFinite(np) ? 0 : np;
-        document.getElementById('xfmr-out-ns').innerText = isNaN(ns) || !isFinite(ns) ? 0 : ns;
-        document.getElementById('xfmr-out-ip').innerText = ip.toFixed(2) + " A";
-        document.getElementById('xfmr-out-is').innerText = is.toFixed(2) + " A";
+        // Saturation check — B_op = Vp / (4.44 * f * Np * Ae)
+        const b_op = vp / (4.44 * f * np * ae_m2);
+        const satRatio = b_op / bmax;
+
+        // Thermal
+        const rho_cu = 1.72e-8; // Ohm·m
+        const wireDia_m = wireDia_mm / 1000;
+        const wireArea_m2 = Math.PI * (wireDia_m/2) ** 2;
+        const meanTurnLen_m = 2 * Math.PI * 0.01; // ~1cm radius approx
+        const Rp = rho_cu * (np * meanTurnLen_m) / wireArea_m2;
+        const Rs = rho_cu * (ns * meanTurnLen_m) / wireArea_m2;
+        const P_cu = ip*ip*Rp + is_a*is_a*Rs;
+        const P_cu_total = isFinite(P_cu) ? P_cu : 0;
+        const Tc = ta + P_cu_total * rca;
+        const Tw = Tc + P_cu_total * rwc;
+        const thermOk = Tw <= twMax;
+
+        // Update outputs
+        document.getElementById('xfmr-out-np').innerText = isNaN(np) ? 0 : np;
+        document.getElementById('xfmr-out-ns').innerText = isNaN(ns) ? 0 : ns;
+        document.getElementById('xfmr-out-ip').innerText = ip.toFixed(2) + ' A';
+        document.getElementById('xfmr-out-is').innerText = is_a.toFixed(2) + ' A';
         document.getElementById('xfmr-out-vpt').innerText = vpt.toFixed(3);
         document.getElementById('xfmr-out-ap').innerText = required_ap.toFixed(1);
-        document.getElementById('xfmr-out-lp').innerText = lp_mH > 10000 ? "∞" : lp_mH.toFixed(2);
+        document.getElementById('xfmr-out-lp').innerText = lp_mH > 10000 ? '∞' : lp_mH.toFixed(2);
+        document.getElementById('xfmr-out-dia').innerText = wireDia_mm.toFixed(3) + ' mm';
+        document.getElementById('xfmr-out-wfill').innerText = windowFill.toFixed(1) + '%';
+        document.getElementById('xfmr-out-layers').innerText = layers + ' (' + windingThick_mm.toFixed(1) + 'mm)';
 
-        const warnEl = document.getElementById('xfmr-warn-ap');
-        if (actual_ap < required_ap && s > 0) {
-            warnEl.classList.remove('hidden');
+        // Status badges
+        const fitBadge = document.getElementById('xfmr-fit-badge');
+        const fitVal = document.getElementById('xfmr-fit-val');
+        if(fits) {
+            fitBadge.className = 'bg-themeContainer border border-green-500/40 p-2 text-center rounded';
+            fitVal.className = 'text-green-400 font-bold';
+            fitVal.textContent = 'FIT OK';
         } else {
-            warnEl.classList.add('hidden');
+            fitBadge.className = 'bg-themeContainer border border-red-500/40 p-2 text-center rounded';
+            fitVal.className = 'text-red-400 font-bold';
+            fitVal.textContent = 'OVERFILL!';
         }
 
+        const satBadge = document.getElementById('xfmr-sat-badge');
+        const satVal = document.getElementById('xfmr-sat-val');
+        satVal.textContent = b_op.toFixed(3) + 'T / ' + bmax + 'T';
+        if(satRatio > 0.95) {
+            satBadge.className = 'bg-themeContainer border border-red-500/40 p-2 text-center rounded';
+            satVal.className = 'text-red-400 font-bold text-[9px]';
+        } else if(satRatio > 0.8) {
+            satBadge.className = 'bg-themeContainer border border-yellow-500/40 p-2 text-center rounded';
+            satVal.className = 'text-yellow-400 font-bold text-[9px]';
+        } else {
+            satBadge.className = 'bg-themeContainer border border-green-500/30 p-2 text-center rounded';
+            satVal.className = 'text-green-400 font-bold text-[9px]';
+        }
+
+        const twVal = document.getElementById('xfmr-tw-val');
+        const thermBadge = document.getElementById('xfmr-therm-badge');
+        twVal.textContent = Tw.toFixed(1) + '°C';
+        if(!thermOk) {
+            thermBadge.className = 'bg-themeContainer border border-red-500/40 p-2 text-center rounded';
+            twVal.className = 'text-red-400 font-bold';
+        } else {
+            thermBadge.className = 'bg-themeContainer border border-green-500/30 p-2 text-center rounded';
+            twVal.className = 'text-green-400 font-bold';
+        }
+
+        // Thermal summary panel
+        const thermRes = document.getElementById('xfmr-thermal-res');
+        if(thermRes && !thermRes.classList.contains('hidden')) {
+            document.getElementById('xfmr-tc-val').textContent = Tc.toFixed(1) + '°C';
+            document.getElementById('xfmr-tw2-val').textContent = Tw.toFixed(1) + '°C';
+            document.getElementById('xfmr-cu-val').textContent = (P_cu_total*1000).toFixed(1) + ' mW';
+        }
+
+        // Warnings
+        document.getElementById('xfmr-warn-ap').classList.toggle('hidden', actual_ap >= required_ap || s <= 0);
+        document.getElementById('xfmr-warn-fit').classList.toggle('hidden', fits);
+        document.getElementById('xfmr-warn-sat').classList.toggle('hidden', satRatio <= 0.95);
+
+        // Rebuild 3D with saturation info
+        if(typeof buildXfmr3D === 'function') buildXfmr3D(satRatio);
+
     } else {
-        // Extraction
         const voc = parseFloat(document.getElementById('xfmr-voc').value) || 230;
         const ioc = parseFloat(document.getElementById('xfmr-ioc').value) || 0.5;
         const poc = parseFloat(document.getElementById('xfmr-poc').value) || 30;
-        
         const vsc = parseFloat(document.getElementById('xfmr-vsc').value) || 12;
         const isc = parseFloat(document.getElementById('xfmr-isc').value) || 4.5;
         const psc = parseFloat(document.getElementById('xfmr-psc').value) || 25;
 
-        // OC Test (LV side usually, finding Rc, Xm)
         let rc = 0, xm = 0;
         if (ioc > 0 && poc > 0) {
             rc = (voc * voc) / poc;
@@ -1826,8 +2193,6 @@ window.updateXfmr = function() {
             const im = Math.sqrt(Math.max(0, ioc*ioc - ic*ic));
             xm = im > 0 ? (voc / im) : 0;
         }
-
-        // SC Test (HV side usually, finding Req, Xeq)
         let req = 0, xeq = 0;
         if (isc > 0) {
             req = psc / (isc * isc);
@@ -1835,12 +2200,12 @@ window.updateXfmr = function() {
             xeq = Math.sqrt(Math.max(0, zeq*zeq - req*req));
         }
 
-        document.getElementById('xfmr-out-rc').innerText = rc.toFixed(1) + " Ω";
-        document.getElementById('xfmr-out-xm').innerText = xm.toFixed(1) + " Ω";
-        document.getElementById('xfmr-out-req').innerText = req.toFixed(3) + " Ω";
-        document.getElementById('xfmr-out-xeq').innerText = xeq.toFixed(3) + " Ω";
+        document.getElementById('xfmr-out-rc').innerText = rc.toFixed(1) + ' Ω';
+        document.getElementById('xfmr-out-xm').innerText = xm.toFixed(1) + ' Ω';
+        document.getElementById('xfmr-out-req').innerText = req.toFixed(3) + ' Ω';
+        document.getElementById('xfmr-out-xeq').innerText = xeq.toFixed(3) + ' Ω';
     }
-}
+};
 
 document.addEventListener('toolLoaded', function() {
     initHeatsink3D();

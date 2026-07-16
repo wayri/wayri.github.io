@@ -1664,6 +1664,32 @@ window.drawSmithChart = function() {
     ctx.lineTo(cx + R_chart, cy);
     ctx.stroke();
     
+    // Rim Indexes (Phase of Reflection Coefficient)
+    ctx.font = '10px monospace';
+    ctx.fillStyle = tc.text;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    for(let ang = 0; ang < 360; ang += 10) {
+        const rad = ang * Math.PI / 180;
+        const u = Math.cos(rad);
+        const v = Math.sin(rad); // y = cy - v*R, so positive v is up.
+        
+        const tickIn = mapGamma(u * 0.98, v * 0.98);
+        const tickOut = mapGamma(u * 1.02, v * 1.02);
+        ctx.beginPath();
+        ctx.strokeStyle = tc.text;
+        ctx.moveTo(tickIn.x, tickIn.y);
+        ctx.lineTo(tickOut.x, tickOut.y);
+        ctx.stroke();
+        
+        if (ang % 20 === 0) {
+            const tPos = mapGamma(u * 1.08, v * 1.08);
+            let phase = ang <= 180 ? ang : ang - 360;
+            ctx.fillText(phase + '°', tPos.x, tPos.y);
+        }
+    }
+    
     // Get Z0
     const zs_re = parseFloat(document.getElementById('smith-zs-re')?.value) || 50;
     const zs_im = parseFloat(document.getElementById('smith-zs-im')?.value) || 0;
@@ -1799,4 +1825,208 @@ window.drawSmithChart = function() {
     ctx.moveTo(ptS.x - 8, ptS.y - 8); ctx.lineTo(ptS.x + 8, ptS.y + 8);
     ctx.moveTo(ptS.x + 8, ptS.y - 8); ctx.lineTo(ptS.x - 8, ptS.y + 8);
     ctx.stroke();
+    
+    if(!window.smithHoverInit) {
+        initSmithHover();
+        window.smithHoverInit = true;
+    }
+};
+
+function initSmithHover() {
+    const canvas = document.getElementById('smith-canvas');
+    if(!canvas) return;
+    
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        const w = rect.width;
+        const h = rect.height;
+        const cx = w / 2;
+        const cy = h / 2;
+        const R_chart = Math.min(cx, cy) - 20;
+        
+        // Mouse coordinates relative to canvas
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        
+        // Convert to Gamma (u, v)
+        const u = (mx - cx) / R_chart;
+        const v = (cy - my) / R_chart; // y = cy - v*R_chart
+        
+        const gammaMag = Math.sqrt(u*u + v*v);
+        
+        const info = document.getElementById('smith-hover-info');
+        if(gammaMag > 1.05) {
+            if(info) info.classList.add('hidden');
+            return;
+        }
+        
+        if(info) {
+            info.classList.remove('hidden');
+            info.style.left = (mx + 15) + 'px';
+            info.style.top = (my + 15) + 'px';
+            
+            let phase = Math.atan2(v, u) * 180 / Math.PI;
+            
+            const zs_re = parseFloat(document.getElementById('smith-zs-re')?.value) || 50;
+            const Z0 = zs_re;
+            
+            // Gamma to Z: z = (1+Gamma)/(1-Gamma)
+            const den = (1 - u)*(1 - u) + v*v;
+            let zRe = 1e6, zIm = 0;
+            if(den > 0.0001) {
+                zRe = (1 - u*u - v*v) / den;
+                zIm = (2*v) / den;
+            }
+            
+            const Z = { re: zRe * Z0, im: zIm * Z0 };
+            
+            // Admittance Y = 1/Z
+            const zMag2 = Z.re*Z.re + Z.im*Z.im;
+            const Y = { re: Z.re / zMag2 * 1000, im: -Z.im / zMag2 * 1000 }; // mS
+            
+            // VSWR = (1+|Gamma|)/(1-|Gamma|)
+            let vswr = 99.99;
+            if(gammaMag < 0.999) vswr = (1 + gammaMag)/(1 - gammaMag);
+            
+            document.getElementById('smith-hover-z').textContent = `${Z.re.toFixed(1)} ${Z.im >= 0 ? '+' : '-'} j${Math.abs(Z.im).toFixed(1)}`;
+            document.getElementById('smith-hover-y').textContent = `${Y.re.toFixed(2)} ${Y.im >= 0 ? '+' : '-'} j${Math.abs(Y.im).toFixed(2)}`;
+            document.getElementById('smith-hover-gamma').innerHTML = `${gammaMag.toFixed(3)} &ang; ${phase.toFixed(1)}&deg;`;
+            document.getElementById('smith-hover-vswr').textContent = vswr.toFixed(2);
+        }
+    });
+    
+    canvas.addEventListener('mouseleave', () => {
+        const info = document.getElementById('smith-hover-info');
+        if(info) info.classList.add('hidden');
+    });
+}
+
+window.exportSmithSVG = function() {
+    const canvas = document.getElementById('smith-canvas');
+    if(!canvas) return;
+    
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    const cx = w / 2;
+    const cy = h / 2;
+    const R_chart = Math.min(cx, cy) - 20;
+    const Z0 = parseFloat(document.getElementById('smith-zs-re')?.value) || 50;
+    
+    let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="background:#0f0f0f; font-family:monospace;">`;
+    svg += `<style> .grid { stroke: rgba(255,255,255,0.2); fill: none; stroke-width: 1; } .text { fill: #9ca3af; font-size: 10px; text-anchor: middle; dominant-baseline: middle; } .highlight { stroke: #9ca3af; } </style>`;
+    
+    function mG(u, v) { return { x: cx + u * R_chart, y: cy - v * R_chart }; }
+    
+    // Background clip path for arcs
+    svg += `<clipPath id="unitCircle"><circle cx="${cx}" cy="${cy}" r="${R_chart}"/></clipPath>`;
+    
+    svg += `<g clip-path="url(#unitCircle)">`;
+    // R circles
+    [0, 0.2, 0.5, 1, 2, 5].forEach(r => {
+        const rad = R_chart / (r + 1);
+        const center_u = r / (r + 1);
+        const pt = mG(center_u, 0);
+        svg += `<circle cx="${pt.x}" cy="${pt.y}" r="${rad}" class="grid ${r===1?'highlight':''}"/>`;
+    });
+    
+    // X arcs
+    [0.2, 0.5, 1, 2, 5, -0.2, -0.5, -1, -2, -5].forEach(x => {
+        const rad = R_chart / Math.abs(x);
+        const pt = mG(1, 1/x);
+        svg += `<circle cx="${pt.x}" cy="${pt.y}" r="${rad}" class="grid ${Math.abs(x)===1?'highlight':''}"/>`;
+    });
+    svg += `</g>`;
+    
+    // Real axis
+    svg += `<line x1="${cx - R_chart}" y1="${cy}" x2="${cx + R_chart}" y2="${cy}" class="grid highlight"/>`;
+    
+    // Unit circle
+    svg += `<circle cx="${cx}" cy="${cy}" r="${R_chart}" class="grid highlight"/>`;
+    
+    // Rim indexes
+    for(let ang = 0; ang < 360; ang += 10) {
+        const rad = ang * Math.PI / 180;
+        const u = Math.cos(rad); const v = Math.sin(rad);
+        const tIn = mG(u*0.98, v*0.98); const tOut = mG(u*1.02, v*1.02);
+        svg += `<line x1="${tIn.x}" y1="${tIn.y}" x2="${tOut.x}" y2="${tOut.y}" class="grid highlight"/>`;
+        if (ang % 20 === 0) {
+            const tPos = mG(u*1.08, v*1.08);
+            let phase = ang <= 180 ? ang : ang - 360;
+            svg += `<text x="${tPos.x}" y="${tPos.y}" class="text">${phase}&deg;</text>`;
+        }
+    }
+    
+    // Trajectory (approximate replication from canvas)
+    // Note: Re-calculating trajectory exactly here to put in SVG
+    const freq = parseFloat(document.getElementById('smith-freq')?.value) || 1000;
+    const w_rad = 2 * Math.PI * freq * 1e6;
+    let currentZ = { re: parseFloat(document.getElementById('smith-zl-re')?.value) || 10, im: parseFloat(document.getElementById('smith-zl-im')?.value) || -20 };
+    let traj = [{...currentZ}];
+    const comps = typeof smithComponents !== 'undefined' ? smithComponents : [];
+    
+    function zToG(R, X) {
+        const r = R/Z0; const x = X/Z0; const den = (r+1)*(r+1) + x*x;
+        return {u: (r*r + x*x - 1)/den, v: (2*x)/den};
+    }
+    
+    comps.forEach(c => {
+        if(c.type.startsWith('sh_')) {
+            const den = currentZ.re*currentZ.re + currentZ.im*currentZ.im;
+            let Y = { re: currentZ.re/den, im: -currentZ.im/den };
+            let yc = {re:0, im:0};
+            if(c.type === 'sh_c') yc.im = w_rad * (c.val1*1e-12);
+            else if(c.type === 'sh_l') yc.im = -1/(w_rad * (c.val1*1e-9));
+            else if(c.type === 'sh_r') yc.re = 1/c.val1;
+            Y.re += yc.re; Y.im += yc.im;
+            const yden = Y.re*Y.re + Y.im*Y.im;
+            currentZ.re = Y.re/yden; currentZ.im = -Y.im/yden;
+            traj.push({...currentZ});
+        } else if(c.type.startsWith('ser_')) {
+            if(c.type === 'ser_c') currentZ.im -= 1/(w_rad * (c.val1*1e-12));
+            else if(c.type === 'ser_l') currentZ.im += w_rad * (c.val1*1e-9);
+            else if(c.type === 'ser_r') currentZ.re += c.val1;
+            traj.push({...currentZ});
+        } else if(c.type === 'tline') {
+            const tanB = Math.tan(c.val2 * Math.PI / 180);
+            const nRe = currentZ.re, nIm = currentZ.im + c.val1*tanB;
+            const dRe = c.val1 - currentZ.im*tanB, dIm = currentZ.re*tanB;
+            const dMag = dRe*dRe + dIm*dIm;
+            const nRe2 = c.val1*(nRe*dRe + nIm*dIm)/dMag;
+            const nIm2 = c.val1*(nIm*dRe - nRe*dIm)/dMag;
+            currentZ = {re: nRe2, im: nIm2};
+            traj.push({...currentZ});
+        }
+    });
+    
+    if(traj.length > 0) {
+        svg += `<polyline points="`;
+        traj.forEach(z => {
+            const g = zToG(z.re, z.im); const pt = mG(g.u, g.v);
+            svg += `${pt.x},${pt.y} `;
+        });
+        svg += `" fill="none" stroke="#f59e0b" stroke-width="2"/>`;
+        
+        traj.forEach((z, idx) => {
+            const g = zToG(z.re, z.im); const pt = mG(g.u, g.v);
+            let color = idx===0 ? '#ef4444' : (idx===traj.length-1 ? '#10b981' : '#f59e0b');
+            svg += `<circle cx="${pt.x}" cy="${pt.y}" r="5" fill="${color}"/>`;
+        });
+    }
+    
+    // Source target
+    const zs_im = parseFloat(document.getElementById('smith-zs-im')?.value) || 0;
+    const gS = zToG(Z0, -zs_im); const ptS = mG(gS.u, gS.v);
+    svg += `<line x1="${ptS.x-8}" y1="${ptS.y-8}" x2="${ptS.x+8}" y2="${ptS.y+8}" stroke="#10b981" stroke-width="2"/>`;
+    svg += `<line x1="${ptS.x+8}" y1="${ptS.y-8}" x2="${ptS.x-8}" y2="${ptS.y+8}" stroke="#10b981" stroke-width="2"/>`;
+    
+    svg += `</svg>`;
+    
+    const blob = new Blob([svg], {type: 'image/svg+xml;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'smith_chart_match.svg';
+    a.click();
+    URL.revokeObjectURL(url);
 };
