@@ -6,7 +6,13 @@ const TOOL_REGISTRY = [
             { id: "tool-resistor-divider", name: "Resistor Divider", file: "resistor-divider.html" },
             { id: "tool-e-series-finder", name: "E-Series Finder", file: "e-series-finder.html" },
             { id: "tool-awg-wire-ampacity", name: "AWG Wire Ampacity", file: "awg-wire-ampacity.html" },
-            { id: "tool-ipc-2221-trace-width", name: "IPC-2221 Trace Width", file: "ipc-2221-trace-width.html" }
+            { id: "tool-ipc-2221-trace-width", name: "IPC-2221 Trace Width", file: "ipc-2221-trace-width.html" },
+            { id: "tool-smd-resistor", name: "SMD Resistor Decoder", file: "smd-resistor.html" },
+            { id: "tool-led-resistor", name: "LED Resistor Calculator", file: "led-resistor.html" },
+            { id: "tool-reactance-calc", name: "Reactance Calculator", file: "reactance-calc.html" },
+            { id: "tool-rc-time-calc", name: "RC Time Constant", file: "rc-time-calc.html" },
+            { id: "tool-555-timer-calc", name: "555 Timer Calculator", file: "555-timer-calc.html" },
+            { id: "tool-ohms-law-wheel", name: "Ohm's Law Wheel", file: "ohms-law-wheel.html" }
         ]
     },
     {

@@ -1,0 +1,175 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="SMD Resistor Code Decoder">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-hashtag"></i><h3 class="font-bold font-mono">SMD Resistor Code</h3></div>
+        <span class="font-mono text-[10px] opacity-70">3-digit, 4-digit, EIA-96</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow items-center justify-center relative overflow-y-auto">
+        
+        <div class="w-full max-w-md space-y-6">
+            <!-- Visual Component -->
+            <div class="flex justify-center mb-8">
+                <div class="w-48 h-24 bg-[#1a1a1a] border-x-8 border-[#d4d4d4] rounded-sm shadow-xl flex items-center justify-center relative">
+                    <div class="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]"></div>
+                    <span id="smd-display" class="text-white text-3xl font-mono tracking-widest z-10 font-bold opacity-90 drop-shadow-md">103</span>
+                </div>
+            </div>
+
+            <!-- Input -->
+            <div class="bg-themeContainer border border-themeBorder p-4">
+                <div class="flex justify-between text-xs mb-2"><span>Enter SMD Code</span><span id="smd-type" class="text-themeAccent font-bold">3-Digit Standard</span></div>
+                <input type="text" id="smd-input" class="w-full bg-themeBg border border-themeBorder p-3 text-center text-xl text-themeText font-bold uppercase tracking-widest focus:border-themeAccent focus:outline-none transition-colors" value="103" placeholder="e.g. 4R7, 103, 01C" oninput="decodeSMD()" maxlength="4">
+            </div>
+
+            <!-- Results -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
+                    <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-1">Resistance</span>
+                    <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
+                        <span id="smd-res-val">10</span> <span id="smd-res-unit" class="text-sm text-themeAccent">kΩ</span>
+                    </div>
+                </div>
+                <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
+                    <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-1">Tolerance</span>
+                    <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
+                        <span id="smd-tol-val">±5</span> <span class="text-sm text-themeAccent">%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="smd-error" class="hidden text-red-500 text-xs text-center p-2 bg-red-500/10 border border-red-500/30">
+                Invalid SMD Code Format
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('smd-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Standards</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="smd-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>3-Digit:</strong> First two digits are significant figures, third is multiplier ($10^x$). 'R' indicates decimal. Tolerance typically ±5%.</p>
+            <p><strong>4-Digit:</strong> First three digits are significant, fourth is multiplier. 'R' indicates decimal. Tolerance typically ±1%.</p>
+            <p><strong>EIA-96:</strong> Two digits (code for value from EIA-96 table) followed by a letter (multiplier). Tolerance is ±1%.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // EIA-96 Value lookup table
+    const eia96Vals = [
+        100, 102, 105, 107, 110, 113, 115, 118, 121, 124, 127, 130, 133, 137, 140, 143, 147, 150, 154, 158, 162, 165, 169, 174,
+        178, 182, 187, 191, 196, 200, 205, 210, 215, 221, 226, 232, 237, 243, 249, 255, 261, 267, 274, 280, 287, 294, 301, 309,
+        316, 324, 332, 340, 348, 357, 365, 374, 383, 392, 402, 412, 422, 432, 442, 453, 464, 475, 487, 499, 511, 523, 536, 549,
+        562, 576, 590, 604, 619, 634, 649, 665, 681, 698, 715, 732, 750, 768, 787, 806, 825, 845, 866, 887, 909, 931, 953, 976
+    ];
+
+    const eia96Mult = {
+        'Z': 0.001, 'Y': 0.01, 'R': 0.01, 'X': 0.1, 'S': 0.1,
+        'A': 1, 'B': 10, 'C': 100, 'D': 1000, 'E': 10000, 'F': 100000
+    };
+
+    function formatRes(val) {
+        if(val >= 1e6) return { v: (val/1e6).toPrecision(4).replace(/\.0+$/,''), u: 'MΩ' };
+        if(val >= 1e3) return { v: (val/1e3).toPrecision(4).replace(/\.0+$/,''), u: 'kΩ' };
+        if(val < 1) return { v: (val*1000).toPrecision(4).replace(/\.0+$/,''), u: 'mΩ' };
+        return { v: val.toPrecision(4).replace(/\.0+$/,''), u: 'Ω' };
+    }
+
+    function decodeSMD() {
+        let raw = document.getElementById('smd-input').value.toUpperCase().trim();
+        document.getElementById('smd-display').innerText = raw || '---';
+        const err = document.getElementById('smd-error');
+        const typeLabel = document.getElementById('smd-type');
+        let res = 0;
+        let tol = "";
+        let valid = false;
+
+        err.classList.add('hidden');
+
+        if(raw.length === 0) {
+            document.getElementById('smd-res-val').innerText = "-";
+            document.getElementById('smd-tol-val').innerText = "-";
+            document.getElementById('smd-res-unit').innerText = "";
+            typeLabel.innerText = "Unknown";
+            return;
+        }
+
+        // Check if under 1 ohm (e.g. R047)
+        if(raw.startsWith('R') && raw.length > 1) {
+            raw = '0' + raw;
+        }
+
+        if(raw === '0' || raw === '000' || raw === '0000') {
+            res = 0;
+            tol = "Jumper";
+            valid = true;
+            typeLabel.innerText = "Zero Ohm Jumper";
+        }
+        else if(raw.length === 3) {
+            if(raw.includes('R')) {
+                res = parseFloat(raw.replace('R', '.'));
+                valid = !isNaN(res);
+                tol = "±1% or ±5%";
+                typeLabel.innerText = "Decimal Standard";
+            }
+            else if(/^[0-9]{2}[A-Z]$/.test(raw)) {
+                // EIA-96
+                const code = parseInt(raw.substring(0, 2), 10);
+                const mult = raw.charAt(2);
+                if(code >= 1 && code <= 96 && eia96Mult[mult]) {
+                    res = eia96Vals[code - 1] * eia96Mult[mult];
+                    tol = "±1%";
+                    valid = true;
+                    typeLabel.innerText = "EIA-96 (1%)";
+                }
+            }
+            else if(/^[0-9]{3}$/.test(raw)) {
+                const sig = parseInt(raw.substring(0, 2), 10);
+                const mult = parseInt(raw.charAt(2), 10);
+                res = sig * Math.pow(10, mult);
+                tol = "±5%";
+                valid = true;
+                typeLabel.innerText = "3-Digit Standard (5%)";
+            }
+        }
+        else if(raw.length === 4) {
+            if(raw.includes('R')) {
+                res = parseFloat(raw.replace('R', '.'));
+                valid = !isNaN(res);
+                tol = "±1%";
+                typeLabel.innerText = "Decimal Standard";
+            }
+            else if(/^[0-9]{4}$/.test(raw)) {
+                const sig = parseInt(raw.substring(0, 3), 10);
+                const mult = parseInt(raw.charAt(3), 10);
+                res = sig * Math.pow(10, mult);
+                tol = "±1%";
+                valid = true;
+                typeLabel.innerText = "4-Digit Standard (1%)";
+            }
+        }
+
+        if(valid) {
+            if(tol === "Jumper") {
+                document.getElementById('smd-res-val').innerText = "0";
+                document.getElementById('smd-res-unit').innerText = "Ω";
+            } else {
+                const f = formatRes(res);
+                document.getElementById('smd-res-val').innerText = f.v;
+                document.getElementById('smd-res-unit').innerText = f.u;
+            }
+            document.getElementById('smd-tol-val').innerText = tol;
+        } else {
+            document.getElementById('smd-res-val').innerText = "-";
+            document.getElementById('smd-tol-val').innerText = "-";
+            document.getElementById('smd-res-unit').innerText = "";
+            err.classList.remove('hidden');
+            typeLabel.innerText = "Invalid";
+        }
+    }
+    
+    setTimeout(decodeSMD, 100);
+</script>

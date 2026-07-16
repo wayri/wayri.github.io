@@ -1,0 +1,181 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Ohm's Law Power Wheel">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-circle-notch"></i><h3 class="font-bold font-mono">Ohm's Law Wheel</h3></div>
+        <span class="font-mono text-[10px] opacity-70">V, I, R, P</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col justify-center">
+                <div class="text-xs text-themeMuted mb-4 border-b border-themeBorder/20 pb-2 text-center">Enter any TWO known values to calculate the rest.</div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Voltage (V)</span><span class="text-themeMuted">Volts</span></div>
+                        <input type="number" id="ohm-v" class="ohm-input w-full bg-themeBg border border-themeBorder p-2 text-themeText font-bold focus:border-themeAccent focus:outline-none" step="any" oninput="calculateOhms(this)">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Current (I)</span><span class="text-themeMuted">Amps</span></div>
+                        <input type="number" id="ohm-i" class="ohm-input w-full bg-themeBg border border-themeBorder p-2 text-themeText font-bold focus:border-themeAccent focus:outline-none" step="any" oninput="calculateOhms(this)">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Resistance (R)</span><span class="text-themeMuted">Ohms</span></div>
+                        <input type="number" id="ohm-r" class="ohm-input w-full bg-themeBg border border-themeBorder p-2 text-themeText font-bold focus:border-themeAccent focus:outline-none" step="any" min="0" oninput="calculateOhms(this)">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Power (P)</span><span class="text-themeMuted">Watts</span></div>
+                        <input type="number" id="ohm-p" class="ohm-input w-full bg-themeBg border border-themeBorder p-2 text-themeText font-bold focus:border-themeAccent focus:outline-none" step="any" min="0" oninput="calculateOhms(this)">
+                    </div>
+                </div>
+
+                <button class="w-full bg-themeBorder/20 text-themeText hover:bg-themeBorder hover:text-themeBg transition-colors py-2 mt-4 text-xs font-bold" onclick="resetOhms()">RESET</button>
+                <div id="ohm-error" class="hidden text-red-500 text-xs text-center mt-2">Cannot calculate. Check inputs.</div>
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col items-center justify-center relative min-h-[250px]">
+                
+                <!-- SVG Power Wheel representation -->
+                <div class="relative w-64 h-64 border-4 border-themeBorder/30 rounded-full flex items-center justify-center bg-themeContainer shadow-inner">
+                    <!-- Cross lines -->
+                    <div class="absolute w-full h-1 bg-themeBorder/20 top-1/2 -translate-y-1/2"></div>
+                    <div class="absolute h-full w-1 bg-themeBorder/20 left-1/2 -translate-x-1/2"></div>
+                    <div class="absolute w-full h-1 bg-themeBorder/10 top-1/2 -translate-y-1/2 rotate-45"></div>
+                    <div class="absolute h-full w-1 bg-themeBorder/10 left-1/2 -translate-x-1/2 rotate-45"></div>
+                    
+                    <!-- Center Hole -->
+                    <div class="w-16 h-16 bg-themeBg rounded-full border-2 border-themeBorder/30 z-10 flex flex-col items-center justify-center shadow-lg">
+                        <i class="fa-solid fa-bolt text-themeAccent text-xl"></i>
+                    </div>
+
+                    <!-- Quadrants -->
+                    <div class="absolute top-4 left-0 right-0 flex justify-center text-xl font-bold text-blue-500 opacity-80" title="Voltage (V)">V</div>
+                    <div class="absolute bottom-4 left-0 right-0 flex justify-center text-xl font-bold text-green-500 opacity-80" title="Current (I)">I</div>
+                    <div class="absolute left-4 top-0 bottom-0 flex flex-col justify-center text-xl font-bold text-red-500 opacity-80" title="Power (P)">P</div>
+                    <div class="absolute right-4 top-0 bottom-0 flex flex-col justify-center text-xl font-bold text-yellow-500 opacity-80" title="Resistance (R)">R</div>
+                </div>
+
+                <!-- Floating Results Overlay -->
+                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none drop-shadow-lg">
+                    <div class="absolute top-12 bg-themeBg/90 px-3 py-1 border border-blue-500/50 rounded text-blue-400 font-bold backdrop-blur-sm shadow-xl transition-all duration-300" id="disp-v">- V</div>
+                    <div class="absolute bottom-12 bg-themeBg/90 px-3 py-1 border border-green-500/50 rounded text-green-400 font-bold backdrop-blur-sm shadow-xl transition-all duration-300" id="disp-i">- A</div>
+                    <div class="absolute left-12 bg-themeBg/90 px-3 py-1 border border-red-500/50 rounded text-red-400 font-bold backdrop-blur-sm shadow-xl transition-all duration-300" id="disp-p">- W</div>
+                    <div class="absolute right-12 bg-themeBg/90 px-3 py-1 border border-yellow-500/50 rounded text-yellow-400 font-bold backdrop-blur-sm shadow-xl transition-all duration-300" id="disp-r">- Ω</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let activeInputs = [];
+
+    function resetOhms() {
+        document.querySelectorAll('.ohm-input').forEach(el => {
+            el.value = '';
+            el.classList.remove('border-themeAccent', 'bg-themeAccent/10');
+        });
+        activeInputs = [];
+        updateDisplay(null, null, null, null);
+        document.getElementById('ohm-error').classList.add('hidden');
+    }
+
+    function calculateOhms(changedElement) {
+        const err = document.getElementById('ohm-error');
+        err.classList.add('hidden');
+
+        // Manage active inputs (keep max 2)
+        if (changedElement.value !== "") {
+            if (!activeInputs.includes(changedElement.id)) {
+                activeInputs.push(changedElement.id);
+            }
+        } else {
+            activeInputs = activeInputs.filter(id => id !== changedElement.id);
+        }
+
+        // If user typed into a 3rd input, clear the oldest one
+        if (activeInputs.length > 2) {
+            const oldest = activeInputs.shift();
+            document.getElementById(oldest).value = '';
+        }
+
+        // Visual feedback for active inputs
+        document.querySelectorAll('.ohm-input').forEach(el => {
+            if (activeInputs.includes(el.id)) {
+                el.classList.add('border-themeAccent', 'bg-themeAccent/10');
+            } else {
+                el.classList.remove('border-themeAccent', 'bg-themeAccent/10');
+            }
+        });
+
+        // Calculate if exactly 2 inputs
+        if (activeInputs.length === 2) {
+            let v = parseFloat(document.getElementById('ohm-v').value);
+            let i = parseFloat(document.getElementById('ohm-i').value);
+            let r = parseFloat(document.getElementById('ohm-r').value);
+            let p = parseFloat(document.getElementById('ohm-p').value);
+
+            let v_calc = isNaN(v) ? null : v;
+            let i_calc = isNaN(i) ? null : i;
+            let r_calc = isNaN(r) ? null : r;
+            let p_calc = isNaN(p) ? null : p;
+
+            try {
+                if (v_calc !== null && i_calc !== null) {
+                    r_calc = v_calc / i_calc;
+                    p_calc = v_calc * i_calc;
+                } else if (v_calc !== null && r_calc !== null) {
+                    i_calc = v_calc / r_calc;
+                    p_calc = (v_calc * v_calc) / r_calc;
+                } else if (v_calc !== null && p_calc !== null) {
+                    i_calc = p_calc / v_calc;
+                    r_calc = (v_calc * v_calc) / p_calc;
+                } else if (i_calc !== null && r_calc !== null) {
+                    v_calc = i_calc * r_calc;
+                    p_calc = i_calc * i_calc * r_calc;
+                } else if (i_calc !== null && p_calc !== null) {
+                    v_calc = p_calc / i_calc;
+                    r_calc = p_calc / (i_calc * i_calc);
+                } else if (r_calc !== null && p_calc !== null) {
+                    v_calc = Math.sqrt(p_calc * r_calc);
+                    i_calc = Math.sqrt(p_calc / r_calc);
+                }
+
+                // Update non-active inputs with calculated values
+                if (!activeInputs.includes('ohm-v')) document.getElementById('ohm-v').value = isFinite(v_calc) ? parseFloat(v_calc.toPrecision(5)) : '';
+                if (!activeInputs.includes('ohm-i')) document.getElementById('ohm-i').value = isFinite(i_calc) ? parseFloat(i_calc.toPrecision(5)) : '';
+                if (!activeInputs.includes('ohm-r')) document.getElementById('ohm-r').value = isFinite(r_calc) ? parseFloat(r_calc.toPrecision(5)) : '';
+                if (!activeInputs.includes('ohm-p')) document.getElementById('ohm-p').value = isFinite(p_calc) ? parseFloat(p_calc.toPrecision(5)) : '';
+
+                updateDisplay(v_calc, i_calc, r_calc, p_calc);
+
+            } catch (e) {
+                err.classList.remove('hidden');
+                updateDisplay(null, null, null, null);
+            }
+        } else {
+            // Not enough inputs to calculate all, but still update display for what we have
+            let v = parseFloat(document.getElementById('ohm-v').value);
+            let i = parseFloat(document.getElementById('ohm-i').value);
+            let r = parseFloat(document.getElementById('ohm-r').value);
+            let p = parseFloat(document.getElementById('ohm-p').value);
+            updateDisplay(isNaN(v)?null:v, isNaN(i)?null:i, isNaN(r)?null:r, isNaN(p)?null:p);
+        }
+    }
+
+    function formatNum(val) {
+        if(val === null || !isFinite(val)) return "-";
+        if(Math.abs(val) < 0.001 && val !== 0) return val.toExponential(2);
+        return parseFloat(val.toPrecision(4)).toString();
+    }
+
+    function updateDisplay(v, i, r, p) {
+        document.getElementById('disp-v').innerText = formatNum(v) + " V";
+        document.getElementById('disp-i').innerText = formatNum(i) + " A";
+        document.getElementById('disp-r').innerText = formatNum(r) + " Ω";
+        document.getElementById('disp-p').innerText = formatNum(p) + " W";
+    }
+</script>

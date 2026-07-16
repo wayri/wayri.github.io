@@ -1,0 +1,161 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="RC Time Constant Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-stopwatch"></i><h3 class="font-bold font-mono">RC Time Constant</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Charge / Discharge</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">COMPONENT VALUES</h4>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Resistance (R)</span></div>
+                    <div class="flex gap-2">
+                        <input type="number" id="rc-r" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateRC()">
+                        <select id="rc-r-unit" class="bg-themeBg border border-themeBorder p-1.5 text-xs outline-none" onchange="updateRC()">
+                            <option value="1">Ω</option>
+                            <option value="1e3" selected>kΩ</option>
+                            <option value="1e6">MΩ</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="pt-2">
+                    <div class="flex justify-between text-xs mb-1"><span>Capacitance (C)</span></div>
+                    <div class="flex gap-2">
+                        <input type="number" id="rc-c" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateRC()">
+                        <select id="rc-c-unit" class="bg-themeBg border border-themeBorder p-1.5 text-xs outline-none" onchange="updateRC()">
+                            <option value="1e-12">pF</option>
+                            <option value="1e-9">nF</option>
+                            <option value="1e-6" selected>μF</option>
+                            <option value="1e-3">mF</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-2 border-t border-themeBorder/20 mt-4">
+                    <div class="flex justify-between text-xs mb-1"><span>Target Voltage ($V_c$) Threshold</span><span class="text-themeMuted">%</span></div>
+                    <input type="range" id="rc-pct" class="w-full accent-themeAccent" min="1" max="99" value="63" oninput="updateRC()">
+                    <div class="flex justify-between text-[10px] text-themeMuted">
+                        <span>1%</span><span id="rc-pct-val" class="font-bold text-themeText">63%</span><span>99%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <div class="bg-themeBg border-l-4 border-themeAccent p-4 flex flex-col justify-center relative overflow-hidden group">
+                    <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Time Constant ($\tau$)</span>
+                    <div class="text-4xl font-bold text-themeText flex items-baseline gap-1">
+                        <span id="rc-tau-val">100.0</span> <span id="rc-tau-unit" class="text-lg text-themeAccent">ms</span>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="grid grid-cols-2 gap-4 flex-grow">
+                    
+                    <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col items-center text-center relative">
+                        <div class="text-[10px] text-themeMuted absolute top-2 left-2"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold mt-4">Charge Time to <span class="rc-pct-disp">63%</span></span>
+                        <div class="text-xl font-bold text-themeText flex items-baseline gap-1 mt-auto">
+                            <span id="rc-tc-val">100.0</span> <span id="rc-tc-unit" class="text-xs text-themeAccent">ms</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col items-center text-center relative">
+                        <div class="text-[10px] text-themeMuted absolute top-2 left-2"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold mt-4">Discharge Time to <span class="rc-pct-disp">63%</span></span>
+                        <div class="text-xl font-bold text-themeText flex items-baseline gap-1 mt-auto">
+                            <span id="rc-td-val">46.1</span> <span id="rc-td-unit" class="text-xs text-themeAccent">ms</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full p-2 border border-themeBorder/50 text-[10px] text-themeMuted flex justify-between bg-themeContainer">
+                    <span>Cutoff Freq (Low-Pass):</span>
+                    <span id="rc-fc" class="font-bold text-themeText">1.59 Hz</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('rc-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="rc-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Time Constant:</strong> $\tau = R \times C$</p>
+            <p><strong>Charging Voltage:</strong> $V_c(t) = V_s \times (1 - e^{-t/\tau})$</p>
+            <p><strong>Discharging Voltage:</strong> $V_c(t) = V_0 \times e^{-t/\tau}$</p>
+            <p><strong>Cutoff Frequency:</strong> $f_c = \frac{1}{2 \pi R C}$</p>
+            <p>A capacitor is considered fully charged (~99.3%) after $5\tau$.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function formatTime(val_sec) {
+        if(val_sec >= 1) return { v: val_sec.toPrecision(4).replace(/\.0+$/,''), u: 's' };
+        if(val_sec >= 1e-3) return { v: (val_sec*1e3).toPrecision(4).replace(/\.0+$/,''), u: 'ms' };
+        if(val_sec >= 1e-6) return { v: (val_sec*1e6).toPrecision(4).replace(/\.0+$/,''), u: 'μs' };
+        return { v: (val_sec*1e9).toPrecision(4).replace(/\.0+$/,''), u: 'ns' };
+    }
+
+    function formatFreq(val) {
+        if(val >= 1e9) return (val/1e9).toPrecision(4).replace(/\.0+$/,'') + ' GHz';
+        if(val >= 1e6) return (val/1e6).toPrecision(4).replace(/\.0+$/,'') + ' MHz';
+        if(val >= 1e3) return (val/1e3).toPrecision(4).replace(/\.0+$/,'') + ' kHz';
+        return val.toPrecision(4).replace(/\.0+$/,'') + ' Hz';
+    }
+
+    function updateRC() {
+        const r_val = parseFloat(document.getElementById('rc-r').value);
+        const r_mult = parseFloat(document.getElementById('rc-r-unit').value);
+        const R = r_val * r_mult;
+
+        const c_val = parseFloat(document.getElementById('rc-c').value);
+        const c_mult = parseFloat(document.getElementById('rc-c-unit').value);
+        const C = c_val * c_mult;
+
+        const pct = parseFloat(document.getElementById('rc-pct').value);
+        document.getElementById('rc-pct-val').innerText = pct + "%";
+        document.querySelectorAll('.rc-pct-disp').forEach(e => e.innerText = pct + "%");
+
+        const tau = R * C;
+        
+        // Time to charge to X% of supply
+        // Vc = Vs * (1 - e^(-t/tau)) => t = -tau * ln(1 - Vc/Vs)
+        const v_ratio_c = pct / 100;
+        const t_charge = -tau * Math.log(1 - v_ratio_c);
+
+        // Time to discharge to X% of initial
+        // Vc = V0 * e^(-t/tau) => t = -tau * ln(Vc/V0)
+        const v_ratio_d = pct / 100;
+        const t_discharge = -tau * Math.log(v_ratio_d);
+
+        const fc = 1 / (2 * Math.PI * tau);
+
+        const fTau = formatTime(tau);
+        document.getElementById('rc-tau-val').innerText = fTau.v;
+        document.getElementById('rc-tau-unit').innerText = fTau.u;
+
+        const fTc = formatTime(t_charge);
+        document.getElementById('rc-tc-val').innerText = fTc.v;
+        document.getElementById('rc-tc-unit').innerText = fTc.u;
+
+        const fTd = formatTime(t_discharge);
+        document.getElementById('rc-td-val').innerText = fTd.v;
+        document.getElementById('rc-td-unit').innerText = fTd.u;
+
+        document.getElementById('rc-fc').innerText = formatFreq(fc);
+    }
+    
+    setTimeout(updateRC, 100);
+</script>

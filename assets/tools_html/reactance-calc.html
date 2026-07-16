@@ -1,0 +1,178 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Reactance Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-wave-square"></i><h3 class="font-bold font-mono">Reactance Calculator</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Capacitive (Xc) & Inductive (Xl)</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">COMPONENT VALUES</h4>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Frequency (f)</span><span class="text-themeMuted">Hz</span></div>
+                    <div class="flex gap-2">
+                        <input type="number" id="react-f" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1000" step="100" oninput="updateReactance()">
+                        <select id="react-f-unit" class="bg-themeBg border border-themeBorder p-1.5 text-xs outline-none" onchange="updateReactance()">
+                            <option value="1">Hz</option>
+                            <option value="1e3" selected>kHz</option>
+                            <option value="1e6">MHz</option>
+                            <option value="1e9">GHz</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="pt-2">
+                    <div class="flex justify-between text-xs mb-1"><span class="text-blue-400 font-bold">Capacitance (C)</span></div>
+                    <div class="flex gap-2">
+                        <input type="number" id="react-c" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1" step="0.1" oninput="updateReactance()">
+                        <select id="react-c-unit" class="bg-themeBg border border-themeBorder p-1.5 text-xs outline-none" onchange="updateReactance()">
+                            <option value="1e-12">pF</option>
+                            <option value="1e-9">nF</option>
+                            <option value="1e-6" selected>μF</option>
+                            <option value="1e-3">mF</option>
+                            <option value="1">F</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-2 border-b border-themeBorder/20 pb-4">
+                    <div class="flex justify-between text-xs mb-1"><span class="text-red-400 font-bold">Inductance (L)</span></div>
+                    <div class="flex gap-2">
+                        <input type="number" id="react-l" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateReactance()">
+                        <select id="react-l-unit" class="bg-themeBg border border-themeBorder p-1.5 text-xs outline-none" onchange="updateReactance()">
+                            <option value="1e-9">nH</option>
+                            <option value="1e-6" selected>μH</option>
+                            <option value="1e-3">mH</option>
+                            <option value="1">H</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between text-xs pt-2">
+                    <span class="text-themeMuted">Resonant Frequency ($f_r$)</span>
+                    <span id="react-fr" class="font-bold text-themeAccent">0 Hz</span>
+                </div>
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <!-- Results -->
+                <div class="flex flex-col gap-4 flex-grow">
+                    <!-- Xc Result -->
+                    <div class="bg-blue-900/10 border border-blue-500/30 p-4 flex flex-col justify-center relative overflow-hidden group hover:border-blue-500 transition-colors">
+                        <i class="fa-solid fa-capacitor absolute right-2 top-2 text-blue-500/20 text-4xl"></i>
+                        <span class="text-[10px] text-blue-400 uppercase tracking-wider mb-2 font-bold">Capacitive Reactance ($X_C$)</span>
+                        <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="react-xc-val">0.00</span> <span id="react-xc-unit" class="text-sm text-blue-400">Ω</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Xl Result -->
+                    <div class="bg-red-900/10 border border-red-500/30 p-4 flex flex-col justify-center relative overflow-hidden group hover:border-red-500 transition-colors">
+                        <i class="fa-solid fa-tape absolute right-2 top-2 text-red-500/20 text-4xl"></i> <!-- tape as makeshift inductor icon -->
+                        <span class="text-[10px] text-red-400 uppercase tracking-wider mb-2 font-bold">Inductive Reactance ($X_L$)</span>
+                        <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="react-xl-val">0.00</span> <span id="react-xl-unit" class="text-sm text-red-400">Ω</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Frequency Response Hint -->
+                <div class="w-full h-24 bg-themeBg border border-themeBorder/50 flex flex-col justify-center relative overflow-hidden text-[10px] text-themeMuted p-2">
+                    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-themeText to-transparent"></div>
+                    <div class="z-10 flex justify-between px-4 w-full border-b border-dashed border-themeMuted/50 mb-1">
+                        <span>Low Freq</span> <span>High Freq</span>
+                    </div>
+                    <div class="z-10 flex justify-between px-4 w-full">
+                        <span class="text-blue-400">$X_C$ dominates (Open)</span> <span class="text-red-400">$X_L$ dominates (Open)</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('react-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="react-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Capacitive Reactance:</strong></p>
+            <p>$$ X_C = \frac{1}{2 \pi f C} $$</p>
+            <p><strong>Inductive Reactance:</strong></p>
+            <p>$$ X_L = 2 \pi f L $$</p>
+            <p><strong>LC Resonant Frequency:</strong> (Frequency where $X_C = X_L$)</p>
+            <p>$$ f_r = \frac{1}{2 \pi \sqrt{L C}} $$</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function formatReactance(val) {
+        if(val >= 1e6) return { v: (val/1e6).toPrecision(4).replace(/\.0+$/,''), u: 'MΩ' };
+        if(val >= 1e3) return { v: (val/1e3).toPrecision(4).replace(/\.0+$/,''), u: 'kΩ' };
+        if(val < 1) return { v: (val*1000).toPrecision(4).replace(/\.0+$/,''), u: 'mΩ' };
+        return { v: val.toPrecision(4).replace(/\.0+$/,''), u: 'Ω' };
+    }
+
+    function formatFreq(val) {
+        if(val >= 1e9) return (val/1e9).toPrecision(4).replace(/\.0+$/,'') + ' GHz';
+        if(val >= 1e6) return (val/1e6).toPrecision(4).replace(/\.0+$/,'') + ' MHz';
+        if(val >= 1e3) return (val/1e3).toPrecision(4).replace(/\.0+$/,'') + ' kHz';
+        return val.toPrecision(4).replace(/\.0+$/,'') + ' Hz';
+    }
+
+    function updateReactance() {
+        const f_val = parseFloat(document.getElementById('react-f').value);
+        const f_mult = parseFloat(document.getElementById('react-f-unit').value);
+        const f = f_val * f_mult;
+
+        const c_val = parseFloat(document.getElementById('react-c').value);
+        const c_mult = parseFloat(document.getElementById('react-c-unit').value);
+        const C = c_val * c_mult;
+
+        const l_val = parseFloat(document.getElementById('react-l').value);
+        const l_mult = parseFloat(document.getElementById('react-l-unit').value);
+        const L = l_val * l_mult;
+
+        let Xc = 0;
+        if(f > 0 && C > 0) {
+            Xc = 1 / (2 * Math.PI * f * C);
+        } else if (f === 0) {
+            Xc = Infinity;
+        }
+
+        let Xl = 0;
+        if(f > 0 && L > 0) {
+            Xl = 2 * Math.PI * f * L;
+        }
+
+        let fr = 0;
+        if(L > 0 && C > 0) {
+            fr = 1 / (2 * Math.PI * Math.sqrt(L * C));
+        }
+
+        if(Xc === Infinity) {
+            document.getElementById('react-xc-val').innerText = "∞";
+            document.getElementById('react-xc-unit').innerText = "Ω";
+        } else {
+            const fXc = formatReactance(Xc);
+            document.getElementById('react-xc-val').innerText = fXc.v;
+            document.getElementById('react-xc-unit').innerText = fXc.u;
+        }
+
+        const fXl = formatReactance(Xl);
+        document.getElementById('react-xl-val').innerText = fXl.v;
+        document.getElementById('react-xl-unit').innerText = fXl.u;
+
+        document.getElementById('react-fr').innerText = formatFreq(fr);
+    }
+    
+    setTimeout(updateReactance, 100);
+</script>
