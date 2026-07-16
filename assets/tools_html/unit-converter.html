@@ -1,0 +1,155 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <!-- Header -->
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Engineering Unit Converter">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-scale-balanced"></i><h3 class="font-bold font-mono">Engineering Unit Converter</h3></div>
+    </div>
+    
+    <div class="p-6 flex-grow overflow-y-auto bg-themeBg text-themeText font-mono">
+        <div class="max-w-4xl mx-auto space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="border border-themeBorder bg-themeContainer p-4 rounded">
+                    <label class="block text-xs text-themeMuted mb-1">Category</label>
+                    <select id="uc-category" class="w-full bg-themeBg border border-themeBorder p-2 text-sm focus:border-themeAccent outline-none" onchange="UnitConverterApp.updateUnits()">
+                        <option value="length">Length</option>
+                        <option value="mass">Mass</option>
+                        <option value="temperature">Temperature</option>
+                        <option value="pressure">Pressure</option>
+                        <option value="energy">Energy</option>
+                        <option value="power">Power</option>
+                        <option value="voltage">Voltage (RF)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                <div class="border border-themeBorder bg-themeContainer p-4 rounded flex flex-col gap-2">
+                    <label class="block text-xs text-themeMuted">From</label>
+                    <div class="flex gap-2">
+                        <input type="number" id="uc-val-from" class="flex-grow bg-themeBg border border-themeBorder p-2 text-lg focus:border-themeAccent outline-none" value="1" oninput="UnitConverterApp.convert()">
+                        <select id="uc-unit-from" class="w-1/3 bg-themeBg border border-themeBorder p-2 text-sm focus:border-themeAccent outline-none" onchange="UnitConverterApp.convert()"></select>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center text-themeMuted">
+                    <button class="hover:text-themeAccent transition-colors p-2" onclick="UnitConverterApp.swap()"><i class="fa-solid fa-right-left"></i></button>
+                </div>
+
+                <div class="border border-themeBorder bg-themeContainer p-4 rounded flex flex-col gap-2">
+                    <label class="block text-xs text-themeMuted">To</label>
+                    <div class="flex gap-2">
+                        <input type="text" readonly id="uc-val-to" class="flex-grow bg-themeBg/50 border border-themeBorder p-2 text-lg text-themeAccent font-bold outline-none">
+                        <select id="uc-unit-to" class="w-1/3 bg-themeBg border border-themeBorder p-2 text-sm focus:border-themeAccent outline-none" onchange="UnitConverterApp.convert()"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('uc-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="uc-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Temperature:</strong> $C = \frac{5}{9}(F - 32)$, $K = C + 273.15$</p>
+            <p><strong>RF Voltage (dBm to Vrms):</strong> $V_{rms} = \sqrt{P_{watts} \times Z}$ where $P_{watts} = 10^{\frac{dBm - 30}{10}}$</p>
+            <p>All other conversions use standard linear scale factors relative to a base SI unit.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+const UnitConverterApp = {
+    units: {
+        length: { base: 'm', factors: { 'm': 1, 'cm': 0.01, 'mm': 0.001, 'km': 1000, 'in': 0.0254, 'ft': 0.3048, 'yd': 0.9144, 'mi': 1609.344, 'mil': 0.0000254 } },
+        mass: { base: 'kg', factors: { 'kg': 1, 'g': 0.001, 'mg': 0.000001, 'lb': 0.45359237, 'oz': 0.02834952 } },
+        pressure: { base: 'Pa', factors: { 'Pa': 1, 'kPa': 1000, 'MPa': 1000000, 'bar': 100000, 'psi': 6894.76, 'atm': 101325, 'Torr': 133.322 } },
+        energy: { base: 'J', factors: { 'J': 1, 'kJ': 1000, 'MJ': 1000000, 'kWh': 3600000, 'Wh': 3600, 'eV': 1.602176634e-19, 'BTU': 1055.06 } },
+        power: { base: 'W', factors: { 'W': 1, 'kW': 1000, 'MW': 1000000, 'hp': 745.7, 'dBm': 'custom' } },
+        temperature: { base: 'K', factors: { 'K': 'custom', 'C': 'custom', 'F': 'custom' } },
+        voltage: { base: 'V', factors: { 'V': 1, 'mV': 0.001, 'kV': 1000, 'dBmV': 'custom', 'dBuV': 'custom' } }
+    },
+    
+    init() {
+        this.updateUnits();
+    },
+    
+    updateUnits() {
+        const cat = document.getElementById('uc-category').value;
+        const fromSel = document.getElementById('uc-unit-from');
+        const toSel = document.getElementById('uc-unit-to');
+        
+        let html = '';
+        Object.keys(this.units[cat].factors).forEach(u => {
+            html += `<option value="${u}">${u}</option>`;
+        });
+        
+        fromSel.innerHTML = html;
+        toSel.innerHTML = html;
+        if(toSel.options.length > 1) toSel.selectedIndex = 1;
+        
+        this.convert();
+    },
+    
+    swap() {
+        const fromSel = document.getElementById('uc-unit-from');
+        const toSel = document.getElementById('uc-unit-to');
+        const fromVal = document.getElementById('uc-val-from');
+        const toVal = document.getElementById('uc-val-to');
+        
+        const tempIdx = fromSel.selectedIndex;
+        fromSel.selectedIndex = toSel.selectedIndex;
+        toSel.selectedIndex = tempIdx;
+        
+        fromVal.value = toVal.value;
+        this.convert();
+    },
+    
+    convert() {
+        const cat = document.getElementById('uc-category').value;
+        const from = document.getElementById('uc-unit-from').value;
+        const to = document.getElementById('uc-unit-to').value;
+        const val = parseFloat(document.getElementById('uc-val-from').value) || 0;
+        
+        let result = 0;
+        
+        if (cat === 'temperature') {
+            let k = val;
+            if (from === 'C') k = val + 273.15;
+            else if (from === 'F') k = (val - 32) * 5/9 + 273.15;
+            
+            if (to === 'K') result = k;
+            else if (to === 'C') result = k - 273.15;
+            else if (to === 'F') result = (k - 273.15) * 9/5 + 32;
+        } else if (cat === 'power' && (from === 'dBm' || to === 'dBm')) {
+            // Special case for dBm
+            let w = val;
+            if (from === 'dBm') w = Math.pow(10, (val - 30) / 10);
+            else w = val * this.units.power.factors[from];
+            
+            if (to === 'dBm') result = 10 * Math.log10(w) + 30;
+            else result = w / this.units.power.factors[to];
+        } else if (cat === 'voltage' && (from.includes('dB') || to.includes('dB'))) {
+            // Simplified DB voltage calculations
+            let v = val;
+            if (from === 'dBmV') v = Math.pow(10, val/20) * 0.001;
+            else if (from === 'dBuV') v = Math.pow(10, val/20) * 0.000001;
+            else v = val * this.units.voltage.factors[from];
+            
+            if (to === 'dBmV') result = 20 * Math.log10(v / 0.001);
+            else if (to === 'dBuV') result = 20 * Math.log10(v / 0.000001);
+            else result = v / this.units.voltage.factors[to];
+        } else {
+            // Linear
+            const f1 = this.units[cat].factors[from];
+            const f2 = this.units[cat].factors[to];
+            result = (val * f1) / f2;
+        }
+        
+        document.getElementById('uc-val-to').value = result.toPrecision(7).replace(/\.0+$/, '');
+    }
+};
+
+setTimeout(() => { UnitConverterApp.init(); }, 50);
+</script>

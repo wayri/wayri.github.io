@@ -1,5 +1,5 @@
 <div id="tool-loop-compensator-p-z" class="doc-container flex flex-col">
-                <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
                     <i class="fa-solid fa-chart-line"></i>
                     <h3 class="font-bold font-mono">Loop Compensator (P/Z)</h3>
                 </div>
@@ -34,4 +34,15 @@
                         <div class="flex justify-between opacity-50" id="comp-fp2-grp"><span class="text-themeMuted">Pole 2 (Fp2)</span><span id="comp-fp2" class="font-bold text-themeAccent">-- hz</span></div>
                     </div>
                 </div>
-            </div>
+            
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('loopcompensatorpz-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="loopcompensatorpz-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Theory:</strong> Mathematical and theoretical details for this tool are used to ensure accurate results based on industry standards.</p>
+        </div>
+    </div>
+</div>

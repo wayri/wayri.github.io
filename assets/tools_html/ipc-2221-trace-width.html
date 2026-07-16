@@ -1,5 +1,5 @@
 <div id="tool-ipc-2221-trace-width" class="doc-container flex flex-col">
-        <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+        <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
             <i class="fa-solid fa-ruler-horizontal"></i>
             <h3 class="font-bold font-mono">IPC-2221 Trace Width</h3>
         </div>
@@ -27,4 +27,15 @@
                 </div>
             </div>
         </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('ipc2221tracewidth-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="ipc2221tracewidth-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Theory:</strong> Mathematical and theoretical details for this tool are used to ensure accurate results based on industry standards.</p>
+        </div>
     </div>
+</div>

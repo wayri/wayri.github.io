@@ -1,5 +1,5 @@
 <div id="tool-pv-yield-simulator" class="doc-container flex flex-col ">
-                  <div class="cursor-pointer hover:opacity-90 p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+                  <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
                       <div class="flex items-center gap-2"><i class="fa-solid fa-solar-panel"></i><h3 class="font-bold font-mono">PV Yield Simulator</h3></div>
                       <span class="font-mono text-[10px] opacity-70">click map OR set location &bull; Adjust month & time</span>
                   </div>
@@ -55,4 +55,15 @@
                           </div>
                       </div>
                   </div>
-              </div>
+              
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('pvyieldsimulator-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="pvyieldsimulator-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Theory:</strong> Mathematical and theoretical details for this tool are used to ensure accurate results based on industry standards.</p>
+        </div>
+    </div>
+</div>

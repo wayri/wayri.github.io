@@ -1,0 +1,199 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <!-- Header -->
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Busbar Capacity Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-bars"></i><h3 class="font-bold font-mono">Busbar Capacity Calculator</h3></div>
+    </div>
+    
+    <div class="p-6 flex-grow overflow-y-auto bg-themeBg text-themeText font-mono">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Inputs -->
+            <div class="space-y-4">
+                <div class="border border-themeBorder bg-themeContainer p-4 rounded flex flex-col gap-3">
+                    <h4 class="font-bold text-themeAccent border-b border-themeBorder/50 pb-2">Busbar Dimensions</h4>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-themeMuted mb-1">Width (w) [mm]</label>
+                            <input type="number" id="bb-width" class="w-full bg-themeBg border border-themeBorder p-2 text-sm focus:border-themeAccent outline-none" value="50" oninput="BusbarApp.calc()">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-themeMuted mb-1">Thickness (t) [mm]</label>
+                            <input type="number" id="bb-thick" class="w-full bg-themeBg border border-themeBorder p-2 text-sm focus:border-themeAccent outline-none" value="5" oninput="BusbarApp.calc()">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-themeMuted mb-1">Length (L) [m]</label>
+                            <input type="number" id="bb-len" class="w-full bg-themeBg border border-themeBorder p-2 text-sm focus:border-themeAccent outline-none" value="1.5" oninput="BusbarApp.calc()">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-themeMuted mb-1">Material</label>
+                            <select id="bb-mat" class="w-full bg-themeBg border border-themeBorder p-2 text-sm focus:border-themeAccent outline-none" onchange="BusbarApp.calc()">
+                                <option value="cu">Copper (Cu)</option>
+                                <option value="al">Aluminum (Al)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-themeBorder bg-themeContainer p-4 rounded flex flex-col gap-3">
+                    <h4 class="font-bold text-themeAccent border-b border-themeBorder/50 pb-2">Operating Conditions</h4>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-themeMuted mb-1">Ambient Temp [°C]</label>
+                            <input type="number" id="bb-tamb" class="w-full bg-themeBg border border-themeBorder p-2 text-sm focus:border-themeAccent outline-none" value="35" oninput="BusbarApp.calc()">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-themeMuted mb-1">Max Allowable Temp [°C]</label>
+                            <input type="number" id="bb-tmax" class="w-full bg-themeBg border border-themeBorder p-2 text-sm focus:border-themeAccent outline-none" value="85" oninput="BusbarApp.calc()">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-themeMuted mb-1">Current (I) [A]</label>
+                            <input type="number" id="bb-i" class="w-full bg-themeBg border border-themeBorder p-2 text-sm focus:border-themeAccent outline-none" value="400" oninput="BusbarApp.calc()">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-themeMuted mb-1">Frequency [Hz]</label>
+                            <select id="bb-freq" class="w-full bg-themeBg border border-themeBorder p-2 text-sm focus:border-themeAccent outline-none" onchange="BusbarApp.calc()">
+                                <option value="0">0 (DC)</option>
+                                <option value="50">50</option>
+                                <option value="60">60</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outputs -->
+            <div class="space-y-4">
+                <div class="border border-themeBorder bg-themeContainer p-4 rounded h-full flex flex-col">
+                    <h4 class="font-bold text-themeAccent border-b border-themeBorder/50 pb-2 mb-4">Results & Ratings</h4>
+                    
+                    <div class="flex-grow space-y-3 text-sm">
+                        <div class="flex justify-between items-center border-b border-themeBorder/30 pb-2">
+                            <span class="text-themeMuted">Cross-sectional Area</span>
+                            <span class="font-bold" id="res-area">- mm²</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-themeBorder/30 pb-2">
+                            <span class="text-themeMuted">DC Resistance (20°C)</span>
+                            <span class="font-bold" id="res-rdc">- μΩ</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-themeBorder/30 pb-2">
+                            <span class="text-themeMuted">AC Resistance (Op. Temp)</span>
+                            <span class="font-bold" id="res-rac">- μΩ</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-themeBorder/30 pb-2">
+                            <span class="text-themeMuted">Voltage Drop (total)</span>
+                            <span class="font-bold text-themeAccent" id="res-vdrop">- mV</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-themeBorder/30 pb-2">
+                            <span class="text-themeMuted">Power Dissipation</span>
+                            <span class="font-bold text-red-400" id="res-power">- W</span>
+                        </div>
+                        
+                        <div class="mt-6 p-3 bg-themeBorder/10 border border-themeBorder rounded">
+                            <p class="text-xs text-themeMuted mb-2">Estimated Ampacity Capacity (ΔT Method)</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xl font-bold text-themeText" id="res-ampacity">- A</span>
+                                <span class="text-xs px-2 py-1 rounded bg-themeBg border border-themeBorder" id="res-status">OK</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('bb-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="bb-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Resistance:</strong> $R_{DC} = \rho \frac{L}{A}$ where $\rho_{Cu} \approx 1.724 \times 10^{-8} \, \Omega \cdot m$ at $20^\circ C$.</p>
+            <p><strong>Temperature Coefficient:</strong> $R_T = R_{20} [1 + \alpha (T - 20)]$.</p>
+            <p><strong>Skin Effect (AC):</strong> For AC, skin depth $\delta = \sqrt{\frac{\rho}{\pi f \mu}}$. The AC resistance ratio $k_{ac}$ increases $R_{DC}$.</p>
+            <p><strong>Ampacity:</strong> Estimated using standard convection/radiation balancing $I = \sqrt{\frac{h \cdot A_{surf} \cdot \Delta T}{R_{ac}}}$, often simplified using empirical DIN 43671 or IEC standards.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+const BusbarApp = {
+    mats: {
+        cu: { rho: 1.724e-8, alpha: 0.00393 },
+        al: { rho: 2.82e-8, alpha: 0.00403 }
+    },
+
+    calc() {
+        const w = parseFloat(document.getElementById('bb-width').value) / 1000;
+        const t = parseFloat(document.getElementById('bb-thick').value) / 1000;
+        const L = parseFloat(document.getElementById('bb-len').value);
+        const mat = this.mats[document.getElementById('bb-mat').value];
+        const Tamb = parseFloat(document.getElementById('bb-tamb').value);
+        const Tmax = parseFloat(document.getElementById('bb-tmax').value);
+        const I = parseFloat(document.getElementById('bb-i').value);
+        const f = parseFloat(document.getElementById('bb-freq').value);
+
+        if(!w || !t || !L || !I) return;
+
+        // Area
+        const A = w * t;
+        document.getElementById('res-area').innerText = (A * 1e6).toFixed(1) + ' mm²';
+
+        // DC Resistance at 20C
+        const Rdc20 = mat.rho * L / A;
+        document.getElementById('res-rdc').innerText = (Rdc20 * 1e6).toFixed(1) + ' μΩ';
+
+        // AC Resistance at Tmax
+        const Rdc_hot = Rdc20 * (1 + mat.alpha * (Tmax - 20));
+        let k_ac = 1.0;
+        if (f > 0) {
+            // Simplified Skin Effect for rectangular bar
+            const mu0 = 4 * Math.PI * 1e-7;
+            const rho_hot = mat.rho * (1 + mat.alpha * (Tmax - 20));
+            const delta = Math.sqrt(rho_hot / (Math.PI * f * mu0));
+            // Very rough approximation for k_ac
+            const p = 2*(w+t); // perimeter
+            const effectiveA = p * delta;
+            if (effectiveA < A) {
+                k_ac = A / effectiveA;
+            }
+        }
+        
+        const Rac = Rdc_hot * k_ac;
+        document.getElementById('res-rac').innerText = (Rac * 1e6).toFixed(1) + ' μΩ';
+
+        // Voltage Drop & Power
+        const Vdrop = I * Rac;
+        const Power = I * I * Rac;
+        document.getElementById('res-vdrop').innerText = (Vdrop * 1000).toFixed(1) + ' mV';
+        document.getElementById('res-power').innerText = Power.toFixed(1) + ' W';
+
+        // Rough Ampacity (DIN 43671 style empirical estimation for bare painted copper)
+        // h_eff ~ 10 W/m2K
+        const h_eff = 10; 
+        const Asurf = 2 * (w + t) * L;
+        const dT = Tmax - Tamb;
+        const Rac_per_m = Rac / L;
+        
+        let I_max = 0;
+        if(dT > 0) {
+            // P_diss = h * Asurf * dT  => I^2 * Rac = h * Asurf * dT
+            I_max = Math.sqrt((h_eff * Asurf * dT) / Rac);
+        }
+
+        document.getElementById('res-ampacity').innerText = Math.round(I_max) + ' A';
+        
+        const stat = document.getElementById('res-status');
+        if (I > I_max) {
+            stat.innerText = 'OVERLOAD';
+            stat.className = 'text-xs px-2 py-1 rounded bg-red-500/20 text-red-500 font-bold border border-red-500';
+        } else {
+            stat.innerText = 'OK';
+            stat.className = 'text-xs px-2 py-1 rounded bg-green-500/20 text-green-500 font-bold border border-green-500';
+        }
+    }
+};
+
+setTimeout(() => { BusbarApp.calc(); }, 50);
+</script>

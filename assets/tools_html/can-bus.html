@@ -1,0 +1,159 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="CAN Bus Harness Designer">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-network-wired"></i><h3 class="font-bold font-mono">CAN Bus Topology Designer</h3></div>
+        <div class="flex gap-2">
+            <button class="px-2 py-1 bg-themeBg text-themeText text-xs font-bold hover:opacity-80 rounded" onclick="CanBusApp.addNode()">+ Add ECU Node</button>
+        </div>
+    </div>
+    
+    <div class="flex flex-grow relative overflow-hidden bg-themeBg font-mono">
+        <div class="flex-grow relative overflow-auto p-6" id="can-canvas-container">
+            <div id="can-bus-line" class="relative w-[800px] h-2 bg-themeAccent mt-10 rounded-full flex justify-between items-center px-4">
+                <div class="w-4 h-6 bg-themeBorder border-2 border-themeAccent absolute -left-2 rounded text-[8px] text-center text-themeText" title="120Ω Terminator">120<br>Ω</div>
+                <div class="w-4 h-6 bg-themeBorder border-2 border-themeAccent absolute -right-2 rounded text-[8px] text-center text-themeText" title="120Ω Terminator">120<br>Ω</div>
+                <!-- Nodes get injected here -->
+            </div>
+            
+            <div class="mt-20 p-4 border border-themeBorder bg-themeContainer rounded max-w-2xl">
+                <h4 class="font-bold text-themeAccent mb-2 border-b border-themeBorder/50 pb-1">Bus Parameters</h4>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <label class="block text-xs text-themeMuted mb-1">Total Bus Length [m]</label>
+                        <input type="number" id="can-len" class="w-full bg-themeBg border border-themeBorder p-2 focus:border-themeAccent outline-none" value="10" oninput="CanBusApp.analyze()">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-themeMuted mb-1">Target Bitrate</label>
+                        <select id="can-rate" class="w-full bg-themeBg border border-themeBorder p-2 focus:border-themeAccent outline-none" onchange="CanBusApp.analyze()">
+                            <option value="125">125 kbps</option>
+                            <option value="250">250 kbps</option>
+                            <option value="500" selected>500 kbps</option>
+                            <option value="1000">1 Mbps</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 p-4 border border-themeBorder bg-themeContainer rounded max-w-2xl" id="can-analysis">
+                <h4 class="font-bold text-themeAccent mb-2 border-b border-themeBorder/50 pb-1">Analysis Results</h4>
+                <div class="space-y-2 text-sm" id="can-results">
+                    <!-- Results injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('can-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="can-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>ISO 11898-2 Constraints:</strong> Max bus length is inversely proportional to bit rate. At 1 Mbps, max length is typically 40m. Max stub length is 0.3m. Max nodes is typically 30 without repeaters.</p>
+            <p><strong>Propagation Delay:</strong> Signals travel at $\approx 5 \, ns/m$. Total loop delay (Node A $\rightarrow$ Node B $\rightarrow$ Node A) must be strictly less than the bit time ($T_{bit} = 1 / f$).</p>
+            <p><strong>Reflections:</strong> Stubs cause impedance mismatches. Un-terminated stubs should be kept as short as possible to prevent ringing. $L_{stub} < \frac{0.1 \times v_{prop}}{f_{knee}}$.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+const CanBusApp = {
+    nodes: [],
+    
+    addNode() {
+        if(this.nodes.length >= 30) return alert("Max 30 nodes for standard CAN.");
+        this.nodes.push({ id: 'ECU ' + (this.nodes.length + 1), stub: 0.1 });
+        this.renderBus();
+        this.analyze();
+    },
+    
+    updateStub(idx, val) {
+        this.nodes[idx].stub = parseFloat(val) || 0;
+        this.analyze();
+    },
+    
+    removeNode(idx) {
+        this.nodes.splice(idx, 1);
+        this.renderBus();
+        this.analyze();
+    },
+    
+    renderBus() {
+        const bus = document.getElementById('can-bus-line');
+        // keep terminators
+        bus.innerHTML = `
+            <div class="w-4 h-6 bg-themeBorder border-2 border-themeAccent absolute -left-2 rounded text-[8px] text-center text-themeText" title="120Ω Terminator">120<br>Ω</div>
+            <div class="w-4 h-6 bg-themeBorder border-2 border-themeAccent absolute -right-2 rounded text-[8px] text-center text-themeText" title="120Ω Terminator">120<br>Ω</div>
+        `;
+        
+        if (this.nodes.length === 0) return;
+        
+        const spacing = 100 / (this.nodes.length + 1);
+        this.nodes.forEach((n, i) => {
+            const left = spacing * (i + 1);
+            bus.innerHTML += `
+                <div class="absolute flex flex-col items-center" style="left: ${left}%; top: -10px;">
+                    <div class="w-2 h-[40px] bg-themeAccent relative">
+                        <!-- ECU Box -->
+                        <div class="absolute bottom-[-50px] -left-[40px] w-[80px] bg-themeBg border border-themeAccent rounded p-1 text-[10px] text-center">
+                            <div class="font-bold text-themeText">${n.id}</div>
+                            <input type="number" step="0.1" value="${n.stub}" class="w-full mt-1 bg-themeContainer border border-themeBorder text-center" onchange="CanBusApp.updateStub(${i}, this.value)" title="Stub length (m)">
+                            <button class="mt-1 text-red-500 hover:text-white hover:bg-red-500 w-full rounded" onclick="CanBusApp.removeNode(${i})">Del</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    },
+    
+    analyze() {
+        const L = parseFloat(document.getElementById('can-len').value) || 0;
+        const rate = parseFloat(document.getElementById('can-rate').value) || 500;
+        
+        const res = document.getElementById('can-results');
+        let html = '';
+        
+        // Limits
+        let maxL = 40;
+        if(rate <= 500) maxL = 100;
+        if(rate <= 250) maxL = 250;
+        if(rate <= 125) maxL = 500;
+        
+        const bitTimeNs = (1 / (rate * 1000)) * 1e9;
+        const propDelayNs = L * 5; // 5ns / m
+        const maxStub = 0.3; // standard 0.3m
+        
+        html += `<div class="flex justify-between border-b border-themeBorder/30 pb-1">
+            <span class="text-themeMuted">Bit Time ($T_{bit}$)</span>
+            <span class="font-bold text-themeAccent">${Math.round(bitTimeNs)} ns</span>
+        </div>`;
+        
+        html += `<div class="flex justify-between border-b border-themeBorder/30 pb-1">
+            <span class="text-themeMuted">Total Prop Delay (Loop)</span>
+            <span class="font-bold ${(propDelayNs*2) > (bitTimeNs*0.7) ? 'text-red-500' : 'text-themeAccent'}">${Math.round(propDelayNs*2)} ns</span>
+        </div>`;
+        
+        html += `<div class="flex justify-between border-b border-themeBorder/30 pb-1">
+            <span class="text-themeMuted">Length Check (Max ${maxL}m)</span>
+            <span class="font-bold ${L > maxL ? 'text-red-500' : 'text-green-500'}">${L > maxL ? 'FAIL' : 'PASS'}</span>
+        </div>`;
+        
+        let badStubs = this.nodes.filter(n => n.stub > maxStub);
+        html += `<div class="flex justify-between border-b border-themeBorder/30 pb-1">
+            <span class="text-themeMuted">Stub Check (Max ${maxStub}m)</span>
+            <span class="font-bold ${badStubs.length > 0 ? 'text-red-500' : 'text-green-500'}">${badStubs.length > 0 ? badStubs.length + ' FAIL' : 'PASS'}</span>
+        </div>`;
+        
+        res.innerHTML = html;
+        
+        if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+            MathJax.typesetPromise([res]);
+        }
+    }
+};
+
+setTimeout(() => { 
+    CanBusApp.addNode(); 
+    CanBusApp.addNode(); 
+}, 50);
+</script>

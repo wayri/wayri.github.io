@@ -1,0 +1,248 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Plot Data Extractor">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-chart-line"></i><h3 class="font-bold font-mono">Plot Data Extractor</h3></div>
+        <div class="flex gap-2">
+            <button class="px-2 py-1 bg-themeBg text-themeText text-xs font-bold hover:opacity-80 rounded" onclick="document.getElementById('pe-file').click()">Load Image</button>
+            <input type="file" id="pe-file" accept="image/*" class="hidden" onchange="PlotExtractorApp.loadImage(event)">
+            <button class="px-2 py-1 border border-themeBg text-themeBg text-xs font-bold hover:bg-themeBg hover:text-themeText rounded" onclick="PlotExtractorApp.downloadCSV()">Export CSV</button>
+        </div>
+    </div>
+    
+    <div class="flex flex-col flex-grow relative overflow-hidden bg-themeBg font-mono">
+        <div class="p-4 border-b border-themeBorder bg-themeContainer flex gap-4 text-sm items-center flex-wrap">
+            <div class="font-bold text-themeAccent mr-2">Calibration (Click on plot):</div>
+            
+            <button id="btn-cal-x1" class="px-2 py-1 border border-themeAccent text-themeAccent hover:bg-themeAccent/20 rounded" onclick="PlotExtractorApp.setMode('cal_x1')">Set X1</button>
+            <input type="number" id="val-x1" class="w-16 bg-themeBg border border-themeBorder p-1 text-center" value="0">
+            
+            <button id="btn-cal-x2" class="px-2 py-1 border border-themeAccent text-themeAccent hover:bg-themeAccent/20 rounded" onclick="PlotExtractorApp.setMode('cal_x2')">Set X2</button>
+            <input type="number" id="val-x2" class="w-16 bg-themeBg border border-themeBorder p-1 text-center" value="100">
+            
+            <button id="btn-cal-y1" class="px-2 py-1 border border-themeAccent text-themeAccent hover:bg-themeAccent/20 rounded ml-4" onclick="PlotExtractorApp.setMode('cal_y1')">Set Y1</button>
+            <input type="number" id="val-y1" class="w-16 bg-themeBg border border-themeBorder p-1 text-center" value="0">
+            
+            <button id="btn-cal-y2" class="px-2 py-1 border border-themeAccent text-themeAccent hover:bg-themeAccent/20 rounded" onclick="PlotExtractorApp.setMode('cal_y2')">Set Y2</button>
+            <input type="number" id="val-y2" class="w-16 bg-themeBg border border-themeBorder p-1 text-center" value="100">
+            
+            <button id="btn-extract" class="px-4 py-1 bg-themeAccent text-themeBg font-bold hover:opacity-80 rounded ml-auto" onclick="PlotExtractorApp.setMode('extract')">Extract Points</button>
+        </div>
+
+        <div class="flex flex-grow overflow-hidden">
+            <!-- Canvas -->
+            <div class="flex-grow p-4 overflow-auto bg-gray-900 relative cursor-crosshair" id="pe-canvas-container">
+                <canvas id="pe-canvas" class="block border border-themeBorder shadow max-w-none"></canvas>
+            </div>
+            
+            <!-- Sidebar Data -->
+            <div class="w-64 border-l border-themeBorder bg-themeContainer flex flex-col flex-shrink-0">
+                <div class="p-2 border-b border-themeBorder font-bold text-xs bg-themeBorder/10 flex justify-between items-center">
+                    <span>Extracted Data</span>
+                    <button class="text-red-500 hover:text-red-400" onclick="PlotExtractorApp.clearData()">Clear</button>
+                </div>
+                <div class="flex-grow overflow-y-auto">
+                    <table class="w-full text-left text-xs border-collapse" id="pe-table">
+                        <thead class="sticky top-0 bg-themeContainer shadow">
+                            <tr><th class="p-2 border-b border-themeBorder">X</th><th class="p-2 border-b border-themeBorder">Y</th><th class="p-2 border-b border-themeBorder"></th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-themeBorder/20"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('plotextractor-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="plotextractor-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Theory:</strong> Mathematical and theoretical details for this tool are used to ensure accurate results based on industry standards.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+const PlotExtractorApp = {
+    canvas: null, ctx: null,
+    img: null,
+    mode: 'none', // cal_x1, cal_x2, cal_y1, cal_y2, extract
+    
+    cal: {
+        x1: { px: null, val: 0 },
+        x2: { px: null, val: 100 },
+        y1: { py: null, val: 0 },
+        y2: { py: null, val: 100 }
+    },
+    
+    points: [], // {px, py, x, y}
+    
+    init() {
+        this.canvas = document.getElementById('pe-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.canvas.addEventListener('click', (e) => this.onClick(e));
+        
+        // Draw placeholder
+        this.canvas.width = 600; this.canvas.height = 400;
+        this.ctx.fillStyle = '#111827'; this.ctx.fillRect(0,0,600,400);
+        this.ctx.fillStyle = '#6b7280'; this.ctx.font = '20px sans-serif';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText("Load an image to start extracting", 300, 200);
+    },
+    
+    loadImage(e) {
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            this.img = new Image();
+            this.img.onload = () => {
+                this.canvas.width = this.img.width;
+                this.canvas.height = this.img.height;
+                this.draw();
+            };
+            this.img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    },
+    
+    setMode(mode) {
+        if(!this.img) return alert("Load an image first.");
+        this.mode = mode;
+        
+        ['btn-cal-x1', 'btn-cal-x2', 'btn-cal-y1', 'btn-cal-y2', 'btn-extract'].forEach(id => {
+            document.getElementById(id).classList.remove('bg-themeAccent', 'text-themeBg');
+            if(id !== 'btn-extract') document.getElementById(id).classList.add('text-themeAccent');
+        });
+        
+        const btn = document.getElementById(mode === 'extract' ? 'btn-extract' : `btn-${mode.replace('_','-')}`);
+        if(btn) {
+            btn.classList.add('bg-themeAccent', 'text-themeBg');
+            btn.classList.remove('text-themeAccent');
+        }
+    },
+    
+    onClick(e) {
+        if(!this.img || this.mode === 'none') return;
+        
+        const rect = this.canvas.getBoundingClientRect();
+        // Handle CSS scaling if any
+        const scaleX = this.canvas.width / rect.width;
+        const scaleY = this.canvas.height / rect.height;
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
+        
+        if (this.mode === 'cal_x1') {
+            this.cal.x1.px = x;
+            this.cal.x1.val = parseFloat(document.getElementById('val-x1').value);
+            this.setMode('cal_x2');
+        } else if (this.mode === 'cal_x2') {
+            this.cal.x2.px = x;
+            this.cal.x2.val = parseFloat(document.getElementById('val-x2').value);
+            this.setMode('cal_y1');
+        } else if (this.mode === 'cal_y1') {
+            this.cal.y1.py = y;
+            this.cal.y1.val = parseFloat(document.getElementById('val-y1').value);
+            this.setMode('cal_y2');
+        } else if (this.mode === 'cal_y2') {
+            this.cal.y2.py = y;
+            this.cal.y2.val = parseFloat(document.getElementById('val-y2').value);
+            this.setMode('extract');
+        } else if (this.mode === 'extract') {
+            if (this.cal.x1.px === null || this.cal.x2.px === null || this.cal.y1.py === null || this.cal.y2.py === null) {
+                return alert("Please set all 4 calibration points first.");
+            }
+            
+            // Map pixel to value
+            const xVal = this.mapLinear(x, this.cal.x1.px, this.cal.x2.px, this.cal.x1.val, this.cal.x2.val);
+            const yVal = this.mapLinear(y, this.cal.y1.py, this.cal.y2.py, this.cal.y1.val, this.cal.y2.val);
+            
+            this.points.push({px: x, py: y, x: xVal, y: yVal});
+            this.updateTable();
+        }
+        
+        this.draw();
+    },
+    
+    mapLinear(val, p1, p2, v1, v2) {
+        if(p1 === p2) return v1;
+        return v1 + ((val - p1) / (p2 - p1)) * (v2 - v1);
+    },
+    
+    clearData() {
+        this.points = [];
+        this.updateTable();
+        this.draw();
+    },
+    
+    removePoint(idx) {
+        this.points.splice(idx, 1);
+        this.updateTable();
+        this.draw();
+    },
+    
+    updateTable() {
+        const tbody = document.querySelector('#pe-table tbody');
+        tbody.innerHTML = '';
+        this.points.forEach((p, i) => {
+            tbody.innerHTML += `
+                <tr class="hover:bg-themeBorder/10">
+                    <td class="p-2">${p.x.toPrecision(5)}</td>
+                    <td class="p-2">${p.y.toPrecision(5)}</td>
+                    <td class="p-2 text-right"><button class="text-red-500 hover:text-red-400" onclick="PlotExtractorApp.removePoint(${i})"><i class="fa-solid fa-xmark"></i></button></td>
+                </tr>
+            `;
+        });
+    },
+    
+    draw() {
+        if(!this.img) return;
+        this.ctx.drawImage(this.img, 0, 0);
+        
+        // Draw cal lines
+        this.ctx.lineWidth = 1;
+        
+        if (this.cal.x1.px !== null) {
+            this.ctx.strokeStyle = 'rgba(0, 255, 0, 0.5)';
+            this.ctx.beginPath(); this.ctx.moveTo(this.cal.x1.px, 0); this.ctx.lineTo(this.cal.x1.px, this.canvas.height); this.ctx.stroke();
+        }
+        if (this.cal.x2.px !== null) {
+            this.ctx.strokeStyle = 'rgba(0, 255, 0, 0.5)';
+            this.ctx.beginPath(); this.ctx.moveTo(this.cal.x2.px, 0); this.ctx.lineTo(this.cal.x2.px, this.canvas.height); this.ctx.stroke();
+        }
+        if (this.cal.y1.py !== null) {
+            this.ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)';
+            this.ctx.beginPath(); this.ctx.moveTo(0, this.cal.y1.py); this.ctx.lineTo(this.canvas.width, this.cal.y1.py); this.ctx.stroke();
+        }
+        if (this.cal.y2.py !== null) {
+            this.ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)';
+            this.ctx.beginPath(); this.ctx.moveTo(0, this.cal.y2.py); this.ctx.lineTo(this.canvas.width, this.cal.y2.py); this.ctx.stroke();
+        }
+        
+        // Draw points
+        this.ctx.fillStyle = '#f59e0b';
+        this.ctx.strokeStyle = '#fff';
+        this.ctx.lineWidth = 1;
+        this.points.forEach(p => {
+            this.ctx.beginPath();
+            this.ctx.arc(p.px, p.py, 4, 0, Math.PI*2);
+            this.ctx.fill();
+            this.ctx.stroke();
+        });
+    },
+    
+    downloadCSV() {
+        if(this.points.length === 0) return alert("No data to export.");
+        let csv = "X,Y\n";
+        this.points.forEach(p => csv += `${p.x},${p.y}\n`);
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const a = document.createElement('a');
+        a.href = window.URL.createObjectURL(blob);
+        a.download = 'extracted_plot_data.csv';
+        a.click();
+    }
+};
+
+setTimeout(() => { PlotExtractorApp.init(); }, 50);
+</script>

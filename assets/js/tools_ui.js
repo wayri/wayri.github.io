@@ -56,9 +56,24 @@ const TOOL_REGISTRY = [
         category: "Embedded & Sensors",
         icon: "fa-temperature-half",
         tools: [
-            { id: "tool-voltage-margining-dac", name: "Voltage/Current Margining", file: "voltage-margining-dac.html" },
-            { id: "tool-thermistor-r-t-curve-ntc", name: "Thermistor R-T Curve", file: "thermistor-r-t-curve-ntc.html" },
-            { id: "tool-web-serial-interface", name: "Web Serial Interface", file: "web-serial-interface.html" }
+            { id: "tool-voltage-margining-dac", name: "Voltage/Current Margining", file: "voltage-margining-dac.html", desc: "Design DAC margining circuits." },
+            { id: "tool-thermistor-r-t-curve-ntc", name: "Thermistor R-T Curve", file: "thermistor-r-t-curve-ntc.html", desc: "NTC temperature to resistance calculations." },
+            { id: "tool-web-serial-interface", name: "Web Serial Interface", file: "web-serial-interface.html", desc: "Connect to serial devices from the browser." }
+        ]
+    },
+    {
+        category: "Advanced Toolkit",
+        icon: "fa-layer-group",
+        tools: [
+            { id: "tool-unit-converter", name: "Engineering Unit Converter", file: "unit-converter.html", desc: "Bidirectional conversions across 23 categories." },
+            { id: "tool-busbar-capacity", name: "Busbar Capacity", file: "busbar-capacity.html", desc: "DC skin effect, EM forces, deflection, voltage drop." },
+            { id: "tool-cable-thermal", name: "Dynamic Cable Thermal", file: "cable-thermal.html", desc: "Multi-segment series derating and NEC limits." },
+            { id: "tool-can-bus", name: "CAN Bus Harness", file: "can-bus.html", desc: "ISO 11898 compliance and propagation delays." },
+            { id: "tool-fishbone", name: "Ishikawa Fishbone Diagram", file: "fishbone.html", desc: "Root cause analysis with dynamic SVGs." },
+            { id: "tool-plot-extractor", name: "Plot Data Extractor", file: "plot-extractor.html", desc: "Extract data points from images of graphs." },
+            { id: "tool-2d-drafting", name: "2D Drafting Board", file: "2d-drafting.html", desc: "Parametric vector parts with geometric constraints." },
+            { id: "tool-beam-solver", name: "Structural Beam Solver", file: "beam-solver.html", desc: "1D Finite Element Analysis (FEA) solver." },
+            { id: "tool-heatsink-sim", name: "Heatsink Simulator", file: "heatsink-sim.html", desc: "3D voxel heat diffusion solver." }
         ]
     }
 ];
@@ -168,3 +183,48 @@ async function loadTool(toolId, fileName, btnElement) {
         mainArea.innerHTML = `<div class="p-6 border border-red-500/50 bg-red-500/10 text-red-400 font-mono"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Error loading tool: ${error.message}<br><br>Tool File: ${fileName}</div>`;
     }
 }
+
+function renderWelcomeGrid() {
+    const welcome = document.getElementById('tools-welcome');
+    if(!welcome) return;
+    
+    let gridHtml = `<div class="w-full max-w-6xl mx-auto p-6 flex flex-col gap-8">
+        <div class="text-center mb-4">
+            <h2 class="text-3xl font-bold font-mono text-themeText"><i class="fa-solid fa-toolbox text-themeAccent mr-3"></i>Engineering Toolkit</h2>
+            <p class="text-themeMuted mt-2 text-sm max-w-2xl mx-auto">A curated, unified suite of high-performance interactive design calculators, simulation solvers, and engineering utilities.</p>
+        </div>
+    `;
+    
+    TOOL_REGISTRY.forEach(category => {
+        gridHtml += `
+            <div>
+                <h3 class="text-lg font-bold font-mono text-themeText border-b border-themeBorder pb-2 mb-4"><i class="fa-solid ${category.icon} mr-2 text-themeAccent"></i>${category.category}</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        `;
+        
+        category.tools.forEach(tool => {
+            gridHtml += `
+                <div class="group border border-themeBorder bg-themeContainer hover:border-themeAccent hover:shadow-[0_0_15px_rgba(var(--theme-accent-rgb),0.2)] rounded p-4 cursor-pointer transition-all flex flex-col gap-2" onclick="loadTool('${tool.id}', '${tool.file}')">
+                    <h4 class="font-bold font-mono text-themeAccent group-hover:text-themeText transition-colors">${tool.name}</h4>
+                    <p class="text-xs text-themeMuted leading-relaxed">${tool.desc || 'Interactive engineering design utility.'}</p>
+                </div>
+            `;
+        });
+        
+        gridHtml += `</div></div>`;
+    });
+    
+    gridHtml += `</div>`;
+    
+    // Replace the default welcome content with our new grid
+    welcome.innerHTML = gridHtml;
+    // Remove the opacity classes
+    welcome.className = "absolute inset-0 overflow-y-auto bg-themeBg";
+}
+
+// Call renderWelcomeGrid after initSidebar
+const origInitSidebar = initSidebar;
+initSidebar = function() {
+    origInitSidebar();
+    renderWelcomeGrid();
+};

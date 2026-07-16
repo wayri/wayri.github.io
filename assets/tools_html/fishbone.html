@@ -1,0 +1,180 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Ishikawa Fishbone Diagram">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-fish"></i><h3 class="font-bold font-mono">Ishikawa (Fishbone) Diagram</h3></div>
+        <div class="flex gap-2">
+            <button class="px-2 py-1 bg-themeBg text-themeText text-xs font-bold hover:opacity-80 rounded" onclick="FishboneApp.downloadSVG()"><i class="fa-solid fa-download mr-1"></i> SVG</button>
+        </div>
+    </div>
+    
+    <div class="flex flex-col flex-grow relative overflow-hidden bg-themeBg font-mono">
+        <!-- Controls -->
+        <div class="p-4 border-b border-themeBorder bg-themeContainer flex gap-4 text-sm items-center">
+            <label class="font-bold text-themeAccent">Main Problem:</label>
+            <input type="text" id="fb-problem" class="bg-themeBg border border-themeBorder p-1 flex-grow focus:border-themeAccent outline-none text-themeText" value="Product Failure" oninput="FishboneApp.render()">
+            
+            <label class="font-bold text-themeAccent ml-4">Template:</label>
+            <select id="fb-template" class="bg-themeBg border border-themeBorder p-1 focus:border-themeAccent outline-none" onchange="FishboneApp.loadTemplate()">
+                <option value="6m">6M (Manufacturing)</option>
+                <option value="8p">8P (Service)</option>
+                <option value="4s">4S (Systems)</option>
+            </select>
+        </div>
+
+        <!-- Editor and Canvas -->
+        <div class="flex flex-grow overflow-hidden">
+            <!-- Sidebar Editor -->
+            <div class="w-80 border-r border-themeBorder bg-themeContainer flex flex-col flex-shrink-0 overflow-y-auto p-4" id="fb-categories">
+                <!-- Categories injected here -->
+            </div>
+            
+            <!-- Canvas -->
+            <div class="flex-grow p-4 overflow-auto bg-white" id="fb-svg-container">
+                <svg id="fb-svg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"></svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('fb-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="fb-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Cause and Effect:</strong> The Ishikawa diagram is a visual tool used to logically organize possible causes for a specific problem or effect by displaying them graphically.</p>
+            <p><strong>Standard Templates:</strong> 6M (Machine, Method, Materials, Measurement, Man, Mother Nature) is standard for manufacturing. 8P for service, 4S for software/systems.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+const FishboneApp = {
+    templates: {
+        '6m': ['Machine', 'Method', 'Material', 'Man Power', 'Measurement', 'Mother Nature'],
+        '8p': ['Price', 'Promotion', 'People', 'Processes', 'Place / Plant', 'Policies', 'Procedures', 'Product'],
+        '4s': ['Surroundings', 'Suppliers', 'Systems', 'Skills']
+    },
+    
+    data: [], // [{ name: 'Category', causes: ['c1', 'c2'] }]
+    
+    loadTemplate() {
+        const t = document.getElementById('fb-template').value;
+        this.data = this.templates[t].map(name => ({ name, causes: ['Example cause 1', 'Example cause 2'] }));
+        this.buildEditor();
+        this.render();
+    },
+    
+    buildEditor() {
+        const container = document.getElementById('fb-categories');
+        let html = '';
+        this.data.forEach((cat, i) => {
+            html += `
+                <div class="mb-4 border border-themeBorder bg-themeBg p-2 rounded">
+                    <input type="text" class="font-bold text-themeAccent bg-transparent border-b border-themeBorder/50 w-full mb-2 outline-none text-sm" value="${cat.name}" oninput="FishboneApp.updateCat(${i}, this.value)">
+                    <textarea class="w-full h-20 text-xs bg-themeContainer border border-themeBorder p-1 outline-none text-themeText" oninput="FishboneApp.updateCauses(${i}, this.value)" placeholder="Enter causes, one per line">${cat.causes.join('\n')}</textarea>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    },
+    
+    updateCat(idx, val) { this.data[idx].name = val; this.render(); },
+    updateCauses(idx, val) { this.data[idx].causes = val.split('\n').filter(c => c.trim() !== ''); this.render(); },
+    
+    render() {
+        const problem = document.getElementById('fb-problem').value || 'Problem';
+        const svg = document.getElementById('fb-svg');
+        const W = 1000;
+        const H = 600;
+        svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+        
+        let html = `
+            <style>
+                .fb-line { stroke: #000; stroke-width: 3; }
+                .fb-sub { stroke: #000; stroke-width: 1.5; }
+                .fb-text { font-family: sans-serif; fill: #000; }
+                .fb-box { fill: #fff; stroke: #000; stroke-width: 2; }
+            </style>
+            <!-- Main Spine -->
+            <line x1="50" y1="${H/2}" x2="${W-200}" y2="${H/2}" class="fb-line" />
+            <polygon points="${W-200},${H/2-15} ${W-170},${H/2} ${W-200},${H/2+15}" fill="#000" />
+            
+            <!-- Problem Box -->
+            <rect x="${W-160}" y="${H/2-40}" width="150" height="80" class="fb-box" />
+            <foreignObject x="${W-150}" y="${H/2-30}" width="130" height="60">
+                <div xmlns="http://www.w3.org/1999/xhtml" style="font-family:sans-serif;font-size:14px;font-weight:bold;text-align:center;display:flex;align-items:center;justify-content:center;height:100%;color:#000;">
+                    ${problem}
+                </div>
+            </foreignObject>
+        `;
+        
+        // Branches
+        const topCount = Math.ceil(this.data.length / 2);
+        const botCount = Math.floor(this.data.length / 2);
+        const spacingX = (W - 300) / Math.max(topCount, botCount, 1);
+        
+        let topIdx = 0;
+        let botIdx = 0;
+        
+        this.data.forEach((cat, i) => {
+            const isTop = i % 2 === 0;
+            const idx = isTop ? topIdx++ : botIdx++;
+            
+            const startX = 100 + (idx * spacingX) + (isTop ? 0 : spacingX/2);
+            const startY = isTop ? 50 : H - 50;
+            const endX = startX + 100;
+            const endY = H/2;
+            
+            // Branch line
+            html += `<line x1="${startX}" y1="${startY}" x2="${endX}" y2="${endY}" class="fb-line" />`;
+            
+            // Category Box
+            html += `
+                <rect x="${startX-60}" y="${isTop ? startY-30 : startY}" width="120" height="30" class="fb-box" />
+                <text x="${startX}" y="${isTop ? startY-10 : startY+20}" class="fb-text" font-size="14" font-weight="bold" text-anchor="middle">${cat.name}</text>
+            `;
+            
+            // Causes
+            const dX = endX - startX;
+            const dY = endY - startY;
+            const length = Math.hypot(dX, dY);
+            const causeSpacing = length / (cat.causes.length + 1);
+            
+            cat.causes.forEach((cause, cIdx) => {
+                const fraction = (cIdx + 1) / (cat.causes.length + 1);
+                const px = startX + dX * fraction;
+                const py = startY + dY * fraction;
+                
+                const subX = px - 80;
+                const subY = py; // horizontal line
+                
+                html += `
+                    <line x1="${subX}" y1="${subY}" x2="${px}" y2="${py}" class="fb-sub" />
+                    <text x="${subX-5}" y="${subY+4}" class="fb-text" font-size="12" text-anchor="end">${cause}</text>
+                `;
+            });
+        });
+        
+        svg.innerHTML = html;
+    },
+    
+    downloadSVG() {
+        const svg = document.getElementById('fb-svg');
+        const serializer = new XMLSerializer();
+        let source = serializer.serializeToString(svg);
+        if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+            source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+        }
+        const blob = new Blob([source], {type: "image/svg+xml;charset=utf-8"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "fishbone_diagram.svg";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+};
+
+setTimeout(() => { FishboneApp.loadTemplate(); }, 50);
+</script>
