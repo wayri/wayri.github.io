@@ -117,3 +117,9 @@
 
 <script src="{{ '/assets/js/harness_designer.js' | relative_url }}"></script>
 <script>
+setTimeout(() => {
+    if(window.HarnessApp) {
+        window.HarnessApp.addNode();
+    }
+}, 50);
+</script>
