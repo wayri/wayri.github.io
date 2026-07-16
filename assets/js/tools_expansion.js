@@ -1546,3 +1546,188 @@ window.updateMagCore = function() {
     document.getElementById('mag-out-mueff').innerText = mu_eff.toFixed(1);
     document.getElementById('mag-out-e').innerText = (E_J * 1000).toFixed(2) + " mJ";
 }
+
+
+// ==========================================
+// TRANSFORMER DESIGNER & EXTRACTOR
+// ==========================================
+
+let xfmrScene, xfmrCamera, xfmrRenderer, xfmrGroup;
+let xfmrReqId = null;
+
+function initXfmr3D() {
+    const container = document.getElementById('xfmr-3d-container');
+    if (!container || xfmrRenderer) return;
+
+    xfmrScene = new THREE.Scene();
+    xfmrCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    xfmrCamera.position.set(40, 30, 50);
+    xfmrCamera.lookAt(0, 0, 0);
+
+    xfmrRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    xfmrRenderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(xfmrRenderer.domElement);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    xfmrScene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(20, 50, 20);
+    xfmrScene.add(dirLight);
+
+    xfmrGroup = new THREE.Group();
+    xfmrScene.add(xfmrGroup);
+
+    // Build a basic E-Core representation
+    const coreMat = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.3, roughness: 0.7 });
+    const wireMatPri = new THREE.MeshStandardMaterial({ color: 0xb87333, metalness: 0.8, roughness: 0.2 });
+    const wireMatSec = new THREE.MeshStandardMaterial({ color: 0xc4522f, metalness: 0.8, roughness: 0.2 });
+
+    // E-Core Back
+    const backGeo = new THREE.BoxGeometry(30, 20, 5);
+    const backMesh = new THREE.Mesh(backGeo, coreMat);
+    backMesh.position.z = -5;
+    xfmrGroup.add(backMesh);
+
+    // Legs
+    const outerLegGeo = new THREE.BoxGeometry(5, 20, 15);
+    const centerLegGeo = new THREE.BoxGeometry(10, 20, 15);
+    
+    const leftLeg = new THREE.Mesh(outerLegGeo, coreMat);
+    leftLeg.position.set(-12.5, 0, 5);
+    xfmrGroup.add(leftLeg);
+    
+    const rightLeg = new THREE.Mesh(outerLegGeo, coreMat);
+    rightLeg.position.set(12.5, 0, 5);
+    xfmrGroup.add(rightLeg);
+    
+    const centerLeg = new THREE.Mesh(centerLegGeo, coreMat);
+    centerLeg.position.set(0, 0, 5);
+    xfmrGroup.add(centerLeg);
+
+    // Primary Winding (Inner)
+    const priGeo = new THREE.CylinderGeometry(8, 8, 16, 16, 1, true);
+    const priMesh = new THREE.Mesh(priGeo, wireMatPri);
+    priMesh.rotation.x = Math.PI / 2;
+    priMesh.position.z = 5;
+    priMesh.scale.set(1, 1, 1.2);
+    xfmrGroup.add(priMesh);
+
+    // Secondary Winding (Outer)
+    const secGeo = new THREE.CylinderGeometry(10, 10, 14, 16, 1, true);
+    const secMesh = new THREE.Mesh(secGeo, wireMatSec);
+    secMesh.rotation.x = Math.PI / 2;
+    secMesh.position.z = 5;
+    secMesh.scale.set(1, 1, 1.3);
+    xfmrGroup.add(secMesh);
+
+    // Grid helper
+    const gridHelper = new THREE.GridHelper(100, 10, 0x444444, 0x222222);
+    gridHelper.position.y = -15;
+    xfmrScene.add(gridHelper);
+
+    const animate = function () {
+        xfmrReqId = requestAnimationFrame(animate);
+        xfmrGroup.rotation.y += 0.005;
+        xfmrRenderer.render(xfmrScene, xfmrCamera);
+    };
+    animate();
+}
+
+window.updateXfmrUI = function() {
+    const mode = document.getElementById('xfmr-mode').value;
+    if (mode === 'extract') {
+        document.getElementById('xfmr-design-cont').classList.add('hidden');
+        document.getElementById('xfmr-res-design').classList.add('hidden');
+        document.getElementById('xfmr-extract-cont').classList.remove('hidden');
+        document.getElementById('xfmr-res-extract').classList.remove('hidden');
+    } else {
+        document.getElementById('xfmr-design-cont').classList.remove('hidden');
+        document.getElementById('xfmr-res-design').classList.remove('hidden');
+        document.getElementById('xfmr-extract-cont').classList.add('hidden');
+        document.getElementById('xfmr-res-extract').classList.add('hidden');
+    }
+    updateXfmr();
+}
+
+window.updateXfmr = function() {
+    if (!document.getElementById('xfmr-mode')) return;
+
+    const mode = document.getElementById('xfmr-mode').value;
+
+    if (mode === 'design') {
+        const vp = parseFloat(document.getElementById('xfmr-vp').value) || 230;
+        const vs = parseFloat(document.getElementById('xfmr-vs').value) || 24;
+        const s = parseFloat(document.getElementById('xfmr-s').value) || 100;
+        const f = parseFloat(document.getElementById('xfmr-f').value) || 50;
+        
+        const ae = parseFloat(document.getElementById('xfmr-ae').value) || 12; // cm^2
+        const bmax = parseFloat(document.getElementById('xfmr-bmax').value) || 1.2;
+        const aw = parseFloat(document.getElementById('xfmr-aw').value) || 15; // cm^2
+        const kw = parseFloat(document.getElementById('xfmr-kw').value) || 0.4;
+        
+        // Vrms = 4.44 * f * N * Bmax * Ae
+        // Ae needs to be in m^2 for standard SI, but let's do it cleanly:
+        const ae_m2 = ae / 10000;
+        
+        // Volts per turn
+        const vpt = 4.44 * f * bmax * ae_m2;
+        
+        const np = Math.round(vp / vpt);
+        const ns = Math.round(vs / vpt * 1.05); // 5% regulation margin
+
+        const ip = s / vp;
+        const is = s / vs;
+
+        // Area Product Ap = S / (4.44 * f * Bmax * kw * J)
+        // Assume J = 3 A/mm^2 = 300 A/cm^2
+        const J_cm2 = 300; 
+        const required_ap = s / (4.44 * f * bmax * kw * J_cm2); // cm^4
+        const actual_ap = ae * aw;
+
+        document.getElementById('xfmr-out-np').innerText = isNaN(np) || !isFinite(np) ? 0 : np;
+        document.getElementById('xfmr-out-ns').innerText = isNaN(ns) || !isFinite(ns) ? 0 : ns;
+        document.getElementById('xfmr-out-ip').innerText = ip.toFixed(2) + " A";
+        document.getElementById('xfmr-out-is').innerText = is.toFixed(2) + " A";
+        document.getElementById('xfmr-out-vpt').innerText = vpt.toFixed(3);
+        document.getElementById('xfmr-out-ap').innerText = required_ap.toFixed(1);
+
+        const warnEl = document.getElementById('xfmr-warn-ap');
+        if (actual_ap < required_ap && s > 0) {
+            warnEl.classList.remove('hidden');
+        } else {
+            warnEl.classList.add('hidden');
+        }
+
+    } else {
+        // Extraction
+        const voc = parseFloat(document.getElementById('xfmr-voc').value) || 230;
+        const ioc = parseFloat(document.getElementById('xfmr-ioc').value) || 0.5;
+        const poc = parseFloat(document.getElementById('xfmr-poc').value) || 30;
+        
+        const vsc = parseFloat(document.getElementById('xfmr-vsc').value) || 12;
+        const isc = parseFloat(document.getElementById('xfmr-isc').value) || 4.5;
+        const psc = parseFloat(document.getElementById('xfmr-psc').value) || 25;
+
+        // OC Test (LV side usually, finding Rc, Xm)
+        let rc = 0, xm = 0;
+        if (ioc > 0 && poc > 0) {
+            rc = (voc * voc) / poc;
+            const ic = voc / rc;
+            const im = Math.sqrt(Math.max(0, ioc*ioc - ic*ic));
+            xm = im > 0 ? (voc / im) : 0;
+        }
+
+        // SC Test (HV side usually, finding Req, Xeq)
+        let req = 0, xeq = 0;
+        if (isc > 0) {
+            req = psc / (isc * isc);
+            const zeq = vsc / isc;
+            xeq = Math.sqrt(Math.max(0, zeq*zeq - req*req));
+        }
+
+        document.getElementById('xfmr-out-rc').innerText = rc.toFixed(1) + " Ω";
+        document.getElementById('xfmr-out-xm').innerText = xm.toFixed(1) + " Ω";
+        document.getElementById('xfmr-out-req').innerText = req.toFixed(3) + " Ω";
+        document.getElementById('xfmr-out-xeq').innerText = xeq.toFixed(3) + " Ω";
+    }
+}

@@ -63,6 +63,7 @@ const TOOL_REGISTRY = [
         category: "Magnetics & Filters",
         icon: "fa-magnet",
         tools: [
+            { id: "tool-transformer-designer", name: "Transformer Designer", file: "transformer-designer.html" },
             { id: "tool-magnetic-core", name: "Magnetic Core & Inductor", file: "magnetic-core-calc.html" },
             { id: "tool-emi-filter", name: "EMI Filter Calculator", file: "emi-filter-calc.html" },
             { id: "tool-magnetics-suite", name: "Magnetics Design Suite", file: "magnetics-suite.html" },

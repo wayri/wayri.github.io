@@ -1,0 +1,211 @@
+<div class="doc-container flex flex-col w-full h-full min-h-[850px]">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Transformer Designer & Extractor">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-transformer"></i><h3 class="font-bold font-mono">Transformer Designer & Extractor</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Design & OC/SC Parameter Extraction</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col overflow-y-auto">
+                <div class="flex justify-between items-center mb-2">
+                    <h4 class="text-xs font-bold text-themeMuted border-b border-themeBorder/20 pb-1 flex-grow">OPERATING MODE</h4>
+                    <select id="xfmr-mode" class="bg-themeBg border border-themeBorder text-themeText text-xs p-1 outline-none ml-2" onchange="updateXfmrUI()">
+                        <option value="extract">Parameter Extraction (OC/SC)</option>
+                        <option value="design" selected>Transformer Designer</option>
+                    </select>
+                </div>
+                
+                <!-- DESIGN MODE -->
+                <div id="xfmr-design-cont" class="space-y-4">
+                    <h4 class="text-[10px] font-bold text-themeAccent bg-themeBg p-1">SPECIFICATIONS</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Primary Volts ($V_p$)</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-vp" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="230" min="1" step="1" oninput="updateXfmr()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">V</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Secondary Volts ($V_s$)</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-vs" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="24" min="1" step="1" oninput="updateXfmr()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">V</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Power Rating ($S$)</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-s" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="100" min="1" step="10" oninput="updateXfmr()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">VA</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Frequency ($f$)</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-f" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="50" min="10" step="10" oninput="updateXfmr()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">Hz</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="text-[10px] font-bold text-themeAccent bg-themeBg p-1">CORE PROPERTIES</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Effective Area ($A_e$)</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-ae" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="12" min="1" step="1" oninput="updateXfmr()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">cm&sup2;</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Max Flux Density ($B_{max}$)</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-bmax" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1.2" min="0.1" step="0.1" oninput="updateXfmr()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">T</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Window Area ($A_w$)</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-aw" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="15" min="1" step="1" oninput="updateXfmr()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">cm&sup2;</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Fill Factor ($k_w$)</span></div>
+                            <input type="number" id="xfmr-kw" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.4" min="0.1" max="1" step="0.05" oninput="updateXfmr()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EXTRACTION MODE -->
+                <div id="xfmr-extract-cont" class="space-y-4 hidden">
+                    <h4 class="text-[10px] font-bold text-themeAccent bg-themeBg p-1">OPEN CIRCUIT TEST (LV Side)</h4>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Voltage ($V_{oc}$)</span></div>
+                            <input type="number" id="xfmr-voc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="230" step="1" oninput="updateXfmr()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Current ($I_{oc}$)</span></div>
+                            <input type="number" id="xfmr-ioc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.5" step="0.01" oninput="updateXfmr()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Power ($P_{oc}$)</span></div>
+                            <input type="number" id="xfmr-poc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="30" step="1" oninput="updateXfmr()">
+                        </div>
+                    </div>
+
+                    <h4 class="text-[10px] font-bold text-themeAccent bg-themeBg p-1">SHORT CIRCUIT TEST (HV Side)</h4>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Voltage ($V_{sc}$)</span></div>
+                            <input type="number" id="xfmr-vsc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="12" step="0.5" oninput="updateXfmr()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Current ($I_{sc}$)</span></div>
+                            <input type="number" id="xfmr-isc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="4.5" step="0.1" oninput="updateXfmr()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Power ($P_{sc}$)</span></div>
+                            <input type="number" id="xfmr-psc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="25" step="1" oninput="updateXfmr()">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <div class="w-full h-64 bg-[#0a0a0a] border border-themeBorder/50 flex items-center justify-center relative overflow-hidden" id="xfmr-3d-container">
+                    <!-- 3D canvas injected here -->
+                </div>
+
+                <!-- DESIGN RESULTS -->
+                <div id="xfmr-res-design" class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center shadow-inner flex-grow">
+                    <span class="text-[10px] text-themeAccent font-bold mb-2 uppercase text-center">Winding Requirements</span>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-themeBg p-3 border border-themeBorder/50 text-center">
+                            <span class="text-[10px] text-themeMuted block mb-1">Primary Turns ($N_p$)</span>
+                            <div class="text-3xl font-bold text-themeText" id="xfmr-out-np">0</div>
+                            <span class="text-[10px] text-themeMuted block mt-1" id="xfmr-out-ip">0.0 A</span>
+                        </div>
+                        <div class="bg-themeBg p-3 border border-themeBorder/50 text-center">
+                            <span class="text-[10px] text-themeMuted block mb-1">Secondary Turns ($N_s$)</span>
+                            <div class="text-3xl font-bold text-themeText" id="xfmr-out-ns">0</div>
+                            <span class="text-[10px] text-themeMuted block mt-1" id="xfmr-out-is">0.0 A</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 grid grid-cols-2 gap-2 text-xs border-t border-themeBorder/20 pt-2 text-center">
+                        <div>
+                            <span class="text-[9px] text-themeMuted block">Volts per Turn</span>
+                            <span class="font-bold text-themeText" id="xfmr-out-vpt">0.0</span> V/t
+                        </div>
+                        <div>
+                            <span class="text-[9px] text-themeMuted block">Area Product ($A_p$)</span>
+                            <span class="font-bold text-themeText" id="xfmr-out-ap">0.0</span> cm&sup4;
+                        </div>
+                    </div>
+                    
+                    <div id="xfmr-warn-ap" class="w-full mt-3 p-2 text-[10px] font-bold text-white bg-red-600/80 border border-red-500 rounded hidden text-center">
+                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> Core too small for this power rating (Ap < req)
+                    </div>
+                </div>
+
+                <!-- EXTRACT RESULTS -->
+                <div id="xfmr-res-extract" class="hidden bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center shadow-inner flex-grow">
+                    <span class="text-[10px] text-themeAccent font-bold mb-2 uppercase text-center">Equivalent Circuit Parameters</span>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-themeBg p-2 border border-themeBorder/50 text-center flex flex-col justify-center">
+                            <span class="text-[9px] text-themeMuted block">Core Loss Res ($R_c$)</span>
+                            <span class="text-xl font-bold text-themeText" id="xfmr-out-rc">0.0 &Omega;</span>
+                        </div>
+                        <div class="bg-themeBg p-2 border border-themeBorder/50 text-center flex flex-col justify-center">
+                            <span class="text-[9px] text-themeMuted block">Magnetizing ($X_m$)</span>
+                            <span class="text-xl font-bold text-themeText" id="xfmr-out-xm">0.0 &Omega;</span>
+                        </div>
+                        <div class="bg-themeBg p-2 border border-themeBorder/50 text-center flex flex-col justify-center">
+                            <span class="text-[9px] text-themeMuted block">Eq. Series Res ($R_{eq}$)*</span>
+                            <span class="text-xl font-bold text-themeText" id="xfmr-out-req">0.0 &Omega;</span>
+                        </div>
+                        <div class="bg-themeBg p-2 border border-themeBorder/50 text-center flex flex-col justify-center">
+                            <span class="text-[9px] text-themeMuted block">Eq. Leakage ($X_{eq}$)*</span>
+                            <span class="text-xl font-bold text-themeText" id="xfmr-out-xeq">0.0 &Omega;</span>
+                        </div>
+                    </div>
+                    <div class="text-[9px] text-themeMuted text-center mt-2">* Referred to the side SC test was performed on.</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('xfmr-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="xfmr-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Universal EMF Equation:</strong> $V_{rms} = 4.44 \cdot f \cdot N \cdot B_{max} \cdot A_e$</p>
+            <ul class="list-disc pl-4 space-y-1">
+                <li>Primary Turns: $N_p = rac{V_p}{4.44 \cdot f \cdot B_{max} \cdot A_e}$</li>
+                <li>Area Product Requirement: $A_p = A_e \cdot A_w = rac{S \cdot 10^4}{4.44 \cdot f \cdot B_{max} \cdot k_w \cdot J}$</li>
+            </ul>
+            <p><strong>Parameter Extraction:</strong></p>
+            <ul class="list-disc pl-4 space-y-1">
+                <li>$P_{oc} pprox P_{core} \implies R_c = rac{V_{oc}^2}{P_{oc}}$</li>
+                <li>$I_c = rac{V_{oc}}{R_c}$, $I_m = \sqrt{I_{oc}^2 - I_c^2} \implies X_m = rac{V_{oc}}{I_m}$</li>
+                <li>$P_{sc} pprox P_{copper} \implies R_{eq} = rac{P_{sc}}{I_{sc}^2}$</li>
+                <li>$Z_{eq} = rac{V_{sc}}{I_{sc}}$, $X_{eq} = \sqrt{Z_{eq}^2 - R_{eq}^2}$</li>
+            </ul>
+        </div>
+    </div>
+</div>
