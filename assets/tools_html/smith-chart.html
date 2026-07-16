@@ -1,7 +1,8 @@
 <div id="tool-smith-chart" class="doc-container flex flex-col w-full h-full">
     <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Smith Chart & RF Analysis">
         <div class="flex items-center gap-2"><i class="fa-solid fa-satellite-dish"></i><h3 class="font-bold font-mono">Smith Chart & RF Analysis</h3></div>
-        <div class="flex gap-2">
+        <div class="flex gap-2 items-center">
+            <button class="px-2 py-1 bg-themeBg text-themeText border border-themeBorder text-xs font-bold hover:bg-themeBorder rounded" onclick="exportSmithSVG()"><i class="fa-solid fa-download mr-1"></i>Export SVG</button>
             <select id="smith-comp-type" class="bg-themeBg text-themeText border border-themeBorder text-xs p-1">
                 <option value="ser_l">Series Inductor</option>
                 <option value="ser_c">Series Capacitor</option>
@@ -15,9 +16,17 @@
         </div>
     </div>
     
-    <div class="flex flex-grow relative overflow-hidden bg-themeBg font-mono min-h-[500px]">
-        <div id="smith-canvas-container" class="flex-grow flex items-center justify-center p-4 bg-themeBg relative overflow-hidden">
-            <canvas id="smith-canvas" class="w-full h-full max-w-[800px] max-h-[800px]"></canvas>
+    <div class="flex flex-grow relative bg-themeBg font-mono min-h-[500px]">
+        <div id="smith-canvas-container" class="flex-grow flex flex-col p-4 bg-themeBg relative h-[800px] max-h-[80vh] min-h-[500px]">
+            <div class="absolute top-4 left-4 z-10 bg-themeContainer border border-themeBorder/50 p-2 text-xs font-mono pointer-events-none text-themeText shadow-md hidden" id="smith-hover-info">
+                <div>Z: <span id="smith-hover-z" class="text-themeAccent">50 + j0</span> &Omega;</div>
+                <div>Y: <span id="smith-hover-y">20 - j0</span> mS</div>
+                <div>&Gamma;: <span id="smith-hover-gamma">0.00 &ang; 0&deg;</span></div>
+                <div>VSWR: <span id="smith-hover-vswr">1.00</span></div>
+            </div>
+            <div class="flex-grow relative flex items-center justify-center">
+                <canvas id="smith-canvas" class="w-full h-full max-w-[800px] max-h-[800px] cursor-crosshair"></canvas>
+            </div>
         </div>
         
         <div class="w-80 border-l border-themeBorder bg-themeContainer flex flex-col flex-shrink-0">
@@ -55,6 +64,31 @@
                 </div>
                 
                 <button class="w-full px-2 py-1 bg-themeAccent text-themeBg font-bold hover:opacity-80 rounded mt-4" onclick="runSmithChart()">Calculate Match</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tutorial & Theory Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('smith-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-book-open mr-2"></i>How to Use & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="smith-theory" class="hidden text-themeMuted mt-2 space-y-4 text-xs">
+            <div>
+                <strong class="text-themeText">1. Basic Setup:</strong> Enter the <strong>System Frequency</strong> and the <strong>Source/Load Impedances</strong>. The center of the chart represents the Source Impedance ($Z_0$). The green point represents your target match (Source conjugate). The red point is the starting Load Impedance.
+            </div>
+            <div>
+                <strong class="text-themeText">2. Adding Components:</strong> Use the dropdown at the top to add Series or Shunt components (L, C, R) or Transmission Lines. These will appear in the "Matching Network" pane. 
+            </div>
+            <div>
+                <strong class="text-themeText">3. Tuning the Match:</strong> Adjust the component values in the Cascade list. The chart draws the impedance trajectory (amber line) from Load towards Source. The goal is to move the final point (amber) onto the green target point to achieve a perfect match (VSWR = 1.0).
+            </div>
+            <div>
+                <strong class="text-themeText">4. Interactivity:</strong> Hover your mouse over the chart to read the absolute Impedance ($Z$), Admittance ($Y$), Reflection Coefficient ($\Gamma$), and VSWR at any point on the grid.
+            </div>
+            <div>
+                <strong class="text-themeText">Smith Chart Math:</strong> The reflection coefficient is $\Gamma = \frac{Z_L - Z_0}{Z_L + Z_0}$. The outer rim represents $|\Gamma| = 1$ (pure reactance).
             </div>
         </div>
     </div>

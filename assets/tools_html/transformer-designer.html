@@ -1,14 +1,17 @@
 <div class="doc-container flex flex-col w-full h-full min-h-[850px]">
     <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Transformer Designer & Extractor">
         <div class="flex items-center gap-2"><i class="fa-solid fa-transformer"></i><h3 class="font-bold font-mono">Transformer Designer & Extractor</h3></div>
-        <span class="font-mono text-[10px] opacity-70">Design & OC/SC Parameter Extraction</span>
+        <div class="flex items-center gap-3">
+            <span class="font-mono text-[10px] opacity-70">Design & OC/SC Parameter Extraction</span>
+            <button class="px-2 py-1 bg-themeAccent text-themeBg text-[10px] font-bold hover:opacity-80 rounded" onclick="xfmrRunThermal()"><i class="fa-solid fa-temperature-half mr-1"></i>Run Thermal</button>
+        </div>
     </div>
     
     <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 h-full">
             
-            <!-- Parameters -->
-            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col overflow-y-auto">
+            <!-- Parameters (Left Column) -->
+            <div class="space-y-3 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col overflow-y-auto max-h-[80vh]">
                 <div class="flex justify-between items-center mb-2">
                     <h4 class="text-xs font-bold text-themeMuted border-b border-themeBorder/20 pb-1 flex-grow">OPERATING MODE</h4>
                     <select id="xfmr-mode" class="bg-themeBg border border-themeBorder text-themeText text-xs p-1 outline-none ml-2" onchange="updateXfmrUI()">
@@ -18,9 +21,9 @@
                 </div>
                 
                 <!-- DESIGN MODE -->
-                <div id="xfmr-design-cont" class="space-y-4">
+                <div id="xfmr-design-cont" class="space-y-3">
                     <h4 class="text-[10px] font-bold text-themeAccent bg-themeBg p-1">SPECIFICATIONS</h4>
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-2 gap-3">
                         <div>
                             <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Primary Volts ($V_p$)</span></div>
                             <div class="flex">
@@ -51,13 +54,24 @@
                         </div>
                     </div>
 
-                    <h4 class="text-[10px] font-bold text-themeAccent bg-themeBg p-1">CORE PROPERTIES</h4>
-                    <div class="grid grid-cols-2 gap-4">
+                    <h4 class="text-[10px] font-bold text-themeAccent bg-themeBg p-1 mt-2">CORE SHAPE & PROPERTIES</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="col-span-2">
+                            <div class="text-[10px] mb-1">Core Shape</div>
+                            <div class="flex gap-2 flex-wrap">
+                                <button id="cs-btn-EE" onclick="xfmrSetCore('EE')" class="px-2 py-1 border border-themeAccent bg-themeAccent text-themeBg text-[10px] font-bold rounded hover:opacity-80">EE</button>
+                                <button id="cs-btn-EI" onclick="xfmrSetCore('EI')" class="px-2 py-1 border border-themeBorder text-themeMuted text-[10px] font-bold rounded hover:border-themeAccent">EI</button>
+                                <button id="cs-btn-UI" onclick="xfmrSetCore('UI')" class="px-2 py-1 border border-themeBorder text-themeMuted text-[10px] font-bold rounded hover:border-themeAccent">UI</button>
+                                <button id="cs-btn-Pot" onclick="xfmrSetCore('Pot')" class="px-2 py-1 border border-themeBorder text-themeMuted text-[10px] font-bold rounded hover:border-themeAccent">Pot</button>
+                                <button id="cs-btn-Toroid" onclick="xfmrSetCore('Toroid')" class="px-2 py-1 border border-themeBorder text-themeMuted text-[10px] font-bold rounded hover:border-themeAccent">Toroid</button>
+                                <button id="cs-btn-RM" onclick="xfmrSetCore('RM')" class="px-2 py-1 border border-themeBorder text-themeMuted text-[10px] font-bold rounded hover:border-themeAccent">RM</button>
+                            </div>
+                        </div>
                         <div>
                             <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Effective Area ($A_e$)</span></div>
                             <div class="flex">
                                 <input type="number" id="xfmr-ae" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="12" min="1" step="1" oninput="updateXfmr()">
-                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">cm&sup2;</span>
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">cm²</span>
                             </div>
                         </div>
                         <div>
@@ -71,7 +85,7 @@
                             <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Window Area ($A_w$)</span></div>
                             <div class="flex">
                                 <input type="number" id="xfmr-aw" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="15" min="1" step="1" oninput="updateXfmr()">
-                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">cm&sup2;</span>
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">cm²</span>
                             </div>
                         </div>
                         <div>
@@ -83,6 +97,52 @@
                             <div class="flex">
                                 <input type="number" id="xfmr-lg" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0" min="0" step="0.1" oninput="updateXfmr()">
                                 <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">mm</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Wire Gauge (AWG)</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-awg" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="24" min="10" max="40" step="1" oninput="updateXfmr()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">AWG</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Bobbin Height (h)</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-bh" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="30" min="5" step="1" oninput="updateXfmr()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">mm</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="text-[10px] font-bold text-themeAccent bg-themeBg p-1 mt-2">THERMAL MODEL</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Ambient Temp ($T_a$)</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-ta" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="25" step="5" oninput="updateXfmr()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">°C</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Max Winding Temp</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-twmax" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-red-400 font-bold" value="130" step="5">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">°C</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Rθ Core-Ambient</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-rca" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="15" step="1" oninput="updateXfmr()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">°C/W</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Rθ Winding-Core</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-rwc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="5" step="1" oninput="updateXfmr()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">°C/W</span>
                             </div>
                         </div>
                     </div>
@@ -122,18 +182,47 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Visualization & Results -->
-            <div class="flex flex-col gap-4">
+            <!-- Visualization & Results (Right Column) -->
+            <div class="flex flex-col gap-3">
                 
-                <div class="w-full h-64 bg-themeContainer border border-themeBorder/50 flex items-center justify-center relative overflow-hidden" id="xfmr-3d-container">
-                    <!-- 3D canvas injected here -->
+                <!-- 3D View with Controls -->
+                <div class="relative">
+                    <div class="w-full h-72 bg-themeContainer border border-themeBorder/50 flex items-center justify-center relative overflow-hidden" id="xfmr-3d-container">
+                        <!-- 3D canvas injected here -->
+                    </div>
+                    <!-- 3D Controls overlay -->
+                    <div class="absolute top-2 left-2 flex gap-1 flex-wrap">
+                        <button onclick="xfmrToggleField()" id="xfmr-field-btn" class="px-2 py-0.5 bg-themeBg/90 border border-themeAccent/50 text-themeAccent text-[9px] font-bold rounded hover:bg-themeAccent hover:text-themeBg transition-colors">B-Field</button>
+                        <button onclick="xfmrToggleLeakage()" id="xfmr-leak-btn" class="px-2 py-0.5 bg-themeBg/90 border border-themeBorder text-themeMuted text-[9px] font-bold rounded hover:border-themeAccent hover:text-themeAccent transition-colors">Leakage</button>
+                        <button onclick="xfmrToggleSaturation()" id="xfmr-sat-btn" class="px-2 py-0.5 bg-themeBg/90 border border-themeBorder text-themeMuted text-[9px] font-bold rounded hover:border-red-500 hover:text-red-400 transition-colors">Saturation</button>
+                    </div>
+                    <!-- Probe readout overlay -->
+                    <div id="xfmr-probe-info" class="absolute bottom-2 left-2 bg-themeBg/95 border border-themeAccent/40 px-2 py-1 text-[9px] font-mono text-themeAccent rounded hidden">
+                        Hover over the model to probe
+                    </div>
+                    <div class="absolute top-2 right-2 text-[8px] text-themeMuted/60 font-mono">Drag to rotate • Scroll to zoom</div>
+                </div>
+
+                <!-- Status indicators -->
+                <div class="grid grid-cols-3 gap-2 text-[10px]">
+                    <div id="xfmr-fit-badge" class="bg-themeContainer border border-green-500/40 p-2 text-center rounded">
+                        <div class="text-green-400 font-bold" id="xfmr-fit-val">FIT OK</div>
+                        <div class="text-themeMuted text-[9px]">Winding Fit</div>
+                    </div>
+                    <div id="xfmr-sat-badge" class="bg-themeContainer border border-themeBorder p-2 text-center rounded">
+                        <div class="text-themeAccent font-bold" id="xfmr-sat-val">--</div>
+                        <div class="text-themeMuted text-[9px]">B / Bmax</div>
+                    </div>
+                    <div id="xfmr-therm-badge" class="bg-themeContainer border border-themeBorder p-2 text-center rounded">
+                        <div class="text-themeText font-bold" id="xfmr-tw-val">--°C</div>
+                        <div class="text-themeMuted text-[9px]">Winding Temp</div>
+                    </div>
                 </div>
 
                 <!-- DESIGN RESULTS -->
-                <div id="xfmr-res-design" class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center shadow-inner flex-grow">
+                <div id="xfmr-res-design" class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center shadow-inner">
                     <span class="text-[10px] text-themeAccent font-bold mb-2 uppercase text-center">Winding Requirements</span>
                     
                     <div class="grid grid-cols-2 gap-4">
@@ -149,30 +238,61 @@
                         </div>
                     </div>
                     
-                    <div class="mt-4 grid grid-cols-3 gap-2 text-xs border-t border-themeBorder/20 pt-2 text-center">
+                    <div class="mt-3 grid grid-cols-3 gap-2 text-xs border-t border-themeBorder/20 pt-2 text-center">
                         <div>
                             <span class="text-[9px] text-themeMuted block">Volts per Turn</span>
                             <span class="font-bold text-themeText" id="xfmr-out-vpt">0.0</span> V/t
                         </div>
                         <div>
                             <span class="text-[9px] text-themeMuted block">Area Product ($A_p$)</span>
-                            <span class="font-bold text-themeText" id="xfmr-out-ap">0.0</span> cm&sup4;
+                            <span class="font-bold text-themeText" id="xfmr-out-ap">0.0</span> cm⁴
                         </div>
                         <div>
                             <span class="text-[9px] text-themeMuted block">Primary Inductance ($L_p$)</span>
                             <span class="font-bold text-themeText" id="xfmr-out-lp">0.0</span> mH
                         </div>
                     </div>
+
+                    <!-- Winding Fit Detail -->
+                    <div class="mt-2 border-t border-themeBorder/20 pt-2 grid grid-cols-3 gap-2 text-[9px] text-center">
+                        <div>
+                            <span class="text-themeMuted block">Wire Dia (AWG)</span>
+                            <span class="font-bold text-themeText" id="xfmr-out-dia">--</span>
+                        </div>
+                        <div>
+                            <span class="text-themeMuted block">Window Used</span>
+                            <span class="font-bold text-themeText" id="xfmr-out-wfill">--</span>
+                        </div>
+                        <div>
+                            <span class="text-themeMuted block">Winding Layers</span>
+                            <span class="font-bold text-themeText" id="xfmr-out-layers">--</span>
+                        </div>
+                    </div>
+
+                    <!-- Thermal Summary -->
+                    <div id="xfmr-thermal-res" class="mt-2 p-2 bg-themeBg border border-orange-500/30 text-[9px] text-center hidden">
+                        <div class="text-orange-400 font-bold mb-1"><i class="fa-solid fa-fire-flame-curved mr-1"></i>Thermal Analysis</div>
+                        <div class="grid grid-cols-3 gap-1">
+                            <div><span class="text-themeMuted block">Core Temp</span><span id="xfmr-tc-val" class="font-bold text-themeText">--</span></div>
+                            <div><span class="text-themeMuted block">Winding Temp</span><span id="xfmr-tw2-val" class="font-bold text-themeText">--</span></div>
+                            <div><span class="text-themeMuted block">Cu Loss</span><span id="xfmr-cu-val" class="font-bold text-themeText">--</span></div>
+                        </div>
+                    </div>
                     
                     <div id="xfmr-warn-ap" class="w-full mt-3 p-2 text-[10px] font-bold text-white bg-red-600/80 border border-red-500 rounded hidden text-center">
                         <i class="fa-solid fa-triangle-exclamation mr-1"></i> Core too small for this power rating (Ap < req)
                     </div>
+                    <div id="xfmr-warn-fit" class="w-full mt-1 p-2 text-[10px] font-bold text-white bg-orange-600/80 border border-orange-500 rounded hidden text-center">
+                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> Winding does NOT fit in window area!
+                    </div>
+                    <div id="xfmr-warn-sat" class="w-full mt-1 p-2 text-[10px] font-bold text-white bg-red-900/80 border border-red-400 rounded hidden text-center">
+                        <i class="fa-solid fa-bolt mr-1"></i> Core may saturate at operating flux density!
+                    </div>
                 </div>
 
                 <!-- EXTRACT RESULTS -->
-                <div id="xfmr-res-extract" class="hidden bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center shadow-inner flex-grow">
+                <div id="xfmr-res-extract" class="hidden bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center shadow-inner">
                     <span class="text-[10px] text-themeAccent font-bold mb-2 uppercase text-center">Equivalent Circuit Parameters</span>
-                    
                     <div class="grid grid-cols-2 gap-4">
                         <div class="bg-themeBg p-2 border border-themeBorder/50 text-center flex flex-col justify-center">
                             <span class="text-[9px] text-themeMuted block">Core Loss Res ($R_c$)</span>
@@ -193,7 +313,6 @@
                     </div>
                     <div class="text-[9px] text-themeMuted text-center mt-2">* Referred to the side SC test was performed on.</div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -205,10 +324,23 @@
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
         <div id="xfmr-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <div class="bg-themeBg p-2 rounded border border-themeBorder/50 flex items-center justify-center gap-3 text-[10px] font-bold flex-wrap">
+                <div class="flex flex-col text-center"><span class="text-red-400">Winding</span><span>$T_w$</span></div>
+                <span class="text-themeMuted">→</span>
+                <div class="flex flex-col text-center"><span>$R_{\theta wc}$</span><span class="text-[8px]">Winding-Core</span></div>
+                <span class="text-themeMuted">→</span>
+                <div class="flex flex-col text-center"><span class="text-orange-400">Core</span><span>$T_c$</span></div>
+                <span class="text-themeMuted">→</span>
+                <div class="flex flex-col text-center"><span>$R_{\theta ca}$</span><span class="text-[8px]">Core-Amb</span></div>
+                <span class="text-themeMuted">→</span>
+                <div class="flex flex-col text-center"><span class="text-blue-400">Ambient</span><span>$T_a$</span></div>
+            </div>
             <p><strong>Universal EMF Equation:</strong> $V_{rms} = 4.44 \cdot f \cdot N \cdot B_{max} \cdot A_e$</p>
             <ul class="list-disc pl-4 space-y-1">
                 <li>Primary Turns: $N_p = \frac{V_p}{4.44 \cdot f \cdot B_{max} \cdot A_e}$</li>
                 <li>Area Product Requirement: $A_p = A_e \cdot A_w = \frac{S \cdot 10^4}{4.44 \cdot f \cdot B_{max} \cdot k_w \cdot J}$</li>
+                <li>Winding Temp: $T_w = T_a + P_{cu} \cdot (R_{\theta ca} + R_{\theta wc})$</li>
+                <li>Operating Flux: $B_{op} = \frac{V_p}{4.44 \cdot f \cdot N_p \cdot A_e}$ — if $B_{op} > B_{max}$, core saturates</li>
             </ul>
             <p><strong>Parameter Extraction:</strong></p>
             <ul class="list-disc pl-4 space-y-1">
@@ -219,4 +351,59 @@
             </ul>
         </div>
     </div>
+
 </div>
+
+<script>
+    let xfmrCoreShape = 'EE';
+    let xfmrShowField = false;
+    let xfmrShowLeakage = false;
+    let xfmrShowSaturation = false;
+
+    window.xfmrSetCore = function(shape) {
+        xfmrCoreShape = shape;
+        ['EE','EI','UI','Pot','Toroid','RM'].forEach(s => {
+            const btn = document.getElementById('cs-btn-' + s);
+            if(!btn) return;
+            if(s === shape) {
+                btn.className = 'px-2 py-1 border border-themeAccent bg-themeAccent text-themeBg text-[10px] font-bold rounded hover:opacity-80';
+            } else {
+                btn.className = 'px-2 py-1 border border-themeBorder text-themeMuted text-[10px] font-bold rounded hover:border-themeAccent';
+            }
+        });
+        if(typeof buildXfmr3D === 'function') buildXfmr3D();
+        updateXfmr();
+    };
+
+    window.xfmrToggleField = function() {
+        xfmrShowField = !xfmrShowField;
+        const btn = document.getElementById('xfmr-field-btn');
+        btn.className = xfmrShowField
+            ? 'px-2 py-0.5 bg-themeAccent text-themeBg text-[9px] font-bold rounded'
+            : 'px-2 py-0.5 bg-themeBg/90 border border-themeAccent/50 text-themeAccent text-[9px] font-bold rounded hover:bg-themeAccent hover:text-themeBg transition-colors';
+        if(typeof buildXfmr3D === 'function') buildXfmr3D();
+    };
+
+    window.xfmrToggleLeakage = function() {
+        xfmrShowLeakage = !xfmrShowLeakage;
+        const btn = document.getElementById('xfmr-leak-btn');
+        btn.className = xfmrShowLeakage
+            ? 'px-2 py-0.5 bg-yellow-500 text-black text-[9px] font-bold rounded'
+            : 'px-2 py-0.5 bg-themeBg/90 border border-themeBorder text-themeMuted text-[9px] font-bold rounded hover:border-themeAccent hover:text-themeAccent transition-colors';
+        if(typeof buildXfmr3D === 'function') buildXfmr3D();
+    };
+
+    window.xfmrToggleSaturation = function() {
+        xfmrShowSaturation = !xfmrShowSaturation;
+        const btn = document.getElementById('xfmr-sat-btn');
+        btn.className = xfmrShowSaturation
+            ? 'px-2 py-0.5 bg-red-600 text-white text-[9px] font-bold rounded'
+            : 'px-2 py-0.5 bg-themeBg/90 border border-themeBorder text-themeMuted text-[9px] font-bold rounded hover:border-red-500 hover:text-red-400 transition-colors';
+        if(typeof buildXfmr3D === 'function') buildXfmr3D();
+    };
+
+    window.xfmrRunThermal = function() {
+        updateXfmr();
+        document.getElementById('xfmr-thermal-res').classList.remove('hidden');
+    };
+</script>

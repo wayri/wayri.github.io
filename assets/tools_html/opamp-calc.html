@@ -21,9 +21,31 @@
                     </select>
                 </div>
                 
-                <div>
-                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Input Voltage (\(V_{in}\) or \(V_1\))</span><span class="text-themeMuted">V</span></div>
-                    <input type="number" id="op-vin1" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText font-bold text-blue-400" value="1" step="0.1" oninput="updateOpAmp()">
+                <div class="mt-4 border-t border-themeBorder/20 pt-4">
+                    <h4 class="text-xs font-bold text-themeMuted mb-2">INPUT SIGNAL (V1 / Vin)</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="col-span-2">
+                            <label class="block text-[10px] text-themeMuted mb-1">Waveform Type</label>
+                            <select id="op-sig-type" class="w-full bg-themeBg border border-themeBorder text-themeText p-1 text-xs outline-none" onchange="updateOpAmp()">
+                                <option value="sine">Sine Wave</option>
+                                <option value="square">Square Wave</option>
+                                <option value="triangle">Triangle Wave</option>
+                                <option value="dc">DC Only</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-themeMuted mb-1">Amplitude (V_pk)</label>
+                            <input type="number" id="op-vin1" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText font-bold text-blue-400" value="1" step="0.1" oninput="updateOpAmp()">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-themeMuted mb-1">Frequency (Hz)</label>
+                            <input type="number" id="op-sig-freq" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText" value="1000" step="100" oninput="updateOpAmp()">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-[10px] text-themeMuted mb-1">DC Offset (V)</label>
+                            <input type="number" id="op-sig-offset" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText" value="0" step="0.1" oninput="updateOpAmp()">
+                        </div>
+                    </div>
                 </div>
                 
                 <div id="op-vin2-container" class="hidden">
@@ -336,7 +358,13 @@
     function updateOpAmp() {
         if(!opChart) initOpChart();
         const type = document.getElementById('op-type').value;
-        const Vin1 = parseFloat(document.getElementById('op-vin1').value);
+        const sigType = document.getElementById('op-sig-type')?.value || 'sine';
+        const vinAmp = parseFloat(document.getElementById('op-vin1').value) || 0;
+        const vinOffset = parseFloat(document.getElementById('op-sig-offset')?.value) || 0;
+        
+        // For DC analysis, use Offset + Amplitude if DC Only, else use just Offset
+        const Vin1_DC = sigType === 'dc' ? vinOffset + vinAmp : vinOffset;
+        
         const R1 = parseFloat(document.getElementById('op-r1').value);
         const R2 = parseFloat(document.getElementById('op-r2').value);
 
@@ -351,43 +379,43 @@
             v2Cont.classList.add('hidden'); r34Cont.classList.add('hidden');
             diag.innerHTML = drawNonInv();
             if (R1 > 0) idealGain = 1 + (R2 / R1);
-            idealVout = Vin1 * idealGain;
+            idealVout = Vin1_DC * idealGain;
         } 
         else if (type === 'inv') {
             v2Cont.classList.add('hidden'); r34Cont.classList.add('hidden');
             diag.innerHTML = drawInv();
             if (R1 > 0) idealGain = -(R2 / R1);
-            idealVout = Vin1 * idealGain;
+            idealVout = Vin1_DC * idealGain;
         }
         else if (type === 'diff') {
             v2Cont.classList.remove('hidden'); r34Cont.classList.remove('hidden'); r34Cont.classList.add('flex');
             diag.innerHTML = drawDiff();
-            const Vin2 = parseFloat(document.getElementById('op-vin2').value);
+            const Vin2 = parseFloat(document.getElementById('op-vin2').value) || 0;
             const R3 = parseFloat(document.getElementById('op-r3').value);
             const R4 = parseFloat(document.getElementById('op-r4').value);
             if (R1 > 0 && (R3 + R4) > 0) {
-                idealVout = Vin2 * (R4 / (R3 + R4)) * ((R1 + R2) / R1) - Vin1 * (R2 / R1);
-                idealGain = (R2 / R1); // Differential gain approx
+                idealVout = Vin2 * (R4 / (R3 + R4)) * ((R1 + R2) / R1) - Vin1_DC * (R2 / R1);
+                idealGain = -(R2 / R1); // Gain w.r.t Vin1
             }
         }
         else if (type === 'error') {
             v2Cont.classList.remove('hidden'); r34Cont.classList.add('hidden');
             diag.innerHTML = drawError();
-            const Vref = parseFloat(document.getElementById('op-vin2').value);
-            if (R1 > 0) idealGain = (R2 / R1);
-            idealVout = Vref + (Vref - Vin1) * idealGain;
+            const Vref = parseFloat(document.getElementById('op-vin2').value) || 0;
+            if (R1 > 0) idealGain = -(R2 / R1);
+            idealVout = Vref + (Vref - Vin1_DC) * Math.abs(idealGain);
         }
         else if (type === 'atten') {
             v2Cont.classList.add('hidden'); r34Cont.classList.add('hidden');
             diag.innerHTML = drawAtten();
             if ((R1 + R2) > 0) idealGain = R2 / (R1 + R2);
-            idealVout = Vin1 * idealGain;
+            idealVout = Vin1_DC * idealGain;
         }
         else if (type === 'buffer') {
             v2Cont.classList.add('hidden'); r34Cont.classList.add('hidden');
             diag.innerHTML = drawBuffer();
             idealGain = 1;
-            idealVout = Vin1 * idealGain;
+            idealVout = Vin1_DC * idealGain;
         }
 
         // Apply Real-Life Imperfections
@@ -465,28 +493,76 @@
             const dataIn = [];
             const dataOut = [];
             
-            const vin = parseFloat(document.getElementById('op-vin1').value) || 1;
-            const freq = 1000; // 1kHz test signal
-            const vcc = parseFloat(document.getElementById('op-vcc').value);
-            const vee = parseFloat(document.getElementById('op-vee').value);
+            const vinAmp = parseFloat(document.getElementById('op-vin1').value) || 0;
+            const vinOffset = parseFloat(document.getElementById('op-sig-offset')?.value) || 0;
+            const freq = parseFloat(document.getElementById('op-sig-freq')?.value) || 1000;
+            const sigType = document.getElementById('op-sig-type')?.value || 'sine';
+            
+            const vcc = parseFloat(document.getElementById('op-vcc').value) || 15;
+            const vee = parseFloat(document.getElementById('op-vee').value) || -15;
+            const useReal = document.getElementById('op-real-toggle').checked;
 
-            // Time for 3 cycles
-            for(let t = 0; t <= 3/freq; t += (1/freq)/50) {
+            const Vmax = useReal ? vcc - 0.5 : 9999;
+            const Vmin = useReal ? vee + 0.5 : -9999;
+
+            // Generate 3 periods (or 3ms if DC)
+            const T = sigType === 'dc' ? 0.001 : 1/freq;
+            const points = 200;
+            const dt = (3 * T) / points;
+
+            for(let i = 0; i <= points; i++) {
+                const t = i * dt;
                 labels.push(t.toExponential(2));
-                const v_t = vin * Math.sin(2 * Math.PI * freq * t);
-                dataIn.push(v_t);
                 
-                // SR limit not implemented fully, just gain and clip
-                let vo_t = v_t * gain;
-                if(vo_t > vcc - 0.5) vo_t = vcc - 0.5;
-                if(vo_t < vee + 0.5) vo_t = vee + 0.5;
+                let v_ac = 0;
+                if(sigType === 'sine') {
+                    v_ac = vinAmp * Math.sin(2 * Math.PI * freq * t);
+                } else if(sigType === 'square') {
+                    v_ac = Math.sin(2 * Math.PI * freq * t) >= 0 ? vinAmp : -vinAmp;
+                } else if(sigType === 'triangle') {
+                    v_ac = vinAmp * (2 / Math.PI) * Math.asin(Math.sin(2 * Math.PI * freq * t));
+                } else if(sigType === 'dc') {
+                    v_ac = vinAmp;
+                }
+                
+                const v_in_total = v_ac + vinOffset;
+                dataIn.push(v_in_total);
+                
+                let vo_t = v_in_total * gain; // Simplified ideal dynamic gain 
+                
+                // If differential or error, we must apply the correct formula
+                const type = document.getElementById('op-type').value;
+                if(type === 'diff') {
+                    const Vin2 = parseFloat(document.getElementById('op-vin2').value) || 0;
+                    const R1 = parseFloat(document.getElementById('op-r1').value) || 1;
+                    const R2 = parseFloat(document.getElementById('op-r2').value) || 1;
+                    const R3 = parseFloat(document.getElementById('op-r3').value) || 1;
+                    const R4 = parseFloat(document.getElementById('op-r4').value) || 1;
+                    vo_t = Vin2 * (R4 / (R3 + R4)) * ((R1 + R2) / R1) - v_in_total * (R2 / R1);
+                } else if (type === 'error') {
+                    const Vref = parseFloat(document.getElementById('op-vin2').value) || 0;
+                    const R1 = parseFloat(document.getElementById('op-r1').value) || 1;
+                    const R2 = parseFloat(document.getElementById('op-r2').value) || 1;
+                    vo_t = Vref + (Vref - v_in_total) * (R2 / R1);
+                }
+                
+                // Add DC Offset Error from imperfections
+                const vos = useReal ? parseFloat(document.getElementById('op-vos').value)/1000 : 0;
+                if (type === 'noninv' || type === 'inv') {
+                    const R1 = parseFloat(document.getElementById('op-r1').value) || 1;
+                    const R2 = parseFloat(document.getElementById('op-r2').value) || 1;
+                    vo_t += vos * (1 + R2/R1);
+                }
+                
+                if(vo_t > Vmax) vo_t = Vmax;
+                if(vo_t < Vmin) vo_t = Vmin;
                 dataOut.push(vo_t);
             }
 
             opChart.data.labels = labels;
             opChart.data.datasets = [
-                { label: 'Vin', data: dataIn, borderColor: '#60a5fa', fill: false, pointRadius: 0, tension: 0.1 },
-                { label: 'Vout', data: dataOut, borderColor: '#D4AF37', fill: false, pointRadius: 0, borderWidth: 2, tension: 0.1 }
+                { label: 'Vin1(t)', data: dataIn, borderColor: '#60a5fa', fill: false, pointRadius: 0, tension: sigType==='sine'||sigType==='dc'?0.1:0, borderWidth: 1.5 },
+                { label: 'Vout(t)', data: dataOut, borderColor: '#D4AF37', fill: false, pointRadius: 0, borderWidth: 2, tension: sigType==='sine'||sigType==='dc'?0.1:0 }
             ];
             opChart.update();
         }

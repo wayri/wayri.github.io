@@ -121,7 +121,8 @@ const TOOL_REGISTRY = [
         category: "Thermal Management",
         icon: "fa-temperature-arrow-up",
         tools: [
-            { id: "tool-heatsink-simulator", name: "Heatsink Simulator", file: "heatsink-simulator.html" }
+            { id: "tool-heatsink-simulator", name: "Heatsink Simulator", file: "heatsink-simulator.html" },
+            { id: "tool-thermal-network-calc", name: "Thermal Network Calculator", file: "thermal-network-calc.html" }
         ]
     },
     {
