@@ -1,0 +1,303 @@
+<div class="doc-container flex flex-col w-full h-full min-h-[600px]">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Protocol-Aware Stackup Impedance Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-layer-group"></i><h3 class="font-bold font-mono">Stackup Impedance Solver</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Cross-Layer Z0/Zdiff Routing</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        
+        <!-- Top Controls: Protocol & Targets -->
+        <div class="bg-themeContainer border border-themeBorder/30 p-4 mb-4 flex flex-col md:flex-row gap-6">
+            <div class="flex-grow">
+                <label class="text-xs font-bold text-themeMuted mb-2 block">PROTOCOL PRESET</label>
+                <select id="stackup-protocol" class="w-full bg-themeBg border border-themeBorder p-2 text-themeText focus:border-themeAccent outline-none" onchange="updateTargetsFromProtocol()">
+                    <option value="custom">Custom...</option>
+                    <option value="usb">USB 2.0 / 3.0 (90&Omega; Diff)</option>
+                    <option value="eth">Ethernet 10/100/1G/10G (100&Omega; Diff)</option>
+                    <option value="can">CAN Bus (120&Omega; Diff)</option>
+                    <option value="pcie">PCIe Gen 1-5 (85&Omega; Diff)</option>
+                    <option value="ddr_se">DDR3/4/5 Single-Ended (40&Omega;)</option>
+                    <option value="ddr_diff">DDR Clock/Strobe (80&Omega; Diff)</option>
+                    <option value="xaui">XAUI / XPI / QPI (100&Omega; Diff)</option>
+                    <option value="rf50" selected>Generic RF / Clock (50&Omega; SE)</option>
+                </select>
+            </div>
+            
+            <div class="flex gap-4">
+                <div>
+                    <label class="text-xs font-bold text-themeMuted mb-2 block">Target Z0 (SE)</label>
+                    <div class="flex">
+                        <input type="number" id="target-z0" class="w-24 bg-themeBg border border-themeBorder p-2 text-themeText font-bold" value="50" oninput="document.getElementById('stackup-protocol').value='custom'; solveStackup()">
+                        <span class="bg-themeBorder text-themeBg p-2 text-xs flex items-center">&Omega;</span>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-themeMuted mb-2 block">Target Zdiff</label>
+                    <div class="flex">
+                        <input type="number" id="target-zdiff" class="w-24 bg-themeBg border border-themeBorder p-2 text-themeText font-bold" value="" placeholder="N/A" oninput="document.getElementById('stackup-protocol').value='custom'; solveStackup()">
+                        <span class="bg-themeBorder text-themeBg p-2 text-xs flex items-center">&Omega;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Layers Table -->
+        <div class="bg-themeContainer border border-themeBorder/30 flex flex-col flex-grow overflow-hidden">
+            <div class="p-3 border-b border-themeBorder/30 bg-themeBorder/10 flex justify-between items-center">
+                <h4 class="text-xs font-bold text-themeAccent uppercase tracking-wide">Routing Layers (Signal)</h4>
+                <button class="px-3 py-1 bg-themeAccent text-themeBg text-xs font-bold hover:opacity-80 rounded" onclick="addLayer()">+ Add Layer</button>
+            </div>
+            
+            <div class="overflow-x-auto flex-grow">
+                <table class="w-full text-left border-collapse text-xs whitespace-nowrap">
+                    <thead class="bg-themeBg sticky top-0 shadow z-10">
+                        <tr>
+                            <th class="p-2 border-b border-themeBorder font-bold text-themeMuted">Layer Name</th>
+                            <th class="p-2 border-b border-themeBorder font-bold text-themeMuted">Type</th>
+                            <th class="p-2 border-b border-themeBorder font-bold text-themeMuted" title="Dielectric thickness to Ref 1">H1 (&mu;m)</th>
+                            <th class="p-2 border-b border-themeBorder font-bold text-themeMuted" title="Dielectric thickness to Ref 2 (Stripline only)">H2 (&mu;m)</th>
+                            <th class="p-2 border-b border-themeBorder font-bold text-themeMuted" title="Dielectric Constant">Er</th>
+                            <th class="p-2 border-b border-themeBorder font-bold text-themeMuted" title="Copper Thickness">Cu (&mu;m)</th>
+                            <th class="p-2 border-b border-themeBorder font-bold text-themeAccent border-l" title="Calculated Trace Width">Required W</th>
+                            <th class="p-2 border-b border-themeBorder font-bold text-themeAccent" title="Calculated Trace Spacing">Required S</th>
+                            <th class="p-2 border-b border-themeBorder text-center"><i class="fa-solid fa-trash text-themeMuted"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody id="layers-tbody" class="divide-y divide-themeBorder/20">
+                        <!-- Rows injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('stackup-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="stackup-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p>Calculations use IPC-2141 approximations. The tool uses a binary search (bisection method) to solve for $W$ and $S$ since the equations are naturally formulated as $Z_0 = f(W, S)$.</p>
+            <p><strong>Microstrip SE:</strong> $Z_0 = \frac{87}{\sqrt{E_r + 1.41}} \ln\left(\frac{5.98H}{0.8W + T}\right)$</p>
+            <p><strong>Symmetric Stripline SE:</strong> $Z_0 = \frac{60}{\sqrt{E_r}} \ln\left(\frac{1.9B}{0.8W + T}\right)$, where $B = 2H + T$</p>
+            <p><strong>Microstrip Diff:</strong> $Z_{diff} = 2Z_0 \left(1 - 0.48e^{-0.96 \frac{S}{H}}\right)$</p>
+            <p><strong>Stripline Diff:</strong> $Z_{diff} = 2Z_0 \left(1 - 0.374e^{-2.9 \frac{S}{B}}\right)$</p>
+            <p class="text-themeAccent/80"><em>Note: IPC equations are approximations accurate to ~5-10% in typical ranges. Final sign-off should be done with your manufacturer's 2D field solver (e.g., Polar or Si8000).</em></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const protocols = {
+        'usb': { z0: 45, zdiff: 90 },
+        'eth': { z0: 50, zdiff: 100 },
+        'can': { z0: 60, zdiff: 120 },
+        'pcie': { z0: 42.5, zdiff: 85 },
+        'ddr_se': { z0: 40, zdiff: null },
+        'ddr_diff': { z0: 40, zdiff: 80 },
+        'xaui': { z0: 50, zdiff: 100 },
+        'rf50': { z0: 50, zdiff: null },
+    };
+
+    let layers = [
+        { id: 1, name: "L1 (Top)", type: "microstrip", h1: 100, h2: 0, er: 4.2, cu: 35 },
+        { id: 3, name: "L3 (Inner)", type: "stripline", h1: 200, h2: 200, er: 4.2, cu: 18 },
+        { id: 4, name: "L4 (Bottom)", type: "microstrip", h1: 100, h2: 0, er: 4.2, cu: 35 }
+    ];
+
+    let nextLayerId = 5;
+
+    function updateTargetsFromProtocol() {
+        const p = document.getElementById('stackup-protocol').value;
+        if (protocols[p]) {
+            document.getElementById('target-z0').value = protocols[p].z0;
+            document.getElementById('target-zdiff').value = protocols[p].zdiff !== null ? protocols[p].zdiff : "";
+        }
+        solveStackup();
+    }
+
+    function addLayer() {
+        layers.push({ id: nextLayerId++, name: "L?", type: "stripline", h1: 150, h2: 150, er: 4.2, cu: 18 });
+        renderTable();
+        solveStackup();
+    }
+
+    function removeLayer(id) {
+        layers = layers.filter(l => l.id !== id);
+        renderTable();
+        solveStackup();
+    }
+
+    function updateLayer(id, field, value) {
+        const layer = layers.find(l => l.id === id);
+        if(layer) {
+            if (field === 'type') {
+                layer[field] = value;
+                if (value === 'microstrip') layer.h2 = 0;
+            } else if (field === 'name') {
+                layer[field] = value;
+            } else {
+                layer[field] = parseFloat(value) || 0;
+            }
+            if (field === 'type') renderTable(); // re-render to disable/enable H2
+            solveStackup();
+        }
+    }
+
+    // --- Math Engine ---
+    
+    function calcZ0_Microstrip(W, H, T, Er) {
+        if (W <= 0) return 9999;
+        return (87 / Math.sqrt(Er + 1.41)) * Math.log((5.98 * H) / (0.8 * W + T));
+    }
+
+    function calcZ0_Stripline(W, B, T, Er) {
+        if (W <= 0) return 9999;
+        return (60 / Math.sqrt(Er)) * Math.log((1.9 * B) / (0.8 * W + T));
+    }
+
+    function calcZdiff_Microstrip(Z0, S, H) {
+        return 2 * Z0 * (1 - 0.48 * Math.exp(-0.96 * (S / H)));
+    }
+
+    function calcZdiff_Stripline(Z0, S, B) {
+        return 2 * Z0 * (1 - 0.374 * Math.exp(-2.9 * (S / B)));
+    }
+
+    // Binary search to find W that yields target Z0
+    function solveW(type, H, B, T, Er, targetZ0) {
+        let low = 0.1; // um
+        let high = 5000; // um (5mm max)
+        let bestW = 0;
+        
+        for (let i = 0; i < 50; i++) {
+            let mid = (low + high) / 2;
+            let z = type === 'microstrip' ? calcZ0_Microstrip(mid, H, T, Er) : calcZ0_Stripline(mid, B, T, Er);
+            
+            if (z > targetZ0) {
+                // Trace is too narrow, make it wider to lower Z0
+                low = mid;
+            } else {
+                // Trace is too wide
+                high = mid;
+            }
+            bestW = mid;
+        }
+        return bestW;
+    }
+
+    // Binary search to find S that yields target Zdiff
+    function solveS(type, Z0, H, B, targetZdiff) {
+        let low = 1; // um
+        let high = 5000; // um
+        let bestS = 0;
+
+        for(let i=0; i<50; i++) {
+            let mid = (low + high) / 2;
+            let z = type === 'microstrip' ? calcZdiff_Microstrip(Z0, mid, H) : calcZdiff_Stripline(Z0, mid, B);
+            
+            if (z < targetZdiff) {
+                // S is too small, coupling is too strong, Zdiff is too low. Increase S.
+                low = mid;
+            } else {
+                high = mid;
+            }
+            bestS = mid;
+        }
+        return bestS;
+    }
+
+    function solveStackup() {
+        const targetZ0 = parseFloat(document.getElementById('target-z0').value);
+        const zdiffInput = document.getElementById('target-zdiff').value;
+        const targetZdiff = zdiffInput ? parseFloat(zdiffInput) : null;
+
+        layers.forEach(l => {
+            if(!targetZ0) {
+                l.calcW = 0; l.calcS = 0; return;
+            }
+
+            let B = l.h1 + l.h2 + l.cu; // Total distance between planes for stripline
+
+            // 1. Solve for W to hit target Z0
+            l.calcW = solveW(l.type, l.h1, B, l.cu, l.er, targetZ0);
+            
+            // 2. Solve for S to hit target Zdiff (assuming trace width W is kept the same)
+            if (targetZdiff) {
+                // Recalculate actual Z0 just in case
+                let actualZ0 = l.type === 'microstrip' ? calcZ0_Microstrip(l.calcW, l.h1, l.cu, l.er) : calcZ0_Stripline(l.calcW, B, l.cu, l.er);
+                l.calcS = solveS(l.type, actualZ0, l.h1, B, targetZdiff);
+                
+                // Note: In real life, designers often shrink W slightly for diff pairs to maintain line density.
+                // We are fixing W = W(SE) and solving purely for S, which is a valid methodology.
+            } else {
+                l.calcS = null;
+            }
+        });
+
+        updateResultsUI();
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('layers-tbody');
+        tbody.innerHTML = '';
+        
+        layers.forEach(l => {
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-themeBorder/10 transition-colors";
+            tr.innerHTML = `
+                <td class="p-1"><input type="text" class="w-20 bg-themeBg border border-themeBorder p-1 text-themeText" value="${l.name}" onchange="updateLayer(${l.id}, 'name', this.value)"></td>
+                <td class="p-1">
+                    <select class="w-24 bg-themeBg border border-themeBorder p-1 text-themeText" onchange="updateLayer(${l.id}, 'type', this.value)">
+                        <option value="microstrip" ${l.type==='microstrip'?'selected':''}>Microstrip</option>
+                        <option value="stripline" ${l.type==='stripline'?'selected':''}>Stripline</option>
+                    </select>
+                </td>
+                <td class="p-1"><input type="number" class="w-16 bg-themeBg border border-themeBorder p-1 text-themeText" value="${l.h1}" onchange="updateLayer(${l.id}, 'h1', this.value)"></td>
+                <td class="p-1"><input type="number" class="w-16 bg-themeBg border border-themeBorder p-1 text-themeText ${l.type==='microstrip'?'opacity-30':''}" value="${l.h2}" ${l.type==='microstrip'?'disabled':''} onchange="updateLayer(${l.id}, 'h2', this.value)"></td>
+                <td class="p-1"><input type="number" class="w-14 bg-themeBg border border-themeBorder p-1 text-themeText" value="${l.er}" step="0.1" onchange="updateLayer(${l.id}, 'er', this.value)"></td>
+                <td class="p-1"><input type="number" class="w-16 bg-themeBg border border-themeBorder p-1 text-themeText" value="${l.cu}" onchange="updateLayer(${l.id}, 'cu', this.value)"></td>
+                <td class="p-1 border-l border-themeBorder font-bold text-themeText text-right px-2" id="res-w-${l.id}">-</td>
+                <td class="p-1 font-bold text-themeText text-right px-2" id="res-s-${l.id}">-</td>
+                <td class="p-1 text-center"><button class="text-red-500 hover:text-red-400" onclick="removeLayer(${l.id})"><i class="fa-solid fa-xmark"></i></button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function formatUm(val) {
+        if (!val || val > 10000 || val < 0) return "OOR"; // Out of range
+        return val.toFixed(1) + " &mu;m";
+    }
+
+    function updateResultsUI() {
+        layers.forEach(l => {
+            const elW = document.getElementById(`res-w-${l.id}`);
+            const elS = document.getElementById(`res-s-${l.id}`);
+            if(elW) {
+                elW.innerHTML = formatUm(l.calcW);
+                // Also show in mils as a tooltip
+                elW.title = (l.calcW / 25.4).toFixed(1) + " mils";
+            }
+            if(elS) {
+                if (l.calcS === null) {
+                    elS.innerHTML = '<span class="text-themeMuted text-[10px]">N/A</span>';
+                    elS.title = "";
+                } else {
+                    elS.innerHTML = formatUm(l.calcS);
+                    elS.title = (l.calcS / 25.4).toFixed(1) + " mils";
+                }
+            }
+        });
+    }
+
+    // Init
+    setTimeout(() => {
+        updateTargetsFromProtocol();
+        renderTable();
+        solveStackup();
+    }, 100);
+
+</script>

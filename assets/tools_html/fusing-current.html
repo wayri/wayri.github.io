@@ -1,0 +1,131 @@
+<div class="doc-container flex flex-col w-full h-full min-h-[500px]">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="PCB Trace Fusing Current">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-fire-flame-curved"></i><h3 class="font-bold font-mono">Trace Fusing Current</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Onderdonk's Equation</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">TRACE GEOMETRY</h4>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-[10px] mb-1"><span>Trace Width ($W$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="fuse-w" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="1.0" step="0.1" oninput="updateFusing()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-[10px] mb-1"><span>Copper Thickness ($T$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="fuse-t" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-orange-400" value="35" step="1" oninput="updateFusing()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">&mu;m</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-themeMuted mt-4 border-b border-themeBorder/20 pb-1">ENVIRONMENT & TIME</h4>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-[10px] mb-1"><span>Ambient Temp ($T_{amb}$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="fuse-tamb" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="25" step="5" oninput="updateFusing()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">&deg;C</span>
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-[10px] mb-1"><span>Fault Duration ($t$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="fuse-time" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-red-400" value="0.1" step="0.01" oninput="updateFusing()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">sec</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="flex flex-col gap-4">
+                <div class="w-full h-32 bg-themeBg border border-themeBorder/50 flex flex-col items-center justify-center relative overflow-hidden">
+                    <svg width="200" height="80" viewBox="0 0 200 80" class="text-themeText">
+                        <!-- Trace -->
+                        <rect x="0" y="30" width="200" height="20" fill="var(--orange-400)" opacity="0.8"/>
+                        <!-- Melting effect -->
+                        <path d="M 80,30 Q 100,50 120,30" fill="var(--bg-color)" stroke="var(--bg-color)" stroke-width="2"/>
+                        <path d="M 80,50 Q 100,30 120,50" fill="var(--bg-color)" stroke="var(--bg-color)" stroke-width="2"/>
+                        <!-- Lightning bolt -->
+                        <path d="M 95,10 L 85,35 L 105,35 L 90,65 L 100,45 L 85,45 Z" fill="var(--red-400)"/>
+                    </svg>
+                </div>
+
+                <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(239,68,68,0.1)] flex-grow">
+                    <span class="text-[10px] text-red-400 uppercase tracking-wider mb-2 font-bold">Fusing Current (Melt Threshold)</span>
+                    <div class="text-4xl font-bold text-themeText flex items-baseline gap-1">
+                        <span id="fuse-imax">0.0</span> <span class="text-sm text-red-400">Amps</span>
+                    </div>
+                    <span class="text-[9px] text-themeMuted mt-2 max-w-[250px]">Current required to melt the copper trace in the specified fault duration time.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('fuse-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="fuse-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p>Calculated using <strong>Onderdonk's Equation</strong>, which models the adiabatic heating of copper until it reaches its melting point (1083 &deg;C).</p>
+            <p>$I = A \cdot \sqrt{ \frac{\log_{10}\left(\frac{\Delta T}{274 + T_{amb}} + 1\right)}{33 \cdot t} }$</p>
+            <p>Where:</p>
+            <ul class="list-disc pl-4 space-y-1">
+                <li>$I$ = Fusing current (Amps)</li>
+                <li>$A$ = Trace cross-sectional area in circular mils (1 sq mil = 1.273 circular mils)</li>
+                <li>$\Delta T = 1083 - T_{amb}$ (Temperature rise to melt copper)</li>
+                <li>$t$ = Time duration of the current pulse (seconds)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateFusing() {
+        const w_mm = parseFloat(document.getElementById('fuse-w').value) || 0;
+        const t_um = parseFloat(document.getElementById('fuse-t').value) || 0;
+        const T_amb = parseFloat(document.getElementById('fuse-tamb').value) || 25;
+        const time_s = parseFloat(document.getElementById('fuse-time').value) || 0.1;
+
+        if (w_mm <= 0 || t_um <= 0 || time_s <= 0) {
+            document.getElementById('fuse-imax').innerText = "0.0";
+            return;
+        }
+
+        // Convert area to sq mils
+        const area_mm2 = w_mm * (t_um / 1000);
+        const area_sq_mils = area_mm2 * 1550; // 1 mm^2 = 1550.003 sq mils
+        
+        // Convert sq mils to circular mils (1 sq mil = 4/pi = 1.273 circular mils)
+        const A_cmils = area_sq_mils * 1.2732;
+
+        const T_melt = 1083; // Melting point of copper
+        const delta_T = T_melt - T_amb;
+
+        // Onderdonk's Equation
+        const term1 = delta_T / (274 + T_amb) + 1;
+        const term2 = Math.log10(term1) / (33 * time_s);
+        
+        let I = 0;
+        if (term2 > 0) {
+            I = A_cmils * Math.sqrt(term2);
+        }
+
+        document.getElementById('fuse-imax').innerText = I.toFixed(1);
+    }
+    
+    setTimeout(updateFusing, 100);
+</script>

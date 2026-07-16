@@ -1,0 +1,257 @@
+<div class="doc-container flex flex-col w-full h-full min-h-[600px]">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Comprehensive Via Properties Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-circle-dot"></i><h3 class="font-bold font-mono">Comprehensive Via Properties</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Parasitics, Thermal, & Current Limits</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 flex flex-col overflow-y-auto shadow-inner">
+                <h4 class="text-xs font-bold text-themeMuted border-b border-themeBorder/20 pb-1">PHYSICAL PROPERTIES</h4>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span>Hole Diameter ($d$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="via-d" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="0.3" step="0.1" oninput="updateVia()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span>Pad Diameter ($D_1$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="via-pad" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.6" step="0.1" oninput="updateVia()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span>Anti-Pad Diameter ($D_2$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="via-antipad" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-themeMuted" value="0.8" step="0.1" oninput="updateVia()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span>Via Height/Thickness ($h$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="via-h" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1.6" step="0.1" oninput="updateVia()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span>Plating Thickness ($t$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="via-t" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-themeAccent" value="25" step="5" oninput="updateVia()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">&mu;m</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span>Dielectric Constant ($E_r$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="via-er" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="4.2" step="0.1" oninput="updateVia()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-themeMuted mt-4 border-b border-themeBorder/20 pb-1">THERMAL & ELECTRICAL ENVIRONMENT</h4>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span>Allowed Temp Rise ($\Delta T$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="via-dt" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-orange-400" value="20" step="5" oninput="updateVia()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">&deg;C</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span>Signal Rise Time ($T_r$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="via-tr" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="100" step="10" oninput="updateVia()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">ps</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Results -->
+            <div class="flex flex-col gap-4">
+                <div class="bg-themeBorder/10 border border-themeBorder p-4 grid grid-cols-2 gap-x-6 gap-y-4 shadow-sm">
+                    
+                    <!-- Left Column (Parasitics) -->
+                    <div class="flex flex-col gap-1 border-b border-themeBorder/20 pb-2">
+                        <span class="text-[9px] text-themeMuted uppercase">Capacitance ($C$)</span>
+                        <div class="text-lg font-bold text-themeText flex items-baseline gap-1">
+                            <span id="res-via-c">0.00</span> <span class="text-[10px] text-themeAccent">pF</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1 border-b border-themeBorder/20 pb-2">
+                        <span class="text-[9px] text-themeMuted uppercase">Inductance ($L$)</span>
+                        <div class="text-lg font-bold text-themeText flex items-baseline gap-1">
+                            <span id="res-via-l">0.00</span> <span class="text-[10px] text-themeAccent">nH</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col gap-1 border-b border-themeBorder/20 pb-2">
+                        <span class="text-[9px] text-themeMuted uppercase">Via Impedance ($Z$)</span>
+                        <div class="text-lg font-bold text-themeText flex items-baseline gap-1">
+                            <span id="res-via-z">0.0</span> <span class="text-[10px] text-themeAccent">&Omega;</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1 border-b border-themeBorder/20 pb-2">
+                        <span class="text-[9px] text-themeMuted uppercase">Resonant Frequency</span>
+                        <div class="text-lg font-bold text-themeText flex items-baseline gap-1">
+                            <span id="res-via-fres">0.0</span> <span class="text-[10px] text-themeAccent">GHz</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col gap-1 border-b border-themeBorder/20 pb-2">
+                        <span class="text-[9px] text-themeMuted uppercase">DC Resistance</span>
+                        <div class="text-lg font-bold text-themeText flex items-baseline gap-1">
+                            <span id="res-via-rdc">0.00</span> <span class="text-[10px] text-themeAccent">m&Omega;</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1 border-b border-themeBorder/20 pb-2">
+                        <span class="text-[9px] text-themeMuted uppercase">Plating Cross-Section</span>
+                        <div class="text-lg font-bold text-themeText flex items-baseline gap-1">
+                            <span id="res-via-area">0.00</span> <span class="text-[10px] text-themeAccent">mil&sup2;</span>
+                        </div>
+                    </div>
+
+                    <!-- Right Column (Thermal/Limits) -->
+                    <div class="flex flex-col gap-1 bg-themeBg/50 p-2 rounded">
+                        <span class="text-[9px] text-orange-400 uppercase font-bold">Max Current Capacity</span>
+                        <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="res-via-imax">0.0</span> <span class="text-[10px] text-orange-400">A</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1 bg-themeBg/50 p-2 rounded">
+                        <span class="text-[9px] text-orange-400 uppercase font-bold">Thermal Resistance</span>
+                        <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="res-via-rth">0.0</span> <span class="text-[10px] text-orange-400">&deg;C/W</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1 col-span-2 pt-2">
+                        <span class="text-[9px] text-themeMuted uppercase">Step Response Degradation (10-90%)</span>
+                        <div class="text-base font-bold text-themeText flex items-baseline gap-1">
+                            +<span id="res-via-step">0.0</span> <span class="text-[10px] text-themeAccent">ps</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('via-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="via-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Capacitance:</strong> $C = \frac{1.41 \cdot \varepsilon_r \cdot h \cdot D_1}{D_2 - D_1}$ (empirical IPC equation). Measured in pF where dimensions are in inches.</p>
+            <p><strong>Inductance:</strong> $L = 5.08 \cdot h \cdot [\ln(\frac{4h}{d}) + 1]$ (nH, dimensions in inches).</p>
+            <p><strong>Impedance & Resonance:</strong> $Z_0 = \sqrt{\frac{L}{C}}$ and $f_{res} = \frac{1}{2\pi\sqrt{LC}}$</p>
+            <p><strong>Cross Sectional Area:</strong> $A = \pi \cdot (R_{outer}^2 - R_{inner}^2)$ of the plated barrel.</p>
+            <p><strong>DC Resistance:</strong> $R_{dc} = \rho \cdot \frac{h}{A}$ (Copper resistivity $\rho \approx 1.7 \times 10^{-8} \Omega\cdot m$).</p>
+            <p><strong>Thermal Resistance:</strong> $\theta_{JA} = \frac{h}{k \cdot A}$ ($k_{Cu} = 400 W/m\cdot K$).</p>
+            <p><strong>Max Current:</strong> Based on IPC-2152 approximations for inner/outer layers.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateVia() {
+        const d_mm = parseFloat(document.getElementById('via-d').value) || 0;
+        const pad_mm = parseFloat(document.getElementById('via-pad').value) || 0;
+        const antipad_mm = parseFloat(document.getElementById('via-antipad').value) || 0;
+        const h_mm = parseFloat(document.getElementById('via-h').value) || 0;
+        const t_um = parseFloat(document.getElementById('via-t').value) || 0;
+        const er = parseFloat(document.getElementById('via-er').value) || 1;
+        const dT = parseFloat(document.getElementById('via-dt').value) || 0;
+        const tr_ps = parseFloat(document.getElementById('via-tr').value) || 0;
+
+        // Convert to inches for IPC empirical formulas
+        const d_in = d_mm / 25.4;
+        const pad_in = pad_mm / 25.4;
+        const antipad_in = antipad_mm / 25.4;
+        const h_in = h_mm / 25.4;
+        
+        let C = 0; let L = 0; let Z = 0; let f_res = 0;
+        
+        // Capacitance (pF)
+        if (antipad_in > pad_in) {
+            C = (1.41 * er * h_in * pad_in) / (antipad_in - pad_in);
+        }
+        
+        // Inductance (nH)
+        if (d_in > 0 && h_in > 0) {
+            L = 5.08 * h_in * (Math.log((4 * h_in) / d_in) + 1);
+        }
+
+        if (C > 0 && L > 0) {
+            Z = Math.sqrt(L / C); // Note: purely lumped, true via impedance requires 3D solver
+            f_res = 1 / (2 * Math.PI * Math.sqrt((L * 1e-9) * (C * 1e-12))); // Hz
+        }
+
+        // Cross Section Area
+        // radius = d/2, plating thickness t_mm
+        const t_mm = t_um / 1000;
+        const r_outer_mm = d_mm / 2;
+        const r_inner_mm = r_outer_mm - t_mm;
+        let area_mm2 = 0;
+        if (r_inner_mm >= 0) {
+            area_mm2 = Math.PI * (Math.pow(r_outer_mm, 2) - Math.pow(r_inner_mm, 2));
+        } else {
+            // solid via
+            area_mm2 = Math.PI * Math.pow(r_outer_mm, 2);
+        }
+        
+        const area_mils = area_mm2 * 1550; // 1 mm^2 = 1550 sq mils
+
+        // DC Resistance
+        const rho_cu = 1.72e-8; // Ohm-m
+        const h_m = h_mm / 1000;
+        const area_m2 = area_mm2 / 1e6;
+        let Rdc_mOhm = 0;
+        if (area_m2 > 0) Rdc_mOhm = (rho_cu * h_m / area_m2) * 1000;
+
+        // Thermal Resistance
+        const k_cu = 400; // W / (m*K)
+        let Rth = 0;
+        if (area_m2 > 0) Rth = h_m / (k_cu * area_m2);
+
+        // Max Current (IPC-2152 basic fit: I = 0.048 * dT^0.44 * A^0.725 for mils^2)
+        // Note: For vias, they handle MORE current than traces because they are short and sink heat to planes.
+        // We use standard trace formula as conservative estimate, or slightly bumped.
+        let Imax = 0;
+        if (area_mils > 0 && dT > 0) {
+            Imax = 0.048 * Math.pow(dT, 0.44) * Math.pow(area_mils, 0.725);
+            // Vias can generally take ~2x to 3x this because of the z-axis heat flow into pads, but 
+            // standard calculators just use trace equivalents or a small multiplier.
+            Imax *= 1.5; 
+        }
+
+        // Step response degradation (ps) approx = 2.2 * Z0_sys * C / 2
+        // Assuming Z0_sys = 50 ohms
+        const step_deg = 2.2 * 50 * C / 2; // ps
+
+        // Update UI
+        document.getElementById('res-via-c').innerText = C.toFixed(3);
+        document.getElementById('res-via-l').innerText = L.toFixed(3);
+        document.getElementById('res-via-z').innerText = Z.toFixed(1);
+        document.getElementById('res-via-fres').innerText = f_res > 0 ? (f_res / 1e9).toFixed(2) : "0.0";
+        document.getElementById('res-via-rdc').innerText = Rdc_mOhm.toFixed(2);
+        document.getElementById('res-via-area').innerText = area_mils.toFixed(1);
+        document.getElementById('res-via-imax').innerText = Imax.toFixed(2);
+        document.getElementById('res-via-rth').innerText = Rth.toFixed(1);
+        document.getElementById('res-via-step').innerText = step_deg.toFixed(1);
+    }
+    
+    setTimeout(updateVia, 100);
+</script>

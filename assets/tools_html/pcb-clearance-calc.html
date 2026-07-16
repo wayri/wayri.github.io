@@ -1,0 +1,164 @@
+<div class="doc-container flex flex-col w-full h-full min-h-[500px]">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="IPC-2221B Minimum Conductor Spacing">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-ruler-horizontal"></i><h3 class="font-bold font-mono">PCB Clearance (IPC-2221)</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Voltage & Layer Based Spacing</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">OPERATING CONDITIONS</h4>
+                
+                <div>
+                    <div class="flex justify-between text-[10px] mb-1"><span>Peak Voltage (DC or AC Peak)</span></div>
+                    <div class="flex">
+                        <input type="number" id="clr-v" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-yellow-400" value="230" step="10" oninput="updateClearance()">
+                        <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">Volts</span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label class="text-[10px] mb-1 block">Layer / Environment Type</label>
+                    <select id="clr-type" class="w-full bg-themeBg border border-themeBorder p-2 text-themeText focus:border-themeAccent outline-none h-32" size="4" onchange="updateClearance()">
+                        <option value="B1">B1 - Internal Conductors</option>
+                        <option value="B2">B2 - External Uncoated (Sea Level)</option>
+                        <option value="B3">B3 - External Uncoated (High Altitude)</option>
+                        <option value="B4" selected>B4 - External Coated (Solder Mask)</option>
+                        <option value="A6">A6 - Component Lead (Uncoated)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="flex flex-col gap-4">
+                <div class="w-full h-32 bg-themeBg border border-themeBorder/50 flex flex-col items-center justify-center relative overflow-hidden">
+                    <svg width="250" height="100" viewBox="0 0 250 100" class="text-themeText">
+                        <!-- Trace 1 -->
+                        <rect x="20" y="30" width="60" height="40" fill="var(--theme-color)" opacity="0.8"/>
+                        <!-- Trace 2 -->
+                        <rect x="170" y="30" width="60" height="40" fill="var(--theme-color)" opacity="0.8"/>
+                        
+                        <!-- Measurement Arrows -->
+                        <line x1="80" y1="50" x2="170" y2="50" stroke="var(--yellow-400)" stroke-width="2"/>
+                        <path d="M 80,50 L 90,45 L 90,55 Z" fill="var(--yellow-400)"/>
+                        <path d="M 170,50 L 160,45 L 160,55 Z" fill="var(--yellow-400)"/>
+                        
+                        <text x="125" y="45" font-size="12" fill="var(--yellow-400)" text-anchor="middle" font-weight="bold">Clearance</text>
+                        
+                        <text x="50" y="25" font-size="10" fill="currentColor" text-anchor="middle">Trace 1</text>
+                        <text x="200" y="25" font-size="10" fill="currentColor" text-anchor="middle">Trace 2</text>
+                    </svg>
+                </div>
+
+                <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(250,204,21,0.1)] flex-grow">
+                    <span class="text-[10px] text-yellow-400 uppercase tracking-wider mb-2 font-bold">Minimum IPC Spacing</span>
+                    <div class="text-4xl font-bold text-themeText flex items-baseline gap-2">
+                        <span id="clr-res-mm">0.00</span> <span class="text-sm text-yellow-400">mm</span>
+                    </div>
+                    <div class="text-lg text-themeMuted mt-1 font-bold">
+                        (<span id="clr-res-mil">0.0</span> mil)
+                    </div>
+                    <span class="text-[9px] text-themeMuted mt-4 max-w-[250px]">Required to prevent dielectric breakdown and arcing between conductors.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('clr-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="clr-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p>Calculated using <strong>IPC-2221B Table 6-1</strong> Electrical Conductor Spacing.</p>
+            <p><strong>Note on Voltage:</strong> The voltage used should be the maximum Peak AC or DC voltage across the conductors.</p>
+            <p>For voltages &gt; 500V, the clearance scales linearly according to the standard's per-volt multiplier:</p>
+            <ul class="list-disc pl-4 space-y-1">
+                <li>B1 (Internal): $0.25 mm + 0.0025 \times (V - 500)$</li>
+                <li>B2 (Ext Uncoated): $2.5 mm + 0.0050 \times (V - 500)$</li>
+                <li>B4 (Ext Coated): $0.8 mm + 0.00305 \times (V - 500)$</li>
+            </ul>
+            <p class="text-themeAccent/80 mt-2"><em>This standard is widely used for general electronics. Mains-connected or safety-critical isolation (creepage) often requires IEC 60950-1 or UL 62368-1, which are significantly more stringent.</em></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getIPC2221Spacing(v, type) {
+        // Table 6-1 logic
+        if (v < 0) v = 0;
+        
+        let s = 0; // spacing in mm
+        
+        if (type === 'B1') {
+            if (v <= 15) s = 0.05;
+            else if (v <= 50) s = 0.1;
+            else if (v <= 100) s = 0.1;
+            else if (v <= 300) s = 0.2;
+            else if (v <= 500) s = 0.25;
+            else s = 0.25 + 0.0025 * (v - 500);
+        } 
+        else if (type === 'B2') {
+            if (v <= 15) s = 0.1;
+            else if (v <= 30) s = 0.1;
+            else if (v <= 100) s = 0.6;
+            else if (v <= 300) s = 1.25;
+            else if (v <= 500) s = 2.5;
+            else s = 2.5 + 0.005 * (v - 500);
+        }
+        else if (type === 'B3') { // High altitude > 3050m
+            if (v <= 15) s = 0.1;
+            else if (v <= 30) s = 0.1;
+            else if (v <= 50) s = 0.6;
+            else if (v <= 100) s = 1.5;
+            else if (v <= 170) s = 3.2;
+            else if (v <= 250) s = 3.2;
+            else if (v <= 300) s = 3.2;
+            else if (v <= 500) s = 12.5; // Huge jump for high altitude
+            else s = 12.5 + 0.025 * (v - 500);
+        }
+        else if (type === 'B4') {
+            if (v <= 15) s = 0.05;
+            else if (v <= 30) s = 0.05;
+            else if (v <= 100) s = 0.13;
+            else if (v <= 300) s = 0.4;
+            else if (v <= 500) s = 0.8;
+            else s = 0.8 + 0.00305 * (v - 500);
+        }
+        else if (type === 'A6') { // Component lead uncoated
+            if (v <= 15) s = 0.13;
+            else if (v <= 50) s = 0.13;
+            else if (v <= 100) s = 0.13; // Actually IPC says 0.13 for 0-50, 0.13 for 51-100? Yes
+            else if (v <= 170) s = 0.4; // Usually same as B4 for 101-170
+            else if (v <= 250) s = 0.4;
+            else if (v <= 300) s = 0.4;
+            else if (v <= 500) s = 0.8; // Wait A6 is usually 1.5 for 301-500. Let's use standard table.
+            // Refining A6:
+            if (v <= 50) s = 0.13;
+            else if (v <= 100) s = 0.13;
+            else if (v <= 170) s = 0.4;
+            else if (v <= 250) s = 0.4;
+            else if (v <= 300) s = 0.4;
+            else if (v <= 500) s = 1.5;
+            else s = 1.5 + 0.00305 * (v - 500); // 0.00305 is typical for A6 > 500
+        }
+        
+        return s;
+    }
+
+    function updateClearance() {
+        const v = parseFloat(document.getElementById('clr-v').value) || 0;
+        const type = document.getElementById('clr-type').value;
+
+        const s_mm = getIPC2221Spacing(v, type);
+        const s_mil = s_mm / 0.0254;
+
+        document.getElementById('clr-res-mm').innerText = s_mm.toFixed(3);
+        document.getElementById('clr-res-mil').innerText = s_mil.toFixed(1);
+    }
+    
+    setTimeout(updateClearance, 100);
+</script>

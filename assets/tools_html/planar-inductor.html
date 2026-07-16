@@ -1,0 +1,182 @@
+<div class="doc-container flex flex-col w-full h-full min-h-[600px]">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Planar Spiral Inductor Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-hurricane"></i><h3 class="font-bold font-mono">Planar Spiral Inductor</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Modified Wheeler Equation</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col overflow-y-auto">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">GEOMETRY</h4>
+                
+                <div>
+                    <label class="text-[10px] mb-1 block">Spiral Shape</label>
+                    <select id="ind-shape" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText focus:border-themeAccent outline-none" onchange="updateInductor()">
+                        <option value="square">Square</option>
+                        <option value="hexagonal">Hexagonal</option>
+                        <option value="octagonal">Octagonal / Circular</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mt-2">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span>Number of Turns ($N$)</span></div>
+                        <input type="number" id="ind-n" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="4" step="1" oninput="updateInductor()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span>Outer Diameter ($D_{out}$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="ind-dout" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateInductor()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span>Trace Width ($W$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="ind-w" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.5" step="0.1" oninput="updateInductor()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span>Trace Spacing ($S$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="ind-s" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.2" step="0.1" oninput="updateInductor()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-[10px] text-themeMuted p-2 bg-themeBg/50 border border-themeBorder/30 rounded" id="ind-warnings">
+                    Geometry looks valid.
+                </div>
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <div class="w-full h-40 bg-themeBg border border-themeBorder/50 flex items-center justify-center relative overflow-hidden">
+                    <svg width="100" height="100" viewBox="0 0 100 100" class="text-blue-400" id="ind-svg">
+                        <!-- Square Spiral approximation -->
+                        <path d="M 10,10 L 90,10 L 90,90 L 20,90 L 20,20 L 80,20 L 80,80 L 30,80 L 30,30 L 70,30 L 70,70 L 40,70 L 40,40 L 60,40 L 60,60 L 50,60" fill="none" stroke="currentColor" stroke-width="4"/>
+                    </svg>
+                </div>
+
+                <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(59,130,246,0.1)] flex-grow">
+                    <span class="text-[10px] text-blue-400 uppercase tracking-wider mb-2 font-bold">Planar Inductance ($L$)</span>
+                    <div class="text-4xl font-bold text-themeText flex items-baseline gap-1">
+                        <span id="ind-l">0.0</span> <span class="text-sm text-blue-400">nH</span>
+                    </div>
+                    
+                    <div class="w-full grid grid-cols-3 gap-2 mt-6 pt-4 border-t border-themeBorder/20 text-xs">
+                        <div class="flex flex-col">
+                            <span class="text-[9px] text-themeMuted">Inner Diameter</span>
+                            <span class="font-bold text-themeText" id="ind-din">0.0 mm</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-[9px] text-themeMuted">Fill Ratio (&rho;)</span>
+                            <span class="font-bold text-themeText" id="ind-rho">0.0</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-[9px] text-themeMuted">Approx Length</span>
+                            <span class="font-bold text-themeText" id="ind-len">0.0 mm</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('ind-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="ind-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p>Calculated using the <strong>Modified Wheeler Formula</strong> for planar spiral inductors (Mohan et al., 1999).</p>
+            <p>$L = K_1 \cdot \mu_0 \cdot \frac{N^2 \cdot d_{avg}}{1 + K_2 \cdot \rho}$</p>
+            <ul class="list-disc pl-4 space-y-1">
+                <li>$d_{avg} = (d_{out} + d_{in}) / 2$</li>
+                <li>Fill Ratio $\rho = (d_{out} - d_{in}) / (d_{out} + d_{in})$</li>
+                <li>Square: $K_1 = 2.34, K_2 = 2.75$</li>
+                <li>Hexagonal: $K_1 = 2.33, K_2 = 3.82$</li>
+                <li>Octagonal: $K_1 = 2.25, K_2 = 3.55$</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    const K_COEFFS = {
+        'square': { k1: 2.34, k2: 2.75 },
+        'hexagonal': { k1: 2.33, k2: 3.82 },
+        'octagonal': { k1: 2.25, k2: 3.55 }
+    };
+
+    function updateInductor() {
+        const shape = document.getElementById('ind-shape').value;
+        const N = parseFloat(document.getElementById('ind-n').value) || 0;
+        const D_out = parseFloat(document.getElementById('ind-dout').value) || 0;
+        const W = parseFloat(document.getElementById('ind-w').value) || 0;
+        const S = parseFloat(document.getElementById('ind-s').value) || 0;
+
+        // Calculate D_in
+        // Each turn consumes W. Between N turns there are N-1 spacings S.
+        // The total thickness of the spiral wall on one side is N*W + (N-1)*S
+        // D_in = D_out - 2*(N*W + (N-1)*S)
+        const wall_thickness = (N * W) + ((N - 1) * S);
+        const D_in = D_out - (2 * wall_thickness);
+
+        const warningsEl = document.getElementById('ind-warnings');
+        if (D_in <= 0) {
+            warningsEl.innerHTML = `<span class="text-red-400"><i class="fa-solid fa-triangle-exclamation"></i> Invalid geometry: Inner diameter is &le; 0. Decrease turns, W, or S.</span>`;
+            document.getElementById('ind-l').innerText = "0.0";
+            document.getElementById('ind-din').innerText = D_in.toFixed(2) + " mm";
+            return;
+        } else {
+            warningsEl.innerHTML = `<span class="text-green-400"><i class="fa-solid fa-check"></i> Geometry valid.</span>`;
+        }
+
+        const D_avg = (D_out + D_in) / 2; // mm
+        const rho = (D_out - D_in) / (D_out + D_in);
+
+        const k1 = K_COEFFS[shape].k1;
+        const k2 = K_COEFFS[shape].k2;
+        const mu0 = 4 * Math.PI * 1e-7; // H/m
+
+        // L = K1 * mu0 * N^2 * D_avg / (1 + K2 * rho)
+        // Note: D_avg must be in meters for L in Henrys.
+        const D_avg_m = D_avg / 1000;
+        const L_H = k1 * mu0 * (N * N) * D_avg_m / (1 + k2 * rho);
+        const L_nH = L_H * 1e9;
+
+        // Approx Length of trace (N * pi * D_avg for circle, N * 4 * D_avg / (pi/4) approx for square)
+        let len_mm = 0;
+        if(shape === 'square') len_mm = 4 * N * D_avg;
+        else if (shape === 'hexagonal') len_mm = 3 * N * D_avg; // roughly
+        else len_mm = Math.PI * N * D_avg;
+
+        document.getElementById('ind-l').innerText = L_nH.toFixed(1);
+        document.getElementById('ind-din').innerText = D_in.toFixed(2) + " mm";
+        document.getElementById('ind-rho').innerText = rho.toFixed(3);
+        document.getElementById('ind-len').innerText = len_mm.toFixed(1) + " mm";
+        
+        // Update SVG vaguely
+        const svg = document.getElementById('ind-svg');
+        if (shape === 'square') {
+            svg.innerHTML = `<path d="M 10,10 L 90,10 L 90,90 L 20,90 L 20,20 L 80,20 L 80,80 L 30,80 L 30,30 L 70,30 L 70,70 L 40,70 L 40,40 L 60,40 L 60,60 L 50,60" fill="none" stroke="currentColor" stroke-width="4"/>`;
+        } else {
+            // Just draw concentric circles for octagonal to look cool
+            svg.innerHTML = `
+                <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="20 4"/>
+                <circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="15 4"/>
+                <circle cx="50" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="10 4"/>
+            `;
+        }
+    }
+    
+    setTimeout(updateInductor, 100);
+</script>
