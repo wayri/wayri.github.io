@@ -33,6 +33,31 @@
                         <div class="flex justify-between opacity-50" id="comp-fz2-grp"><span class="whitespace-nowrap text-themeMuted">Zero 2 (Fz2)</span><span id="comp-fz2" class="font-bold text-themeAccent">-- hz</span></div>
                         <div class="flex justify-between opacity-50" id="comp-fp2-grp"><span class="whitespace-nowrap text-themeMuted">Pole 2 (Fp2)</span><span id="comp-fp2" class="font-bold text-themeAccent">-- hz</span></div>
                     </div>
+
+                    <div class="pt-4 border-t border-themeBorder/20">
+                        <h4 class="font-bold text-themeText text-xs mb-2">Pole-Zero Map (s-plane)</h4>
+                        <div class="relative w-full h-40 bg-[#050505] border border-themeBorder/30">
+                            <canvas id="comp-pz-canvas" class="absolute inset-0 w-full h-full"></canvas>
+                        </div>
+                        <div class="flex gap-2 justify-end mt-2">
+                            <button class="px-2 py-1 bg-themeBg text-themeText border border-themeBorder text-[10px] hover:bg-themeBorder" onclick="document.getElementById('nyquist-box').classList.toggle('hidden')">Nyquist / Polar Plot</button>
+                            <button class="px-2 py-1 bg-themeBg text-themeText border border-themeBorder text-[10px] hover:bg-themeBorder" onclick="document.getElementById('routh-box').classList.toggle('hidden')">Routh-Hurwitz</button>
+                        </div>
+                    </div>
+
+                    <div id="nyquist-box" class="pt-4 border-t border-themeBorder/20 hidden">
+                        <h4 class="font-bold text-themeText text-xs mb-2">Nyquist (Polar) Plot</h4>
+                        <div class="relative w-full h-40 bg-[#050505] border border-themeBorder/30">
+                            <canvas id="comp-nyquist-canvas" class="absolute inset-0 w-full h-full"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="routh-box" class="pt-4 border-t border-themeBorder/20 hidden">
+                        <h4 class="font-bold text-themeText text-xs mb-2">Routh-Hurwitz Array</h4>
+                        <div id="routh-array-output" class="text-[10px] text-themeMuted p-2 bg-[#050505] border border-themeBorder/30 overflow-x-auto">
+                            Calculating Characteristic Equation...
+                        </div>
+                    </div>
                 </div>
             
     <!-- Theory & Math Section -->
@@ -42,7 +67,19 @@
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
         <div id="loopcompensatorpz-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Theory:</strong> Type II and Type III compensators use poles and zeros to shape the frequency response of a power supply control loop, ensuring stability (phase margin).</p>
+            <p><strong>Type II Compensator:</strong> Provides a single zero and two poles (one at origin). Used for current-mode control.</p>
+            <p>\( H(s) = \frac{1 + s R_2 C_2}{s R_1 (C_1 + C_2) (1 + s R_2 \frac{C_1 C_2}{C_1 + C_2})} \)</p>
+            <p>\( F_{z1} = \frac{1}{2\pi \cdot R_2 \cdot C_2} \)</p>
+            <p>\( F_{p1} = \frac{1}{2\pi \cdot R_2 \cdot \left(\frac{C_1 \cdot C_2}{C_1 + C_2}\right)} \)</p>
+            <p><strong>Design Logic:</strong> Place \(F_{z1}\) slightly below the LC resonance. Place \(F_{p1}\) at the ESR zero of the output capacitor to cancel it.</p>
+            
+            <p class="pt-2"><strong>Type III Compensator:</strong> Provides two zeros and three poles. Used for voltage-mode control.</p>
+            <p>\( H(s) = \frac{(1 + s R_2 C_2) (1 + s (R_1 + R_3) C_3)}{s R_1 (C_1 + C_2) (1 + s R_2 \frac{C_1 C_2}{C_1 + C_2}) (1 + s R_3 C_3)} \)</p>
+            <p>\( F_{z1} = \frac{1}{2\pi \cdot R_2 \cdot C_2} \)</p>
+            <p>\( F_{z2} = \frac{1}{2\pi \cdot (R_1 + R_3) \cdot C_3} \)</p>
+            <p>\( F_{p1} = \frac{1}{2\pi \cdot R_2 \cdot \left(\frac{C_1 \cdot C_2}{C_1 + C_2}\right)} \)</p>
+            <p>\( F_{p2} = \frac{1}{2\pi \cdot R_3 \cdot C_3} \)</p>
+            <p><strong>Design Logic:</strong> Place both zeros (\(F_{z1}\), \(F_{z2}\)) near the double LC resonance to offset the -40dB/dec drop and -180&deg; phase shift. Place one pole (\(F_{p1}\)) at the ESR zero and the other (\(F_{p2}\)) at half the switching frequency to attenuate high-frequency switching noise.</p>
         </div>
     </div>
 </div>

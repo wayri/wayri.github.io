@@ -82,6 +82,19 @@
                         <input type="number" id="ind-mur" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1" min="1" step="1" oninput="updateInductor()">
                     </div>
                 </div>
+                <div class="grid grid-cols-2 gap-4 mt-2">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Substrate Permittivity ($\epsilon_r$)</span></div>
+                        <input type="number" id="ind-er" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="4.4" min="1" step="0.1" oninput="updateInductor()" title="FR4 is typically 4.4">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Frequency ($f_{ac}$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="ind-f" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1" step="1" oninput="updateInductor()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">MHz</span>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="mt-4 text-[10px] text-themeMuted p-2 bg-themeBg/50 border border-themeBorder/30 rounded" id="ind-warnings">
                     Geometry looks valid.
@@ -100,8 +113,11 @@
                     <div class="text-4xl font-bold text-themeText flex items-baseline gap-1">
                         <span id="ind-l">0.0</span> <span class="text-sm text-blue-400" id="ind-l-unit">nH</span>
                     </div>
-                    <div class="text-xs text-themeMuted mt-1">
-                        DC Resistance: <span class="font-bold text-themeText" id="ind-dcr">0.0 &Omega;</span>
+                    <div class="w-full text-xs text-themeMuted mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-center bg-themeBg/50 p-2 rounded border border-themeBorder/20">
+                        <div><span class="block text-[9px]">DCR</span><span class="font-bold text-themeText" id="ind-dcr">0.0 &Omega;</span></div>
+                        <div><span class="block text-[9px]">ACR (Skin)</span><span class="font-bold text-themeText" id="ind-acr">0.0 &Omega;</span></div>
+                        <div><span class="block text-[9px]">Parasitic $C_p$</span><span class="font-bold text-themeText" id="ind-cp">0.0 pF</span></div>
+                        <div id="ind-m-cont"><span class="block text-[9px]">Mutual $M$</span><span class="font-bold text-themeText" id="ind-m">0.0 nH</span></div>
                     </div>
                     
                     <div class="w-full grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-themeBorder/20 text-xs">

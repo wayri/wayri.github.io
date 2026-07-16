@@ -1,52 +1,52 @@
-<div class="doc-container flex flex-col w-full h-full">
+<div class="doc-container flex flex-col w-full h-full overflow-hidden">
     <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Battery Life Estimator">
         <div class="flex items-center gap-2"><i class="fa-solid fa-battery-half"></i><h3 class="font-bold font-mono">Battery Life Estimator</h3></div>
         <span class="font-mono text-[10px] opacity-70">IoT & Embedded Systems</span>
     </div>
     
-    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto bg-themeBg">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
             
             <!-- Parameters -->
-            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col">
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col h-full overflow-y-auto">
                 <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">BATTERY CAPACITY</h4>
                 
                 <div>
                     <div class="flex justify-between text-xs mb-1"><span>Battery Type Preset</span></div>
                     <select id="bat-preset" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText outline-none" onchange="setBatPreset()">
                         <optgroup label="Alkaline (1.5V Nominal)">
-                            <option value="2500">AA Alkaline (~2500 mAh)</option>
-                            <option value="1000">AAA Alkaline (~1000 mAh)</option>
-                            <option value="600">AAAA Alkaline (~600 mAh)</option>
-                            <option value="8000">C Alkaline (~8000 mAh)</option>
-                            <option value="15000">D Alkaline (~15000 mAh)</option>
-                            <option value="500">9V Alkaline (~500 mAh)</option>
+                            <option value="2500" data-crate="0.5" data-loss="0.05">AA Alkaline (~2500 mAh)</option>
+                            <option value="1000" data-crate="0.5" data-loss="0.05">AAA Alkaline (~1000 mAh)</option>
+                            <option value="500" data-crate="0.2" data-loss="0.05">9V Alkaline (~500 mAh)</option>
                         </optgroup>
                         <optgroup label="Lithium Coin (3.0V Nominal)">
-                            <option value="225">CR2032 (~225 mAh)</option>
-                            <option value="90">CR2016 (~90 mAh)</option>
-                            <option value="620">CR2450 (~620 mAh)</option>
-                            <option value="35">CR1220 (~35 mAh)</option>
+                            <option value="225" data-crate="0.01" data-loss="0.01">CR2032 (~225 mAh)</option>
+                            <option value="620" data-crate="0.01" data-loss="0.01">CR2450 (~620 mAh)</option>
                         </optgroup>
                         <optgroup label="Lithium-Ion / LiPo (3.7V Nominal)">
-                            <option value="2500">18650 Typical (~2500 mAh)</option>
-                            <option value="3500">18650 High Cap (~3500 mAh)</option>
-                            <option value="5000">21700 (~5000 mAh)</option>
-                            <option value="1000">Small LiPo Pouch (~1000 mAh)</option>
+                            <option value="2500" data-crate="2.0" data-loss="0.20">18650 Typical (~2500 mAh)</option>
+                            <option value="5000" data-crate="2.0" data-loss="0.20">21700 (~5000 mAh)</option>
+                            <option value="1000" data-crate="1.0" data-loss="0.15">Small LiPo Pouch (~1000 mAh)</option>
                         </optgroup>
-                        <option value="custom">Custom Capacity...</option>
+                        <option value="custom" data-crate="1.0" data-loss="0.1">Custom Capacity...</option>
                     </select>
                 </div>
                 
-                <div>
-                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Usable Capacity (C)</span><span class="text-themeMuted">mAh</span></div>
-                    <input type="number" id="bat-c" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="2500" step="10" oninput="updateBat()">
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Usable Capacity (C)</span></div>
+                        <input type="number" id="bat-c" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="2500" step="10" oninput="updateBat()">
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Max C-Rate</span></div>
+                        <input type="number" id="bat-crate" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.5" step="0.1" oninput="updateBat()" title="Maximum discharge current relative to capacity (e.g. 1C for 2500mAh = 2500mA)">
+                    </div>
                 </div>
                 
                 <div>
                     <div class="flex justify-between text-xs mb-1"><span>Derating Factor</span><span class="text-themeMuted">%</span></div>
                     <input type="number" id="bat-derate" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="85" step="1" min="1" max="100" oninput="updateBat()">
-                    <div class="text-[9px] text-themeMuted mt-1 leading-tight">Accounts for self-discharge, temperature, and cutoff voltage limits. Usually 80-90%.</div>
+                    <div class="text-[9px] text-themeMuted mt-1 leading-tight">Accounts for initial self-discharge, temperature, and cutoff voltage limits. Usually 80-90%.</div>
                 </div>
 
                 <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">LOAD PROFILE (DUTY CYCLE)</h4>
@@ -72,29 +72,43 @@
                         <input type="number" id="bat-tsleep" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateBat()">
                     </div>
                 </div>
-
+                
+                <div id="bat-alerts" class="mt-4 flex flex-col gap-2"></div>
             </div>
 
             <!-- Visualization & Results -->
-            <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-4 h-full">
                 
-                <div class="w-full bg-themeContainer border border-themeBorder/50 p-4 text-center">
-                    <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 block">Average Current Draw</span>
-                    <div class="text-3xl font-bold text-themeText flex items-baseline justify-center gap-2">
-                        <span id="bat-iavg">0.00</span> <span id="bat-iavg-unit" class="text-sm text-themeAccent">mA</span>
+                <div class="w-full bg-themeContainer border border-themeBorder/50 p-4 text-center flex justify-around">
+                    <div>
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 block">Average Current Draw</span>
+                        <div class="text-2xl font-bold text-themeText flex items-baseline justify-center gap-1">
+                            <span id="bat-iavg">0.00</span> <span id="bat-iavg-unit" class="text-xs text-themeAccent">mA</span>
+                        </div>
+                    </div>
+                    <div class="border-l border-themeBorder/50 pl-4">
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 block">Peak Load Check</span>
+                        <div class="text-2xl font-bold text-themeText flex items-baseline justify-center gap-1" id="bat-peak-check">
+                            <span id="bat-peak-val">0.0</span> <span class="text-xs text-themeAccent">C</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Results -->
-                <div class="flex-grow bg-themeBg border border-themeAccent/50 p-6 flex flex-col justify-center items-center text-center relative shadow-[inset_0_0_15px_rgba(212,175,55,0.1)]">
+                <div class="bg-themeBg border border-themeAccent/50 p-4 flex flex-col justify-center items-center text-center relative shadow-[inset_0_0_15px_rgba(212,175,55,0.1)]">
                     <i class="fa-solid fa-clock absolute right-4 top-4 text-themeAccent/20 text-4xl"></i>
                     <span class="text-xs text-themeAccent uppercase tracking-wider mb-2 font-bold">Estimated Runtime</span>
-                    <div class="text-5xl font-bold text-themeText flex items-baseline gap-2">
-                        <span id="bat-time-val">0.0</span> <span id="bat-time-unit" class="text-xl text-themeAccent">Days</span>
+                    <div class="text-4xl font-bold text-themeText flex items-baseline gap-2">
+                        <span id="bat-time-val">0.0</span> <span id="bat-time-unit" class="text-lg text-themeAccent">Days</span>
                     </div>
-                    <p class="text-[10px] text-themeMuted mt-4" id="bat-time-alt">Or approx 0.0 hours</p>
+                    <p class="text-[10px] text-themeMuted mt-2" id="bat-time-alt">Or approx 0.0 hours</p>
                 </div>
 
+                <!-- Aging Chart -->
+                <div class="flex-grow bg-themeContainer border border-themeBorder/50 p-4 relative min-h-[200px]">
+                    <span class="text-xs font-bold text-themeMuted mb-2 block absolute top-2 left-2 z-10">Capacity Loss Over Time (Aging Model)</span>
+                    <canvas id="bat-aging-chart" class="w-full h-full pt-6"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -106,45 +120,91 @@
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
         <div id="bat-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Average Current ($I_{avg}$):</strong></p>
-            <p>$$ I_{avg} = \frac{(I_{active} \cdot T_{active}) + (I_{sleep} \cdot T_{sleep})}{T_{active} + T_{sleep}} $$</p>
-            <p><strong>Estimated Lifetime:</strong></p>
-            <p>$$ \text{Hours} = \frac{C \cdot (\text{Derating} / 100)}{I_{avg}} $$</p>
+            <p><strong>Average Current:</strong> \( I_{avg} = \frac{(I_{active} \cdot T_{active}) + (I_{sleep} \cdot T_{sleep})}{T_{active} + T_{sleep}} \)</p>
+            <p><strong>C-Rate:</strong> A measure of the rate at which a battery is discharged relative to its maximum capacity.</p>
+            <p><strong>Aging:</strong> Batteries degrade over time and cycles. We apply an exponential decay model \( C_t = C_0 \cdot (1 - \text{loss})^{\text{years}} \) depending on the chemistry.</p>
         </div>
     </div>
 </div>
 
 <script>
+    let agingChart = null;
+
     function setBatPreset() {
-        const preset = document.getElementById('bat-preset').value;
+        const preset = document.getElementById('bat-preset');
         const cInput = document.getElementById('bat-c');
-        if(preset !== 'custom') {
-            cInput.value = preset;
+        const crateInput = document.getElementById('bat-crate');
+        
+        if(preset.value !== 'custom') {
+            cInput.value = preset.value;
+            const opt = preset.options[preset.selectedIndex];
+            crateInput.value = opt.getAttribute('data-crate');
         }
         updateBat();
     }
 
+    function initAgingChart() {
+        const ctx = document.getElementById('bat-aging-chart');
+        if(!ctx) return;
+        agingChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Usable Capacity (mAh)',
+                    data: [],
+                    borderColor: '#D4AF37',
+                    backgroundColor: 'rgba(212, 175, 55, 0.2)',
+                    fill: true,
+                    tension: 0.2,
+                    pointRadius: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Years', color: '#888' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: '#aaa' }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: '#aaa' }
+                    }
+                }
+            }
+        });
+    }
+
     function updateBat() {
-        // Just checking if preset matches value, otherwise switch to custom
+        // Preset matching
         const presetSelect = document.getElementById('bat-preset');
         const cValStr = document.getElementById('bat-c').value;
         let match = false;
+        let lossRate = 0.1; // default custom
+        
         for (let i = 0; i < presetSelect.options.length; i++) {
-            if (presetSelect.options[i].value === cValStr) {
+            if (presetSelect.options[i].value === cValStr && presetSelect.options[i].value !== 'custom') {
                 presetSelect.selectedIndex = i;
                 match = true;
+                lossRate = parseFloat(presetSelect.options[i].getAttribute('data-loss') || 0.1);
                 break;
             }
         }
         if(!match) presetSelect.value = 'custom';
 
         const C = parseFloat(cValStr);
+        const maxCRate = parseFloat(document.getElementById('bat-crate').value);
         const derate = parseFloat(document.getElementById('bat-derate').value) / 100;
         
         const I_active_ma = parseFloat(document.getElementById('bat-iactive').value);
-        const T_active_s = parseFloat(document.getElementById('bat-tactive').value) / 1000; // ms to s
+        const T_active_s = parseFloat(document.getElementById('bat-tactive').value) / 1000;
         
-        const I_sleep_ma = parseFloat(document.getElementById('bat-isleep').value) / 1000; // uA to mA
+        const I_sleep_ma = parseFloat(document.getElementById('bat-isleep').value) / 1000;
         const T_sleep_s = parseFloat(document.getElementById('bat-tsleep').value);
 
         let I_avg_ma = 0;
@@ -168,6 +228,27 @@
             document.getElementById('bat-iavg-unit').innerText = "mA";
         }
 
+        // Check limits / Alerts
+        const alertsCont = document.getElementById('bat-alerts');
+        alertsCont.innerHTML = '';
+        
+        const peakCRate = I_active_ma / C;
+        document.getElementById('bat-peak-val').innerText = peakCRate.toFixed(3);
+        const peakCheckElem = document.getElementById('bat-peak-check');
+        
+        if (peakCRate > maxCRate) {
+            peakCheckElem.classList.remove('text-themeText');
+            peakCheckElem.classList.add('text-red-500');
+            alertsCont.innerHTML += `<div class="bg-red-900/40 text-red-400 p-2 text-xs border border-red-500/50 flex items-start gap-2"><i class="fa-solid fa-triangle-exclamation mt-0.5"></i> <span><strong>Peak Current Exceeds Max C-Rate!</strong> Active current is ${I_active_ma}mA, but max safe continuous discharge is ${(C * maxCRate).toFixed(0)}mA. This can damage the battery or cause severe voltage drops.</span></div>`;
+        } else {
+            peakCheckElem.classList.add('text-themeText');
+            peakCheckElem.classList.remove('text-red-500');
+        }
+
+        if (lifetime_hrs < 24) {
+            alertsCont.innerHTML += `<div class="bg-yellow-900/40 text-yellow-400 p-2 text-xs border border-yellow-500/50 flex items-start gap-2"><i class="fa-solid fa-circle-exclamation mt-0.5"></i> <span><strong>Very Short Runtime.</strong> Consider a larger capacity battery or reducing active duty cycle.</span></div>`;
+        }
+
         // Format Lifetime
         const lifetime_days = lifetime_hrs / 24;
         const lifetime_yrs = lifetime_days / 365.25;
@@ -189,7 +270,33 @@
             unitElem.innerText = "Hours";
             altElem.innerText = `Or approx ${Math.round(lifetime_hrs * 60)} minutes`;
         }
+
+        // Update Aging Chart
+        if (!agingChart) initAgingChart();
+        if (agingChart) {
+            const labels = [];
+            const data = [];
+            const totalYears = Math.max(5, Math.ceil(lifetime_yrs));
+            for(let y=0; y<=totalYears; y++) {
+                labels.push(`Y${y}`);
+                const cap = C * derate * Math.pow(1 - lossRate, y);
+                data.push(cap.toFixed(0));
+            }
+            agingChart.data.labels = labels;
+            agingChart.data.datasets[0].data = data;
+            agingChart.update();
+        }
     }
     
-    setTimeout(updateBat, 100);
+    setTimeout(() => {
+        if(typeof Chart === 'undefined') {
+            const script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/npm/chart.js";
+            script.onload = () => { initAgingChart(); updateBat(); };
+            document.head.appendChild(script);
+        } else {
+            initAgingChart();
+            updateBat();
+        }
+    }, 100);
 </script>

@@ -763,6 +763,9 @@ function initPVCharts() {
     if(pvTimeChart) pvTimeChart.destroy();
     if(pvHistChart) pvHistChart.destroy();
 
+    const mutedColor = getComputedStyle(document.documentElement).getPropertyValue('--muted-text').trim() || '#888';
+    const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--grid-color').trim() || 'rgba(128,128,128,0.2)';
+
     pvTimeChart = new Chart(ctxTime, {
         type: 'line',
         data: {
@@ -775,26 +778,55 @@ function initPVCharts() {
                 borderWidth: 2,
                 fill: true,
                 tension: 0.4,
-                pointRadius: 0
+                pointRadius: 0,
+                pointHoverRadius: 4,
+                hitRadius: 15
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+                axis: 'x'
+            },
             scales: {
                 x: {
-                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                    ticks: { color: 'rgba(255, 255, 255, 0.5)' }
+                    grid: { color: gridColor },
+                    ticks: { color: mutedColor }
                 },
                 y: {
                     beginAtZero: true,
-                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                    ticks: { color: 'rgba(255, 255, 255, 0.5)' },
+                    grid: { color: gridColor },
+                    ticks: { color: mutedColor },
                     max: 1100
                 }
             },
-            plugins: { legend: { display: false } }
-        }
+            plugins: { 
+                legend: { display: false, labels: { color: mutedColor, font: { size: 10 } } },
+                tooltip: { enabled: true, intersect: false, mode: 'index' }
+            }
+        },
+        plugins: [{
+            id: 'verticalLine',
+            afterDraw: chart => {
+                if (chart.tooltip?._active?.length) {
+                    let x = chart.tooltip._active[0].element.x;
+                    let yAxis = chart.scales.y;
+                    let ctx = chart.ctx;
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.moveTo(x, yAxis.top);
+                    ctx.lineTo(x, yAxis.bottom);
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#D4AF37';
+                    ctx.setLineDash([5, 5]);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            }
+        }]
     });
 
     pvHistChart = new Chart(ctxHist, {
@@ -811,18 +843,25 @@ function initPVCharts() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
             scales: {
                 x: {
                     grid: { display: false },
-                    ticks: { color: 'rgba(255, 255, 255, 0.5)' }
+                    ticks: { color: mutedColor }
                 },
                 y: {
                     beginAtZero: true,
-                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                    ticks: { color: 'rgba(255, 255, 255, 0.5)' }
+                    grid: { color: gridColor },
+                    ticks: { color: mutedColor }
                 }
             },
-            plugins: { legend: { display: false } }
+            plugins: { 
+                legend: { display: false },
+                tooltip: { enabled: true, intersect: false, mode: 'index' }
+            }
         }
     });
 }
@@ -904,7 +943,8 @@ window.updateSolarSim = function() {
         });
     }
     pvTimeChart.options.plugins.legend.display = showAll;
-    pvTimeChart.options.plugins.legend.labels = { color: 'rgba(255,255,255,0.7)', font: { size: 10 } };
+    const mutedColor = getComputedStyle(document.documentElement).getPropertyValue('--muted-text').trim() || '#888';
+    pvTimeChart.options.plugins.legend.labels = { color: mutedColor, font: { size: 10 } };
     pvTimeChart.data.datasets = datasets;
     pvTimeChart.update();
 
@@ -1217,20 +1257,38 @@ window.updateInductor = function() {
     const trace_area = W * t; // mm^2
     DCR_single = (0.0171 * (len_mm / 1000)) / trace_area;
 
+    const f_ac_hz = (parseFloat(document.getElementById('ind-f').value) || 1) * 1e6;
+    const er = parseFloat(document.getElementById('ind-er').value) || 4.4;
+    
+    // AC Resistance (Skin Effect)
+    const rho_cu = 1.71e-8; // ohm*m
+    const delta = Math.sqrt(rho_cu / (Math.PI * f_ac_hz * mu0)); // m
+    const delta_mm = delta * 1000;
+    const t_eff = Math.min(t, 2 * delta_mm);
+    const ACR_single = (0.0171 * (len_mm / 1000)) / (W * t_eff);
+
     let DCR_tot = DCR_single;
+    let ACR_tot = ACR_single;
+    let M_val = 0;
+
+    const eps0 = 8.854e-12;
+    // Gap capacitance (between turns)
+    const C_gap = eps0 * er * (t / 1000) / (S / 1000) * (len_mm / 1000); 
+    let C_p = C_gap;
 
     if (M > 1) {
+        const C_layer = eps0 * er * (len_mm / 1000 * W / 1000) / (h / 1000);
         if (layer_conn === 'series') {
-            // Simplified mutual inductance: M_layers ~ L_single * M^1.6 (empirical for tightly coupled planar)
             L_tot = L_tot * Math.pow(M, 1.6);
             DCR_tot = DCR_single * M;
+            ACR_tot = ACR_single * M;
+            C_p += C_layer / 3;
+            M_val = (L_tot - M * (L_single * mu_eff)) / 2;
         } else {
-            // Parallel: L drops slightly due to mutual coupling canceling self inductance if closely spaced,
-            // but primarily acts as 1/M. Let's use roughly L_tot ~ L_single / (M^0.1) assuming perfectly identical.
-            // Wait, for parallel identical inductors with coupling k ~ 1, L_tot = L_single!
-            // But realistically k < 1, so L_tot is slightly less. We'll approximate as L_single * 0.95.
             L_tot = L_tot * (1 - 0.05 * (M - 1));
             DCR_tot = DCR_single / M;
+            ACR_tot = ACR_single / M;
+            C_p += C_layer;
         }
     }
 
@@ -1247,6 +1305,16 @@ window.updateInductor = function() {
     document.getElementById('ind-rho').innerText = rho.toFixed(3);
     document.getElementById('ind-dcr').innerHTML = DCR_tot.toFixed(3) + " &Omega;";
     document.getElementById('ind-mueff').innerText = mu_eff.toFixed(2);
+    
+    document.getElementById('ind-acr').innerHTML = ACR_tot.toFixed(3) + " &Omega;";
+    document.getElementById('ind-cp').innerText = (C_p * 1e12).toFixed(2) + " pF";
+    const m_cont = document.getElementById('ind-m-cont');
+    if(M_val > 0) {
+        m_cont.classList.remove('hidden');
+        document.getElementById('ind-m').innerText = (M_val * 1e9).toFixed(2) + " nH";
+    } else {
+        m_cont.classList.add('hidden');
+    }
 
     // Update 3D Model
     if (inductorMesh && typeof THREE !== 'undefined') {
@@ -1712,12 +1780,26 @@ window.updateXfmr = function() {
         const required_ap = s / (4.44 * f * bmax * kw * J_cm2); // cm^4
         const actual_ap = ae * aw;
 
+        // Air Gap & Inductance
+        const lg_mm = parseFloat(document.getElementById('xfmr-lg').value) || 0;
+        let lp_mH = 0;
+        if(np > 0) {
+            const mu0 = 4 * Math.PI * 1e-7;
+            const le_m = Math.sqrt(ae_m2) * 4; // Very rough approximation for magnetic path length
+            const mu_r = 2500; // typical ferrite
+            const lg_m = lg_mm / 1000;
+            const reluctance = (lg_m > 0) ? (lg_m / (mu0 * ae_m2) + le_m / (mu0 * mu_r * ae_m2)) : (le_m / (mu0 * mu_r * ae_m2));
+            const lp_H = (np * np) / reluctance;
+            lp_mH = lp_H * 1000;
+        }
+
         document.getElementById('xfmr-out-np').innerText = isNaN(np) || !isFinite(np) ? 0 : np;
         document.getElementById('xfmr-out-ns').innerText = isNaN(ns) || !isFinite(ns) ? 0 : ns;
         document.getElementById('xfmr-out-ip').innerText = ip.toFixed(2) + " A";
         document.getElementById('xfmr-out-is').innerText = is.toFixed(2) + " A";
         document.getElementById('xfmr-out-vpt').innerText = vpt.toFixed(3);
         document.getElementById('xfmr-out-ap').innerText = required_ap.toFixed(1);
+        document.getElementById('xfmr-out-lp').innerText = lp_mH > 10000 ? "∞" : lp_mH.toFixed(2);
 
         const warnEl = document.getElementById('xfmr-warn-ap');
         if (actual_ap < required_ap && s > 0) {
@@ -1759,3 +1841,9 @@ window.updateXfmr = function() {
         document.getElementById('xfmr-out-xeq').innerText = xeq.toFixed(3) + " Ω";
     }
 }
+
+document.addEventListener('toolLoaded', function() {
+    initHeatsink3D();
+    initInductor3D();
+    initXfmr3D();
+});

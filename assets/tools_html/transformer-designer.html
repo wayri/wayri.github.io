@@ -78,6 +78,13 @@
                             <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Fill Factor ($k_w$)</span></div>
                             <input type="number" id="xfmr-kw" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.4" min="0.1" max="1" step="0.05" oninput="updateXfmr()">
                         </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Air Gap ($l_g$)</span></div>
+                            <div class="flex">
+                                <input type="number" id="xfmr-lg" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0" min="0" step="0.1" oninput="updateXfmr()">
+                                <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">mm</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -121,7 +128,7 @@
             <!-- Visualization & Results -->
             <div class="flex flex-col gap-4">
                 
-                <div class="w-full h-64 bg-[#0a0a0a] border border-themeBorder/50 flex items-center justify-center relative overflow-hidden" id="xfmr-3d-container">
+                <div class="w-full h-64 bg-themeContainer border border-themeBorder/50 flex items-center justify-center relative overflow-hidden" id="xfmr-3d-container">
                     <!-- 3D canvas injected here -->
                 </div>
 
@@ -142,7 +149,7 @@
                         </div>
                     </div>
                     
-                    <div class="mt-4 grid grid-cols-2 gap-2 text-xs border-t border-themeBorder/20 pt-2 text-center">
+                    <div class="mt-4 grid grid-cols-3 gap-2 text-xs border-t border-themeBorder/20 pt-2 text-center">
                         <div>
                             <span class="text-[9px] text-themeMuted block">Volts per Turn</span>
                             <span class="font-bold text-themeText" id="xfmr-out-vpt">0.0</span> V/t
@@ -150,6 +157,10 @@
                         <div>
                             <span class="text-[9px] text-themeMuted block">Area Product ($A_p$)</span>
                             <span class="font-bold text-themeText" id="xfmr-out-ap">0.0</span> cm&sup4;
+                        </div>
+                        <div>
+                            <span class="text-[9px] text-themeMuted block">Primary Inductance ($L_p$)</span>
+                            <span class="font-bold text-themeText" id="xfmr-out-lp">0.0</span> mH
                         </div>
                     </div>
                     

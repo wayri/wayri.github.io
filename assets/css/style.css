@@ -125,3 +125,21 @@ input[type="number"], select, input[type="text"], input[type="password"] {
     filter: none;
     mix-blend-mode: screen;
 }
+
+/* Fix Tailwind CSS resetting MathJax inline SVGs and containers to display:block */
+mjx-container[jax="SVG"][display="true"] {
+    display: block !important;
+    text-align: center;
+    margin: 1em 0;
+}
+mjx-container[jax="SVG"] {
+    display: inline-block !important;
+    vertical-align: middle;
+    margin: 0 !important;
+    line-height: 1 !important;
+}
+mjx-container[jax="SVG"] > svg {
+    display: inline !important;
+    vertical-align: middle !important;
+    margin: 0 !important;
+}

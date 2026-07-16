@@ -8,3 +8,7 @@ node_modules/
 .DS_Store
 *.pyc
 __pycache__/
+
+# Local planning documents
+rf_roadmap.*
+motor_roadmap.*
