@@ -102,6 +102,7 @@ const TOOL_REGISTRY = [
         category: "Motor & Drives",
         icon: "fa-gear",
         tools: [
+            { id: "tool-bldc-winding-helper", name: "BLDC Motor Winding Helper", file: "bldc-winding-helper.html" },
             { id: "tool-ac-motor-dynamics", name: "AC Motor Dynamics", file: "ac-motor-dynamics.html" },
             { id: "tool-motor-controller", name: "Motor Controller Design", file: "motor-controller.html" }
         ]

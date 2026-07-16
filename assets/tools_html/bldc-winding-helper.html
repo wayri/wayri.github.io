@@ -1,0 +1,209 @@
+<div class="doc-container flex flex-col w-full h-full min-h-[600px]">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="BLDC Motor Winding Helper">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-fan"></i><h3 class="font-bold font-mono">BLDC Motor Winding Helper</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Stator/Rotor Poles & Winding Factor</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">MOTOR CONFIGURATION</h4>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Stator Slots ($N_s$)</span></div>
+                        <input type="number" id="bldc-slots" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="12" min="3" step="3" oninput="updateBldc()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Rotor Poles (Magnets, $N_p$)</span></div>
+                        <input type="number" id="bldc-poles" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-red-400" value="14" min="2" step="2" oninput="updateBldc()">
+                    </div>
+                </div>
+                
+                <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">ELECTRICAL</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Phases</span></div>
+                        <input type="number" id="bldc-phases" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="3" disabled>
+                    </div>
+                    <div>
+                        <label class="whitespace-nowrap text-[10px] mb-1 block">Connection</label>
+                        <select id="bldc-conn" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText outline-none" onchange="updateBldc()">
+                            <option value="star" selected>Wye / Star (Y)</option>
+                            <option value="delta">Delta (Δ)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center shadow-inner flex-grow">
+                    
+                    <div id="bldc-validity" class="w-full p-2 mb-4 text-xs font-bold text-white bg-green-600/80 border border-green-500 rounded">
+                        <i class="fa-solid fa-circle-check mr-1"></i> VALID CONFIGURATION
+                    </div>
+
+                    <div class="w-full grid grid-cols-2 gap-4 mb-4">
+                        <div class="flex flex-col border-r border-themeBorder/20 pr-4">
+                            <span class="whitespace-nowrap text-[10px] text-themeAccent uppercase tracking-wider mb-1 font-bold">Winding Factor ($K_w$)</span>
+                            <div class="text-3xl font-bold text-themeText flex items-baseline justify-center gap-1">
+                                <span id="bldc-out-kw">0.933</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="whitespace-nowrap text-[10px] text-themeMuted uppercase tracking-wider mb-1 font-bold">Cogging Steps</span>
+                            <div class="text-3xl font-bold text-themeText flex items-baseline justify-center gap-1">
+                                <span id="bldc-out-cog">84</span> <span class="text-[10px] font-normal">/ rev</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full bg-themeBg border border-themeBorder/30 p-3 mt-2 text-left">
+                        <span class="text-[10px] text-themeMuted uppercase block mb-1">Recommended Winding Layout (DLR)</span>
+                        <div class="font-mono text-sm tracking-widest text-themeAccent font-bold break-all" id="bldc-out-layout">
+                            AabBCcaAabBCca
+                        </div>
+                        <span class="text-[9px] text-themeMuted mt-1 block">Capital = CW, Lowercase = CCW</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('bldc-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="bldc-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Winding Factor ($K_w$):</strong> Indicates how effectively the winding utilizes the magnetic flux. $K_w = K_p 	imes K_d$ (Pitch factor $	imes$ Distribution factor).</p>
+            <p><strong>Cogging Torque:</strong> The number of cogging steps per mechanical revolution is the Least Common Multiple (LCM) of the number of Stator Slots ($N_s$) and Rotor Poles ($N_p$). A higher LCM generally means smoother rotation and lower cogging torque.</p>
+            <p><strong>Rule of Thumb:</strong> Configurations where $N_s = N_p \pm 1$ or $N_s = N_p \pm 2$ (e.g. 12N14P) often yield very high winding factors and smooth operation for BLDC outrunners.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Helper to calculate greatest common divisor
+    function gcd(a, b) {
+        return b === 0 ? a : gcd(b, a % b);
+    }
+    
+    // Helper to calculate least common multiple
+    function lcm(a, b) {
+        return (a * b) / gcd(a, b);
+    }
+
+    // Generate winding layout based on star of slots (simplified)
+    // Based on fundamental EMF phase angles for fractional slot concentrated windings
+    function generateLayout(slots, poles) {
+        let layout = "";
+        const m = 3; // phases
+        const q = slots / (m * poles); 
+        
+        // Very basic layout generation based on phase angles 
+        // Real DLR (Double Layer) fractional slot winding generation is complex.
+        // We'll use a simplified phase assignment for demonstration.
+        // Array of phases: 0=A, 1=B, 2=C
+        const phases = ['A', 'B', 'C'];
+        const phases_inv = ['a', 'b', 'c'];
+        
+        let valid = true;
+        if (slots % 3 !== 0 || poles % 2 !== 0) {
+            return { layout: "INVALID", valid: false };
+        }
+
+        // Mechanical angle step
+        const mech_angle = 360 / slots;
+        // Electrical angle step
+        const elec_angle = (poles / 2) * mech_angle;
+        
+        for (let i = 0; i < slots; i++) {
+            let angle = (i * elec_angle) % 360;
+            // Shift to [-180, 180]
+            if (angle > 180) angle -= 360;
+            
+            // Assign to phase based on 60-degree phase belts
+            if (angle >= -30 && angle < 30) layout += "A";
+            else if (angle >= 30 && angle < 90) layout += "c";
+            else if (angle >= 90 && angle < 150) layout += "B";
+            else if (angle >= 150 || angle < -150) layout += "a";
+            else if (angle >= -150 && angle < -90) layout += "C";
+            else if (angle >= -90 && angle < -30) layout += "b";
+            else layout += "?";
+        }
+        
+        return { layout, valid };
+    }
+
+    function updateBldc() {
+        const slots = parseInt(document.getElementById('bldc-slots').value) || 12;
+        const poles = parseInt(document.getElementById('bldc-poles').value) || 14;
+
+        const valEl = document.getElementById('bldc-validity');
+        
+        if (slots % 3 !== 0 || poles % 2 !== 0 || slots === poles) {
+            valEl.className = "w-full p-2 mb-4 text-xs font-bold text-white bg-red-600/80 border border-red-500 rounded";
+            valEl.innerHTML = '<i class="fa-solid fa-circle-xmark mr-1"></i> INVALID CONFIGURATION';
+            document.getElementById('bldc-out-kw').innerText = "0.000";
+            document.getElementById('bldc-out-cog').innerText = "0";
+            document.getElementById('bldc-out-layout').innerText = "N/A";
+            return;
+        }
+
+        valEl.className = "w-full p-2 mb-4 text-xs font-bold text-white bg-green-600/80 border border-green-500 rounded";
+        valEl.innerHTML = '<i class="fa-solid fa-circle-check mr-1"></i> VALID CONFIGURATION';
+
+        const cogg = lcm(slots, poles);
+        document.getElementById('bldc-out-cog').innerText = cogg;
+
+        // Calculate Winding Factor (fundamental)
+        // Kw = Kd * Kp
+        // For concentrated fractional-slot windings, Kd = sin(pi/(2*m)) / (q * sin(pi/(2*m*q)))
+        // simplified approximation for common configurations
+        const q = slots / (3 * poles); 
+        
+        // Exact Kw calculation via star of slots
+        const elec_angle_rad = (poles / 2) * (2 * Math.PI / slots);
+        
+        // We can just use the standard formula for fractional slot:
+        // Kw = | sin(n * pi / 3) / (n * sin(pi / 3)) | ... actually it's easier to use known tables or exact phasor sum.
+        // Let's do exact phasor sum for Phase A
+        let sumX = 0, sumY = 0;
+        let count = 0;
+        
+        const res = generateLayout(slots, poles);
+        document.getElementById('bldc-out-layout').innerText = res.layout;
+
+        for (let i = 0; i < slots; i++) {
+            let angle = i * elec_angle_rad;
+            let char = res.layout[i];
+            if (char === 'A') {
+                sumX += Math.cos(angle);
+                sumY += Math.sin(angle);
+                count++;
+            } else if (char === 'a') {
+                sumX -= Math.cos(angle);
+                sumY -= Math.sin(angle);
+                count++;
+            }
+        }
+        
+        let kw = 0;
+        if (count > 0) {
+            const mag = Math.sqrt(sumX*sumX + sumY*sumY);
+            kw = mag / count;
+        }
+
+        document.getElementById('bldc-out-kw').innerText = kw.toFixed(3);
+    }
+    
+    // Initial run
+    setTimeout(updateBldc, 100);
+</script>
