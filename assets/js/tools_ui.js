@@ -113,6 +113,13 @@ const TOOL_REGISTRY = [
         ]
     },
     {
+        category: "Thermal Management",
+        icon: "fa-temperature-arrow-up",
+        tools: [
+            { id: "tool-heatsink-simulator", name: "Heatsink Simulator", file: "heatsink-simulator.html" }
+        ]
+    },
+    {
         category: "Advanced Toolkit",
         icon: "fa-layer-group",
         tools: [

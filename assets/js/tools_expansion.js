@@ -1287,3 +1287,175 @@ window.updateInductor = function() {
         inductorMesh.scale.set(scale, scale, scale);
     }
 }
+
+
+// ==========================================
+// HEATSINK THERMAL SIMULATOR (3D)
+// ==========================================
+
+let hsScene, hsCamera, hsRenderer, hsGroup;
+let hsReqId = null;
+
+function initHeatsink3D() {
+    const container = document.getElementById('hs-3d-container');
+    if (!container || hsRenderer) return;
+
+    hsScene = new THREE.Scene();
+    hsCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    hsCamera.position.set(100, 100, 150);
+    hsCamera.lookAt(0, 0, 0);
+
+    hsRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    hsRenderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(hsRenderer.domElement);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    hsScene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    dirLight.position.set(50, 100, 50);
+    hsScene.add(dirLight);
+
+    hsGroup = new THREE.Group();
+    hsScene.add(hsGroup);
+
+    // Grid helper
+    const gridHelper = new THREE.GridHelper(150, 15, 0x444444, 0x222222);
+    hsScene.add(gridHelper);
+
+    updateHeatsink();
+
+    const animate = function () {
+        hsReqId = requestAnimationFrame(animate);
+        hsGroup.rotation.y += 0.005;
+        hsRenderer.render(hsScene, hsCamera);
+    };
+    animate();
+}
+
+window.updateHeatsink = function() {
+    if (!document.getElementById('hs-pd')) return;
+
+    const pd = parseFloat(document.getElementById('hs-pd').value) || 0;
+    const ta = parseFloat(document.getElementById('hs-ta').value) || 25;
+    const rjc = parseFloat(document.getElementById('hs-rjc').value) || 0;
+    const rcs = parseFloat(document.getElementById('hs-rcs').value) || 0;
+    
+    const W = parseFloat(document.getElementById('hs-w').value) || 50;
+    const L = parseFloat(document.getElementById('hs-l').value) || 50;
+    const tb = parseFloat(document.getElementById('hs-tb').value) || 5;
+    const hf = parseFloat(document.getElementById('hs-hf').value) || 20;
+    const tf = parseFloat(document.getElementById('hs-tf').value) || 1.5;
+    const N = parseInt(document.getElementById('hs-n').value) || 10;
+    
+    const lfm = parseFloat(document.getElementById('hs-lfm').value) || 0;
+    const k_mat = parseFloat(document.getElementById('hs-mat').value) || 205; // W/mK
+
+    const warningsEl = document.getElementById('hs-warnings');
+    
+    if (N < 2 || tf * N >= W) {
+        warningsEl.innerHTML = `<span class="text-red-400"><i class="fa-solid fa-triangle-exclamation"></i> Invalid fins: Too many fins for the base width.</span>`;
+        return;
+    } else {
+        warningsEl.innerHTML = `<span class="text-green-400"><i class="fa-solid fa-check"></i> Geometry valid.</span>`;
+    }
+
+    // Thermal Resistance Calculation Approximation
+    // 1. Surface Area
+    const baseArea = (W * L) / 100; // cm^2
+    const finAreaOne = (hf * L * 2) / 100 + (tf * L) / 100; // cm^2
+    const totalArea = baseArea + (finAreaOne * N); // cm^2
+    
+    // 2. Heat transfer coefficient (h) in W/(m^2 K)
+    // Natural convection h ~ 5 to 10. Forced ~ 10 to 100 depending on LFM.
+    let h_conv = 5; // W/m^2K natural
+    if (lfm > 0) {
+        // Very rough empirical rule for LFM to h (W/m^2K)
+        h_conv = 5 + 4 * Math.sqrt(lfm / 100);
+    }
+    
+    // Convert Area to m^2
+    const area_m2 = totalArea / 10000;
+    
+    // Fin efficiency (simplification)
+    // m = sqrt(2*h / (k * tf)) where tf is in meters
+    const m_fin = Math.sqrt((2 * h_conv) / (k_mat * (tf / 1000)));
+    const hf_m = hf / 1000;
+    let fin_eff = Math.tanh(m_fin * hf_m) / (m_fin * hf_m);
+    if(isNaN(fin_eff) || fin_eff > 1) fin_eff = 1;
+    
+    // Effective area = Base + Fins * eff
+    const a_eff_m2 = (baseArea / 10000) + (N * (finAreaOne / 10000) * fin_eff);
+    
+    // R_sa = 1 / (h * A_eff)
+    const Rsa = 1 / (h_conv * a_eff_m2);
+    
+    // Temperatures
+    const Ts = ta + (pd * Rsa);
+    const Tc = Ts + (pd * rcs);
+    const Tj = Tc + (pd * rjc);
+    
+    document.getElementById('hs-rsa').innerText = Rsa.toFixed(2) + " °C/W";
+    document.getElementById('hs-tj').innerText = Tj.toFixed(1);
+    document.getElementById('hs-ts').innerText = Ts.toFixed(1);
+    document.getElementById('hs-area').innerText = totalArea.toFixed(1) + " cm²";
+    
+    const vol_cm3 = ((W * L * tb) + (N * tf * hf * L)) / 1000;
+    document.getElementById('hs-vol').innerText = vol_cm3.toFixed(1) + " cm³";
+    
+    // Update 3D Model
+    if (hsGroup && typeof THREE !== 'undefined') {
+        while(hsGroup.children.length > 0) { 
+            hsGroup.remove(hsGroup.children[0]); 
+        }
+
+        // We will build the heatsink geometry and map colors
+        // Red = hot (base), Blue = cold (ambient)
+        // Map Tj (max) to red, Ta to blue
+        const maxTempColor = new THREE.Color(0xff3333); // Red
+        const minTempColor = new THREE.Color(0x3333ff); // Blue
+        
+        // Base geometry
+        const baseGeo = new THREE.BoxGeometry(W, tb, L);
+        const baseMat = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, metalness: 0.5, roughness: 0.5 });
+        // Actually, let's just make it a single color based on Ts
+        // We'll interpolate between ambient (blue) and max danger (e.g. 150C)
+        const t_ratio = Math.min((Ts - ta) / (120 - ta), 1.0);
+        const baseColor = minTempColor.clone().lerp(maxTempColor, t_ratio);
+        const coloredBaseMat = new THREE.MeshStandardMaterial({ color: baseColor, metalness: 0.5, roughness: 0.5 });
+        
+        const baseMesh = new THREE.Mesh(baseGeo, coloredBaseMat);
+        baseMesh.position.y = tb / 2;
+        hsGroup.add(baseMesh);
+        
+        // Fins geometry
+        const finSpacing = (W - (N * tf)) / (N - 1);
+        for (let i = 0; i < N; i++) {
+            const finGeo = new THREE.BoxGeometry(tf, hf, L);
+            // Fin tips are slightly cooler (fin efficiency)
+            const tipTemp = Ts - (Ts - ta)*(1 - fin_eff);
+            const tipRatio = Math.min((tipTemp - ta) / (120 - ta), 1.0);
+            const tipColor = minTempColor.clone().lerp(maxTempColor, tipRatio);
+            const finMat = new THREE.MeshStandardMaterial({ color: tipColor, metalness: 0.5, roughness: 0.5 });
+            
+            const finMesh = new THREE.Mesh(finGeo, finMat);
+            const x_pos = -W/2 + (tf/2) + i * (tf + finSpacing);
+            finMesh.position.set(x_pos, tb + (hf/2), 0);
+            hsGroup.add(finMesh);
+        }
+        
+        // Add a heat source component at the bottom
+        const compGeo = new THREE.BoxGeometry(W * 0.4, 2, L * 0.4);
+        const tjRatio = Math.min((Tj - ta) / (150 - ta), 1.0);
+        const tjColor = minTempColor.clone().lerp(new THREE.Color(0xff0000), tjRatio);
+        const compMat = new THREE.MeshStandardMaterial({ color: tjColor, metalness: 0.8, roughness: 0.2 });
+        const compMesh = new THREE.Mesh(compGeo, compMat);
+        compMesh.position.y = -1;
+        hsGroup.add(compMesh);
+        
+        // Scale to fit camera nicely
+        const scale = 80 / Math.max(W, L);
+        hsGroup.scale.set(scale, scale, scale);
+        // Center it slightly
+        hsGroup.position.y = -10;
+    }
+}

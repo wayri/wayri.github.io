@@ -1384,6 +1384,7 @@ window.addEventListener('DOMContentLoaded', () => {
     try { if(typeof initPlotter==='function') initPlotter(); } catch(e){}
     try { if(typeof initSolarWidget==='function') initSolarWidget(); } catch(e){}
     try { if(typeof initPlanarInductor3D==='function') initPlanarInductor3D(); } catch(e){}
+    try { if(typeof initHeatsink3D==='function') initHeatsink3D(); } catch(e){}
 });
 
 document.addEventListener('toolLoaded', () => {
@@ -1391,6 +1392,7 @@ document.addEventListener('toolLoaded', () => {
     try { if(typeof initPlotter==='function') initPlotter(); } catch(e){}
     try { if(typeof initSolarWidget==='function') initSolarWidget(); } catch(e){}
     try { if(typeof initPlanarInductor3D==='function') initPlanarInductor3D(); } catch(e){}
+    try { if(typeof initHeatsink3D==='function') initHeatsink3D(); } catch(e){}
 });
 
 

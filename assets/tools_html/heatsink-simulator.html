@@ -1,0 +1,176 @@
+<div class="doc-container flex flex-col w-full h-full min-h-[750px]">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Heatsink & Thermal Simulator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-temperature-arrow-up"></i><h3 class="font-bold font-mono">Heatsink Thermal Simulator</h3></div>
+        <span class="font-mono text-[10px] opacity-70">3D Gradient & CFD Approx</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col overflow-y-auto">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">COMPONENT & ENVIRONMENT</h4>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Power Dissipated ($P_d$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="hs-pd" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-red-400" value="50" min="0.1" step="1" oninput="updateHeatsink()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">W</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Ambient Temp ($T_a$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="hs-ta" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="25" step="1" oninput="updateHeatsink()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">&deg;C</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Junction-to-Case ($R_{	heta JC}$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="hs-rjc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1.5" min="0.01" step="0.1" oninput="updateHeatsink()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">&deg;C/W</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Case-to-Sink ($R_{	heta CS}$) TIM</span></div>
+                        <div class="flex">
+                            <input type="number" id="hs-rcs" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.5" min="0.01" step="0.1" oninput="updateHeatsink()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">&deg;C/W</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">HEATSINK GEOMETRY</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Base Width ($W$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="hs-w" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="50" min="10" step="5" oninput="updateHeatsink()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Base Length ($L$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="hs-l" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="50" min="10" step="5" oninput="updateHeatsink()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Base Thickness ($t_b$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="hs-tb" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="5" min="1" step="1" oninput="updateHeatsink()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Fin Height ($H_f$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="hs-hf" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="20" min="5" step="5" oninput="updateHeatsink()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Fin Thickness ($t_f$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="hs-tf" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1.5" min="0.5" step="0.5" oninput="updateHeatsink()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Number of Fins ($N$)</span></div>
+                        <input type="number" id="hs-n" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" min="2" step="1" oninput="updateHeatsink()">
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">FLUID DYNAMICS</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Airflow Velocity</span></div>
+                        <div class="flex">
+                            <input type="number" id="hs-lfm" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="0" min="0" step="50" oninput="updateHeatsink()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">LFM</span>
+                        </div>
+                        <span class="text-[9px] text-themeMuted">0 LFM = Natural Convection</span>
+                    </div>
+                    <div>
+                        <label class="whitespace-nowrap text-[10px] mb-1 block">Heatsink Material</label>
+                        <select id="hs-mat" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText focus:border-themeAccent outline-none" onchange="updateHeatsink()">
+                            <option value="205">Aluminum (Extruded, k=205)</option>
+                            <option value="400">Copper (k=400)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-[10px] text-themeMuted p-2 bg-themeBg/50 border border-themeBorder/30 rounded" id="hs-warnings">
+                    Awaiting geometry check.
+                </div>
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <div class="w-full h-64 bg-[#0a0a0a] border border-themeBorder/50 flex items-center justify-center relative overflow-hidden" id="hs-3d-container">
+                    <!-- 3D canvas injected here -->
+                    <div class="absolute bottom-2 right-2 flex flex-col gap-1 items-end pointer-events-none">
+                        <div class="flex items-center gap-2 text-[10px] font-bold"><span class="w-3 h-3 bg-red-500 rounded-sm"></span> Hot ($T_j$)</div>
+                        <div class="flex items-center gap-2 text-[10px] font-bold"><span class="w-3 h-3 bg-blue-500 rounded-sm"></span> Cool ($T_a$)</div>
+                    </div>
+                </div>
+
+                <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(239,68,68,0.1)] flex-grow">
+                    <div class="w-full grid grid-cols-2 gap-4 mb-4">
+                        <div class="flex flex-col border-r border-themeBorder/20 pr-4">
+                            <span class="whitespace-nowrap text-[10px] text-red-400 uppercase tracking-wider mb-1 font-bold">Junction Temp ($T_j$)</span>
+                            <div class="text-3xl font-bold text-themeText flex items-baseline justify-center gap-1">
+                                <span id="hs-tj">0.0</span> <span class="text-sm text-red-400">&deg;C</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="whitespace-nowrap text-[10px] text-orange-400 uppercase tracking-wider mb-1 font-bold">Heatsink Base ($T_s$)</span>
+                            <div class="text-3xl font-bold text-themeText flex items-baseline justify-center gap-1">
+                                <span id="hs-ts">0.0</span> <span class="text-sm text-orange-400">&deg;C</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full grid grid-cols-3 gap-2 mt-2 pt-4 border-t border-themeBorder/20 text-xs">
+                        <div class="flex flex-col">
+                            <span class="text-[9px] text-themeMuted whitespace-nowrap">Sink-Ambient ($R_{	heta SA}$)</span>
+                            <span class="font-bold text-themeText" id="hs-rsa">0.0 &deg;C/W</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="whitespace-nowrap text-[9px] text-themeMuted">Total Surface Area</span>
+                            <span class="font-bold text-themeText" id="hs-area">0.0 cm&sup2;</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-[9px] text-themeMuted whitespace-nowrap">Est. Volume</span>
+                            <span class="font-bold text-themeText" id="hs-vol">0.0 cm&sup3;</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('hs-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="hs-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Thermal Equivalent Circuit:</strong> Heat transfer is modeled analogously to Ohm's Law where Temperature $\Delta T = P \cdot R_{	heta}$.</p>
+            <p>$T_j = T_a + P_d \cdot (R_{	heta JC} + R_{	heta CS} + R_{	heta SA})$</p>
+            <p><strong>Convection Approximation:</strong> $R_{	heta SA}$ is estimated using empirical correlations. For natural convection, heat transfer coefficient $h pprox 5 - 10 	ext{ W/m}^2	ext{K}$. For forced convection, $h$ increases proportionally to $\sqrt{v}$.</p>
+            <p>$R_{	heta SA} = rac{1}{h \cdot A} + R_{cond}$</p>
+            <ul class="list-disc pl-4 space-y-1 mt-2">
+                <li>$A$ = Total exposed surface area of base and fins.</li>
+                <li>Fin efficiency ($\eta_f$) is considered to account for temperature drop along the fin height.</li>
+            </ul>
+        </div>
+    </div>
+</div>
