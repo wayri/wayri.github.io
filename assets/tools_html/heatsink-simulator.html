@@ -27,14 +27,14 @@
                         </div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Junction-to-Case ($R_{	heta JC}$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Junction-to-Case ($R_{\theta JC}$)</span></div>
                         <div class="flex">
                             <input type="number" id="hs-rjc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1.5" min="0.01" step="0.1" oninput="updateHeatsink()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">&deg;C/W</span>
                         </div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Case-to-Sink ($R_{	heta CS}$) TIM</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Case-to-Sink ($R_{\theta CS}$) TIM</span></div>
                         <div class="flex">
                             <input type="number" id="hs-rcs" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.5" min="0.01" step="0.1" oninput="updateHeatsink()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">&deg;C/W</span>
@@ -138,7 +138,7 @@
                     
                     <div class="w-full grid grid-cols-3 gap-2 mt-2 pt-4 border-t border-themeBorder/20 text-xs">
                         <div class="flex flex-col">
-                            <span class="text-[9px] text-themeMuted whitespace-nowrap">Sink-Ambient ($R_{	heta SA}$)</span>
+                            <span class="text-[9px] text-themeMuted whitespace-nowrap">Sink-Ambient ($R_{\theta SA}$)</span>
                             <span class="font-bold text-themeText" id="hs-rsa">0.0 &deg;C/W</span>
                         </div>
                         <div class="flex flex-col">
@@ -163,10 +163,10 @@
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
         <div id="hs-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Thermal Equivalent Circuit:</strong> Heat transfer is modeled analogously to Ohm's Law where Temperature $\Delta T = P \cdot R_{	heta}$.</p>
-            <p>$T_j = T_a + P_d \cdot (R_{	heta JC} + R_{	heta CS} + R_{	heta SA})$</p>
-            <p><strong>Convection Approximation:</strong> $R_{	heta SA}$ is estimated using empirical correlations. For natural convection, heat transfer coefficient $h pprox 5 - 10 	ext{ W/m}^2	ext{K}$. For forced convection, $h$ increases proportionally to $\sqrt{v}$.</p>
-            <p>$R_{	heta SA} = rac{1}{h \cdot A} + R_{cond}$</p>
+            <p><strong>Thermal Equivalent Circuit:</strong> Heat transfer is modeled analogously to Ohm's Law where Temperature $\Delta T = P \cdot R_{\theta}$.</p>
+            <p>$T_j = T_a + P_d \cdot (R_{\theta JC} + R_{\theta CS} + R_{\theta SA})$</p>
+            <p><strong>Convection Approximation:</strong> $R_{\theta SA}$ is estimated using empirical correlations. For natural convection, heat transfer coefficient $h \approx 5 - 10 \text{ W/m}^2\text{K}$. For forced convection, $h$ increases proportionally to $\sqrt{v}$.</p>
+            <p>$R_{\theta SA} = \frac{1}{h \cdot A} + R_{cond}$</p>
             <ul class="list-disc pl-4 space-y-1 mt-2">
                 <li>$A$ = Total exposed surface area of base and fins.</li>
                 <li>Fin efficiency ($\eta_f$) is considered to account for temperature drop along the fin height.</li>
