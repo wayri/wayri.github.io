@@ -369,6 +369,7 @@ function runCompensator() {
                 document.getElementById('comp-fz2').textContent = "-- hz";
                 document.getElementById('comp-fp2').textContent = "-- hz";
 
+                drawPZMap('comp-pz-canvas', [0, -fp1], [-fz1]);
             } else {
                 r3Grp.classList.remove('opacity-50'); c3Grp.classList.remove('opacity-50');
                 fz2Grp.classList.remove('opacity-50'); fp2Grp.classList.remove('opacity-50');
@@ -385,8 +386,159 @@ function runCompensator() {
                 document.getElementById('comp-fp1').textContent = formatFreq(fp1);
                 document.getElementById('comp-fz2').textContent = formatFreq(fz2);
                 document.getElementById('comp-fp2').textContent = formatFreq(fp2);
+
+                drawPZMap('comp-pz-canvas', [0, -fp1, -fp2], [-fz1, -fz2]);
             }
         }
+
+function drawPZMap(canvasId, poles, zeros) {
+    const canvas = document.getElementById(canvasId);
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width = canvas.parentElement.clientWidth;
+    const h = canvas.height = canvas.parentElement.clientHeight;
+
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    // Grid
+    for(let i=0; i<w; i+=20) { ctx.moveTo(i,0); ctx.lineTo(i,h); }
+    for(let i=0; i<h; i+=20) { ctx.moveTo(0,i); ctx.lineTo(w,i); }
+    ctx.stroke();
+
+    // Axes
+    const originY = h / 2;
+    // We want originX to be near the right edge since all poles/zeros are left half plane (negative)
+    const originX = w - 40; 
+    ctx.strokeStyle = '#666';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, originY); ctx.lineTo(w, originY); // Real axis
+    ctx.moveTo(originX, 0); ctx.lineTo(originX, h); // Imag axis
+    ctx.stroke();
+    
+    ctx.fillStyle = '#666';
+    ctx.font = '10px monospace';
+    ctx.fillText('Re', w - 15, originY - 5);
+    ctx.fillText('Im', originX + 5, 10);
+
+    // Find min real value to scale
+    let minVal = Math.min(...poles, ...zeros);
+    if(minVal >= 0) minVal = -100; // default if somehow 0
+    // Scale: distance from originX to 20px is |minVal|
+    const scaleX = (originX - 20) / Math.abs(minVal || 1);
+
+    // Plot Zeros
+    ctx.strokeStyle = '#0ea5e9'; // blue for zeros
+    ctx.lineWidth = 2;
+    zeros.forEach(z => {
+        let px = originX + z * scaleX;
+        let py = originY;
+        ctx.beginPath();
+        ctx.arc(px, py, 5, 0, Math.PI*2);
+        ctx.stroke();
+    });
+
+    // Plot Poles
+    ctx.strokeStyle = '#ef4444'; // red for poles
+    poles.forEach(p => {
+        let px = originX + p * scaleX;
+        let py = originY;
+        ctx.beginPath();
+        ctx.moveTo(px-4, py-4); ctx.lineTo(px+4, py+4);
+        ctx.moveTo(px+4, py-4); ctx.lineTo(px-4, py+4);
+        ctx.stroke();
+    });
+
+    drawNyquist('comp-nyquist-canvas', poles, zeros);
+    calcRouth('routh-array-output', poles, zeros);
+}
+
+function drawNyquist(canvasId, poles, zeros) {
+    const canvas = document.getElementById(canvasId);
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width = canvas.parentElement.clientWidth;
+    const h = canvas.height = canvas.parentElement.clientHeight;
+
+    ctx.clearRect(0, 0, w, h);
+    const cx = w/2, cy = h/2;
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.beginPath();
+    ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+    ctx.moveTo(cx, 0); ctx.lineTo(cx, h);
+    ctx.stroke();
+
+    ctx.fillStyle = '#666'; ctx.font = '10px monospace';
+    ctx.fillText('Re', w - 15, cy - 5);
+    ctx.fillText('Im', cx + 5, 10);
+    
+    // Evaluate H(jw)
+    const pts = [];
+    let maxR = 0.001;
+    for(let w_rad = 0.1; w_rad < 1e7; w_rad *= 1.2) {
+        let re = 1, im = 0;
+        // Zeros: (jw - z)
+        zeros.forEach(z => {
+            // (0 - z) + j*w_rad
+            let r_num = -z, i_num = w_rad;
+            let n_re = re * r_num - im * i_num;
+            let n_im = re * i_num + im * r_num;
+            re = n_re; im = n_im;
+        });
+        // Poles: / (jw - p)
+        poles.forEach(p => {
+            let r_den = -p, i_den = w_rad;
+            let mag2 = r_den*r_den + i_den*i_den;
+            if(mag2 === 0) return;
+            let n_re = (re * r_den + im * i_den) / mag2;
+            let n_im = (im * r_den - re * i_den) / mag2;
+            re = n_re; im = n_im;
+        });
+        pts.push({re, im});
+        maxR = Math.max(maxR, Math.hypot(re, im));
+    }
+
+    const scale = (Math.min(w, h)/2 - 10) / maxR;
+    ctx.strokeStyle = '#D4AF37';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    pts.forEach((p, i) => {
+        let px = cx + p.re * scale;
+        let py = cy - p.im * scale; // inverted Y
+        if(i===0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+    });
+    ctx.stroke();
+    
+    // Draw conjugate
+    ctx.strokeStyle = 'rgba(212,175,55,0.4)';
+    ctx.setLineDash([5,5]);
+    ctx.beginPath();
+    pts.forEach((p, i) => {
+        let px = cx + p.re * scale;
+        let py = cy + p.im * scale;
+        if(i===0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+    });
+    ctx.stroke();
+    ctx.setLineDash([]);
+}
+
+function calcRouth(elId, poles, zeros) {
+    const el = document.getElementById(elId);
+    if(!el) return;
+    
+    // Determine stability based on poles
+    let isStable = poles.every(p => p <= 0);
+    
+    let html = `<div><strong>Open-Loop Poles:</strong> ${poles.map(p => (p/(2*Math.PI)).toPrecision(3) + ' Hz').join(', ')}</div>`;
+    html += `<div><strong>Open-Loop Zeros:</strong> ${zeros.map(z => (z/(2*Math.PI)).toPrecision(3) + ' Hz').join(', ')}</div>`;
+    html += `<div class="mt-2 text-${isStable?'green':'red'}-500 border border-${isStable?'green':'red'}-500/30 p-1 inline-block">System is ${isStable ? 'Marginally/Fully Stable' : 'Unstable'}</div>`;
+    
+    el.innerHTML = html;
+}
 
 function formatFreq(f) {
             if (f >= 1e6) return (f / 1e6).toFixed(2) + " Mhz";

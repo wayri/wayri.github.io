@@ -8,7 +8,7 @@
     
     <div class="flex flex-col flex-grow relative overflow-hidden bg-themeBg font-mono">
         <!-- Controls -->
-        <div class="p-4 border-b border-themeBorder bg-themeContainer flex gap-4 text-sm items-center">
+        <div class="p-4 border-b border-themeBorder bg-themeContainer flex flex-wrap gap-4 text-sm items-center">
             <label class="font-bold text-themeAccent">Main Problem:</label>
             <input type="text" id="fb-problem" class="bg-themeBg border border-themeBorder p-1 flex-grow focus:border-themeAccent outline-none text-themeText" value="Product Failure" oninput="FishboneApp.render()">
             
@@ -18,18 +18,31 @@
                 <option value="8p">8P (Service)</option>
                 <option value="4s">4S (Systems)</option>
             </select>
+            
+            <label class="font-bold text-themeAccent ml-4">Analysis Mode:</label>
+            <select id="fb-mode" class="bg-themeBg border border-themeBorder p-1 focus:border-themeAccent outline-none" onchange="FishboneApp.changeMode()">
+                <option value="standard">Standard Ishikawa</option>
+                <option value="weighted">Weighted (RPN / FMEA)</option>
+                <option value="bayesian">Bayesian Fault Tree</option>
+            </select>
         </div>
 
         <!-- Editor and Canvas -->
         <div class="flex flex-grow overflow-hidden">
             <!-- Sidebar Editor -->
-            <div class="w-80 border-r border-themeBorder bg-themeContainer flex flex-col flex-shrink-0 overflow-y-auto p-4" id="fb-categories">
+            <div class="w-96 border-r border-themeBorder bg-themeContainer flex flex-col flex-shrink-0 overflow-y-auto p-4" id="fb-categories">
                 <!-- Categories injected here -->
             </div>
             
             <!-- Canvas -->
-            <div class="flex-grow p-4 overflow-auto bg-white" id="fb-svg-container">
-                <svg id="fb-svg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="flex-grow flex flex-col bg-white overflow-hidden relative">
+                <div class="absolute top-2 right-2 bg-white/90 p-3 border border-gray-300 shadow-md rounded text-sm text-black hidden" id="fb-results">
+                    <h4 class="font-bold mb-2 border-b border-gray-200 pb-1" id="fb-res-title">Analysis Results</h4>
+                    <div id="fb-res-content" class="space-y-1"></div>
+                </div>
+                <div class="flex-grow overflow-auto" id="fb-svg-container">
+                    <svg id="fb-svg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"></svg>
+                </div>
             </div>
         </div>
     </div>
@@ -41,29 +54,50 @@
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
         <div id="fb-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Cause and Effect:</strong> The Ishikawa diagram is a visual tool used to logically organize possible causes for a specific problem or effect by displaying them graphically.</p>
-            <p><strong>Standard Templates:</strong> 6M (Machine, Method, Materials, Measurement, Man, Mother Nature) is standard for manufacturing. 8P for service, 4S for software/systems.</p>
+            <p><strong>Standard Ishikawa:</strong> Organizes root causes by category.</p>
+            <p><strong>Weighted (FMEA-style):</strong> Each cause is given an RPN (Risk Priority Number) between 1-10. Higher RPN means higher priority.</p>
+            <p><strong>Bayesian:</strong> Each cause has an independent probability of occurring [0.0 - 1.0]. The total probability of the Main Problem is calculated assuming causes are independent: \( P_{total} = 1 - \prod (1 - P_i) \).</p>
         </div>
     </div>
 </div>
 
 <script>
 const FishboneApp = {
+    mode: 'standard',
     templates: {
         '6m': ['Machine', 'Method', 'Material', 'Man Power', 'Measurement', 'Mother Nature'],
         '8p': ['Price', 'Promotion', 'People', 'Processes', 'Place / Plant', 'Policies', 'Procedures', 'Product'],
         '4s': ['Surroundings', 'Suppliers', 'Systems', 'Skills']
     },
     
-    data: [], // [{ name: 'Category', causes: ['c1', 'c2'] }]
+    data: [], // [{ name: 'Category', causes: [{text, val}] }]
     
     loadTemplate() {
         const t = document.getElementById('fb-template').value;
-        this.data = this.templates[t].map(name => ({ name, causes: ['Example cause 1', 'Example cause 2'] }));
+        this.data = this.templates[t].map(name => ({
+            name, 
+            causes: [
+                {text: 'Cause 1', val: 0.1},
+                {text: 'Cause 2', val: 0.2}
+            ] 
+        }));
         this.buildEditor();
         this.render();
     },
     
+    changeMode() {
+        this.mode = document.getElementById('fb-mode').value;
+        // Adjust values for the mode
+        this.data.forEach(cat => {
+            cat.causes.forEach(c => {
+                if (this.mode === 'weighted') c.val = Math.max(1, Math.min(10, Math.round(c.val * 10 || 5)));
+                if (this.mode === 'bayesian') c.val = Math.max(0, Math.min(1, c.val / 10 || 0.1));
+            });
+        });
+        this.buildEditor();
+        this.render();
+    },
+
     buildEditor() {
         const container = document.getElementById('fb-categories');
         let html = '';
@@ -71,7 +105,22 @@ const FishboneApp = {
             html += `
                 <div class="mb-4 border border-themeBorder bg-themeBg p-2 rounded">
                     <input type="text" class="font-bold text-themeAccent bg-transparent border-b border-themeBorder/50 w-full mb-2 outline-none text-sm" value="${cat.name}" oninput="FishboneApp.updateCat(${i}, this.value)">
-                    <textarea class="w-full h-20 text-xs bg-themeContainer border border-themeBorder p-1 outline-none text-themeText" oninput="FishboneApp.updateCauses(${i}, this.value)" placeholder="Enter causes, one per line">${cat.causes.join('\n')}</textarea>
+                    <div id="cat-causes-${i}" class="space-y-1 mb-2">
+            `;
+            cat.causes.forEach((c, cIdx) => {
+                html += `
+                        <div class="flex gap-1 items-center">
+                            <input type="text" class="flex-grow text-xs bg-themeContainer border border-themeBorder p-1 outline-none text-themeText" value="${c.text}" oninput="FishboneApp.updateCauseText(${i}, ${cIdx}, this.value)">
+                            ${this.mode === 'standard' ? '' : `
+                            <input type="${this.mode === 'bayesian' ? 'number' : 'number'}" step="${this.mode === 'bayesian' ? '0.01' : '1'}" min="${this.mode === 'bayesian' ? '0' : '1'}" max="${this.mode === 'bayesian' ? '1' : '10'}" class="w-14 text-xs bg-themeContainer border border-themeBorder p-1 outline-none text-themeText" value="${c.val}" oninput="FishboneApp.updateCauseVal(${i}, ${cIdx}, this.value)" title="${this.mode === 'bayesian' ? 'Probability (0-1)' : 'RPN (1-10)'}">
+                            `}
+                            <button class="text-red-500 hover:text-red-400 px-1" onclick="FishboneApp.removeCause(${i}, ${cIdx})"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                `;
+            });
+            html += `
+                    </div>
+                    <button class="text-xs bg-themeBorder text-themeBg px-2 py-1 rounded hover:opacity-80 w-full" onclick="FishboneApp.addCause(${i})"><i class="fa-solid fa-plus mr-1"></i> Add Cause</button>
                 </div>
             `;
         });
@@ -79,11 +128,17 @@ const FishboneApp = {
     },
     
     updateCat(idx, val) { this.data[idx].name = val; this.render(); },
-    updateCauses(idx, val) { this.data[idx].causes = val.split('\n').filter(c => c.trim() !== ''); this.render(); },
+    updateCauseText(idx, cIdx, val) { this.data[idx].causes[cIdx].text = val; this.render(); },
+    updateCauseVal(idx, cIdx, val) { this.data[idx].causes[cIdx].val = parseFloat(val) || 0; this.render(); },
+    addCause(idx) { this.data[idx].causes.push({text: 'New Cause', val: this.mode === 'bayesian' ? 0.1 : 5}); this.buildEditor(); this.render(); },
+    removeCause(idx, cIdx) { this.data[idx].causes.splice(cIdx, 1); this.buildEditor(); this.render(); },
     
     render() {
         const problem = document.getElementById('fb-problem').value || 'Problem';
         const svg = document.getElementById('fb-svg');
+        const resBox = document.getElementById('fb-results');
+        const resContent = document.getElementById('fb-res-content');
+        
         const W = 1000;
         const H = 600;
         svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -94,6 +149,7 @@ const FishboneApp = {
                 .fb-sub { stroke: #000; stroke-width: 1.5; }
                 .fb-text { font-family: sans-serif; fill: #000; }
                 .fb-box { fill: #fff; stroke: #000; stroke-width: 2; }
+                .fb-val { font-family: monospace; font-size: 10px; fill: #d97706; font-weight: bold; }
             </style>
             <!-- Main Spine -->
             <line x1="50" y1="${H/2}" x2="${W-200}" y2="${H/2}" class="fb-line" />
@@ -115,6 +171,10 @@ const FishboneApp = {
         
         let topIdx = 0;
         let botIdx = 0;
+        
+        let bayesNotOccur = 1.0;
+        let highestRpn = 0;
+        let rpnList = [];
         
         this.data.forEach((cat, i) => {
             const isTop = i % 2 === 0;
@@ -140,22 +200,56 @@ const FishboneApp = {
             const length = Math.hypot(dX, dY);
             const causeSpacing = length / (cat.causes.length + 1);
             
-            cat.causes.forEach((cause, cIdx) => {
+            cat.causes.forEach((c, cIdx) => {
                 const fraction = (cIdx + 1) / (cat.causes.length + 1);
                 const px = startX + dX * fraction;
                 const py = startY + dY * fraction;
                 
-                const subX = px - 80;
-                const subY = py; // horizontal line
+                const subX = px - 100;
+                const subY = py; 
                 
+                let valStr = '';
+                if (this.mode === 'weighted') {
+                    valStr = `[RPN: ${c.val}]`;
+                    rpnList.push({text: c.text, val: c.val});
+                    if (c.val > highestRpn) highestRpn = c.val;
+                } else if (this.mode === 'bayesian') {
+                    valStr = `[P: ${(c.val*100).toFixed(1)}%]`;
+                    bayesNotOccur *= (1 - c.val);
+                }
+
                 html += `
                     <line x1="${subX}" y1="${subY}" x2="${px}" y2="${py}" class="fb-sub" />
-                    <text x="${subX-5}" y="${subY+4}" class="fb-text" font-size="12" text-anchor="end">${cause}</text>
+                    <text x="${subX-5}" y="${subY+4}" class="fb-text" font-size="12" text-anchor="end">${c.text}</text>
+                    ${valStr ? `<text x="${subX-5}" y="${subY+16}" class="fb-val" text-anchor="end">${valStr}</text>` : ''}
                 `;
             });
         });
         
         svg.innerHTML = html;
+        
+        // Show Results
+        if (this.mode === 'standard') {
+            resBox.classList.add('hidden');
+        } else {
+            resBox.classList.remove('hidden');
+            if (this.mode === 'bayesian') {
+                const pTotal = 1 - bayesNotOccur;
+                document.getElementById('fb-res-title').innerText = "Bayesian Fault Tree";
+                resContent.innerHTML = `
+                    <div class="flex justify-between font-bold text-red-600 gap-4 border-b border-red-200 pb-1 mb-1">
+                        <span>Total Probability of Failure:</span>
+                        <span>${(pTotal*100).toFixed(2)}%</span>
+                    </div>
+                    <div class="text-[10px] text-gray-500 italic">Assuming all causes are independent events.</div>
+                `;
+            } else if (this.mode === 'weighted') {
+                rpnList.sort((a,b) => b.val - a.val);
+                document.getElementById('fb-res-title').innerText = "Highest RPN Causes";
+                let top3 = rpnList.slice(0,3).map(x => `<div class="flex justify-between gap-4"><span>${x.text}</span><span class="font-bold text-red-500">${x.val}</span></div>`).join('');
+                resContent.innerHTML = top3 || '<div class="text-gray-500">No causes defined.</div>';
+            }
+        }
     },
     
     downloadSVG() {

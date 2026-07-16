@@ -69,6 +69,10 @@
                     </div>
                 </div>
 
+                <div id="bat-alerts" class="space-y-2 mt-4">
+                    <!-- Alerts injected here -->
+                </div>
+
             </div>
         </div>
         
@@ -102,6 +106,14 @@
                         <span class="whitespace-nowrap text-themeMuted">Est. Cycle Life (80% DOD):</span>
                         <span id="txt-life" class="font-bold text-themeAccent">-- Cycles</span>
                     </div>
+                </div>
+            </div>
+            
+            <!-- Capacity Fade Curve -->
+            <div class="bg-themeContainer border border-themeBorder/30 relative min-h-[250px] p-2 flex flex-col mt-2 flex-shrink-0">
+                <h4 class="text-xs font-bold text-themeMuted absolute top-2 left-2">CAPACITY FADE (RETENTION vs CYCLES)</h4>
+                <div class="flex-grow relative mt-6">
+                    <canvas id="bat-fade-chart"></canvas>
                 </div>
             </div>
         </div>
@@ -180,8 +192,17 @@ function runBatterySuite() {
     const estCycles = Math.round(model.base_cycles * tempMult * (1 / Math.max(1, crate*0.8)));
     document.getElementById('txt-life').innerText = estCycles + ' Cycles';
 
+    // Alerts
+    const alertsBox = document.getElementById('bat-alerts');
+    alertsBox.innerHTML = '';
+    if (temp > 50) alertsBox.innerHTML += `<div class="p-2 border border-red-500/50 bg-red-500/10 text-red-500 text-[10px]"><i class="fa-solid fa-triangle-exclamation mr-1"></i> CRITICAL: Temperature > 50°C accelerates SEI layer degradation and thermal runaway risks.</div>`;
+    else if (temp < 0) alertsBox.innerHTML += `<div class="p-2 border border-blue-500/50 bg-blue-500/10 text-blue-500 text-[10px]"><i class="fa-solid fa-snowflake mr-1"></i> WARNING: Sub-zero operation may cause lithium plating during charge.</div>`;
+    if (crate > document.getElementById('bat-crate').max * 0.8) alertsBox.innerHTML += `<div class="p-2 border border-yellow-500/50 bg-yellow-500/10 text-yellow-500 text-[10px]"><i class="fa-solid fa-bolt mr-1"></i> HIGH C-RATE: Approaching max limits for this chemistry. Expect high thermal load.</div>`;
+
     updateBatCharts(model, s, temp, crate, estCycles);
 }
+
+let batFadeChart = null;
 
 function updateBatCharts(model, series, temp, crate, estCycles) {
     // Generate Curve Data (0% to 100% SOC)
@@ -251,6 +272,61 @@ function updateBatCharts(model, series, temp, crate, estCycles) {
                 y: { type: 'logarithmic', title: { display: true, text: 'Cycles', color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } }
             },
             plugins: { legend: { display: false } }
+        }
+    });
+
+    // Fade Curve (Retention vs Cycles)
+    const fadeLabels = [];
+    const fadeData = [];
+    for(let i=0; i<=estCycles*1.2; i+= Math.max(10, Math.floor(estCycles/10))) {
+        fadeLabels.push(i);
+        // Typical exponential decay curve mapping to 80% at estCycles
+        // R(c) = 100 - 20 * (c / estCycles)^1.5
+        let retention = 100 - 20 * Math.pow(i / estCycles, 1.5);
+        if(retention < 0) retention = 0;
+        fadeData.push(retention.toFixed(1));
+    }
+    
+    const ctxFade = document.getElementById('bat-fade-chart').getContext('2d');
+    if(batFadeChart) batFadeChart.destroy();
+    
+    batFadeChart = new Chart(ctxFade, {
+        type: 'line',
+        data: {
+            labels: fadeLabels,
+            datasets: [{
+                label: 'Capacity Retention (%)',
+                data: fadeData,
+                borderColor: '#10b981', // emerald-500
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { title: { display: true, text: 'Cycles', color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                y: { min: 50, max: 105, title: { display: true, text: 'Retention (%)', color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+            },
+            plugins: {
+                legend: { display: false },
+                annotation: {
+                    annotations: {
+                        line1: {
+                            type: 'line',
+                            yMin: 80,
+                            yMax: 80,
+                            borderColor: 'red',
+                            borderWidth: 1,
+                            borderDash: [5, 5],
+                            label: { content: 'EOL (80%)', enabled: true, position: 'start' }
+                        }
+                    }
+                }
+            }
         }
     });
 }

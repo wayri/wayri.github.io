@@ -24,7 +24,13 @@
             <button id="btn-cal-y2" class="px-2 py-1 border border-themeAccent text-themeAccent hover:bg-themeAccent/20 rounded" onclick="PlotExtractorApp.setMode('cal_y2')">Set Y2</button>
             <input type="number" id="val-y2" class="w-16 bg-themeBg border border-themeBorder p-1 text-center" value="100">
             
-            <button id="btn-extract" class="px-4 py-1 bg-themeAccent text-themeBg font-bold hover:opacity-80 rounded ml-auto" onclick="PlotExtractorApp.setMode('extract')">Extract Points</button>
+            <button id="btn-extract" class="px-4 py-1 bg-themeAccent text-themeBg font-bold hover:opacity-80 rounded ml-4" onclick="PlotExtractorApp.setMode('extract')">Extract Points</button>
+            
+            <select id="pe-output-mode" class="ml-auto bg-themeBg border border-themeBorder p-1 text-xs" onchange="PlotExtractorApp.updateTable()">
+                <option value="cartesian">Cartesian (X, Y)</option>
+                <option value="polar">Polar (r, &theta;)</option>
+                <option value="complex">Complex (Re, Im)</option>
+            </select>
         </div>
 
         <div class="flex flex-grow overflow-hidden">
@@ -183,13 +189,25 @@ const PlotExtractorApp = {
     },
     
     updateTable() {
+        const mode = document.getElementById('pe-output-mode').value;
         const tbody = document.querySelector('#pe-table tbody');
+        const thead = document.querySelector('#pe-table thead tr');
         tbody.innerHTML = '';
+        
+        if (mode === 'cartesian') thead.innerHTML = `<th class="p-2 border-b border-themeBorder">X</th><th class="p-2 border-b border-themeBorder">Y</th><th class="p-2 border-b border-themeBorder"></th>`;
+        else if (mode === 'polar') thead.innerHTML = `<th class="p-2 border-b border-themeBorder">r</th><th class="p-2 border-b border-themeBorder">&theta;&deg;</th><th class="p-2 border-b border-themeBorder"></th>`;
+        else if (mode === 'complex') thead.innerHTML = `<th class="p-2 border-b border-themeBorder">Re</th><th class="p-2 border-b border-themeBorder">Im</th><th class="p-2 border-b border-themeBorder"></th>`;
+
         this.points.forEach((p, i) => {
+            let v1 = p.x, v2 = p.y;
+            if (mode === 'polar') {
+                v1 = Math.hypot(p.x, p.y);
+                v2 = Math.atan2(p.y, p.x) * (180 / Math.PI);
+            }
             tbody.innerHTML += `
                 <tr class="hover:bg-themeBorder/10">
-                    <td class="p-2">${p.x.toPrecision(5)}</td>
-                    <td class="p-2">${p.y.toPrecision(5)}</td>
+                    <td class="p-2">${v1.toPrecision(5)}</td>
+                    <td class="p-2">${v2.toPrecision(5)}</td>
                     <td class="p-2 text-right"><button class="text-red-500 hover:text-red-400" onclick="PlotExtractorApp.removePoint(${i})"><i class="fa-solid fa-xmark"></i></button></td>
                 </tr>
             `;
@@ -234,8 +252,16 @@ const PlotExtractorApp = {
     
     downloadCSV() {
         if(this.points.length === 0) return alert("No data to export.");
-        let csv = "X,Y\n";
-        this.points.forEach(p => csv += `${p.x},${p.y}\n`);
+        const mode = document.getElementById('pe-output-mode').value;
+        let csv = mode === 'cartesian' ? "X,Y\n" : (mode === 'polar' ? "r,theta\n" : "Re,Im\n");
+        this.points.forEach(p => {
+            let v1 = p.x, v2 = p.y;
+            if (mode === 'polar') {
+                v1 = Math.hypot(p.x, p.y);
+                v2 = Math.atan2(p.y, p.x) * (180 / Math.PI);
+            }
+            csv += `${v1},${v2}\n`;
+        });
         const blob = new Blob([csv], { type: 'text/csv' });
         const a = document.createElement('a');
         a.href = window.URL.createObjectURL(blob);
