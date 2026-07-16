@@ -1459,3 +1459,90 @@ window.updateHeatsink = function() {
         hsGroup.position.y = -10;
     }
 }
+
+
+// ==========================================
+// ADVANCED MAGNETIC CORE CALCULATOR
+// ==========================================
+
+window.updateMagCore = function() {
+    if (!document.getElementById('mag-le')) return;
+
+    const le = parseFloat(document.getElementById('mag-le').value) || 0; // mm
+    const ae = parseFloat(document.getElementById('mag-ae').value) || 0; // mm^2
+    const matSel = document.getElementById('mag-mat').value;
+    const customCont = document.getElementById('mag-mu-custom-cont');
+    
+    let mu_i = 1;
+    if (matSel === 'custom') {
+        customCont.classList.remove('hidden');
+        mu_i = parseFloat(document.getElementById('mag-mu-custom').value) || 1;
+    } else {
+        customCont.classList.add('hidden');
+        mu_i = parseFloat(matSel) || 1;
+    }
+
+    const lg = parseFloat(document.getElementById('mag-lg').value) || 0; // mm
+    const N = parseFloat(document.getElementById('mag-n').value) || 1;
+    const I = parseFloat(document.getElementById('mag-i').value) || 0; // A
+    const Bsat = parseFloat(document.getElementById('mag-bsat').value) || 0.3; // T
+
+    const le_m = le / 1000;
+    const ae_m2 = ae / 1e6;
+    const lg_m = lg / 1000;
+    const mu0 = 4 * Math.PI * 1e-7;
+
+    // Reluctance
+    // Rc = le / (mu0 * mu_r * Ae)
+    const Rc = le_m / (mu0 * mu_i * ae_m2);
+    // Rg = lg / (mu0 * Ae)  // Assuming no fringing for simplicity
+    const Rg = lg_m / (mu0 * ae_m2);
+    const Rtot = Rc + Rg;
+
+    // Effective Permeability
+    // Rtot = (le + lg) / (mu0 * mu_eff * Ae) => mu_eff = (le + lg) / (mu0 * Ae * Rtot)
+    const mu_eff = (le_m + lg_m) / (mu0 * ae_m2 * Rtot);
+
+    // Inductance L = N^2 / Rtot
+    const L_H = (N * N) / Rtot;
+    let L_display = L_H * 1e6; // uH
+    let unit = "μH";
+    if (L_display < 1) {
+        L_display *= 1000;
+        unit = "nH";
+    } else if (L_display > 1000) {
+        L_display /= 1000;
+        unit = "mH";
+    }
+
+    // AL value = L / N^2 in nH/N^2
+    const AL = (L_H * 1e9) / (N * N);
+
+    // Flux Density B = (L * I) / (N * Ae)
+    const Bpk = (L_H * I) / (N * ae_m2);
+
+    // Energy E = 1/2 L I^2
+    const E_J = 0.5 * L_H * (I * I);
+
+    document.getElementById('mag-out-l').innerText = L_display.toFixed(2);
+    document.getElementById('mag-out-l-unit').innerText = unit;
+    
+    document.getElementById('mag-out-b').innerText = Bpk.toFixed(3);
+    
+    // Saturation Warning
+    const warnEl = document.getElementById('mag-sat-warn');
+    if (Bpk >= Bsat && I > 0) {
+        warnEl.classList.remove('hidden');
+    } else {
+        warnEl.classList.add('hidden');
+    }
+
+    // Convert Reluctance to scientific notation string for cleaner UI
+    document.getElementById('mag-out-rc').innerText = Rc.toExponential(2);
+    document.getElementById('mag-out-rg').innerText = Rg.toExponential(2);
+    document.getElementById('mag-out-rt').innerText = Rtot.toExponential(2);
+    
+    document.getElementById('mag-out-al').innerText = AL.toFixed(1) + " nH/N²";
+    document.getElementById('mag-out-mueff').innerText = mu_eff.toFixed(1);
+    document.getElementById('mag-out-e').innerText = (E_J * 1000).toFixed(2) + " mJ";
+}

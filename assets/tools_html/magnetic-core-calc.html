@@ -1,7 +1,7 @@
-<div class="doc-container flex flex-col w-full h-full">
-    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Magnetic Core & Inductor Calculator">
-        <div class="flex items-center gap-2"><i class="fa-solid fa-magnet"></i><h3 class="font-bold font-mono">Magnetic Core & Inductor</h3></div>
-        <span class="font-mono text-[10px] opacity-70">Turns, Inductance & AL</span>
+<div class="doc-container flex flex-col w-full h-full min-h-[750px]">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Advanced Magnetic Core Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-magnet"></i><h3 class="font-bold font-mono">Advanced Magnetic Core Calculator</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Reluctance, Bmax, MMF & Inductance</span>
     </div>
     
     <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
@@ -9,86 +9,126 @@
             
             <!-- Parameters -->
             <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col overflow-y-auto">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">CORE GEOMETRY & MATERIAL</h4>
                 
-                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">SOLVER MODE</h4>
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-xs">Solve For:</span>
-                    <select id="mag-mode" class="bg-themeBg border border-themeBorder text-themeText text-xs p-1 outline-none" onchange="updateMagMode()">
-                        <option value="inductance">Inductance (L)</option>
-                        <option value="turns">Number of Turns (N)</option>
-                        <option value="al">Core AL Value (AL)</option>
-                    </select>
-                </div>
-
-                <div id="mag-al-cont">
-                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Inductance Factor ($A_L$)</span><span class="whitespace-nowrap text-themeMuted">nH / $N^2$</span></div>
-                    <input type="number" id="mag-al" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="100" step="10" oninput="updateMagCalc()">
-                </div>
-                
-                <div id="mag-n-cont">
-                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Number of Turns ($N$)</span></div>
-                    <input type="number" id="mag-n" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-green-400" value="10" step="1" oninput="updateMagCalc()">
-                </div>
-                
-                <div id="mag-l-cont" class="hidden">
-                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Target Inductance ($L$)</span><span class="text-themeMuted">μH</span></div>
-                    <input type="number" id="mag-l" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-orange-400" value="10" step="1" oninput="updateMagCalc()">
-                </div>
-
-                <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">TRANSFORMER RATIO</h4>
-                <div class="flex gap-4">
-                    <div class="w-1/2">
-                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Primary Turns ($N_p$)</span></div>
-                        <input type="number" id="mag-np" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateMagCalc()">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Effective Length ($l_e$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="mag-le" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="50" min="1" step="1" oninput="updateMagCore()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
                     </div>
-                    <div class="w-1/2">
-                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Secondary Turns ($N_s$)</span></div>
-                        <input type="number" id="mag-ns" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="50" step="1" oninput="updateMagCalc()">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Effective Area ($A_e$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="mag-ae" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="25" min="1" step="1" oninput="updateMagCore()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">mm&sup2;</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="whitespace-nowrap text-[10px] mb-1 block">Material Permeability ($\mu_i$)</label>
+                        <select id="mag-mat" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText focus:border-themeAccent outline-none" onchange="updateMagCore()">
+                            <option value="1">Air / Vacuum (1)</option>
+                            <option value="60">Iron Powder Mix -26 (60)</option>
+                            <option value="75">Iron Powder Mix -52 (75)</option>
+                            <option value="850">Ferrite N49 (850)</option>
+                            <option value="2000" selected>Ferrite N87 / N97 (2000)</option>
+                            <option value="4300">Ferrite N30 (4300)</option>
+                            <option value="10000">Ferrite High-mu (10000)</option>
+                            <option value="custom">Custom...</option>
+                        </select>
+                    </div>
+                    <div id="mag-mu-custom-cont" class="hidden">
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Custom $\mu_r$</span></div>
+                        <input type="number" id="mag-mu-custom" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="2000" min="1" step="100" oninput="updateMagCore()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Air Gap ($l_g$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="mag-lg" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0" min="0" step="0.1" oninput="updateMagCore()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
+                        </div>
                     </div>
                 </div>
 
+                <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">WINDING & OPERATION</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Number of Turns ($N$)</span></div>
+                        <input type="number" id="mag-n" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="10" min="1" step="1" oninput="updateMagCore()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Peak Current ($I_{pk}$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="mag-i" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-red-400" value="2" min="0" step="0.1" oninput="updateMagCore()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">A</span>
+                        </div>
+                    </div>
+                    <div class="col-span-2">
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Material Saturation Limit ($B_{sat}$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="mag-bsat" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.35" min="0.1" step="0.05" oninput="updateMagCore()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">T</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Visualization & Results -->
             <div class="flex flex-col gap-4">
                 
-                <!-- Diagram -->
-                <div class="w-full h-32 bg-themeBg border border-themeBorder/50 flex items-center justify-center relative overflow-hidden">
-                    <svg width="200" height="100" viewBox="0 0 200 100" class="text-themeText">
-                        <!-- Core (Toroid approximation) -->
-                        <circle cx="100" cy="50" r="35" fill="none" stroke="var(--container-color)" stroke-width="20" />
-                        <circle cx="100" cy="50" r="25" fill="none" stroke="var(--border-color)" stroke-width="2" />
-                        <circle cx="100" cy="50" r="45" fill="none" stroke="var(--border-color)" stroke-width="2" />
-                        
-                        <!-- Wire wrapping (Simulated) -->
-                        <path d="M 55 50 Q 55 30 75 25 M 75 25 Q 90 20 100 20" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="4,6" />
-                        <path d="M 100 20 Q 120 20 135 30 M 135 30 Q 145 40 145 50" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="4,6" />
-                        <path d="M 145 50 Q 145 70 125 75 M 125 75 Q 110 80 100 80" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="4,6" />
-                        <path d="M 100 80 Q 80 80 65 70 M 65 70 Q 55 60 55 50" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="4,6" />
-                        
-                        <text x="100" y="55" font-size="12" fill="var(--accent-color)" text-anchor="middle" font-weight="bold">A_L</text>
-                    </svg>
-                </div>
-
-                <div class="grid grid-cols-1 gap-4 flex-grow">
-                    <div class="bg-themeBg border border-themeAccent/50 p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(212,175,55,0.1)]">
-                        <span class="whitespace-nowrap text-[10px] text-themeAccent uppercase tracking-wider mb-2 font-bold" id="mag-result-label">Calculated Inductance ($L$)</span>
-                        <div class="text-4xl font-bold text-themeText flex items-baseline gap-1">
-                            <span id="mag-result-val">0.0</span> <span id="mag-result-unit" class="text-lg text-themeAccent">μH</span>
+                <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center shadow-inner flex-grow">
+                    <div class="w-full grid grid-cols-2 gap-4 mb-4">
+                        <div class="flex flex-col border-r border-themeBorder/20 pr-4">
+                            <span class="whitespace-nowrap text-[10px] text-themeAccent uppercase tracking-wider mb-1 font-bold">Inductance ($L$)</span>
+                            <div class="text-3xl font-bold text-themeText flex items-baseline justify-center gap-1">
+                                <span id="mag-out-l">0.0</span> <span class="text-sm text-themeAccent" id="mag-out-l-unit">μH</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="whitespace-nowrap text-[10px] text-red-400 uppercase tracking-wider mb-1 font-bold">Peak Flux Density ($B_{pk}$)</span>
+                            <div class="text-3xl font-bold text-themeText flex items-baseline justify-center gap-1">
+                                <span id="mag-out-b">0.0</span> <span class="text-sm text-red-400">T</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-themeBorder/10 border border-themeBorder p-3 flex flex-col justify-center items-center text-center">
-                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-1 font-bold">Voltage Ratio</span>
-                        <div class="font-bold text-themeText"><span id="mag-vratio">1:5</span></div>
-                        <div class="text-[9px] text-themeMuted">$V_s / V_p$</div>
+                    
+                    <div id="mag-sat-warn" class="w-full mt-2 mb-4 p-2 text-xs font-bold text-white bg-red-600/80 border border-red-500 rounded hidden">
+                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> CORE SATURATION WARNING
                     </div>
-                    <div class="bg-themeBorder/10 border border-themeBorder p-3 flex flex-col justify-center items-center text-center">
-                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-1 font-bold">Impedance Ratio</span>
-                        <div class="font-bold text-themeText"><span id="mag-zratio">1:25</span></div>
-                        <div class="text-[9px] text-themeMuted">$Z_s / Z_p$</div>
+                    
+                    <div class="w-full grid grid-cols-3 gap-2 mt-2 pt-4 border-t border-themeBorder/20 text-xs">
+                        <div class="flex flex-col">
+                            <span class="text-[9px] text-themeMuted whitespace-nowrap">Core Reluctance ($\mathcal{R}_c$)</span>
+                            <span class="font-bold text-themeText" id="mag-out-rc">0.0</span>
+                            <span class="text-[8px] text-themeMuted">At/Wb</span>
+                        </div>
+                        <div class="flex flex-col border-l border-themeBorder/20 pl-2">
+                            <span class="whitespace-nowrap text-[9px] text-themeMuted">Gap Reluctance ($\mathcal{R}_g$)</span>
+                            <span class="font-bold text-themeText" id="mag-out-rg">0.0</span>
+                            <span class="text-[8px] text-themeMuted">At/Wb</span>
+                        </div>
+                        <div class="flex flex-col border-l border-themeBorder/20 pl-2">
+                            <span class="text-[9px] text-themeMuted whitespace-nowrap">Total $\mathcal{R}$</span>
+                            <span class="font-bold text-themeText" id="mag-out-rt">0.0</span>
+                            <span class="text-[8px] text-themeMuted">At/Wb</span>
+                        </div>
+                    </div>
+
+                    <div class="w-full grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-themeBorder/20 text-xs">
+                        <div class="flex flex-col">
+                            <span class="text-[9px] text-themeMuted whitespace-nowrap">Inductance Factor ($A_L$)</span>
+                            <span class="font-bold text-themeText" id="mag-out-al">0.0 nH/N&sup2;</span>
+                        </div>
+                        <div class="flex flex-col border-l border-themeBorder/20 pl-2">
+                            <span class="whitespace-nowrap text-[9px] text-themeMuted">Effective Perm. ($\mu_{eff}$)</span>
+                            <span class="font-bold text-themeText" id="mag-out-mueff">0.0</span>
+                        </div>
+                        <div class="flex flex-col border-l border-themeBorder/20 pl-2">
+                            <span class="text-[9px] text-themeMuted whitespace-nowrap">Energy ($E$)</span>
+                            <span class="font-bold text-themeText" id="mag-out-e">0.0 mJ</span>
+                        </div>
                     </div>
                 </div>
 
@@ -103,102 +143,19 @@
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
         <div id="mag-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Inductance Factor ($A_L$):</strong> The inductance of a core per square of the number of turns.</p>
-            <p>$L = A_L \cdot N^2$ (where L is usually in nH and AL is in $nH/N^2$)</p>
-            <p>$N = \sqrt{\frac{L}{A_L}}$</p>
-            <p>$A_L = \frac{L}{N^2}$</p>
-            <p><strong>Transformers:</strong></p>
-            <p>Voltage Ratio: $\frac{V_s}{V_p} = \frac{N_s}{N_p}$</p>
-            <p>Impedance Ratio: $\frac{Z_s}{Z_p} = \left(\frac{N_s}{N_p}\right)^2$</p>
+            <p><strong>Magnetic Ohm's Law (Hopkinson's Law):</strong> $\mathcal{F} = \Phi \cdot \mathcal{R}$</p>
+            <p>Where Magnetomotive Force (MMF) $\mathcal{F} = N \cdot I$</p>
+            <p><strong>Reluctance ($\mathcal{R}$):</strong> Resistance to magnetic flux.</p>
+            <ul class="list-disc pl-4 space-y-1">
+                <li>Core Reluctance: $\mathcal{R}_c = rac{l_e}{\mu_0 \mu_r A_e}$</li>
+                <li>Gap Reluctance: $\mathcal{R}_g = rac{l_g}{\mu_0 A_e}$ (ignoring fringing flux for small gaps)</li>
+                <li>Total Reluctance: $\mathcal{R}_{tot} = \mathcal{R}_c + \mathcal{R}_g$</li>
+            </ul>
+            <p><strong>Inductance ($L$) & Flux Density ($B$):</strong></p>
+            <ul class="list-disc pl-4 space-y-1">
+                <li>$L = rac{N^2}{\mathcal{R}_{tot}} = A_L \cdot N^2$</li>
+                <li>$B = rac{\Phi}{A_e} = rac{L \cdot I}{N \cdot A_e}$</li>
+            </ul>
         </div>
     </div>
 </div>
-
-<script>
-    function updateMagMode() {
-        const mode = document.getElementById('mag-mode').value;
-        const alCont = document.getElementById('mag-al-cont');
-        const nCont = document.getElementById('mag-n-cont');
-        const lCont = document.getElementById('mag-l-cont');
-        const rLabel = document.getElementById('mag-result-label');
-        const rUnit = document.getElementById('mag-result-unit');
-
-        alCont.classList.add('hidden');
-        nCont.classList.add('hidden');
-        lCont.classList.add('hidden');
-
-        if (mode === 'inductance') {
-            alCont.classList.remove('hidden');
-            nCont.classList.remove('hidden');
-            rLabel.innerHTML = 'Calculated Inductance ($L$)';
-            rUnit.innerText = 'μH';
-        } else if (mode === 'turns') {
-            alCont.classList.remove('hidden');
-            lCont.classList.remove('hidden');
-            rLabel.innerHTML = 'Required Turns ($N$)';
-            rUnit.innerText = 'turns';
-        } else if (mode === 'al') {
-            nCont.classList.remove('hidden');
-            lCont.classList.remove('hidden');
-            rLabel.innerHTML = 'Core $A_L$ Value';
-            rUnit.innerText = 'nH/N²';
-        }
-        
-        // Re-run mathjax if present on labels (handled by site globally usually, but we injected raw text so no MathJax here, just simple text)
-        rLabel.innerHTML = rLabel.innerHTML.replace(/\$L\$/, "(L)").replace(/\$N\$/, "(N)").replace(/\$A_L\$/, "(AL)");
-        
-        updateMagCalc();
-    }
-
-    function formatInductance(nH) {
-        if (nH >= 1e6) return { v: (nH / 1e6).toFixed(2), u: "mH" };
-        if (nH >= 1e3) return { v: (nH / 1e3).toFixed(2), u: "μH" };
-        return { v: nH.toFixed(1), u: "nH" };
-    }
-
-    function updateMagCalc() {
-        const mode = document.getElementById('mag-mode').value;
-        const AL = parseFloat(document.getElementById('mag-al').value); // nH
-        const N = parseFloat(document.getElementById('mag-n').value);
-        const L_uh = parseFloat(document.getElementById('mag-l').value); // uH
-        
-        const Np = parseFloat(document.getElementById('mag-np').value);
-        const Ns = parseFloat(document.getElementById('mag-ns').value);
-
-        const valElem = document.getElementById('mag-result-val');
-        const unitElem = document.getElementById('mag-result-unit');
-
-        if (mode === 'inductance') {
-            if (AL > 0 && N > 0) {
-                const L_nH = AL * N * N;
-                const fL = formatInductance(L_nH);
-                valElem.innerText = fL.v;
-                unitElem.innerText = fL.u;
-            }
-        } else if (mode === 'turns') {
-            if (AL > 0 && L_uh > 0) {
-                const L_nH = L_uh * 1000;
-                const N_calc = Math.sqrt(L_nH / AL);
-                valElem.innerText = N_calc.toFixed(1);
-                unitElem.innerText = "turns";
-            }
-        } else if (mode === 'al') {
-            if (N > 0 && L_uh > 0) {
-                const L_nH = L_uh * 1000;
-                const AL_calc = L_nH / (N * N);
-                valElem.innerText = AL_calc.toFixed(1);
-                unitElem.innerText = "nH/N²";
-            }
-        }
-
-        if (Np > 0 && Ns > 0) {
-            const ratio = Ns / Np;
-            document.getElementById('mag-vratio').innerText = "1 : " + ratio.toFixed(2);
-            document.getElementById('mag-zratio').innerText = "1 : " + (ratio * ratio).toFixed(2);
-        }
-    }
-    
-    // Initial setup
-    document.getElementById('mag-result-label').innerHTML = 'Calculated Inductance (L)';
-    setTimeout(updateMagCalc, 100);
-</script>
