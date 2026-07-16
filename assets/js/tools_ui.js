@@ -54,6 +54,7 @@ const TOOL_REGISTRY = [
         category: "RF & Wireless",
         icon: "fa-satellite-dish",
         tools: [
+            { id: "tool-rf-unit-translator", name: "dB & RF Unit Translator", file: "rf-unit-translator.html" },
             { id: "tool-attenuator", name: "Attenuator Calculator", file: "attenuator-calc.html" },
             { id: "tool-rf-noise-figure", name: "Cascade Noise Figure", file: "rf-noise-figure.html" },
             { id: "tool-friis-transmission", name: "Friis Transmission", file: "friis-transmission.html" }
