@@ -78,13 +78,58 @@
             <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
-        <div id="stackup-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p>Calculations use IPC-2141 approximations. The tool uses a binary search (bisection method) to solve for $W$ and $S$ since the equations are naturally formulated as $Z_0 = f(W, S)$.</p>
-            <p><strong>Microstrip SE:</strong> $Z_0 = \frac{87}{\sqrt{E_r + 1.41}} \ln\left(\frac{5.98H}{0.8W + T}\right)$</p>
-            <p><strong>Symmetric Stripline SE:</strong> $Z_0 = \frac{60}{\sqrt{E_r}} \ln\left(\frac{1.9B}{0.8W + T}\right)$, where $B = 2H + T$</p>
-            <p><strong>Microstrip Diff:</strong> $Z_{diff} = 2Z_0 \left(1 - 0.48e^{-0.96 \frac{S}{H}}\right)$</p>
-            <p><strong>Stripline Diff:</strong> $Z_{diff} = 2Z_0 \left(1 - 0.374e^{-2.9 \frac{S}{B}}\right)$</p>
-            <p class="text-themeAccent/80"><em>Note: IPC equations are approximations accurate to ~5-10% in typical ranges. Final sign-off should be done with your manufacturer's 2D field solver (e.g., Polar or Si8000).</em></p>
+        <div id="stackup-theory" class="hidden text-themeMuted mt-2 space-y-4 text-xs leading-relaxed">
+            <div>
+                <h5 class="font-bold text-themeText">What this tool does</h5>
+                <p>Unlike standard calculators that ask for a trace width and output an impedance, this tool works in reverse. It acts as a <strong>multi-layer geometric solver</strong>. You select a target impedance (e.g., 90&Omega; Diff for USB), define the dielectric heights and copper weights of your stackup, and the engine calculates the exact Trace Width ($W$) and Pair Spacing ($S$) required on <em>every single routing layer</em> simultaneously.</p>
+            </div>
+            
+            <div>
+                <h5 class="font-bold text-themeText mt-2">How to use it</h5>
+                <ol class="list-decimal pl-4 space-y-1">
+                    <li><strong>Select a Protocol:</strong> Choose from the preset list (USB, PCIe, Ethernet, etc.) to automatically load the industry-standard target single-ended ($Z_0$) and differential ($Z_{diff}$) impedances.</li>
+                    <li><strong>Define your Stackup:</strong> Add the routing layers of your PCB. 
+                        <ul class="list-disc pl-4 mt-1 text-[10px]">
+                            <li>For top/bottom layers, choose <strong>Microstrip</strong> and enter $H_1$ (distance to the nearest reference plane).</li>
+                            <li>For internal layers, choose <strong>Stripline</strong> and enter $H_1$ and $H_2$ (distance to the upper and lower reference planes respectively).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Read the Output:</strong> The <em>Required W</em> and <em>Required S</em> columns will dynamically update with the exact trace geometry needed for each layer.</li>
+                </ol>
+            </div>
+
+            <div>
+                <h5 class="font-bold text-themeText mt-2">The Mathematics (IPC-2141)</h5>
+                <p>Because the standard IPC equations compute impedance from width ($Z = f(W)$), this tool uses a computational <strong>binary search (bisection method)</strong> to invert the equations and solve for $W$ and $S$ iteratively until the target is hit.</p>
+                
+                <div class="bg-themeBg/50 p-3 rounded mt-2 border border-themeBorder/30">
+                    <p class="font-bold text-[10px] text-themeAccent uppercase mb-1">Microstrip (Surface Layers)</p>
+                    <p>Single-Ended:</p>
+                    <div class="overflow-x-auto">
+                        $$ Z_0 = \frac{87}{\sqrt{E_r + 1.41}} \ln\left(\frac{5.98H}{0.8W + T}\right) $$
+                    </div>
+                    <p class="mt-2">Differential:</p>
+                    <div class="overflow-x-auto">
+                        $$ Z_{diff} = 2Z_0 \left(1 - 0.48e^{-0.96 \frac{S}{H}}\right) $$
+                    </div>
+                </div>
+
+                <div class="bg-themeBg/50 p-3 rounded mt-2 border border-themeBorder/30">
+                    <p class="font-bold text-[10px] text-themeAccent uppercase mb-1">Stripline (Internal Layers)</p>
+                    <p>Single-Ended (where $B = H_1 + H_2 + T$):</p>
+                    <div class="overflow-x-auto">
+                        $$ Z_0 = \frac{60}{\sqrt{E_r}} \ln\left(\frac{1.9B}{0.8W + T}\right) $$
+                    </div>
+                    <p class="mt-2">Differential:</p>
+                    <div class="overflow-x-auto">
+                        $$ Z_{diff} = 2Z_0 \left(1 - 0.374e^{-2.9 \frac{S}{B}}\right) $$
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-themeAccent/80 mt-2 p-2 bg-themeAccent/10 border-l-2 border-themeAccent">
+                <em>Note: IPC equations are approximations accurate to ~5-10% in typical ranges. They are excellent for pre-layout planning and stackup design. Final tapeout sign-off should be done in consultation with your manufacturer's 2D field solver (e.g., Polar Instruments or Si8000).</em>
+            </p>
         </div>
     </div>
 </div>

@@ -213,6 +213,11 @@ async function loadTool(toolId, fileName, btnElement) {
         // Ensure any newly added canvas elements correctly size themselves
         // and trigger existing initialization scripts
         setTimeout(() => {
+            // Trigger MathJax typesetting for equations in the newly loaded tool
+            if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
+                MathJax.typesetPromise([mainArea]).catch((err) => console.log('MathJax typeset failed: ' + err.message));
+            }
+
             // Some old tools rely on specific window functions or setup calls.
             // Dispatch a custom event that tools can listen to.
             document.dispatchEvent(new CustomEvent('toolLoaded', { detail: { toolId } }));
