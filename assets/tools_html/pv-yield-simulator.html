@@ -63,7 +63,9 @@
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
         <div id="pvyieldsimulator-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Theory:</strong> PV yield is calculated using solar irradiance models, adjusting for the panel's tilt and geographical latitude. Power output \(P = A \times r \times H \times PR\).</p>
+            <p><strong>Theory:</strong> PV yield is calculated using solar irradiance models based on the Hottel clear-sky model. The simulator adjusts the theoretical maximum irradiance (1367 W/m²) for atmospheric attenuation at different zenith angles.</p>
+            <p>The final Power output is calculated using the formula \(P = A \times r \times H \times PR\), where \(A\) is total solar panel Area, \(r\) is solar panel efficiency (typically ~15-20%), \(H\) is the solar radiation on tilted panels, and \(PR\) is the Performance Ratio (accounting for inverter/thermal losses, typically ~0.75).</p>
+            <p>The optimal tilt angle is derived from the site's latitude, adjusted dynamically for seasonal shifts in the sun's declination angle.</p>
         </div>
     </div>
 </div>

@@ -588,6 +588,8 @@ function initSolarWidget() {
                 });
             }
             drawSolarMap();
+            if(typeof initPVCharts === 'function') initPVCharts();
+            updateSolarSim();
         }
 
 window.updateSolarFromInput = function() {

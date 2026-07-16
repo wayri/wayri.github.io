@@ -760,6 +760,9 @@ function initPVCharts() {
     const ctxHist = document.getElementById('pv-hist-chart');
     if(!ctxTime || !ctxHist) return;
 
+    if(pvTimeChart) pvTimeChart.destroy();
+    if(pvHistChart) pvHistChart.destroy();
+
     pvTimeChart = new Chart(ctxTime, {
         type: 'line',
         data: {

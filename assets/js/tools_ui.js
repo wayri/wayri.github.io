@@ -226,7 +226,12 @@ async function loadTool(toolId, fileName, btnElement) {
             if(toolId === 'tool-pv-yield-simulator' && typeof initSolarWidget === 'function') initSolarWidget();
             if(toolId === 'tool-resistor-divider' && typeof setupDividerMode === 'function') setupDividerMode();
             if(toolId === 'tool-loop-compensator-p-z' && typeof runCompensator === 'function') runCompensator();
-            if(toolId === 'tool-filter-designer' && typeof setupFilterMode === 'function') setupFilterMode();
+            if(toolId === 'tool-filter-designer') {
+                if(typeof setupFilterMode === 'function') setupFilterMode();
+                if(typeof initRemediationCharts === 'function') initRemediationCharts();
+                if(typeof initFilterBodeChart === 'function') initFilterBodeChart();
+            }
+            if(toolId === 'tool-web-serial-interface' && typeof initSerialChart === 'function') initSerialChart();
             
             // New tools might load scripts dynamically, but typically we will include their JS in default.html or load it here.
         }, 100);
