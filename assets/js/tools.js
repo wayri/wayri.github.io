@@ -1,7 +1,14 @@
-
 const E12 = [1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2];
 const E24 = [1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7, 3.0, 3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1];
 const AWG_DATA = {4:{dia:5.189,res:0.2485,amp:95},6:{dia:4.115,res:0.3951,amp:75},8:{dia:3.264,res:0.6282,amp:55},10:{dia:2.588,res:0.9989,amp:30},12:{dia:2.053,res:1.588,amp:20},14:{dia:1.628,res:2.525,amp:15},16:{dia:1.291,res:4.016,amp:10},18:{dia:1.024,res:6.385,amp:7},20:{dia:0.812,res:10.15,amp:5},22:{dia:0.645,res:16.14,amp:3},24:{dia:0.511,res:25.67,amp:2}};
+
+window.getThemeColors = function() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    return {
+        text: isDark ? '#9ca3af' : '#4b5563',
+        grid: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.1)'
+    };
+};
 
 // Chart objects
 let filterChartObj = null;
@@ -399,7 +406,8 @@ function drawPZMap(canvasId, poles, zeros) {
     const h = canvas.height = canvas.parentElement.clientHeight;
 
     ctx.clearRect(0, 0, w, h);
-    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    const tc = window.getThemeColors ? window.getThemeColors() : {grid: 'rgba(255,255,255,0.1)'};
+    ctx.strokeStyle = tc.grid;
     ctx.lineWidth = 1;
     ctx.beginPath();
     // Grid
@@ -1528,6 +1536,7 @@ window.runAllTools = function() {
     try { if(typeof initRemediationCharts==='function') initRemediationCharts(); } catch(e){console.error(e);}
     try { if(typeof initSolarWidget==='function') initSolarWidget(); } catch(e){console.error(e);}
     try { if(typeof initPlotter==='function') initPlotter(); } catch(e){console.error(e);}
+    try { if(typeof updateOpAmp==='function') updateOpAmp(); } catch(e){console.error(e);}
 }
 
 
@@ -1555,4 +1564,239 @@ window.addEventListener('themeChanged', () => {
     try { if(typeof drawSolarWidget==='function') drawSolarWidget(); } catch(e){}
     try { if(typeof runThermistor==='function') runThermistor(); } catch(e){}
     try { if(typeof runFilter==='function') runFilter(); } catch(e){}
+    try { if(typeof runAllTools==='function') runAllTools(); } catch(e){}
+    try { if(typeof drawSmithChart==='function') drawSmithChart(); } catch(e){}
 });
+
+// ==========================================
+// SMITH CHART DRAWING ENGINE
+// ==========================================
+window.drawSmithChart = function() {
+    const canvas = document.getElementById('smith-canvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    
+    // Handle high DPI displays
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const w = rect.width;
+    const h = rect.height;
+    
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.scale(dpr, dpr);
+    
+    ctx.clearRect(0, 0, w, h);
+    
+    const cx = w / 2;
+    const cy = h / 2;
+    const R_chart = Math.min(cx, cy) - 20;
+    
+    const tc = window.getThemeColors ? window.getThemeColors() : {text: '#9ca3af', grid: 'rgba(255,255,255,0.05)'};
+    
+    function mapGamma(u, v) {
+        return { x: cx + u * R_chart, y: cy - v * R_chart };
+    }
+    
+    function zToGamma(R, X, Z0) {
+        const r = R/Z0;
+        const x = X/Z0;
+        const denom = (r+1)*(r+1) + x*x;
+        const gRe = (r*r + x*x - 1) / denom;
+        const gIm = (2*x) / denom;
+        return {u: gRe, v: gIm};
+    }
+    
+    // Draw circles
+    ctx.lineWidth = 1;
+    
+    // Resistance circles
+    const r_vals = [0, 0.2, 0.5, 1, 2, 5];
+    r_vals.forEach(r => {
+        const rad = R_chart / (r + 1);
+        const center_u = r / (r + 1);
+        const pt = mapGamma(center_u, 0);
+        
+        ctx.beginPath();
+        ctx.strokeStyle = tc.grid;
+        if(r === 1) ctx.strokeStyle = tc.text; // highlight r=1
+        ctx.arc(pt.x, pt.y, rad, 0, 2*Math.PI);
+        ctx.stroke();
+    });
+    
+    // Reactance arcs
+    const x_vals = [0.2, 0.5, 1, 2, 5, -0.2, -0.5, -1, -2, -5];
+    x_vals.forEach(x => {
+        const rad = R_chart / Math.abs(x);
+        const center_u = 1;
+        const center_v = 1 / x;
+        const pt = mapGamma(center_u, center_v);
+        
+        ctx.beginPath();
+        ctx.strokeStyle = tc.grid;
+        if(Math.abs(x) === 1) ctx.strokeStyle = tc.text;
+        
+        // We only want the part of the arc inside the unit circle.
+        ctx.arc(pt.x, pt.y, rad, 0, 2*Math.PI);
+        ctx.stroke(); // Optimization: clipping to unit circle is better
+    });
+    
+    // Clear outside unit circle to make arcs look correct
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    // draw a huge rect over everything
+    ctx.rect(0, 0, w, h);
+    // punch a hole for the unit circle
+    ctx.arc(cx, cy, R_chart, 0, 2*Math.PI, true);
+    ctx.fill();
+    ctx.restore();
+    
+    // Draw bounding circle
+    ctx.beginPath();
+    ctx.strokeStyle = tc.text;
+    ctx.arc(cx, cy, R_chart, 0, 2*Math.PI);
+    ctx.stroke();
+    
+    // Draw real axis
+    ctx.beginPath();
+    ctx.moveTo(cx - R_chart, cy);
+    ctx.lineTo(cx + R_chart, cy);
+    ctx.stroke();
+    
+    // Get Z0
+    const zs_re = parseFloat(document.getElementById('smith-zs-re')?.value) || 50;
+    const zs_im = parseFloat(document.getElementById('smith-zs-im')?.value) || 0;
+    const Z0 = zs_re; // Normalize to source resistance
+    
+    // Trajectory calculation
+    const freq = parseFloat(document.getElementById('smith-freq')?.value) || 1000;
+    const freq_hz = freq * 1e6;
+    const w_rad = 2 * Math.PI * freq_hz;
+    
+    let currentZ = {
+        re: parseFloat(document.getElementById('smith-zl-re')?.value) || 10,
+        im: parseFloat(document.getElementById('smith-zl-im')?.value) || -20
+    };
+    
+    let trajectory = [];
+    trajectory.push({...currentZ});
+    
+    const components = typeof smithComponents !== 'undefined' ? smithComponents : [];
+    
+    components.forEach(c => {
+        if(c.type.startsWith('sh_')) {
+            const denom = currentZ.re*currentZ.re + currentZ.im*currentZ.im;
+            let Y = { re: currentZ.re / denom, im: -currentZ.im / denom };
+            let y_comp = {re: 0, im: 0};
+            
+            if(c.type === 'sh_c') {
+                const C = c.val1 * 1e-12;
+                const Xc = -1 / (w_rad * C);
+                if(!c.isIdeal && c.val2 > 0) {
+                    const ESR = Math.abs(Xc) / c.val2;
+                    const zdenom = ESR*ESR + Xc*Xc;
+                    y_comp.re = ESR / zdenom;
+                    y_comp.im = -Xc / zdenom;
+                } else {
+                    y_comp.im = w_rad * C;
+                }
+            } else if(c.type === 'sh_l') {
+                const L = c.val1 * 1e-9;
+                const Xl = w_rad * L;
+                if(!c.isIdeal && c.val2 > 0) {
+                    const ESR = Xl / c.val2;
+                    const zdenom = ESR*ESR + Xl*Xl;
+                    y_comp.re = ESR / zdenom;
+                    y_comp.im = -Xl / zdenom;
+                } else {
+                    y_comp.im = -1 / Xl;
+                }
+            } else if(c.type === 'sh_r') {
+                y_comp.re = 1/c.val1;
+            }
+            
+            Y.re += y_comp.re;
+            Y.im += y_comp.im;
+            const ydenom = Y.re*Y.re + Y.im*Y.im;
+            currentZ.re = Y.re / ydenom;
+            currentZ.im = -Y.im / ydenom;
+            trajectory.push({...currentZ});
+            
+        } else if(c.type.startsWith('ser_')) {
+            let z_comp = {re: 0, im: 0};
+            if(c.type === 'ser_c') {
+                const C = c.val1 * 1e-12;
+                const Xc = -1 / (w_rad * C);
+                z_comp.im = Xc;
+                if(!c.isIdeal && c.val2 > 0) z_comp.re = Math.abs(Xc) / c.val2;
+            } else if(c.type === 'ser_l') {
+                const L = c.val1 * 1e-9;
+                const Xl = w_rad * L;
+                z_comp.im = Xl;
+                if(!c.isIdeal && c.val2 > 0) z_comp.re = Xl / c.val2;
+            } else if(c.type === 'ser_r') {
+                z_comp.re = c.val1;
+            }
+            
+            currentZ.re += z_comp.re;
+            currentZ.im += z_comp.im;
+            trajectory.push({...currentZ});
+        } else if(c.type === 'tline') {
+            const Z0_tl = c.val1;
+            const betaL = c.val2 * Math.PI / 180;
+            const tanB = Math.tan(betaL);
+            const numRe = currentZ.re;
+            const numIm = currentZ.im + Z0_tl * tanB;
+            const denRe = Z0_tl - currentZ.im * tanB;
+            const denIm = currentZ.re * tanB;
+            const denMag2 = denRe*denRe + denIm*denIm;
+            
+            const newRe = Z0_tl * (numRe*denRe + numIm*denIm) / denMag2;
+            const newIm = Z0_tl * (numIm*denRe - numRe*denIm) / denMag2;
+            currentZ.re = newRe;
+            currentZ.im = newIm;
+            
+            // To properly draw a t-line arc on the Smith chart, we could add intermediate points, 
+            // but for simplicity we'll just add the end point.
+            trajectory.push({...currentZ});
+        }
+    });
+    
+    // Draw trajectory
+    if(trajectory.length > 0) {
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#f59e0b'; // amber
+        ctx.beginPath();
+        
+        trajectory.forEach((z, idx) => {
+            const g = zToGamma(z.re, z.im, Z0);
+            const pt = mapGamma(g.u, g.v);
+            if(idx === 0) ctx.moveTo(pt.x, pt.y);
+            else ctx.lineTo(pt.x, pt.y);
+        });
+        ctx.stroke();
+        
+        // Draw points
+        trajectory.forEach((z, idx) => {
+            const g = zToGamma(z.re, z.im, Z0);
+            const pt = mapGamma(g.u, g.v);
+            
+            ctx.beginPath();
+            ctx.fillStyle = idx === 0 ? '#ef4444' : (idx === trajectory.length-1 ? '#10b981' : '#f59e0b');
+            ctx.arc(pt.x, pt.y, 5, 0, 2*Math.PI);
+            ctx.fill();
+        });
+    }
+    
+    // Draw Source Impedance target
+    const gS = zToGamma(zs_re, -zs_im, Z0); // conjugate match target
+    const ptS = mapGamma(gS.u, gS.v);
+    
+    ctx.beginPath();
+    ctx.strokeStyle = '#10b981';
+    ctx.lineWidth = 2;
+    ctx.moveTo(ptS.x - 8, ptS.y - 8); ctx.lineTo(ptS.x + 8, ptS.y + 8);
+    ctx.moveTo(ptS.x + 8, ptS.y - 8); ctx.lineTo(ptS.x - 8, ptS.y + 8);
+    ctx.stroke();
+};

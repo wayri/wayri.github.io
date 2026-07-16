@@ -2,17 +2,22 @@
     <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Smith Chart & RF Analysis">
         <div class="flex items-center gap-2"><i class="fa-solid fa-satellite-dish"></i><h3 class="font-bold font-mono">Smith Chart & RF Analysis</h3></div>
         <div class="flex gap-2">
-            <button class="px-2 py-1 bg-themeBg text-themeText border border-themeBorder text-xs font-bold hover:bg-themeBorder rounded" onclick="alert('Component Library coming soon!')">Add Component</button>
+            <select id="smith-comp-type" class="bg-themeBg text-themeText border border-themeBorder text-xs p-1">
+                <option value="ser_l">Series Inductor</option>
+                <option value="ser_c">Series Capacitor</option>
+                <option value="ser_r">Series Resistor</option>
+                <option value="sh_l">Shunt Inductor</option>
+                <option value="sh_c">Shunt Capacitor</option>
+                <option value="sh_r">Shunt Resistor</option>
+                <option value="tline">Transmission Line</option>
+            </select>
+            <button class="px-2 py-1 bg-themeBg text-themeText border border-themeBorder text-xs font-bold hover:bg-themeBorder rounded" onclick="addSmithComponent()">Add Component</button>
         </div>
     </div>
     
     <div class="flex flex-grow relative overflow-hidden bg-themeBg font-mono min-h-[500px]">
-        <div class="flex-grow flex items-center justify-center p-8 bg-[#050505] relative">
-            <div class="text-center">
-                <i class="fa-solid fa-spinner fa-spin text-4xl text-themeAccent mb-4"></i>
-                <h4 class="text-themeText font-bold mb-2">Smith Chart Canvas Engine Initialization</h4>
-                <p class="text-themeMuted text-xs">The dedicated Smith Chart tool is currently being provisioned.<br>It will support full matching network design, VSWR circles, and Q-factor contours.</p>
-            </div>
+        <div id="smith-canvas-container" class="flex-grow flex items-center justify-center p-4 bg-themeBg relative overflow-hidden">
+            <canvas id="smith-canvas" class="w-full h-full max-w-[800px] max-h-[800px]"></canvas>
         </div>
         
         <div class="w-80 border-l border-themeBorder bg-themeContainer flex flex-col flex-shrink-0">
@@ -21,20 +26,35 @@
             </div>
             <div class="flex-grow overflow-y-auto p-4 space-y-4 text-xs">
                 <div class="space-y-2">
+                    <label class="font-bold text-themeAccent block">System Frequency (MHz)</label>
+                    <input type="number" id="smith-freq" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="1000" oninput="runSmithChart()">
+                </div>
+                <div class="space-y-2">
                     <label class="font-bold text-themeAccent block">Source Impedance (Z_S)</label>
                     <div class="flex gap-2">
-                        <input type="number" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="50" placeholder="Re">
-                        <input type="number" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="0" placeholder="Im">
+                        <input type="number" id="smith-zs-re" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="50" placeholder="Re" oninput="runSmithChart()">
+                        <input type="number" id="smith-zs-im" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="0" placeholder="Im" oninput="runSmithChart()">
                     </div>
                 </div>
                 <div class="space-y-2">
                     <label class="font-bold text-themeAccent block">Load Impedance (Z_L)</label>
                     <div class="flex gap-2">
-                        <input type="number" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="10" placeholder="Re">
-                        <input type="number" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="-20" placeholder="Im">
+                        <input type="number" id="smith-zl-re" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="10" placeholder="Re" oninput="runSmithChart()">
+                        <input type="number" id="smith-zl-im" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="-20" placeholder="Im" oninput="runSmithChart()">
                     </div>
                 </div>
-                <button class="w-full px-2 py-1 bg-themeAccent text-themeBg font-bold hover:opacity-80 rounded mt-4" onclick="alert('Simulation core is starting...')">Calculate Match</button>
+                
+                <div class="border-t border-themeBorder/30 my-4 pt-2">
+                    <div class="flex justify-between items-center text-themeMuted mb-2">
+                        <span class="font-bold">Cascade</span>
+                        <span>(Load &rarr; Source)</span>
+                    </div>
+                    <div id="smith-components" class="space-y-2">
+                        <!-- Added components go here -->
+                    </div>
+                </div>
+                
+                <button class="w-full px-2 py-1 bg-themeAccent text-themeBg font-bold hover:opacity-80 rounded mt-4" onclick="runSmithChart()">Calculate Match</button>
             </div>
         </div>
     </div>

@@ -1847,3 +1847,95 @@ document.addEventListener('toolLoaded', function() {
     initInductor3D();
     initXfmr3D();
 });
+
+// ==========================================
+// SMITH CHART UI LOGIC
+// ==========================================
+let smithComponents = [];
+
+window.addSmithComponent = function() {
+    const typeSelect = document.getElementById('smith-comp-type');
+    if(!typeSelect) return;
+    const type = typeSelect.value;
+    const typeName = typeSelect.options[typeSelect.selectedIndex].text;
+    
+    // Check if component already has Q input. If not, default to ideal.
+    const isTline = type === 'tline';
+    
+    smithComponents.push({
+        type: type,
+        name: typeName,
+        val1: isTline ? 50 : 1, // Z0 or L/C/R val
+        val2: isTline ? 90 : 0,  // EL or Q
+        isIdeal: !isTline 
+    });
+    
+    renderSmithComponents();
+    runSmithChart();
+}
+
+window.removeSmithComponent = function(idx) {
+    smithComponents.splice(idx, 1);
+    renderSmithComponents();
+    runSmithChart();
+}
+
+window.updateSmithComp = function(idx, field, val) {
+    if(field === 'ideal') {
+        smithComponents[idx].isIdeal = val;
+    } else {
+        smithComponents[idx][field] = parseFloat(val) || 0;
+    }
+    runSmithChart();
+    renderSmithComponents(); // re-render to toggle Q inputs
+}
+
+function renderSmithComponents() {
+    const container = document.getElementById('smith-components');
+    if(!container) return;
+    
+    container.innerHTML = '';
+    
+    smithComponents.forEach((comp, idx) => {
+        const isTline = comp.type === 'tline';
+        let val1Label = 'Val';
+        if(comp.type.includes('l')) val1Label = 'nH';
+        else if(comp.type.includes('c')) val1Label = 'pF';
+        else if(comp.type.includes('r')) val1Label = '&Omega;';
+        
+        if(isTline) val1Label = 'Z0 (&Omega;)';
+        
+        let val2Label = isTline ? 'E.L. (&deg;)' : 'Q-factor';
+        
+        let html = `
+            <div class="bg-themeBorder/10 border border-themeBorder p-2 relative group">
+                <button class="absolute top-1 right-1 text-red-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onclick="removeSmithComponent(${idx})"><i class="fa-solid fa-xmark"></i></button>
+                <div class="font-bold text-themeAccent mb-1">${comp.name}</div>
+                <div class="flex gap-2 items-center">
+                    <div class="flex-1">
+                        <label class="text-[10px] text-themeMuted">${val1Label}</label>
+                        <input type="number" class="w-full bg-themeBg border border-themeBorder p-1 text-right text-xs" value="${comp.val1}" onchange="updateSmithComp(${idx}, 'val1', this.value)">
+                    </div>
+                    ${!isTline ? `
+                    <div class="flex items-end pb-1 px-1">
+                        <label class="text-[10px] text-themeMuted flex items-center gap-1 cursor-pointer">
+                            <input type="checkbox" ${comp.isIdeal ? 'checked' : ''} onchange="updateSmithComp(${idx}, 'ideal', this.checked)"> Ideal
+                        </label>
+                    </div>
+                    ` : ''}
+                    <div class="flex-1 ${(!isTline && comp.isIdeal) ? 'opacity-30 pointer-events-none' : ''}">
+                        <label class="text-[10px] text-themeMuted">${val2Label}</label>
+                        <input type="number" class="w-full bg-themeBg border border-themeBorder p-1 text-right text-xs" value="${comp.val2}" onchange="updateSmithComp(${idx}, 'val2', this.value)">
+                    </div>
+                </div>
+            </div>
+        `;
+        container.innerHTML += html;
+    });
+}
+
+window.runSmithChart = function() {
+    if(typeof drawSmithChart === 'function') {
+        drawSmithChart();
+    }
+}
