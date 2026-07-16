@@ -1903,12 +1903,19 @@ window.buildXfmr3D = function(bRatio) {
             addMesh(new THREE.BoxGeometry(6, 25, 20), coreMat, [17,0,12], null, 'Outer Leg (Right) — mirror');
             addMesh(new THREE.BoxGeometry(10, 25, 20), coreMat, [0,0,12], null, 'Center Leg — mirror');
         }
-        // Primary winding — inner
-        const priGeo = new THREE.TorusGeometry(6, 2.5, 8, 24);
-        const priMesh = addMesh(priGeo, priMat, [0,0,7], [Math.PI/2,0,0], 'Primary Winding — copper (inner layer)');
-        // Secondary winding — outer
-        const secGeo = new THREE.TorusGeometry(9, 2, 8, 24);
-        addMesh(secGeo, secMat, [0,0,7], [Math.PI/2,0,0], 'Secondary Winding — gold (outer layer)');
+        // Primary winding — stacked rings around center leg (Z-axis)
+        // Torus default = XY plane with hole along Z — correct for center leg running in Z
+        for(let layer=0; layer<3; layer++) {
+            const zPos = 2 + (layer - 1) * 5;
+            const priRingGeo = new THREE.TorusGeometry(5.5, 1.0, 8, 24);
+            addMesh(priRingGeo, priMat, [0, 0, zPos], null, `Primary Winding — Layer ${layer+1} (copper, inner)`);
+        }
+        // Secondary winding — outer concentric rings
+        for(let layer=0; layer<2; layer++) {
+            const zPos = 1 + (layer - 0.5) * 6;
+            const secRingGeo = new THREE.TorusGeometry(8, 1.0, 8, 24);
+            addMesh(secRingGeo, secMat, [0, 0, zPos], null, `Secondary Winding — Layer ${layer+1} (gold, outer)`);
+        }
 
     } else if(shape === 'Toroid') {
         // Toroid core
@@ -1956,7 +1963,7 @@ window.buildXfmr3D = function(bRatio) {
         addMesh(new THREE.BoxGeometry(6, 30, 6), coreMat, [14,0,0], null, 'U Core Right Leg');
         addMesh(new THREE.BoxGeometry(34, 6, 6), coreMat, [0,-12,0], null, 'U Core Bottom Yoke');
         addMesh(new THREE.BoxGeometry(34, 6, 6), coreMat, [0,12,0], null, 'I Core Top Plate');
-        // Winding on legs
+        // Winding on legs — torus hole along X (encircles the X-axis leg)
         const wGeo = new THREE.TorusGeometry(5, 2, 8, 16);
         addMesh(wGeo, priMat, [-14,0,0], [0,0,Math.PI/2], 'Primary Winding (left leg)');
         addMesh(wGeo.clone(), secMat, [14,0,0], [0,0,Math.PI/2], 'Secondary Winding (right leg)');
@@ -2174,6 +2181,109 @@ window.updateXfmr = function() {
         document.getElementById('xfmr-warn-ap').classList.toggle('hidden', actual_ap >= required_ap || s <= 0);
         document.getElementById('xfmr-warn-fit').classList.toggle('hidden', fits);
         document.getElementById('xfmr-warn-sat').classList.toggle('hidden', satRatio <= 0.95);
+
+        // Smart Recommendations Engine
+        const recPanel = document.getElementById('xfmr-recommendations');
+        const recList = document.getElementById('xfmr-rec-list');
+        const recs = [];
+
+        // Saturation recommendations
+        if(satRatio > 0.95) {
+            const needAe = (vp / (4.44 * f * np * bmax * satRatio * 0.85)) * 10000; // cm²
+            const needNp = Math.ceil(vp / (4.44 * f * bmax * ae_m2));
+            const needBmax = b_op * 1.1;
+            recs.push({
+                color: 'text-red-400',
+                icon: 'fa-bolt',
+                title: 'Fix Saturation',
+                items: [
+                    `<strong>Increase core area (Ae):</strong> Need ≥ ${needAe.toFixed(1)} cm² — use a larger core (current: ${ae} cm²)`,
+                    `<strong>Increase primary turns (Np):</strong> Target ≥ ${needNp} turns to reduce B_op below B_max`,
+                    `<strong>Reduce B_max setting:</strong> Target ≤ ${(b_op * 0.85).toFixed(2)} T to add 15% margin`,
+                    `<strong>Increase frequency:</strong> Higher f reduces required turns and flux density (V/t ∝ f)`
+                ]
+            });
+        } else if(satRatio > 0.80) {
+            recs.push({
+                color: 'text-yellow-400',
+                icon: 'fa-exclamation-circle',
+                title: 'Saturation Margin Low',
+                items: [
+                    `B_op/B_max = ${(satRatio*100).toFixed(0)}% — consider adding 10–15% margin for transient spikes`,
+                    `Add an air gap of 0.1–0.5mm to shift the saturation knee higher`
+                ]
+            });
+        }
+
+        // Core too small
+        if(actual_ap < required_ap && s > 0) {
+            const scaleNeeded = Math.sqrt(required_ap / actual_ap);
+            recs.push({
+                color: 'text-red-400',
+                icon: 'fa-expand',
+                title: 'Core Too Small (Ap insufficient)',
+                items: [
+                    `<strong>Required Ap:</strong> ${required_ap.toFixed(1)} cm⁴ — Current: ${actual_ap.toFixed(1)} cm⁴ (${((actual_ap/required_ap)*100).toFixed(0)}% of needed)`,
+                    `<strong>Scale core up:</strong> All dimensions × ${scaleNeeded.toFixed(2)} — try a core with Ae×Aw ≥ ${required_ap.toFixed(1)} cm⁴`,
+                    `<strong>Reduce power:</strong> Derate to ≤ ${(s * actual_ap / required_ap).toFixed(0)} VA for this core`,
+                    `<strong>Increase frequency:</strong> At 2× frequency, required Ap halves — consider SMPS topology`
+                ]
+            });
+        }
+
+        // Winding doesn't fit
+        if(!fits) {
+            const nextAwg = Math.min(awg + 4, 40);
+            const nextDia = AWG_DIAMETER_MM[nextAwg] || 0;
+            const fitsAtNextAwg = (totalTurns * Math.PI * (nextDia/10/2)**2) / usableWindow * 100 <= 100;
+            recs.push({
+                color: 'text-orange-400',
+                icon: 'fa-layer-group',
+                title: 'Winding Overfills Window',
+                items: [
+                    `<strong>Window fill:</strong> ${windowFill.toFixed(1)}% (max 100%) — ${(windowFill-100).toFixed(0)}% over capacity`,
+                    fitsAtNextAwg
+                        ? `<strong>Use thinner wire:</strong> Switch to AWG ${nextAwg} (${nextDia.toFixed(3)}mm) — reduces fill to fit`
+                        : `<strong>Use thinner wire:</strong> Try AWG ${nextAwg} or finer (Litz wire for HF)`,
+                    `<strong>Increase window area (Aw):</strong> Need ≥ ${(aw * windowFill/100 * 1.1).toFixed(1)} cm² — use a wider bobbin/core`,
+                    `<strong>Reduce fill factor (kw):</strong> Check if winding pattern allows > ${(kw*100).toFixed(0)}% fill`,
+                    `<strong>Reduce turns:</strong> Increase Ae to allow fewer turns at same flux density`
+                ]
+            });
+        }
+
+        // Thermal warning
+        if(!thermOk) {
+            const maxPcu = (twMax - ta) / (rca + rwc);
+            const maxS = Math.sqrt(maxPcu / (Rp/ip**2 + Rs/is_a**2)) * vp;
+            recs.push({
+                color: 'text-orange-400',
+                icon: 'fa-temperature-arrow-up',
+                title: 'Winding Temperature Exceeded',
+                items: [
+                    `<strong>Winding temp:</strong> ${Tw.toFixed(1)}°C — max allowed: ${twMax}°C`,
+                    `<strong>Use thicker wire:</strong> Larger AWG (lower number) reduces Cu loss (I²R)`,
+                    `<strong>Improve thermal interface:</strong> Reduce Rθ winding-core (better potting/heatsinking)`,
+                    `<strong>Reduce load power:</strong> Max safe power ≈ ${isFinite(maxS) ? maxS.toFixed(0) : '?'} VA at current thermal resistance`,
+                    `<strong>Add forced airflow:</strong> Even 100 LFM reduces Rθ SA by ~40%`
+                ]
+            });
+        }
+
+        if(recs.length > 0) {
+            recPanel.classList.remove('hidden');
+            recList.innerHTML = recs.map(r => `
+                <div class="border-l-2 border-${r.color.replace('text-','')} pl-2 mb-2">
+                    <div class="font-bold ${r.color} mb-1"><i class="fa-solid ${r.icon} mr-1"></i>${r.title}</div>
+                    <ul class="list-disc pl-3 space-y-0.5">
+                        ${r.items.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+            `).join('');
+        } else {
+            recPanel.classList.add('hidden');
+            recList.innerHTML = '';
+        }
 
         // Rebuild 3D with saturation info
         if(typeof buildXfmr3D === 'function') buildXfmr3D(satRatio);
