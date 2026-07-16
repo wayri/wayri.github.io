@@ -1,0 +1,147 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Skin Effect & AC Resistance">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-water"></i><h3 class="font-bold font-mono">Skin Effect & AC Resistance</h3></div>
+        <span class="font-mono text-[10px] opacity-70">High Frequency Conductors</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Parameters -->
+            <div class="space-y-4">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">MATERIAL & FREQUENCY</h4>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Conductor</span></div>
+                        <select id="skin-mat" class="w-full bg-themeContainer border border-themeBorder p-1.5 text-themeText" onchange="updateSkin()">
+                            <option value="1.68e-8">Copper (1.68e-8 Ω·m)</option>
+                            <option value="2.82e-8">Aluminum (2.82e-8 Ω·m)</option>
+                            <option value="1.59e-8">Silver (1.59e-8 Ω·m)</option>
+                            <option value="2.44e-8">Gold (2.44e-8 Ω·m)</option>
+                        </select>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Frequency (f)</span><span class="text-themeMuted">MHz</span></div>
+                        <input type="number" id="skin-freq" class="w-full bg-themeContainer border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateSkin()">
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">GEOMETRY (Round Wire)</h4>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Wire Radius (r)</span><span class="text-themeMuted">mm</span></div>
+                    <input type="number" id="skin-r" class="w-full bg-themeContainer border border-themeBorder p-1.5 text-themeText" value="0.5" step="0.1" oninput="updateSkin()">
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Length (L)</span><span class="text-themeMuted">meters</span></div>
+                    <input type="number" id="skin-l" class="w-full bg-themeContainer border border-themeBorder p-1.5 text-themeText" value="1.0" step="0.1" oninput="updateSkin()">
+                </div>
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <!-- Diagram -->
+                <div class="w-full h-32 bg-themeContainer border border-themeBorder/50 flex flex-col items-center justify-center relative overflow-hidden">
+                    <!-- Wire Cross Section -->
+                    <div class="w-24 h-24 rounded-full border border-themeBorder bg-themeBg relative flex items-center justify-center overflow-hidden">
+                        <!-- Skin Depth Ring -->
+                        <div id="skin-depth-visual" class="absolute inset-0 border-[10px] border-themeAccent/80 rounded-full transition-all duration-300"></div>
+                        <div class="text-[8px] text-themeMuted z-10 bg-themeBg/80 px-1 rounded">Cross Section</div>
+                    </div>
+                    <div class="absolute right-4 text-[10px] text-themeAccent font-bold">
+                        &delta; = <span id="skin-depth-label">0</span> &mu;m
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="grid grid-cols-2 gap-4 flex-grow">
+                    <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2">DC Resistance</span>
+                        <div class="text-xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="skin-rdc">0.00</span> <span class="text-xs text-themeAccent">mΩ</span>
+                        </div>
+                    </div>
+                    <div class="bg-themeBg border border-themeAccent/50 p-4 flex flex-col justify-center items-center text-center relative shadow-[inset_0_0_10px_rgba(212,175,55,0.1)]">
+                        <span class="text-[10px] text-themeAccent uppercase tracking-wider mb-2 font-bold">AC Resistance</span>
+                        <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="skin-rac">0.00</span> <span class="text-sm text-themeAccent">mΩ</span>
+                        </div>
+                        <div class="absolute bottom-1 right-2 text-[8px] text-themeMuted" id="skin-ratio">Ratio: 1.0</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('skin-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="skin-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Skin Depth ($\delta$):</strong></p>
+            <p>$$ \delta = \sqrt{\frac{\rho}{\pi \cdot f \cdot \mu_0 \cdot \mu_r}} $$</p>
+            <p><strong>AC Resistance (Round Wire Approximation):</strong></p>
+            <p>When radius $r \gg \delta$, current is confined to the outer ring of area $A_{ac} \approx 2 \pi r \delta$. Therefore, $R_{ac} = \rho \frac{L}{2 \pi r \delta}$.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateSkin() {
+        const rho = parseFloat(document.getElementById('skin-mat').value);
+        const f_mhz = parseFloat(document.getElementById('skin-freq').value);
+        const r_mm = parseFloat(document.getElementById('skin-r').value);
+        const L_m = parseFloat(document.getElementById('skin-l').value);
+
+        const f = f_mhz * 1e6;
+        const r = r_mm / 1000;
+        const mu0 = 4 * Math.PI * 1e-7;
+        const mur = 1.0; // Non-magnetic assumed
+
+        // Skin Depth
+        let delta = 0;
+        if (f > 0) {
+            delta = Math.sqrt(rho / (Math.PI * f * mu0 * mur));
+        } else {
+            delta = r; // DC case
+        }
+
+        // DC Resistance
+        const A_dc = Math.PI * r * r;
+        const Rdc = rho * L_m / A_dc;
+
+        // AC Resistance (simplified)
+        let Rac = Rdc;
+        if (delta < r && f > 0) {
+            // Exact formula involves Bessel functions, but standard approx is:
+            // Rac = Rdc * (r / (2 * delta)) for very high freq.
+            // A better smooth approx:
+            const x = r / delta;
+            if (x > 2) {
+                Rac = Rdc * (0.25 + 0.5 * x); // Approx for x > 2
+            } else {
+                Rac = Rdc; // Close enough for low freq
+            }
+        }
+
+        document.getElementById('skin-depth-label').innerText = (delta * 1e6).toFixed(2);
+        document.getElementById('skin-rdc').innerText = (Rdc * 1000).toFixed(2);
+        document.getElementById('skin-rac').innerText = (Rac * 1000).toFixed(2);
+        document.getElementById('skin-ratio').innerText = "Ratio: " + (Rac / Rdc).toFixed(2);
+
+        // Visual update
+        const visual = document.getElementById('skin-depth-visual');
+        // Max visual thickness is 48px (half of 96px w/h)
+        let visualDepth = (delta / r) * 48;
+        if (visualDepth > 48) visualDepth = 48;
+        if (visualDepth < 1) visualDepth = 1;
+        visual.style.borderWidth = visualDepth + 'px';
+    }
+    
+    // Initial calculation
+    setTimeout(updateSkin, 100);
+</script>

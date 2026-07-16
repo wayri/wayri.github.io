@@ -1,0 +1,113 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Power Delivery Network (PDN) Target Impedance">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-bolt"></i><h3 class="font-bold font-mono">PDN Target Impedance</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Decoupling Estimator</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="flex flex-col md:flex-row gap-6">
+            
+            <!-- Parameters -->
+            <div class="w-full md:w-1/2 space-y-4 border-r border-themeBorder/30 pr-4">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">POWER RAIL REQUIREMENTS</h4>
+                
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Supply Voltage (Vdd)</span><span class="text-themeMuted">V</span></div>
+                        <input type="number" id="pdn-vdd" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="1.2" step="0.1" oninput="updatePdn()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Allowed Ripple / Tolerance</span><span class="text-themeMuted">%</span></div>
+                        <input type="number" id="pdn-ripple" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="5" step="1" oninput="updatePdn()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Max Transient Current (I_max)</span><span class="text-themeMuted">A</span></div>
+                        <input type="number" id="pdn-imax" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="2.5" step="0.1" oninput="updatePdn()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Current Transient Rate (50%)</span><span class="text-themeMuted">A</span></div>
+                        <div class="text-[10px] text-themeMuted mb-1 leading-tight">Assuming 50% of I_max as typical dynamic step</div>
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-themeMuted mt-6 mb-2 border-b border-themeBorder/20 pb-1">CAPACITOR BANK ESTIMATE</h4>
+                <div class="bg-themeBorder/10 p-3 text-xs text-themeText border border-themeBorder">
+                    <p class="mb-2">To meet this target impedance at high frequencies, decoupling capacitors must provide a lower total ESL and ESR.</p>
+                    <div class="flex justify-between"><span>Required F_max (~1/Tr):</span><span class="text-themeAccent">100 MHz</span></div>
+                    <div class="flex justify-between mt-1"><span>Est. Target Capacitance:</span><span id="pdn-ctarget" class="text-themeAccent">0.0 uF</span></div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="w-full md:w-1/2 flex flex-col justify-center gap-6">
+                
+                <div class="bg-themeBg border-l-4 border-themeAccent p-6 relative overflow-hidden">
+                    <i class="fa-solid fa-bullseye absolute -right-4 -bottom-4 text-8xl text-themeAccent/5"></i>
+                    <div class="text-xs text-themeMuted uppercase tracking-widest mb-2 font-bold">Target Impedance (Z_target)</div>
+                    <div class="text-5xl font-bold text-themeText flex items-end gap-2 drop-shadow-md">
+                        <span id="pdn-ztarget">0.00</span> <span class="text-lg text-themeAccent mb-2">mΩ</span>
+                    </div>
+                    <p class="text-[10px] text-themeMuted mt-4">
+                        The PDN impedance must be kept below this value from DC up to the maximum frequency of interest to prevent voltage droop during switching transients.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="border border-themeBorder bg-themeContainer p-3 flex flex-col items-center justify-center">
+                        <span class="text-[10px] text-themeMuted uppercase">Allowable Ripple (V)</span>
+                        <span id="pdn-vripple" class="text-xl font-bold text-themeText mt-1">0.0 V</span>
+                    </div>
+                    <div class="border border-themeBorder bg-themeContainer p-3 flex flex-col items-center justify-center">
+                        <span class="text-[10px] text-themeMuted uppercase">Delta I (50%)</span>
+                        <span id="pdn-delta-i" class="text-xl font-bold text-themeText mt-1">0.0 A</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('pdn-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="pdn-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Target Impedance (Z_target):</strong></p>
+            <p>$$ Z_{target} = \frac{V_{dd} \times \%Ripple}{\Delta I} $$</p>
+            <p>Where $\Delta I$ is the transient current step (often assumed as 50% of $I_{max}$).</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updatePdn() {
+        const Vdd = parseFloat(document.getElementById('pdn-vdd').value);
+        const RipplePct = parseFloat(document.getElementById('pdn-ripple').value);
+        const Imax = parseFloat(document.getElementById('pdn-imax').value);
+
+        const Vripple = Vdd * (RipplePct / 100);
+        const DeltaI = Imax * 0.5; // 50% assumption
+        
+        let Ztarget = 0;
+        if (DeltaI > 0) {
+            Ztarget = Vripple / DeltaI;
+        }
+
+        // Extremely rough capacitance estimate for 100MHz bandwidth
+        // Zc = 1 / (2 * pi * f * C)  => C = 1 / (2 * pi * f * Z)
+        let Ctarget_uf = 0;
+        if(Ztarget > 0) {
+            Ctarget_uf = 1 / (2 * Math.PI * 100e6 * Ztarget) * 1e6;
+        }
+
+        document.getElementById('pdn-ztarget').innerText = isNaN(Ztarget) ? "-" : (Ztarget * 1000).toFixed(1); // Convert to mOhms
+        document.getElementById('pdn-vripple').innerText = isNaN(Vripple) ? "-" : Vripple.toFixed(3) + " V";
+        document.getElementById('pdn-delta-i').innerText = isNaN(DeltaI) ? "-" : DeltaI.toFixed(2) + " A";
+        document.getElementById('pdn-ctarget').innerText = isNaN(Ctarget_uf) ? "-" : (Ctarget_uf > 1000 ? (Ctarget_uf/1000).toFixed(1) + " mF" : Ctarget_uf.toFixed(2) + " uF");
+    }
+    
+    // Initial calculation
+    setTimeout(updatePdn, 100);
+</script>

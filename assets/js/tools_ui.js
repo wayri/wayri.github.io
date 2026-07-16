@@ -41,7 +41,13 @@ const TOOL_REGISTRY = [
         icon: "fa-microchip",
         tools: [
             { id: "tool-impedance-calc", name: "Impedance Calculation", file: "impedance-calc.html" },
-            { id: "tool-high-speed-design", name: "High Speed Design", file: "high-speed-design.html" }
+            { id: "tool-high-speed-design", name: "High Speed Design", file: "high-speed-design.html" },
+            { id: "tool-pcb-impedance-diff", name: "Diff Pair Impedance", file: "pcb-impedance-diff.html", desc: "Microstrip and Stripline coupled pairs." },
+            { id: "tool-via-impedance", name: "Via Parasitics", file: "via-impedance.html", desc: "Via capacitance and inductance calculator." },
+            { id: "tool-crosstalk-estimator", name: "Crosstalk Estimator", file: "crosstalk-estimator.html", desc: "Forward and backward crosstalk coefficients." },
+            { id: "tool-pdn-impedance", name: "PDN Target Impedance", file: "pdn-impedance.html", desc: "Power Delivery Network decoupling estimator." },
+            { id: "tool-skin-effect", name: "Skin Effect & AC Resistance", file: "skin-effect.html", desc: "High frequency resistance calculator." },
+            { id: "tool-insertion-loss", name: "S-Parameter / Insertion Loss", file: "insertion-loss.html", desc: "Insertion loss estimator for FR4/Rogers." }
         ]
     },
     {
@@ -70,10 +76,7 @@ const TOOL_REGISTRY = [
             { id: "tool-cable-thermal", name: "Dynamic Cable Thermal", file: "cable-thermal.html", desc: "Multi-segment series derating and NEC limits." },
             { id: "tool-can-bus", name: "CAN Bus Harness", file: "can-bus.html", desc: "ISO 11898 compliance and propagation delays." },
             { id: "tool-fishbone", name: "Ishikawa Fishbone Diagram", file: "fishbone.html", desc: "Root cause analysis with dynamic SVGs." },
-            { id: "tool-plot-extractor", name: "Plot Data Extractor", file: "plot-extractor.html", desc: "Extract data points from images of graphs." },
-            { id: "tool-2d-drafting", name: "2D Drafting Board", file: "2d-drafting.html", desc: "Parametric vector parts with geometric constraints." },
-            { id: "tool-beam-solver", name: "Structural Beam Solver", file: "beam-solver.html", desc: "1D Finite Element Analysis (FEA) solver." },
-            { id: "tool-heatsink-sim", name: "Heatsink Simulator", file: "heatsink-sim.html", desc: "3D voxel heat diffusion solver." }
+            { id: "tool-plot-extractor", name: "Plot Data Extractor", file: "plot-extractor.html", desc: "Extract data points from images of graphs." }
         ]
     }
 ];
@@ -171,7 +174,7 @@ async function loadTool(toolId, fileName, btnElement) {
             document.dispatchEvent(new CustomEvent('toolLoaded', { detail: { toolId } }));
             
             // Legacy fallbacks for tools that don't use the event listener
-            if(toolId === 'tool-pv-yield-simulator' && typeof initSolarSim === 'function') initSolarSim();
+            if(toolId === 'tool-pv-yield-simulator' && typeof initSolarWidget === 'function') initSolarWidget();
             if(toolId === 'tool-resistor-divider' && typeof setupDividerMode === 'function') setupDividerMode();
             if(toolId === 'tool-loop-compensator-p-z' && typeof runCompensator === 'function') runCompensator();
             if(toolId === 'tool-filter-designer' && typeof setupFilterMode === 'function') setupFilterMode();

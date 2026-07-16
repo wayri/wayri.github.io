@@ -1,0 +1,129 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Insertion Loss Estimator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-chart-line"></i><h3 class="font-bold font-mono">Insertion Loss Estimator</h3></div>
+        <span class="font-mono text-[10px] opacity-70">S21 Attenuation Approximation</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">TRACE & MATERIAL</h4>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Target Impedance (Zo)</span><span class="text-themeMuted">Ω</span></div>
+                    <input type="number" id="il-zo" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="50" step="1" oninput="updateIL()">
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Trace Width (W)</span><span class="text-themeMuted">mils</span></div>
+                    <input type="number" id="il-w" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="5" step="0.5" oninput="updateIL()">
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Trace Length (L)</span><span class="text-themeMuted">inches</span></div>
+                    <input type="number" id="il-l" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="10" step="1" oninput="updateIL()">
+                </div>
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Diel. Const (Er)</span></div>
+                        <input type="number" id="il-er" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="4.3" step="0.1" oninput="updateIL()">
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Loss Tangent (Df)</span></div>
+                        <input type="number" id="il-df" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="0.02" step="0.001" oninput="updateIL()">
+                    </div>
+                </div>
+                
+                <h4 class="text-xs font-bold text-themeMuted mt-6 mb-2 border-b border-themeBorder/20 pb-1">OPERATING FREQUENCY</h4>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Frequency (f)</span><span class="text-themeMuted">GHz</span></div>
+                    <input type="number" id="il-f" class="w-full bg-themeBg border border-themeAccent p-2 text-themeText font-bold text-lg" value="5" step="0.5" oninput="updateIL()">
+                </div>
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner relative">
+                
+                <div class="absolute top-2 right-2 text-themeMuted/20 text-6xl"><i class="fa-solid fa-chart-area"></i></div>
+                
+                <div class="text-[10px] text-themeMuted uppercase tracking-wider border-b border-themeBorder/20 pb-1 mb-2">Total Insertion Loss (S21)</div>
+                <div class="text-5xl font-bold text-themeText flex items-end gap-2 drop-shadow-md z-10">
+                    <span id="il-total">-0.00</span> <span class="text-lg text-themeAccent mb-1">dB</span>
+                </div>
+                
+                <div class="mt-4 space-y-2 z-10">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-themeMuted">Dielectric Loss ($\alpha_d$)</span>
+                        <span id="il-diel" class="font-bold">-0.00 dB</span>
+                    </div>
+                    <!-- Visual Bar -->
+                    <div class="w-full h-1.5 bg-themeBg overflow-hidden rounded-full"><div id="il-diel-bar" class="h-full bg-blue-500" style="width:50%"></div></div>
+                    
+                    <div class="flex justify-between items-center text-xs mt-2">
+                        <span class="text-themeMuted">Conductor Loss ($\alpha_c$)</span>
+                        <span id="il-cond" class="font-bold">-0.00 dB</span>
+                    </div>
+                    <!-- Visual Bar -->
+                    <div class="w-full h-1.5 bg-themeBg overflow-hidden rounded-full"><div id="il-cond-bar" class="h-full bg-red-500" style="width:50%"></div></div>
+                </div>
+
+                <div class="mt-auto pt-4 text-[10px] text-themeMuted bg-themeBg p-2 border border-themeBorder/50">
+                    Heuristic Rule of Thumb:<br>
+                    Loss is generally acceptable if total attenuation > -3 dB at the Nyquist frequency of the signal.
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('il-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="il-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Dielectric Loss (dB/in):</strong></p>
+            <p>$$ \alpha_d \approx 2.3 \times f_{GHz} \times \sqrt{E_r} \times D_f $$</p>
+            <p><strong>Conductor Loss (dB/in) for 1/2 oz copper:</strong></p>
+            <p>$$ \alpha_c \approx \frac{0.1 \times \sqrt{f_{GHz}}}{W_{mils}} $$</p>
+            <p>Total Loss = $(\alpha_d + \alpha_c) \times L$. Note: These are simplified first-order heuristics commonly used in high-speed digital design for FR4-like materials.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateIL() {
+        const W = parseFloat(document.getElementById('il-w').value);
+        const L = parseFloat(document.getElementById('il-l').value);
+        const Er = parseFloat(document.getElementById('il-er').value);
+        const Df = parseFloat(document.getElementById('il-df').value);
+        const f_ghz = parseFloat(document.getElementById('il-f').value);
+
+        // Dielectric loss approx (dB/in)
+        const alpha_d = 2.3 * f_ghz * Math.sqrt(Er) * Df;
+        
+        // Conductor loss approx (dB/in) - highly dependent on roughness, width, copper weight
+        // Using a rough rule of thumb for standard widths
+        let alpha_c = 0;
+        if (W > 0) {
+            alpha_c = (0.1 * Math.sqrt(f_ghz)) / (W / 5); // Normalized to 5 mil trace
+        }
+
+        const diel_loss = alpha_d * L;
+        const cond_loss = alpha_c * L;
+        const total_loss = diel_loss + cond_loss;
+
+        document.getElementById('il-diel').innerText = "-" + diel_loss.toFixed(2) + " dB";
+        document.getElementById('il-cond').innerText = "-" + cond_loss.toFixed(2) + " dB";
+        document.getElementById('il-total').innerText = "-" + total_loss.toFixed(2);
+
+        // Visual bars
+        let maxL = Math.max(diel_loss, cond_loss, 0.1);
+        document.getElementById('il-diel-bar').style.width = (diel_loss / (total_loss+0.01) * 100) + "%";
+        document.getElementById('il-cond-bar').style.width = (cond_loss / (total_loss+0.01) * 100) + "%";
+    }
+    
+    // Initial calculation
+    setTimeout(updateIL, 100);
+</script>

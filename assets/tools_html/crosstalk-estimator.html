@@ -1,0 +1,141 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Crosstalk Coefficient Estimator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-wave-square"></i><h3 class="font-bold font-mono">Crosstalk Estimator</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Forward & Backward (NEXT/FEXT)</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer p-4 border border-themeBorder/30 shadow-inner">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">COUPLED LINES PARAMETERS</h4>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Trace Height above GND (H)</span><span class="text-themeMuted">mils</span></div>
+                    <input type="number" id="xtalk-h" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="5" step="0.5" oninput="updateXtalk()">
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Trace Separation (D)</span><span class="text-themeMuted">mils</span></div>
+                    <input type="number" id="xtalk-d" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="0.5" oninput="updateXtalk()">
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Rise Time (Tr)</span><span class="text-themeMuted">ns</span></div>
+                    <input type="number" id="xtalk-tr" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1.0" step="0.1" oninput="updateXtalk()">
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Coupled Length (L)</span><span class="text-themeMuted">inches</span></div>
+                    <input type="number" id="xtalk-l" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="2.0" step="0.1" oninput="updateXtalk()">
+                </div>
+                
+                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-themeBorder/20">
+                    <span class="text-xs text-themeMuted">Routing Type:</span>
+                    <label class="flex items-center gap-1 text-xs cursor-pointer"><input type="radio" name="xtalk-type" value="microstrip" checked onchange="updateXtalk()" class="accent-themeAccent"> Microstrip</label>
+                    <label class="flex items-center gap-1 text-xs cursor-pointer"><input type="radio" name="xtalk-type" value="stripline" onchange="updateXtalk()" class="accent-themeAccent"> Stripline</label>
+                </div>
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <!-- Visual Indicator -->
+                <div class="w-full h-32 bg-themeBg border border-themeBorder/50 flex flex-col items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-themeAccent to-transparent"></div>
+                    <div class="flex gap-8 items-center z-10 relative">
+                        <div class="flex flex-col items-center group cursor-help" title="Aggressor Line">
+                            <i class="fa-solid fa-arrow-right text-themeAccent animate-pulse"></i>
+                            <div class="w-24 h-2 bg-themeAccent shadow-[0_0_8px_rgba(212,175,55,0.8)] rounded-sm my-1"></div>
+                            <span class="text-[10px] font-bold text-themeAccent">Aggressor</span>
+                        </div>
+                        
+                        <div class="absolute left-1/2 -translate-x-1/2 flex flex-col items-center text-themeMuted">
+                            <span class="text-[8px] mb-1">Coupling (D)</span>
+                            <i class="fa-solid fa-arrows-left-right text-xs"></i>
+                        </div>
+
+                        <div class="flex flex-col items-center group cursor-help" title="Victim Line">
+                            <div class="flex w-full justify-between px-2 text-[8px] text-red-500 opacity-80">
+                                <span title="Near End Crosstalk (NEXT)">NEXT</span>
+                                <span title="Far End Crosstalk (FEXT)">FEXT</span>
+                            </div>
+                            <div class="w-24 h-2 bg-themeText/50 rounded-sm my-1"></div>
+                            <span class="text-[10px] font-bold text-themeMuted group-hover:text-themeText transition-colors">Victim</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="grid grid-cols-2 gap-4 flex-grow">
+                    <div class="bg-themeBorder/10 border border-themeBorder p-3 flex flex-col justify-between">
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider">Backward Crosstalk (NEXT)</span>
+                        <div class="text-2xl font-bold text-themeText mt-2" id="xtalk-next-val">0.0 %</div>
+                        <div class="w-full bg-themeBg h-1 mt-2 overflow-hidden"><div id="xtalk-next-bar" class="h-full bg-red-500" style="width: 0%"></div></div>
+                    </div>
+                    <div class="bg-themeBorder/10 border border-themeBorder p-3 flex flex-col justify-between relative overflow-hidden" id="fext-container">
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider">Forward Crosstalk (FEXT)</span>
+                        <div class="text-2xl font-bold text-themeText mt-2" id="xtalk-fext-val">0.0 %</div>
+                        <div class="w-full bg-themeBg h-1 mt-2 overflow-hidden"><div id="xtalk-fext-bar" class="h-full bg-orange-500" style="width: 0%"></div></div>
+                        <div id="fext-zero-overlay" class="absolute inset-0 bg-themeContainer/90 flex flex-col items-center justify-center hidden backdrop-blur-[1px]">
+                            <i class="fa-solid fa-check-circle text-green-500 mb-1"></i>
+                            <span class="text-[10px] text-themeMuted text-center px-2">FEXT is ~0 for homogenous stripline</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('xtalk-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="xtalk-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Crosstalk Coefficient (Kb):</strong></p>
+            <p>$$ K_b \approx \frac{1}{1 + \left(\frac{D}{H}\right)^2} $$</p>
+            <p>This is a widely used rule-of-thumb approximation for NEXT in microstrip logic. Stripline FEXT is effectively zero due to homogenous dielectric. Actual voltages depend on driver swing and coupled length relative to rise time.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateXtalk() {
+        const H = parseFloat(document.getElementById('xtalk-h').value);
+        const D = parseFloat(document.getElementById('xtalk-d').value);
+        const Tr = parseFloat(document.getElementById('xtalk-tr').value);
+        const L = parseFloat(document.getElementById('xtalk-l').value);
+        const type = document.querySelector('input[name="xtalk-type"]:checked').value;
+
+        // Kb approximation: 1 / (1 + (D/H)^2)
+        let Kb = 1 / (1 + Math.pow(D/H, 2));
+        
+        let NEXT_pct = Kb * 100;
+        let FEXT_pct = 0;
+
+        const fextContainer = document.getElementById('fext-zero-overlay');
+
+        if (type === 'microstrip') {
+            // Rough approximation for FEXT in microstrip (inhomogeneous dielectric)
+            // Proportional to coupled length and inversely to rise time
+            // Very rough heuristic coefficient for display purposes
+            FEXT_pct = (NEXT_pct * 0.1) * (L / Math.max(0.1, Tr)); 
+            fextContainer.classList.add('hidden');
+        } else {
+            // Stripline has homogenous dielectric, FEXT is effectively 0
+            FEXT_pct = 0;
+            fextContainer.classList.remove('hidden');
+        }
+
+        document.getElementById('xtalk-next-val').innerText = isNaN(NEXT_pct) ? "-" : NEXT_pct.toFixed(2) + " %";
+        document.getElementById('xtalk-fext-val').innerText = isNaN(FEXT_pct) ? "-" : FEXT_pct.toFixed(2) + " %";
+
+        // Visual bars (cap at 100% for display)
+        document.getElementById('xtalk-next-bar').style.width = Math.min(100, NEXT_pct * 2) + "%"; // Scaled for visibility
+        document.getElementById('xtalk-fext-bar').style.width = Math.min(100, FEXT_pct * 5) + "%";
+    }
+    
+    // Initial calculation
+    setTimeout(updateXtalk, 100);
+</script>

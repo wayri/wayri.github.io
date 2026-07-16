@@ -1,0 +1,161 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Differential Pair Impedance Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-layer-group"></i><h3 class="font-bold font-mono">Diff Pair Impedance</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Microstrip & Stripline</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-grow">
+            <!-- Diagram Section -->
+            <div class="col-span-1 border-r border-themeBorder/30 pr-4 flex flex-col items-center">
+                <div class="mb-4 w-full flex justify-between items-center">
+                    <span class="text-xs font-bold text-themeMuted">ROUTING LAYER</span>
+                    <select id="diff-layer-type" class="bg-themeContainer border border-themeBorder text-themeText text-xs p-1 outline-none" onchange="updateDiffImpedance()">
+                        <option value="microstrip">Edge-Coupled Microstrip</option>
+                        <option value="stripline">Edge-Coupled Stripline</option>
+                    </select>
+                </div>
+                <!-- CSS Based Diagram -->
+                <div class="w-full h-40 bg-themeBorder/10 relative rounded border border-themeBorder flex items-center justify-center overflow-hidden">
+                    <!-- Ground plane -->
+                    <div class="absolute bottom-2 left-2 right-2 h-2 bg-themeMuted/50 border-t border-themeMuted flex items-center justify-center text-[8px] text-themeBg">GND (Plane)</div>
+                    
+                    <!-- Substrate -->
+                    <div id="diff-substrate" class="absolute bottom-4 left-2 right-2 h-20 bg-themeAccent/10 border-l border-r border-themeAccent/30 flex items-center justify-center flex-col text-[10px] text-themeAccent/80">
+                        <span>Er</span>
+                        <div class="h-full border-l border-dashed border-themeAccent/50 absolute left-4"></div>
+                        <span class="absolute left-1 top-1/2 -translate-y-1/2 text-[8px]">H</span>
+                    </div>
+
+                    <!-- Top Ground (for stripline) -->
+                    <div id="diff-top-gnd" class="hidden absolute top-2 left-2 right-2 h-2 bg-themeMuted/50 border-b border-themeMuted items-center justify-center text-[8px] text-themeBg">Top GND</div>
+
+                    <!-- Traces -->
+                    <div class="absolute bottom-24 flex gap-4">
+                        <div class="w-12 h-3 bg-themeAccent shadow-[0_0_5px_rgba(212,175,55,0.5)] relative">
+                            <span class="absolute -top-4 left-1/2 -translate-x-1/2 text-[8px] text-themeText whitespace-nowrap">Trace 1 (W)</span>
+                        </div>
+                        <div class="w-12 h-3 bg-themeAccent shadow-[0_0_5px_rgba(212,175,55,0.5)] relative">
+                            <span class="absolute -top-4 left-1/2 -translate-x-1/2 text-[8px] text-themeText whitespace-nowrap">Trace 2 (W)</span>
+                            <span class="absolute top-1/2 -left-3 -translate-y-1/2 text-[8px] text-themeText">S</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parameters Section -->
+            <div class="col-span-1 border-r border-themeBorder/30 pr-4 space-y-4">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">GEOMETRY & MATERIALS</h4>
+                
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Trace Width (W)</span><span class="text-themeMuted">mils</span></div>
+                        <input type="number" id="diff-w" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="5" step="0.1" oninput="updateDiffImpedance()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Trace Separation (S)</span><span class="text-themeMuted">mils</span></div>
+                        <input type="number" id="diff-s" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="8" step="0.1" oninput="updateDiffImpedance()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Trace Thickness (T)</span><span class="text-themeMuted">oz / mils</span></div>
+                        <input type="number" id="diff-t" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="1.4" step="0.1" title="1 oz copper is ~1.4 mils" oninput="updateDiffImpedance()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span id="diff-h-label">Dielectric Height (H)</span><span class="text-themeMuted">mils</span></div>
+                        <input type="number" id="diff-h" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="4.5" step="0.1" oninput="updateDiffImpedance()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Dielectric Constant (Er)</span><span class="text-themeMuted">-</span></div>
+                        <input type="number" id="diff-er" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="4.3" step="0.1" oninput="updateDiffImpedance()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="col-span-1 flex flex-col justify-center gap-6">
+                <div class="bg-themeBg border-l-4 border-themeAccent p-4 relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <i class="fa-solid fa-wave-square text-6xl"></i>
+                    </div>
+                    <div class="text-[10px] text-themeMuted mb-1 uppercase tracking-widest">Differential Impedance (Zdiff)</div>
+                    <div class="text-4xl font-bold text-themeText drop-shadow-[0_0_8px_rgba(255,255,255,0.1)] flex items-end gap-2">
+                        <span id="diff-zdiff-val">100.0</span> <span class="text-sm text-themeAccent mb-1">Ω</span>
+                    </div>
+                </div>
+
+                <div class="bg-themeBorder/10 border border-themeBorder p-4 relative">
+                    <div class="text-[10px] text-themeMuted mb-1 uppercase tracking-widest">Single-Ended Impedance (Zo)</div>
+                    <div class="text-2xl font-bold text-themeText flex items-end gap-2">
+                        <span id="diff-zo-val">55.0</span> <span class="text-xs text-themeAccent mb-1">Ω</span>
+                    </div>
+                </div>
+                
+                <div class="text-[10px] text-themeMuted mt-4 space-y-1 bg-themeContainer p-2 border border-themeBorder/20 border-dashed">
+                    <div class="flex justify-between"><span>Propagation Delay:</span><span id="diff-tpd-val">140 ps/in</span></div>
+                    <div class="flex justify-between"><span>Effective Er (Eeff):</span><span id="diff-eeff-val">3.2</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('pcbimpedancediff-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="pcbimpedancediff-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Microstrip Impedance (IPC-2141):</strong></p>
+            <p>$$ Z_o = \frac{87}{\sqrt{E_r + 1.41}} \ln\left(\frac{5.98 \times H}{0.8 \times W + T}\right) $$</p>
+            <p>$$ Z_{diff} = 2 \times Z_o \times \left(1 - 0.48 \times \exp\left(-0.96 \times \frac{S}{H}\right)\right) $$</p>
+            <p>Note: These equations are first-order approximations. Field solvers provide superior accuracy for actual manufacturing.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateDiffImpedance() {
+        const type = document.getElementById('diff-layer-type').value;
+        const W = parseFloat(document.getElementById('diff-w').value);
+        const S = parseFloat(document.getElementById('diff-s').value);
+        const T = parseFloat(document.getElementById('diff-t').value);
+        const H = parseFloat(document.getElementById('diff-h').value);
+        const Er = parseFloat(document.getElementById('diff-er').value);
+
+        const topGnd = document.getElementById('diff-top-gnd');
+        if(type === 'stripline') {
+            topGnd.classList.remove('hidden');
+            document.getElementById('diff-h-label').innerText = 'Dielectric Spacing (B)';
+        } else {
+            topGnd.classList.add('hidden');
+            document.getElementById('diff-h-label').innerText = 'Dielectric Height (H)';
+        }
+
+        let Zo, Zdiff, Eeff, Tpd;
+
+        if (type === 'microstrip') {
+            // IPC-2141 approx
+            Eeff = (Er + 1.41) / 2; // rough approx for delay
+            Zo = (87 / Math.sqrt(Er + 1.41)) * Math.log((5.98 * H) / (0.8 * W + T));
+            if(Zo < 0) Zo = 0;
+            Zdiff = 2 * Zo * (1 - 0.48 * Math.exp(-0.96 * (S / H)));
+            Tpd = 84.72 * Math.sqrt(0.475 * Er + 0.67);
+        } else {
+            // Stripline approx
+            Eeff = Er;
+            const b = H; // Total spacing between planes
+            Zo = (60 / Math.sqrt(Er)) * Math.log((1.9 * b) / (0.8 * W + T));
+            if(Zo < 0) Zo = 0;
+            Zdiff = 2 * Zo * (1 - 0.374 * Math.exp(-2.9 * (S / b)));
+            Tpd = 84.72 * Math.sqrt(Er);
+        }
+
+        document.getElementById('diff-zo-val').innerText = isNaN(Zo) || !isFinite(Zo) ? "-" : Zo.toFixed(1);
+        document.getElementById('diff-zdiff-val').innerText = isNaN(Zdiff) || !isFinite(Zdiff) ? "-" : Zdiff.toFixed(1);
+        document.getElementById('diff-eeff-val').innerText = isNaN(Eeff) || !isFinite(Eeff) ? "-" : Eeff.toFixed(2);
+        document.getElementById('diff-tpd-val').innerText = isNaN(Tpd) || !isFinite(Tpd) ? "-" : Tpd.toFixed(0) + " ps/in";
+    }
+    
+    // Initial calculation
+    setTimeout(updateDiffImpedance, 100);
+</script>

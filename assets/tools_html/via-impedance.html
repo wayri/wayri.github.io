@@ -1,0 +1,149 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Via Parasitics Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-circle-dot"></i><h3 class="font-bold font-mono">Via Impedance & Parasitics</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Capacitance & Inductance</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        
+        <div class="flex flex-col md:flex-row gap-6 mb-6">
+            <!-- Left: Visual via representation -->
+            <div class="w-full md:w-1/3 flex flex-col items-center justify-center p-4 border border-themeBorder bg-themeContainer/50 rounded-lg shadow-inner relative overflow-hidden">
+                <div class="text-xs text-themeMuted absolute top-2 left-2 uppercase tracking-widest font-bold">Cross Section</div>
+                
+                <!-- SVG Diagram -->
+                <svg width="100%" height="200" viewBox="0 0 200 200" class="mt-4">
+                    <!-- Top Pad -->
+                    <rect x="50" y="20" width="100" height="10" fill="var(--accent-color)" />
+                    <!-- Substrate Background -->
+                    <rect x="20" y="30" width="160" height="140" fill="var(--bg-color)" opacity="0.5" stroke="var(--border-color)" stroke-dasharray="4" />
+                    <!-- Anti-pad gap in plane -->
+                    <rect x="20" y="90" width="160" height="20" fill="var(--text-color)" opacity="0.2" />
+                    <rect x="60" y="90" width="80" height="20" fill="var(--bg-color)" /> <!-- Anti pad cutout -->
+                    
+                    <!-- Barrel -->
+                    <rect x="85" y="30" width="30" height="140" fill="var(--accent-color)" opacity="0.8" />
+                    <rect x="90" y="30" width="20" height="140" fill="var(--bg-color)" opacity="0.9" /> <!-- Hollow center -->
+                    
+                    <!-- Bottom Pad -->
+                    <rect x="50" y="170" width="100" height="10" fill="var(--accent-color)" />
+                    
+                    <!-- Labels -->
+                    <text x="35" y="27" fill="var(--text-color)" font-size="10">D_pad</text>
+                    <text x="35" y="102" fill="var(--text-color)" font-size="10">D_anti</text>
+                    <text x="120" y="110" fill="var(--text-color)" font-size="10">D_hole</text>
+                    <text x="170" y="100" fill="var(--accent-color)" font-size="10">T</text>
+                </svg>
+            </div>
+
+            <!-- Right: Parameters -->
+            <div class="w-full md:w-2/3 grid grid-cols-2 gap-4 bg-themeContainer p-4 border border-themeBorder/30">
+                <div class="col-span-2 text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">VIA DIMENSIONS</div>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Board Thickness (T)</span><span class="text-themeMuted">mils</span></div>
+                    <input type="number" id="via-t" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="62" step="1" oninput="updateViaCalc()">
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Hole Diameter (D_hole)</span><span class="text-themeMuted">mils</span></div>
+                    <input type="number" id="via-d-hole" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="0.5" oninput="updateViaCalc()">
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Pad Diameter (D_pad)</span><span class="text-themeMuted">mils</span></div>
+                    <input type="number" id="via-d-pad" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="20" step="1" oninput="updateViaCalc()">
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Anti-Pad Dia (D_anti)</span><span class="text-themeMuted">mils</span></div>
+                    <input type="number" id="via-d-anti" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="30" step="1" oninput="updateViaCalc()">
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Dielectric Const (Er)</span><span class="text-themeMuted">-</span></div>
+                    <input type="number" id="via-er" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="4.3" step="0.1" oninput="updateViaCalc()">
+                </div>
+                <div class="flex items-end">
+                    <button class="w-full bg-themeBorder text-themeBg hover:bg-themeAccent font-bold py-1.5 transition-colors" onclick="updateViaCalc()">Calculate</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div class="bg-themeBg border border-themeBorder p-4 flex flex-col justify-center items-center text-center hover:border-themeAccent transition-colors">
+                <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2">Via Capacitance</span>
+                <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
+                    <span id="via-c-val">0.00</span> <span class="text-sm text-themeAccent">pF</span>
+                </div>
+            </div>
+            <div class="bg-themeBg border border-themeBorder p-4 flex flex-col justify-center items-center text-center hover:border-themeAccent transition-colors">
+                <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2">Via Inductance</span>
+                <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
+                    <span id="via-l-val">0.00</span> <span class="text-sm text-themeAccent">nH</span>
+                </div>
+            </div>
+            <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_2px_10px_rgba(0,0,0,0.2)]">
+                <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2">Characteristic Impedance</span>
+                <div class="text-3xl font-bold text-themeAccent flex items-baseline gap-1">
+                    <span id="via-z-val">0.00</span> <span class="text-sm">Ω</span>
+                </div>
+                <span class="text-[9px] text-themeMuted mt-2">Step Response (Td = <span id="via-td-val">0</span> ps)</span>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('via-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="via-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Via Capacitance (pF):</strong></p>
+            <p>$$ C = \frac{1.41 \times E_r \times T \times D_{pad}}{D_{anti} - D_{pad}} $$</p>
+            <p><strong>Via Inductance (nH):</strong></p>
+            <p>$$ L = 5.08 \times T \times \left[\ln\left(\frac{4 \times T}{D_{hole}}\right) + 1\right] $$</p>
+            <p>Note: T is in inches for these specific empirical constants. Results are approximations for typical through-hole vias.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateViaCalc() {
+        const T_mils = parseFloat(document.getElementById('via-t').value);
+        const D_hole_mils = parseFloat(document.getElementById('via-d-hole').value);
+        const D_pad_mils = parseFloat(document.getElementById('via-d-pad').value);
+        const D_anti_mils = parseFloat(document.getElementById('via-d-anti').value);
+        const Er = parseFloat(document.getElementById('via-er').value);
+
+        // Convert mils to inches for the standard empirical formulas
+        const T = T_mils / 1000;
+        const D_hole = D_hole_mils / 1000;
+        const D_pad = D_pad_mils / 1000;
+        const D_anti = D_anti_mils / 1000;
+
+        let C_pf = 0;
+        if (D_anti > D_pad) {
+            C_pf = (1.41 * Er * T * D_pad) / (D_anti - D_pad);
+        }
+
+        let L_nh = 0;
+        if (D_hole > 0) {
+            L_nh = 5.08 * T * (Math.log((4 * T) / D_hole) + 1);
+        }
+
+        let Z = 0;
+        let Td_ps = 0;
+        if (C_pf > 0 && L_nh > 0) {
+            Z = Math.sqrt((L_nh * 1000) / C_pf); // L in nH, C in pF -> (L*1e-9)/(C*1e-12) = (L/C)*1000
+            Td_ps = Math.sqrt((L_nh * 1000) * C_pf); // Delay in ps
+        }
+
+        document.getElementById('via-c-val').innerText = isNaN(C_pf) || !isFinite(C_pf) ? "-" : C_pf.toFixed(3);
+        document.getElementById('via-l-val').innerText = isNaN(L_nh) || !isFinite(L_nh) ? "-" : L_nh.toFixed(3);
+        document.getElementById('via-z-val').innerText = isNaN(Z) || !isFinite(Z) ? "-" : Z.toFixed(1);
+        document.getElementById('via-td-val').innerText = isNaN(Td_ps) || !isFinite(Td_ps) ? "-" : Td_ps.toFixed(1);
+    }
+    
+    // Initial calculation
+    setTimeout(updateViaCalc, 100);
+</script>
