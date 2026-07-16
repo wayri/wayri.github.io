@@ -1,0 +1,301 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Operational Amplifier Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-play"></i><h3 class="font-bold font-mono">OpAmp Calculator</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Standard Configurations</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col overflow-y-auto">
+                <div class="flex justify-between items-center mb-2 border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeMuted">CONFIGURATION</h4>
+                    <select id="op-type" class="bg-themeBg border border-themeBorder text-themeText text-xs p-1 outline-none" onchange="updateOpAmp()">
+                        <option value="noninv">Non-Inverting</option>
+                        <option value="inv">Inverting</option>
+                        <option value="diff">Differential</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Input Voltage ($V_{in}$ or $V_1$)</span><span class="text-themeMuted">V</span></div>
+                    <input type="number" id="op-vin1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="1" step="0.1" oninput="updateOpAmp()">
+                </div>
+                
+                <div id="op-vin2-container" class="hidden">
+                    <div class="flex justify-between text-xs mb-1"><span>Input Voltage 2 ($V_2$)</span><span class="text-themeMuted">V</span></div>
+                    <input type="number" id="op-vin2" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-green-400" value="-1" step="0.1" oninput="updateOpAmp()">
+                </div>
+
+                <div class="pt-4 border-t border-themeBorder/20 mt-4">
+                    <div class="flex justify-between text-xs mb-1"><span>Resistor 1 ($R_1$)</span><span class="text-themeMuted">kΩ</span></div>
+                    <input type="number" id="op-r1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateOpAmp()">
+                </div>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Feedback Resistor ($R_f$ or $R_2$)</span><span class="text-themeMuted">kΩ</span></div>
+                    <input type="number" id="op-r2" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="100" step="1" oninput="updateOpAmp()">
+                </div>
+
+                <div id="op-r34-container" class="hidden flex-col gap-4">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Resistor 3 ($R_3$)</span><span class="text-themeMuted">kΩ</span></div>
+                        <input type="number" id="op-r3" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateOpAmp()">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span>Resistor 4 ($R_4$)</span><span class="text-themeMuted">kΩ</span></div>
+                        <input type="number" id="op-r4" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="100" step="1" oninput="updateOpAmp()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <!-- Circuit Diagram (ASCII/HTML mix for simplicity) -->
+                <div class="w-full h-40 bg-themeBg border border-themeBorder/50 flex items-center justify-center relative overflow-hidden" id="op-diagram">
+                    <!-- SVG injected here -->
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 flex-grow">
+                    <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Voltage Gain ($A_v$)</span>
+                        <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="op-gain-val">0.0</span> <span class="text-sm text-themeMuted">V/V</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-themeBg border border-themeAccent/50 p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(212,175,55,0.1)]">
+                        <span class="text-[10px] text-themeAccent uppercase tracking-wider mb-2 font-bold">Output Voltage ($V_{out}$)</span>
+                        <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="op-vout-val">0.0</span> <span class="text-sm text-themeAccent">V</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-themeContainer border border-themeBorder p-2 text-center text-[10px] text-themeMuted">
+                    Assuming ideal op-amp characteristics and infinite supply rails.
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('op-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="op-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Non-Inverting Amplifier:</strong></p>
+            <p>$V_{out} = V_{in} \cdot \left(1 + \frac{R_f}{R_1}\right)$</p>
+            <p><strong>Inverting Amplifier:</strong></p>
+            <p>$V_{out} = -V_{in} \cdot \left(\frac{R_f}{R_1}\right)$</p>
+            <p><strong>Differential Amplifier:</strong></p>
+            <p>$V_{out} = V_2 \cdot \left(\frac{R_4}{R_3 + R_4}\right) \cdot \left(\frac{R_1 + R_2}{R_1}\right) - V_1 \cdot \left(\frac{R_2}{R_1}\right)$</p>
+            <p>If $R_1=R_3$ and $R_2=R_4$, then $V_{out} = \frac{R_2}{R_1}(V_2 - V_1)$</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getResSvg() {
+        return `<polyline points="0,0 2,-5 6,5 10,-5 14,5 18,-5 20,0" fill="none" stroke="currentColor" stroke-width="1.5"/>`;
+    }
+
+    function drawNonInv() {
+        return `
+            <svg width="150" height="100" viewBox="0 0 150 100" class="text-themeText">
+                <!-- OpAmp -->
+                <polygon points="60,20 60,80 110,50" fill="var(--container-color)" stroke="var(--border-color)" stroke-width="2"/>
+                <text x="65" y="40" font-size="12" fill="var(--text-color)">-</text>
+                <text x="65" y="70" font-size="12" fill="var(--text-color)">+</text>
+                
+                <!-- Vin -->
+                <line x1="20" y1="65" x2="60" y2="65" stroke="var(--text-color)" stroke-width="2"/>
+                <circle cx="20" cy="65" r="3" fill="var(--accent-color)"/>
+                <text x="5" y="68" font-size="10" fill="var(--accent-color)">Vin</text>
+
+                <!-- Feedback network -->
+                <line x1="60" y1="35" x2="40" y2="35" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="40" y1="35" x2="40" y2="10" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="40" y1="10" x2="70" y2="10" stroke="var(--text-color)" stroke-width="2"/>
+                
+                <g transform="translate(70, 10)">${getResSvg()}</g>
+                <text x="80" y="5" font-size="8" fill="var(--text-color)">Rf (R2)</text>
+                
+                <line x1="90" y1="10" x2="130" y2="10" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="130" y1="10" x2="130" y2="50" stroke="var(--text-color)" stroke-width="2"/>
+                
+                <line x1="40" y1="35" x2="40" y2="50" stroke="var(--text-color)" stroke-width="2"/>
+                <g transform="translate(30, 50) rotate(90 10 0)">${getResSvg()}</g>
+                <text x="25" y="55" font-size="8" fill="var(--text-color)">R1</text>
+                
+                <line x1="40" y1="70" x2="40" y2="85" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="30" y1="85" x2="50" y2="85" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="35" y1="88" x2="45" y2="88" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="38" y1="91" x2="42" y2="91" stroke="var(--text-color)" stroke-width="2"/>
+
+                <!-- Vout -->
+                <line x1="110" y1="50" x2="140" y2="50" stroke="var(--text-color)" stroke-width="2"/>
+                <circle cx="140" cy="50" r="3" fill="var(--text-color)"/>
+                <text x="145" y="53" font-size="10" fill="var(--text-color)">Vout</text>
+            </svg>
+        `;
+    }
+
+    function drawInv() {
+        return `
+            <svg width="150" height="100" viewBox="0 0 150 100" class="text-themeText">
+                <!-- OpAmp -->
+                <polygon points="60,20 60,80 110,50" fill="var(--container-color)" stroke="var(--border-color)" stroke-width="2"/>
+                <text x="65" y="40" font-size="12" fill="var(--text-color)">-</text>
+                <text x="65" y="70" font-size="12" fill="var(--text-color)">+</text>
+                
+                <!-- Vin -->
+                <line x1="10" y1="35" x2="20" y2="35" stroke="var(--text-color)" stroke-width="2"/>
+                <circle cx="10" cy="35" r="3" fill="var(--accent-color)"/>
+                <text x="0" y="32" font-size="10" fill="var(--accent-color)">Vin</text>
+                
+                <g transform="translate(20, 35)">${getResSvg()}</g>
+                <text x="30" y="30" font-size="8" fill="var(--text-color)">R1</text>
+                <line x1="40" y1="35" x2="60" y2="35" stroke="var(--text-color)" stroke-width="2"/>
+
+                <!-- Feedback network -->
+                <line x1="45" y1="35" x2="45" y2="10" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="45" y1="10" x2="70" y2="10" stroke="var(--text-color)" stroke-width="2"/>
+                
+                <g transform="translate(70, 10)">${getResSvg()}</g>
+                <text x="80" y="5" font-size="8" fill="var(--text-color)">Rf (R2)</text>
+                
+                <line x1="90" y1="10" x2="130" y2="10" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="130" y1="10" x2="130" y2="50" stroke="var(--text-color)" stroke-width="2"/>
+
+                <!-- GND -->
+                <line x1="60" y1="65" x2="40" y2="65" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="40" y1="65" x2="40" y2="85" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="30" y1="85" x2="50" y2="85" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="35" y1="88" x2="45" y2="88" stroke="var(--text-color)" stroke-width="2"/>
+
+                <!-- Vout -->
+                <line x1="110" y1="50" x2="140" y2="50" stroke="var(--text-color)" stroke-width="2"/>
+                <circle cx="140" cy="50" r="3" fill="var(--text-color)"/>
+                <text x="145" y="53" font-size="10" fill="var(--text-color)">Vout</text>
+            </svg>
+        `;
+    }
+
+    function drawDiff() {
+        return `
+            <svg width="150" height="100" viewBox="0 0 150 100" class="text-themeText">
+                <!-- OpAmp -->
+                <polygon points="60,20 60,80 110,50" fill="var(--container-color)" stroke="var(--border-color)" stroke-width="2"/>
+                <text x="65" y="40" font-size="12" fill="var(--text-color)">-</text>
+                <text x="65" y="70" font-size="12" fill="var(--text-color)">+</text>
+                
+                <!-- Vin 1 -->
+                <line x1="10" y1="35" x2="20" y2="35" stroke="var(--text-color)" stroke-width="2"/>
+                <circle cx="10" cy="35" r="3" fill="var(--accent-color)"/>
+                <text x="0" y="32" font-size="10" fill="var(--accent-color)">V1</text>
+                <g transform="translate(20, 35)">${getResSvg()}</g>
+                <text x="30" y="30" font-size="8" fill="var(--text-color)">R1</text>
+                <line x1="40" y1="35" x2="60" y2="35" stroke="var(--text-color)" stroke-width="2"/>
+
+                <!-- Vin 2 -->
+                <line x1="10" y1="65" x2="20" y2="65" stroke="var(--text-color)" stroke-width="2"/>
+                <circle cx="10" cy="65" r="3" fill="#4ade80"/>
+                <text x="0" y="62" font-size="10" fill="#4ade80">V2</text>
+                <g transform="translate(20, 65)">${getResSvg()}</g>
+                <text x="30" y="60" font-size="8" fill="var(--text-color)">R3</text>
+                <line x1="40" y1="65" x2="60" y2="65" stroke="var(--text-color)" stroke-width="2"/>
+
+                <!-- Feedback R2 -->
+                <line x1="45" y1="35" x2="45" y2="10" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="45" y1="10" x2="70" y2="10" stroke="var(--text-color)" stroke-width="2"/>
+                <g transform="translate(70, 10)">${getResSvg()}</g>
+                <text x="80" y="5" font-size="8" fill="var(--text-color)">R2</text>
+                <line x1="90" y1="10" x2="130" y2="10" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="130" y1="10" x2="130" y2="50" stroke="var(--text-color)" stroke-width="2"/>
+
+                <!-- Divider R4 -->
+                <line x1="45" y1="65" x2="45" y2="80" stroke="var(--text-color)" stroke-width="2"/>
+                <g transform="translate(45, 80)">${getResSvg()}</g>
+                <text x="55" y="85" font-size="8" fill="var(--text-color)">R4</text>
+                <line x1="65" y1="80" x2="80" y2="80" stroke="var(--text-color)" stroke-width="2"/>
+                <!-- GND -->
+                <line x1="80" y1="80" x2="80" y2="90" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="75" y1="90" x2="85" y2="90" stroke="var(--text-color)" stroke-width="2"/>
+                <line x1="77" y1="93" x2="83" y2="93" stroke="var(--text-color)" stroke-width="2"/>
+
+                <!-- Vout -->
+                <line x1="110" y1="50" x2="140" y2="50" stroke="var(--text-color)" stroke-width="2"/>
+                <circle cx="140" cy="50" r="3" fill="var(--text-color)"/>
+                <text x="145" y="53" font-size="10" fill="var(--text-color)">Vout</text>
+            </svg>
+        `;
+    }
+
+    function updateOpAmp() {
+        const type = document.getElementById('op-type').value;
+        const Vin1 = parseFloat(document.getElementById('op-vin1').value);
+        const R1 = parseFloat(document.getElementById('op-r1').value);
+        const R2 = parseFloat(document.getElementById('op-r2').value); // Rf
+
+        const v2Cont = document.getElementById('op-vin2-container');
+        const r34Cont = document.getElementById('op-r34-container');
+        const diag = document.getElementById('op-diagram');
+
+        let Vout = 0;
+        let GainStr = "";
+
+        if (type === 'noninv') {
+            v2Cont.classList.add('hidden');
+            r34Cont.classList.add('hidden');
+            diag.innerHTML = drawNonInv();
+
+            if (R1 > 0) {
+                const gain = 1 + (R2 / R1);
+                Vout = Vin1 * gain;
+                GainStr = gain.toFixed(2);
+            }
+        } 
+        else if (type === 'inv') {
+            v2Cont.classList.add('hidden');
+            r34Cont.classList.add('hidden');
+            diag.innerHTML = drawInv();
+
+            if (R1 > 0) {
+                const gain = -(R2 / R1);
+                Vout = Vin1 * gain;
+                GainStr = gain.toFixed(2);
+            }
+        }
+        else if (type === 'diff') {
+            v2Cont.classList.remove('hidden');
+            r34Cont.classList.remove('hidden');
+            r34Cont.classList.add('flex');
+            diag.innerHTML = drawDiff();
+
+            const Vin2 = parseFloat(document.getElementById('op-vin2').value);
+            const R3 = parseFloat(document.getElementById('op-r3').value);
+            const R4 = parseFloat(document.getElementById('op-r4').value);
+
+            if (R1 > 0 && (R3 + R4) > 0) {
+                Vout = Vin2 * (R4 / (R3 + R4)) * ((R1 + R2) / R1) - Vin1 * (R2 / R1);
+                
+                if (Math.abs(R1 - R3) < 0.1 && Math.abs(R2 - R4) < 0.1) {
+                    GainStr = (R2 / R1).toFixed(2) + " (Diff)";
+                } else {
+                    GainStr = "N/A"; // Unbalanced
+                }
+            }
+        }
+
+        document.getElementById('op-gain-val').innerText = GainStr || "0.0";
+        document.getElementById('op-vout-val').innerText = isNaN(Vout) ? "0.0" : Vout.toFixed(3);
+    }
+    
+    setTimeout(updateOpAmp, 100);
+</script>

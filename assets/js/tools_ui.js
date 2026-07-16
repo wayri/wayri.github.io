@@ -16,30 +16,65 @@ const TOOL_REGISTRY = [
         ]
     },
     {
-        category: "Power & SMPS",
-        icon: "fa-transformer",
+        category: "Analog & Signal Chains",
+        icon: "fa-wave-square",
         tools: [
-            { id: "tool-loop-compensator-p-z", name: "Loop Compensator (P/Z)", file: "loop-compensator-p-z.html" },
-            { id: "tool-smps-topology-ratio", name: "SMPS Topology & Ratio", file: "smps-topology-ratio.html" },
-            { id: "tool-filter-designer", name: "Filter Designer", file: "filter-designer.html" }
+            { id: "tool-opamp-calc", name: "OpAmp Calculator", file: "opamp-calc.html" },
+            { id: "tool-current-sense-amp", name: "Current Sense Amplifier", file: "current-sense-amp.html" }
         ]
     },
     {
-        category: "Batteries & Energy",
-        icon: "fa-car-battery",
+        category: "Power & SMPS",
+        icon: "fa-plug-circle-bolt",
         tools: [
-            { id: "tool-battery-pack-s-p-config", name: "Battery Pack Config", file: "battery-pack-s-p-config.html" },
-            { id: "tool-battery-suite", name: "Full Battery Suite", file: "battery-suite.html" },
+            { id: "tool-loop-compensator-p-z", name: "Loop Compensator (P/Z)", file: "loop-compensator-p-z.html" },
+            { id: "tool-smps-topology-ratio", name: "SMPS Topology & Ratio", file: "smps-topology-ratio.html" }
+        ]
+    },
+    {
+        category: "Grid & Generation",
+        icon: "fa-tower-observation",
+        tools: [
+            { id: "tool-grid-power", name: "Grid Power Equations", file: "grid-power-calc.html" },
+            { id: "tool-hydro-power", name: "Hydroelectric Dam", file: "hydro-power-calc.html" },
             { id: "tool-pv-yield-simulator", name: "PV Yield Simulator", file: "pv-yield-simulator.html" }
         ]
     },
     {
-        category: "Magnetics & Harness",
+        category: "Batteries & EV",
+        icon: "fa-car-battery",
+        tools: [
+            { id: "tool-battery-pack-s-p-config", name: "Battery Pack Config", file: "battery-pack-s-p-config.html" },
+            { id: "tool-battery-suite", name: "Full Battery Suite", file: "battery-suite.html" },
+            { id: "tool-battery-life", name: "Battery Life Estimator", file: "battery-life-estimator.html" },
+            { id: "tool-ev-powertrain", name: "EV Powertrain & Range", file: "ev-powertrain-calc.html" }
+        ]
+    },
+    {
+        category: "RF & Wireless",
+        icon: "fa-satellite-dish",
+        tools: [
+            { id: "tool-attenuator", name: "Attenuator Calculator", file: "attenuator-calc.html" },
+            { id: "tool-rf-noise-figure", name: "Cascade Noise Figure", file: "rf-noise-figure.html" },
+            { id: "tool-friis-transmission", name: "Friis Transmission", file: "friis-transmission.html" }
+        ]
+    },
+    {
+        category: "Magnetics & Filters",
         icon: "fa-magnet",
         tools: [
-            { id: "tool-magnetics-harness", name: "Basic Magnetics", file: "magnetics-harness.html" },
+            { id: "tool-magnetic-core", name: "Magnetic Core & Inductor", file: "magnetic-core-calc.html" },
+            { id: "tool-emi-filter", name: "EMI Filter Calculator", file: "emi-filter-calc.html" },
             { id: "tool-magnetics-suite", name: "Magnetics Design Suite", file: "magnetics-suite.html" },
-            { id: "tool-multipoint-harness", name: "Multipoint Harness", file: "multipoint-harness.html" }
+            { id: "tool-filter-designer", name: "Analog Filter Designer", file: "filter-designer.html" }
+        ]
+    },
+    {
+        category: "Harness & Interconnect",
+        icon: "fa-network-wired",
+        tools: [
+            { id: "tool-multipoint-harness", name: "Multipoint Harness", file: "multipoint-harness.html" },
+            { id: "tool-can-bus", name: "CAN Bus Harness", file: "can-bus.html" }
         ]
     },
     {
@@ -48,12 +83,12 @@ const TOOL_REGISTRY = [
         tools: [
             { id: "tool-impedance-calc", name: "Impedance Calculation", file: "impedance-calc.html" },
             { id: "tool-high-speed-design", name: "High Speed Design", file: "high-speed-design.html" },
-            { id: "tool-pcb-impedance-diff", name: "Diff Pair Impedance", file: "pcb-impedance-diff.html", desc: "Microstrip and Stripline coupled pairs." },
-            { id: "tool-via-impedance", name: "Via Parasitics", file: "via-impedance.html", desc: "Via capacitance and inductance calculator." },
-            { id: "tool-crosstalk-estimator", name: "Crosstalk Estimator", file: "crosstalk-estimator.html", desc: "Forward and backward crosstalk coefficients." },
-            { id: "tool-pdn-impedance", name: "PDN Target Impedance", file: "pdn-impedance.html", desc: "Power Delivery Network decoupling estimator." },
-            { id: "tool-skin-effect", name: "Skin Effect & AC Resistance", file: "skin-effect.html", desc: "High frequency resistance calculator." },
-            { id: "tool-insertion-loss", name: "S-Parameter / Insertion Loss", file: "insertion-loss.html", desc: "Insertion loss estimator for FR4/Rogers." }
+            { id: "tool-pcb-impedance-diff", name: "Diff Pair Impedance", file: "pcb-impedance-diff.html" },
+            { id: "tool-via-impedance", name: "Via Parasitics", file: "via-impedance.html" },
+            { id: "tool-crosstalk-estimator", name: "Crosstalk Estimator", file: "crosstalk-estimator.html" },
+            { id: "tool-pdn-impedance", name: "PDN Target Impedance", file: "pdn-impedance.html" },
+            { id: "tool-skin-effect", name: "Skin Effect & AC Resistance", file: "skin-effect.html" },
+            { id: "tool-insertion-loss", name: "S-Parameter / Insertion Loss", file: "insertion-loss.html" }
         ]
     },
     {
@@ -68,21 +103,20 @@ const TOOL_REGISTRY = [
         category: "Embedded & Sensors",
         icon: "fa-temperature-half",
         tools: [
-            { id: "tool-voltage-margining-dac", name: "Voltage/Current Margining", file: "voltage-margining-dac.html", desc: "Design DAC margining circuits." },
-            { id: "tool-thermistor-r-t-curve-ntc", name: "Thermistor R-T Curve", file: "thermistor-r-t-curve-ntc.html", desc: "NTC temperature to resistance calculations." },
-            { id: "tool-web-serial-interface", name: "Web Serial Interface", file: "web-serial-interface.html", desc: "Connect to serial devices from the browser." }
+            { id: "tool-voltage-margining-dac", name: "Voltage/Current Margining", file: "voltage-margining-dac.html" },
+            { id: "tool-thermistor-r-t-curve-ntc", name: "Thermistor R-T Curve", file: "thermistor-r-t-curve-ntc.html" },
+            { id: "tool-web-serial-interface", name: "Web Serial Interface", file: "web-serial-interface.html" }
         ]
     },
     {
         category: "Advanced Toolkit",
         icon: "fa-layer-group",
         tools: [
-            { id: "tool-unit-converter", name: "Engineering Unit Converter", file: "unit-converter.html", desc: "Bidirectional conversions across 23 categories." },
-            { id: "tool-busbar-capacity", name: "Busbar Capacity", file: "busbar-capacity.html", desc: "DC skin effect, EM forces, deflection, voltage drop." },
-            { id: "tool-cable-thermal", name: "Dynamic Cable Thermal", file: "cable-thermal.html", desc: "Multi-segment series derating and NEC limits." },
-            { id: "tool-can-bus", name: "CAN Bus Harness", file: "can-bus.html", desc: "ISO 11898 compliance and propagation delays." },
-            { id: "tool-fishbone", name: "Ishikawa Fishbone Diagram", file: "fishbone.html", desc: "Root cause analysis with dynamic SVGs." },
-            { id: "tool-plot-extractor", name: "Plot Data Extractor", file: "plot-extractor.html", desc: "Extract data points from images of graphs." }
+            { id: "tool-unit-converter", name: "Engineering Unit Converter", file: "unit-converter.html" },
+            { id: "tool-busbar-capacity", name: "Busbar Capacity", file: "busbar-capacity.html" },
+            { id: "tool-cable-thermal", name: "Dynamic Cable Thermal", file: "cable-thermal.html" },
+            { id: "tool-fishbone", name: "Ishikawa Fishbone Diagram", file: "fishbone.html" },
+            { id: "tool-plot-extractor", name: "Plot Data Extractor", file: "plot-extractor.html" }
         ]
     }
 ];

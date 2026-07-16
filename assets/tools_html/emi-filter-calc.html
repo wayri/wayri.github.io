@@ -1,0 +1,181 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="EMI Filter Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-filter"></i><h3 class="font-bold font-mono">EMI Power Filter</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Common & Differential Mode</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col overflow-y-auto">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">FILTER COMPONENTS</h4>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-[10px] mb-1"><span>Common Mode Choke ($L_c$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="emi-lc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="10" step="1" oninput="updateEMI()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mH</span>
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-[10px] mb-1"><span>Leakage Inductance ($L_d$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="emi-ld" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-themeMuted" value="100" step="10" oninput="updateEMI()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">μH</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 mt-2">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-[10px] mb-1"><span>X-Capacitor ($C_x$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="emi-cx" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="0.47" step="0.1" oninput="updateEMI()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">μF</span>
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-[10px] mb-1"><span>Y-Capacitor ($C_y$)</span></div>
+                        <div class="flex">
+                            <input type="number" id="emi-cy" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-green-400" value="2.2" step="0.1" oninput="updateEMI()">
+                            <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">nF</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-themeBorder/20">
+                    <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">LINE IMPEDANCE</h4>
+                    <div class="flex justify-between text-xs mb-1"><span>Source/Load Impedance ($Z$)</span><span class="text-themeMuted">Ω</span></div>
+                    <input type="number" id="emi-z" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="50" step="10" oninput="updateEMI()">
+                    <div class="text-[9px] text-themeMuted mt-1">LISN (Line Impedance Stabilization Network) standard is 50Ω.</div>
+                </div>
+
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <!-- Circuit Diagram -->
+                <div class="w-full h-40 bg-themeBg border border-themeBorder/50 flex flex-col items-center justify-center relative overflow-hidden">
+                    <svg width="250" height="120" viewBox="0 0 250 120" class="text-themeText">
+                        <!-- Lines -->
+                        <line x1="10" y1="30" x2="240" y2="30" stroke="currentColor" stroke-width="2"/>
+                        <line x1="10" y1="90" x2="240" y2="90" stroke="currentColor" stroke-width="2"/>
+                        <text x="10" y="25" font-size="10" fill="currentColor">L</text>
+                        <text x="10" y="105" font-size="10" fill="currentColor">N</text>
+                        
+                        <text x="230" y="25" font-size="10" fill="currentColor">L</text>
+                        <text x="230" y="105" font-size="10" fill="currentColor">N</text>
+
+                        <!-- Cx -->
+                        <line x1="50" y1="30" x2="50" y2="55" stroke="var(--blue-400)" stroke-width="2"/>
+                        <line x1="40" y1="55" x2="60" y2="55" stroke="var(--blue-400)" stroke-width="2"/>
+                        <line x1="40" y1="65" x2="60" y2="65" stroke="var(--blue-400)" stroke-width="2"/>
+                        <line x1="50" y1="65" x2="50" y2="90" stroke="var(--blue-400)" stroke-width="2"/>
+                        <text x="65" y="63" font-size="10" fill="var(--blue-400)">Cx</text>
+
+                        <!-- CMC Lc -->
+                        <rect x="90" y="15" width="40" height="90" fill="var(--container-color)" stroke="currentColor" stroke-width="2" rx="5"/>
+                        <text x="110" y="63" font-size="10" fill="currentColor" text-anchor="middle" font-weight="bold">CMC</text>
+                        <!-- Dots -->
+                        <circle cx="100" cy="22" r="2" fill="currentColor"/>
+                        <circle cx="100" cy="82" r="2" fill="currentColor"/>
+
+                        <!-- Cy1 -->
+                        <line x1="170" y1="30" x2="170" y2="45" stroke="var(--green-400)" stroke-width="2"/>
+                        <line x1="160" y1="45" x2="180" y2="45" stroke="var(--green-400)" stroke-width="2"/>
+                        <line x1="160" y1="50" x2="180" y2="50" stroke="var(--green-400)" stroke-width="2"/>
+                        <line x1="170" y1="50" x2="170" y2="60" stroke="var(--green-400)" stroke-width="2"/>
+                        <text x="185" y="45" font-size="10" fill="var(--green-400)">Cy</text>
+
+                        <!-- Cy2 -->
+                        <line x1="170" y1="90" x2="170" y2="75" stroke="var(--green-400)" stroke-width="2"/>
+                        <line x1="160" y1="75" x2="180" y2="75" stroke="var(--green-400)" stroke-width="2"/>
+                        <line x1="160" y1="70" x2="180" y2="70" stroke="var(--green-400)" stroke-width="2"/>
+                        <line x1="170" y1="70" x2="170" y2="60" stroke="var(--green-400)" stroke-width="2"/>
+                        <text x="185" y="85" font-size="10" fill="var(--green-400)">Cy</text>
+
+                        <!-- Earth GND -->
+                        <line x1="150" y1="60" x2="190" y2="60" stroke="currentColor" stroke-width="2"/>
+                        <line x1="170" y1="60" x2="170" y2="105" stroke="currentColor" stroke-width="2"/>
+                        <line x1="160" y1="105" x2="180" y2="105" stroke="currentColor" stroke-width="2"/>
+                        <line x1="165" y1="109" x2="175" y2="109" stroke="currentColor" stroke-width="2"/>
+                        <line x1="168" y1="113" x2="172" y2="113" stroke="currentColor" stroke-width="2"/>
+                        <text x="185" y="110" font-size="10" fill="currentColor">PE</text>
+
+                    </svg>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 flex-grow">
+                    <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Common Mode (CM) Cutoff</span>
+                        <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="emi-fc-cm">0.0</span> <span class="text-xs text-themeAccent">kHz</span>
+                        </div>
+                        <span class="text-[9px] text-themeMuted mt-1">Noise L+N to Earth</span>
+                    </div>
+                    
+                    <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(212,175,55,0.05)]">
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Differential (DM) Cutoff</span>
+                        <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="emi-fc-dm">0.0</span> <span class="text-xs text-themeAccent">kHz</span>
+                        </div>
+                        <span class="text-[9px] text-themeMuted mt-1">Noise L to N</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('emi-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="emi-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Common Mode Cutoff Frequency ($f_{cm}$):</strong></p>
+            <p>Formed by the Common Mode Choke ($L_c$) and the Y-capacitors ($C_y$) to Earth.</p>
+            <p>$f_{cm} = \frac{1}{2\pi \sqrt{L_c \cdot (2 \cdot C_y)}}$</p>
+            <br>
+            <p><strong>Differential Mode Cutoff Frequency ($f_{dm}$):</strong></p>
+            <p>Formed by the leakage inductance of the choke ($L_d$) and the X-capacitor ($C_x$). Usually $L_d$ is 0.5% to 2% of $L_c$.</p>
+            <p>$f_{dm} = \frac{1}{2\pi \sqrt{2 \cdot L_d \cdot C_x}}$</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateEMI() {
+        const Lc_mH = parseFloat(document.getElementById('emi-lc').value);
+        const Ld_uH = parseFloat(document.getElementById('emi-ld').value);
+        const Cx_uF = parseFloat(document.getElementById('emi-cx').value);
+        const Cy_nF = parseFloat(document.getElementById('emi-cy').value);
+
+        const Lc = Lc_mH * 1e-3;
+        const Ld = Ld_uH * 1e-6;
+        const Cx = Cx_uF * 1e-6;
+        const Cy = Cy_nF * 1e-9;
+
+        let fc_cm = 0;
+        let fc_dm = 0;
+
+        if (Lc > 0 && Cy > 0) {
+            // Lc handles CM noise. The two Cy caps act in parallel for CM (2*Cy).
+            fc_cm = 1 / (2 * Math.PI * Math.sqrt(Lc * 2 * Cy));
+        }
+
+        if (Ld > 0 && Cx > 0) {
+            // Ld is the leakage of each winding. Total leakage in the loop is 2*Ld.
+            fc_dm = 1 / (2 * Math.PI * Math.sqrt(2 * Ld * Cx));
+        }
+
+        document.getElementById('emi-fc-cm').innerText = (fc_cm / 1000).toFixed(1);
+        document.getElementById('emi-fc-dm').innerText = (fc_dm / 1000).toFixed(1);
+    }
+    
+    setTimeout(updateEMI, 100);
+</script>

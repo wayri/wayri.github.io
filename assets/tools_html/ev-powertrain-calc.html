@@ -1,0 +1,178 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="EV Powertrain & Range Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-car-side"></i><h3 class="font-bold font-mono">EV Powertrain & Range</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Tractive Effort & Energy</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col overflow-y-auto">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">VEHICLE DYNAMICS</h4>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Cruising Speed ($v$)</span><span class="text-themeMuted">km/h</span></div>
+                    <input type="number" id="ev-v" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-lg" value="100" step="5" oninput="updateEV()">
+                </div>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Mass ($m$)</span><span class="text-themeMuted">kg</span></div>
+                        <input type="number" id="ev-m" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1800" step="50" oninput="updateEV()">
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Roll Resist ($C_{rr}$)</span></div>
+                        <input type="number" id="ev-crr" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.012" step="0.001" oninput="updateEV()">
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Drag Coeff ($C_d$)</span></div>
+                        <input type="number" id="ev-cd" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.25" step="0.01" oninput="updateEV()">
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Frontal Area ($A$)</span><span class="text-themeMuted">$m^2$</span></div>
+                        <input type="number" id="ev-a" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="2.4" step="0.1" oninput="updateEV()">
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">POWERTRAIN & BATTERY</h4>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Battery Size</span><span class="text-themeMuted">kWh</span></div>
+                        <input type="number" id="ev-bat" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="75" step="1" oninput="updateEV()">
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Efficiency ($\eta$)</span><span class="text-themeMuted">%</span></div>
+                        <input type="number" id="ev-eta" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="90" step="1" max="100" min="1" oninput="updateEV()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <!-- Diagram -->
+                <div class="w-full h-32 bg-themeBg border border-themeBorder/50 flex items-center justify-center relative overflow-hidden">
+                    <i class="fa-solid fa-wind absolute left-4 text-themeMuted text-4xl opacity-50"></i>
+                    
+                    <div class="relative w-40 h-16 border-2 border-themeBorder bg-themeContainer/50 rounded-t-3xl flex flex-col items-center justify-center">
+                        <i class="fa-solid fa-arrow-left absolute -left-8 text-blue-400 text-sm"><span class="absolute -top-4 -left-4 text-[8px] whitespace-nowrap">$F_{drag}$</span></i>
+                        <i class="fa-solid fa-arrow-left absolute -left-8 -bottom-2 text-red-400 text-sm"><span class="absolute -bottom-4 -left-4 text-[8px] whitespace-nowrap">$F_{roll}$</span></i>
+                        <i class="fa-solid fa-arrow-right absolute -right-12 bottom-2 text-green-400 font-bold"><span class="absolute -top-4 -left-2 text-[8px] whitespace-nowrap">$F_{tractive}$</span></i>
+                        
+                        <div class="absolute -bottom-3 left-4 w-6 h-6 bg-themeBorder rounded-full"></div>
+                        <div class="absolute -bottom-3 right-4 w-6 h-6 bg-themeBorder rounded-full"></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-themeBorder/10 border border-themeBorder p-3 flex justify-between items-center text-xs">
+                        <span class="text-themeMuted">Aero Drag ($F_{drag}$)</span>
+                        <span id="ev-fdrag" class="font-bold text-blue-400">0 N</span>
+                    </div>
+                    <div class="bg-themeBorder/10 border border-themeBorder p-3 flex justify-between items-center text-xs">
+                        <span class="text-themeMuted">Rolling Res ($F_{roll}$)</span>
+                        <span id="ev-froll" class="font-bold text-red-400">0 N</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 flex-grow">
+                    
+                    <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Cruise Power (Elec)</span>
+                        <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="ev-p-val">0.0</span> <span class="text-sm text-themeAccent">kW</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Consumption</span>
+                        <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="ev-eff-val">0</span> <span class="text-xs text-themeAccent">Wh/km</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Range -->
+                <div class="w-full bg-themeBg border border-themeAccent/50 p-4 flex justify-between items-center relative shadow-[inset_0_0_15px_rgba(212,175,55,0.1)]">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-themeAccent uppercase tracking-wider font-bold">Estimated Cruise Range</span>
+                        <span class="text-[9px] text-themeMuted">Assuming flat terrain, constant speed</span>
+                    </div>
+                    <div class="text-4xl font-bold text-themeText flex items-baseline gap-1">
+                        <span id="ev-range-val">0</span> <span class="text-lg text-themeAccent">km</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('ev-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="ev-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Aerodynamic Drag:</strong> $F_{drag} = \frac{1}{2} \rho v^2 C_d A$ (where $\rho \approx 1.225 \text{ kg/m}^3$)</p>
+            <p><strong>Rolling Resistance:</strong> $F_{roll} = C_{rr} \cdot m \cdot g$</p>
+            <p><strong>Total Tractive Force (Cruise):</strong> $F_{total} = F_{drag} + F_{roll}$</p>
+            <p><strong>Mechanical Power:</strong> $P_m = F_{total} \cdot v$ (where v is in m/s)</p>
+            <p><strong>Electrical Power:</strong> $P_e = \frac{P_m}{\eta_{drivetrain}}$</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateEV() {
+        const v_kmh = parseFloat(document.getElementById('ev-v').value);
+        const m = parseFloat(document.getElementById('ev-m').value);
+        const Crr = parseFloat(document.getElementById('ev-crr').value);
+        const Cd = parseFloat(document.getElementById('ev-cd').value);
+        const A = parseFloat(document.getElementById('ev-a').value);
+        const bat_kwh = parseFloat(document.getElementById('ev-bat').value);
+        const eta = parseFloat(document.getElementById('ev-eta').value) / 100;
+
+        const g = 9.81;
+        const rho_air = 1.225;
+        const v_ms = v_kmh / 3.6;
+
+        let F_roll = 0;
+        let F_drag = 0;
+        let P_elec = 0;
+        let Wh_km = 0;
+        let range_km = 0;
+
+        if (v_ms > 0) {
+            F_roll = Crr * m * g;
+            F_drag = 0.5 * rho_air * v_ms * v_ms * Cd * A;
+            
+            const F_tot = F_roll + F_drag;
+            const P_mech = F_tot * v_ms; // Watts
+            
+            P_elec = P_mech / eta; // Watts from battery
+            
+            // Time to travel 1 km at this speed
+            const t_1km_hrs = 1 / v_kmh;
+            Wh_km = P_elec * t_1km_hrs; // Wh consumed per km
+            
+            if (Wh_km > 0) {
+                range_km = (bat_kwh * 1000) / Wh_km;
+            }
+        }
+
+        document.getElementById('ev-fdrag').innerText = Math.round(F_drag) + " N";
+        document.getElementById('ev-froll').innerText = Math.round(F_roll) + " N";
+        document.getElementById('ev-p-val').innerText = (P_elec / 1000).toFixed(1);
+        document.getElementById('ev-eff-val').innerText = Math.round(Wh_km);
+        document.getElementById('ev-range-val').innerText = Math.round(range_km);
+    }
+    
+    setTimeout(updateEV, 100);
+</script>

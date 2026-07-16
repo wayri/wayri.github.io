@@ -1,0 +1,142 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Friis Transmission Equation">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-wifi"></i><h3 class="font-bold font-mono">Friis Transmission Equation</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Wireless Link Budget</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col overflow-y-auto">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">TRANSMITTER (TX)</h4>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Tx Power ($P_t$)</span><span class="text-themeMuted">dBm</span></div>
+                        <input type="number" id="friis-pt" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="20" step="1" oninput="updateFriis()">
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Tx Antenna Gain ($G_t$)</span><span class="text-themeMuted">dBi</span></div>
+                        <input type="number" id="friis-gt" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="2" step="0.5" oninput="updateFriis()">
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">RECEIVER (RX)</h4>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Rx Antenna Gain ($G_r$)</span><span class="text-themeMuted">dBi</span></div>
+                        <input type="number" id="friis-gr" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-green-400" value="2" step="0.5" oninput="updateFriis()">
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>System Loss ($L$)</span><span class="text-themeMuted">dB</span></div>
+                        <input type="number" id="friis-l" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0" step="0.5" oninput="updateFriis()" title="Misc losses like cables, connectors, mismatched polarization">
+                    </div>
+                </div>
+
+                <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">ENVIRONMENT</h4>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Frequency ($f$)</span><span class="text-themeMuted">MHz</span></div>
+                    <input type="number" id="friis-f" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-lg font-bold text-orange-400" value="2450" step="1" oninput="updateFriis()">
+                </div>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Distance ($R$)</span><span class="text-themeMuted">meters</span></div>
+                    <input type="number" id="friis-r" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-lg font-bold text-orange-400" value="1000" step="10" oninput="updateFriis()">
+                </div>
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <!-- Diagram -->
+                <div class="w-full h-32 bg-themeBg border border-themeBorder/50 flex flex-col items-center justify-center relative overflow-hidden">
+                    <div class="flex justify-between items-center w-full px-8 z-10">
+                        <div class="flex flex-col items-center text-blue-400">
+                            <i class="fa-solid fa-tower-broadcast text-3xl"></i>
+                            <span class="text-[10px] font-bold mt-1">TX</span>
+                        </div>
+                        
+                        <!-- RF Waves -->
+                        <div class="flex-grow flex items-center justify-center text-themeAccent/50 gap-2">
+                            <i class="fa-solid fa-wifi rotate-90 scale-x-150"></i>
+                            <i class="fa-solid fa-wifi rotate-90 scale-x-150 opacity-50"></i>
+                            <i class="fa-solid fa-wifi rotate-90 scale-x-150 opacity-20"></i>
+                        </div>
+
+                        <div class="flex flex-col items-center text-green-400">
+                            <i class="fa-solid fa-satellite-dish text-2xl"></i>
+                            <span class="text-[10px] font-bold mt-1">RX</span>
+                        </div>
+                    </div>
+                    
+                    <div class="absolute bottom-2 text-[10px] text-themeMuted border-t border-themeMuted/50 w-3/4 text-center pt-1">
+                        Distance $R$
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 flex-grow">
+                    <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Free Space Path Loss (FSPL)</span>
+                        <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="friis-fspl-val">0.0</span> <span class="text-sm text-themeAccent">dB</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-themeBg border border-themeAccent/50 p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(212,175,55,0.1)]">
+                        <span class="text-[10px] text-themeAccent uppercase tracking-wider mb-2 font-bold">Received Power ($P_r$)</span>
+                        <div class="text-4xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="friis-pr-val">0.0</span> <span class="text-lg text-themeAccent">dBm</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('friis-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="friis-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Free Space Path Loss (FSPL):</strong></p>
+            <p>$FSPL_{dB} = 20 \log_{10}(R_{km}) + 20 \log_{10}(f_{MHz}) + 32.44$</p>
+            <p><strong>Friis Equation (Logarithmic / dB form):</strong></p>
+            <p>$P_r (dBm) = P_t (dBm) + G_t (dBi) + G_r (dBi) - FSPL_{dB} - L_{misc}$</p>
+            <p>This ideal equation assumes free space propagation with no multi-path, reflections, or atmospheric absorption.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateFriis() {
+        const Pt = parseFloat(document.getElementById('friis-pt').value);
+        const Gt = parseFloat(document.getElementById('friis-gt').value);
+        const Gr = parseFloat(document.getElementById('friis-gr').value);
+        const L = parseFloat(document.getElementById('friis-l').value);
+        
+        const f_mhz = parseFloat(document.getElementById('friis-f').value);
+        const R_m = parseFloat(document.getElementById('friis-r').value);
+
+        let fspl_db = 0;
+        let Pr = 0;
+
+        if (f_mhz > 0 && R_m > 0) {
+            const R_km = R_m / 1000;
+            // FSPL = 20*log10(d) + 20*log10(f) + 32.44  (where d is in km, f is in MHz)
+            fspl_db = 20 * Math.log10(R_km) + 20 * Math.log10(f_mhz) + 32.44;
+            
+            Pr = Pt + Gt + Gr - fspl_db - L;
+        }
+
+        document.getElementById('friis-fspl-val').innerText = isNaN(fspl_db) ? "-" : fspl_db.toFixed(1);
+        document.getElementById('friis-pr-val').innerText = isNaN(Pr) ? "-" : Pr.toFixed(1);
+    }
+    
+    setTimeout(updateFriis, 100);
+</script>

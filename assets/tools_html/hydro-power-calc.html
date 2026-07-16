@@ -1,0 +1,159 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Hydroelectric Dam Generation">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-water"></i><h3 class="font-bold font-mono">Hydroelectric Dam</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Power Generation Estimator</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">DAM CHARACTERISTICS</h4>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span>Effective Head ($H$)</span><span class="text-themeMuted">meters</span>
+                    </div>
+                    <input type="number" id="hydro-h" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="100" step="1" oninput="updateHydro()">
+                </div>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span>Flow Rate ($Q$)</span><span class="text-themeMuted">$m^3/s$</span>
+                    </div>
+                    <input type="number" id="hydro-q" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="50" step="1" oninput="updateHydro()">
+                </div>
+                
+                <h4 class="text-xs font-bold text-themeMuted mb-2 mt-4 border-b border-themeBorder/20 pb-1">EFFICIENCIES</h4>
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Turbine ($\eta_t$)</span><span class="text-themeMuted">%</span>
+                        </div>
+                        <input type="number" id="hydro-eta-t" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="90" step="1" min="0" max="100" oninput="updateHydro()">
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Generator ($\eta_g$)</span><span class="text-themeMuted">%</span>
+                        </div>
+                        <input type="number" id="hydro-eta-g" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="95" step="1" min="0" max="100" oninput="updateHydro()">
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-4 text-[10px] text-themeMuted">
+                    Constants: $\rho = 1000 \text{ kg/m}^3$ (Water density), $g = 9.81 \text{ m/s}^2$ (Gravity)
+                </div>
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <!-- Diagram -->
+                <div class="w-full h-40 bg-themeBg border border-themeBorder/50 flex flex-col relative overflow-hidden">
+                    <div class="absolute inset-0 bg-blue-900/10"></div>
+                    
+                    <!-- SVG Dam Cross Section -->
+                    <svg width="100%" height="100%" viewBox="0 0 200 100" preserveAspectRatio="none">
+                        <!-- Water reservoir -->
+                        <rect x="0" y="20" width="100" height="80" fill="#3b82f6" opacity="0.4" />
+                        <!-- Dam wall -->
+                        <polygon points="90,20 110,20 140,100 90,100" fill="var(--container-color)" stroke="var(--border-color)" />
+                        <!-- Penstock / Pipe -->
+                        <polygon points="90,80 130,90 130,95 90,85" fill="var(--bg-color)" stroke="var(--border-color)" />
+                        <!-- Turbine House -->
+                        <rect x="130" y="80" width="30" height="20" fill="var(--border-color)" />
+                        <circle cx="145" cy="90" r="6" fill="var(--accent-color)" />
+                        <!-- Tailwater -->
+                        <rect x="160" y="90" width="40" height="10" fill="#3b82f6" opacity="0.4" />
+                        
+                        <!-- Dimension Lines -->
+                        <line x1="20" y1="20" x2="20" y2="90" stroke="var(--text-color)" stroke-dasharray="2" />
+                        <text x="25" y="55" fill="var(--text-color)" font-size="10">Head (H)</text>
+                        
+                        <text x="40" y="75" fill="var(--text-color)" font-size="10">Flow (Q) ➔</text>
+                    </svg>
+                </div>
+
+                <!-- Results -->
+                <div class="grid grid-cols-1 flex-grow">
+                    
+                    <div class="bg-themeBorder/10 border border-themeAccent/50 p-6 flex flex-col justify-center items-center text-center relative shadow-[inset_0_0_15px_rgba(212,175,55,0.1)]">
+                        <i class="fa-solid fa-bolt absolute right-4 top-4 text-themeAccent/20 text-4xl"></i>
+                        <span class="text-xs text-themeAccent uppercase tracking-wider mb-2 font-bold">Electrical Power Output ($P_e$)</span>
+                        <div class="text-5xl font-bold text-themeText flex items-baseline gap-2">
+                            <span id="hydro-pe-val">0.00</span> <span id="hydro-pe-unit" class="text-xl text-themeAccent">MW</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-themeContainer border border-themeBorder/50 p-3 flex justify-between items-center text-xs">
+                        <span class="text-themeMuted">Theoretical Max ($P_{th}$)</span>
+                        <span id="hydro-pth" class="font-bold text-themeText">0 MW</span>
+                    </div>
+                    <div class="bg-themeContainer border border-themeBorder/50 p-3 flex justify-between items-center text-xs">
+                        <span class="text-themeMuted">Mechanical ($P_m$)</span>
+                        <span id="hydro-pm" class="font-bold text-themeText">0 MW</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('hydro-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="hydro-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Theoretical Power:</strong> $P_{th} = \rho \cdot g \cdot Q \cdot H$</p>
+            <p><strong>Mechanical Power (Turbine Shaft):</strong> $P_m = P_{th} \cdot \eta_t$</p>
+            <p><strong>Electrical Power (Grid Output):</strong> $P_e = P_m \cdot \eta_g = \rho \cdot g \cdot Q \cdot H \cdot \eta_t \cdot \eta_g$</p>
+            <p>Where $\rho = 1000 \text{ kg/m}^3$ and $g = 9.81 \text{ m/s}^2$.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function formatPower(watts) {
+        if (watts >= 1e9) return { v: (watts/1e9).toFixed(2), u: "GW" };
+        if (watts >= 1e6) return { v: (watts/1e6).toFixed(2), u: "MW" };
+        if (watts >= 1e3) return { v: (watts/1e3).toFixed(2), u: "kW" };
+        return { v: watts.toFixed(0), u: "W" };
+    }
+
+    function updateHydro() {
+        const H = parseFloat(document.getElementById('hydro-h').value);
+        const Q = parseFloat(document.getElementById('hydro-q').value);
+        const eta_t = parseFloat(document.getElementById('hydro-eta-t').value) / 100;
+        const eta_g = parseFloat(document.getElementById('hydro-eta-g').value) / 100;
+
+        const rho = 1000;
+        const g = 9.81;
+
+        let Pth = 0;
+        let Pm = 0;
+        let Pe = 0;
+
+        if (H > 0 && Q > 0) {
+            Pth = rho * g * Q * H; // Watts
+            Pm = Pth * eta_t;
+            Pe = Pm * eta_g;
+        }
+
+        const fPe = formatPower(Pe);
+        document.getElementById('hydro-pe-val').innerText = fPe.v;
+        document.getElementById('hydro-pe-unit').innerText = fPe.u;
+
+        const fPth = formatPower(Pth);
+        document.getElementById('hydro-pth').innerText = fPth.v + " " + fPth.u;
+
+        const fPm = formatPower(Pm);
+        document.getElementById('hydro-pm').innerText = fPm.v + " " + fPm.u;
+    }
+    
+    setTimeout(updateHydro, 100);
+</script>

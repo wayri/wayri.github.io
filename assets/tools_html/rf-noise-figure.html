@@ -1,0 +1,226 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="RF Cascade Noise Figure">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-satellite-dish"></i><h3 class="font-bold font-mono">Cascade Noise Figure</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Friis Formula for Noise</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        
+        <div class="text-[10px] text-themeMuted mb-4 border-b border-themeBorder/20 pb-2 text-center bg-themeContainer/50 p-2">
+            Calculate total Noise Figure (NF) and Gain for a cascade of up to 3 RF stages.
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-4 h-full">
+            
+            <!-- Parameters: 3 Stages -->
+            <div class="flex flex-col gap-4 w-full md:w-2/3">
+                
+                <!-- Stage 1 -->
+                <div class="bg-themeContainer border border-themeBorder p-3 relative shadow-inner">
+                    <div class="absolute -left-2 -top-2 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-xs shadow-md">1</div>
+                    <div class="flex justify-between items-center mb-2 ml-4 border-b border-themeBorder/20 pb-1">
+                        <span class="text-xs font-bold text-blue-400 uppercase tracking-wider">Stage 1 (LNA / Filter)</span>
+                        <select id="nf-s1-type" class="bg-themeBg border border-themeBorder text-xs p-1 outline-none text-themeText" onchange="updateNF()">
+                            <option value="amp">Amplifier</option>
+                            <option value="loss">Lossy Element (e.g. Cable/Filter)</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 ml-4">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1 text-themeMuted"><span>Gain / Loss</span><span>dB</span></div>
+                            <input type="number" id="nf-s1-g" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText" value="15" step="0.5" oninput="updateNF()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1 text-themeMuted"><span>Noise Figure (NF)</span><span>dB</span></div>
+                            <input type="number" id="nf-s1-nf" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText" value="1.5" step="0.1" oninput="updateNF()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 2 -->
+                <div class="bg-themeContainer border border-themeBorder p-3 relative shadow-inner">
+                    <div class="absolute -left-2 -top-2 w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-xs shadow-md">2</div>
+                    <div class="flex justify-between items-center mb-2 ml-4 border-b border-themeBorder/20 pb-1">
+                        <span class="text-xs font-bold text-green-400 uppercase tracking-wider">Stage 2 (Mixer / Amp)</span>
+                        <select id="nf-s2-type" class="bg-themeBg border border-themeBorder text-xs p-1 outline-none text-themeText" onchange="updateNF()">
+                            <option value="amp">Amplifier</option>
+                            <option value="loss">Lossy Element (e.g. Cable/Filter)</option>
+                            <option value="none">Not Used</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 ml-4" id="nf-s2-inputs">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1 text-themeMuted"><span>Gain / Loss</span><span>dB</span></div>
+                            <input type="number" id="nf-s2-g" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText" value="-3" step="0.5" oninput="updateNF()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1 text-themeMuted"><span>Noise Figure (NF)</span><span>dB</span></div>
+                            <input type="number" id="nf-s2-nf" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText" value="3.0" step="0.1" oninput="updateNF()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 3 -->
+                <div class="bg-themeContainer border border-themeBorder p-3 relative shadow-inner">
+                    <div class="absolute -left-2 -top-2 w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-xs shadow-md">3</div>
+                    <div class="flex justify-between items-center mb-2 ml-4 border-b border-themeBorder/20 pb-1">
+                        <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Stage 3 (IF Amp)</span>
+                        <select id="nf-s3-type" class="bg-themeBg border border-themeBorder text-xs p-1 outline-none text-themeText" onchange="updateNF()">
+                            <option value="amp">Amplifier</option>
+                            <option value="loss">Lossy Element (e.g. Cable/Filter)</option>
+                            <option value="none" selected>Not Used</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 ml-4 hidden" id="nf-s3-inputs">
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1 text-themeMuted"><span>Gain / Loss</span><span>dB</span></div>
+                            <input type="number" id="nf-s3-g" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText" value="20" step="0.5" oninput="updateNF()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] mb-1 text-themeMuted"><span>Noise Figure (NF)</span><span>dB</span></div>
+                            <input type="number" id="nf-s3-nf" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText" value="5.0" step="0.1" oninput="updateNF()">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="w-full md:w-1/3 flex flex-col gap-4">
+                
+                <div class="flex-grow bg-themeBg border-l-4 border-themeAccent p-4 flex flex-col justify-center shadow-lg relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 opacity-10">
+                        <i class="fa-solid fa-wave-square text-9xl"></i>
+                    </div>
+                    
+                    <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-1 font-bold">Total System NF</span>
+                    <div class="text-4xl font-bold text-themeText flex items-baseline gap-1 mb-6 drop-shadow-md">
+                        <span id="nf-total-val">0.00</span> <span class="text-lg text-themeAccent">dB</span>
+                    </div>
+
+                    <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-1 font-bold">Total Cascade Gain</span>
+                    <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
+                        <span id="gain-total-val">0.00</span> <span class="text-sm text-themeAccent">dB</span>
+                    </div>
+                </div>
+
+                <div class="bg-themeContainer border border-themeBorder p-3 text-[9px] text-themeMuted">
+                    <strong>Rule of Thumb:</strong> Total Noise Figure is dominated by the first stage, provided its gain is sufficiently high to suppress the noise contributions of subsequent stages.
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('nf-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="nf-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Noise Factor (F) to Noise Figure (NF):</strong></p>
+            <p>$NF = 10 \cdot \log_{10}(F) \quad \iff \quad F = 10^{NF/10}$</p>
+            <p><strong>Linear Gain (G) from dB:</strong></p>
+            <p>$G = 10^{Gain_{dB}/10}$</p>
+            <p><strong>Friis Formula for Cascaded Noise Factor:</strong></p>
+            <p>$F_{total} = F_1 + \frac{F_2 - 1}{G_1} + \frac{F_3 - 1}{G_1 \cdot G_2} + \dots$</p>
+            <p><strong>Note on Lossy Elements:</strong> For a passive lossy component at room temperature, its Noise Figure equals its Insertion Loss in dB ($NF_{dB} = L_{dB}$).</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateStageInputs(num) {
+        const type = document.getElementById(`nf-s${num}-type`).value;
+        const inputs = document.getElementById(`nf-s${num}-inputs`);
+        const gInp = document.getElementById(`nf-s${num}-g`);
+        const nfInp = document.getElementById(`nf-s${num}-nf`);
+
+        if (type === 'none') {
+            inputs.classList.add('hidden');
+        } else {
+            inputs.classList.remove('hidden');
+            if (type === 'loss') {
+                // If it's a lossy element, NF = IL (which is -Gain). So if Gain is -3dB, NF is 3dB.
+                nfInp.disabled = true;
+                nfInp.classList.add('opacity-50');
+                
+                // Force gain to be negative if user entered positive
+                let val = parseFloat(gInp.value);
+                if (val > 0) {
+                    gInp.value = -val;
+                    val = -val;
+                }
+                nfInp.value = Math.abs(val);
+            } else {
+                nfInp.disabled = false;
+                nfInp.classList.remove('opacity-50');
+            }
+        }
+    }
+
+    function updateNF() {
+        // Sync inputs first
+        updateStageInputs(1);
+        updateStageInputs(2);
+        updateStageInputs(3);
+
+        const s1Type = document.getElementById('nf-s1-type').value;
+        const s2Type = document.getElementById('nf-s2-type').value;
+        const s3Type = document.getElementById('nf-s3-type').value;
+
+        // Stage 1
+        let F1 = 1, G1 = 1, G1_db = 0;
+        if (s1Type !== 'none') {
+            G1_db = parseFloat(document.getElementById('nf-s1-g').value);
+            const NF1_db = parseFloat(document.getElementById('nf-s1-nf').value);
+            G1 = Math.pow(10, G1_db / 10);
+            F1 = Math.pow(10, NF1_db / 10);
+        }
+
+        // Stage 2
+        let F2 = 1, G2 = 1, G2_db = 0;
+        if (s2Type !== 'none') {
+            G2_db = parseFloat(document.getElementById('nf-s2-g').value);
+            const NF2_db = parseFloat(document.getElementById('nf-s2-nf').value);
+            G2 = Math.pow(10, G2_db / 10);
+            F2 = Math.pow(10, NF2_db / 10);
+        }
+
+        // Stage 3
+        let F3 = 1, G3 = 1, G3_db = 0;
+        if (s3Type !== 'none') {
+            G3_db = parseFloat(document.getElementById('nf-s3-g').value);
+            const NF3_db = parseFloat(document.getElementById('nf-s3-nf').value);
+            G3 = Math.pow(10, G3_db / 10);
+            F3 = Math.pow(10, NF3_db / 10);
+        }
+
+        // Friis Cascade
+        let F_total = 1;
+        let G_total_db = 0;
+
+        if (s1Type !== 'none') {
+            F_total = F1;
+            G_total_db += G1_db;
+            
+            if (s2Type !== 'none') {
+                F_total += (F2 - 1) / G1;
+                G_total_db += G2_db;
+                
+                if (s3Type !== 'none') {
+                    F_total += (F3 - 1) / (G1 * G2);
+                    G_total_db += G3_db;
+                }
+            }
+        }
+
+        let NF_total = 10 * Math.log10(F_total);
+
+        document.getElementById('nf-total-val').innerText = isNaN(NF_total) || NF_total <= 0 ? "0.00" : NF_total.toFixed(2);
+        document.getElementById('gain-total-val').innerText = isNaN(G_total_db) ? "0.00" : G_total_db.toFixed(2);
+    }
+    
+    setTimeout(updateNF, 100);
+</script>

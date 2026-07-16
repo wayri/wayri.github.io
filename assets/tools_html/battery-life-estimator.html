@@ -1,0 +1,195 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Battery Life Estimator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-battery-half"></i><h3 class="font-bold font-mono">Battery Life Estimator</h3></div>
+        <span class="font-mono text-[10px] opacity-70">IoT & Embedded Systems</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">BATTERY CAPACITY</h4>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Battery Type Preset</span></div>
+                    <select id="bat-preset" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText outline-none" onchange="setBatPreset()">
+                        <optgroup label="Alkaline (1.5V Nominal)">
+                            <option value="2500">AA Alkaline (~2500 mAh)</option>
+                            <option value="1000">AAA Alkaline (~1000 mAh)</option>
+                            <option value="600">AAAA Alkaline (~600 mAh)</option>
+                            <option value="8000">C Alkaline (~8000 mAh)</option>
+                            <option value="15000">D Alkaline (~15000 mAh)</option>
+                            <option value="500">9V Alkaline (~500 mAh)</option>
+                        </optgroup>
+                        <optgroup label="Lithium Coin (3.0V Nominal)">
+                            <option value="225">CR2032 (~225 mAh)</option>
+                            <option value="90">CR2016 (~90 mAh)</option>
+                            <option value="620">CR2450 (~620 mAh)</option>
+                            <option value="35">CR1220 (~35 mAh)</option>
+                        </optgroup>
+                        <optgroup label="Lithium-Ion / LiPo (3.7V Nominal)">
+                            <option value="2500">18650 Typical (~2500 mAh)</option>
+                            <option value="3500">18650 High Cap (~3500 mAh)</option>
+                            <option value="5000">21700 (~5000 mAh)</option>
+                            <option value="1000">Small LiPo Pouch (~1000 mAh)</option>
+                        </optgroup>
+                        <option value="custom">Custom Capacity...</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Usable Capacity (C)</span><span class="text-themeMuted">mAh</span></div>
+                    <input type="number" id="bat-c" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="2500" step="10" oninput="updateBat()">
+                </div>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Derating Factor</span><span class="text-themeMuted">%</span></div>
+                    <input type="number" id="bat-derate" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="85" step="1" min="1" max="100" oninput="updateBat()">
+                    <div class="text-[9px] text-themeMuted mt-1 leading-tight">Accounts for self-discharge, temperature, and cutoff voltage limits. Usually 80-90%.</div>
+                </div>
+
+                <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">LOAD PROFILE (DUTY CYCLE)</h4>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Active Current</span><span class="text-themeMuted">mA</span></div>
+                        <input type="number" id="bat-iactive" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-red-400 font-bold" value="15" step="0.1" oninput="updateBat()">
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Active Time</span><span class="text-themeMuted">ms</span></div>
+                        <input type="number" id="bat-tactive" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="100" step="10" oninput="updateBat()">
+                    </div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Sleep Current</span><span class="text-themeMuted">μA</span></div>
+                        <input type="number" id="bat-isleep" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-blue-400 font-bold" value="5" step="1" oninput="updateBat()">
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Sleep Time</span><span class="text-themeMuted">sec</span></div>
+                        <input type="number" id="bat-tsleep" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateBat()">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <div class="w-full bg-themeContainer border border-themeBorder/50 p-4 text-center">
+                    <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 block">Average Current Draw</span>
+                    <div class="text-3xl font-bold text-themeText flex items-baseline justify-center gap-2">
+                        <span id="bat-iavg">0.00</span> <span id="bat-iavg-unit" class="text-sm text-themeAccent">mA</span>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="flex-grow bg-themeBg border border-themeAccent/50 p-6 flex flex-col justify-center items-center text-center relative shadow-[inset_0_0_15px_rgba(212,175,55,0.1)]">
+                    <i class="fa-solid fa-clock absolute right-4 top-4 text-themeAccent/20 text-4xl"></i>
+                    <span class="text-xs text-themeAccent uppercase tracking-wider mb-2 font-bold">Estimated Runtime</span>
+                    <div class="text-5xl font-bold text-themeText flex items-baseline gap-2">
+                        <span id="bat-time-val">0.0</span> <span id="bat-time-unit" class="text-xl text-themeAccent">Days</span>
+                    </div>
+                    <p class="text-[10px] text-themeMuted mt-4" id="bat-time-alt">Or approx 0.0 hours</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('bat-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="bat-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Average Current ($I_{avg}$):</strong></p>
+            <p>$$ I_{avg} = \frac{(I_{active} \cdot T_{active}) + (I_{sleep} \cdot T_{sleep})}{T_{active} + T_{sleep}} $$</p>
+            <p><strong>Estimated Lifetime:</strong></p>
+            <p>$$ \text{Hours} = \frac{C \cdot (\text{Derating} / 100)}{I_{avg}} $$</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setBatPreset() {
+        const preset = document.getElementById('bat-preset').value;
+        const cInput = document.getElementById('bat-c');
+        if(preset !== 'custom') {
+            cInput.value = preset;
+        }
+        updateBat();
+    }
+
+    function updateBat() {
+        // Just checking if preset matches value, otherwise switch to custom
+        const presetSelect = document.getElementById('bat-preset');
+        const cValStr = document.getElementById('bat-c').value;
+        let match = false;
+        for (let i = 0; i < presetSelect.options.length; i++) {
+            if (presetSelect.options[i].value === cValStr) {
+                presetSelect.selectedIndex = i;
+                match = true;
+                break;
+            }
+        }
+        if(!match) presetSelect.value = 'custom';
+
+        const C = parseFloat(cValStr);
+        const derate = parseFloat(document.getElementById('bat-derate').value) / 100;
+        
+        const I_active_ma = parseFloat(document.getElementById('bat-iactive').value);
+        const T_active_s = parseFloat(document.getElementById('bat-tactive').value) / 1000; // ms to s
+        
+        const I_sleep_ma = parseFloat(document.getElementById('bat-isleep').value) / 1000; // uA to mA
+        const T_sleep_s = parseFloat(document.getElementById('bat-tsleep').value);
+
+        let I_avg_ma = 0;
+        const T_total = T_active_s + T_sleep_s;
+
+        if (T_total > 0) {
+            I_avg_ma = ((I_active_ma * T_active_s) + (I_sleep_ma * T_sleep_s)) / T_total;
+        }
+
+        let lifetime_hrs = 0;
+        if (I_avg_ma > 0) {
+            lifetime_hrs = (C * derate) / I_avg_ma;
+        }
+
+        // Format I_avg
+        if (I_avg_ma < 1) {
+            document.getElementById('bat-iavg').innerText = (I_avg_ma * 1000).toFixed(1);
+            document.getElementById('bat-iavg-unit').innerText = "μA";
+        } else {
+            document.getElementById('bat-iavg').innerText = I_avg_ma.toFixed(3);
+            document.getElementById('bat-iavg-unit').innerText = "mA";
+        }
+
+        // Format Lifetime
+        const lifetime_days = lifetime_hrs / 24;
+        const lifetime_yrs = lifetime_days / 365.25;
+
+        const valElem = document.getElementById('bat-time-val');
+        const unitElem = document.getElementById('bat-time-unit');
+        const altElem = document.getElementById('bat-time-alt');
+
+        if (lifetime_yrs >= 1.5) {
+            valElem.innerText = lifetime_yrs.toFixed(2);
+            unitElem.innerText = "Years";
+            altElem.innerText = `Or approx ${Math.round(lifetime_days)} days`;
+        } else if (lifetime_days >= 2) {
+            valElem.innerText = lifetime_days.toFixed(1);
+            unitElem.innerText = "Days";
+            altElem.innerText = `Or approx ${Math.round(lifetime_hrs)} hours`;
+        } else {
+            valElem.innerText = lifetime_hrs.toFixed(1);
+            unitElem.innerText = "Hours";
+            altElem.innerText = `Or approx ${Math.round(lifetime_hrs * 60)} minutes`;
+        }
+    }
+    
+    setTimeout(updateBat, 100);
+</script>

@@ -1,0 +1,194 @@
+<div class="doc-container flex flex-col w-full h-full">
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Current Sense Amplifier Design">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-microchip"></i><h3 class="font-bold font-mono">Current Sense Amplifier</h3></div>
+        <span class="font-mono text-[10px] opacity-70">Shunt Resistor Sizing</span>
+    </div>
+    
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+            
+            <!-- Parameters -->
+            <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col overflow-y-auto">
+                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">SYSTEM REQUIREMENTS</h4>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Max Current ($I_{max}$)</span><span class="text-themeMuted">A</span></div>
+                        <input type="number" id="csa-imax" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-red-400" value="10" step="1" oninput="updateCSA()">
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>ADC Range ($V_{ADC}$)</span><span class="text-themeMuted">V</span></div>
+                        <input type="number" id="csa-vadc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="3.3" step="0.1" oninput="updateCSA()">
+                    </div>
+                </div>
+
+                <div class="text-[9px] text-themeMuted leading-relaxed">
+                    $V_{ADC}$ is the maximum voltage the ADC can read. The amplifier output will be designed to hit this voltage at $I_{max}$.
+                </div>
+
+                <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">SHUNT SIZING & GAIN</h4>
+                
+                <div>
+                    <div class="flex justify-between text-xs mb-1"><span>Max Shunt Voltage Drop</span><span class="text-themeMuted">mV</span></div>
+                    <input type="number" id="csa-vshunt-max" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="50" step="10" oninput="updateCSA()" title="Target max voltage drop across the shunt resistor">
+                </div>
+
+                <div class="flex gap-4">
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Actual Shunt Value</span><span class="text-themeMuted">mΩ</span></div>
+                        <input type="number" id="csa-rshunt" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="5" step="0.5" oninput="updateCSA_FromShunt()">
+                    </div>
+                    <div class="w-1/2">
+                        <div class="flex justify-between text-xs mb-1"><span>Amp Gain ($A_v$)</span><span class="text-themeMuted">V/V</span></div>
+                        <input type="number" id="csa-gain" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="50" step="1" oninput="updateCSA_FromGain()">
+                    </div>
+                </div>
+                
+                <div class="text-[9px] text-themeMuted">
+                    * Adjusting Actual Shunt will recalculate Gain. Adjusting Gain will recalculate Actual Shunt.
+                </div>
+
+            </div>
+
+            <!-- Visualization & Results -->
+            <div class="flex flex-col gap-4">
+                
+                <!-- Circuit Diagram -->
+                <div class="w-full h-32 bg-themeBg border border-themeBorder/50 flex flex-col items-center justify-center relative overflow-hidden">
+                    <svg width="250" height="100" viewBox="0 0 250 100" class="text-themeText">
+                        <!-- Shunt -->
+                        <line x1="20" y1="20" x2="60" y2="20" stroke="currentColor" stroke-width="2"/>
+                        <rect x="60" y="10" width="40" height="20" fill="var(--bg-color)" stroke="var(--accent-color)" stroke-width="2"/>
+                        <text x="80" y="25" font-size="10" fill="var(--accent-color)" text-anchor="middle" font-weight="bold">R_s</text>
+                        <line x1="100" y1="20" x2="140" y2="20" stroke="currentColor" stroke-width="2"/>
+                        
+                        <!-- Tap Lines -->
+                        <line x1="50" y1="20" x2="50" y2="50" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2"/>
+                        <line x1="110" y1="20" x2="110" y2="70" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2"/>
+                        
+                        <!-- Amp -->
+                        <polygon points="110,40 110,80 150,60" fill="var(--container-color)" stroke="var(--border-color)" stroke-width="2"/>
+                        <line x1="50" y1="50" x2="110" y2="50" stroke="currentColor" stroke-width="1.5"/>
+                        <text x="115" y="53" font-size="10" fill="currentColor">+</text>
+                        <text x="115" y="73" font-size="10" fill="currentColor">-</text>
+
+                        <!-- ADC -->
+                        <line x1="150" y1="60" x2="180" y2="60" stroke="currentColor" stroke-width="1.5"/>
+                        <rect x="180" y="45" width="40" height="30" fill="none" stroke="var(--blue-400)" stroke-width="2"/>
+                        <text x="200" y="63" font-size="10" fill="var(--blue-400)" text-anchor="middle">ADC</text>
+
+                        <text x="80" y="8" font-size="8" fill="currentColor" text-anchor="middle">V_shunt</text>
+                        <text x="165" y="55" font-size="8" fill="currentColor" text-anchor="middle">V_out</text>
+                    </svg>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 flex-grow">
+                    <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Shunt Power Dissipation</span>
+                        <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="csa-pd-val">0.0</span> <span class="text-sm text-themeAccent">W</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(212,175,55,0.05)]">
+                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Resolution (per LSB)</span>
+                        <div class="text-2xl font-bold text-themeText flex items-baseline gap-1 mb-1">
+                            <span id="csa-res10-val">0.0</span> <span class="text-[10px] text-themeMuted">mA (10-bit)</span>
+                        </div>
+                        <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
+                            <span id="csa-res12-val">0.0</span> <span class="text-[10px] text-themeMuted">mA (12-bit)</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theory & Math Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('csa-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="csa-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
+            <p><strong>Ideal Shunt Value:</strong> $R_{shunt} = \frac{V_{shunt\_max}}{I_{max}}$</p>
+            <p><strong>Required Gain:</strong> $A_v = \frac{V_{ADC\_max}}{V_{shunt\_max}} = \frac{V_{ADC\_max}}{I_{max} \cdot R_{shunt}}$</p>
+            <p><strong>Power Dissipation:</strong> $P = I_{max}^2 \cdot R_{shunt}$ (Select a resistor rated for at least $2 \times P$)</p>
+            <p><strong>Resolution:</strong> $I_{LSB} = \frac{V_{ADC\_max}}{2^N \cdot A_v \cdot R_{shunt}}$ (where $N$ is the ADC bit depth).</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateCSA() {
+        // Master recalculate from Vshunt max
+        const Imax = parseFloat(document.getElementById('csa-imax').value);
+        const Vadc = parseFloat(document.getElementById('csa-vadc').value);
+        const Vshunt_max_mV = parseFloat(document.getElementById('csa-vshunt-max').value);
+
+        if (Imax > 0 && Vadc > 0 && Vshunt_max_mV > 0) {
+            const Vshunt_V = Vshunt_max_mV / 1000;
+            const Rshunt_ohm = Vshunt_V / Imax;
+            
+            document.getElementById('csa-rshunt').value = (Rshunt_ohm * 1000).toFixed(2); // in mOhm
+            
+            const Gain = Vadc / Vshunt_V;
+            document.getElementById('csa-gain').value = Gain.toFixed(1);
+
+            calcOutputs(Imax, Vadc, Rshunt_ohm, Gain);
+        }
+    }
+
+    function updateCSA_FromShunt() {
+        const Imax = parseFloat(document.getElementById('csa-imax').value);
+        const Vadc = parseFloat(document.getElementById('csa-vadc').value);
+        const Rshunt_mOhm = parseFloat(document.getElementById('csa-rshunt').value);
+
+        if (Imax > 0 && Vadc > 0 && Rshunt_mOhm > 0) {
+            const Rshunt_ohm = Rshunt_mOhm / 1000;
+            const Vshunt_V = Imax * Rshunt_ohm;
+            document.getElementById('csa-vshunt-max').value = (Vshunt_V * 1000).toFixed(1);
+            
+            const Gain = Vadc / Vshunt_V;
+            document.getElementById('csa-gain').value = Gain.toFixed(1);
+
+            calcOutputs(Imax, Vadc, Rshunt_ohm, Gain);
+        }
+    }
+
+    function updateCSA_FromGain() {
+        const Imax = parseFloat(document.getElementById('csa-imax').value);
+        const Vadc = parseFloat(document.getElementById('csa-vadc').value);
+        const Gain = parseFloat(document.getElementById('csa-gain').value);
+
+        if (Imax > 0 && Vadc > 0 && Gain > 0) {
+            const Vshunt_V = Vadc / Gain;
+            document.getElementById('csa-vshunt-max').value = (Vshunt_V * 1000).toFixed(1);
+            
+            const Rshunt_ohm = Vshunt_V / Imax;
+            document.getElementById('csa-rshunt').value = (Rshunt_ohm * 1000).toFixed(2);
+
+            calcOutputs(Imax, Vadc, Rshunt_ohm, Gain);
+        }
+    }
+
+    function calcOutputs(Imax, Vadc, Rshunt, Gain) {
+        const Power = Imax * Imax * Rshunt;
+        document.getElementById('csa-pd-val').innerText = Power.toFixed(3);
+
+        const v_per_amp = Rshunt * Gain;
+        
+        // 10-bit resolution (mA/LSB)
+        const lsb_10 = Vadc / 1024;
+        const res_10_ma = (lsb_10 / v_per_amp) * 1000;
+        document.getElementById('csa-res10-val').innerText = res_10_ma.toFixed(1);
+
+        // 12-bit resolution
+        const lsb_12 = Vadc / 4096;
+        const res_12_ma = (lsb_12 / v_per_amp) * 1000;
+        document.getElementById('csa-res12-val').innerText = res_12_ma.toFixed(2);
+    }
+    
+    setTimeout(updateCSA, 100);
+</script>
