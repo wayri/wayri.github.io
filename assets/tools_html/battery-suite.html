@@ -211,9 +211,11 @@ function updateBatCharts(model, series, temp, crate, estCycles) {
     
     const voltages = model.curve.map(v => {
         let sag = vDropCrate;
-        if(temp < 10) sag *= 1.5; // More sag at cold temps
+        if(temp < 10) sag *= 1.5;
         return Math.max((v * series) - sag, model.v_min * series);
     });
+
+    const tc = window.getThemeColors ? window.getThemeColors() : {text: '#9ca3af', grid: 'rgba(255,255,255,0.05)'};
 
     const ctxCurve = document.getElementById('bat-curve-chart').getContext('2d');
     if(batCurveChart) batCurveChart.destroy();
@@ -236,8 +238,8 @@ function updateBatCharts(model, series, temp, crate, estCycles) {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                x: { title: { display: true, text: 'State of Charge (%)', color: '#9ca3af' }, reverse: true, grid: { color: 'rgba(255,255,255,0.05)' } },
-                y: { title: { display: true, text: 'Voltage (V)', color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                x: { title: { display: true, text: 'State of Charge (%)', color: tc.text }, ticks: {color: tc.text}, reverse: true, grid: { color: tc.grid } },
+                y: { title: { display: true, text: 'Voltage (V)', color: tc.text }, ticks: {color: tc.text}, grid: { color: tc.grid } }
             },
             plugins: { legend: { display: false } }
         }
@@ -268,8 +270,8 @@ function updateBatCharts(model, series, temp, crate, estCycles) {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                x: { title: { display: true, text: 'Depth of Discharge (%)', color: '#9ca3af' }, grid: { display: false } },
-                y: { type: 'logarithmic', title: { display: true, text: 'Cycles', color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                x: { title: { display: true, text: 'Depth of Discharge (%)', color: tc.text }, ticks: {color: tc.text}, reverse: true, grid: { color: tc.grid } },
+                y: { title: { display: true, text: 'Estimated Cycles', color: tc.text }, ticks: {color: tc.text}, type: 'logarithmic', grid: { color: tc.grid } }
             },
             plugins: { legend: { display: false } }
         }
@@ -308,8 +310,8 @@ function updateBatCharts(model, series, temp, crate, estCycles) {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                x: { title: { display: true, text: 'Cycles', color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                y: { min: 50, max: 105, title: { display: true, text: 'Retention (%)', color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                x: { title: { display: true, text: 'Cycles', color: tc.text }, ticks: {color: tc.text}, grid: { color: tc.grid } },
+                y: { min: 50, max: 105, title: { display: true, text: 'Retention (%)', color: tc.text }, ticks: {color: tc.text}, grid: { color: tc.grid } }
             },
             plugins: {
                 legend: { display: false },

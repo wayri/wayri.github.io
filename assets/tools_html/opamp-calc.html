@@ -153,6 +153,8 @@
         if(!ctx) return;
         if(opChart) opChart.destroy();
 
+        const tc = window.getThemeColors ? window.getThemeColors() : {text: '#aaa', grid: 'rgba(255, 255, 255, 0.1)'};
+
         opChart = new Chart(ctx, {
             type: 'line',
             data: { labels: [], datasets: [] },
@@ -160,18 +162,18 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 animation: false,
-                plugins: { legend: { labels: { color: '#aaa' } } },
+                plugins: { legend: { labels: { color: tc.text } } },
                 scales: {
                     x: {
                         type: 'logarithmic',
-                        title: { display: true, text: 'Frequency (Hz)', color: '#888' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        ticks: { color: '#aaa' }
+                        title: { display: true, text: 'Frequency (Hz)', color: tc.text },
+                        grid: { color: tc.grid },
+                        ticks: { color: tc.text }
                     },
                     y: {
-                        title: { display: true, text: 'Gain (dB)', color: '#888' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        ticks: { color: '#aaa' }
+                        title: { display: true, text: 'Gain (dB)', color: tc.text },
+                        grid: { color: tc.grid },
+                        ticks: { color: tc.text }
                     }
                 }
             }
