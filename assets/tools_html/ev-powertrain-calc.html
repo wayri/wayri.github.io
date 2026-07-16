@@ -12,28 +12,28 @@
                 <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">VEHICLE DYNAMICS</h4>
                 
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Cruising Speed ($v$)</span><span class="text-themeMuted">km/h</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Cruising Speed ($v$)</span><span class="text-themeMuted">km/h</span></div>
                     <input type="number" id="ev-v" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-lg" value="100" step="5" oninput="updateEV()">
                 </div>
                 
                 <div class="flex gap-4">
                     <div class="w-1/2">
-                        <div class="flex justify-between text-xs mb-1"><span>Mass ($m$)</span><span class="text-themeMuted">kg</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Mass ($m$)</span><span class="text-themeMuted">kg</span></div>
                         <input type="number" id="ev-m" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1800" step="50" oninput="updateEV()">
                     </div>
                     <div class="w-1/2">
-                        <div class="flex justify-between text-xs mb-1"><span>Roll Resist ($C_{rr}$)</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Roll Resist ($C_{rr}$)</span></div>
                         <input type="number" id="ev-crr" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.012" step="0.001" oninput="updateEV()">
                     </div>
                 </div>
 
                 <div class="flex gap-4">
                     <div class="w-1/2">
-                        <div class="flex justify-between text-xs mb-1"><span>Drag Coeff ($C_d$)</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Drag Coeff ($C_d$)</span></div>
                         <input type="number" id="ev-cd" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.25" step="0.01" oninput="updateEV()">
                     </div>
                     <div class="w-1/2">
-                        <div class="flex justify-between text-xs mb-1"><span>Frontal Area ($A$)</span><span class="text-themeMuted">$m^2$</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Frontal Area ($A$)</span><span class="whitespace-nowrap text-themeMuted">$m^2$</span></div>
                         <input type="number" id="ev-a" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="2.4" step="0.1" oninput="updateEV()">
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                         <input type="number" id="ev-bat" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="75" step="1" oninput="updateEV()">
                     </div>
                     <div class="w-1/2">
-                        <div class="flex justify-between text-xs mb-1"><span>Efficiency ($\eta$)</span><span class="text-themeMuted">%</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Efficiency ($\eta$)</span><span class="text-themeMuted">%</span></div>
                         <input type="number" id="ev-eta" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="90" step="1" max="100" min="1" oninput="updateEV()">
                     </div>
                 </div>
@@ -71,11 +71,11 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <div class="bg-themeBorder/10 border border-themeBorder p-3 flex justify-between items-center text-xs">
-                        <span class="text-themeMuted">Aero Drag ($F_{drag}$)</span>
+                        <span class="whitespace-nowrap text-themeMuted">Aero Drag ($F_{drag}$)</span>
                         <span id="ev-fdrag" class="font-bold text-blue-400">0 N</span>
                     </div>
                     <div class="bg-themeBorder/10 border border-themeBorder p-3 flex justify-between items-center text-xs">
-                        <span class="text-themeMuted">Rolling Res ($F_{roll}$)</span>
+                        <span class="whitespace-nowrap text-themeMuted">Rolling Res ($F_{roll}$)</span>
                         <span id="ev-froll" class="font-bold text-red-400">0 N</span>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                 <div class="grid grid-cols-2 gap-4 flex-grow">
                     
                     <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
-                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Cruise Power (Elec)</span>
+                        <span class="whitespace-nowrap text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Cruise Power (Elec)</span>
                         <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
                             <span id="ev-p-val">0.0</span> <span class="text-sm text-themeAccent">kW</span>
                         </div>

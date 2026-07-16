@@ -13,14 +13,14 @@
                 
                 <div class="flex gap-4">
                     <div class="w-1/2">
-                        <div class="flex justify-between text-[10px] mb-1"><span>Trace Width ($W$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Trace Width ($W$)</span></div>
                         <div class="flex">
                             <input type="number" id="fuse-w" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="1.0" step="0.1" oninput="updateFusing()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
                         </div>
                     </div>
                     <div class="w-1/2">
-                        <div class="flex justify-between text-[10px] mb-1"><span>Copper Thickness ($T$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Copper Thickness ($T$)</span></div>
                         <div class="flex">
                             <input type="number" id="fuse-t" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-orange-400" value="35" step="1" oninput="updateFusing()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">&mu;m</span>
@@ -32,14 +32,14 @@
                 
                 <div class="flex gap-4">
                     <div class="w-1/2">
-                        <div class="flex justify-between text-[10px] mb-1"><span>Ambient Temp ($T_{amb}$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Ambient Temp ($T_{amb}$)</span></div>
                         <div class="flex">
                             <input type="number" id="fuse-tamb" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="25" step="5" oninput="updateFusing()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">&deg;C</span>
                         </div>
                     </div>
                     <div class="w-1/2">
-                        <div class="flex justify-between text-[10px] mb-1"><span>Fault Duration ($t$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Fault Duration ($t$)</span></div>
                         <div class="flex">
                             <input type="number" id="fuse-time" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-red-400" value="0.1" step="0.01" oninput="updateFusing()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">sec</span>
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(239,68,68,0.1)] flex-grow">
-                    <span class="text-[10px] text-red-400 uppercase tracking-wider mb-2 font-bold">Fusing Current (Melt Threshold)</span>
+                    <span class="whitespace-nowrap text-[10px] text-red-400 uppercase tracking-wider mb-2 font-bold">Fusing Current (Melt Threshold)</span>
                     <div class="text-4xl font-bold text-themeText flex items-baseline gap-1">
                         <span id="fuse-imax">0.0</span> <span class="text-sm text-red-400">Amps</span>
                     </div>

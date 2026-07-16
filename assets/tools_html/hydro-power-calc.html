@@ -13,14 +13,14 @@
                 
                 <div>
                     <div class="flex justify-between text-xs mb-1">
-                        <span>Effective Head ($H$)</span><span class="text-themeMuted">meters</span>
+                        <span class="whitespace-nowrap">Effective Head ($H$)</span><span class="text-themeMuted">meters</span>
                     </div>
                     <input type="number" id="hydro-h" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="100" step="1" oninput="updateHydro()">
                 </div>
                 
                 <div>
                     <div class="flex justify-between text-xs mb-1">
-                        <span>Flow Rate ($Q$)</span><span class="text-themeMuted">$m^3/s$</span>
+                        <span class="whitespace-nowrap">Flow Rate ($Q$)</span><span class="whitespace-nowrap text-themeMuted">$m^3/s$</span>
                     </div>
                     <input type="number" id="hydro-q" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="50" step="1" oninput="updateHydro()">
                 </div>
@@ -29,13 +29,13 @@
                 <div class="flex gap-4">
                     <div class="w-1/2">
                         <div class="flex justify-between text-xs mb-1">
-                            <span>Turbine ($\eta_t$)</span><span class="text-themeMuted">%</span>
+                            <span class="whitespace-nowrap">Turbine ($\eta_t$)</span><span class="text-themeMuted">%</span>
                         </div>
                         <input type="number" id="hydro-eta-t" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="90" step="1" min="0" max="100" oninput="updateHydro()">
                     </div>
                     <div class="w-1/2">
                         <div class="flex justify-between text-xs mb-1">
-                            <span>Generator ($\eta_g$)</span><span class="text-themeMuted">%</span>
+                            <span class="whitespace-nowrap">Generator ($\eta_g$)</span><span class="text-themeMuted">%</span>
                         </div>
                         <input type="number" id="hydro-eta-g" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="95" step="1" min="0" max="100" oninput="updateHydro()">
                     </div>
@@ -80,7 +80,7 @@
                     
                     <div class="bg-themeBorder/10 border border-themeAccent/50 p-6 flex flex-col justify-center items-center text-center relative shadow-[inset_0_0_15px_rgba(212,175,55,0.1)]">
                         <i class="fa-solid fa-bolt absolute right-4 top-4 text-themeAccent/20 text-4xl"></i>
-                        <span class="text-xs text-themeAccent uppercase tracking-wider mb-2 font-bold">Electrical Power Output ($P_e$)</span>
+                        <span class="whitespace-nowrap text-xs text-themeAccent uppercase tracking-wider mb-2 font-bold">Electrical Power Output ($P_e$)</span>
                         <div class="text-5xl font-bold text-themeText flex items-baseline gap-2">
                             <span id="hydro-pe-val">0.00</span> <span id="hydro-pe-unit" class="text-xl text-themeAccent">MW</span>
                         </div>
@@ -89,11 +89,11 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <div class="bg-themeContainer border border-themeBorder/50 p-3 flex justify-between items-center text-xs">
-                        <span class="text-themeMuted">Theoretical Max ($P_{th}$)</span>
+                        <span class="whitespace-nowrap text-themeMuted">Theoretical Max ($P_{th}$)</span>
                         <span id="hydro-pth" class="font-bold text-themeText">0 MW</span>
                     </div>
                     <div class="bg-themeContainer border border-themeBorder/50 p-3 flex justify-between items-center text-xs">
-                        <span class="text-themeMuted">Mechanical ($P_m$)</span>
+                        <span class="whitespace-nowrap text-themeMuted">Mechanical ($P_m$)</span>
                         <span id="hydro-pm" class="font-bold text-themeText">0 MW</span>
                     </div>
                 </div>

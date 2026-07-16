@@ -124,24 +124,24 @@ const CanBusApp = {
         const maxStub = 0.3; // standard 0.3m
         
         html += `<div class="flex justify-between border-b border-themeBorder/30 pb-1">
-            <span class="text-themeMuted">Bit Time ($T_{bit}$)</span>
-            <span class="font-bold text-themeAccent">${Math.round(bitTimeNs)} ns</span>
+            <span class="whitespace-nowrap text-themeMuted">Bit Time ($T_{bit}$)</span>
+            <span class="whitespace-nowrap font-bold text-themeAccent">${Math.round(bitTimeNs)} ns</span>
         </div>`;
         
         html += `<div class="flex justify-between border-b border-themeBorder/30 pb-1">
-            <span class="text-themeMuted">Total Prop Delay (Loop)</span>
-            <span class="font-bold ${(propDelayNs*2) > (bitTimeNs*0.7) ? 'text-red-500' : 'text-themeAccent'}">${Math.round(propDelayNs*2)} ns</span>
+            <span class="whitespace-nowrap text-themeMuted">Total Prop Delay (Loop)</span>
+            <span class="whitespace-nowrap font-bold ${(propDelayNs*2) > (bitTimeNs*0.7) ? 'text-red-500' : 'text-themeAccent'}">${Math.round(propDelayNs*2)} ns</span>
         </div>`;
         
         html += `<div class="flex justify-between border-b border-themeBorder/30 pb-1">
-            <span class="text-themeMuted">Length Check (Max ${maxL}m)</span>
-            <span class="font-bold ${L > maxL ? 'text-red-500' : 'text-green-500'}">${L > maxL ? 'FAIL' : 'PASS'}</span>
+            <span class="whitespace-nowrap text-themeMuted">Length Check (Max ${maxL}m)</span>
+            <span class="whitespace-nowrap font-bold ${L > maxL ? 'text-red-500' : 'text-green-500'}">${L > maxL ? 'FAIL' : 'PASS'}</span>
         </div>`;
         
         let badStubs = this.nodes.filter(n => n.stub > maxStub);
         html += `<div class="flex justify-between border-b border-themeBorder/30 pb-1">
-            <span class="text-themeMuted">Stub Check (Max ${maxStub}m)</span>
-            <span class="font-bold ${badStubs.length > 0 ? 'text-red-500' : 'text-green-500'}">${badStubs.length > 0 ? badStubs.length + ' FAIL' : 'PASS'}</span>
+            <span class="whitespace-nowrap text-themeMuted">Stub Check (Max ${maxStub}m)</span>
+            <span class="whitespace-nowrap font-bold ${badStubs.length > 0 ? 'text-red-500' : 'text-green-500'}">${badStubs.length > 0 ? badStubs.length + ' FAIL' : 'PASS'}</span>
         </div>`;
         
         res.innerHTML = html;

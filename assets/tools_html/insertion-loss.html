@@ -12,31 +12,31 @@
                 <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">TRACE & MATERIAL</h4>
                 
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Target Impedance (Zo)</span><span class="text-themeMuted">ohms</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Target Impedance (Zo)</span><span class="text-themeMuted">ohms</span></div>
                     <input type="number" id="il-zo" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="50" step="1" oninput="updateIL()">
                 </div>
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Trace Width (W)</span><span class="text-themeMuted">mils</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Trace Width (W)</span><span class="text-themeMuted">mils</span></div>
                     <input type="number" id="il-w" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="5" step="0.5" oninput="updateIL()">
                 </div>
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Trace Length (L)</span><span class="text-themeMuted">inches</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Trace Length (L)</span><span class="text-themeMuted">inches</span></div>
                     <input type="number" id="il-l" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="10" step="1" oninput="updateIL()">
                 </div>
                 <div class="flex gap-4">
                     <div class="w-1/2">
-                        <div class="flex justify-between text-xs mb-1"><span>Diel. Const (Er)</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Diel. Const (Er)</span></div>
                         <input type="number" id="il-er" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="4.3" step="0.1" oninput="updateIL()">
                     </div>
                     <div class="w-1/2">
-                        <div class="flex justify-between text-xs mb-1"><span>Loss Tangent (Df)</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Loss Tangent (Df)</span></div>
                         <input type="number" id="il-df" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="0.02" step="0.001" oninput="updateIL()">
                     </div>
                 </div>
                 
                 <h4 class="text-xs font-bold text-themeMuted mt-6 mb-2 border-b border-themeBorder/20 pb-1">OPERATING FREQUENCY</h4>
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Frequency (f)</span><span class="text-themeMuted">GHz</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Frequency (f)</span><span class="text-themeMuted">GHz</span></div>
                     <input type="number" id="il-f" class="w-full bg-themeBg border border-themeAccent p-2 text-themeText font-bold text-lg" value="5" step="0.5" oninput="updateIL()">
                 </div>
             </div>
@@ -53,14 +53,14 @@
                 
                 <div class="mt-4 space-y-2 z-10">
                     <div class="flex justify-between items-center text-xs">
-                        <span class="text-themeMuted">Dielectric Loss ($\alpha_d$)</span>
+                        <span class="whitespace-nowrap text-themeMuted">Dielectric Loss ($\alpha_d$)</span>
                         <span id="il-diel" class="font-bold">-0.00 dB</span>
                     </div>
                     <!-- Visual Bar -->
                     <div class="w-full h-1.5 bg-themeBg overflow-hidden rounded-full"><div id="il-diel-bar" class="h-full bg-blue-500" style="width:50%"></div></div>
                     
                     <div class="flex justify-between items-center text-xs mt-2">
-                        <span class="text-themeMuted">Conductor Loss ($\alpha_c$)</span>
+                        <span class="whitespace-nowrap text-themeMuted">Conductor Loss ($\alpha_c$)</span>
                         <span id="il-cond" class="font-bold">-0.00 dB</span>
                     </div>
                     <!-- Visual Bar -->

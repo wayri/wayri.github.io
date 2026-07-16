@@ -33,7 +33,7 @@
                                   </div>
                               </div>
                               <div class="space-y-1 pt-2 border-t border-themeBorder/20">
-                                  <div class="flex justify-between text-xs text-themeMuted"><span>Time (Solar)</span><span id="pv-time-val" class="font-bold text-themeAccent">12:00</span></div>
+                                  <div class="flex justify-between text-xs text-themeMuted"><span class="whitespace-nowrap">Time (Solar)</span><span id="pv-time-val" class="font-bold text-themeAccent">12:00</span></div>
                                   <input type="range" id="pv-time" min="0" max="24" step="0.5" value="12" class="w-full accent-themeAccent" oninput="updateSolarSim()">
                               </div>
                               <div class="pt-2 border-t border-themeBorder/20">
@@ -50,7 +50,7 @@
                               <div class="relative w-full h-[250px] bg-themeContainer border border-themeBorder/30"><canvas id="pv-time-chart"></canvas></div>
                           </div>
                           <div class="flex flex-col">
-                              <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-themeMuted">MONTHLY ENERGY YIELD (kWh)</span><span class="text-[10px] text-themeAccent" id="pv-annual">Annual: 0 kWh</span></div>
+                              <div class="flex justify-between items-center mb-2"><span class="whitespace-nowrap text-xs font-bold text-themeMuted">MONTHLY ENERGY YIELD (kWh)</span><span class="text-[10px] text-themeAccent" id="pv-annual">Annual: 0 kWh</span></div>
                               <div class="relative w-full h-[250px] bg-themeContainer border border-themeBorder/30"><canvas id="pv-hist-chart"></canvas></div>
                           </div>
                       </div>

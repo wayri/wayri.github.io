@@ -97,7 +97,7 @@ function runMargin() {
 }
 
 // Ensure it runs on load
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('toolLoaded', () => {
     if(document.getElementById('margin-type')) setupMarginMode();
 });
 
@@ -177,7 +177,7 @@ function runMotor() {
     }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('toolLoaded', () => {
     if(document.getElementById('motor-solve-group')) setupMotorMode();
 });
 
@@ -286,7 +286,7 @@ function runSMPS() {
     }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('toolLoaded', () => {
     if(document.getElementById('smps-solve-group')) setupSMPSMode();
 });
 
@@ -419,7 +419,7 @@ function runFilter() {
     ctx.stroke();
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('toolLoaded', () => {
     if(document.getElementById('filter-solve-group')) setupFilterMode();
 });
 
@@ -557,7 +557,7 @@ function runThermistor() {
     document.getElementById('ntc-result').textContent = solveTarget === 'rt' ? (rt ? rt.toFixed(1) + " ohms" : "-") : (temp ? temp.toFixed(2) + " °C" : "-");
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('toolLoaded', () => {
     if(document.getElementById('ntc-solve-group')) setupNTCMode();
 });
 
@@ -605,7 +605,7 @@ function initSerialChart() {
     });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('toolLoaded', () => {
     initSerialChart();
 });
 
@@ -827,7 +827,7 @@ function initPVCharts() {
     });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('toolLoaded', () => {
     initPVCharts();
 });
 
@@ -978,7 +978,7 @@ function initFilterBodeChart() {
     });
 }
 
-window.addEventListener('DOMContentLoaded', function() { initFilterBodeChart(); });
+document.addEventListener('toolLoaded', function() { initFilterBodeChart(); });
 
 // Override runFilter to use Chart.js
 var _origRunFilter = (typeof runFilter === 'function') ? runFilter : null;
@@ -1018,7 +1018,7 @@ window.updatePVFromInputs = function() {
 // ==========================================
 // GLOBAL STANDARD VALUE SUGGESTIONS
 // ==========================================
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('toolLoaded', () => {
     setTimeout(() => {
         const allInputs = document.querySelectorAll('input[type="number"]');
         allInputs.forEach(input => {

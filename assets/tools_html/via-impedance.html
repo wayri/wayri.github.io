@@ -41,23 +41,23 @@
                 <div class="col-span-2 text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">VIA DIMENSIONS</div>
                 
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Board Thickness (T)</span><span class="text-themeMuted">mils</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Board Thickness (T)</span><span class="text-themeMuted">mils</span></div>
                     <input type="number" id="via-t" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="62" step="1" oninput="updateViaCalc()">
                 </div>
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Hole Diameter (D_hole)</span><span class="text-themeMuted">mils</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Hole Diameter (D_hole)</span><span class="text-themeMuted">mils</span></div>
                     <input type="number" id="via-d-hole" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="0.5" oninput="updateViaCalc()">
                 </div>
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Pad Diameter (D_pad)</span><span class="text-themeMuted">mils</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Pad Diameter (D_pad)</span><span class="text-themeMuted">mils</span></div>
                     <input type="number" id="via-d-pad" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="20" step="1" oninput="updateViaCalc()">
                 </div>
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Anti-Pad Dia (D_anti)</span><span class="text-themeMuted">mils</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Anti-Pad Dia (D_anti)</span><span class="text-themeMuted">mils</span></div>
                     <input type="number" id="via-d-anti" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="30" step="1" oninput="updateViaCalc()">
                 </div>
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Dielectric Const (Er)</span><span class="text-themeMuted">-</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Dielectric Const (Er)</span><span class="text-themeMuted">-</span></div>
                     <input type="number" id="via-er" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="4.3" step="0.1" oninput="updateViaCalc()">
                 </div>
                 <div class="flex items-end">
@@ -85,7 +85,7 @@
                 <div class="text-3xl font-bold text-themeAccent flex items-baseline gap-1">
                     <span id="via-z-val">0.00</span> <span class="text-sm">ohms</span>
                 </div>
-                <span class="text-[9px] text-themeMuted mt-2">Step Response (Td = <span id="via-td-val">0</span> ps)</span>
+                <span class="whitespace-nowrap text-[9px] text-themeMuted mt-2">Step Response (Td = <span id="via-td-val">0</span> ps)</span>
             </div>
         </div>
 

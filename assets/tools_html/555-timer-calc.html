@@ -19,7 +19,7 @@
                 </div>
                 
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Resistor 1 (R1)</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Resistor 1 (R1)</span></div>
                     <div class="flex gap-2">
                         <input type="number" id="t555-r1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1" step="0.1" oninput="update555()">
                         <select id="t555-r1-unit" class="bg-themeBg border border-themeBorder p-1.5 text-xs outline-none" onchange="update555()">
@@ -31,7 +31,7 @@
                 </div>
 
                 <div id="t555-r2-container">
-                    <div class="flex justify-between text-xs mb-1"><span>Resistor 2 (R2)</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Resistor 2 (R2)</span></div>
                     <div class="flex gap-2">
                         <input type="number" id="t555-r2" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="0.1" oninput="update555()">
                         <select id="t555-r2-unit" class="bg-themeBg border border-themeBorder p-1.5 text-xs outline-none" onchange="update555()">
@@ -43,7 +43,7 @@
                 </div>
                 
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Capacitor (C1)</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Capacitor (C1)</span></div>
                     <div class="flex gap-2">
                         <input type="number" id="t555-c" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="update555()">
                         <select id="t555-c-unit" class="bg-themeBg border border-themeBorder p-1.5 text-xs outline-none" onchange="update555()">
@@ -76,7 +76,7 @@
                 <!-- Results - Astable -->
                 <div id="res-astable" class="grid grid-cols-2 gap-4 flex-grow">
                     <div class="bg-themeBorder/10 border border-themeBorder p-3 flex flex-col justify-center items-center text-center">
-                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-1 font-bold">Frequency ($f$)</span>
+                        <span class="whitespace-nowrap text-[10px] text-themeMuted uppercase tracking-wider mb-1 font-bold">Frequency ($f$)</span>
                         <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
                             <span id="t555-f-val">0.00</span> <span id="t555-f-unit" class="text-xs text-themeAccent">Hz</span>
                         </div>
@@ -91,11 +91,11 @@
 
                     <div class="col-span-2 flex gap-4 text-xs">
                         <div class="flex-1 bg-themeContainer border border-themeBorder/50 p-2 text-center">
-                            <span class="block text-[9px] text-themeMuted">Time High ($T_H$)</span>
+                            <span class="whitespace-nowrap block text-[9px] text-themeMuted">Time High ($T_H$)</span>
                             <span id="t555-th" class="font-bold">0.0 ms</span>
                         </div>
                         <div class="flex-1 bg-themeContainer border border-themeBorder/50 p-2 text-center">
-                            <span class="block text-[9px] text-themeMuted">Time Low ($T_L$)</span>
+                            <span class="whitespace-nowrap block text-[9px] text-themeMuted">Time Low ($T_L$)</span>
                             <span id="t555-tl" class="font-bold">0.0 ms</span>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                 <!-- Results - Monostable -->
                 <div id="res-monostable" class="hidden flex-col gap-4 flex-grow">
                     <div class="bg-themeBorder/10 border border-themeAccent/50 p-6 flex flex-col justify-center items-center text-center h-full shadow-[inset_0_0_15px_rgba(212,175,55,0.1)]">
-                        <span class="text-[10px] text-themeAccent uppercase tracking-wider mb-2 font-bold">Output Pulse Time ($T$)</span>
+                        <span class="whitespace-nowrap text-[10px] text-themeAccent uppercase tracking-wider mb-2 font-bold">Output Pulse Time ($T$)</span>
                         <div class="text-4xl font-bold text-themeText flex items-baseline gap-2">
                             <span id="t555-mono-t-val">0.00</span> <span id="t555-mono-t-unit" class="text-lg text-themeAccent">s</span>
                         </div>

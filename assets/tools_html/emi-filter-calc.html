@@ -13,14 +13,14 @@
                 
                 <div class="flex gap-4">
                     <div class="w-1/2">
-                        <div class="flex justify-between text-[10px] mb-1"><span>Common Mode Choke ($L_c$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Common Mode Choke ($L_c$)</span></div>
                         <div class="flex">
                             <input type="number" id="emi-lc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="10" step="1" oninput="updateEMI()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mH</span>
                         </div>
                     </div>
                     <div class="w-1/2">
-                        <div class="flex justify-between text-[10px] mb-1"><span>Leakage Inductance ($L_d$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Leakage Inductance ($L_d$)</span></div>
                         <div class="flex">
                             <input type="number" id="emi-ld" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-themeMuted" value="100" step="10" oninput="updateEMI()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">μH</span>
@@ -30,14 +30,14 @@
 
                 <div class="flex gap-4 mt-2">
                     <div class="w-1/2">
-                        <div class="flex justify-between text-[10px] mb-1"><span>X-Capacitor ($C_x$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">X-Capacitor ($C_x$)</span></div>
                         <div class="flex">
                             <input type="number" id="emi-cx" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="0.47" step="0.1" oninput="updateEMI()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">μF</span>
                         </div>
                     </div>
                     <div class="w-1/2">
-                        <div class="flex justify-between text-[10px] mb-1"><span>Y-Capacitor ($C_y$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Y-Capacitor ($C_y$)</span></div>
                         <div class="flex">
                             <input type="number" id="emi-cy" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-green-400" value="2.2" step="0.1" oninput="updateEMI()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">nF</span>
@@ -47,7 +47,7 @@
 
                 <div class="mt-4 pt-4 border-t border-themeBorder/20">
                     <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">LINE IMPEDANCE</h4>
-                    <div class="flex justify-between text-xs mb-1"><span>Source/Load Impedance ($Z$)</span><span class="text-themeMuted">ohms</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Source/Load Impedance ($Z$)</span><span class="text-themeMuted">ohms</span></div>
                     <input type="number" id="emi-z" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="50" step="10" oninput="updateEMI()">
                     <div class="text-[9px] text-themeMuted mt-1">LISN (Line Impedance Stabilization Network) standard is 50ohms.</div>
                 </div>
@@ -110,7 +110,7 @@
 
                 <div class="grid grid-cols-2 gap-4 flex-grow">
                     <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
-                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Common Mode (CM) Cutoff</span>
+                        <span class="whitespace-nowrap text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Common Mode (CM) Cutoff</span>
                         <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
                             <span id="emi-fc-cm">0.0</span> <span class="text-xs text-themeAccent">kHz</span>
                         </div>
@@ -118,7 +118,7 @@
                     </div>
                     
                     <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(212,175,55,0.05)]">
-                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Differential (DM) Cutoff</span>
+                        <span class="whitespace-nowrap text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Differential (DM) Cutoff</span>
                         <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
                             <span id="emi-fc-dm">0.0</span> <span class="text-xs text-themeAccent">kHz</span>
                         </div>

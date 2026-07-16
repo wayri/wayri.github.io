@@ -12,17 +12,17 @@
                 <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">CIRCUIT PARAMETERS</h4>
                 
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Supply Voltage (Vs)</span><span class="text-themeMuted">V</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Supply Voltage (Vs)</span><span class="text-themeMuted">V</span></div>
                     <input type="number" id="led-vs" class="w-full bg-themeContainer border border-themeBorder p-1.5 text-themeText" value="5" step="0.5" oninput="updateLED()">
                 </div>
                 
                 <div class="flex gap-4">
                     <div class="w-1/2">
-                        <div class="flex justify-between text-xs mb-1"><span>LED Forward Voltage (Vf)</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">LED Forward Voltage (Vf)</span></div>
                         <input type="number" id="led-vf" class="w-full bg-themeContainer border border-themeBorder p-1.5 text-themeText" value="2.2" step="0.1" oninput="updateLED()">
                     </div>
                     <div class="w-1/2">
-                        <div class="flex justify-between text-xs mb-1"><span>Target Current (If)</span><span class="text-themeMuted">mA</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Target Current (If)</span><span class="text-themeMuted">mA</span></div>
                         <input type="number" id="led-if" class="w-full bg-themeContainer border border-themeBorder p-1.5 text-themeText" value="20" step="1" oninput="updateLED()">
                     </div>
                 </div>

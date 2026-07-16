@@ -1,7 +1,7 @@
 <div class="doc-container flex flex-col w-full h-full">
     <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Crosstalk Coefficient Estimator">
         <div class="flex items-center gap-2"><i class="fa-solid fa-wave-square"></i><h3 class="font-bold font-mono">Crosstalk Estimator</h3></div>
-        <span class="font-mono text-[10px] opacity-70">Forward & Backward (NEXT/FEXT)</span>
+        <span class="whitespace-nowrap font-mono text-[10px] opacity-70">Forward & Backward (NEXT/FEXT)</span>
     </div>
     
     <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
@@ -12,19 +12,19 @@
                 <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">COUPLED LINES PARAMETERS</h4>
                 
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Trace Height above GND (H)</span><span class="text-themeMuted">mils</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Trace Height above GND (H)</span><span class="text-themeMuted">mils</span></div>
                     <input type="number" id="xtalk-h" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="5" step="0.5" oninput="updateXtalk()">
                 </div>
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Trace Separation (D)</span><span class="text-themeMuted">mils</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Trace Separation (D)</span><span class="text-themeMuted">mils</span></div>
                     <input type="number" id="xtalk-d" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="0.5" oninput="updateXtalk()">
                 </div>
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Rise Time (Tr)</span><span class="text-themeMuted">ns</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Rise Time (Tr)</span><span class="text-themeMuted">ns</span></div>
                     <input type="number" id="xtalk-tr" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1.0" step="0.1" oninput="updateXtalk()">
                 </div>
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Coupled Length (L)</span><span class="text-themeMuted">inches</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Coupled Length (L)</span><span class="text-themeMuted">inches</span></div>
                     <input type="number" id="xtalk-l" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="2.0" step="0.1" oninput="updateXtalk()">
                 </div>
                 
@@ -49,7 +49,7 @@
                         </div>
                         
                         <div class="absolute left-1/2 -translate-x-1/2 flex flex-col items-center text-themeMuted">
-                            <span class="text-[8px] mb-1">Coupling (D)</span>
+                            <span class="whitespace-nowrap text-[8px] mb-1">Coupling (D)</span>
                             <i class="fa-solid fa-arrows-left-right text-xs"></i>
                         </div>
 
@@ -67,12 +67,12 @@
                 <!-- Results -->
                 <div class="grid grid-cols-2 gap-4 flex-grow">
                     <div class="bg-themeBorder/10 border border-themeBorder p-3 flex flex-col justify-between">
-                        <span class="text-[10px] text-themeMuted uppercase tracking-wider">Backward Crosstalk (NEXT)</span>
+                        <span class="whitespace-nowrap text-[10px] text-themeMuted uppercase tracking-wider">Backward Crosstalk (NEXT)</span>
                         <div class="text-2xl font-bold text-themeText mt-2" id="xtalk-next-val">0.0 %</div>
                         <div class="w-full bg-themeBg h-1 mt-2 overflow-hidden"><div id="xtalk-next-bar" class="h-full bg-red-500" style="width: 0%"></div></div>
                     </div>
                     <div class="bg-themeBorder/10 border border-themeBorder p-3 flex flex-col justify-between relative overflow-hidden" id="fext-container">
-                        <span class="text-[10px] text-themeMuted uppercase tracking-wider">Forward Crosstalk (FEXT)</span>
+                        <span class="whitespace-nowrap text-[10px] text-themeMuted uppercase tracking-wider">Forward Crosstalk (FEXT)</span>
                         <div class="text-2xl font-bold text-themeText mt-2" id="xtalk-fext-val">0.0 %</div>
                         <div class="w-full bg-themeBg h-1 mt-2 overflow-hidden"><div id="xtalk-fext-bar" class="h-full bg-orange-500" style="width: 0%"></div></div>
                         <div id="fext-zero-overlay" class="absolute inset-0 bg-themeContainer/90 flex flex-col items-center justify-center hidden backdrop-blur-[1px]">

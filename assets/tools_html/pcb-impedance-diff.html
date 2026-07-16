@@ -49,23 +49,23 @@
                 
                 <div class="space-y-3">
                     <div>
-                        <div class="flex justify-between text-xs mb-1"><span>Trace Width (W)</span><span class="text-themeMuted">mils</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Trace Width (W)</span><span class="text-themeMuted">mils</span></div>
                         <input type="number" id="diff-w" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="5" step="0.1" oninput="updateDiffImpedance()">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs mb-1"><span>Trace Separation (S)</span><span class="text-themeMuted">mils</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Trace Separation (S)</span><span class="text-themeMuted">mils</span></div>
                         <input type="number" id="diff-s" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="8" step="0.1" oninput="updateDiffImpedance()">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs mb-1"><span>Trace Thickness (T)</span><span class="text-themeMuted">oz / mils</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Trace Thickness (T)</span><span class="text-themeMuted">oz / mils</span></div>
                         <input type="number" id="diff-t" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="1.4" step="0.1" title="1 oz copper is ~1.4 mils" oninput="updateDiffImpedance()">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs mb-1"><span id="diff-h-label">Dielectric Height (H)</span><span class="text-themeMuted">mils</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span id="diff-h-label" class="whitespace-nowrap">Dielectric Height (H)</span><span class="text-themeMuted">mils</span></div>
                         <input type="number" id="diff-h" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="4.5" step="0.1" oninput="updateDiffImpedance()">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs mb-1"><span>Dielectric Constant (Er)</span><span class="text-themeMuted">-</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Dielectric Constant (Er)</span><span class="text-themeMuted">-</span></div>
                         <input type="number" id="diff-er" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="4.3" step="0.1" oninput="updateDiffImpedance()">
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                 
                 <div class="text-[10px] text-themeMuted mt-4 space-y-1 bg-themeContainer p-2 border border-themeBorder/20 border-dashed">
                     <div class="flex justify-between"><span>Propagation Delay:</span><span id="diff-tpd-val">140 ps/in</span></div>
-                    <div class="flex justify-between"><span>Effective Er (Eeff):</span><span id="diff-eeff-val">3.2</span></div>
+                    <div class="flex justify-between"><span class="whitespace-nowrap">Effective Er (Eeff):</span><span id="diff-eeff-val">3.2</span></div>
                 </div>
             </div>
         </div>

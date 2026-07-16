@@ -12,7 +12,7 @@
                 <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">COMPONENT VALUES</h4>
                 
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Resistance (R)</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Resistance (R)</span></div>
                     <div class="flex gap-2">
                         <input type="number" id="rc-r" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateRC()">
                         <select id="rc-r-unit" class="bg-themeBg border border-themeBorder p-1.5 text-xs outline-none" onchange="updateRC()">
@@ -24,7 +24,7 @@
                 </div>
                 
                 <div class="pt-2">
-                    <div class="flex justify-between text-xs mb-1"><span>Capacitance (C)</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Capacitance (C)</span></div>
                     <div class="flex gap-2">
                         <input type="number" id="rc-c" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateRC()">
                         <select id="rc-c-unit" class="bg-themeBg border border-themeBorder p-1.5 text-xs outline-none" onchange="updateRC()">
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="pt-2 border-t border-themeBorder/20 mt-4">
-                    <div class="flex justify-between text-xs mb-1"><span>Target Voltage ($V_c$) Threshold</span><span class="text-themeMuted">%</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Target Voltage ($V_c$) Threshold</span><span class="text-themeMuted">%</span></div>
                     <input type="range" id="rc-pct" class="w-full accent-themeAccent" min="1" max="99" value="63" oninput="updateRC()">
                     <div class="flex justify-between text-[10px] text-themeMuted">
                         <span>1%</span><span id="rc-pct-val" class="font-bold text-themeText">63%</span><span>99%</span>
@@ -49,7 +49,7 @@
             <div class="flex flex-col gap-4">
                 
                 <div class="bg-themeBg border-l-4 border-themeAccent p-4 flex flex-col justify-center relative overflow-hidden group">
-                    <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Time Constant ($\tau$)</span>
+                    <span class="whitespace-nowrap text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Time Constant ($\tau$)</span>
                     <div class="text-4xl font-bold text-themeText flex items-baseline gap-1">
                         <span id="rc-tau-val">100.0</span> <span id="rc-tau-unit" class="text-lg text-themeAccent">ms</span>
                     </div>
@@ -76,7 +76,7 @@
                 </div>
 
                 <div class="w-full p-2 border border-themeBorder/50 text-[10px] text-themeMuted flex justify-between bg-themeContainer">
-                    <span>Cutoff Freq (Low-Pass):</span>
+                    <span class="whitespace-nowrap">Cutoff Freq (Low-Pass):</span>
                     <span id="rc-fc" class="font-bold text-themeText">1.59 Hz</span>
                 </div>
 

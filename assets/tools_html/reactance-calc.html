@@ -1,7 +1,7 @@
 <div class="doc-container flex flex-col w-full h-full">
     <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Reactance Calculator">
         <div class="flex items-center gap-2"><i class="fa-solid fa-wave-square"></i><h3 class="font-bold font-mono">Reactance Calculator</h3></div>
-        <span class="font-mono text-[10px] opacity-70">Capacitive (Xc) & Inductive (Xl)</span>
+        <span class="whitespace-nowrap font-mono text-[10px] opacity-70">Capacitive (Xc) & Inductive (Xl)</span>
     </div>
     
     <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
@@ -12,7 +12,7 @@
                 <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">COMPONENT VALUES</h4>
                 
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Frequency (f)</span><span class="text-themeMuted">Hz</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Frequency (f)</span><span class="text-themeMuted">Hz</span></div>
                     <div class="flex gap-2">
                         <input type="number" id="react-f" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1000" step="100" oninput="updateReactance()">
                         <select id="react-f-unit" class="bg-themeBg border border-themeBorder p-1.5 text-xs outline-none" onchange="updateReactance()">
@@ -25,7 +25,7 @@
                 </div>
                 
                 <div class="pt-2">
-                    <div class="flex justify-between text-xs mb-1"><span class="text-blue-400 font-bold">Capacitance (C)</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap text-blue-400 font-bold">Capacitance (C)</span></div>
                     <div class="flex gap-2">
                         <input type="number" id="react-c" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1" step="0.1" oninput="updateReactance()">
                         <select id="react-c-unit" class="bg-themeBg border border-themeBorder p-1.5 text-xs outline-none" onchange="updateReactance()">
@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="pt-2 border-b border-themeBorder/20 pb-4">
-                    <div class="flex justify-between text-xs mb-1"><span class="text-red-400 font-bold">Inductance (L)</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap text-red-400 font-bold">Inductance (L)</span></div>
                     <div class="flex gap-2">
                         <input type="number" id="react-l" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateReactance()">
                         <select id="react-l-unit" class="bg-themeBg border border-themeBorder p-1.5 text-xs outline-none" onchange="updateReactance()">
@@ -86,7 +86,7 @@
                         <span>Low Freq</span> <span>High Freq</span>
                     </div>
                     <div class="z-10 flex justify-between px-4 w-full">
-                        <span class="text-blue-400">$X_C$ dominates (Open)</span> <span class="text-red-400">$X_L$ dominates (Open)</span>
+                        <span class="whitespace-nowrap text-blue-400">$X_C$ dominates (Open)</span> <span class="whitespace-nowrap text-red-400">$X_L$ dominates (Open)</span>
                     </div>
                 </div>
 

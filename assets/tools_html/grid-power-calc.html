@@ -19,19 +19,19 @@
                 
                 <div>
                     <div class="flex justify-between text-xs mb-1">
-                        <span id="label-v">Voltage (V_rms)</span><span class="text-themeMuted">V</span>
+                        <span id="label-v" class="whitespace-nowrap">Voltage (V_rms)</span><span class="text-themeMuted">V</span>
                     </div>
                     <input type="number" id="grid-v" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="230" step="10" oninput="updateGrid()">
                     <div id="hint-v" class="text-[9px] text-themeMuted mt-1 hidden">Line-to-Line Voltage</div>
                 </div>
                 
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Current (I_rms)</span><span class="text-themeMuted">A</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Current (I_rms)</span><span class="text-themeMuted">A</span></div>
                     <input type="number" id="grid-i" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateGrid()">
                 </div>
                 
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Power Factor (PF)</span><span class="text-themeMuted">cos(θ)</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Power Factor (PF)</span><span class="whitespace-nowrap text-themeMuted">cos(θ)</span></div>
                     <input type="number" id="grid-pf" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.85" step="0.05" min="0" max="1" oninput="updateGrid()">
                 </div>
 
@@ -76,17 +76,17 @@
                 <!-- Power Results -->
                 <div class="grid grid-cols-3 gap-2 flex-grow">
                     <div class="bg-themeBorder/10 border border-themeAccent/50 p-2 flex flex-col justify-center items-center text-center">
-                        <span class="text-[9px] text-themeAccent uppercase tracking-wider mb-1">Real Power (P)</span>
+                        <span class="whitespace-nowrap text-[9px] text-themeAccent uppercase tracking-wider mb-1">Real Power (P)</span>
                         <div class="text-lg font-bold text-themeText"><span id="grid-p">0</span> <span class="text-[10px] text-themeAccent">kW</span></div>
                     </div>
                     
                     <div class="bg-red-900/10 border border-red-500/50 p-2 flex flex-col justify-center items-center text-center">
-                        <span class="text-[9px] text-red-400 uppercase tracking-wider mb-1">Reactive (Q)</span>
+                        <span class="whitespace-nowrap text-[9px] text-red-400 uppercase tracking-wider mb-1">Reactive (Q)</span>
                         <div class="text-lg font-bold text-themeText"><span id="grid-q">0</span> <span class="text-[10px] text-red-400">kVAR</span></div>
                     </div>
 
                     <div class="bg-blue-900/10 border border-blue-500/50 p-2 flex flex-col justify-center items-center text-center">
-                        <span class="text-[9px] text-blue-400 uppercase tracking-wider mb-1">Apparent (S)</span>
+                        <span class="whitespace-nowrap text-[9px] text-blue-400 uppercase tracking-wider mb-1">Apparent (S)</span>
                         <div class="text-lg font-bold text-themeText"><span id="grid-s">0</span> <span class="text-[10px] text-blue-400">kVA</span></div>
                     </div>
                 </div>

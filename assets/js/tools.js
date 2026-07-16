@@ -1378,11 +1378,19 @@ window.runAllTools = function() {
     try { if(typeof initPlotter==='function') initPlotter(); } catch(e){console.error(e);}
 }
 
+
 window.addEventListener('DOMContentLoaded', () => {
     runAllTools();
     try { if(typeof initPlotter==='function') initPlotter(); } catch(e){}
     try { if(typeof initSolarWidget==='function') initSolarWidget(); } catch(e){}
 });
+
+document.addEventListener('toolLoaded', () => {
+    runAllTools();
+    try { if(typeof initPlotter==='function') initPlotter(); } catch(e){}
+    try { if(typeof initSolarWidget==='function') initSolarWidget(); } catch(e){}
+});
+
 
 window.addEventListener('themeChanged', () => {
     try { if(typeof drawPlot==='function') drawPlot(); } catch(e){}

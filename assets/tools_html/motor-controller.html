@@ -75,16 +75,16 @@
                     <p class="text-[10px] text-themeMuted">Calculated PI gains for zero-pole cancellation (bandwidth = f_PWM / 10).</p>
                     
                     <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                        <span class="text-themeMuted text-xs">Target Bandwidth (&omega;c)</span>
+                        <span class="whitespace-nowrap text-themeMuted text-xs">Target Bandwidth (&omega;c)</span>
                         <span id="mc-bw" class="font-bold text-themeText">-- rad/s</span>
                     </div>
                     <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                        <span class="text-themeMuted text-xs">Kp (Proportional Gain)</span>
+                        <span class="whitespace-nowrap text-themeMuted text-xs">Kp (Proportional Gain)</span>
                         <span id="mc-kp" class="font-bold text-themeAccent">-- V/A</span>
                     </div>
                     <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                        <span class="text-themeMuted text-xs">Ki (Integral Gain)</span>
-                        <span id="mc-ki" class="font-bold text-themeAccent">-- V/(A&middot;s)</span>
+                        <span class="whitespace-nowrap text-themeMuted text-xs">Ki (Integral Gain)</span>
+                        <span id="mc-ki" class="whitespace-nowrap font-bold text-themeAccent">-- V/(A&middot;s)</span>
                     </div>
                     
                     <p class="text-[10px] text-themeMuted mt-2">Electrical Time Constant (Te = Ls/Rs): <span id="mc-te">--</span> ms</p>
@@ -96,19 +96,19 @@
                     <p class="text-[10px] text-themeMuted">Estimated conduction and switching losses for thermal sizing.</p>
                     
                     <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                        <span class="text-themeMuted text-xs">Conduction Loss (P_cond)</span>
+                        <span class="whitespace-nowrap text-themeMuted text-xs">Conduction Loss (P_cond)</span>
                         <span id="mc-pcond" class="font-bold text-themeText">-- W</span>
                     </div>
                     <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                        <span class="text-themeMuted text-xs">Switching Loss (P_sw)</span>
+                        <span class="whitespace-nowrap text-themeMuted text-xs">Switching Loss (P_sw)</span>
                         <span id="mc-psw" class="font-bold text-themeText">-- W</span>
                     </div>
                     <div class="flex justify-between font-bold border-b border-themeBorder/10 pb-1">
-                        <span class="text-themeAccent text-xs">Total Loss (per FET)</span>
+                        <span class="whitespace-nowrap text-themeAccent text-xs">Total Loss (per FET)</span>
                         <span id="mc-ptot" class="text-themeAccent">-- W</span>
                     </div>
                     <div class="flex justify-between font-bold text-red-400">
-                        <span class="text-xs">Total Inverter Loss (6 FETs)</span>
+                        <span class="whitespace-nowrap text-xs">Total Inverter Loss (6 FETs)</span>
                         <span id="mc-pinv">-- W</span>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
                     <div class="text-themeAccent"><i class="fa-solid fa-arrow-right"></i></div>
                     <div class="border border-themeBorder px-2 py-1 bg-themeBg">V*_dq</div>
                     <div class="text-themeAccent"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="border border-themeBorder px-2 py-1 bg-themeBg text-center">Inv / Motor<br><span id="diag-tf" class="text-[10px]">1/(sL+R)</span></div>
+                    <div class="border border-themeBorder px-2 py-1 bg-themeBg text-center">Inv / Motor<br><span id="diag-tf" class="whitespace-nowrap text-[10px]">1/(sL+R)</span></div>
                     <div class="text-themeAccent"><i class="fa-solid fa-arrow-right"></i></div>
                     <div class="border border-themeBorder px-2 py-1 bg-themeBg">I_dq</div>
                 </div>

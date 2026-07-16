@@ -19,32 +19,32 @@
                 </div>
                 
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Input Voltage ($V_{in}$ or $V_1$)</span><span class="text-themeMuted">V</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Input Voltage ($V_{in}$ or $V_1$)</span><span class="text-themeMuted">V</span></div>
                     <input type="number" id="op-vin1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="1" step="0.1" oninput="updateOpAmp()">
                 </div>
                 
                 <div id="op-vin2-container" class="hidden">
-                    <div class="flex justify-between text-xs mb-1"><span>Input Voltage 2 ($V_2$)</span><span class="text-themeMuted">V</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Input Voltage 2 ($V_2$)</span><span class="text-themeMuted">V</span></div>
                     <input type="number" id="op-vin2" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-green-400" value="-1" step="0.1" oninput="updateOpAmp()">
                 </div>
 
                 <div class="pt-4 border-t border-themeBorder/20 mt-4">
-                    <div class="flex justify-between text-xs mb-1"><span>Resistor 1 ($R_1$)</span><span class="text-themeMuted">kohms</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Resistor 1 ($R_1$)</span><span class="text-themeMuted">kohms</span></div>
                     <input type="number" id="op-r1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateOpAmp()">
                 </div>
                 
                 <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Feedback Resistor ($R_f$ or $R_2$)</span><span class="text-themeMuted">kohms</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Feedback Resistor ($R_f$ or $R_2$)</span><span class="text-themeMuted">kohms</span></div>
                     <input type="number" id="op-r2" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="100" step="1" oninput="updateOpAmp()">
                 </div>
 
                 <div id="op-r34-container" class="hidden flex-col gap-4">
                     <div>
-                        <div class="flex justify-between text-xs mb-1"><span>Resistor 3 ($R_3$)</span><span class="text-themeMuted">kohms</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Resistor 3 ($R_3$)</span><span class="text-themeMuted">kohms</span></div>
                         <input type="number" id="op-r3" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateOpAmp()">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs mb-1"><span>Resistor 4 ($R_4$)</span><span class="text-themeMuted">kohms</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Resistor 4 ($R_4$)</span><span class="text-themeMuted">kohms</span></div>
                         <input type="number" id="op-r4" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="100" step="1" oninput="updateOpAmp()">
                     </div>
                 </div>
@@ -60,14 +60,14 @@
 
                 <div class="grid grid-cols-2 gap-4 flex-grow">
                     <div class="bg-themeBorder/10 border border-themeBorder p-4 flex flex-col justify-center items-center text-center">
-                        <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Voltage Gain ($A_v$)</span>
+                        <span class="whitespace-nowrap text-[10px] text-themeMuted uppercase tracking-wider mb-2 font-bold">Voltage Gain ($A_v$)</span>
                         <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
                             <span id="op-gain-val">0.0</span> <span class="text-sm text-themeMuted">V/V</span>
                         </div>
                     </div>
                     
                     <div class="bg-themeBg border border-themeAccent/50 p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(212,175,55,0.1)]">
-                        <span class="text-[10px] text-themeAccent uppercase tracking-wider mb-2 font-bold">Output Voltage ($V_{out}$)</span>
+                        <span class="whitespace-nowrap text-[10px] text-themeAccent uppercase tracking-wider mb-2 font-bold">Output Voltage ($V_{out}$)</span>
                         <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
                             <span id="op-vout-val">0.0</span> <span class="text-sm text-themeAccent">V</span>
                         </div>

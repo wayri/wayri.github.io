@@ -13,42 +13,42 @@
                 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <div class="flex justify-between text-[10px] mb-1"><span>Hole Diameter ($d$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Hole Diameter ($d$)</span></div>
                         <div class="flex">
                             <input type="number" id="via-d" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="0.3" step="0.1" oninput="updateVia()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
                         </div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] mb-1"><span>Pad Diameter ($D_1$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Pad Diameter ($D_1$)</span></div>
                         <div class="flex">
                             <input type="number" id="via-pad" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.6" step="0.1" oninput="updateVia()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
                         </div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] mb-1"><span>Anti-Pad Diameter ($D_2$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Anti-Pad Diameter ($D_2$)</span></div>
                         <div class="flex">
                             <input type="number" id="via-antipad" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-themeMuted" value="0.8" step="0.1" oninput="updateVia()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
                         </div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] mb-1"><span>Via Height/Thickness ($h$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Via Height/Thickness ($h$)</span></div>
                         <div class="flex">
                             <input type="number" id="via-h" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1.6" step="0.1" oninput="updateVia()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">mm</span>
                         </div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] mb-1"><span>Plating Thickness ($t$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Plating Thickness ($t$)</span></div>
                         <div class="flex">
                             <input type="number" id="via-t" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-themeAccent" value="25" step="5" oninput="updateVia()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">&mu;m</span>
                         </div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] mb-1"><span>Dielectric Constant ($E_r$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Dielectric Constant ($E_r$)</span></div>
                         <div class="flex">
                             <input type="number" id="via-er" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="4.2" step="0.1" oninput="updateVia()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center"></span>
@@ -60,14 +60,14 @@
                 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <div class="flex justify-between text-[10px] mb-1"><span>Allowed Temp Rise ($\Delta T$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Allowed Temp Rise ($\Delta T$)</span></div>
                         <div class="flex">
                             <input type="number" id="via-dt" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-orange-400" value="20" step="5" oninput="updateVia()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">&deg;C</span>
                         </div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-[10px] mb-1"><span>Signal Rise Time ($T_r$)</span></div>
+                        <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Signal Rise Time ($T_r$)</span></div>
                         <div class="flex">
                             <input type="number" id="via-tr" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="100" step="10" oninput="updateVia()">
                             <span class="bg-themeBorder text-themeBg p-1.5 text-xs flex items-center">ps</span>
@@ -83,20 +83,20 @@
                     
                     <!-- Left Column (Parasitics) -->
                     <div class="flex flex-col gap-1 border-b border-themeBorder/20 pb-2">
-                        <span class="text-[9px] text-themeMuted uppercase">Capacitance ($C$)</span>
+                        <span class="whitespace-nowrap text-[9px] text-themeMuted uppercase">Capacitance ($C$)</span>
                         <div class="text-lg font-bold text-themeText flex items-baseline gap-1">
                             <span id="res-via-c">0.00</span> <span class="text-[10px] text-themeAccent">pF</span>
                         </div>
                     </div>
                     <div class="flex flex-col gap-1 border-b border-themeBorder/20 pb-2">
-                        <span class="text-[9px] text-themeMuted uppercase">Inductance ($L$)</span>
+                        <span class="whitespace-nowrap text-[9px] text-themeMuted uppercase">Inductance ($L$)</span>
                         <div class="text-lg font-bold text-themeText flex items-baseline gap-1">
                             <span id="res-via-l">0.00</span> <span class="text-[10px] text-themeAccent">nH</span>
                         </div>
                     </div>
                     
                     <div class="flex flex-col gap-1 border-b border-themeBorder/20 pb-2">
-                        <span class="text-[9px] text-themeMuted uppercase">Via Impedance ($Z$)</span>
+                        <span class="whitespace-nowrap text-[9px] text-themeMuted uppercase">Via Impedance ($Z$)</span>
                         <div class="text-lg font-bold text-themeText flex items-baseline gap-1">
                             <span id="res-via-z">0.0</span> <span class="text-[10px] text-themeAccent">ohms</span>
                         </div>
@@ -136,7 +136,7 @@
                     </div>
 
                     <div class="flex flex-col gap-1 col-span-2 pt-2">
-                        <span class="text-[9px] text-themeMuted uppercase">Step Response Degradation (10-90%)</span>
+                        <span class="whitespace-nowrap text-[9px] text-themeMuted uppercase">Step Response Degradation (10-90%)</span>
                         <div class="text-base font-bold text-themeText flex items-baseline gap-1">
                             +<span id="res-via-step">0.0</span> <span class="text-[10px] text-themeAccent">ps</span>
                         </div>

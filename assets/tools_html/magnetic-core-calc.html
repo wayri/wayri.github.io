@@ -21,28 +21,28 @@
                 </div>
 
                 <div id="mag-al-cont">
-                    <div class="flex justify-between text-xs mb-1"><span>Inductance Factor ($A_L$)</span><span class="text-themeMuted">nH / $N^2$</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Inductance Factor ($A_L$)</span><span class="whitespace-nowrap text-themeMuted">nH / $N^2$</span></div>
                     <input type="number" id="mag-al" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="100" step="10" oninput="updateMagCalc()">
                 </div>
                 
                 <div id="mag-n-cont">
-                    <div class="flex justify-between text-xs mb-1"><span>Number of Turns ($N$)</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Number of Turns ($N$)</span></div>
                     <input type="number" id="mag-n" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-green-400" value="10" step="1" oninput="updateMagCalc()">
                 </div>
                 
                 <div id="mag-l-cont" class="hidden">
-                    <div class="flex justify-between text-xs mb-1"><span>Target Inductance ($L$)</span><span class="text-themeMuted">μH</span></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Target Inductance ($L$)</span><span class="text-themeMuted">μH</span></div>
                     <input type="number" id="mag-l" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-orange-400" value="10" step="1" oninput="updateMagCalc()">
                 </div>
 
                 <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">TRANSFORMER RATIO</h4>
                 <div class="flex gap-4">
                     <div class="w-1/2">
-                        <div class="flex justify-between text-xs mb-1"><span>Primary Turns ($N_p$)</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Primary Turns ($N_p$)</span></div>
                         <input type="number" id="mag-np" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10" step="1" oninput="updateMagCalc()">
                     </div>
                     <div class="w-1/2">
-                        <div class="flex justify-between text-xs mb-1"><span>Secondary Turns ($N_s$)</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Secondary Turns ($N_s$)</span></div>
                         <input type="number" id="mag-ns" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="50" step="1" oninput="updateMagCalc()">
                     </div>
                 </div>
@@ -72,7 +72,7 @@
 
                 <div class="grid grid-cols-1 gap-4 flex-grow">
                     <div class="bg-themeBg border border-themeAccent/50 p-4 flex flex-col justify-center items-center text-center shadow-[inset_0_0_15px_rgba(212,175,55,0.1)]">
-                        <span class="text-[10px] text-themeAccent uppercase tracking-wider mb-2 font-bold" id="mag-result-label">Calculated Inductance ($L$)</span>
+                        <span class="whitespace-nowrap text-[10px] text-themeAccent uppercase tracking-wider mb-2 font-bold" id="mag-result-label">Calculated Inductance ($L$)</span>
                         <div class="text-4xl font-bold text-themeText flex items-baseline gap-1">
                             <span id="mag-result-val">0.0</span> <span id="mag-result-unit" class="text-lg text-themeAccent">μH</span>
                         </div>

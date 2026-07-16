@@ -13,7 +13,7 @@
                 
                 <div class="space-y-3">
                     <div>
-                        <div class="flex justify-between text-xs mb-1"><span>Supply Voltage (Vdd)</span><span class="text-themeMuted">V</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Supply Voltage (Vdd)</span><span class="text-themeMuted">V</span></div>
                         <input type="number" id="pdn-vdd" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="1.2" step="0.1" oninput="updatePdn()">
                     </div>
                     <div>
@@ -21,11 +21,11 @@
                         <input type="number" id="pdn-ripple" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="5" step="1" oninput="updatePdn()">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs mb-1"><span>Max Transient Current (I_max)</span><span class="text-themeMuted">A</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Max Transient Current (I_max)</span><span class="text-themeMuted">A</span></div>
                         <input type="number" id="pdn-imax" class="w-full bg-themeContainer border border-themeBorder p-1 text-themeText" value="2.5" step="0.1" oninput="updatePdn()">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs mb-1"><span>Current Transient Rate (50%)</span><span class="text-themeMuted">A</span></div>
+                        <div class="flex justify-between text-xs mb-1"><span class="whitespace-nowrap">Current Transient Rate (50%)</span><span class="text-themeMuted">A</span></div>
                         <div class="text-[10px] text-themeMuted mb-1 leading-tight">Assuming 50% of I_max as typical dynamic step</div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                 <h4 class="text-xs font-bold text-themeMuted mt-6 mb-2 border-b border-themeBorder/20 pb-1">CAPACITOR BANK ESTIMATE</h4>
                 <div class="bg-themeBorder/10 p-3 text-xs text-themeText border border-themeBorder">
                     <p class="mb-2">To meet this target impedance at high frequencies, decoupling capacitors must provide a lower total ESL and ESR.</p>
-                    <div class="flex justify-between"><span>Required F_max (~1/Tr):</span><span class="text-themeAccent">100 MHz</span></div>
+                    <div class="flex justify-between"><span class="whitespace-nowrap">Required F_max (~1/Tr):</span><span class="text-themeAccent">100 MHz</span></div>
                     <div class="flex justify-between mt-1"><span>Est. Target Capacitance:</span><span id="pdn-ctarget" class="text-themeAccent">0.0 uF</span></div>
                 </div>
             </div>
@@ -54,11 +54,11 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <div class="border border-themeBorder bg-themeContainer p-3 flex flex-col items-center justify-center">
-                        <span class="text-[10px] text-themeMuted uppercase">Allowable Ripple (V)</span>
+                        <span class="whitespace-nowrap text-[10px] text-themeMuted uppercase">Allowable Ripple (V)</span>
                         <span id="pdn-vripple" class="text-xl font-bold text-themeText mt-1">0.0 V</span>
                     </div>
                     <div class="border border-themeBorder bg-themeContainer p-3 flex flex-col items-center justify-center">
-                        <span class="text-[10px] text-themeMuted uppercase">Delta I (50%)</span>
+                        <span class="whitespace-nowrap text-[10px] text-themeMuted uppercase">Delta I (50%)</span>
                         <span id="pdn-delta-i" class="text-xl font-bold text-themeText mt-1">0.0 A</span>
                     </div>
                 </div>
