@@ -261,6 +261,11 @@ function renderWelcomeGrid() {
         <div class="text-center mb-4">
             <h2 class="text-3xl font-bold font-mono text-themeText"><i class="fa-solid fa-toolbox text-themeAccent mr-3"></i>Engineering Toolkit</h2>
             <p class="text-themeMuted mt-2 text-sm max-w-2xl mx-auto">A curated, unified suite of high-performance interactive design calculators, simulation solvers, and engineering utilities.</p>
+            <div class="max-w-3xl mx-auto mt-6 bg-themeBorder/10 border-l-4 border-themeAccent p-4 text-left">
+                <p class="text-sm text-themeMuted leading-relaxed">
+                    Over my career, I've manually developed dozens of Python, C++, and C# desktop applications to automate tedious engineering math, calculate tolerances, and design magnetics. To make these tools universally accessible for my own rapid prototyping, I used modern AI coding assistants to port my existing tools to this browser-based suite. These aren't meant to replace heavy enterprise software—they are built for speed, allowing me to iterate on complex hardware. I have used AI to add a few more tools that can come in handy. I use these, now you can too.
+                </p>
+            </div>
         </div>
     `;
     
