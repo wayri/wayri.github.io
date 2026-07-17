@@ -1799,13 +1799,16 @@ function initXfmr3D() {
     });
     ro.observe(container);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
     xfmrScene.add(ambientLight);
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.0);
+    hemiLight.position.set(0, 50, 0);
+    xfmrScene.add(hemiLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
     dirLight.position.set(30, 60, 40);
     dirLight.castShadow = true;
     xfmrScene.add(dirLight);
-    const fillLight = new THREE.DirectionalLight(0x6699ff, 0.3);
+    const fillLight = new THREE.DirectionalLight(0x88bbff, 0.8);
     fillLight.position.set(-30, -20, -30);
     xfmrScene.add(fillLight);
 
