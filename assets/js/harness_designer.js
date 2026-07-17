@@ -485,9 +485,10 @@ class HarnessDesigner {
                 </div>
             `;
         } else if (this.selectedWires.size === 1) {
-            let w = Array.from(this.selectedWires)[0];
-            let metaStr = Object.keys(w.metadata || {}).map(k => `${k}: ${w.metadata[k]}`).join('\n');
-            info.innerText = `Wire: ${w.id}`;
+            let id = Array.from(this.selectedWires)[0];
+            let w = this.wires.find(x => x.id === id);
+            let metaStr = w && w.metadata ? Object.keys(w.metadata).map(k => `${k}: ${w.metadata[k]}`).join('\n') : '';
+            info.innerText = `Wire: ${w ? w.id : id}`;
             cont.innerHTML = `
                 <div class="flex flex-col gap-2">
                     <label>ID: <input type="text" class="w-full bg-themeBg border border-themeBorder p-1" value="${w.id}" onchange="window.HarnessApp.updateProp('wire', '${w.id}', 'id', this.value)"></label>
