@@ -1,0 +1,921 @@
+<!-- RF Signal Analysis Suite -->
+<div class="doc-container flex flex-col w-full h-full" id="rf-suite-root">
+<div class="p-3 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center">
+    <div class="flex items-center gap-2"><i class="fa-solid fa-wave-square"></i><h3 class="font-bold font-mono">RF Signal Analysis Suite</h3></div>
+    <span class="font-mono text-[10px] opacity-70">SNR · Modulation · Encoding · Constellation</span>
+</div>
+
+<!-- Tab Bar -->
+<div class="flex border-b border-themeBorder bg-themeContainer text-[10px] font-mono font-bold overflow-x-auto flex-shrink-0">
+    <button class="rf-tab active px-4 py-2 border-r border-themeBorder whitespace-nowrap" onclick="rfTab('snr',this)">📊 SNR / SINAD</button>
+    <button class="rf-tab px-4 py-2 border-r border-themeBorder whitespace-nowrap" onclick="rfTab('mod',this)">📡 Modulation</button>
+    <button class="rf-tab px-4 py-2 border-r border-themeBorder whitespace-nowrap" onclick="rfTab('enc',this)">💾 Line Encoding</button>
+    <button class="rf-tab px-4 py-2 whitespace-nowrap" onclick="rfTab('const',this)">✦ Constellation</button>
+</div>
+
+<div class="flex-grow overflow-y-auto font-mono text-xs">
+
+<!-- ===================== SNR / SINAD TAB ===================== -->
+<div id="rf-tab-snr" class="rf-panel p-4 space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Inputs -->
+        <div class="md:col-span-1 space-y-3 bg-themeContainer border border-themeBorder/40 p-3">
+            <div class="font-bold text-themeAccent border-b border-themeBorder/30 pb-1">PARAMETERS</div>
+            <div>
+                <label class="text-themeMuted block mb-1">Signal Power</label>
+                <div class="flex"><input type="number" id="snr-sig" value="-30" step="0.1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" oninput="calcSNR()">
+                <span class="bg-themeBorder text-themeBg px-2 flex items-center">dBm</span></div>
+            </div>
+            <div>
+                <label class="text-themeMuted block mb-1">Noise Power</label>
+                <div class="flex"><input type="number" id="snr-noise" value="-100" step="0.1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" oninput="calcSNR()">
+                <span class="bg-themeBorder text-themeBg px-2 flex items-center">dBm</span></div>
+            </div>
+            <div>
+                <label class="text-themeMuted block mb-1">Distortion Power</label>
+                <div class="flex"><input type="number" id="snr-dist" value="-80" step="0.1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" oninput="calcSNR()">
+                <span class="bg-themeBorder text-themeBg px-2 flex items-center">dBm</span></div>
+            </div>
+            <div>
+                <label class="text-themeMuted block mb-1">Bandwidth</label>
+                <div class="flex"><input type="number" id="snr-bw" value="200" step="1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" oninput="calcSNR()">
+                <span class="bg-themeBorder text-themeBg px-2 flex items-center">kHz</span></div>
+            </div>
+            <div>
+                <label class="text-themeMuted block mb-1">Bits per Symbol (M)</label>
+                <select id="snr-bps" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" onchange="calcSNR()">
+                    <option value="1">1 (BPSK)</option>
+                    <option value="2">2 (QPSK)</option>
+                    <option value="3">3 (8PSK)</option>
+                    <option value="4" selected>4 (16QAM)</option>
+                    <option value="6">6 (64QAM)</option>
+                    <option value="8">8 (256QAM)</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-themeMuted block mb-1">Temperature (K)</label>
+                <input type="number" id="snr-temp" value="290" step="1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" oninput="calcSNR()">
+            </div>
+        </div>
+        <!-- Results -->
+        <div class="md:col-span-2 space-y-3">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div class="bg-themeContainer border border-themeBorder p-3 text-center">
+                    <div class="text-themeMuted text-[9px] uppercase">SNR</div>
+                    <div class="text-2xl font-bold text-themeAccent" id="snr-out-snr">--</div>
+                    <div class="text-[9px] text-themeMuted">dB</div>
+                </div>
+                <div class="bg-themeContainer border border-themeBorder p-3 text-center">
+                    <div class="text-themeMuted text-[9px] uppercase">SINAD</div>
+                    <div class="text-2xl font-bold text-green-400" id="snr-out-sinad">--</div>
+                    <div class="text-[9px] text-themeMuted">dB</div>
+                </div>
+                <div class="bg-themeContainer border border-themeBorder p-3 text-center">
+                    <div class="text-themeMuted text-[9px] uppercase">THD</div>
+                    <div class="text-2xl font-bold text-orange-400" id="snr-out-thd">--</div>
+                    <div class="text-[9px] text-themeMuted">%</div>
+                </div>
+                <div class="bg-themeContainer border border-themeBorder p-3 text-center">
+                    <div class="text-themeMuted text-[9px] uppercase">Eb/N0</div>
+                    <div class="text-2xl font-bold text-themeText" id="snr-out-ebn0">--</div>
+                    <div class="text-[9px] text-themeMuted">dB</div>
+                </div>
+                <div class="bg-themeContainer border border-themeBorder p-3 text-center">
+                    <div class="text-themeMuted text-[9px] uppercase">Thermal Noise</div>
+                    <div class="text-xl font-bold text-themeText" id="snr-out-thermal">--</div>
+                    <div class="text-[9px] text-themeMuted">dBm</div>
+                </div>
+                <div class="bg-themeContainer border border-themeBorder p-3 text-center">
+                    <div class="text-themeMuted text-[9px] uppercase">Shannon Cap.</div>
+                    <div class="text-xl font-bold text-blue-400" id="snr-out-shannon">--</div>
+                    <div class="text-[9px] text-themeMuted">bit/s/Hz</div>
+                </div>
+            </div>
+            <!-- BER vs Eb/N0 canvas -->
+            <div class="bg-themeBg border border-themeBorder/50 p-2">
+                <div class="text-[9px] text-themeMuted mb-1 font-bold">BER vs Eb/N0 — hover to read</div>
+                <canvas id="snr-ber-canvas" width="560" height="180" class="w-full cursor-crosshair"></canvas>
+                <div class="text-[9px] text-themeMuted mt-1 flex gap-4">
+                    <span class="text-themeAccent">— BPSK/QPSK</span>
+                    <span class="text-blue-400">— 16QAM</span>
+                    <span class="text-orange-400">— 64QAM</span>
+                    <span class="text-red-400">— 256QAM</span>
+                    <span class="text-green-400">▲ Your Eb/N0</span>
+                </div>
+            </div>
+            <!-- Theory -->
+            <div class="bg-themeContainer border border-themeBorder/30 p-3 text-[10px] text-themeMuted leading-relaxed space-y-1">
+                <div><strong class="text-themeText">SNR</strong> = P<sub>signal</sub> - P<sub>noise</sub> (dB). Higher is better.</div>
+                <div><strong class="text-themeText">SINAD</strong> = P<sub>signal</sub> / (P<sub>noise</sub> + P<sub>distortion</sub>). Accounts for harmonic distortion.</div>
+                <div><strong class="text-themeText">Eb/N0</strong> = SNR − 10·log₁₀(bits/symbol). Normalised per-bit SNR.</div>
+                <div><strong class="text-themeText">Shannon</strong> = log₂(1 + SNR<sub>linear</sub>) [bit/s/Hz]. Theoretical maximum spectral efficiency.</div>
+                <div><strong class="text-themeText">Thermal noise</strong> = kTB = −174 dBm/Hz + 10·log₁₀(BW)</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== MODULATION TAB ===================== -->
+<div id="rf-tab-mod" class="rf-panel hidden p-4 space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="md:col-span-1 space-y-3 bg-themeContainer border border-themeBorder/40 p-3">
+            <div class="font-bold text-themeAccent border-b border-themeBorder/30 pb-1">MODULATION TYPE</div>
+            <select id="mod-type" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" onchange="calcMod()">
+                <optgroup label="Analog">
+                    <option value="am">AM — Amplitude Modulation</option>
+                    <option value="fm" selected>FM — Frequency Modulation</option>
+                    <option value="pm">PM — Phase Modulation</option>
+                    <option value="dsb">DSB-SC — Double Sideband</option>
+                    <option value="ssb">SSB — Single Sideband</option>
+                </optgroup>
+                <optgroup label="Digital Phase">
+                    <option value="bpsk">BPSK</option>
+                    <option value="qpsk">QPSK</option>
+                    <option value="8psk">8PSK</option>
+                    <option value="dqpsk">DQPSK (Differential)</option>
+                </optgroup>
+                <optgroup label="Digital Amplitude">
+                    <option value="ask">ASK (OOK)</option>
+                    <option value="qam16">16-QAM</option>
+                    <option value="qam64">64-QAM</option>
+                    <option value="qam256">256-QAM</option>
+                </optgroup>
+                <optgroup label="Frequency">
+                    <option value="fsk">FSK (2-FSK)</option>
+                    <option value="msk">MSK (Minimum Shift Keying)</option>
+                    <option value="gmsk">GMSK</option>
+                </optgroup>
+            </select>
+            <div id="mod-params-container" class="space-y-2">
+                <!-- Dynamic params injected here -->
+            </div>
+        </div>
+        <div class="md:col-span-2 space-y-3">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="mod-results-grid">
+                <!-- Dynamic results -->
+            </div>
+            <!-- Waveform / spectrum canvas -->
+            <div class="bg-themeBg border border-themeBorder/50 p-2">
+                <div class="text-[9px] text-themeMuted mb-1 font-bold" id="mod-canvas-label">Spectrum / Waveform</div>
+                <canvas id="mod-canvas" width="560" height="200" class="w-full"></canvas>
+            </div>
+            <div id="mod-theory" class="bg-themeContainer border border-themeBorder/30 p-3 text-[10px] text-themeMuted leading-relaxed"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== ENCODING TAB ===================== -->
+<div id="rf-tab-enc" class="rf-panel hidden p-4 space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="md:col-span-1 space-y-3 bg-themeContainer border border-themeBorder/40 p-3">
+            <div class="font-bold text-themeAccent border-b border-themeBorder/30 pb-1">ENCODING SCHEME</div>
+            <select id="enc-type" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" onchange="calcEnc()">
+                <optgroup label="Line Codes">
+                    <option value="nrz-l">NRZ-L (Non-Return to Zero Level)</option>
+                    <option value="nrz-i">NRZ-I (Inverted)</option>
+                    <option value="rz">RZ (Return to Zero)</option>
+                    <option value="ami">AMI (Alternate Mark Inversion)</option>
+                    <option value="manchester">Manchester (IEEE 802.3)</option>
+                    <option value="diff-man">Differential Manchester</option>
+                    <option value="mlt3">MLT-3 (100BASE-TX)</option>
+                    <option value="nrzi">NRZI (USB)</option>
+                </optgroup>
+                <optgroup label="Block Codes">
+                    <option value="4b5b">4B5B (FDDI / 100BASE-FX)</option>
+                    <option value="8b10b">8B10B (Gigabit Ethernet / USB 3)</option>
+                    <option value="64b66b">64B66B (10GbE)</option>
+                    <option value="128b130b">128B130B (PCIe 3+)</option>
+                </optgroup>
+            </select>
+            <div>
+                <label class="text-themeMuted block mb-1">Bit Pattern (binary)</label>
+                <input type="text" id="enc-bits" value="10110100" maxlength="16" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold tracking-widest" oninput="calcEnc()">
+                <div class="text-[9px] text-themeMuted mt-1">Enter 0s and 1s (up to 16 bits)</div>
+            </div>
+            <div>
+                <label class="text-themeMuted block mb-1">Bit Rate</label>
+                <div class="flex"><input type="number" id="enc-bitrate" value="100" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" oninput="calcEnc()">
+                <span class="bg-themeBorder text-themeBg px-2 flex items-center">Mbps</span></div>
+            </div>
+            <div id="enc-results-box" class="space-y-2"></div>
+        </div>
+        <div class="md:col-span-2 space-y-3">
+            <!-- Waveform canvas -->
+            <div class="bg-themeBg border border-themeBorder/50 p-2">
+                <div class="text-[9px] text-themeMuted mb-1 font-bold">Encoded Waveform — <span id="enc-scheme-label">NRZ-L</span></div>
+                <canvas id="enc-canvas" width="560" height="140" class="w-full"></canvas>
+            </div>
+            <!-- Encoded bits display -->
+            <div class="bg-themeContainer border border-themeBorder/30 p-3">
+                <div class="text-[9px] text-themeMuted mb-1 font-bold">Encoded Symbol Sequence</div>
+                <div id="enc-symbol-out" class="font-mono text-themeAccent text-[11px] tracking-widest break-all"></div>
+            </div>
+            <div id="enc-theory" class="bg-themeContainer border border-themeBorder/30 p-3 text-[10px] text-themeMuted leading-relaxed space-y-1"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== CONSTELLATION TAB ===================== -->
+<div id="rf-tab-const" class="rf-panel hidden p-4 space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="md:col-span-1 space-y-3 bg-themeContainer border border-themeBorder/40 p-3">
+            <div class="font-bold text-themeAccent border-b border-themeBorder/30 pb-1">CONSTELLATION</div>
+            <div>
+                <label class="text-themeMuted block mb-1">Modulation</label>
+                <select id="const-mod" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" onchange="drawConst()">
+                    <option value="bpsk">BPSK</option>
+                    <option value="qpsk" selected>QPSK</option>
+                    <option value="8psk">8PSK</option>
+                    <option value="16qam">16-QAM</option>
+                    <option value="32qam">32-QAM (Cross)</option>
+                    <option value="64qam">64-QAM</option>
+                    <option value="256qam">256-QAM</option>
+                    <option value="16apsk">16-APSK (DVB-S2)</option>
+                    <option value="32apsk">32-APSK (DVB-S2)</option>
+                    <option value="8fsk">8-FSK (orthogonal)</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-themeMuted block mb-1">EVM / Noise (% rms)</label>
+                <input type="range" id="const-evm" min="0" max="40" value="8" step="0.5" class="w-full accent-themeAccent" oninput="drawConst(); document.getElementById('const-evm-val').textContent=this.value+'%'">
+                <div class="text-themeAccent text-center font-bold" id="const-evm-val">8%</div>
+            </div>
+            <div>
+                <label class="text-themeMuted block mb-1">Symbol Count</label>
+                <select id="const-count" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" onchange="drawConst()">
+                    <option value="200">200</option>
+                    <option value="500" selected>500</option>
+                    <option value="1000">1000</option>
+                    <option value="2000">2000</option>
+                </select>
+            </div>
+            <div class="flex items-center gap-2">
+                <input type="checkbox" id="const-labels" checked onchange="drawConst()" class="accent-themeAccent">
+                <label class="text-themeMuted">Show labels</label>
+            </div>
+            <div class="flex items-center gap-2">
+                <input type="checkbox" id="const-decision" checked onchange="drawConst()" class="accent-themeAccent">
+                <label class="text-themeMuted">Decision regions</label>
+            </div>
+            <div class="flex items-center gap-2">
+                <input type="checkbox" id="const-ideal" checked onchange="drawConst()" class="accent-themeAccent">
+                <label class="text-themeMuted">Ideal points</label>
+            </div>
+            <button onclick="drawConst()" class="w-full py-1.5 bg-themeAccent text-themeBg font-bold text-[10px] hover:opacity-80 rounded">↻ Regenerate</button>
+            <!-- Results -->
+            <div class="space-y-2 mt-2 border-t border-themeBorder/30 pt-2">
+                <div class="flex justify-between"><span class="text-themeMuted">Modulation Order M</span><span class="font-bold text-themeText" id="const-M">4</span></div>
+                <div class="flex justify-between"><span class="text-themeMuted">Bits/Symbol</span><span class="font-bold text-themeText" id="const-bps">2</span></div>
+                <div class="flex justify-between"><span class="text-themeMuted">Spec. Efficiency</span><span class="font-bold text-themeAccent" id="const-se">2 b/s/Hz</span></div>
+                <div class="flex justify-between"><span class="text-themeMuted">Min Eb/N0 req.</span><span class="font-bold text-green-400" id="const-ebn0req">--</span></div>
+                <div class="flex justify-between"><span class="text-themeMuted">EVM (rms)</span><span class="font-bold text-orange-400" id="const-evm-out">--</span></div>
+                <div class="flex justify-between"><span class="text-themeMuted">SNR equiv.</span><span class="font-bold text-blue-400" id="const-snr-out">--</span></div>
+            </div>
+        </div>
+        <div class="md:col-span-3">
+            <canvas id="const-canvas" width="600" height="520" class="w-full bg-themeBg border border-themeBorder/50 cursor-crosshair rounded"></canvas>
+            <div class="text-[9px] text-themeMuted mt-1 text-center" id="const-hover-info">Hover over canvas to probe symbol coordinates</div>
+        </div>
+    </div>
+</div>
+
+</div><!-- flex-grow -->
+</div><!-- root -->
+
+<style>
+.rf-tab { color: var(--theme-muted, #6b7280); transition: all 0.15s; }
+.rf-tab:hover { color: var(--theme-text, #e5e7eb); }
+.rf-tab.active { color: var(--theme-accent, #D4AF37); border-bottom: 2px solid var(--theme-accent, #D4AF37); background: rgba(255,255,255,0.03); }
+.rf-panel { display: block; }
+.rf-panel.hidden { display: none; }
+</style>
+
+<script>
+// ===== Tab switching =====
+function rfTab(id, btn) {
+    document.querySelectorAll('.rf-panel').forEach(p => p.classList.add('hidden'));
+    document.querySelectorAll('.rf-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('rf-tab-' + id).classList.remove('hidden');
+    btn.classList.add('active');
+    if(id === 'snr') calcSNR();
+    if(id === 'mod') calcMod();
+    if(id === 'enc') calcEnc();
+    if(id === 'const') drawConst();
+}
+
+// ===== Helpers =====
+function dBmToW(dbm) { return Math.pow(10, (dbm - 30) / 10); }
+function WTodBm(w) { return 10 * Math.log10(w) + 30; }
+function linFromdB(dB) { return Math.pow(10, dB / 10); }
+function getCtx(id) { const c = document.getElementById(id); c.width = c.clientWidth * (window.devicePixelRatio||1) || c.width; return { ctx: c.getContext('2d'), w: c.clientWidth || c.width, h: c.clientHeight || c.height, dpr: window.devicePixelRatio||1 }; }
+function isDark() { const bg = getComputedStyle(document.body).backgroundColor; return !bg.includes('255') && !bg.includes('250'); }
+function themeColors() {
+    const dark = isDark();
+    return { bg: dark?'#0d0d12':'#f8fafc', grid: dark?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.08)', text: dark?'#9ca3af':'#374151', accent: dark?'#D4AF37':'#92600a', white: dark?'#e5e7eb':'#111' };
+}
+
+// ===================== SNR / SINAD =====================
+function calcSNR() {
+    const sig  = parseFloat(document.getElementById('snr-sig').value) || -30;
+    const noise= parseFloat(document.getElementById('snr-noise').value) || -100;
+    const dist = parseFloat(document.getElementById('snr-dist').value) || -80;
+    const bw   = parseFloat(document.getElementById('snr-bw').value) || 200;
+    const bps  = parseInt(document.getElementById('snr-bps').value) || 4;
+    const temp = parseFloat(document.getElementById('snr-temp').value) || 290;
+
+    const sigW  = dBmToW(sig);
+    const noiseW= dBmToW(noise);
+    const distW = dBmToW(dist);
+
+    const snr_dB    = sig - noise;
+    const sinad_lin = sigW / (noiseW + distW);
+    const sinad_dB  = 10 * Math.log10(sinad_lin);
+    const thd_pct   = Math.sqrt(distW / sigW) * 100;
+    const kTB       = 1.38e-23 * temp * (bw * 1e3);
+    const thermal_dBm = WTodBm(kTB);
+    const ebn0_dB   = snr_dB - 10 * Math.log10(bps);
+    const snr_lin   = linFromdB(snr_dB);
+    const shannon   = Math.log2(1 + snr_lin);
+
+    document.getElementById('snr-out-snr').textContent     = snr_dB.toFixed(1);
+    document.getElementById('snr-out-sinad').textContent    = sinad_dB.toFixed(1);
+    document.getElementById('snr-out-thd').textContent      = thd_pct.toFixed(2);
+    document.getElementById('snr-out-ebn0').textContent     = ebn0_dB.toFixed(1);
+    document.getElementById('snr-out-thermal').textContent  = thermal_dBm.toFixed(1);
+    document.getElementById('snr-out-shannon').textContent  = shannon.toFixed(2);
+
+    drawBERcurves(ebn0_dB);
+}
+
+function drawBERcurves(currentEbn0) {
+    const canvas = document.getElementById('snr-ber-canvas');
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.clientWidth || 560;
+    const H = 180;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    const tc = themeColors();
+    ctx.fillStyle = tc.bg; ctx.fillRect(0, 0, W, H);
+
+    const xMin = 0, xMax = 20;
+    const yMin = -6, yMax = 0; // log10(BER)
+
+    const toX = eb => (eb - xMin) / (xMax - xMin) * (W - 60) + 40;
+    const toY = logBer => (1 - (logBer - yMin) / (yMax - yMin)) * (H - 30) + 10;
+
+    // Grid
+    ctx.strokeStyle = tc.grid; ctx.lineWidth = 1;
+    for(let x = 0; x <= 20; x += 2) { ctx.beginPath(); ctx.moveTo(toX(x), 10); ctx.lineTo(toX(x), H-20); ctx.stroke(); }
+    for(let y = yMin; y <= yMax; y++) { ctx.beginPath(); ctx.moveTo(40, toY(y)); ctx.lineTo(W-10, toY(y)); ctx.stroke(); }
+
+    // Axes labels
+    ctx.fillStyle = tc.text; ctx.font = `${9*dpr/dpr}px monospace`; ctx.textAlign = 'center';
+    for(let x = 0; x <= 20; x += 4) { ctx.fillText(x, toX(x), H - 8); }
+    ctx.fillText('Eb/N0 (dB)', W/2, H - 1);
+    ctx.textAlign = 'right';
+    for(let y = yMin; y <= 0; y++) { ctx.fillText('1e'+y, 38, toY(y)+3); }
+    ctx.save(); ctx.translate(11, H/2); ctx.rotate(-Math.PI/2); ctx.textAlign='center'; ctx.fillText('BER', 0, 0); ctx.restore();
+
+    // BER functions (approximate)
+    function Q(x) { return 0.5 * Math.erfc(x / Math.sqrt(2)); }
+    if(!Math.erfc) Math.erfc = x => { const t=1/(1+0.3275911*Math.abs(x)); const p=t*(0.254829592+t*(-0.284496736+t*(1.421413741+t*(-1.453152027+t*1.061405429)))); const r=1-p*Math.exp(-x*x); return x>=0?1-r:1+r; };
+
+    const curves = [
+        { label:'BPSK', color:'#D4AF37', ber: eb => Q(Math.sqrt(2*linFromdB(eb))) },
+        { label:'16QAM', color:'#60a5fa', ber: eb => 0.75*Q(Math.sqrt(0.4*linFromdB(eb))) },
+        { label:'64QAM', color:'#f97316', ber: eb => (7/12)*Q(Math.sqrt(0.1*linFromdB(eb)*6)) },
+        { label:'256QAM', color:'#f87171', ber: eb => (15/16)*Q(Math.sqrt(0.05*linFromdB(eb)*8)) }
+    ];
+
+    curves.forEach(c => {
+        ctx.beginPath(); ctx.strokeStyle = c.color; ctx.lineWidth = 1.5;
+        let first = true;
+        for(let eb = xMin; eb <= xMax; eb += 0.2) {
+            const ber = c.ber(eb);
+            if(ber <= 0 || !isFinite(ber)) { first = true; continue; }
+            const logBer = Math.log10(ber);
+            if(logBer < yMin) { first = true; continue; }
+            const px = toX(eb), py = toY(logBer);
+            if(first) { ctx.moveTo(px, py); first = false; } else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+    });
+
+    // User Eb/N0 marker
+    if(isFinite(currentEbn0) && currentEbn0 >= xMin && currentEbn0 <= xMax) {
+        ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 2; ctx.setLineDash([4,3]);
+        ctx.beginPath(); ctx.moveTo(toX(currentEbn0), 10); ctx.lineTo(toX(currentEbn0), H-20); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#22c55e'; ctx.textAlign = 'center';
+        ctx.fillText(currentEbn0.toFixed(1)+'dB', toX(currentEbn0), 8);
+    }
+}
+
+// ===================== MODULATION =====================
+const MOD_PARAMS = {
+    am:    [{id:'mod-m',label:'Modulation Index (m)',val:'0.8',unit:'',min:0,max:1,step:0.05},{id:'mod-fc',label:'Carrier Freq',val:'1000',unit:'kHz'},{id:'mod-fm',label:'Message Freq',val:'5',unit:'kHz'},{id:'mod-pc',label:'Carrier Power',val:'10',unit:'W'}],
+    fm:    [{id:'mod-df',label:'Peak Deviation (Δf)',val:'75',unit:'kHz'},{id:'mod-fm',label:'Message Freq (fm)',val:'15',unit:'kHz'},{id:'mod-fc',label:'Carrier Freq',val:'100',unit:'MHz'},{id:'mod-pc',label:'Carrier Power',val:'10',unit:'kW'}],
+    pm:    [{id:'mod-dp',label:'Peak Phase Dev (Δφ)',val:'1.5',unit:'rad'},{id:'mod-fm',label:'Message Freq',val:'10',unit:'kHz'}],
+    dsb:   [{id:'mod-fc',label:'Carrier Freq',val:'1000',unit:'kHz'},{id:'mod-fm',label:'Message Freq',val:'5',unit:'kHz'}],
+    ssb:   [{id:'mod-fc',label:'Carrier Freq',val:'1000',unit:'kHz'},{id:'mod-fm',label:'Message BW',val:'4',unit:'kHz'}],
+    bpsk:  [{id:'mod-rb',label:'Symbol Rate',val:'10',unit:'Msym/s'},{id:'mod-ro',label:'Roll-off α',val:'0.35',unit:''}],
+    qpsk:  [{id:'mod-rb',label:'Symbol Rate',val:'10',unit:'Msym/s'},{id:'mod-ro',label:'Roll-off α',val:'0.35',unit:''}],
+    '8psk':[{id:'mod-rb',label:'Symbol Rate',val:'10',unit:'Msym/s'},{id:'mod-ro',label:'Roll-off α',val:'0.35',unit:''}],
+    dqpsk:[{id:'mod-rb',label:'Symbol Rate',val:'10',unit:'Msym/s'},{id:'mod-ro',label:'Roll-off α',val:'0.5',unit:''}],
+    ask:   [{id:'mod-rb',label:'Bit Rate',val:'10',unit:'Mbps'},{id:'mod-ro',label:'Roll-off α',val:'0.5',unit:''}],
+    qam16: [{id:'mod-rb',label:'Symbol Rate',val:'10',unit:'Msym/s'},{id:'mod-ro',label:'Roll-off α',val:'0.2',unit:''}],
+    qam64: [{id:'mod-rb',label:'Symbol Rate',val:'10',unit:'Msym/s'},{id:'mod-ro',label:'Roll-off α',val:'0.15',unit:''}],
+    qam256:[{id:'mod-rb',label:'Symbol Rate',val:'10',unit:'Msym/s'},{id:'mod-ro',label:'Roll-off α',val:'0.1',unit:''}],
+    fsk:   [{id:'mod-rb',label:'Bit Rate',val:'10',unit:'Mbps'},{id:'mod-df',label:'Freq Deviation (Δf)',val:'5',unit:'MHz'}],
+    msk:   [{id:'mod-rb',label:'Bit Rate',val:'10',unit:'Mbps'}],
+    gmsk:  [{id:'mod-rb',label:'Bit Rate',val:'271',unit:'kbps'},{id:'mod-bt',label:'BT Product',val:'0.3',unit:''}],
+};
+
+function calcMod() {
+    const type = document.getElementById('mod-type').value;
+    const pc = document.getElementById('mod-params-container');
+    const params = MOD_PARAMS[type] || [];
+    pc.innerHTML = params.map(p => `
+        <div>
+            <label class="text-themeMuted block mb-0.5 text-[9px]">${p.label}</label>
+            <div class="flex">
+                <input type="number" id="${p.id}" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="${p.val}" step="${p.step||'any'}" min="${p.min||''}" max="${p.max||''}" oninput="runMod()">
+                ${p.unit?`<span class="bg-themeBorder text-themeBg px-2 flex items-center text-[9px] whitespace-nowrap">${p.unit}</span>`:''}
+            </div>
+        </div>`).join('');
+    runMod();
+}
+
+function runMod() {
+    const type = document.getElementById('mod-type').value;
+    const g = id => parseFloat(document.getElementById(id)?.value) || 0;
+    let results = [], theory = '', canvasMode = 'spectrum';
+
+    if(type === 'am') {
+        const m=g('mod-m'), fc=g('mod-fc'), fm=g('mod-fm'), Pc=g('mod-pc');
+        const BW = 2*fm;
+        const Pt = Pc * (1 + m*m/2);
+        const Pside = Pc * m*m/4;
+        results = [
+            {label:'Bandwidth', val: BW.toFixed(1)+' kHz'},
+            {label:'Total Power', val: Pt.toFixed(2)+' W'},
+            {label:'Sideband Power', val: (2*Pside).toFixed(2)+' W'},
+            {label:'Efficiency', val: (m*m/(2+m*m)*100).toFixed(1)+'%'},
+            {label:'Lower SB', val: (fc-fm).toFixed(1)+' kHz'},
+            {label:'Upper SB', val: (fc+fm).toFixed(1)+' kHz'},
+        ];
+        theory = `<strong>AM:</strong> s(t) = A_c[1 + m·cos(2πf_m·t)]cos(2πf_c·t) | BW = 2f_m | η = m²/(2+m²)`;
+    } else if(type === 'fm') {
+        const df=g('mod-df'), fm=g('mod-fm');
+        const mi = df/fm;
+        const BW = 2*(df+fm); // Carson's rule
+        results = [
+            {label:'Modulation Index β', val: mi.toFixed(3)},
+            {label:'Carson BW', val: BW.toFixed(1)+' kHz'},
+            {label:'Noise Improvement', val: (3*mi*mi*(mi+1)).toFixed(1)+' (linear)'},
+            {label:'SNR Gain', val: (10*Math.log10(3*mi*mi*(mi+1))).toFixed(1)+' dB'},
+        ];
+        theory = `<strong>FM:</strong> β = Δf/f_m | Carson's Rule: BW ≈ 2(Δf + f_m) | SNR improvement ∝ 3β²(β+1)`;
+    } else if(['bpsk','qpsk','8psk','dqpsk'].includes(type)) {
+        const Rs=g('mod-rb'), ro=g('mod-ro');
+        const bps = {bpsk:1,qpsk:2,'8psk':3,dqpsk:2}[type];
+        const BW = Rs*(1+ro);
+        const Rb = Rs*bps;
+        const SE = Rb/BW;
+        const minEbn0 = {bpsk:10.6,qpsk:10.6,'8psk':14.5,dqpsk:11.2}[type];
+        results = [
+            {label:'Bits/Symbol', val: bps},
+            {label:'Bit Rate', val: (Rb).toFixed(1)+' Mbps'},
+            {label:'RF Bandwidth', val: BW.toFixed(2)+' MHz'},
+            {label:'Spectral Eff.', val: SE.toFixed(2)+' b/s/Hz'},
+            {label:'Min Eb/N0 (BER=1e-6)', val: minEbn0+' dB'},
+        ];
+        theory = `<strong>${type.toUpperCase()}:</strong> ${bps} bit/symbol | BW = Rs·(1+α) | Spectral Efficiency = ${bps}/(1+α) b/s/Hz`;
+    } else if(['qam16','qam64','qam256'].includes(type)) {
+        const Rs=g('mod-rb'), ro=g('mod-ro');
+        const bps = {qam16:4,qam64:6,qam256:8}[type];
+        const M = Math.pow(2,bps);
+        const BW = Rs*(1+ro);
+        const SE = bps/(1+ro);
+        const minEbn0 = {qam16:20,qam64:26.5,qam256:33}[type];
+        results = [
+            {label:'Order M', val: M},
+            {label:'Bits/Symbol', val: bps},
+            {label:'RF Bandwidth', val: BW.toFixed(2)+' MHz'},
+            {label:'Spectral Eff.', val: SE.toFixed(2)+' b/s/Hz'},
+            {label:'Min Eb/N0', val: minEbn0+' dB'},
+            {label:'PAPR', val: (bps<=4?6.6:8.2).toFixed(1)+' dB'},
+        ];
+        theory = `<strong>${type.toUpperCase()}:</strong> M=${M}, ${bps} bits/symbol | BW = Rs(1+α) | High spectral efficiency, requires linear amplifier | Typical PAPR ~${(bps<=4?6.6:8.2).toFixed(1)} dB`;
+    } else if(type === 'fsk') {
+        const Rb=g('mod-rb'), df=g('mod-df');
+        const h = 2*df/Rb;
+        const BW = 2*(df + Rb);
+        results = [
+            {label:'Modulation Index h', val: h.toFixed(3)},
+            {label:'Bandwidth (Carson)', val: BW.toFixed(2)+' MHz'},
+            {label:'Freq Separation', val: (2*df).toFixed(2)+' MHz'},
+            {label:'Orthogonality', val: h>=1?'Yes (h≥1)':'No (h<1)'},
+        ];
+        theory = `<strong>FSK:</strong> h = 2Δf/Rb | Carson BW ≈ 2(Δf + Rb) | Orthogonal when h is integer`;
+    } else if(type === 'msk') {
+        const Rb=g('mod-rb');
+        results = [
+            {label:'Δf (exactly)', val: (Rb/2).toFixed(3)+' MHz'},
+            {label:'h (exactly)', val: '0.5'},
+            {label:'Null-null BW', val: (1.5*Rb).toFixed(2)+' MHz'},
+            {label:'99% BW', val: (2.5*Rb).toFixed(2)+' MHz'},
+        ];
+        theory = `<strong>MSK:</strong> h = 0.5 exactly | Δf = Rb/2 | Continuous phase, no spectral splatter | Similar BER to BPSK but with better spectral containment`;
+    } else if(type === 'gmsk') {
+        const Rb=g('mod-rb'), BT=g('mod-bt');
+        const BW = 0.3*Rb/BT;
+        results = [
+            {label:'3dB BW', val: (BT*Rb).toFixed(2)+' kbps'},
+            {label:'99% BW', val: BW.toFixed(2)+' kbps'},
+            {label:'Spectral Eff.', val: '~'+(1/BW*Rb).toFixed(2)},
+        ];
+        theory = `<strong>GMSK (GSM uses BT=0.3):</strong> Gaussian filter smooths FSK transitions | Lower BW than MSK | ISI increases as BT decreases`;
+    } else {
+        results = [{label:'Select a modulation', val:''}];
+        theory = '';
+    }
+
+    const grid = document.getElementById('mod-results-grid');
+    grid.innerHTML = results.map(r => `
+        <div class="bg-themeContainer border border-themeBorder p-3 text-center">
+            <div class="text-themeMuted text-[9px] uppercase leading-tight">${r.label}</div>
+            <div class="text-xl font-bold text-themeText mt-1">${r.val}</div>
+        </div>`).join('');
+    document.getElementById('mod-theory').innerHTML = theory;
+    drawModCanvas(type);
+}
+
+function drawModCanvas(type) {
+    const canvas = document.getElementById('mod-canvas');
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.clientWidth || 560, H = 200;
+    canvas.width = W*dpr; canvas.height = H*dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    const tc = themeColors();
+    ctx.fillStyle = tc.bg; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle = tc.grid; ctx.lineWidth = 1;
+
+    // Draw waveforms for analog, spectrum-like for digital
+    const N = 400;
+    if(['am','fm','pm','dsb','ssb'].includes(type)) {
+        // Time domain waveform
+        const g = id => parseFloat(document.getElementById(id)?.value) || 0;
+        const steps = N;
+        const T = W / steps;
+        const my = H/2, amp = H/2 - 15;
+
+        // Message signal (grey)
+        ctx.beginPath(); ctx.strokeStyle = tc.grid; ctx.lineWidth = 1;
+        for(let i=0;i<steps;i++) {
+            const t = i/steps;
+            const fm = 5;
+            const y = Math.sin(2*Math.PI*fm*t);
+            const px = i*T, py = my - y*amp*0.4;
+            i===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+        }
+        ctx.stroke();
+
+        // Modulated signal
+        ctx.beginPath(); ctx.strokeStyle = tc.accent; ctx.lineWidth = 1.5;
+        for(let i=0;i<steps;i++) {
+            const t = i/steps;
+            const m_idx = g('mod-m') || 0.8;
+            const mi = g('mod-df') ? g('mod-df')/Math.max(g('mod-fm'),1) : 0;
+            const fm_f = 5, fc_f = 50;
+            let y = 0;
+            if(type==='am')  y = (1 + m_idx*Math.sin(2*Math.PI*fm_f*t)) * Math.cos(2*Math.PI*fc_f*t);
+            else if(type==='fm') y = Math.cos(2*Math.PI*fc_f*t + mi*Math.sin(2*Math.PI*fm_f*t));
+            else if(type==='pm') { const dp=g('mod-dp')||1.5; y = Math.cos(2*Math.PI*fc_f*t + dp*Math.sin(2*Math.PI*fm_f*t)); }
+            else if(type==='dsb') y = Math.sin(2*Math.PI*fm_f*t) * Math.cos(2*Math.PI*fc_f*t);
+            else if(type==='ssb') y = Math.sin(2*Math.PI*(fc_f+fm_f)*t);
+            const px = i*T, py = my - y*amp*0.85;
+            i===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+        }
+        ctx.stroke();
+
+        ctx.fillStyle = tc.text; ctx.font = '9px monospace'; ctx.textAlign='left';
+        ctx.fillText('grey = message signal  |  gold = modulated', 8, 12);
+    } else {
+        // Digital: draw eye-diagram-like or spectrum bar chart
+        // Simple pseudo-spectrum
+        const freqs = 20;
+        const barW = (W - 60) / freqs;
+        const maxH = H - 30;
+        ctx.fillStyle = tc.grid; ctx.strokeStyle = tc.grid;
+
+        // Draw axis
+        ctx.strokeStyle = tc.text; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(30, 10); ctx.lineTo(30, H-20); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(30, H-20); ctx.lineTo(W-10, H-20); ctx.stroke();
+
+        // Spectrum shape based on type
+        const ro = parseFloat(document.getElementById('mod-ro')?.value) || 0.35;
+        for(let i=0;i<freqs;i++) {
+            const f = (i - freqs/2) / (freqs/2);
+            let A = 0;
+            const af = Math.abs(f);
+            if(af <= (1-ro)/2) A = 1;
+            else if(af <= (1+ro)/2) A = 0.5*(1+Math.cos(Math.PI*(af-(1-ro)/2)/ro));
+            else A = 0;
+            const barH = A * maxH * 0.85;
+            const x = 35 + i*barW;
+            ctx.fillStyle = `rgba(${isDark()?'212,175,55':'146,96,10'},${0.2+A*0.6})`;
+            ctx.fillRect(x, H-20-barH, barW-2, barH);
+        }
+        ctx.fillStyle = tc.text; ctx.font='9px monospace'; ctx.textAlign='center';
+        ctx.fillText('RRC Spectrum (α='+ro+')', W/2, 12);
+        ctx.fillText('-f_s/2', 40, H-10); ctx.fillText('0', W/2, H-10); ctx.fillText('+f_s/2', W-20, H-10);
+    }
+    document.getElementById('mod-canvas-label').textContent = ['am','fm','pm','dsb','ssb'].includes(type) ? 'Time Domain Waveform' : 'RRC Spectrum Shape';
+}
+
+// ===================== ENCODING =====================
+const ENC_INFO = {
+    'nrz-l':     { levels:2, dc:true,  clk:false, eff:1,    theory:'NRZ-L: 1=high, 0=low. Simple but no clock sync, DC component.' },
+    'nrz-i':     { levels:2, dc:true,  clk:false, eff:1,    theory:'NRZ-I: transition on 1, no transition on 0. Used in USB (full-speed).' },
+    'rz':        { levels:2, dc:true,  clk:false, eff:0.5,  theory:'RZ: signal returns to 0 each bit period. Double BW required. Built-in clock.' },
+    'ami':       { levels:3, dc:false, clk:false, eff:1,    theory:'AMI: 0=zero, 1 alternates between +1 and -1. No DC, but long runs of 0 cause sync loss.' },
+    'manchester':{ levels:2, dc:false, clk:true,  eff:0.5,  theory:'Manchester: mid-bit transition. 1=high→low, 0=low→high. Self-clocking. BW = 2× bit rate. IEEE 802.3 Ethernet.' },
+    'diff-man':  { levels:2, dc:false, clk:true,  eff:0.5,  theory:'Differential Manchester: transition at start of period for 0, no transition for 1. Plus always mid-bit transition.' },
+    'mlt3':      { levels:3, dc:false, clk:false, eff:1,    theory:'MLT-3: cycles through +1,0,-1,0 on each 1 bit. Used in 100BASE-TX. Lower EMI than NRZ.' },
+    'nrzi':      { levels:2, dc:false, clk:false, eff:1,    theory:'NRZI: transition on 1, hold on 0. USB (low-/full-speed). Polarity independent.' },
+    '4b5b':      { levels:2, dc:false, clk:false, eff:0.8,  theory:'4B5B: 4 data bits → 5 line code bits (chosen to guarantee transitions). 80% efficiency. Used with NRZI in FDDI.' },
+    '8b10b':     { levels:2, dc:false, clk:true,  eff:0.8,  theory:'8B10B: 8 bits → 10 bits, DC balance maintained. 80% efficiency. Gigabit Ethernet, USB 3.0, SATA, PCIe 1/2.' },
+    '64b66b':    { levels:2, dc:false, clk:true,  eff:0.97, theory:'64B/66B: 64 bits → 66 bits (97% efficiency). 2-bit sync header. Used in 10GbE, 40GbE, 100GbE.' },
+    '128b130b':  { levels:2, dc:false, clk:true,  eff:0.985,theory:'128B/130B: 128 bits → 130 bits (98.5% efficiency). Used in PCIe 3.0+, USB 3.1 Gen2.' },
+};
+
+// 4B5B lookup table
+const B4B5 = {'0000':'11110','0001':'01001','0010':'10100','0011':'10101','0100':'01010','0101':'01011','0110':'01110','0111':'01111',
+               '1000':'10010','1001':'10011','1010':'10110','1011':'10111','1100':'11010','1101':'11011','1110':'11100','1111':'11101'};
+
+function calcEnc() {
+    const type  = document.getElementById('enc-type').value;
+    const bits  = document.getElementById('enc-bits').value.replace(/[^01]/g,'').slice(0,16) || '10110100';
+    const br    = parseFloat(document.getElementById('enc-bitrate').value) || 100;
+    document.getElementById('enc-bits').value = bits;
+
+    const info = ENC_INFO[type];
+    const lineBW = br / info.eff;
+    const clkStr = info.clk ? 'Yes (self-clocking)' : 'No (external clock needed)';
+    const dcStr  = info.dc  ? 'Yes (has DC component)' : 'No (DC-balanced)';
+
+    // Encode
+    let encoded = [];
+    if(type === 'nrz-l')    encoded = bits.split('').map(b => b==='1'?1:0);
+    else if(type === 'nrz-i') { let cur=0; encoded = bits.split('').map(b => { if(b==='1') cur=1-cur; return cur; }); }
+    else if(type === 'rz')   encoded = bits.split('').flatMap(b => [b==='1'?1:0, 0]);
+    else if(type === 'ami')  { let sign=1; encoded = bits.split('').map(b => { if(b==='1'){const v=sign;sign=-sign;return v;}return 0; }); }
+    else if(type === 'manchester') encoded = bits.split('').flatMap(b => b==='1'?[1,0]:[0,1]);
+    else if(type === 'diff-man') { let cur=0; encoded = bits.split('').flatMap(b => { if(b==='0') cur=1-cur; const h1=cur; cur=1-cur; return [h1,cur]; }); }
+    else if(type === 'mlt3') { let state=0,states=[0,1,0,-1]; let idx=0; encoded=bits.split('').map(b=>{if(b==='1'){idx=(idx+1)%4;return states[idx];}return states[idx];}); }
+    else if(type === 'nrzi') { let cur=0; encoded = bits.split('').map(b => { if(b==='1')cur=1-cur; return cur; }); }
+    else if(type === '4b5b') {
+        let out=''; for(let i=0;i<bits.length;i+=4){const chunk=bits.slice(i,i+4).padEnd(4,'0');out+=B4B5[chunk]||'11111';} encoded=out.split('').map(Number);
+    } else if(['8b10b','64b66b','128b130b'].includes(type)) {
+        // Simplified: show with RD+ (running disparity)
+        const pad = bits.padEnd(8,'0');
+        const rd_flip = str => str.split('').map((_,i,a)=>a.filter((c,j)=>j<=i&&c==='1').length%2===0?str[i]:(str[i]==='0'?'1':'0')).join('');
+        encoded = (pad+rd_flip(pad).slice(0,2)).slice(0,10).split('').map(Number);
+    }
+
+    const symbolStr = encoded.map(v => v===1?'1': v===-1?'‾':'0').join(' ');
+    document.getElementById('enc-symbol-out').textContent = symbolStr;
+    document.getElementById('enc-scheme-label').textContent = document.getElementById('enc-type').options[document.getElementById('enc-type').selectedIndex].text;
+
+    document.getElementById('enc-results-box').innerHTML = `
+        <div class="space-y-1 border-t border-themeBorder/20 pt-2">
+            <div class="flex justify-between"><span class="text-themeMuted">Line Rate</span><span class="font-bold text-themeAccent">${lineBW.toFixed(1)} Mbaud</span></div>
+            <div class="flex justify-between"><span class="text-themeMuted">Efficiency</span><span class="font-bold text-themeText">${(info.eff*100).toFixed(0)}%</span></div>
+            <div class="flex justify-between"><span class="text-themeMuted">Signal Levels</span><span class="font-bold text-themeText">${info.levels}</span></div>
+            <div class="flex justify-between"><span class="text-themeMuted">Self-Clock</span><span class="font-bold ${info.clk?'text-green-400':'text-orange-400'}">${clkStr}</span></div>
+            <div class="flex justify-between"><span class="text-themeMuted">DC Balance</span><span class="font-bold ${!info.dc?'text-green-400':'text-orange-400'}">${dcStr}</span></div>
+        </div>`;
+
+    document.getElementById('enc-theory').innerHTML = info.theory;
+    drawEncWaveform(encoded, bits, info.levels);
+}
+
+function drawEncWaveform(encoded, bits, levels) {
+    const canvas = document.getElementById('enc-canvas');
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.clientWidth || 560, H = 140;
+    canvas.width = W*dpr; canvas.height = H*dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr,dpr);
+    const tc = themeColors();
+    ctx.fillStyle = tc.bg; ctx.fillRect(0,0,W,H);
+
+    const margin = 35;
+    const chartW = W - margin - 10;
+    const chartH = H - 30;
+    const midY = margin + chartH/2;
+    const step = chartW / encoded.length;
+
+    // Axes
+    ctx.strokeStyle = tc.grid; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(margin, margin); ctx.lineTo(margin, H-20); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(margin, midY); ctx.lineTo(W-5, midY); ctx.stroke();
+
+    // Y labels
+    ctx.fillStyle = tc.text; ctx.font='9px monospace'; ctx.textAlign='right';
+    if(levels===3) { ctx.fillText('+1', margin-3, margin+5); ctx.fillText('0', margin-3, midY+3); ctx.fillText('-1', margin-3, H-22); }
+    else { ctx.fillText('H', margin-3, margin+5); ctx.fillText('L', margin-3, H-22); }
+
+    // Bit markers at top
+    ctx.fillStyle = tc.text; ctx.font='9px monospace'; ctx.textAlign='center';
+    for(let i=0;i<bits.length;i++) {
+        const bitsPerEncoded = encoded.length/bits.length;
+        const x = margin + (i + 0.5)*bitsPerEncoded*step;
+        ctx.fillText(bits[i], x, 12);
+    }
+
+    // Waveform
+    const toY = v => {
+        if(levels===3) return midY - v*(chartH/2*0.8);
+        return v===1 ? margin + 5 : H - 25;
+    };
+
+    ctx.beginPath(); ctx.strokeStyle = tc.accent; ctx.lineWidth = 2;
+    for(let i=0;i<encoded.length;i++) {
+        const x1 = margin + i*step, x2 = margin + (i+1)*step;
+        const y = toY(encoded[i]);
+        if(i===0) { ctx.moveTo(x1, y); } else {
+            const prevY = toY(encoded[i-1]);
+            if(prevY !== y) ctx.lineTo(x1, y);
+        }
+        ctx.lineTo(x2, y);
+    }
+    ctx.stroke();
+
+    // Bit boundary ticks
+    ctx.strokeStyle = tc.grid; ctx.lineWidth=0.5;
+    for(let i=1;i<encoded.length;i++) {
+        const x = margin + i*step;
+        ctx.beginPath(); ctx.moveTo(x, margin); ctx.lineTo(x, H-20); ctx.stroke();
+    }
+}
+
+// ===================== CONSTELLATION =====================
+function constPoints(type) {
+    const pts = [];
+    if(type==='bpsk')   { [[-1,0],[1,0]].forEach((p,i)=>pts.push({x:p[0],y:p[1],gray:i.toString(2).padStart(1,'0')})); }
+    else if(type==='qpsk')  { const r=1/Math.sqrt(2); [[-1,-1],[-1,1],[1,1],[1,-1]].forEach((p,i)=>pts.push({x:p[0]*r,y:p[1]*r,gray:(['00','01','11','10'][i])})); }
+    else if(type==='8psk')  { for(let i=0;i<8;i++){const a=2*Math.PI*i/8+Math.PI/8; pts.push({x:Math.cos(a),y:Math.sin(a),gray:i.toString(2).padStart(3,'0')});} }
+    else if(type==='16qam') {
+        const levs=[-3,-1,1,3]; const grayMap=[0,1,3,2];
+        for(let r=0;r<4;r++) for(let c=0;c<4;c++) pts.push({x:levs[c]/3,y:levs[r]/3,gray:(grayMap[r]*4+grayMap[c]).toString(2).padStart(4,'0')});
+    } else if(type==='32qam') {
+        // Cross-32QAM
+        const sq=[-3,-1,1,3]; for(let r=0;r<4;r++) for(let c=0;c<4;c++) pts.push({x:sq[c]/3,y:sq[r]/3});
+        [[0,-3],[0,3],[-3,0],[3,0],[-3,-6],[3,-6],[-3,6],[3,6],[-6,3],[-6,-3],[6,3],[6,-3],[0,-6],[0,6],[-6,0],[6,0]].slice(0,16).forEach(p=>pts.push({x:p[0]/6,y:p[1]/6}));
+    } else if(type==='64qam') {
+        const levs=[-7,-5,-3,-1,1,3,5,7]; for(let r=0;r<8;r++) for(let c=0;c<8;c++) pts.push({x:levs[c]/7,y:levs[r]/7});
+    } else if(type==='256qam') {
+        const levs=[...Array(16)].map((_,i)=>-15+2*i); for(let r=0;r<16;r++) for(let c=0;c<16;c++) pts.push({x:levs[c]/15,y:levs[r]/15});
+    } else if(type==='16apsk') {
+        const r1=0.4,r2=1; for(let i=0;i<4;i++){const a=2*Math.PI*i/4; pts.push({x:r1*Math.cos(a),y:r1*Math.sin(a)});}
+        for(let i=0;i<12;i++){const a=2*Math.PI*i/12; pts.push({x:r2*Math.cos(a),y:r2*Math.sin(a)});}
+    } else if(type==='32apsk') {
+        const r1=0.3,r2=0.65,r3=1; for(let i=0;i<4;i++){const a=2*Math.PI*i/4;pts.push({x:r1*Math.cos(a),y:r1*Math.sin(a)});}
+        for(let i=0;i<12;i++){const a=2*Math.PI*i/12;pts.push({x:r2*Math.cos(a),y:r2*Math.sin(a)});}
+        for(let i=0;i<16;i++){const a=2*Math.PI*i/16;pts.push({x:r3*Math.cos(a),y:r3*Math.sin(a)});}
+    } else if(type==='8fsk') {
+        for(let i=0;i<8;i++) pts.push({x:(i-3.5)/4,y:0});
+    }
+    return pts;
+}
+
+function randn() { let u=0,v=0; while(!u)u=Math.random(); while(!v)v=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+
+function drawConst() {
+    const type    = document.getElementById('const-mod').value;
+    const evmPct  = parseFloat(document.getElementById('const-evm').value) / 100;
+    const count   = parseInt(document.getElementById('const-count').value);
+    const showLab = document.getElementById('const-labels').checked;
+    const showDec = document.getElementById('const-decision').checked;
+    const showIdeal = document.getElementById('const-ideal').checked;
+
+    const canvas = document.getElementById('const-canvas');
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.clientWidth || 600, H = 520;
+    canvas.width = W*dpr; canvas.height = H*dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr,dpr);
+    const tc = themeColors();
+    ctx.fillStyle = tc.bg; ctx.fillRect(0,0,W,H);
+
+    const pts = constPoints(type);
+    if(!pts.length) return;
+
+    const M = pts.length;
+    const bps = Math.round(Math.log2(M));
+    const margins = 45;
+    const scale = Math.min(W,H)/2 - margins;
+    const cx = W/2, cy = H/2;
+
+    const toX = x => cx + x*scale;
+    const toY = y => cy - y*scale;
+
+    // Grid
+    ctx.strokeStyle = tc.grid; ctx.lineWidth = 1;
+    for(let i=-4;i<=4;i++) {
+        ctx.beginPath(); ctx.moveTo(cx+i*scale/4, margins); ctx.lineTo(cx+i*scale/4, H-margins); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(margins, cy+i*scale/4); ctx.lineTo(W-margins, cy+i*scale/4); ctx.stroke();
+    }
+
+    // Axes
+    ctx.strokeStyle = tc.text; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(margins, cy); ctx.lineTo(W-margins, cy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx, margins); ctx.lineTo(cx, H-margins); ctx.stroke();
+    ctx.fillStyle = tc.text; ctx.font='10px monospace'; ctx.textAlign='center';
+    ctx.fillText('I (In-phase)', W/2, H-8);
+    ctx.save(); ctx.translate(12, H/2); ctx.rotate(-Math.PI/2); ctx.fillText('Q (Quadrature)', 0, 0); ctx.restore();
+
+    // Decision boundaries (simple grid for QAM)
+    if(showDec && ['16qam','64qam','256qam'].includes(type)) {
+        const levs = {qam16:2, qam64:4, qam256:8}; // half of side length
+        const n = levs[type] || 2;
+        ctx.strokeStyle = `rgba(${isDark()?'255,255,255':'0,0,0'},0.06)`;
+        ctx.setLineDash([4,4]); ctx.lineWidth=1;
+        for(let i=-(n-1);i<n;i++){
+            const xi = i/n;
+            ctx.beginPath(); ctx.moveTo(toX(xi), margins); ctx.lineTo(toX(xi), H-margins); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(margins, toY(xi)); ctx.lineTo(W-margins, toY(xi)); ctx.stroke();
+        }
+        ctx.setLineDash([]);
+    }
+
+    // Noisy received symbols
+    const noiseStd = evmPct * 0.7;
+    ctx.globalAlpha = 0.55;
+    for(let i=0;i<count;i++) {
+        const ideal = pts[Math.floor(Math.random()*pts.length)];
+        const nx = ideal.x + randn()*noiseStd;
+        const ny = ideal.y + randn()*noiseStd;
+        ctx.beginPath();
+        ctx.fillStyle = `hsl(${(pts.indexOf(ideal)/M)*280+120}, 80%, 60%)`;
+        ctx.arc(toX(nx), toY(ny), Math.max(1, 3-bps*0.2), 0, 2*Math.PI);
+        ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // Ideal constellation points
+    if(showIdeal) {
+        pts.forEach((p, i) => {
+            ctx.beginPath();
+            ctx.fillStyle = tc.accent;
+            ctx.strokeStyle = tc.bg;
+            ctx.lineWidth = 1.5;
+            ctx.arc(toX(p.x), toY(p.y), 5, 0, 2*Math.PI);
+            ctx.fill(); ctx.stroke();
+
+            if(showLab && p.gray && M <= 64) {
+                ctx.fillStyle = tc.text;
+                ctx.font = `${M<=16?10:8}px monospace`;
+                ctx.textAlign = 'center';
+                const lx = toX(p.x) + (p.x >= 0 ? 10 : -10);
+                const ly = toY(p.y) + (p.y >= 0 ? -8 : 12);
+                ctx.fillText(p.gray, lx, ly);
+            }
+        });
+    }
+
+    // Title
+    ctx.fillStyle = tc.text; ctx.font='bold 12px monospace'; ctx.textAlign='left';
+    ctx.fillText(`${type.toUpperCase()} — M=${M}, ${bps} bit/sym, EVM=${(evmPct*100).toFixed(1)}%`, margins, 20);
+
+    // Update side stats
+    const ebn0Req = {bpsk:10.6, qpsk:10.6, '8psk':14.5, '16qam':20, '32qam':23, '64qam':26.5, '256qam':33, '16apsk':18, '32apsk':22, '8fsk':10}[type] || '--';
+    const snrEq = evmPct > 0 ? (-20*Math.log10(evmPct)).toFixed(1)+' dB' : '∞';
+    document.getElementById('const-M').textContent = M;
+    document.getElementById('const-bps').textContent = bps;
+    document.getElementById('const-se').textContent = bps.toFixed(1)+' b/s/Hz (ideal)';
+    document.getElementById('const-ebn0req').textContent = ebn0Req+(ebn0Req!=='--'?' dB':'');
+    document.getElementById('const-evm-out').textContent = (evmPct*100).toFixed(1)+'% rms';
+    document.getElementById('const-snr-out').textContent = snrEq;
+
+    // Hover probe
+    canvas.onmousemove = e => {
+        const rect = canvas.getBoundingClientRect();
+        const mx = (e.clientX - rect.left) / rect.width * W;
+        const my = (e.clientY - rect.top) / rect.height * H;
+        const qi = (mx - cx) / scale;
+        const qq = (cy - my) / scale;
+        document.getElementById('const-hover-info').textContent =
+            `I = ${qi.toFixed(3)}, Q = ${qq.toFixed(3)} | |Γ| = ${Math.sqrt(qi*qi+qq*qq).toFixed(3)} | φ = ${(Math.atan2(qq,qi)*180/Math.PI).toFixed(1)}°`;
+    };
+}
+
+// Init
+setTimeout(() => { calcSNR(); calcMod(); calcEnc(); drawConst(); }, 150);
+</script>
