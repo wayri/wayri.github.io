@@ -493,9 +493,11 @@ class HarnessDesigner {
                     <label>ID: <input type="text" class="w-full bg-themeBg border border-themeBorder p-1" value="${w.id}" onchange="window.HarnessApp.updateProp('wire', '${w.id}', 'id', this.value)"></label>
                     <label>Group / Bundle: <input type="text" class="w-full bg-themeBg border border-themeBorder p-1" value="${w.group || ''}" placeholder="e.g. 12V_PWR" onchange="window.HarnessApp.updateProp('wire', '${w.id}', 'group', this.value)"></label>
                     <div class="grid grid-cols-2 gap-2">
+                        <label>From Pin: <input type="number" class="w-full bg-themeBg border border-themeBorder p-1" value="${w.fromPin || 1}" min="1" onchange="window.HarnessApp.updateProp('wire', '${w.id}', 'fromPin', this.value)"></label>
+                        <label>To Pin: <input type="number" class="w-full bg-themeBg border border-themeBorder p-1" value="${w.toPin || 1}" min="1" onchange="window.HarnessApp.updateProp('wire', '${w.id}', 'toPin', this.value)"></label>
                         <label>AWG: <input type="number" class="w-full bg-themeBg border border-themeBorder p-1" value="${w.awg}" onchange="window.HarnessApp.updateProp('wire', '${w.id}', 'awg', this.value)"></label>
                         <label>Length (m): <input type="number" class="w-full bg-themeBg border border-themeBorder p-1" value="${w.len}" step="0.1" onchange="window.HarnessApp.updateProp('wire', '${w.id}', 'len', this.value)"></label>
-                        <label>Current (A): <input type="number" class="w-full bg-themeBg border border-themeBorder p-1" value="${w.i}" step="0.1" onchange="window.HarnessApp.updateProp('wire', '${w.id}', 'i', this.value)"></label>
+                        <label class="col-span-2">Current (A): <input type="number" class="w-full bg-themeBg border border-themeBorder p-1" value="${w.i}" step="0.1" onchange="window.HarnessApp.updateProp('wire', '${w.id}', 'i', this.value)"></label>
                     </div>
                     <label>Metadata: <textarea class="w-full bg-themeBg border border-themeBorder p-1 h-20 text-[10px]" placeholder="Color: Red&#10;Type: PTFE" onchange="window.HarnessApp.updateProp('wire', '${w.id}', 'metadata', this.value)">${metaStr}</textarea></label>
                 </div>
@@ -568,7 +570,7 @@ class HarnessDesigner {
     updateProp(type, id, prop, val) {
         let item = type === 'node' ? this.nodes.find(x => x.id === id) : this.wires.find(x => x.id === id);
         if(item) {
-            if(prop === 'pins' || prop === 'awg') item[prop] = parseInt(val) || item[prop];
+            if(prop === 'pins' || prop === 'awg' || prop === 'fromPin' || prop === 'toPin') item[prop] = parseInt(val) || item[prop];
             else if(prop === 'len' || prop === 'i') item[prop] = parseFloat(val) || item[prop];
             else if(prop === 'metadata') {
                 item.metadata = {};
