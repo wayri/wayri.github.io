@@ -211,7 +211,8 @@ async function loadTool(toolId, fileName, btnElement) {
     mainArea.innerHTML = `<div class="flex justify-center p-12 text-themeMuted"><i class="fa-solid fa-spinner fa-spin text-2xl"></i><span class="ml-2 font-mono">Loading tool...</span></div>`;
 
     try {
-        const response = await fetch(`/assets/tools_html/${fileName}`);
+        // Fetch the HTML content for the selected tool with cache-busting
+        const response = await fetch(`/assets/tools_html/${fileName}?v=${new Date().getTime()}`);
         if (!response.ok) throw new Error('Tool file not found');
         const html = await response.text();
         
