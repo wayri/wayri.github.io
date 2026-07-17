@@ -622,7 +622,8 @@ class HarnessDesigner {
             let tr = document.createElement('tr');
             tr.innerHTML = `
                 <td class="p-2 border-r border-themeBorder/20 text-themeAccent font-bold">${w.id} ${w.group ? `<span class="bg-blue-600 text-white text-[9px] px-1 rounded ml-1">${w.group}</span>` : ''}</td>
-                <td class="p-2" colspan="2">${pathStr}</td>
+                <td class="p-2">${w.path[0]} (Pin ${w.fromPin || 1})</td>
+                <td class="p-2">${w.path[w.path.length-1]} (Pin ${w.toPin || 1})</td>
                 <td class="p-2">${w.awg}</td>
                 <td class="p-2">${w.len.toFixed(2)}</td>
                 <td class="p-2 text-red-500">${effectiveI.toFixed(2)} ${w.group ? `<span class="text-[9px] text-themeMuted">(Split)</span>` : ''}</td>
@@ -636,11 +637,11 @@ class HarnessDesigner {
         document.getElementById('harness-table-modal').classList.add('flex');
     }
     downloadCSV() {
-        let csv = "Wire ID,Path,AWG,Length (m),Current (A),R (ohms),V-Drop (V)\n";
+        let csv = "Wire ID,From Node,From Pin,To Node,To Pin,Routing Path,AWG,Length (m),Current (A),R (ohms),V-Drop (V)\n";
         for (let w of this.wires) {
             let r = (this.awgRes[w.awg] || 0) * (w.len / 1000);
             let vdrop = w.i * r;
-            csv += `${w.id},"${w.path.join(' -> ')}",${w.awg},${w.len.toFixed(2)},${w.i.toFixed(2)},${r.toFixed(4)},${vdrop.toFixed(3)}\n`;
+            csv += `${w.id},${w.path[0]},${w.fromPin || 1},${w.path[w.path.length-1]},${w.toPin || 1},"${w.path.join(' -> ')}",${w.awg},${w.len.toFixed(2)},${w.i.toFixed(2)},${r.toFixed(4)},${vdrop.toFixed(3)}\n`;
         }
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
@@ -694,7 +695,7 @@ th { background: #eee; }
 
 <h2>Wire Netlist & Properties</h2>
 <table>
-<tr><th>Wire ID</th><th>Path</th><th>AWG</th><th>Length (m)</th><th>Current (A)</th><th>Resistance (&Omega;)</th><th>Voltage Drop (V)</th><th>Metadata</th></tr>`;
+<tr><th>Wire ID</th><th>From</th><th>To</th><th>Routing Path</th><th>AWG</th><th>Length (m)</th><th>Current (A)</th><th>Resistance (&Omega;)</th><th>Voltage Drop (V)</th><th>Metadata</th></tr>`;
 
         let totalLen = 0;
         let wireGroupsAgg = {};
@@ -718,6 +719,8 @@ th { background: #eee; }
             
             html += `<tr>
                 <td>${w.id} ${w.group ? `(Grp: ${w.group})` : ''}</td>
+                <td>${w.path[0]} (Pin ${w.fromPin || 1})</td>
+                <td>${w.path[w.path.length-1]} (Pin ${w.toPin || 1})</td>
                 <td>${w.path.join(' &rarr; ')}</td>
                 <td>${w.awg}</td>
                 <td>${w.len.toFixed(2)}</td>
