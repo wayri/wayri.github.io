@@ -108,7 +108,7 @@ const TOOL_REGISTRY = [
         tools: [
             { id: "tool-bldc-winding-helper", name: "BLDC Motor Winding Helper", file: "bldc-winding-helper.html" },
             { id: "tool-ac-motor-dynamics", name: "AC Motor Dynamics", file: "ac-motor-dynamics.html" },
-            { id: "tool-motor-controller", name: "Motor Controller Design", file: "motor-controller.html" }
+            { id: "tool-motor-controller", name: "Motor Dynamics Suite", file: "motor-controller.html" }
         ]
     },
     {
