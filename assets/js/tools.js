@@ -1607,66 +1607,113 @@ window.drawSmithChart = function() {
         return {u: gRe, v: gIm};
     }
     
+    // Detect dark mode from computed styles
+    const isDark = document.documentElement.classList.contains('dark') ||
+        window.matchMedia('(prefers-color-scheme: dark)').matches ||
+        getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim().startsWith('#0') ||
+        getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim().startsWith('#1') ||
+        getComputedStyle(document.documentElement).getPropertyValue('--theme-bg')?.trim().startsWith('#2');
+
+    // Detect theme from body/html class or CSS var
+    const bodyBg = getComputedStyle(document.body).backgroundColor;
+    const isLightBg = bodyBg && (bodyBg.includes('255') || bodyBg.includes('250') || bodyBg.includes('240'));
+    const bgColor = isLightBg ? '#f8fafc' : '#0d0d12';
+    const gridColor = isLightBg ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.1)';
+    const highlightColor = isLightBg ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.5)';
+    const textColor = isLightBg ? '#374151' : '#9ca3af';
+
+    // Fill background explicitly so canvas is never transparent
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, w, h);
+
+    // Check if Y-chart mode active
+    const yMode = window.smithYMode === true;
+
+    // Clip all drawing to unit circle
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, R_chart, 0, 2 * Math.PI);
+    ctx.clip();
+
     // Draw circles
     ctx.lineWidth = 1;
     
-    // Resistance circles
-    const r_vals = [0, 0.2, 0.5, 1, 2, 5];
-    r_vals.forEach(r => {
-        const rad = R_chart / (r + 1);
-        const center_u = r / (r + 1);
-        const pt = mapGamma(center_u, 0);
+    if(!yMode) {
+        // Z chart: resistance circles
+        const r_vals = [0, 0.2, 0.5, 1, 2, 5];
+        r_vals.forEach(r => {
+            const rad = R_chart / (r + 1);
+            const center_u = r / (r + 1);
+            const pt = mapGamma(center_u, 0);
+            ctx.beginPath();
+            ctx.strokeStyle = r === 1 ? highlightColor : gridColor;
+            ctx.lineWidth = r === 1 ? 1.5 : 1;
+            ctx.arc(pt.x, pt.y, rad, 0, 2*Math.PI);
+            ctx.stroke();
+        });
         
-        ctx.beginPath();
-        ctx.strokeStyle = tc.grid;
-        if(r === 1) ctx.strokeStyle = tc.text; // highlight r=1
-        ctx.arc(pt.x, pt.y, rad, 0, 2*Math.PI);
-        ctx.stroke();
-    });
-    
-    // Reactance arcs
-    const x_vals = [0.2, 0.5, 1, 2, 5, -0.2, -0.5, -1, -2, -5];
-    x_vals.forEach(x => {
-        const rad = R_chart / Math.abs(x);
-        const center_u = 1;
-        const center_v = 1 / x;
-        const pt = mapGamma(center_u, center_v);
-        
-        ctx.beginPath();
-        ctx.strokeStyle = tc.grid;
-        if(Math.abs(x) === 1) ctx.strokeStyle = tc.text;
-        
-        // We only want the part of the arc inside the unit circle.
-        ctx.arc(pt.x, pt.y, rad, 0, 2*Math.PI);
-        ctx.stroke(); // Optimization: clipping to unit circle is better
-    });
-    
-    // Clear outside unit circle to make arcs look correct
-    ctx.save();
-    ctx.globalCompositeOperation = 'destination-out';
+        // Reactance arcs
+        const x_vals = [0.2, 0.5, 1, 2, 5, -0.2, -0.5, -1, -2, -5];
+        x_vals.forEach(x => {
+            const rad = R_chart / Math.abs(x);
+            const center_u = 1;
+            const center_v = 1 / x;
+            const pt = mapGamma(center_u, center_v);
+            ctx.beginPath();
+            ctx.strokeStyle = Math.abs(x) === 1 ? highlightColor : gridColor;
+            ctx.lineWidth = Math.abs(x) === 1 ? 1.5 : 1;
+            ctx.arc(pt.x, pt.y, rad, 0, 2*Math.PI);
+            ctx.stroke();
+        });
+    } else {
+        // Y chart: conductance circles (mirror of Z chart)
+        const g_vals = [0, 0.2, 0.5, 1, 2, 5];
+        g_vals.forEach(g => {
+            const rad = R_chart / (g + 1);
+            const center_u = -g / (g + 1); // mirrored
+            const pt = mapGamma(center_u, 0);
+            ctx.beginPath();
+            ctx.strokeStyle = g === 1 ? '#3b82f6' : (isLightBg ? 'rgba(59,130,246,0.25)' : 'rgba(96,165,250,0.18)');
+            ctx.lineWidth = g === 1 ? 1.5 : 1;
+            ctx.arc(pt.x, pt.y, rad, 0, 2*Math.PI);
+            ctx.stroke();
+        });
+        // Susceptance arcs
+        const b_vals = [0.2, 0.5, 1, 2, 5, -0.2, -0.5, -1, -2, -5];
+        b_vals.forEach(b => {
+            const rad = R_chart / Math.abs(b);
+            const center_u = -1;
+            const center_v = 1 / b;
+            const pt = mapGamma(center_u, center_v);
+            ctx.beginPath();
+            ctx.strokeStyle = Math.abs(b) === 1 ? '#3b82f6' : (isLightBg ? 'rgba(59,130,246,0.25)' : 'rgba(96,165,250,0.18)');
+            ctx.lineWidth = Math.abs(b) === 1 ? 1.5 : 1;
+            ctx.arc(pt.x, pt.y, rad, 0, 2*Math.PI);
+            ctx.stroke();
+        });
+    }
+
+    // Real axis inside clip
     ctx.beginPath();
-    // draw a huge rect over everything
-    ctx.rect(0, 0, w, h);
-    // punch a hole for the unit circle
-    ctx.arc(cx, cy, R_chart, 0, 2*Math.PI, true);
-    ctx.fill();
-    ctx.restore();
-    
-    // Draw bounding circle
-    ctx.beginPath();
-    ctx.strokeStyle = tc.text;
-    ctx.arc(cx, cy, R_chart, 0, 2*Math.PI);
-    ctx.stroke();
-    
-    // Draw real axis
-    ctx.beginPath();
+    ctx.strokeStyle = highlightColor;
+    ctx.lineWidth = 1;
     ctx.moveTo(cx - R_chart, cy);
     ctx.lineTo(cx + R_chart, cy);
     ctx.stroke();
+
+    ctx.restore(); // end clip
+
+    // Labels inside axes (outside clip but within chart)
+    ctx.font = `bold 12px monospace`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = yMode ? '#3b82f6' : textColor;
+    ctx.fillText(yMode ? 'Y' : 'Z', cx - R_chart * 0.5, cy + 14);
+    ctx.fillText(yMode ? 'B' : 'X', cx + R_chart * 0.5, cy + 14);
     
     // Rim Indexes (Phase of Reflection Coefficient)
     ctx.font = '10px monospace';
-    ctx.fillStyle = tc.text;
+    ctx.fillStyle = textColor;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     
@@ -1678,7 +1725,8 @@ window.drawSmithChart = function() {
         const tickIn = mapGamma(u * 0.98, v * 0.98);
         const tickOut = mapGamma(u * 1.02, v * 1.02);
         ctx.beginPath();
-        ctx.strokeStyle = tc.text;
+        ctx.strokeStyle = textColor;
+        ctx.lineWidth = ang % 30 === 0 ? 1.5 : 0.8;
         ctx.moveTo(tickIn.x, tickIn.y);
         ctx.lineTo(tickOut.x, tickOut.y);
         ctx.stroke();
@@ -1686,9 +1734,17 @@ window.drawSmithChart = function() {
         if (ang % 20 === 0) {
             const tPos = mapGamma(u * 1.08, v * 1.08);
             let phase = ang <= 180 ? ang : ang - 360;
+            ctx.fillStyle = textColor;
             ctx.fillText(phase + '°', tPos.x, tPos.y);
         }
     }
+
+    // Draw outer bounding circle LAST (on top, always visible)
+    ctx.beginPath();
+    ctx.strokeStyle = highlightColor;
+    ctx.lineWidth = 2;
+    ctx.arc(cx, cy, R_chart, 0, 2*Math.PI);
+    ctx.stroke();
     
     // Get Z0
     const zs_re = parseFloat(document.getElementById('smith-zs-re')?.value) || 50;

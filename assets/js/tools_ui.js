@@ -27,9 +27,11 @@ const TOOL_REGISTRY = [
         category: "Power & SMPS",
         icon: "fa-plug-circle-bolt",
         tools: [
+            { id: "tool-power-electronics", name: "Power Electronics Suite", file: "power-electronics-calc.html" },
             { id: "tool-loop-compensator-p-z", name: "Loop Compensator (P/Z)", file: "loop-compensator-p-z.html" },
             { id: "tool-smps-topology-ratio", name: "SMPS Topology & Ratio", file: "smps-topology-ratio.html" }
         ]
+
     },
     {
         category: "Grid & Generation",
@@ -54,6 +56,7 @@ const TOOL_REGISTRY = [
         category: "RF & Wireless",
         icon: "fa-satellite-dish",
         tools: [
+            { id: "tool-rf-suite", name: "RF Signal Analysis Suite", file: "rf-signal-suite.html" },
             { id: "tool-smith-chart", name: "Smith Chart & RF Analysis", file: "smith-chart.html" },
             { id: "tool-balun-calculator", name: "Balun & Unun Calculator", file: "balun-calculator.html" },
             { id: "tool-rf-unit-translator", name: "dB & RF Unit Translator", file: "rf-unit-translator.html" },

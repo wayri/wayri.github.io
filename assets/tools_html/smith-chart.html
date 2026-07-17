@@ -27,6 +27,13 @@
             <div class="flex-grow relative flex items-center justify-center">
                 <canvas id="smith-canvas" class="w-full h-full max-w-[800px] max-h-[800px] cursor-crosshair"></canvas>
             </div>
+            <!-- Z/Y Chart Mode Toggle Bar -->
+            <div class="flex items-center justify-center gap-3 py-2 border-t border-themeBorder/20 bg-themeContainer">
+                <span class="text-[10px] text-themeMuted font-mono font-bold">CHART MODE:</span>
+                <button id="smith-btn-z" onclick="smithSetMode('Z')" class="px-3 py-1 text-[10px] font-bold rounded border border-themeAccent bg-themeAccent text-themeBg transition-all">Z (Impedance)</button>
+                <button id="smith-btn-y" onclick="smithSetMode('Y')" class="px-3 py-1 text-[10px] font-bold rounded border border-themeBorder text-themeMuted transition-all hover:border-blue-500 hover:text-blue-400">Y (Admittance)</button>
+                <span class="text-[9px] text-themeMuted ml-2" id="smith-mode-hint">Impedance chart (Z=R+jX)</span>
+            </div>
         </div>
         
         <div class="w-80 border-l border-themeBorder bg-themeContainer flex flex-col flex-shrink-0">
@@ -93,3 +100,24 @@
         </div>
     </div>
 </div>
+
+<script>
+window.smithYMode = false;
+
+window.smithSetMode = function(mode) {
+    window.smithYMode = (mode === 'Y');
+    const btnZ = document.getElementById('smith-btn-z');
+    const btnY = document.getElementById('smith-btn-y');
+    const hint = document.getElementById('smith-mode-hint');
+    if(window.smithYMode) {
+        if(btnZ) { btnZ.className = 'px-3 py-1 text-[10px] font-bold rounded border border-themeBorder text-themeMuted transition-all hover:border-themeAccent hover:text-themeAccent'; }
+        if(btnY) { btnY.className = 'px-3 py-1 text-[10px] font-bold rounded border border-blue-500 bg-blue-500/20 text-blue-400 transition-all'; }
+        if(hint) hint.textContent = 'Admittance chart (Y=G+jB) — conductance circles mirrored';
+    } else {
+        if(btnZ) { btnZ.className = 'px-3 py-1 text-[10px] font-bold rounded border border-themeAccent bg-themeAccent text-themeBg transition-all'; }
+        if(btnY) { btnY.className = 'px-3 py-1 text-[10px] font-bold rounded border border-themeBorder text-themeMuted transition-all hover:border-blue-500 hover:text-blue-400'; }
+        if(hint) hint.textContent = 'Impedance chart (Z=R+jX)';
+    }
+    if(typeof drawSmithChart === 'function') drawSmithChart();
+};
+</script>
