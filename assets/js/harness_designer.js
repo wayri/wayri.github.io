@@ -970,4 +970,15 @@ th { background: #eee; }
 }
 
 window.HarnessApp = new HarnessDesigner();
+let harnessInitCheck = setInterval(() => {
+    if (document.getElementById('harness-canvas') && !window.HarnessApp.canvas) {
+        window.HarnessApp.init();
+        if (window.HarnessApp.nodes.length === 0) {
+            window.HarnessApp.addNode();
+        }
+    }
+    if (window.HarnessApp.canvas) {
+        clearInterval(harnessInitCheck);
+    }
+}, 50);
 
