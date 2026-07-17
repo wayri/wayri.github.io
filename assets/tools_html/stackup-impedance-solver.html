@@ -72,6 +72,41 @@
 
     </div>
     
+    <!-- Return Path & Via Jump Analyzer -->
+    <div class="bg-themeContainer border border-themeBorder/30 p-4 text-sm font-mono flex flex-col mb-4">
+        <h4 class="text-xs font-bold text-themeAccent uppercase tracking-wide mb-3"><i class="fa-solid fa-arrows-up-down mr-2"></i>Via Transition / Reference Jump Analyzer</h4>
+        <p class="text-[10px] text-themeMuted mb-4">When a high-speed signal changes routing layers, its return current must follow. If the reference planes for the two layers are different, you must provide a path for the return current to jump planes. Failure to do so forces the return current to find a long path, increasing loop inductance, creating impedance discontinuities, and radiating EMI.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+                <label class="text-[10px] font-bold text-themeMuted block mb-1">Pre-Transition Ref Net</label>
+                <select id="jump-ref1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-xs text-themeText outline-none focus:border-themeAccent" onchange="analyzeJump()">
+                    <option value="gnd">GND Plane</option>
+                    <option value="pwr">PWR / VCC Plane</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-[10px] font-bold text-themeMuted block mb-1">Post-Transition Ref Net</label>
+                <select id="jump-ref2" class="w-full bg-themeBg border border-themeBorder p-1.5 text-xs text-themeText outline-none focus:border-themeAccent" onchange="analyzeJump()">
+                    <option value="gnd">GND Plane</option>
+                    <option value="pwr">PWR / VCC Plane</option>
+                    <option value="same">Exact same physical plane layer</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-[10px] font-bold text-themeMuted block mb-1">Transition Length (Via Z-axis)</label>
+                <div class="flex">
+                    <input type="number" id="jump-len" value="1.5" step="0.1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-xs text-themeText outline-none focus:border-themeAccent" oninput="analyzeJump()">
+                    <span class="bg-themeBorder text-themeBg px-2 text-[10px] flex items-center">mm</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="jump-recommendation" class="p-3 border border-themeBorder/30 bg-themeBg text-xs leading-relaxed">
+            <!-- Results injected here -->
+        </div>
+    </div>
+    
     <!-- Theory & Math Section -->
     <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
         <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('stackup-theory').classList.toggle('hidden')">
@@ -338,11 +373,49 @@
         });
     }
 
+    // --- Reference Jump Analyzer ---
+    function analyzeJump() {
+        const ref1 = document.getElementById('jump-ref1').value;
+        const ref2 = document.getElementById('jump-ref2').value;
+        const len = parseFloat(document.getElementById('jump-len').value) || 1.5;
+        const out = document.getElementById('jump-recommendation');
+        
+        // Approx via inductance: ~1 nH / mm
+        const l_est = (len * 1.0).toFixed(2);
+        
+        if (ref2 === 'same') {
+            out.innerHTML = `
+                <div class="text-green-400 font-bold mb-1"><i class="fa-solid fa-check-circle mr-1"></i>No Stitching Required</div>
+                <div class="text-themeMuted">The return current stays on the same physical copper plane (e.g., routing from L1 to L3 where both reference L2). The return path is uninterrupted.</div>
+            `;
+        } else if (ref1 === ref2) {
+            out.innerHTML = `
+                <div class="text-themeAccent font-bold mb-1"><i class="fa-solid fa-circle-nodes mr-1"></i>Stitching Via Required</div>
+                <div class="text-themeMuted mb-2">The signal jumps between two different <strong>${ref1.toUpperCase()}</strong> planes. The return current must jump through a via.</div>
+                <ul class="list-disc pl-4 text-themeMuted text-[10px] space-y-1">
+                    <li>Place 1-2 stitching vias connecting the planes as close as possible to the signal via (ideally < 1mm).</li>
+                    <li>The uncoupled via transition length adds approximately <strong>${l_est} nH</strong> of parasitic inductance.</li>
+                </ul>
+            `;
+        } else {
+            out.innerHTML = `
+                <div class="text-orange-400 font-bold mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Stitching Capacitor Required</div>
+                <div class="text-themeMuted mb-2">The signal jumps from a <strong>${ref1.toUpperCase()}</strong> plane to a <strong>${ref2.toUpperCase()}</strong> plane. The return current cannot flow through a DC via short!</div>
+                <ul class="list-disc pl-4 text-themeMuted text-[10px] space-y-1">
+                    <li>Place a decoupling capacitor (e.g., 10nF to 100nF) to bridge the GND and PWR planes near the signal via to allow AC high-frequency return currents to cross.</li>
+                    <li><strong>Warning:</strong> The physical capacitor adds ESL (Equivalent Series Inductance) which dominates at high frequencies (>1 GHz). Consider using small packages (0402, 0201) or multiple caps to lower ESL.</li>
+                    <li>Via transition length adds <strong>${l_est} nH</strong> of inductance, plus the capacitor's ESL (typically ~0.5nH).</li>
+                </ul>
+            `;
+        }
+    }
+
     // Init
     setTimeout(() => {
         updateTargetsFromProtocol();
         renderTable();
         solveStackup();
+        analyzeJump();
     }, 100);
 
 </script>
