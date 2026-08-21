@@ -1,0 +1,25 @@
+{
+  "name": "Engineering Design & Calculation Suite",
+  "short_name": "EngTools",
+  "description": "Comprehensive suite of 60+ offline engineering calculators, magnetic solvers, harness routing, and power electronics tools.",
+  "start_url": "/tools/index.html",
+  "display": "standalone",
+  "background_color": "#0a0f1d",
+  "theme_color": "#D4AF37",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/assets/images/profile.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/images/profile.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "productivity", "education"]
+}
