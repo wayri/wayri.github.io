@@ -1643,6 +1643,70 @@ window.runHeatsinkSim = function() {
     if(typeof MathJax !== 'undefined') MathJax.typesetPromise([recText]);
 };
 
+window.autoSolveHeatsink = function() {
+    const pd = parseFloat(document.getElementById('hs-pd').value) || 0;
+    const ta = parseFloat(document.getElementById('hs-ta').value) || 25;
+    const rjc = parseFloat(document.getElementById('hs-rjc').value) || 0;
+    const rcs = parseFloat(document.getElementById('hs-rcs').value) || 0;
+    const tjmax = parseFloat(document.getElementById('hs-tjmax').value) || 125;
+    const k_mat = parseFloat(document.getElementById('hs-mat').value) || 205;
+    let W = parseFloat(document.getElementById('hs-w').value) || 50;
+    let L = parseFloat(document.getElementById('hs-l').value) || 50;
+    let hf = parseFloat(document.getElementById('hs-hf').value) || 20;
+    let tf = parseFloat(document.getElementById('hs-tf').value) || 1.5;
+    let N = parseInt(document.getElementById('hs-n').value) || 10;
+    let lfm = parseFloat(document.getElementById('hs-lfm').value) || 0;
+
+    const calcRsa = (nf, height, flow, width, length) => {
+        const bArea = width * length / 100;
+        const fArea = (height * length * 2) / 100 + (tf * length) / 100;
+        let h_c = 5; if(flow > 0) h_c = 5 + 4 * Math.sqrt(flow / 100);
+        const m_fin = Math.sqrt((2 * h_c) / (k_mat * (tf / 1000)));
+        let f_eff = Math.tanh(m_fin * (height / 1000)) / (m_fin * (height / 1000));
+        if(isNaN(f_eff) || f_eff > 1) f_eff = 1;
+        const a_eff = (bArea / 10000) + (nf * (fArea / 10000) * f_eff);
+        return 1 / (h_c * a_eff);
+    };
+
+    const targetTj = tjmax - 10; // 10 deg safety margin
+
+    // 1. Try increasing fins up to physical limit
+    const maxFins = Math.floor(W / (tf * 2));
+    while (N < maxFins && (ta + pd * (calcRsa(N, hf, lfm, W, L) + rcs + rjc)) > targetTj) {
+        N++;
+    }
+
+    // 2. Try increasing fin height up to 60mm
+    while (hf < 60 && (ta + pd * (calcRsa(N, hf, lfm, W, L) + rcs + rjc)) > targetTj) {
+        hf += 5;
+    }
+
+    // 3. Try adding forced air if still exceeding
+    if ((ta + pd * (calcRsa(N, hf, lfm, W, L) + rcs + rjc)) > targetTj) {
+        if (lfm === 0) lfm = 150;
+        while (lfm < 600 && (ta + pd * (calcRsa(N, hf, lfm, W, L) + rcs + rjc)) > targetTj) {
+            lfm += 50;
+        }
+    }
+
+    // 4. Try scaling base width/length if still exceeding
+    while (W < 120 && (ta + pd * (calcRsa(N, hf, lfm, W, L) + rcs + rjc)) > targetTj) {
+        W += 10;
+        L += 10;
+        N = Math.floor(W / (tf * 2.5));
+    }
+
+    // Apply resolved values
+    document.getElementById('hs-w').value = W;
+    document.getElementById('hs-l').value = L;
+    document.getElementById('hs-hf').value = hf;
+    document.getElementById('hs-n').value = N;
+    document.getElementById('hs-lfm').value = lfm;
+
+    if (typeof updateHeatsink === 'function') updateHeatsink();
+    if (typeof runHeatsinkSim === 'function') runHeatsinkSim();
+};
+
 
 // ==========================================
 // ADVANCED MAGNETIC CORE CALCULATOR
@@ -1712,12 +1776,37 @@ window.updateMagCore = function() {
     
     document.getElementById('mag-out-b').innerText = Bpk.toFixed(3);
     
-    // Saturation Warning
+    // Saturation Warning & Advisory
     const warnEl = document.getElementById('mag-sat-warn');
+    const recList = document.getElementById('mag-rec-list');
+    
     if (Bpk >= Bsat && I > 0) {
         warnEl.classList.remove('hidden');
+        const targetB = Bsat * 0.8;
+        const reqLg_m = Math.max(0, (mu0 * N * I) / targetB - le_m / mu_i);
+        const reqLg_mm = reqLg_m * 1000;
+        if (recList) {
+            recList.innerHTML = `
+                <div class="border-l-2 border-red-400 pl-2">
+                    <div class="font-bold text-red-400"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Core Saturated: $B_{pk} = ${Bpk.toFixed(3)}\\text{ T} \\ge ${Bsat}\\text{ T}$</div>
+                    <ul class="list-disc pl-3 mt-1 space-y-0.5 text-[10px]">
+                        <li><strong>Add Air Gap:</strong> Need $l_g \\ge ${reqLg_mm.toFixed(2)}\\text{ mm}$ to drop $B_{pk}$ to safe level ($80\\%\\, B_{sat}$).</li>
+                        <li><strong>Increase Core Area:</strong> Larger $A_e$ reduces flux density for given turns.</li>
+                        <li><strong>Reduce Turns:</strong> Fewer turns reduce MMF ($N \\cdot I$) at cost of lower $L$.</li>
+                    </ul>
+                </div>
+            `;
+        }
     } else {
         warnEl.classList.add('hidden');
+        if (recList) {
+            recList.innerHTML = `
+                <div class="border-l-2 border-green-400 pl-2">
+                    <div class="font-bold text-green-400"><i class="fa-solid fa-circle-check mr-1"></i>Core Flux Operating Safely</div>
+                    <div class="text-[10px]">$B_{pk} = ${Bpk.toFixed(3)}\\text{ T}$ is within material limits (${((Bpk/Bsat)*100).toFixed(0)}\\% of $B_{sat}$).</div>
+                </div>
+            `;
+        }
     }
 
     // Convert Reluctance to scientific notation string for cleaner UI
@@ -1728,6 +1817,27 @@ window.updateMagCore = function() {
     document.getElementById('mag-out-al').innerText = AL.toFixed(1) + " nH/N²";
     document.getElementById('mag-out-mueff').innerText = mu_eff.toFixed(1);
     document.getElementById('mag-out-e').innerText = (E_J * 1000).toFixed(2) + " mJ";
+}
+
+window.autoSolveMagCore = function() {
+    const le = parseFloat(document.getElementById('mag-le').value) || 50;
+    const ae = parseFloat(document.getElementById('mag-ae').value) || 25;
+    const matSel = document.getElementById('mag-mat').value;
+    let mu_i = (matSel === 'custom') ? (parseFloat(document.getElementById('mag-mu-custom').value) || 2000) : (parseFloat(matSel) || 2000);
+    const N = parseFloat(document.getElementById('mag-n').value) || 10;
+    const I = parseFloat(document.getElementById('mag-i').value) || 2;
+    const Bsat = parseFloat(document.getElementById('mag-bsat').value) || 0.35;
+
+    const mu0 = 4 * Math.PI * 1e-7;
+    const le_m = le / 1000;
+    const targetB = Bsat * 0.8;
+
+    // Calculate required air gap in mm
+    const reqLg_m = Math.max(0.1, (mu0 * N * I) / targetB - le_m / mu_i);
+    const reqLg_mm = parseFloat((reqLg_m * 1000).toFixed(2));
+
+    document.getElementById('mag-lg').value = reqLg_mm;
+    updateMagCore();
 }
 
 
@@ -2318,6 +2428,53 @@ window.updateXfmr = function() {
         document.getElementById('xfmr-out-req').innerText = req.toFixed(3) + ' Ω';
         document.getElementById('xfmr-out-xeq').innerText = xeq.toFixed(3) + ' Ω';
     }
+}
+
+function autoSolveXfmrViolations() {
+    const vp = parseFloat(document.getElementById('xfmr-vp').value) || 230;
+    const vs = parseFloat(document.getElementById('xfmr-vs').value) || 24;
+    const s = parseFloat(document.getElementById('xfmr-s').value) || 100;
+    const f = parseFloat(document.getElementById('xfmr-f').value) || 50;
+    let bmax = parseFloat(document.getElementById('xfmr-bmax').value) || 1.2;
+    let ae = parseFloat(document.getElementById('xfmr-ae').value) || 10;
+    let aw = parseFloat(document.getElementById('xfmr-aw').value) || 10;
+    let awg = parseInt(document.getElementById('xfmr-awg').value) || 22;
+
+    const targetB = Math.min(bmax, 1.2);
+    const minAe = (vp / (4.44 * f * 500 * (targetB * 0.8))) * 10000;
+    if (ae < minAe) {
+        ae = Math.ceil(minAe * 1.15);
+        document.getElementById('xfmr-ae').value = ae;
+    }
+
+    const j = parseFloat(document.getElementById('xfmr-j').value) || 3.0;
+    const kw = parseFloat(document.getElementById('xfmr-kw').value) || 0.4;
+    const required_ap = (s * 1e4) / (4.44 * f * targetB * kw * j * 100);
+    if (ae * aw < required_ap) {
+        aw = Math.ceil((required_ap / ae) * 1.2);
+        document.getElementById('xfmr-aw').value = aw;
+    }
+
+    const np = Math.ceil(vp / (4.44 * f * targetB * (ae * 1e-4)));
+    const ns = Math.ceil(np * (vs / vp));
+    const totalTurns = np + ns;
+    const usableWindow = (aw * 100) * kw;
+    let currentDia = (typeof AWG_DIAMETER_MM !== 'undefined' && AWG_DIAMETER_MM[awg]) ? AWG_DIAMETER_MM[awg] : 0.64;
+    let fill = ((totalTurns * Math.PI * Math.pow(currentDia / 2, 2)) / usableWindow) * 100;
+    
+    while (fill > 80 && awg < 36) {
+        awg += 1;
+        currentDia = (typeof AWG_DIAMETER_MM !== 'undefined' && AWG_DIAMETER_MM[awg]) ? AWG_DIAMETER_MM[awg] : 0.3;
+        fill = ((totalTurns * Math.PI * Math.pow(currentDia / 2, 2)) / usableWindow) * 100;
+    }
+    document.getElementById('xfmr-awg').value = awg;
+
+    const rca = parseFloat(document.getElementById('xfmr-rca').value) || 5;
+    if (rca > 3.0) {
+        document.getElementById('xfmr-rca').value = 2.0; // add forced airflow / potting
+    }
+
+    if (typeof updateXfmrCalc === 'function') updateXfmrCalc();
 };
 
 document.addEventListener('toolLoaded', function() {
