@@ -1,85 +1,284 @@
-<div id="tool-loop-compensator-p-z" class="doc-container flex flex-col">
-                <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
-                    <i class="fa-solid fa-chart-line"></i>
-                    <h3 class="font-bold font-mono">Loop Compensator (P/Z)</h3>
-                </div>
-                <div class="p-4 space-y-2 font-mono text-sm flex-grow">
-                    
-                      <div class="mb-4 w-full h-64 bg-[#050505] flex items-center justify-center border border-themeBorder/30">
-                          <img id="comp-img-type2" src="/assets/images/comp_type2.png" class="max-h-full max-w-full object-contain" alt="Type II Compensator">
-                          <img id="comp-img-type3" src="/assets/images/comp_type3.png" class="max-h-full max-w-full object-contain hidden" alt="Type III Compensator">
-                      </div>
-                      <select id="comp-type" class="w-full border border-themeBorder px-2 py-1 mb-2 font-bold" onchange="runCompensator(); document.getElementById('comp-img-type2').classList.toggle('hidden', this.value==='type3'); document.getElementById('comp-img-type3').classList.toggle('hidden', this.value==='type2');">
-                        <option value="type2">Type II compensator</option>
-                        <option value="type3">Type III compensator</option>
-                    </select>
+<div id="tool-loop-compensator-p-z" class="doc-container flex flex-col w-full h-full min-h-[650px]">
+    <!-- Header -->
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Loop Compensator (P/Z) Analyzer">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-chart-line"></i>
+            <h3 class="font-bold font-mono text-base">Loop Compensator (Type II / Type III)</h3>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="font-mono text-[10px] opacity-80 hidden sm:inline">Pole-Zero & Nyquist Analyzer</span>
+            <button class="px-3 py-1 bg-themeAccent text-themeBg text-xs font-bold hover:opacity-90 rounded transition-all shadow" onclick="runCompensator()"><i class="fa-solid fa-calculator mr-1"></i>Calculate</button>
+        </div>
+    </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <div class="flex justify-between text-xs"><label>R1 (kohms)</label><input type="number" id="comp-r1" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()"></div>
-                            <div class="flex justify-between text-xs"><label>R2 (kohms)</label><input type="number" id="comp-r2" value="22" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()"></div>
-                            <div class="flex justify-between text-xs opacity-50 transition-opacity" id="comp-r3-grp"><label>R3 (kohms)</label><input type="number" id="comp-r3" value="1" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()" disabled></div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex justify-between text-xs"><label>c1 (nF)</label><input type="number" id="comp-c1" value="1" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()"></div>
-                            <div class="flex justify-between text-xs"><label>c2 (nF)</label><input type="number" id="comp-c2" value="10" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()"></div>
-                            <div class="flex justify-between text-xs opacity-50 transition-opacity" id="comp-c3-grp"><label>c3 (nF)</label><input type="number" id="comp-c3" value="2.2" class="w-16 border border-themeBorder px-1 text-right" oninput="runCompensator()" disabled></div>
-                        </div>
-                    </div>
-
-                    <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-1 text-xs">
-                        <div class="flex justify-between"><span class="whitespace-nowrap text-themeMuted">Zero 1 (Fz1)</span><span id="comp-fz1" class="font-bold text-themeAccent">0 hz</span></div>
-                        <div class="flex justify-between"><span class="whitespace-nowrap text-themeMuted">Pole 1 (Fp1)</span><span id="comp-fp1" class="font-bold text-themeAccent">0 hz</span></div>
-                        <div class="flex justify-between opacity-50" id="comp-fz2-grp"><span class="whitespace-nowrap text-themeMuted">Zero 2 (Fz2)</span><span id="comp-fz2" class="font-bold text-themeAccent">-- hz</span></div>
-                        <div class="flex justify-between opacity-50" id="comp-fp2-grp"><span class="whitespace-nowrap text-themeMuted">Pole 2 (Fp2)</span><span id="comp-fp2" class="font-bold text-themeAccent">-- hz</span></div>
-                    </div>
-
-                    <div class="pt-4 border-t border-themeBorder/20">
-                        <h4 class="font-bold text-themeText text-xs mb-2">Pole-Zero Map (s-plane)</h4>
-                        <div class="relative w-full h-40 bg-[#050505] border border-themeBorder/30">
-                            <canvas id="comp-pz-canvas" class="absolute inset-0 w-full h-full"></canvas>
-                        </div>
-                        <div class="flex gap-2 justify-end mt-2">
-                            <button class="px-2 py-1 bg-themeBg text-themeText border border-themeBorder text-[10px] hover:bg-themeBorder" onclick="document.getElementById('nyquist-box').classList.toggle('hidden')">Nyquist / Polar Plot</button>
-                            <button class="px-2 py-1 bg-themeBg text-themeText border border-themeBorder text-[10px] hover:bg-themeBorder" onclick="document.getElementById('routh-box').classList.toggle('hidden')">Routh-Hurwitz</button>
-                        </div>
-                    </div>
-
-                    <div id="nyquist-box" class="pt-4 border-t border-themeBorder/20 hidden">
-                        <h4 class="font-bold text-themeText text-xs mb-2">Nyquist (Polar) Plot</h4>
-                        <div class="relative w-full h-40 bg-[#050505] border border-themeBorder/30">
-                            <canvas id="comp-nyquist-canvas" class="absolute inset-0 w-full h-full"></canvas>
-                        </div>
-                    </div>
-
-                    <div id="routh-box" class="pt-4 border-t border-themeBorder/20 hidden">
-                        <h4 class="font-bold text-themeText text-xs mb-2">Routh-Hurwitz Array</h4>
-                        <div id="routh-array-output" class="text-[10px] text-themeMuted p-2 bg-[#050505] border border-themeBorder/30 overflow-x-auto">
-                            Calculating Characteristic Equation...
-                        </div>
-                    </div>
-                </div>
+    <!-- Main Content Area -->
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto space-y-6">
+        
+        <!-- Top Row: Topology Selector and Vector Schematics -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
-    <!-- Theory & Math Section -->
+            <!-- Left: Topology & Component Inputs -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-3 shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-sliders"></i> Compensator Architecture</h4>
+                    <select id="comp-type" class="bg-themeBg border border-themeBorder px-2 py-1 text-xs font-bold text-themeText" onchange="runCompensator()">
+                        <option value="type2" selected>Type II (1 Zero, 2 Poles)</option>
+                        <option value="type3">Type III (2 Zeros, 3 Poles)</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Resistors -->
+                    <div class="space-y-2">
+                        <span class="text-[10px] font-bold text-themeMuted uppercase">Resistors</span>
+                        <div>
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">R1 (Input)</label>
+                            <div class="flex">
+                                <input type="number" id="comp-r1" value="10" step="0.5" class="w-full bg-themeBg border border-themeBorder p-1 text-xs text-themeText font-bold" oninput="runCompensator()">
+                                <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">k&Omega;</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">R2 (Feedback)</label>
+                            <div class="flex">
+                                <input type="number" id="comp-r2" value="22" step="0.5" class="w-full bg-themeBg border border-themeBorder p-1 text-xs text-themeText font-bold" oninput="runCompensator()">
+                                <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">k&Omega;</span>
+                            </div>
+                        </div>
+                        <div id="comp-r3-grp" class="opacity-40">
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">R3 (Lead Filter)</label>
+                            <div class="flex">
+                                <input type="number" id="comp-r3" value="1" step="0.1" class="w-full bg-themeBg border border-themeBorder p-1 text-xs text-themeText font-bold" oninput="runCompensator()" disabled>
+                                <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">k&Omega;</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Capacitors -->
+                    <div class="space-y-2">
+                        <span class="text-[10px] font-bold text-themeMuted uppercase">Capacitors</span>
+                        <div>
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">C1 (High-Freq Pole)</label>
+                            <div class="flex">
+                                <input type="number" id="comp-c1" value="1" step="0.1" class="w-full bg-themeBg border border-themeBorder p-1 text-xs text-themeText font-bold" oninput="runCompensator()">
+                                <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">nF</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">C2 (Main Zero)</label>
+                            <div class="flex">
+                                <input type="number" id="comp-c2" value="10" step="1" class="w-full bg-themeBg border border-themeBorder p-1 text-xs text-themeText font-bold" oninput="runCompensator()">
+                                <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">nF</span>
+                            </div>
+                        </div>
+                        <div id="comp-c3-grp" class="opacity-40">
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">C3 (Lead Zero)</label>
+                            <div class="flex">
+                                <input type="number" id="comp-c3" value="2.2" step="0.1" class="w-full bg-themeBg border border-themeBorder p-1 text-xs text-themeText font-bold" oninput="runCompensator()" disabled>
+                                <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">nF</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Frequency Results -->
+                <div class="grid grid-cols-2 gap-2 pt-2 border-t border-themeBorder/20 text-xs">
+                    <div class="flex justify-between bg-themeBg/50 p-1.5 border border-themeBorder/20 rounded">
+                        <span class="text-themeMuted">Zero 1 ($f_{z1}$):</span>
+                        <span id="comp-fz1" class="font-bold text-blue-400">723 Hz</span>
+                    </div>
+                    <div class="flex justify-between bg-themeBg/50 p-1.5 border border-themeBorder/20 rounded">
+                        <span class="text-themeMuted">Pole 1 ($f_{p1}$):</span>
+                        <span id="comp-fp1" class="font-bold text-red-400">7.96 kHz</span>
+                    </div>
+                    <div id="comp-fz2-grp" class="flex justify-between bg-themeBg/50 p-1.5 border border-themeBorder/20 rounded opacity-40">
+                        <span class="text-themeMuted">Zero 2 ($f_{z2}$):</span>
+                        <span id="comp-fz2" class="font-bold text-blue-400">--</span>
+                    </div>
+                    <div id="comp-fp2-grp" class="flex justify-between bg-themeBg/50 p-1.5 border border-themeBorder/20 rounded opacity-40">
+                        <span class="text-themeMuted">Pole 2 ($f_{p2}$):</span>
+                        <span id="comp-fp2" class="font-bold text-red-400">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Vector Schematic Diagram Container -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col shadow-inner justify-between">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2 mb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-microchip"></i> Operational Schematic</h4>
+                    <span id="comp-type-badge" class="px-2 py-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/30 text-[10px] font-bold rounded">Type II</span>
+                </div>
+                
+                <div class="w-full h-56 bg-themeBg border border-themeBorder/30 rounded flex items-center justify-center p-2 overflow-hidden" id="comp-schematic-box">
+                    <!-- SVG Schematic -->
+                    <svg id="comp-svg-type2" viewBox="0 0 420 180" class="w-full h-full text-themeAccent">
+                        <g stroke="currentColor" stroke-width="2" fill="none" font-family="monospace" font-size="11">
+                            <!-- Op Amp -->
+                            <polygon points="260,70 260,130 320,100" fill="#0f172a" stroke="currentColor"/>
+                            <text x="268" y="85" fill="currentColor" stroke="none" font-size="14">-</text>
+                            <text x="268" y="122" fill="currentColor" stroke="none" font-size="14">+</text>
+                            <line x1="240" y1="85" x2="260" y2="85"/>
+                            <line x1="240" y1="115" x2="260" y2="115"/>
+                            <line x1="320" y1="100" x2="390" y2="100"/>
+                            <circle cx="390" cy="100" r="3" fill="currentColor" stroke="none"/>
+                            <text x="395" y="104" fill="currentColor" stroke="none">Vout</text>
+                            <!-- Ground Vref -->
+                            <line x1="240" y1="115" x2="240" y2="140"/>
+                            <line x1="230" y1="140" x2="250" y2="140"/>
+                            <text x="195" y="145" fill="currentColor" stroke="none">Vref</text>
+                            <!-- Input R1 -->
+                            <text x="30" y="89" fill="currentColor" stroke="none">Vin</text>
+                            <line x1="60" y1="85" x2="100" y2="85"/>
+                            <rect x="100" y="77" width="40" height="16" fill="#0f172a" stroke="currentColor"/>
+                            <text x="110" y="89" fill="currentColor" stroke="none">R1</text>
+                            <line x1="140" y1="85" x2="240" y2="85"/>
+                            <circle cx="210" cy="85" r="3" fill="currentColor" stroke="none"/>
+                            <!-- Feedback Branch C1 & (R2+C2) -->
+                            <line x1="210" y1="85" x2="210" y2="35"/>
+                            <line x1="210" y1="35" x2="230" y2="35"/>
+                            <line x1="230" y1="27" x2="230" y2="43"/><line x1="238" y1="27" x2="238" y2="43"/>
+                            <text x="225" y="20" fill="currentColor" stroke="none">C1</text>
+                            <line x1="238" y1="35" x2="350" y2="35"/>
+                            <!-- Series R2-C2 parallel branch -->
+                            <line x1="210" y1="60" x2="230" y2="60"/>
+                            <rect x="230" y="52" width="35" height="16" fill="#0f172a" stroke="currentColor"/>
+                            <text x="237" y="64" fill="currentColor" stroke="none">R2</text>
+                            <line x1="265" y1="60" x2="285" y2="60"/>
+                            <line x1="285" y1="52" x2="285" y2="68"/><line x1="293" y1="52" x2="293" y2="68"/>
+                            <text x="282" y="47" fill="currentColor" stroke="none">C2</text>
+                            <line x1="293" y1="60" x2="350" y2="60"/>
+                            <line x1="350" y1="35" x2="350" y2="100"/>
+                            <circle cx="350" cy="100" r="3" fill="currentColor" stroke="none"/>
+                        </g>
+                    </svg>
+                    
+                    <svg id="comp-svg-type3" viewBox="0 0 420 180" class="w-full h-full text-themeAccent hidden">
+                        <g stroke="currentColor" stroke-width="2" fill="none" font-family="monospace" font-size="11">
+                            <!-- Op Amp -->
+                            <polygon points="260,70 260,130 320,100" fill="#0f172a" stroke="currentColor"/>
+                            <text x="268" y="85" fill="currentColor" stroke="none" font-size="14">-</text>
+                            <text x="268" y="122" fill="currentColor" stroke="none" font-size="14">+</text>
+                            <line x1="240" y1="85" x2="260" y2="85"/>
+                            <line x1="240" y1="115" x2="260" y2="115"/>
+                            <line x1="320" y1="100" x2="390" y2="100"/>
+                            <circle cx="390" cy="100" r="3" fill="currentColor" stroke="none"/>
+                            <text x="395" y="104" fill="currentColor" stroke="none">Vout</text>
+                            <!-- Input R1 in parallel with R3-C3 -->
+                            <text x="20" y="89" fill="currentColor" stroke="none">Vin</text>
+                            <line x1="45" y1="85" x2="70" y2="85"/>
+                            <circle cx="70" cy="85" r="3" fill="currentColor" stroke="none"/>
+                            <line x1="70" y1="85" x2="110" y2="85"/>
+                            <rect x="110" y="77" width="35" height="16" fill="#0f172a" stroke="currentColor"/>
+                            <text x="117" y="89" fill="currentColor" stroke="none">R1</text>
+                            <line x1="145" y1="85" x2="200" y2="85"/>
+                            <!-- Upper Input branch R3-C3 -->
+                            <line x1="70" y1="85" x2="70" y2="125"/><line x1="70" y1="125" x2="90" y2="125"/>
+                            <rect x="90" y="117" width="35" height="16" fill="#0f172a" stroke="currentColor"/>
+                            <text x="97" y="129" fill="currentColor" stroke="none">R3</text>
+                            <line x1="125" y1="125" x2="145" y2="125"/>
+                            <line x1="145" y1="117" x2="145" y2="133"/><line x1="153" y1="117" x2="153" y2="133"/>
+                            <text x="142" y="112" fill="currentColor" stroke="none">C3</text>
+                            <line x1="153" y1="125" x2="200" y2="125"/><line x1="200" y1="125" x2="200" y2="85"/>
+                            <circle cx="200" cy="85" r="3" fill="currentColor" stroke="none"/>
+                            <line x1="200" y1="85" x2="240" y2="85"/>
+                            <!-- Feedback Network -->
+                            <circle cx="215" cy="85" r="3" fill="currentColor" stroke="none"/>
+                            <line x1="215" y1="85" x2="215" y2="35"/><line x1="215" y1="35" x2="230" y2="35"/>
+                            <line x1="230" y1="27" x2="230" y2="43"/><line x1="238" y1="27" x2="238" y2="43"/>
+                            <text x="225" y="20" fill="currentColor" stroke="none">C1</text>
+                            <line x1="238" y1="35" x2="350" y2="35"/>
+                            <line x1="215" y1="60" x2="230" y2="60"/>
+                            <rect x="230" y="52" width="35" height="16" fill="#0f172a" stroke="currentColor"/>
+                            <text x="237" y="64" fill="currentColor" stroke="none">R2</text>
+                            <line x1="265" y1="60" x2="285" y2="60"/>
+                            <line x1="285" y1="52" x2="285" y2="68"/><line x1="293" y1="52" x2="293" y2="68"/>
+                            <text x="282" y="47" fill="currentColor" stroke="none">C2</text>
+                            <line x1="293" y1="60" x2="350" y2="60"/>
+                            <line x1="350" y1="35" x2="350" y2="100"/>
+                            <circle cx="350" cy="100" r="3" fill="currentColor" stroke="none"/>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Row: Interactive Plots (Pole-Zero & Nyquist) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Card 1: Pole-Zero Map -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2 mb-2">
+                    <h4 class="text-xs font-bold text-themeText flex items-center gap-1.5">
+                        <i class="fa-solid fa-crosshairs text-themeAccent"></i> S-Plane Pole-Zero Map
+                    </h4>
+                    <div class="flex gap-3 text-[10px] font-bold">
+                        <span class="text-blue-400">○ Zeros (Boost Phase)</span>
+                        <span class="text-red-400">✕ Poles (Drop Gain)</span>
+                    </div>
+                </div>
+                <div class="relative w-full h-56 bg-themeBg border border-themeBorder/30 rounded overflow-hidden">
+                    <canvas id="comp-pz-canvas" class="w-full h-full block"></canvas>
+                </div>
+            </div>
+
+            <!-- Card 2: Nyquist (Polar) Plot -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2 mb-2">
+                    <h4 class="text-xs font-bold text-themeText flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-notch text-themeAccent"></i> Nyquist Polar Trajectory ($H(j\omega)$)
+                    </h4>
+                    <span class="text-[10px] text-amber-400 font-bold">● Critical Point (-1, j0)</span>
+                </div>
+                <div class="relative w-full h-56 bg-themeBg border border-themeBorder/30 rounded overflow-hidden">
+                    <canvas id="comp-nyquist-canvas" class="w-full h-full block"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Smart Advisory & Auto-Solve Panel -->
+        <div id="comp-recommendations" class="bg-themeContainer border border-themeAccent/30 rounded p-4 shadow-lg flex flex-col space-y-2">
+            <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                <div class="flex items-center gap-2 text-themeAccent font-bold text-xs">
+                    <i class="fa-solid fa-lightbulb"></i> Compensator Stability & Margin Advisory
+                </div>
+                <button class="px-3 py-1 bg-themeAccent text-themeBg font-bold text-xs rounded hover:opacity-90 transition-all flex items-center gap-1 shadow" onclick="autoSolveCompensator()">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Tune Compensator
+                </button>
+            </div>
+            <div id="comp-rec-list" class="space-y-1.5 text-xs text-themeMuted leading-relaxed">
+                <!-- Dynamically generated -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Theory & Mathematical Foundations -->
     <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
         <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('loopcompensatorpz-theory').classList.toggle('hidden')">
-            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+            <h4 class="font-bold text-themeAccent flex items-center gap-2"><i class="fa-solid fa-calculator"></i>Transfer Functions & Pole-Zero Formulations</h4>
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
-        <div id="loopcompensatorpz-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Type II Compensator:</strong> Provides a single zero and two poles (one at origin). Used for current-mode control.</p>
-            <p>\( H(s) = \frac{1 + s R_2 C_2}{s R_1 (C_1 + C_2) (1 + s R_2 \frac{C_1 C_2}{C_1 + C_2})} \)</p>
-            <p>\( F_{z1} = \frac{1}{2\pi \cdot R_2 \cdot C_2} \)</p>
-            <p>\( F_{p1} = \frac{1}{2\pi \cdot R_2 \cdot \left(\frac{C_1 \cdot C_2}{C_1 + C_2}\right)} \)</p>
-            <p><strong>Design Logic:</strong> Place \(F_{z1}\) slightly below the LC resonance. Place \(F_{p1}\) at the ESR zero of the output capacitor to cancel it.</p>
-            
-            <p class="pt-2"><strong>Type III Compensator:</strong> Provides two zeros and three poles. Used for voltage-mode control.</p>
-            <p>\( H(s) = \frac{(1 + s R_2 C_2) (1 + s (R_1 + R_3) C_3)}{s R_1 (C_1 + C_2) (1 + s R_2 \frac{C_1 C_2}{C_1 + C_2}) (1 + s R_3 C_3)} \)</p>
-            <p>\( F_{z1} = \frac{1}{2\pi \cdot R_2 \cdot C_2} \)</p>
-            <p>\( F_{z2} = \frac{1}{2\pi \cdot (R_1 + R_3) \cdot C_3} \)</p>
-            <p>\( F_{p1} = \frac{1}{2\pi \cdot R_2 \cdot \left(\frac{C_1 \cdot C_2}{C_1 + C_2}\right)} \)</p>
-            <p>\( F_{p2} = \frac{1}{2\pi \cdot R_3 \cdot C_3} \)</p>
-            <p><strong>Design Logic:</strong> Place both zeros (\(F_{z1}\), \(F_{z2}\)) near the double LC resonance to offset the -40dB/dec drop and -180&deg; phase shift. Place one pole (\(F_{p1}\)) at the ESR zero and the other (\(F_{p2}\)) at half the switching frequency to attenuate high-frequency switching noise.</p>
+        <div id="loopcompensatorpz-theory" class="hidden text-themeMuted mt-3 space-y-2 text-xs leading-relaxed">
+            <p><strong>1. Type II Compensator (Current-Mode Control):</strong></p>
+            <p>$$H(s) = \frac{1 + s R_2 C_2}{s R_1 (C_1 + C_2) \left(1 + s R_2 \frac{C_1 C_2}{C_1 + C_2}\right)}$$</p>
+            <p>$$f_{z1} = \frac{1}{2\pi R_2 C_2}, \quad f_{p1} = \frac{1}{2\pi R_2 \left(\frac{C_1 C_2}{C_1 + C_2}\right)}$$</p>
+            <p><strong>2. Type III Compensator (Voltage-Mode Control):</strong></p>
+            <p>$$H(s) = \frac{(1 + s R_2 C_2)(1 + s(R_1 + R_3)C_3)}{s R_1 (C_1 + C_2)\left(1 + s R_2 \frac{C_1 C_2}{C_1 + C_2}\right)(1 + s R_3 C_3)}$$</p>
         </div>
     </div>
 </div>
+
+<script>
+function autoSolveCompensator() {
+    const isType3 = document.getElementById('comp-type').value === 'type3';
+    document.getElementById('comp-r1').value = '10';
+    document.getElementById('comp-r2').value = '33';
+    document.getElementById('comp-c1').value = '0.47';
+    document.getElementById('comp-c2').value = '4.7';
+    if (isType3) {
+        document.getElementById('comp-r3').value = '0.68';
+        document.getElementById('comp-c3').value = '1.5';
+    }
+    runCompensator();
+}
+</script>
