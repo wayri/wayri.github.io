@@ -1,44 +1,386 @@
-<div id="tool-thermistor-r-t-curve-ntc" class="doc-container flex flex-col ">
-        <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+<div class="doc-container flex flex-col w-full h-full min-h-[750px]">
+    <!-- Header -->
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Thermistor R-T Curve & Linearizer">
+        <div class="flex items-center gap-2">
             <i class="fa-solid fa-temperature-half"></i>
-            <h3 class="font-bold font-mono">Thermistor R-T Curve (NTC)</h3>
+            <h3 class="font-bold font-mono text-base">NTC Thermistor R-T Curve & ADC Linearizer</h3>
         </div>
-        <div class="p-4 flex gap-4 font-mono text-sm flex-grow">
-            <div class="w-1/2 flex flex-col space-y-3">
-                <select id="ntc-type" class="border border-themeBorder px-2 py-1 font-bold w-full text-xs" onchange="setupNTCMode()">
-                    <option value="beta">Beta Equation</option>
-                    <option value="steinhart">Steinhart-Hart</option>
-                </select>
+        <div class="flex items-center gap-2">
+            <span class="font-mono text-[10px] opacity-80 hidden sm:inline">&beta; / Steinhart-Hart & Divider Optimizer</span>
+            <button class="px-3 py-1 bg-themeAccent text-themeBg text-xs font-bold hover:opacity-90 rounded transition-all shadow" onclick="calcNTC()"><i class="fa-solid fa-calculator mr-1"></i>Calculate NTC</button>
+        </div>
+    </div>
 
-                <div class="flex gap-2 pb-1 border-b border-themeBorder/20 text-[9px] text-themeMuted font-bold" id="ntc-solve-group">
-                    <!-- Solvers injected by JS -->
+    <!-- Main Content Area -->
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto space-y-6">
+        
+        <!-- Top Row: Parameters Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Card 1: Thermistor Parameters -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-3 shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-microchip"></i> NTC Characteristics</h4>
                 </div>
 
-                <div id="ntc-inputs" class="flex flex-col gap-2 flex-grow">
-                    <!-- Inputs injected by JS -->
+                <div>
+                    <label class="text-[10px] text-themeMuted mb-0.5 block">Thermistor Model</label>
+                    <select id="ntc-model" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-xs" onchange="toggleNTCModel()">
+                        <option value="beta" selected>Beta Parameter (&beta; Equation)</option>
+                        <option value="steinhart">Steinhart-Hart Equation (A, B, C)</option>
+                    </select>
                 </div>
-                
-                <div class="pt-2 mt-2 border-t border-themeBorder/20 text-xs">
+
+                <!-- Beta Inputs -->
+                <div id="ntc-beta-group" class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div>
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">Nominal $R_{25}$ (@25&deg;C)</label>
+                            <div class="flex">
+                                <input type="number" id="ntc-r25" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="10.0" step="0.5" oninput="calcNTC()">
+                                <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">k&Omega;</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">Beta Value ($\beta_{25/85}$)</label>
+                            <div class="flex">
+                                <input type="number" id="ntc-beta" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-themeAccent" value="3950" step="50" oninput="calcNTC()">
+                                <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">K</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Steinhart Inputs -->
+                <div id="ntc-steinhart-group" class="hidden space-y-2 text-xs">
                     <div class="flex justify-between items-center">
-                        <span class="text-themeMuted">Result</span>
-                        <span id="ntc-result" class="font-bold text-themeAccent text-sm">-</span>
+                        <label class="text-[10px] text-themeMuted">Coeff A ($10^{-3}$)</label>
+                        <input type="number" id="ntc-coeff-a" class="w-24 bg-themeBg border border-themeBorder p-1 text-themeText" value="1.129" step="0.001" oninput="calcNTC()">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <label class="text-[10px] text-themeMuted">Coeff B ($10^{-4}$)</label>
+                        <input type="number" id="ntc-coeff-b" class="w-24 bg-themeBg border border-themeBorder p-1 text-themeText" value="2.341" step="0.001" oninput="calcNTC()">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <label class="text-[10px] text-themeMuted">Coeff C ($10^{-7}$)</label>
+                        <input type="number" id="ntc-coeff-c" class="w-24 bg-themeBg border border-themeBorder p-1 text-themeText" value="0.877" step="0.001" oninput="calcNTC()">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs pt-2 border-t border-themeBorder/20">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Target Temp ($T$)</label>
+                        <div class="flex">
+                            <input type="number" id="ntc-target-temp" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-amber-400" value="60" step="5" oninput="calcNTC()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">&deg;C</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Resistance @ $T$</label>
+                        <div class="flex items-center h-full pt-3">
+                            <span id="ntc-res-at-t" class="font-bold text-themeAccent text-sm">2.49 k&Omega;</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="w-1/2 relative border border-themeBorder bg-themeBg">
-                <span class="whitespace-nowrap absolute top-1 right-1 text-[9px] text-themeMuted font-mono z-10">-40°C to 125°C (Log R)</span>
-                <canvas id="ntc-canvas" class="w-full h-full absolute inset-0"></canvas>
+
+            <!-- Card 2: ADC Conditioning Circuit -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-3 shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-sliders"></i> ADC Divider Circuit</h4>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Supply / Reference $V_{cc}$</label>
+                        <div class="flex">
+                            <input type="number" id="ntc-vcc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="3.3" step="0.1" oninput="calcNTC()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">V</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">ADC Resolution</label>
+                        <select id="ntc-adc-bits" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-xs" onchange="calcNTC()">
+                            <option value="10">10-bit (1024)</option>
+                            <option value="12" selected>12-bit (4096)</option>
+                            <option value="14">14-bit (16384)</option>
+                            <option value="16">16-bit (65536)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Divider Topology</label>
+                        <select id="ntc-div-type" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-xs" onchange="calcNTC()">
+                            <option value="pullup" selected>Pull-up Resistor (NTC to GND)</option>
+                            <option value="pulldown">Pull-down Resistor (NTC to Vcc)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Fixed Resistor ($R_{fix}$)</label>
+                        <div class="flex">
+                            <input type="number" id="ntc-rfix" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="10.0" step="0.5" oninput="calcNTC()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">k&Omega;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-2 border-t border-themeBorder/20 text-xs">
+                    <button class="w-full py-1 bg-themeBorder/40 hover:bg-themeAccent hover:text-themeBg text-themeText text-[11px] font-bold rounded transition-all" onclick="autoOptimizeRfix()">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Auto-Optimize $R_{fix}$ for Center Temp
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card 3: ADC Output & Sensitivity Summary -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-2 shadow-inner justify-between">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-gauge"></i> Sensor Metrics</h4>
+                    <span class="text-[10px] text-green-400 font-bold">Linearized Region</span>
+                </div>
+
+                <div class="space-y-1.5 text-xs">
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">ADC Voltage @ Target:</span>
+                        <span id="ntc-res-vadc" class="font-bold text-themeAccent text-sm">0.658 V</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">ADC Raw Code @ Target:</span>
+                        <span id="ntc-res-code" class="font-bold text-themeText">817 / 4095</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Sensitivity ($dV/dT$):</span>
+                        <span id="ntc-res-sens" class="font-bold text-amber-400">18.4 mV / &deg;C</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Temperature Resolution:</span>
+                        <span id="ntc-res-temp-res" class="font-bold text-green-400">0.044 &deg;C / LSB</span>
+                    </div>
+                    <div class="flex justify-between pt-1 border-t border-themeBorder/20 text-[10px] text-themeMuted">
+                        <span>Self-Heating Power:</span>
+                        <span id="ntc-res-pd" class="font-bold text-themeText">0.17 mW</span>
+                    </div>
+                </div>
             </div>
         </div>
-    
-    <!-- Theory & Math Section -->
+
+        <!-- Middle Row: Interactive Dual Curves Canvas -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Curve 1: Resistance vs Temperature Log-Scale -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col shadow-inner">
+                <h4 class="text-xs font-bold text-themeText mb-2 border-b border-themeBorder/20 pb-2">
+                    <i class="fa-solid fa-chart-line text-themeAccent mr-1"></i> Thermistor Resistance vs Temperature (Log Scale)
+                </h4>
+                <div class="relative w-full h-56 bg-themeBg border border-themeBorder/30 rounded overflow-hidden">
+                    <canvas id="ntc-rt-canvas" class="w-full h-full block"></canvas>
+                </div>
+            </div>
+
+            <!-- Curve 2: ADC Voltage vs Temperature Transfer Function -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col shadow-inner">
+                <h4 class="text-xs font-bold text-themeText mb-2 border-b border-themeBorder/20 pb-2">
+                    <i class="fa-solid fa-chart-area text-themeAccent mr-1"></i> ADC Output Voltage & Linearization vs Temperature
+                </h4>
+                <div class="relative w-full h-56 bg-themeBg border border-themeBorder/30 rounded overflow-hidden">
+                    <canvas id="ntc-adc-canvas" class="w-full h-full block"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Theory & Mathematical Formulation -->
     <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
-        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('thermistorrtcurventc-theory').classList.toggle('hidden')">
-            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('ntc-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent flex items-center gap-2"><i class="fa-solid fa-calculator"></i>NTC Equations & Linearization Math</h4>
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
-        <div id="thermistorrtcurventc-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Theory:</strong> NTC thermistors exhibit a non-linear resistance-temperature relationship, commonly modeled by the Steinhart-Hart equation or the simpler Beta (\(\beta\)) parameter equation: \(R_T = R_0 e^{\beta (1/T - 1/T_0)}\).</p>
+        <div id="ntc-theory" class="hidden text-themeMuted mt-3 space-y-2 text-xs leading-relaxed">
+            <p><strong>1. Beta Model:</strong> $R(T) = R_{25} \exp\left(\beta \left[\frac{1}{T} - \frac{1}{T_0}\right]\right)$, where temperatures are in Kelvin ($T_0 = 298.15\text{ K}$).</p>
+            <p><strong>2. Steinhart-Hart Equation:</strong> $\frac{1}{T} = A + B \ln(R) + C (\ln R)^3$.</p>
+            <p><strong>3. Linearizing Resistor Optimization:</strong> To maximize sensitivity around a center temperature $T_{mid}$, choose $R_{fix} \approx R(T_{mid})$.</p>
         </div>
     </div>
 </div>
+
+<script>
+function toggleNTCModel() {
+    const model = document.getElementById('ntc-model').value;
+    document.getElementById('ntc-beta-group').classList.toggle('hidden', model !== 'beta');
+    document.getElementById('ntc-steinhart-group').classList.toggle('hidden', model !== 'steinhart');
+    calcNTC();
+}
+
+function getNTCResistance(tempC) {
+    const model = document.getElementById('ntc-model').value;
+    const tempK = tempC + 273.15;
+    if (model === 'beta') {
+        const R25 = (parseFloat(document.getElementById('ntc-r25').value) || 10.0) * 1e3;
+        const beta = parseFloat(document.getElementById('ntc-beta').value) || 3950;
+        return R25 * Math.exp(beta * (1 / tempK - 1 / 298.15));
+    } else {
+        const A = (parseFloat(document.getElementById('ntc-coeff-a').value) || 1.129) * 1e-3;
+        const B = (parseFloat(document.getElementById('ntc-coeff-b').value) || 2.341) * 1e-4;
+        const C = (parseFloat(document.getElementById('ntc-coeff-c').value) || 0.877) * 1e-7;
+        // Inverse Steinhart via Newton solver or approximation
+        let lnR = Math.log(10000);
+        for (let i = 0; i < 6; i++) {
+            const f = A + B * lnR + C * Math.pow(lnR, 3) - 1 / tempK;
+            const df = B + 3 * C * Math.pow(lnR, 2);
+            lnR -= f / df;
+        }
+        return Math.exp(lnR);
+    }
+}
+
+function autoOptimizeRfix() {
+    const targetTemp = parseFloat(document.getElementById('ntc-target-temp').value) || 25;
+    const rOpt_k = (getNTCResistance(targetTemp) / 1e3).toFixed(2);
+    document.getElementById('ntc-rfix').value = rOpt_k;
+    calcNTC();
+}
+
+function calcNTC() {
+    const targetTemp = parseFloat(document.getElementById('ntc-target-temp').value) || 25;
+    const Vcc = parseFloat(document.getElementById('ntc-vcc').value) || 3.3;
+    const bits = parseInt(document.getElementById('ntc-adc-bits').value) || 12;
+    const divType = document.getElementById('ntc-div-type').value;
+    const Rfix = (parseFloat(document.getElementById('ntc-rfix').value) || 10.0) * 1e3;
+
+    const Rntc = getNTCResistance(targetTemp);
+    
+    let Vadc = 0;
+    if (divType === 'pullup') {
+        Vadc = Vcc * (Rntc / (Rntc + Rfix));
+    } else {
+        Vadc = Vcc * (Rfix / (Rntc + Rfix));
+    }
+
+    const maxCode = Math.pow(2, bits) - 1;
+    const code = Math.round((Vadc / Vcc) * maxCode);
+
+    // Numerical Sensitivity dV/dT
+    const Rntc_plus = getNTCResistance(targetTemp + 0.5);
+    const Rntc_minus = getNTCResistance(targetTemp - 0.5);
+    const Vadc_plus = divType === 'pullup' ? Vcc * (Rntc_plus / (Rntc_plus + Rfix)) : Vcc * (Rfix / (Rntc_plus + Rfix));
+    const Vadc_minus = divType === 'pullup' ? Vcc * (Rntc_minus / (Rntc_minus + Rfix)) : Vcc * (Rfix / (Rntc_minus + Rfix));
+    const dVdT_mV = Math.abs(Vadc_plus - Vadc_minus) * 1e3;
+
+    const lsb_V = Vcc / maxCode;
+    const tempRes = dVdT_mV > 0 ? (lsb_V * 1e3) / dVdT_mV : 0;
+    const Intc = Vadc / Math.max(1, Rntc);
+    const Pd_mW = (Vadc * Intc) * 1e3;
+
+    // Update UI Stats
+    document.getElementById('ntc-res-at-t').innerText = `${(Rntc / 1e3).toFixed(2)} kΩ`;
+    document.getElementById('ntc-res-vadc').innerText = `${Vadc.toFixed(3)} V`;
+    document.getElementById('ntc-res-code').innerText = `${code} / ${maxCode}`;
+    document.getElementById('ntc-res-sens').innerText = `${dVdT_mV.toFixed(1)} mV / °C`;
+    document.getElementById('ntc-res-temp-res').innerText = `${tempRes.toFixed(3)} °C / LSB`;
+    document.getElementById('ntc-res-pd').innerText = `${Pd_mW.toFixed(2)} mW`;
+
+    drawNTCRTCurve(targetTemp, Rntc);
+    drawNTCADCCurve(targetTemp, Vadc, Vcc, divType, Rfix);
+}
+
+function drawNTCRTCurve(targetT, targetR) {
+    const canvas = document.getElementById('ntc-rt-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const width = canvas.parentElement.clientWidth || 380;
+    const height = canvas.parentElement.clientHeight || 200;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
+
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x < width; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); }
+    for (let y = 0; y < height; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+
+    const tMin = -20, tMax = 120;
+    const logRMin = Math.log10(100); // 100 ohms
+    const logRMax = Math.log10(500000); // 500k ohms
+
+    function toX(t) { return ((t - tMin) / (tMax - tMin)) * (width - 40) + 30; }
+    function toY(r) { return height - ((Math.log10(r) - logRMin) / (logRMax - logRMin)) * (height - 30) - 15; }
+
+    // Plot Curve
+    ctx.strokeStyle = '#60a5fa';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let t = tMin; t <= tMax; t += 2) {
+        const r = getNTCResistance(t);
+        const px = toX(t);
+        const py = toY(r);
+        if (t === tMin) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Target marker
+    const pxT = toX(targetT);
+    const pyR = toY(targetR);
+    ctx.fillStyle = '#f59e0b';
+    ctx.beginPath(); ctx.arc(pxT, pyR, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#f59e0b';
+    ctx.font = '10px monospace';
+    ctx.fillText(`${(targetR / 1e3).toFixed(1)}k @ ${targetT}°C`, pxT - 20, pyR - 8);
+}
+
+function drawNTCADCCurve(targetT, targetV, Vcc, divType, Rfix) {
+    const canvas = document.getElementById('ntc-adc-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const width = canvas.parentElement.clientWidth || 380;
+    const height = canvas.parentElement.clientHeight || 200;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
+
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x < width; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); }
+    for (let y = 0; y < height; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+
+    const tMin = -20, tMax = 120;
+    function toX(t) { return ((t - tMin) / (tMax - tMin)) * (width - 40) + 30; }
+    function toY(v) { return height - (v / Vcc) * (height - 30) - 15; }
+
+    // Plot Curve
+    ctx.strokeStyle = '#4ade80';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let t = tMin; t <= tMax; t += 2) {
+        const r = getNTCResistance(t);
+        const v = divType === 'pullup' ? Vcc * (r / (r + Rfix)) : Vcc * (Rfix / (r + Rfix));
+        const px = toX(t);
+        const py = toY(v);
+        if (t === tMin) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Target marker
+    const pxT = toX(targetT);
+    const pyV = toY(targetV);
+    ctx.fillStyle = '#f87171';
+    ctx.beginPath(); ctx.arc(pxT, pyV, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#f87171';
+    ctx.font = '10px monospace';
+    ctx.fillText(`${targetV.toFixed(2)}V`, pxT + 6, pyV - 4);
+}
+
+// Auto-run on load
+setTimeout(calcNTC, 50);
+</script>

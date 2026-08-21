@@ -1,37 +1,349 @@
-<div id="tool-voltage-margining-dac" class="doc-container flex flex-col">
-                <div class="h-48 bg-themeBg border-b border-themeBorder overflow-hidden flex justify-center items-center"><img src="{{ '/assets/images/margining.png' | relative_url }}" class="h-full opacity-80 diagram-img" alt="Margining Circuit" onerror="this.style.display='none'"></div>
-                <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
-                    <i class="fa-solid fa-arrows-to-dot"></i>
-                    <h3 class="font-bold font-mono">Voltage/Current Margining</h3>
-                </div>
-                <div class="p-4 space-y-2 font-mono text-sm flex-grow">
-                    <select id="margin-type" class="border border-themeBorder px-2 py-1 mb-2 font-bold w-full" onchange="setupMarginMode()">
-                        <option value="voltage">Voltage Margining (DAC Injection)</option>
-                        <option value="current">Current Margining (IDAC)</option>
-                    </select>
+<div class="doc-container flex flex-col w-full h-full min-h-[750px]">
+    <!-- Header -->
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Voltage & Current Margining Designer">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-arrows-to-dot"></i>
+            <h3 class="font-bold font-mono text-base">Voltage & Current Margining Designer</h3>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="font-mono text-[10px] opacity-80 hidden sm:inline">DAC & IDAC Feedback Injection</span>
+            <button class="px-3 py-1 bg-themeAccent text-themeBg text-xs font-bold hover:opacity-90 rounded transition-all shadow" onclick="calcMargin()"><i class="fa-solid fa-calculator mr-1"></i>Calculate Margin</button>
+        </div>
+    </div>
 
-                    <div class="flex gap-2 mb-2 pb-2 border-b border-themeBorder/20 text-[10px] text-themeMuted font-bold" id="margin-solve-group">
-                        <!-- Solvers injected by JS -->
-                    </div>
-
-                    <div id="margin-inputs" class="grid grid-cols-2 gap-4">
-                        <!-- Inputs injected by JS -->
-                    </div>
-
-                    <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-1 text-xs">
-                        <div class="flex justify-between"><span class="text-themeMuted">Nominal Vout</span><span id="vm-vnom" class="font-bold text-themeText">3.32 V</span></div>
-                        <div class="flex justify-between"><span class="text-themeMuted" id="vm-result-lbl">Margined Vout</span><span id="vm-vmarg" class="font-bold text-themeAccent text-sm">3.13 V</span></div>
-                    </div>
-                </div>
+    <!-- Main Content Area -->
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto space-y-6">
+        
+        <!-- Top Row: Input Parameters -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-    <!-- Theory & Math Section -->
+            <!-- Card 1: Power Supply & Feedback Divider -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-3 shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-microchip"></i> Target Regulator</h4>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Nominal $V_{out}$</label>
+                        <div class="flex">
+                            <input type="number" id="vm-vnom" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-themeAccent" value="3.30" step="0.05" oninput="calcMargin()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">V</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Regulator $V_{ref}$ (FB)</label>
+                        <div class="flex">
+                            <input type="number" id="vm-vref" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.80" step="0.05" oninput="calcMargin()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">V</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Upper Resistor ($R_1$)</label>
+                        <div class="flex">
+                            <input type="number" id="vm-r1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="31.25" step="1" oninput="calcMargin()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">k&Omega;</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Lower Resistor ($R_2$)</label>
+                        <div class="flex">
+                            <input type="number" id="vm-r2" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10.0" step="0.5" oninput="calcMargin()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">k&Omega;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] text-themeMuted mb-0.5 block">Resistor Tolerance</label>
+                    <select id="vm-tol" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-xs" onchange="calcMargin()">
+                        <option value="0.001">0.1% Precision</option>
+                        <option value="0.005">0.5%</option>
+                        <option value="0.01" selected>1.0% Standard</option>
+                        <option value="0.05">5.0%</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Card 2: Margining Injection Architecture -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-3 shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-sliders"></i> Margining Circuit</h4>
+                </div>
+
+                <div>
+                    <label class="text-[10px] text-themeMuted mb-0.5 block">Injection Method</label>
+                    <select id="vm-mode" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-xs" onchange="toggleMarginMode()">
+                        <option value="vdac" selected>Voltage DAC via $R_{margin}$</option>
+                        <option value="idac">Current DAC (Sink / Source IDAC)</option>
+                    </select>
+                </div>
+
+                <!-- VDAC Inputs -->
+                <div id="vm-vdac-group" class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div>
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">DAC Min $V_{dac\_min}$</label>
+                            <div class="flex">
+                                <input type="number" id="vm-vdac-min" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.0" step="0.1" oninput="calcMargin()">
+                                <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">V</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">DAC Max $V_{dac\_max}$</label>
+                            <div class="flex">
+                                <input type="number" id="vm-vdac-max" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="2.5" step="0.1" oninput="calcMargin()">
+                                <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">V</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div>
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">Margin Res ($R_{margin}$)</label>
+                            <div class="flex">
+                                <input type="number" id="vm-rmargin" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-amber-400" value="100.0" step="5" oninput="calcMargin()">
+                                <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">k&Omega;</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">DAC Resolution</label>
+                            <select id="vm-dac-bits" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-xs" onchange="calcMargin()">
+                                <option value="8">8-bit (256 steps)</option>
+                                <option value="10" selected>10-bit (1024 steps)</option>
+                                <option value="12">12-bit (4096 steps)</option>
+                                <option value="16">16-bit (65536 steps)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IDAC Inputs -->
+                <div id="vm-idac-group" class="hidden space-y-3">
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div>
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">IDAC Max Current</label>
+                            <div class="flex">
+                                <input type="number" id="vm-idac-max" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-amber-400" value="25.0" step="5" oninput="calcMargin()">
+                                <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">&mu;A</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-themeMuted mb-0.5 block">IDAC Resolution</label>
+                            <select id="vm-idac-bits" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText text-xs" onchange="calcMargin()">
+                                <option value="6">6-bit (64 steps)</option>
+                                <option value="7">7-bit (128 steps)</option>
+                                <option value="8" selected>8-bit (256 steps)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Margining Span & Performance -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-2 shadow-inner justify-between">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-gauge-simple-high"></i> Margin Range</h4>
+                    <span id="vm-range-pct" class="px-2 py-0.5 bg-themeAccent/10 text-themeAccent border border-themeAccent/30 text-[10px] font-bold rounded">&plusmn;10.0%</span>
+                </div>
+
+                <div class="space-y-1.5 text-xs">
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Nominal Output ($V_{out\_nom}$):</span>
+                        <span id="vm-res-vnom" class="font-bold text-themeText">3.300 V</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Max Margin High ($V_{out\_max}$):</span>
+                        <span id="vm-res-vmax" class="font-bold text-red-400">3.550 V (+7.58%)</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Min Margin Low ($V_{out\_min}$):</span>
+                        <span id="vm-res-vmin" class="font-bold text-blue-400">3.019 V (-8.52%)</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Step Resolution (LSB):</span>
+                        <span id="vm-res-lsb" class="font-bold text-themeAccent">0.52 mV / step</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Worst-Case Tolerance Error:</span>
+                        <span id="vm-res-tol" class="font-bold text-amber-400">&plusmn;0.98% (&plusmn;32.3 mV)</span>
+                    </div>
+                    <div class="flex justify-between pt-1 border-t border-themeBorder/20 text-[10px] text-themeMuted">
+                        <span>DAC Voltage at Nominal:</span>
+                        <span id="vm-res-vdac-nom" class="font-bold text-themeText">0.800 V</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Row: Interactive Voltage Sweep Canvas -->
+        <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col shadow-inner">
+            <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2 mb-3">
+                <h4 class="text-xs font-bold text-themeText flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line text-themeAccent"></i> Output Voltage vs DAC Control Transfer Curve
+                </h4>
+                <div class="flex gap-4 text-[10px] font-bold">
+                    <span class="text-themeAccent">● Margined $V_{out}$</span>
+                    <span class="text-red-400">-- +5% / +10% Upper Bound</span>
+                    <span class="text-blue-400">-- -5% / -10% Lower Bound</span>
+                </div>
+            </div>
+            <div class="relative w-full h-64 bg-themeBg border border-themeBorder/30 rounded overflow-hidden">
+                <canvas id="vm-sweep-canvas" class="w-full h-full block"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Theory & Mathematical Formulation -->
     <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
-        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('voltagemarginingdac-theory').classList.toggle('hidden')">
-            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('vm-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent flex items-center gap-2"><i class="fa-solid fa-calculator"></i>Voltage & Current Injection Math</h4>
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
-        <div id="voltagemarginingdac-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Theory:</strong> Voltage margining allows testing system robustness by injecting current into a DC-DC converter's feedback node using a DAC, thereby intentionally shifting the output voltage.</p>
+        <div id="vm-theory" class="hidden text-themeMuted mt-3 space-y-2 text-xs leading-relaxed">
+            <p><strong>1. Voltage DAC Injection via $R_{margin}$ into Feedback Node:</strong><br>
+                Applying KCL at the regulator FB node ($V_{fb} = V_{ref}$):
+                $$\frac{V_{out} - V_{ref}}{R_1} = \frac{V_{ref}}{R_2} + \frac{V_{ref} - V_{dac}}{R_{margin}}$$
+                $$V_{out} = V_{ref} \left(1 + \frac{R_1}{R_2}\right) + (V_{ref} - V_{dac}) \frac{R_1}{R_{margin}}$$
+            </p>
+            <p><strong>2. Current DAC (IDAC) Injection:</strong><br>
+                $$V_{out} = V_{ref} \left(1 + \frac{R_1}{R_2}\right) \pm I_{dac} \cdot R_1$$
+            </p>
         </div>
     </div>
 </div>
+
+<script>
+function toggleMarginMode() {
+    const mode = document.getElementById('vm-mode').value;
+    document.getElementById('vm-vdac-group').classList.toggle('hidden', mode !== 'vdac');
+    document.getElementById('vm-idac-group').classList.toggle('hidden', mode !== 'idac');
+    calcMargin();
+}
+
+function calcMargin() {
+    const Vnom_target = parseFloat(document.getElementById('vm-vnom').value) || 3.3;
+    const Vref = parseFloat(document.getElementById('vm-vref').value) || 0.8;
+    const R1_k = parseFloat(document.getElementById('vm-r1').value) || 31.25;
+    const R2_k = parseFloat(document.getElementById('vm-r2').value) || 10.0;
+    const tol = parseFloat(document.getElementById('vm-tol').value) || 0.01;
+    const mode = document.getElementById('vm-mode').value;
+
+    const R1 = R1_k * 1e3;
+    const R2 = R2_k * 1e3;
+    const Vnom_actual = Vref * (1 + R1 / R2);
+
+    let Vout_max = 0, Vout_min = 0, lsb_mV = 0, Vdac_nom = Vref;
+
+    if (mode === 'vdac') {
+        const Vdac_min = parseFloat(document.getElementById('vm-vdac-min').value) || 0.0;
+        const Vdac_max = parseFloat(document.getElementById('vm-vdac-max').value) || 2.5;
+        const Rmargin_k = parseFloat(document.getElementById('vm-rmargin').value) || 100.0;
+        const bits = parseInt(document.getElementById('vm-dac-bits').value) || 10;
+        const Rmargin = Rmargin_k * 1e3;
+
+        // Vout is maximum when Vdac is at minimum (injects current away from FB)
+        Vout_max = Vnom_actual + (Vref - Vdac_min) * (R1 / Rmargin);
+        Vout_min = Vnom_actual + (Vref - Vdac_max) * (R1 / Rmargin);
+
+        const totalSteps = Math.pow(2, bits) - 1;
+        lsb_mV = Math.abs((Vout_max - Vout_min) / totalSteps) * 1e3;
+        Vdac_nom = Vref;
+    } else {
+        const Idac_max_uA = parseFloat(document.getElementById('vm-idac-max').value) || 25.0;
+        const bits = parseInt(document.getElementById('vm-idac-bits').value) || 8;
+        const Idac_max = Idac_max_uA * 1e-6;
+
+        Vout_max = Vnom_actual + Idac_max * R1;
+        Vout_min = Vnom_actual - Idac_max * R1;
+
+        const totalSteps = Math.pow(2, bits) - 1;
+        lsb_mV = ((Vout_max - Vout_min) / (totalSteps * 2)) * 1e3;
+        Vdac_nom = 0;
+    }
+
+    const pctHigh = ((Vout_max - Vnom_actual) / Vnom_actual) * 100;
+    const pctLow = ((Vout_min - Vnom_actual) / Vnom_actual) * 100;
+    const tol_mV = Vnom_actual * (tol * 2) * 1e3;
+
+    // Update UI Stats
+    document.getElementById('vm-res-vnom').innerText = `${Vnom_actual.toFixed(3)} V`;
+    document.getElementById('vm-res-vmax').innerText = `${Vout_max.toFixed(3)} V (+${pctHigh.toFixed(2)}%)`;
+    document.getElementById('vm-res-vmin').innerText = `${Vout_min.toFixed(3)} V (${pctLow.toFixed(2)}%)`;
+    document.getElementById('vm-res-lsb').innerText = `${lsb_mV.toFixed(2)} mV / step`;
+    document.getElementById('vm-res-tol').innerText = `±${(tol * 100).toFixed(1)}% (±${tol_mV.toFixed(1)} mV)`;
+    document.getElementById('vm-range-pct').innerText = `+${pctHigh.toFixed(1)}% / ${pctLow.toFixed(1)}%`;
+    document.getElementById('vm-res-vdac-nom').innerText = `${Vdac_nom.toFixed(3)} V`;
+
+    drawMarginSweepCanvas(Vnom_actual, Vout_min, Vout_max, mode);
+}
+
+function drawMarginSweepCanvas(Vnom, Vmin, Vmax, mode) {
+    const canvas = document.getElementById('vm-sweep-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const width = canvas.parentElement.clientWidth || 400;
+    const height = canvas.parentElement.clientHeight || 250;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
+
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x < width; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); }
+    for (let y = 0; y < height; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+
+    const vHighBound = Vnom * 1.15;
+    const vLowBound = Vnom * 0.85;
+
+    function toY(v) {
+        return height - ((v - vLowBound) / (vHighBound - vLowBound)) * (height * 0.85) - 15;
+    }
+
+    // Nominal line (white dashed)
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(30, toY(Vnom)); ctx.lineTo(width - 20, toY(Vnom)); ctx.stroke();
+    ctx.fillText(`${Vnom.toFixed(2)}V Nom`, 35, toY(Vnom) - 4);
+
+    // +5% and +10% lines (Red dashed)
+    ctx.strokeStyle = '#f87171';
+    ctx.beginPath(); ctx.moveTo(30, toY(Vnom * 1.05)); ctx.lineTo(width - 20, toY(Vnom * 1.05)); ctx.stroke();
+    ctx.fillText('+5%', width - 45, toY(Vnom * 1.05) - 4);
+    ctx.beginPath(); ctx.moveTo(30, toY(Vnom * 1.10)); ctx.lineTo(width - 20, toY(Vnom * 1.10)); ctx.stroke();
+    ctx.fillText('+10%', width - 45, toY(Vnom * 1.10) - 4);
+
+    // -5% and -10% lines (Blue dashed)
+    ctx.strokeStyle = '#60a5fa';
+    ctx.beginPath(); ctx.moveTo(30, toY(Vnom * 0.95)); ctx.lineTo(width - 20, toY(Vnom * 0.95)); ctx.stroke();
+    ctx.fillText('-5%', width - 45, toY(Vnom * 0.95) - 4);
+    ctx.beginPath(); ctx.moveTo(30, toY(Vnom * 0.90)); ctx.lineTo(width - 20, toY(Vnom * 0.90)); ctx.stroke();
+    ctx.fillText('-10%', width - 45, toY(Vnom * 0.90) - 4);
+    ctx.setLineDash([]);
+
+    // Transfer Characteristic Curve (Theme Accent)
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(30, toY(Vmax));
+    ctx.lineTo(width - 30, toY(Vmin));
+    ctx.stroke();
+
+    // Min & Max Markers
+    ctx.fillStyle = '#f87171';
+    ctx.beginPath(); ctx.arc(30, toY(Vmax), 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#60a5fa';
+    ctx.beginPath(); ctx.arc(width - 30, toY(Vmin), 5, 0, Math.PI * 2); ctx.fill();
+}
+
+// Auto-run on load
+setTimeout(calcMargin, 50);
+</script>
