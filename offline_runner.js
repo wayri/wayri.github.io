@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 /**
- * Zero-dependency Node.js Offline Server Launcher
- * Run with: node offline_runner.js
+ * Standalone Desktop Application Host (Node.js)
+ * Automatically spawns the suite in a dedicated standalone desktop window (no browser tabs/URL bar).
  */
 
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const { exec } = require('child_process');
+const os = require('os');
+const { exec, spawn } = require('child_process');
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8422;
 const ROOT = __dirname;
 
 const MIME_TYPES = {
@@ -26,6 +27,32 @@ const MIME_TYPES = {
     '.woff': 'font/woff',
     '.ttf': 'font/ttf'
 };
+
+function findStandaloneBrowser() {
+    if (process.platform === 'win32') {
+        const candidates = [
+            path.join(process.env['ProgramFiles(x86)'] || 'C:\\Program Files (x86)', 'Microsoft\\Edge\\Application\\msedge.exe'),
+            path.join(process.env['ProgramFiles'] || 'C:\\Program Files', 'Microsoft\\Edge\\Application\\msedge.exe'),
+            path.join(process.env['ProgramFiles'] || 'C:\\Program Files', 'Google\\Chrome\\Application\\chrome.exe'),
+            path.join(process.env['ProgramFiles(x86)'] || 'C:\\Program Files (x86)', 'Google\\Chrome\\Application\\chrome.exe'),
+            path.join(process.env['LOCALAPPDATA'] || '', 'Google\\Chrome\\Application\\chrome.exe'),
+            path.join(process.env['ProgramFiles'] || 'C:\\Program Files', 'BraveSoftware\\Brave-Browser\\Application\\brave.exe')
+        ];
+        for (let p of candidates) {
+            if (fs.existsSync(p)) return p;
+        }
+    } else if (process.platform === 'darwin') {
+        const candidates = [
+            '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+            '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+            '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser'
+        ];
+        for (let p of candidates) {
+            if (fs.existsSync(p)) return p;
+        }
+    }
+    return null;
+}
 
 const server = http.createServer((req, res) => {
     let reqUrl = req.url.split('?')[0];
@@ -57,14 +84,32 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, '127.0.0.1', () => {
     const url = `http://127.0.0.1:${PORT}/tools/index.html`;
     console.log('='.repeat(65));
-    console.log('  ⚡ ENGINEERING TOOLS SUITE - NODE.JS OFFLINE HOST');
+    console.log('  ⚡ ENGINEERING TOOLS SUITE - STANDALONE DESKTOP HOST');
     console.log('='.repeat(65));
-    console.log(`  • Serving: ${ROOT}`);
-    console.log(`  • Local URL: ${url}`);
+    console.log(`  • Local Engine : ${ROOT}`);
+    console.log(`  • App Endpoint : ${url}`);
     console.log('='.repeat(65));
 
-    // Auto open browser on Windows/macOS/Linux
-    const startCmd = process.platform === 'win32' ? `start ${url}` :
-                     process.platform === 'darwin' ? `open ${url}` : `xdg-open ${url}`;
-    exec(startCmd, () => {});
+    const browser = findStandaloneBrowser();
+    const tempProfile = path.join(os.tmpdir(), 'eng_tools_node_app_profile');
+
+    if (browser) {
+        console.log(`  Opening dedicated standalone window via: ${path.basename(browser)}`);
+        const child = spawn(browser, [
+            `--app=${url}`,
+            '--window-size=1440,920',
+            `--user-data-dir=${tempProfile}`,
+            '--disable-extensions'
+        ], { detached: false, stdio: 'ignore' });
+
+        child.on('exit', () => {
+            console.log('\nStandalone window closed. Exiting server...');
+            server.close();
+            process.exit(0);
+        });
+    } else {
+        const startCmd = process.platform === 'win32' ? `start ${url}` :
+                         process.platform === 'darwin' ? `open ${url}` : `xdg-open ${url}`;
+        exec(startCmd, () => {});
+    }
 });
