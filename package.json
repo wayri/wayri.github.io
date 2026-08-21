@@ -6,8 +6,68 @@
   "scripts": {
     "start": "node offline_runner.js",
     "serve": "node offline_runner.js",
-    "py": "python offline_runner.py",
-    "app": "electron ."
+    "py": "python standalone_app.py",
+    "app": "electron .",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:linux": "electron-builder --linux AppImage deb",
+    "dist:mac": "electron-builder --mac dmg",
+    "dist:all": "electron-builder -mwl"
+  },
+  "build": {
+    "appId": "com.yawar.engineeringtools",
+    "productName": "Engineering Tools Suite",
+    "copyright": "Copyright © 2026 Yawar",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron_main.js",
+      "assets/**/*",
+      "tools/**/*",
+      "tools.html",
+      "index.html",
+      "manifest.json",
+      "service-worker.js"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        },
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "EngineeringToolsSuite-${version}-${os}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "portable": {
+      "artifactName": "EngineeringToolsSuite-Portable-${version}.exe"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Development",
+      "artifactName": "EngineeringToolsSuite-${version}.${ext}"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.developer-tools",
+      "artifactName": "EngineeringToolsSuite-${version}.${ext}"
+    }
   },
   "keywords": [
     "engineering",
@@ -16,11 +76,14 @@
     "smps",
     "magnetics",
     "wire-harness",
-    "pcb"
+    "pcb",
+    "appimage",
+    "exe"
   ],
   "author": "Yawar",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^28.0.0"
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
   }
 }
