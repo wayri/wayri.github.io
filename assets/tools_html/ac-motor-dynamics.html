@@ -182,6 +182,21 @@
             </div>
         </div>
 
+        <!-- Smart Recommendations & Motor Stability Panel -->
+        <div id="acm-recommendations" class="bg-themeContainer border border-themeAccent/30 rounded p-4 shadow-lg flex flex-col space-y-2">
+            <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                <div class="flex items-center gap-2 text-themeAccent font-bold text-xs">
+                    <i class="fa-solid fa-lightbulb"></i> Motor Operating Region & V/f Advisories
+                </div>
+                <button class="px-3 py-1 bg-themeAccent text-themeBg font-bold text-xs rounded hover:opacity-90 transition-all flex items-center gap-1 shadow" onclick="autoSolveACMotor()">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Solve Operating Point
+                </button>
+            </div>
+            <div id="acm-rec-list" class="space-y-1.5 text-xs text-themeMuted leading-relaxed">
+                <!-- Dynamically generated -->
+            </div>
+        </div>
+
     </div>
 
     <!-- Theory & Mathematical Foundation Section -->
@@ -277,7 +292,60 @@ function calcACMotor() {
     document.getElementById('acm-res-pf').innerText = `${pf.toFixed(2)} (Lagging)`;
     document.getElementById('acm-res-eff').innerText = `${eff.toFixed(1)}%`;
 
+    // Motor Advisories & Operating Region Checks
+    const recList = document.getElementById('acm-rec-list');
+    if (recList) {
+        const recs = [];
+        if (s_op > s_max) {
+            recs.push(`
+                <div class="border-l-2 border-red-400 pl-2">
+                    <div class="font-bold text-red-400"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Unstable / Stall Region ($s = ${s_op.toFixed(3)} > s_{max} = ${s_max.toFixed(3)}$)</div>
+                    <div>Operating past breakdown torque. The motor will decelerate and stall under load. Reduce slip into stable linear region ($s \\le 0.05$).</div>
+                </div>
+            `);
+        } else if (s_op > 0.08) {
+            recs.push(`
+                <div class="border-l-2 border-amber-400 pl-2">
+                    <div class="font-bold text-amber-400"><i class="fa-solid fa-wave-square mr-1"></i>Elevated Slip & Rotor I²R Losses ($s = ${s_op.toFixed(3)}$)</div>
+                    <div>Efficiency drops to ${eff.toFixed(1)}\%. Typical continuous rated slip is between 0.02 and 0.05.</div>
+                </div>
+            `);
+        }
+        if (eff < 75 && s_op <= s_max) {
+            recs.push(`
+                <div class="border-l-2 border-blue-400 pl-2">
+                    <div class="font-bold text-blue-400"><i class="fa-solid fa-bolt mr-1"></i>Low Operating Efficiency</div>
+                    <div>Check V/f ratio (${(Vll/freq).toFixed(2)} V/Hz). If overfluxed, magnetizing current spikes and degrades power factor.</div>
+                </div>
+            `);
+        }
+        if (recs.length === 0) {
+            recs.push(`
+                <div class="border-l-2 border-green-400 pl-2">
+                    <div class="font-bold text-green-400"><i class="fa-solid fa-circle-check mr-1"></i>Optimal Motoring Region</div>
+                    <div>Motor operating in linear stable torque region ($s = ${s_op.toFixed(3)} < s_{max}$) with ${eff.toFixed(1)}\% efficiency.</div>
+                </div>
+            `);
+        }
+        recList.innerHTML = recs.join('');
+    }
+
     drawTorqueSpeedCurve(Ns, Nr, Tem_op, Tmax, s_max, Tstart, getTorque);
+}
+
+function autoSolveACMotor() {
+    // 1. Reset slip into optimal rated motoring range (e.g. 0.035)
+    document.getElementById('acm-slip').value = '0.035';
+    
+    // 2. Align V/f ratio to standard 400V @ 50Hz (8.0 V/Hz) or 460V @ 60Hz (7.67 V/Hz)
+    const freq = parseFloat(document.getElementById('acm-freq').value) || 50;
+    if (freq === 50) {
+        document.getElementById('acm-vll').value = '400';
+    } else if (freq === 60) {
+        document.getElementById('acm-vll').value = '460';
+    }
+
+    calcACMotor();
 }
 
 function drawTorqueSpeedCurve(Ns, Nr, Top, Tmax, s_max, Tstart, torqueFn) {

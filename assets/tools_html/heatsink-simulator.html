@@ -163,9 +163,14 @@
                     </div>
                 </div>
 
-                <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col text-xs shadow-inner mt-2 hidden" id="hs-recommendation-panel">
-                    <div class="flex items-center gap-2 text-themeAccent font-bold mb-2">
-                        <i class="fa-solid fa-lightbulb"></i> Optimization Engine Recommendation
+                <div class="bg-themeContainer border border-themeBorder p-4 flex flex-col text-xs shadow-inner mt-2 hidden rounded" id="hs-recommendation-panel">
+                    <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2 mb-2">
+                        <div class="flex items-center gap-2 text-themeAccent font-bold">
+                            <i class="fa-solid fa-lightbulb"></i> Optimization Engine Recommendations
+                        </div>
+                        <button class="px-2.5 py-1 bg-themeAccent text-themeBg font-bold text-[10px] rounded hover:opacity-90 transition-all flex items-center gap-1 shadow" onclick="autoSolveHeatsink()">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Solve All
+                        </button>
                     </div>
                     <div id="hs-recommendation-text" class="text-themeMuted leading-relaxed">
                         Run thermal sim to generate recommendations.

@@ -290,9 +290,14 @@
                     </div>
 
                     <!-- Smart Recommendations Panel -->
-                    <div id="xfmr-recommendations" class="hidden mt-3 bg-themeBg border border-themeAccent/30 rounded p-3">
-                        <div class="flex items-center gap-2 text-themeAccent font-bold text-[10px] mb-2">
-                            <i class="fa-solid fa-lightbulb"></i> Design Recommendations
+                    <div id="xfmr-recommendations" class="hidden mt-3 bg-themeBg border border-themeAccent/30 rounded p-3 shadow-lg">
+                        <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2 mb-2">
+                            <div class="flex items-center gap-2 text-themeAccent font-bold text-xs">
+                                <i class="fa-solid fa-lightbulb"></i> Design Recommendations & Warnings
+                            </div>
+                            <button class="px-2.5 py-1 bg-themeAccent text-themeBg font-bold text-[10px] rounded hover:opacity-90 transition-all flex items-center gap-1 shadow" onclick="autoSolveXfmrViolations()">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Solve All
+                            </button>
                         </div>
                         <div id="xfmr-rec-list" class="space-y-1.5 text-[9px] text-themeMuted leading-relaxed">
                         </div>
