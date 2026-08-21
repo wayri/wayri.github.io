@@ -370,3 +370,16 @@ initSidebar = function() {
     origInitSidebar();
     renderWelcomeGrid();
 };
+
+// Register PWA Service Worker for 100% Offline Capability
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then(reg => {
+                console.log('⚡ Engineering Tools Suite ServiceWorker Registered (Offline Ready):', reg.scope);
+            })
+            .catch(err => {
+                console.log('ServiceWorker registration note:', err.message);
+            });
+    });
+}
