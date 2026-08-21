@@ -202,14 +202,13 @@ function drawCapabilityCurve(rpm, tq, pwr, id, iq, imax, maxTq, maxPwr) {
     if(!canvas) return;
     const ctx = canvas.getContext('2d');
     
-    // Handle DPI scaling
     const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * window.devicePixelRatio;
-    canvas.height = rect.height * window.devicePixelRatio;
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    
-    const w = rect.width;
-    const h = rect.height;
+    const w = rect.width > 0 ? rect.width : (canvas.parentElement.clientWidth || 400);
+    const h = rect.height > 0 ? rect.height : (canvas.parentElement.clientHeight || 250);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.scale(dpr, dpr);
     
     ctx.clearRect(0, 0, w, h);
     if(rpm.length === 0) return;
