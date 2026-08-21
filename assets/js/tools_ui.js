@@ -27,6 +27,7 @@ const TOOL_REGISTRY = [
         category: "Power & SMPS",
         icon: "fa-plug-circle-bolt",
         tools: [
+            { id: "tool-smps-loop-tuner", name: "SMPS Loop & Transient Tuner", file: "smps-loop-tuner.html" },
             { id: "tool-power-electronics", name: "Power Electronics Suite", file: "power-electronics-calc.html" },
             { id: "tool-loop-compensator-p-z", name: "Loop Compensator (P/Z)", file: "loop-compensator-p-z.html" },
             { id: "tool-smps-topology-ratio", name: "SMPS Topology & Ratio", file: "smps-topology-ratio.html" }
@@ -152,10 +153,20 @@ function initSidebar() {
     const sidebar = document.getElementById('tools-sidebar');
     if(!sidebar) return;
 
-    let html = '';
+    let html = `
+        <div class="p-2 border-b border-themeBorder/40 bg-themeBg/80 sticky top-0 z-20">
+            <div class="relative flex items-center">
+                <i class="fa-solid fa-search absolute left-2.5 text-themeMuted text-xs"></i>
+                <input type="text" id="tools-search-input" placeholder="Search 60+ tools..." 
+                    class="w-full bg-themeContainer border border-themeBorder text-xs text-themeText pl-8 pr-2 py-1.5 rounded outline-none focus:border-themeAccent transition-colors font-mono"
+                    oninput="filterTools(this.value)">
+            </div>
+        </div>
+    `;
+
     TOOL_REGISTRY.forEach((category, catIdx) => {
         html += `
-            <div class="border-b border-themeBorder/50">
+            <div class="border-b border-themeBorder/50 category-group" id="cat-group-${catIdx}">
                 <button class="w-full text-left p-3 flex justify-between items-center hover:bg-themeBorder/10 transition-colors focus:outline-none" onclick="toggleCategory(${catIdx})">
                     <span class="font-bold text-themeText flex items-center gap-2"><i class="fa-solid ${category.icon} w-4 text-center"></i> ${category.category}</span>
                     <i class="fa-solid fa-chevron-down text-xs text-themeMuted transition-transform duration-200" id="cat-icon-${catIdx}"></i>
@@ -164,7 +175,7 @@ function initSidebar() {
         `;
         category.tools.forEach(tool => {
             html += `
-                <button class="text-left pl-10 py-2 pr-4 text-themeMuted hover:text-themeAccent hover:bg-themeBorder/20 transition-colors text-xs border-l-2 border-transparent hover:border-themeAccent" onclick="loadTool('${tool.id}', '${tool.file}', this)">
+                <button class="tool-item-btn text-left pl-10 py-2 pr-4 text-themeMuted hover:text-themeAccent hover:bg-themeBorder/20 transition-colors text-xs border-l-2 border-transparent hover:border-themeAccent" data-tool-name="${tool.name.toLowerCase()}" data-cat-idx="${catIdx}" onclick="loadTool('${tool.id}', '${tool.file}', this)">
                     ${tool.name}
                 </button>
             `;
@@ -172,6 +183,42 @@ function initSidebar() {
         html += `</div></div>`;
     });
     sidebar.innerHTML = html;
+}
+
+function filterTools(query) {
+    const q = (query || '').toLowerCase().trim();
+    TOOL_REGISTRY.forEach((category, catIdx) => {
+        const group = document.getElementById(`cat-group-${catIdx}`);
+        const content = document.getElementById(`cat-content-${catIdx}`);
+        const icon = document.getElementById(`cat-icon-${catIdx}`);
+        if (!group || !content) return;
+
+        let visibleCount = 0;
+        const toolBtns = group.querySelectorAll('.tool-item-btn');
+        toolBtns.forEach(btn => {
+            const name = btn.getAttribute('data-tool-name') || '';
+            if (!q || name.includes(q)) {
+                btn.style.display = 'block';
+                visibleCount++;
+            } else {
+                btn.style.display = 'none';
+            }
+        });
+
+        if (!q) {
+            group.style.display = 'block';
+            content.classList.add('hidden');
+            content.classList.remove('flex');
+            if (icon) icon.style.transform = 'rotate(0deg)';
+        } else if (visibleCount > 0) {
+            group.style.display = 'block';
+            content.classList.remove('hidden');
+            content.classList.add('flex');
+            if (icon) icon.style.transform = 'rotate(180deg)';
+        } else {
+            group.style.display = 'none';
+        }
+    });
 }
 
 function toggleCategory(idx) {
@@ -227,19 +274,28 @@ async function loadTool(toolId, fileName, btnElement) {
             oldScript.parentNode.replaceChild(newScript, oldScript);
         });
         
-        // Ensure any newly added canvas elements correctly size themselves
-        // and trigger existing initialization scripts
+        // Universal Lifecycle Auto-Initializer
         setTimeout(() => {
             // Trigger MathJax typesetting for equations in the newly loaded tool
             if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
                 MathJax.typesetPromise([mainArea]).catch((err) => console.log('MathJax typeset failed: ' + err.message));
             }
 
-            // Some old tools rely on specific window functions or setup calls.
-            // Dispatch a custom event that tools can listen to.
+            // Dispatch universal toolLoaded event
             document.dispatchEvent(new CustomEvent('toolLoaded', { detail: { toolId } }));
             
-            // Legacy fallbacks for tools that don't use the event listener
+            // Universal Lifecycle initializers & fallbacks
+            if(toolId === 'tool-smps-loop-tuner' && typeof runSMPSTuner === 'function') runSMPSTuner();
+            if(toolId === 'tool-ac-motor-dynamics' && typeof setupMotorMode === 'function') setupMotorMode();
+            if(toolId === 'tool-smps-topology-ratio' && typeof setupSMPSMode === 'function') setupSMPSMode();
+            if(toolId === 'tool-voltage-margining-dac' && typeof setupMarginMode === 'function') setupMarginMode();
+            if(toolId === 'tool-thermistor-r-t-curve-ntc' && typeof setupNTCMode === 'function') setupNTCMode();
+            if(toolId === 'tool-heatsink-simulator') {
+                if(typeof initHeatsink3D === 'function') initHeatsink3D();
+                if(typeof updateHeatsink === 'function') updateHeatsink();
+            }
+            if(toolId === 'tool-planar-inductor' && typeof initPlanarInductor3D === 'function') initPlanarInductor3D();
+            if(toolId === 'tool-transformer-designer' && typeof initXfmr3D === 'function') initXfmr3D();
             if(toolId === 'tool-pv-yield-simulator' && typeof initSolarWidget === 'function') initSolarWidget();
             if(toolId === 'tool-resistor-divider' && typeof setupDividerMode === 'function') setupDividerMode();
             if(toolId === 'tool-loop-compensator-p-z' && typeof runCompensator === 'function') runCompensator();
@@ -249,8 +305,15 @@ async function loadTool(toolId, fileName, btnElement) {
                 if(typeof initFilterBodeChart === 'function') initFilterBodeChart();
             }
             if(toolId === 'tool-web-serial-interface' && typeof initSerialChart === 'function') initSerialChart();
-            
-            // New tools might load scripts dynamically, but typically we will include their JS in default.html or load it here.
+            if(toolId === 'tool-e-series-finder' && typeof runESeries === 'function') runESeries();
+            if(toolId === 'tool-awg-wire-ampacity' && typeof runAWG === 'function') runAWG();
+            if(toolId === 'tool-ipc-2221-trace-width' && typeof runPcBTrace === 'function') runPcBTrace();
+            if(toolId === 'tool-battery-pack-s-p-config' && typeof runBattery === 'function') runBattery();
+            if(toolId === 'tool-magnetic-core' && typeof runInductor === 'function') runInductor();
+            if(toolId === 'tool-via-comprehensive' && typeof updateVia === 'function') updateVia();
+            if(toolId === 'tool-multipoint-harness' && window.HarnessApp && typeof window.HarnessApp.init === 'function') {
+                if(!window.HarnessApp.canvas) window.HarnessApp.init();
+            }
         }, 100);
 
     } catch (error) {

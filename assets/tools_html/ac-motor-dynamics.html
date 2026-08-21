@@ -1,45 +1,362 @@
-<div id="tool-ac-motor-dynamics" class="doc-container flex flex-col">
-        <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
+<div class="doc-container flex flex-col w-full h-full min-h-[800px]">
+    <!-- Header -->
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="AC Induction & Synchronous Motor Dynamics">
+        <div class="flex items-center gap-2">
             <i class="fa-solid fa-gear"></i>
-            <h3 class="font-bold font-mono">AC Motor Dynamics</h3>
+            <h3 class="font-bold font-mono text-base">AC Induction Motor Dynamics & Torque-Speed Solver</h3>
         </div>
-        <div class="p-4 space-y-3 font-mono text-sm flex-grow">
-            <div class="flex gap-2 mb-2 pb-2 border-b border-themeBorder/20 text-[10px] text-themeMuted font-bold" id="motor-solve-group">
-                <!-- Solvers injected by JS -->
-            </div>
+        <div class="flex items-center gap-2">
+            <span class="font-mono text-[10px] opacity-80 hidden sm:inline">Equivalent Circuit & V/f Profiler</span>
+            <button class="px-3 py-1 bg-themeAccent text-themeBg text-xs font-bold hover:opacity-90 rounded transition-all shadow" onclick="calcACMotor()"><i class="fa-solid fa-play mr-1"></i>Simulate Motor</button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto space-y-6">
+        
+        <!-- Top Row: Parameters Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            <div id="motor-inputs" class="grid grid-cols-2 gap-4">
-                <!-- Inputs injected by JS -->
+            <!-- Card 1: Nameplate & Supply Specs -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-3 shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-bolt"></i> Supply & Nameplate</h4>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Line-to-Line $V_{LL}$</label>
+                        <div class="flex">
+                            <input type="number" id="acm-vll" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="400" step="10" oninput="calcACMotor()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">V</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Frequency ($f$)</label>
+                        <div class="flex">
+                            <input type="number" id="acm-freq" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-themeAccent" value="50" step="5" oninput="calcACMotor()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">Hz</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Poles ($P$)</label>
+                        <select id="acm-poles" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" onchange="calcACMotor()">
+                            <option value="2">2 Poles (3000/3600 RPM)</option>
+                            <option value="4" selected>4 Poles (1500/1800 RPM)</option>
+                            <option value="6">6 Poles (1000/1200 RPM)</option>
+                            <option value="8">8 Poles (750/900 RPM)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Operating Slip ($s$)</label>
+                        <div class="flex">
+                            <input type="number" id="acm-slip" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="0.04" min="0.001" max="1.0" step="0.005" oninput="calcACMotor()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">pu</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-2 bg-themeBg/60 rounded border border-themeBorder/20 text-[10px] space-y-1 text-themeMuted">
+                    <div class="flex justify-between"><span>Synchronous Speed ($N_s$):</span> <span id="acm-ns-disp" class="font-bold text-themeText">1500 RPM</span></div>
+                    <div class="flex justify-between"><span>Rotor Speed ($N_r$):</span> <span id="acm-nr-disp" class="font-bold text-themeAccent">1440 RPM</span></div>
+                    <div class="flex justify-between"><span>V/f Ratio:</span> <span id="acm-vf-disp" class="font-bold text-themeText">8.00 V/Hz</span></div>
+                </div>
             </div>
 
-            <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-2 text-[10px]">
-                <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                    <span class="text-themeMuted">Synchronous Speed</span>
-                    <span id="mot-rpm" class="font-bold text-themeText">- RPM</span>
+            <!-- Card 2: Equivalent Circuit Parameters -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-3 shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-bezier-curve"></i> Equivalent Circuit</h4>
+                    <span class="text-[10px] text-themeMuted">Per Phase</span>
                 </div>
-                <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                    <span class="text-themeMuted">Mechanical Power</span>
-                    <span class="font-bold text-themeAccent"><span id="mot-kw">-</span> kW / <span id="mot-hp">-</span> HP</span>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Stator Res ($R_1$)</label>
+                        <div class="flex">
+                            <input type="number" id="acm-r1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.64" step="0.05" oninput="calcACMotor()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">&Omega;</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Rotor Res ($R_2'$)</label>
+                        <div class="flex">
+                            <input type="number" id="acm-r2" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.33" step="0.05" oninput="calcACMotor()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">&Omega;</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                    <span class="text-themeMuted">Rotor Speed</span>
-                    <span id="mot-rotor" class="font-bold text-themeText">- RPM</span>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Stator Leakage ($X_1$)</label>
+                        <div class="flex">
+                            <input type="number" id="acm-x1" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1.10" step="0.1" oninput="calcACMotor()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">&Omega;</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Rotor Leakage ($X_2'$)</label>
+                        <div class="flex">
+                            <input type="number" id="acm-x2" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="1.10" step="0.1" oninput="calcACMotor()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">&Omega;</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex justify-between">
-                    <span class="whitespace-nowrap text-themeMuted">V/f Ratio (V/Hz)</span>
-                    <span id="mot-vf" class="font-bold text-themeText">-</span>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Magnetizing ($X_m$)</label>
+                        <div class="flex">
+                            <input type="number" id="acm-xm" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="26.3" step="1" oninput="calcACMotor()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">&Omega;</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Rotational Losses</label>
+                        <div class="flex">
+                            <input type="number" id="acm-prot" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="250" step="50" oninput="calcACMotor()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">W</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Operating Torque & Power Output -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-2 shadow-inner justify-between">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-gauge"></i> Operating Performance</h4>
+                    <span class="text-[10px] text-green-400 font-bold">Motoring Region</span>
+                </div>
+
+                <div class="space-y-1.5 text-xs">
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Shaft Torque ($T_{shaft}$):</span>
+                        <span id="acm-res-torque" class="font-bold text-themeAccent text-base">48.2 N&middot;m</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Mechanical Power:</span>
+                        <span id="acm-res-pout" class="font-bold text-themeText">7.27 kW (9.75 HP)</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Breakdown Torque ($T_{max}$):</span>
+                        <span id="acm-res-tmax" class="font-bold text-red-400">118.5 N&middot;m (s_max = 0.14)</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Starting Torque ($T_{start}$):</span>
+                        <span id="acm-res-tstart" class="font-bold text-amber-400">38.4 N&middot;m</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Stator Line Current ($I_1$):</span>
+                        <span id="acm-res-i1" class="font-bold text-themeText">14.8 A</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Power Factor ($\cos \phi$):</span>
+                        <span id="acm-res-pf" class="font-bold text-themeText">0.86 (Lagging)</span>
+                    </div>
+                    <div class="flex justify-between pt-1 border-t border-themeBorder/20">
+                        <span class="text-themeMuted">Overall Efficiency (&eta;):</span>
+                        <span id="acm-res-eff" class="font-bold text-green-400 text-sm">89.4%</span>
+                    </div>
                 </div>
             </div>
         </div>
-    
-    <!-- Theory & Math Section -->
+
+        <!-- Middle Row: Interactive Torque-Speed Curve Canvas -->
+        <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col shadow-inner">
+            <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2 mb-3">
+                <h4 class="text-xs font-bold text-themeText flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line text-themeAccent"></i> Complete Torque vs Speed Profile ($0 \le N_r \le N_s$)
+                </h4>
+                <div class="flex gap-4 text-[10px] font-bold">
+                    <span class="text-blue-400">● Developed Torque ($T_{em}$)</span>
+                    <span class="text-red-400">● Breakdown Torque ($T_{max}$)</span>
+                    <span class="text-green-400">● Operating Point</span>
+                </div>
+            </div>
+            <div class="relative w-full h-64 bg-themeBg border border-themeBorder/30 rounded overflow-hidden">
+                <canvas id="acm-torque-canvas" class="w-full h-full block"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Theory & Mathematical Foundation Section -->
     <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
-        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('acmotordynamics-theory').classList.toggle('hidden')">
-            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('ac-motor-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent flex items-center gap-2"><i class="fa-solid fa-calculator"></i>Induction Motor Equivalent Circuit & Torque Equations</h4>
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
-        <div id="acmotordynamics-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Theory:</strong> AC motor dynamics are governed by synchronous speed calculations \(N_s = \frac{120 f}{P}\) and slip \(S = \frac{N_s - N_r}{N_s}\). The tool calculates torque based on rotor power and mechanical speed. <a href='https://en.wikipedia.org/wiki/AC_motor' target='_blank' class='text-themeAccent underline'>Read more on Wikipedia</a></p>
+        <div id="ac-motor-theory" class="hidden text-themeMuted mt-3 space-y-2 text-xs leading-relaxed">
+            <p><strong>1. Synchronous Speed & Slip:</strong> $N_s = \frac{120 f}{P} \text{ RPM}, \quad s = \frac{N_s - N_r}{N_s}$</p>
+            <p><strong>2. Thevenin Equivalent Voltage & Impedance:</strong>
+                $$V_{th} = \frac{V_{LL}}{\sqrt{3}} \frac{X_m}{\sqrt{R_1^2 + (X_1 + X_m)^2}}, \quad R_{th} \approx R_1 \left(\frac{X_m}{X_1 + X_m}\right)^2, \quad X_{th} \approx X_1$$
+            </p>
+            <p><strong>3. Electromagnetic Torque ($T_{em}$):</strong>
+                $$T_{em} = \frac{3}{\omega_s} \frac{V_{th}^2 (R_2'/s)}{(R_{th} + R_2'/s)^2 + (X_{th} + X_2')^2}$$
+            </p>
+            <p><strong>4. Breakdown (Maximum) Torque & Slip:</strong>
+                $$s_{max} = \frac{R_2'}{\sqrt{R_{th}^2 + (X_{th} + X_2')^2}}, \quad T_{max} = \frac{3 V_{th}^2}{2 \omega_s \left[R_{th} + \sqrt{R_{th}^2 + (X_{th} + X_2')^2}\right]}$$
+            </p>
         </div>
     </div>
 </div>
+
+<script>
+function calcACMotor() {
+    const Vll = parseFloat(document.getElementById('acm-vll').value) || 400;
+    const freq = parseFloat(document.getElementById('acm-freq').value) || 50;
+    const poles = parseInt(document.getElementById('acm-poles').value) || 4;
+    const s_op = parseFloat(document.getElementById('acm-slip').value) || 0.04;
+
+    const R1 = parseFloat(document.getElementById('acm-r1').value) || 0.64;
+    const R2 = parseFloat(document.getElementById('acm-r2').value) || 0.33;
+    const X1 = parseFloat(document.getElementById('acm-x1').value) || 1.10;
+    const X2 = parseFloat(document.getElementById('acm-x2').value) || 1.10;
+    const Xm = parseFloat(document.getElementById('acm-xm').value) || 26.3;
+    const Prot = parseFloat(document.getElementById('acm-prot').value) || 250;
+
+    const Vph = Vll / Math.sqrt(3);
+    const Ns = (120 * freq) / poles;
+    const omega_s = (2 * Math.PI * Ns) / 60;
+    const Nr = (1 - s_op) * Ns;
+    const omega_r = (2 * Math.PI * Nr) / 60;
+
+    // Thevenin Equivalent
+    const Vth = Vph * (Xm / Math.sqrt(R1 * R1 + Math.pow(X1 + Xm, 2)));
+    const Rth = R1 * Math.pow(Xm / (X1 + Xm), 2);
+    const Xth = X1;
+
+    // Torque function
+    function getTorque(s) {
+        if (s <= 0.0001) return 0;
+        const num = 3 * Math.pow(Vth, 2) * (R2 / s);
+        const den = omega_s * (Math.pow(Rth + R2 / s, 2) + Math.pow(Xth + X2, 2));
+        return num / den;
+    }
+
+    const s_max = R2 / Math.sqrt(Rth * Rth + Math.pow(Xth + X2, 2));
+    const Tmax = (3 * Math.pow(Vth, 2)) / (2 * omega_s * (Rth + Math.sqrt(Rth * Rth + Math.pow(Xth + X2, 2))));
+    const Tstart = getTorque(1.0);
+    const Tem_op = getTorque(s_op);
+
+    // Power & Current calculations at operating point
+    const Pgap = Tem_op * omega_s;
+    const Pconv = (1 - s_op) * Pgap;
+    const Pshaft = Math.max(0, Pconv - Prot);
+
+    // Stator Current & Power Factor
+    const Z_rotor_eq = { re: R2 / s_op, im: X2 };
+    const Z_mag_eq = { re: 0, im: Xm };
+    // Z_parallel = (Z_rotor * Z_mag) / (Z_rotor + Z_mag)
+    const den_par = Math.pow(Z_rotor_eq.re, 2) + Math.pow(Z_rotor_eq.im + Z_mag_eq.im, 2);
+    const Z_par_re = (Z_rotor_eq.re * Math.pow(Xm, 2)) / den_par;
+    const Z_par_im = (Math.pow(Z_rotor_eq.re, 2) * Xm + Z_rotor_eq.im * (Z_rotor_eq.im + Xm) * Xm) / den_par;
+    
+    const Z_tot_re = R1 + Z_par_re;
+    const Z_tot_im = X1 + Z_par_im;
+    const Z_tot_mag = Math.sqrt(Z_tot_re * Z_tot_re + Z_tot_im * Z_tot_im);
+    const I1 = Vph / Z_tot_mag;
+    const pf = Z_tot_re / Z_tot_mag;
+    const Pin = Math.sqrt(3) * Vll * I1 * pf;
+    const eff = Pin > 0 ? (Pshaft / Pin) * 100 : 0;
+
+    // Update UI Stats
+    document.getElementById('acm-ns-disp').innerText = `${Math.round(Ns)} RPM`;
+    document.getElementById('acm-nr-disp').innerText = `${Math.round(Nr)} RPM`;
+    document.getElementById('acm-vf-disp').innerText = `${(Vll / freq).toFixed(2)} V/Hz`;
+
+    document.getElementById('acm-res-torque').innerText = `${Tem_op.toFixed(1)} N·m`;
+    document.getElementById('acm-res-pout').innerText = `${(Pshaft / 1e3).toFixed(2)} kW (${(Pshaft / 745.7).toFixed(2)} HP)`;
+    document.getElementById('acm-res-tmax').innerText = `${Tmax.toFixed(1)} N·m (s_max = ${s_max.toFixed(2)})`;
+    document.getElementById('acm-res-tstart').innerText = `${Tstart.toFixed(1)} N·m`;
+    document.getElementById('acm-res-i1').innerText = `${I1.toFixed(1)} A`;
+    document.getElementById('acm-res-pf').innerText = `${pf.toFixed(2)} (Lagging)`;
+    document.getElementById('acm-res-eff').innerText = `${eff.toFixed(1)}%`;
+
+    drawTorqueSpeedCurve(Ns, Nr, Tem_op, Tmax, s_max, Tstart, getTorque);
+}
+
+function drawTorqueSpeedCurve(Ns, Nr, Top, Tmax, s_max, Tstart, torqueFn) {
+    const canvas = document.getElementById('acm-torque-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const width = canvas.parentElement.clientWidth || 400;
+    const height = canvas.parentElement.clientHeight || 250;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
+
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x < width; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); }
+    for (let y = 0; y < height; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+
+    const yBaseline = height * 0.85;
+    const maxT = Math.max(50, Tmax * 1.25);
+
+    function toY(torque) {
+        return yBaseline - (torque / maxT) * (height * 0.75);
+    }
+    function toX(speedRPM) {
+        return (speedRPM / Ns) * (width * 0.88) + 25;
+    }
+
+    // Draw 0 Torque line
+    ctx.strokeStyle = '#64748b';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(toX(0), yBaseline);
+    ctx.lineTo(toX(Ns), yBaseline);
+    ctx.stroke();
+
+    // Plot Curve
+    ctx.strokeStyle = '#60a5fa';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    const steps = 150;
+    for (let i = 0; i <= steps; i++) {
+        const speed = (i / steps) * Ns;
+        const s = (Ns - speed) / Ns;
+        const T = torqueFn(s);
+        const px = toX(speed);
+        const py = toY(T);
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Breakdown Torque Marker (Red)
+    const N_tmax = (1 - s_max) * Ns;
+    const pxTmax = toX(N_tmax);
+    const pyTmax = toY(Tmax);
+    ctx.fillStyle = '#f87171';
+    ctx.beginPath(); ctx.arc(pxTmax, pyTmax, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.font = '10px monospace';
+    ctx.fillText(`T_max: ${Tmax.toFixed(0)} N·m`, pxTmax - 30, pyTmax - 8);
+
+    // Starting Torque Marker (Amber)
+    const pxStart = toX(0);
+    const pyStart = toY(Tstart);
+    ctx.fillStyle = '#fbbf24';
+    ctx.beginPath(); ctx.arc(pxStart, pyStart, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillText(`T_start: ${Tstart.toFixed(0)}`, pxStart + 6, pyStart - 4);
+
+    // Operating Point Marker (Green)
+    const pxOp = toX(Nr);
+    const pyOp = toY(Top);
+    ctx.fillStyle = '#4ade80';
+    ctx.beginPath(); ctx.arc(pxOp, pyOp, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillText(`Op: ${Top.toFixed(1)} N·m @ ${Math.round(Nr)} RPM`, pxOp - 40, pyOp - 10);
+}
+
+// Auto-run on load
+setTimeout(calcACMotor, 50);
+</script>

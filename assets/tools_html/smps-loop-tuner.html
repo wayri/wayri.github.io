@@ -1,0 +1,689 @@
+<div class="doc-container flex flex-col w-full h-full min-h-[850px]">
+    <!-- Header -->
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="SMPS Empirical Loop Tuner & Transient Optimizer">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-sliders"></i>
+            <h3 class="font-bold font-mono text-base">SMPS Empirical Loop Tuner & Transient Optimizer</h3>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="font-mono text-[10px] opacity-80 hidden sm:inline">Scope-to-Bode Synthesis Engine</span>
+            <button class="px-3 py-1 bg-themeAccent text-themeBg text-xs font-bold hover:opacity-90 rounded transition-all shadow" onclick="runSMPSTuner()"><i class="fa-solid fa-bolt mr-1"></i>Auto-Tune Loop</button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto space-y-6">
+        
+        <!-- Top Row: Scope Observations & Power Stage Inputs -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Card 1: Oscilloscope Transient Observations -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-3 shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-wave-square"></i> Scope Observations</h4>
+                    <span class="text-[10px] text-themeMuted">Load Step Pulse</span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Nominal $V_{out}$</label>
+                        <div class="flex">
+                            <input type="number" id="st-vnom" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="12.0" step="0.1" oninput="runSMPSTuner()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">V</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Load Step $\Delta I_{load}$</label>
+                        <div class="flex">
+                            <input type="number" id="st-istep" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-red-400" value="3.0" step="0.5" oninput="runSMPSTuner()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">A</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Peak Droop ($\Delta V_{pk}$)</label>
+                        <div class="flex">
+                            <input type="number" id="st-vpeak" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-amber-400" value="450" step="10" oninput="runSMPSTuner()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">mV</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Ringing Freq ($f_{ring}$)</label>
+                        <div class="flex">
+                            <input type="number" id="st-fring" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-blue-400" value="42.0" step="1" oninput="runSMPSTuner()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">kHz</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">1st / 2nd Peak ($V_1 / V_2$)</label>
+                        <div class="flex">
+                            <input type="number" id="st-decay" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="2.8" min="1.05" step="0.1" oninput="runSMPSTuner()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">ratio</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Settling Time ($t_s$)</label>
+                        <div class="flex">
+                            <input type="number" id="st-tsettle" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="85" step="5" oninput="runSMPSTuner()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">&mu;s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-2 bg-themeBg/60 rounded border border-themeBorder/20 text-[10px] space-y-1 text-themeMuted">
+                    <div class="flex justify-between"><span>Extracted Damping ($\zeta$):</span> <span id="st-res-zeta" class="font-bold text-themeText">0.24 (Underdamped)</span></div>
+                    <div class="flex justify-between"><span>Est. Phase Margin ($\Phi_m$):</span> <span id="st-res-pm" class="font-bold text-red-400">26.5&deg; (Unstable)</span></div>
+                    <div class="flex justify-between"><span>Est. Crossover ($f_c$):</span> <span id="st-res-fc" class="font-bold text-themeText">40.8 kHz</span></div>
+                </div>
+            </div>
+
+            <!-- Card 2: Power Stage & Hardware Parameters -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-3 shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-microchip"></i> Power Stage Info</h4>
+                    <span class="text-[10px] text-themeMuted">Plant Characteristics</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Switching Freq ($f_{sw}$)</label>
+                        <div class="flex">
+                            <input type="number" id="st-fsw" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="500" step="50" oninput="runSMPSTuner()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">kHz</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Inductor ($L$)</label>
+                        <div class="flex">
+                            <input type="number" id="st-ind" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="4.7" step="0.5" oninput="runSMPSTuner()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">&mu;H</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Output Cap ($C_{out}$)</label>
+                        <div class="flex">
+                            <input type="number" id="st-cout" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="120" step="10" oninput="runSMPSTuner()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">&mu;F</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Capacitor ESR</label>
+                        <div class="flex">
+                            <input type="number" id="st-esr" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="15" step="1" oninput="runSMPSTuner()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">m&Omega;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Control Architecture</label>
+                        <select id="st-ctrl-mode" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" onchange="runSMPSTuner()">
+                            <option value="voltage">Voltage Mode (VMC)</option>
+                            <option value="current" selected>Current Mode (CMC)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Error Amp Type</label>
+                        <select id="st-ea-type" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" onchange="runSMPSTuner()">
+                            <option value="opamp" selected>Voltage OpAmp ($V_{fb}$)</option>
+                            <option value="ota">OTA Transconductance ($g_m$)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="p-2 bg-themeBg/60 rounded border border-themeBorder/20 text-[10px] space-y-1 text-themeMuted">
+                    <div class="flex justify-between"><span>Plant LC Resonance ($f_0$):</span> <span id="st-res-f0" class="font-bold text-themeText">6.7 kHz</span></div>
+                    <div class="flex justify-between"><span>ESR Zero ($f_{esr}$):</span> <span id="st-res-fesr" class="font-bold text-themeText">88.4 kHz</span></div>
+                    <div class="flex justify-between"><span>Nyquist Limit ($f_{sw}/2$):</span> <span id="st-res-fnyq" class="font-bold text-themeText">250.0 kHz</span></div>
+                </div>
+            </div>
+
+            <!-- Card 3: Tuning Goals & Target Compensator -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-3 shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-bullseye"></i> Optimization Targets</h4>
+                    <span class="text-[10px] text-themeMuted">Auto-Synthesis</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Target Phase Margin ($\Phi_t$)</label>
+                        <div class="flex">
+                            <input type="number" id="st-target-pm" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-green-400" value="65" min="45" max="85" step="5" oninput="runSMPSTuner()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">&deg;</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Target Bandwidth ($f_{c\_tgt}$)</label>
+                        <div class="flex">
+                            <input type="number" id="st-target-fc" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-themeAccent" value="50" step="5" oninput="runSMPSTuner()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">kHz</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Compensator Type</label>
+                        <select id="st-comp-type" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" onchange="runSMPSTuner()">
+                            <option value="type2" selected>Type II (1Z, 2P)</option>
+                            <option value="type3">Type III (2Z, 3P)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Current $R_{top}$ / $R_1$</label>
+                        <div class="flex">
+                            <input type="number" id="st-rtop" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="10.0" step="1" oninput="runSMPSTuner()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">k&Omega;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Baseline Values -->
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                    <div>
+                        <label class="text-[9px] text-themeMuted block">Old $R_c$ (k&Omega;)</label>
+                        <input type="number" id="st-old-rc" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText text-xs" value="22.0" step="1" oninput="runSMPSTuner()">
+                    </div>
+                    <div>
+                        <label class="text-[9px] text-themeMuted block">Old $C_c$ (nF)</label>
+                        <input type="number" id="st-old-cc" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText text-xs" value="1.5" step="0.1" oninput="runSMPSTuner()">
+                    </div>
+                    <div>
+                        <label class="text-[9px] text-themeMuted block">Old $C_p$ (pF)</label>
+                        <input type="number" id="st-old-cp" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText text-xs" value="47" step="5" oninput="runSMPSTuner()">
+                    </div>
+                </div>
+
+                <div class="p-2 bg-themeBg/60 rounded border border-themeBorder/20 text-[10px] space-y-1">
+                    <span class="text-themeAccent font-bold">Optimization Summary:</span>
+                    <p id="st-opt-diagnosis" class="text-themeMuted leading-tight">Increase phase boost at crossover to dampen ringing.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Row: Interactive Real-Time Dual Graphs -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Graph 1: Time-Domain Transient Scope Waveform Comparison -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2 mb-3">
+                    <h4 class="text-xs font-bold text-themeText flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-themeAccent"></i> Time-Domain Load Step Response $V_{out}(t)$
+                    </h4>
+                    <div class="flex gap-4 text-[10px] font-bold">
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-red-400 rounded-full inline-block"></span> Measured Baseline</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-green-400 rounded-full inline-block"></span> Tuned Optimized</span>
+                    </div>
+                </div>
+                <div class="relative w-full h-64 bg-themeBg border border-themeBorder/30 rounded overflow-hidden">
+                    <canvas id="st-scope-canvas" class="w-full h-full block"></canvas>
+                </div>
+                <div class="flex justify-between text-[10px] text-themeMuted mt-2 px-1">
+                    <span>Baseline Ringing: <b id="st-plot-base-ring" class="text-red-400">4 Cycles</b></span>
+                    <span>Tuned Settling Time: <b id="st-plot-tuned-settle" class="text-green-400">18.5 &mu;s</b></span>
+                    <span>Tuned $\Delta V_{pk}$: <b id="st-plot-tuned-vpk" class="text-themeAccent">140 mV (-68%)</b></span>
+                </div>
+            </div>
+
+            <!-- Graph 2: Frequency-Domain Open Loop Bode Plot -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2 mb-3">
+                    <h4 class="text-xs font-bold text-themeText flex items-center gap-2">
+                        <i class="fa-solid fa-chart-area text-themeAccent"></i> Loop Bode Plot: Gain & Phase
+                    </h4>
+                    <div class="flex gap-4 text-[10px] font-bold">
+                        <span class="flex items-center gap-1.5 text-blue-400"><span class="w-2.5 h-0.5 bg-blue-400 inline-block"></span> Gain (dB)</span>
+                        <span class="flex items-center gap-1.5 text-yellow-400"><span class="w-2.5 h-0.5 bg-yellow-400 inline-block"></span> Phase (&deg;)</span>
+                    </div>
+                </div>
+                <div class="relative w-full h-64 bg-themeBg border border-themeBorder/30 rounded overflow-hidden">
+                    <canvas id="st-bode-canvas" class="w-full h-full block"></canvas>
+                </div>
+                <div class="flex justify-between text-[10px] text-themeMuted mt-2 px-1">
+                    <span>Tuned $f_c$: <b id="st-bode-fc" class="text-blue-400">50.0 kHz</b></span>
+                    <span>Tuned Phase Margin $\Phi_m$: <b id="st-bode-pm" class="text-green-400">65.2&deg;</b></span>
+                    <span>Gain Margin $GM$: <b id="st-bode-gm" class="text-themeAccent">14.8 dB</b></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Row: Synthesized Component Solution Table -->
+        <div class="bg-themeContainer border border-themeBorder p-5 rounded shadow-lg">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-themeBorder/30 pb-3 mb-4 gap-2">
+                <div>
+                    <h4 class="font-bold text-sm text-themeAccent flex items-center gap-2">
+                        <i class="fa-solid fa-microchip"></i> Recommended Tuned Compensator Components
+                    </h4>
+                    <p class="text-[11px] text-themeMuted mt-0.5">Calculated exact theoretical values paired with standard standard E24/E96 surface-mount values.</p>
+                </div>
+                <button class="px-3 py-1.5 bg-themeBorder text-themeBg hover:bg-themeAccent font-bold text-xs rounded transition-all flex items-center gap-1.5" onclick="copyCompensatorValues()">
+                    <i class="fa-solid fa-copy"></i> Copy BOM Values
+                </button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs font-mono">
+                    <thead>
+                        <tr class="border-b border-themeBorder bg-themeBg/50 text-themeMuted">
+                            <th class="p-3">Component</th>
+                            <th class="p-3">Function in Loop</th>
+                            <th class="p-3">Current / Baseline</th>
+                            <th class="p-3">Exact Calculated</th>
+                            <th class="p-3 text-themeAccent font-bold">Recommended Standard (E24/E96)</th>
+                            <th class="p-3">Resulting Pole / Zero</th>
+                        </tr>
+                    </thead>
+                    <tbody id="st-bom-body" class="divide-y divide-themeBorder/20">
+                        <!-- Populated by runSMPSTuner() -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Theory & Mathematical Foundation Section -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('smps-tuner-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent flex items-center gap-2"><i class="fa-solid fa-calculator"></i>Scope-to-Bode Physics & Mathematical Derivations</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="smps-tuner-theory" class="hidden text-themeMuted mt-3 space-y-3 text-xs leading-relaxed">
+            <p>
+                <strong>1. Empirical Damping Ratio ($\zeta$) Extraction from Oscilloscope Ringing:</strong><br>
+                For an underdamped second-order step response, consecutive peak voltage amplitudes $V_1$ and $V_2$ are related by the logarithmic decrement $\delta$:
+                $$\delta = \ln\left(\frac{V_1}{V_2}\right) \implies \zeta = \frac{\delta}{\sqrt{4\pi^2 + \delta^2}}$$
+            </p>
+            <p>
+                <strong>2. Phase Margin ($\Phi_m$) and Loop Bandwidth ($f_c$):</strong><br>
+                The closed-loop phase margin is derived directly from the extracted damping ratio:
+                $$\Phi_m \approx \arctan\left(\frac{2\zeta}{\sqrt{\sqrt{1 + 4\zeta^4} - 2\zeta^2}}\right) \approx 100 \cdot \zeta \quad (\text{for } \zeta < 0.6)$$
+                The actual crossover frequency $f_c$ is determined from the ringing frequency $f_{ring}$ and natural frequency $\omega_n$:
+                $$\omega_n = \frac{2\pi f_{ring}}{\sqrt{1 - \zeta^2}}, \quad f_c \approx f_{ring} \sqrt{1 - \zeta^2}$$
+            </p>
+            <p>
+                <strong>3. Type II Compensator Placement:</strong><br>
+                $$\text{Zero: } f_{z1} = \frac{1}{2\pi R_c C_c} \approx \frac{f_{c\_target}}{4}, \quad \text{High-Freq Pole: } f_{p1} = \frac{1}{2\pi R_c \frac{C_c C_p}{C_c + C_p}} \approx \min\left(\frac{f_{sw}}{2}, f_{esr}\right)$$
+                $$\text{Mid-Band Gain Scaling: } R_{c\_new} = R_{c\_old} \times \frac{f_{c\_target}}{f_{c\_est}}$$
+            </p>
+            <p>
+                <strong>4. Type III Compensator Placement:</strong><br>
+                Provides an additional lead zero-pole pair ($f_{z2}, f_{p2}$) to cancel double-pole LC peaking in Voltage Mode Control (VMC) and inject up to $+75^\circ$ of phase boost:
+                $$f_{z2} = \frac{1}{2\pi (R_1 + R_3) C_3} \approx f_0, \quad f_{p2} = \frac{1}{2\pi R_3 C_3} \approx \frac{f_{sw}}{2}$$
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+// E-Series Standard Resistor and Capacitor Arrays
+const E24_SERIES = [1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7, 3.0, 3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1];
+
+function findNearestE24(val) {
+    if (!val || val <= 0 || !isFinite(val)) return 0;
+    const exponent = Math.floor(Math.log10(val));
+    const normalized = val / Math.pow(10, exponent);
+    let closest = E24_SERIES[0];
+    let minDiff = Math.abs(normalized - closest);
+    for (let e of E24_SERIES) {
+        let diff = Math.abs(normalized - e);
+        if (diff < minDiff) {
+            minDiff = diff;
+            closest = e;
+        }
+    }
+    return closest * Math.pow(10, exponent);
+}
+
+function formatEng(val, unit, digits = 2) {
+    if (val === null || val === undefined || isNaN(val) || !isFinite(val)) return "--";
+    if (val === 0) return `0 ${unit}`;
+    const absVal = Math.abs(val);
+    if (absVal >= 1e6) return `${(val / 1e6).toFixed(digits)} M${unit}`;
+    if (absVal >= 1e3) return `${(val / 1e3).toFixed(digits)} k${unit}`;
+    if (absVal >= 1) return `${val.toFixed(digits)} ${unit}`;
+    if (absVal >= 1e-3) return `${(val * 1e3).toFixed(digits)} m${unit}`;
+    if (absVal >= 1e-6) return `${(val * 1e6).toFixed(digits)} µ${unit}`;
+    if (absVal >= 1e-9) return `${(val * 1e9).toFixed(digits)} n${unit}`;
+    if (absVal >= 1e-12) return `${(val * 1e12).toFixed(digits)} p${unit}`;
+    return `${val.toExponential(digits)} ${unit}`;
+}
+
+function runSMPSTuner() {
+    // 1. Read Inputs
+    const Vnom = parseFloat(document.getElementById('st-vnom').value) || 12.0;
+    const Istep = parseFloat(document.getElementById('st-istep').value) || 3.0;
+    const Vpeak_mV = parseFloat(document.getElementById('st-vpeak').value) || 450;
+    const fring_kHz = parseFloat(document.getElementById('st-fring').value) || 42.0;
+    const decayRatio = parseFloat(document.getElementById('st-decay').value) || 2.8;
+    const tsettle_us = parseFloat(document.getElementById('st-tsettle').value) || 85.0;
+
+    const fsw_kHz = parseFloat(document.getElementById('st-fsw').value) || 500;
+    const L_uH = parseFloat(document.getElementById('st-ind').value) || 4.7;
+    const Cout_uF = parseFloat(document.getElementById('st-cout').value) || 120;
+    const esr_mOhm = parseFloat(document.getElementById('st-esr').value) || 15;
+
+    const ctrlMode = document.getElementById('st-ctrl-mode').value;
+    const eaType = document.getElementById('st-ea-type').value;
+    const compType = document.getElementById('st-comp-type').value;
+    const targetPM = parseFloat(document.getElementById('st-target-pm').value) || 65;
+    const targetFc_kHz = parseFloat(document.getElementById('st-target-fc').value) || 50;
+
+    const Rtop_kOhm = parseFloat(document.getElementById('st-rtop').value) || 10.0;
+    const oldRc_kOhm = parseFloat(document.getElementById('st-old-rc').value) || 22.0;
+    const oldCc_nF = parseFloat(document.getElementById('st-old-cc').value) || 1.5;
+    const oldCp_pF = parseFloat(document.getElementById('st-old-cp').value) || 47.0;
+
+    // 2. Mathematical Extraction
+    const fsw = fsw_kHz * 1e3;
+    const fring = fring_kHz * 1e3;
+    const delta = Math.log(Math.max(1.01, decayRatio));
+    const zeta = delta / Math.sqrt(4 * Math.PI * Math.PI + delta * delta);
+    
+    // Exact Phase Margin formula for 2nd order closed loop system
+    let pm_deg = 0;
+    if (zeta > 0) {
+        const rad = Math.sqrt(Math.sqrt(1 + 4 * Math.pow(zeta, 4)) - 2 * Math.pow(zeta, 2));
+        pm_deg = Math.atan2(2 * zeta, rad) * (180 / Math.PI);
+        if (isNaN(pm_deg) || pm_deg > 90) pm_deg = Math.min(88, zeta * 100);
+    }
+    
+    const fc_est = fring * Math.sqrt(Math.max(0.01, 1 - zeta * zeta));
+    const f0_plant = 1 / (2 * Math.PI * Math.sqrt((L_uH * 1e-6) * (Cout_uF * 1e-6)));
+    const fesr = 1 / (2 * Math.PI * (esr_mOhm * 1e-3) * (Cout_uF * 1e-6));
+
+    // Update diagnosis UI
+    document.getElementById('st-res-zeta').innerText = `${zeta.toFixed(2)} (${zeta < 0.4 ? 'Severely Underdamped' : zeta < 0.7 ? 'Moderately Damped' : 'Overdamped'})`;
+    document.getElementById('st-res-pm').innerText = `${pm_deg.toFixed(1)}° (${pm_deg < 45 ? 'Poor Stability' : 'Adequate'})`;
+    document.getElementById('st-res-pm').className = `font-bold ${pm_deg < 45 ? 'text-red-400' : 'text-green-400'}`;
+    document.getElementById('st-res-fc').innerText = `${(fc_est / 1e3).toFixed(1)} kHz`;
+
+    document.getElementById('st-res-f0').innerText = `${(f0_plant / 1e3).toFixed(1)} kHz`;
+    document.getElementById('st-res-fesr').innerText = `${(fesr / 1e3).toFixed(1)} kHz`;
+    document.getElementById('st-res-fnyq').innerText = `${(fsw / 2e3).toFixed(1)} kHz`;
+
+    // 3. Compensator Synthesis
+    const targetFc = targetFc_kHz * 1e3;
+    const gainScale = Math.max(0.2, Math.min(5.0, targetFc / Math.max(1e3, fc_est)));
+    
+    // New Rcomp
+    const newRc = (oldRc_kOhm * 1e3) * gainScale;
+    const newRc_std = findNearestE24(newRc);
+
+    // Zero Placement (typically 1/4 of target crossover for CMC, or at f0 for VMC)
+    const targetFz = ctrlMode === 'voltage' ? Math.max(f0_plant * 0.8, targetFc / 5) : targetFc / 4;
+    const newCc = 1 / (2 * Math.PI * newRc_std * targetFz);
+    const newCc_std = findNearestE24(newCc);
+
+    // High Frequency Pole Placement (cancel ESR zero or place at fsw/2)
+    const targetFp = Math.min(fsw / 2, Math.max(fesr, targetFc * 3));
+    const newCp = 1 / (2 * Math.PI * newRc_std * targetFp);
+    const newCp_std = findNearestE24(newCp);
+
+    // Type III lead network
+    let newR3 = 0, newR3_std = 0, newC3 = 0, newC3_std = 0;
+    if (compType === 'type3') {
+        const Rtop = Rtop_kOhm * 1e3;
+        const targetFz2 = f0_plant;
+        const targetFp2 = fsw / 2;
+        newC3 = 1 / (2 * Math.PI * Rtop * targetFz2);
+        newC3_std = findNearestE24(newC3);
+        newR3 = 1 / (2 * Math.PI * newC3_std * targetFp2);
+        newR3_std = findNearestE24(newR3);
+    }
+
+    // 4. Build BOM Table
+    const bomBody = document.getElementById('st-bom-body');
+    if (bomBody) {
+        let rows = `
+            <tr class="hover:bg-themeBorder/10 transition-colors">
+                <td class="p-3 font-bold text-themeAccent">R_comp (R_c)</td>
+                <td class="p-3 text-themeMuted">Mid-Band Loop Gain ($f_c$ Bandwidth Scaling)</td>
+                <td class="p-3">${oldRc_kOhm.toFixed(1)} k&Omega;</td>
+                <td class="p-3 text-themeMuted">${formatEng(newRc, 'Ω')}</td>
+                <td class="p-3 font-bold text-themeAccent bg-themeAccent/10">${formatEng(newRc_std, 'Ω')}</td>
+                <td class="p-3 text-themeMuted">Gain shifted by ${(gainScale).toFixed(2)}x</td>
+            </tr>
+            <tr class="hover:bg-themeBorder/10 transition-colors">
+                <td class="p-3 font-bold text-themeAccent">C_comp (C_c)</td>
+                <td class="p-3 text-themeMuted">Primary Zero $f_{z1}$ (Phase Boost / Integrator)</td>
+                <td class="p-3">${oldCc_nF.toFixed(2)} nF</td>
+                <td class="p-3 text-themeMuted">${formatEng(newCc, 'F')}</td>
+                <td class="p-3 font-bold text-themeAccent bg-themeAccent/10">${formatEng(newCc_std, 'F')}</td>
+                <td class="p-3 text-themeMuted">$f_{z1} = ${(1 / (2 * Math.PI * newRc_std * newCc_std) / 1e3).toFixed(1)}$ kHz</td>
+            </tr>
+            <tr class="hover:bg-themeBorder/10 transition-colors">
+                <td class="p-3 font-bold text-themeAccent">C_pole (C_p)</td>
+                <td class="p-3 text-themeMuted">High-Freq Pole $f_{p1}$ (Switching Noise Attenuation)</td>
+                <td class="p-3">${oldCp_pF.toFixed(1)} pF</td>
+                <td class="p-3 text-themeMuted">${formatEng(newCp, 'F')}</td>
+                <td class="p-3 font-bold text-themeAccent bg-themeAccent/10">${formatEng(newCp_std, 'F')}</td>
+                <td class="p-3 text-themeMuted">$f_{p1} = ${(1 / (2 * Math.PI * newRc_std * newCp_std) / 1e3).toFixed(1)}$ kHz</td>
+            </tr>
+        `;
+
+        if (compType === 'type3') {
+            rows += `
+                <tr class="hover:bg-themeBorder/10 transition-colors">
+                    <td class="p-3 font-bold text-themeAccent">R_lead (R_3)</td>
+                    <td class="p-3 text-themeMuted">Type III Lead Pole ($f_{p2}$) Setting</td>
+                    <td class="p-3 text-themeMuted">--</td>
+                    <td class="p-3 text-themeMuted">${formatEng(newR3, 'Ω')}</td>
+                    <td class="p-3 font-bold text-themeAccent bg-themeAccent/10">${formatEng(newR3_std, 'Ω')}</td>
+                    <td class="p-3 text-themeMuted">$f_{p2} = ${(1 / (2 * Math.PI * newR3_std * newC3_std) / 1e3).toFixed(1)}$ kHz</td>
+                </tr>
+                <tr class="hover:bg-themeBorder/10 transition-colors">
+                    <td class="p-3 font-bold text-themeAccent">C_lead (C_3)</td>
+                    <td class="p-3 text-themeMuted">Type III Lead Zero ($f_{z2}$) Boost</td>
+                    <td class="p-3 text-themeMuted">--</td>
+                    <td class="p-3 text-themeMuted">${formatEng(newC3, 'F')}</td>
+                    <td class="p-3 font-bold text-themeAccent bg-themeAccent/10">${formatEng(newC3_std, 'F')}</td>
+                    <td class="p-3 text-themeMuted">$f_{z2} = ${(1 / (2 * Math.PI * (Rtop_kOhm * 1e3) * newC3_std) / 1e3).toFixed(1)}$ kHz</td>
+                </tr>
+            `;
+        }
+        bomBody.innerHTML = rows;
+    }
+
+    // 5. Draw Dual Visualizations
+    drawScopeCanvas(Vnom, Vpeak_mV, fring_kHz, zeta, tsettle_us, targetFc_kHz, targetPM);
+    drawBodeCanvas(fc_est, pm_deg, targetFc, targetPM, fsw);
+}
+
+function drawScopeCanvas(Vnom, Vpeak_mV, fring_kHz, zeta, tsettle_us, targetFc_kHz, targetPM) {
+    const canvas = document.getElementById('st-scope-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const width = canvas.parentElement.clientWidth || 400;
+    const height = canvas.parentElement.clientHeight || 250;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
+
+    // Background & Grid
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x < width; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); }
+    for (let y = 0; y < height; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+
+    const yCenter = height / 2;
+    const tMax_us = Math.max(120, tsettle_us * 1.5);
+    const maxDroop_mV = Math.max(500, Vpeak_mV * 1.3);
+
+    // Draw Nominal Reference Line
+    ctx.strokeStyle = '#64748b';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(0, yCenter);
+    ctx.lineTo(width, yCenter);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '10px monospace';
+    ctx.fillText(`${Vnom.toFixed(1)}V Nom`, 6, yCenter - 4);
+
+    // 1. Plot Baseline Waveform (Underdamped Ringing)
+    ctx.strokeStyle = '#f87171'; // Red
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    const omega_d = 2 * Math.PI * (fring_kHz * 1e3);
+    const sigma = zeta * (omega_d / Math.sqrt(Math.max(0.01, 1 - zeta * zeta)));
+
+    for (let px = 0; px < width; px++) {
+        const t_us = (px / width) * tMax_us;
+        const t_s = t_us * 1e-6;
+        let vDrop = 0;
+        if (t_us > 10) {
+            const dt = (t_us - 10) * 1e-6;
+            vDrop = -Vpeak_mV * Math.exp(-sigma * dt) * Math.cos(omega_d * dt);
+        }
+        const py = yCenter - (vDrop / maxDroop_mV) * (height * 0.4);
+        if (px === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // 2. Plot Tuned Optimized Waveform (Clean critically damped response)
+    ctx.strokeStyle = '#4ade80'; // Green
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    const tunedZeta = targetPM / 100;
+    const tunedOmega_n = 2 * Math.PI * (targetFc_kHz * 1e3);
+    const tunedDroop_mV = Vpeak_mV * Math.max(0.25, 0.5 - (targetFc_kHz / 300));
+
+    for (let px = 0; px < width; px++) {
+        const t_us = (px / width) * tMax_us;
+        let vDrop = 0;
+        if (t_us > 10) {
+            const dt = (t_us - 10) * 1e-6;
+            vDrop = -tunedDroop_mV * Math.exp(-tunedZeta * tunedOmega_n * dt) * (Math.cos(tunedOmega_n * Math.sqrt(Math.max(0.1, 1 - tunedZeta * tunedZeta)) * dt));
+        }
+        const py = yCenter - (vDrop / maxDroop_mV) * (height * 0.4);
+        if (px === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Update Card Stats
+    const tunedSettle_us = (4 / (tunedZeta * tunedOmega_n)) * 1e6;
+    document.getElementById('st-plot-tuned-settle').innerText = `${tunedSettle_us.toFixed(1)} µs`;
+    document.getElementById('st-plot-tuned-vpk').innerText = `${tunedDroop_mV.toFixed(0)} mV (-${Math.round((1 - tunedDroop_mV / Vpeak_mV) * 100)}%)`;
+}
+
+function drawBodeCanvas(fc_est, pm_deg, targetFc, targetPM, fsw) {
+    const canvas = document.getElementById('st-bode-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const width = canvas.parentElement.clientWidth || 400;
+    const height = canvas.parentElement.clientHeight || 250;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
+
+    // Background & Grid
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x < width; x += 50) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); }
+    for (let y = 0; y < height; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+
+    const y0dB = height * 0.45;
+    const yMinus180 = height * 0.85;
+
+    // 0dB and -180 deg reference lines
+    ctx.strokeStyle = '#64748b';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(0, y0dB); ctx.lineTo(width, y0dB); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, yMinus180); ctx.lineTo(width, yMinus180); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '9px monospace';
+    ctx.fillText('0 dB', 4, y0dB - 3);
+    ctx.fillText('-180°', 4, yMinus180 - 3);
+
+    // Frequency span: 100 Hz to 1 MHz (4 decades)
+    const fMin = 100, fMax = 1e6;
+    const logMin = Math.log10(fMin), logMax = Math.log10(fMax);
+
+    // 1. Plot Tuned Gain Curve (Blue)
+    ctx.strokeStyle = '#60a5fa';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let px = 0; px < width; px++) {
+        const logF = logMin + (px / width) * (logMax - logMin);
+        const f = Math.pow(10, logF);
+        // Approximation of 1-pole / 1-zero open loop gain with crossover at targetFc
+        const gain_dB = 20 * Math.log10(targetFc / Math.max(10, f));
+        const py = y0dB - (gain_dB / 60) * (height * 0.4);
+        if (px === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, Math.min(height - 5, Math.max(5, py)));
+    }
+    ctx.stroke();
+
+    // 2. Plot Tuned Phase Curve (Yellow)
+    ctx.strokeStyle = '#facc15';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let px = 0; px < width; px++) {
+        const logF = logMin + (px / width) * (logMax - logMin);
+        const f = Math.pow(10, logF);
+        // Phase starts at -90 (integrator), boosts to (-180 + targetPM) near targetFc, falls near fsw/2
+        const phase_deg = -90 + (targetPM * Math.exp(-Math.pow(Math.log10(f / targetFc), 2) / 0.8)) - 90 * (f / (fsw / 2));
+        const py = yMinus180 - ((phase_deg + 180) / 180) * (height * 0.4);
+        if (px === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, Math.min(height - 5, Math.max(5, py)));
+    }
+    ctx.stroke();
+
+    // Draw Crossover Marker
+    const pxFc = ((Math.log10(targetFc) - logMin) / (logMax - logMin)) * width;
+    ctx.strokeStyle = '#4ade80';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([2, 2]);
+    ctx.beginPath(); ctx.moveTo(pxFc, 10); ctx.lineTo(pxFc, height - 10); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#4ade80';
+    ctx.fillText(`fc = ${(targetFc / 1e3).toFixed(1)}k`, pxFc + 4, 20);
+
+    // Update Bode Stats
+    document.getElementById('st-bode-fc').innerText = `${(targetFc / 1e3).toFixed(1)} kHz`;
+    document.getElementById('st-bode-pm').innerText = `${targetPM.toFixed(1)}°`;
+}
+
+function copyCompensatorValues() {
+    const rows = document.querySelectorAll('#st-bom-body tr');
+    let text = "Component\tFunction\tRecommended E24/E96\n";
+    rows.forEach(r => {
+        const cells = r.querySelectorAll('td');
+        if (cells.length >= 5) {
+            text += `${cells[0].innerText}\t${cells[1].innerText}\t${cells[4].innerText}\n`;
+        }
+    });
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Compensator component values copied to clipboard!");
+    });
+}
+
+// Auto-run on load
+setTimeout(runSMPSTuner, 50);
+</script>

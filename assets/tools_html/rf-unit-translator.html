@@ -1,167 +1,191 @@
-<div class="doc-container flex flex-col w-full h-full min-h-[500px]">
+<div class="doc-container flex flex-col w-full h-full min-h-[600px]">
+    <!-- Header -->
     <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="dB & RF Unit Translator">
         <div class="flex items-center gap-2"><i class="fa-solid fa-tower-cell"></i><h3 class="font-bold font-mono">dB & RF Unit Translator</h3></div>
-        <span class="font-mono text-[10px] opacity-70">Power & Voltage Conversions</span>
+        <span class="font-mono text-[10px] opacity-70">Power, Voltage & Field Strength Conversions</span>
     </div>
     
-    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
             
             <!-- Parameters -->
             <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col">
-                <h4 class="text-xs font-bold text-themeMuted mb-2 border-b border-themeBorder/20 pb-1">INPUT</h4>
+                <h4 class="text-xs font-bold text-themeAccent mb-2 border-b border-themeBorder/20 pb-1 flex items-center gap-1.5"><i class="fa-solid fa-input-numeric"></i> INPUT SPECIFICATION</h4>
                 
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2 flex items-end gap-2">
                         <div class="flex-grow">
-                            <label class="whitespace-nowrap text-[10px] mb-1 block">Value</label>
+                            <label class="whitespace-nowrap text-[10px] text-themeMuted mb-1 block">Value</label>
                             <input type="number" id="db-val" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-themeAccent" value="0" step="1" oninput="updateDbCalc()">
                         </div>
                         <div class="w-1/3">
-                            <label class="whitespace-nowrap text-[10px] mb-1 block">Unit</label>
-                            <select id="db-unit" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText outline-none" onchange="updateDbCalc()">
-                                <option value="dBm" selected>dBm</option>
-                                <option value="dBW">dBW</option>
-                                <option value="dBV">dBV</option>
-                                <option value="dBu">dBu</option>
+                            <label class="whitespace-nowrap text-[10px] text-themeMuted mb-1 block">Unit</label>
+                            <select id="db-unit" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-xs outline-none" onchange="updateDbCalc()">
+                                <option value="dBm" selected>dBm (mW ref)</option>
+                                <option value="dBW">dBW (W ref)</option>
+                                <option value="dBuV">dBµV (µV ref)</option>
+                                <option value="dBV">dBV (1V ref)</option>
+                                <option value="dBu">dBu (0.775V ref)</option>
                                 <option value="W">Watts (W)</option>
                                 <option value="mW">milliWatts (mW)</option>
+                                <option value="uW">microWatts (µW)</option>
                                 <option value="Vrms">V (RMS)</option>
+                                <option value="mVrms">mV (RMS)</option>
                                 <option value="Vpk">V (Peak)</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <h4 class="text-xs font-bold text-themeMuted mt-4 mb-2 border-b border-themeBorder/20 pb-1">SYSTEM</h4>
+                <h4 class="text-xs font-bold text-themeAccent mt-4 mb-2 border-b border-themeBorder/20 pb-1 flex items-center gap-1.5"><i class="fa-solid fa-gear"></i> SYSTEM IMPEDANCE</h4>
                 <div>
-                    <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap">Characteristic Impedance ($Z_0$)</span></div>
+                    <div class="flex justify-between text-[10px] mb-1"><span class="whitespace-nowrap text-themeMuted">Characteristic Impedance ($Z_0$)</span></div>
                     <div class="flex">
-                        <input type="number" id="db-z0" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="50" min="1" step="1" oninput="updateDbCalc()">
-                        <span class="bg-themeBorder text-themeBg p-1.5 text-[10px] flex items-center">&Omega;</span>
+                        <input type="number" id="db-z0" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="50" min="1" step="1" oninput="updateDbCalc()">
+                        <span class="bg-themeBorder text-themeBg p-1.5 text-xs font-bold flex items-center">&Omega;</span>
                     </div>
-                    <div class="flex gap-2 mt-2">
-                        <button class="flex-1 bg-themeBg border border-themeBorder hover:bg-themeBorder hover:text-themeBg text-[10px] py-1" onclick="document.getElementById('db-z0').value=50; updateDbCalc()">50 &Omega;</button>
-                        <button class="flex-1 bg-themeBg border border-themeBorder hover:bg-themeBorder hover:text-themeBg text-[10px] py-1" onclick="document.getElementById('db-z0').value=75; updateDbCalc()">75 &Omega;</button>
-                        <button class="flex-1 bg-themeBg border border-themeBorder hover:bg-themeBorder hover:text-themeBg text-[10px] py-1" onclick="document.getElementById('db-z0').value=600; updateDbCalc()">600 &Omega;</button>
+                    <div class="grid grid-cols-4 gap-2 mt-2">
+                        <button class="bg-themeBg border border-themeBorder hover:bg-themeAccent hover:text-themeBg text-[10px] font-bold py-1 rounded transition-colors" onclick="document.getElementById('db-z0').value=50; updateDbCalc()">50 &Omega;</button>
+                        <button class="bg-themeBg border border-themeBorder hover:bg-themeAccent hover:text-themeBg text-[10px] font-bold py-1 rounded transition-colors" onclick="document.getElementById('db-z0').value=75; updateDbCalc()">75 &Omega;</button>
+                        <button class="bg-themeBg border border-themeBorder hover:bg-themeAccent hover:text-themeBg text-[10px] font-bold py-1 rounded transition-colors" onclick="document.getElementById('db-z0').value=600; updateDbCalc()">600 &Omega;</button>
+                        <button class="bg-themeBg border border-themeBorder hover:bg-themeAccent hover:text-themeBg text-[10px] font-bold py-1 rounded transition-colors" onclick="document.getElementById('db-z0').value=377; updateDbCalc()">377 &Omega; (Air)</button>
                     </div>
                 </div>
             </div>
 
             <!-- Visualization & Results -->
             <div class="flex flex-col gap-4">
-                <div class="bg-themeContainer border border-themeBorder p-0 flex flex-col shadow-inner flex-grow overflow-hidden">
-                    <div class="bg-themeBorder text-themeBg p-2 text-xs font-bold text-center">EQUIVALENT VALUES</div>
+                <div class="bg-themeContainer border border-themeBorder p-0 flex flex-col shadow-inner flex-grow overflow-hidden rounded">
+                    <div class="bg-themeBorder text-themeBg p-2 text-xs font-bold text-center uppercase tracking-wider">ALL EQUIVALENT QUANTITIES</div>
                     
-                    <div class="flex flex-col flex-grow divide-y divide-themeBorder/20">
-                        <div class="flex justify-between p-3 hover:bg-themeBg/50">
-                            <span class="text-themeMuted text-xs">Power (dBm)</span>
+                    <div class="flex flex-col flex-grow divide-y divide-themeBorder/20 text-xs">
+                        <div class="flex justify-between p-2.5 hover:bg-themeBg/50">
+                            <span class="text-themeMuted">Power (dBm)</span>
                             <span class="font-bold text-themeText" id="db-out-dbm">0.00</span>
                         </div>
-                        <div class="flex justify-between p-3 hover:bg-themeBg/50">
-                            <span class="text-themeMuted text-xs">Power (dBW)</span>
+                        <div class="flex justify-between p-2.5 hover:bg-themeBg/50">
+                            <span class="text-themeMuted">Power (dBW)</span>
                             <span class="font-bold text-themeText" id="db-out-dbw">-30.00</span>
                         </div>
-                        <div class="flex justify-between p-3 hover:bg-themeBg/50">
-                            <span class="text-themeMuted text-xs">Voltage (dBV)</span>
+                        <div class="flex justify-between p-2.5 hover:bg-themeBg/50">
+                            <span class="text-themeMuted">Voltage (dBµV)</span>
+                            <span class="font-bold text-themeAccent" id="db-out-dbuv">106.99</span>
+                        </div>
+                        <div class="flex justify-between p-2.5 hover:bg-themeBg/50">
+                            <span class="text-themeMuted">Voltage (dBV)</span>
                             <span class="font-bold text-themeText" id="db-out-dbv">-13.01</span>
                         </div>
-                        <div class="flex justify-between p-3 hover:bg-themeBg/50">
-                            <span class="text-themeMuted text-xs">Voltage (dBu)</span>
+                        <div class="flex justify-between p-2.5 hover:bg-themeBg/50">
+                            <span class="text-themeMuted">Voltage (dBu)</span>
                             <span class="font-bold text-themeText" id="db-out-dbu">-10.79</span>
                         </div>
-                        <div class="flex justify-between p-3 bg-themeBorder/10 hover:bg-themeBorder/20">
-                            <span class="text-themeMuted text-xs">Power (W)</span>
+                        <div class="flex justify-between p-2.5 bg-themeBorder/10 hover:bg-themeBorder/20">
+                            <span class="text-themeMuted">Power (W)</span>
                             <span class="font-bold text-themeAccent" id="db-out-w">0.001</span>
                         </div>
-                        <div class="flex justify-between p-3 bg-themeBorder/10 hover:bg-themeBorder/20">
-                            <span class="text-themeMuted text-xs">Power (mW)</span>
+                        <div class="flex justify-between p-2.5 bg-themeBorder/10 hover:bg-themeBorder/20">
+                            <span class="text-themeMuted">Power (mW)</span>
                             <span class="font-bold text-themeAccent" id="db-out-mw">1.000</span>
                         </div>
-                        <div class="flex justify-between p-3 hover:bg-themeBg/50">
-                            <span class="text-themeMuted text-xs">Voltage (V RMS)</span>
-                            <span class="font-bold text-themeText" id="db-out-vrms">0.224</span>
+                        <div class="flex justify-between p-2.5 hover:bg-themeBg/50">
+                            <span class="text-themeMuted">Voltage (V RMS)</span>
+                            <span class="font-bold text-themeText" id="db-out-vrms">0.2236</span>
                         </div>
-                        <div class="flex justify-between p-3 hover:bg-themeBg/50">
-                            <span class="text-themeMuted text-xs">Voltage (V Peak)</span>
-                            <span class="font-bold text-themeText" id="db-out-vpk">0.316</span>
+                        <div class="flex justify-between p-2.5 hover:bg-themeBg/50">
+                            <span class="text-themeMuted">Voltage (V Peak / V p-p)</span>
+                            <span class="font-bold text-themeText" id="db-out-vpk">0.316 Vpk / 0.632 Vpp</span>
                         </div>
-                        <div class="flex justify-between p-3 hover:bg-themeBg/50">
-                            <span class="text-themeMuted text-xs">Voltage (V p-p)</span>
-                            <span class="font-bold text-themeText" id="db-out-vpp">0.632</span>
+                        <div class="flex justify-between p-2.5 hover:bg-themeBg/50">
+                            <span class="text-themeMuted">Current (I RMS)</span>
+                            <span class="font-bold text-themeText" id="db-out-irms">4.47 mA</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Theory & Mathematical Formulations -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('rf-translator-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent flex items-center gap-2"><i class="fa-solid fa-calculator"></i>dB, dBm, dBµV & Field Strength Formulas</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="rf-translator-theory" class="hidden text-themeMuted mt-3 space-y-2 text-xs leading-relaxed">
+            <p><strong>1. Power Conversions:</strong> $P_{\text{dBm}} = 10 \log_{10}\left(\frac{P}{1\text{ mW}}\right), \quad P_{\text{dBW}} = 10 \log_{10}\left(\frac{P}{1\text{ W}}\right) = P_{\text{dBm}} - 30$</p>
+            <p><strong>2. Voltage & Impedance Relationships:</strong> $V_{\text{rms}} = \sqrt{P \cdot Z_0}, \quad V_{\text{dBV}} = 20 \log_{10}\left(\frac{V_{\text{rms}}}{1\text{ V}}\right), \quad V_{\text{dB}\mu\text{V}} = 20 \log_{10}\left(\frac{V_{\text{rms}}}{1\ \mu\text{V}}\right) = V_{\text{dBV}} + 120$</p>
+            <p><strong>3. Audio dBu (600 &Omega; Reference):</strong> $V_{\text{dBu}} = 20 \log_{10}\left(\frac{V_{\text{rms}}}{0.7746\text{ V}}\right)$, where $0.7746\text{ V} = \sqrt{1\text{ mW} \times 600\ \Omega}$.</p>
+        </div>
+    </div>
 </div>
 
 <script>
-    function updateDbCalc() {
-        const val = parseFloat(document.getElementById('db-val').value) || 0;
-        const unit = document.getElementById('db-unit').value;
-        const z0 = parseFloat(document.getElementById('db-z0').value) || 50;
+function updateDbCalc() {
+    const val = parseFloat(document.getElementById('db-val').value) || 0;
+    const unit = document.getElementById('db-unit').value;
+    const z0 = parseFloat(document.getElementById('db-z0').value) || 50;
 
-        let p_w = 0; // Everything converted to Watts first as the base unit
+    let p_w = 0; // Convert all to Watts base
 
-        if (unit === 'dBm') {
-            p_w = Math.pow(10, (val - 30) / 10);
-        } else if (unit === 'dBW') {
-            p_w = Math.pow(10, val / 10);
-        } else if (unit === 'W') {
-            p_w = val;
-        } else if (unit === 'mW') {
-            p_w = val / 1000;
-        } else if (unit === 'dBV') {
-            // dBV is 20 * log10(Vrms / 1V)
-            const vrms = Math.pow(10, val / 20);
-            p_w = (vrms * vrms) / z0;
-        } else if (unit === 'dBu') {
-            // dBu is 20 * log10(Vrms / 0.7746V)  [0.7746V is sqrt(1mW * 600 ohms)]
-            const vrms = 0.774596669 * Math.pow(10, val / 20);
-            p_w = (vrms * vrms) / z0;
-        } else if (unit === 'Vrms') {
-            p_w = (val * val) / z0;
-        } else if (unit === 'Vpk') {
-            const vrms = val / Math.SQRT2;
-            p_w = (vrms * vrms) / z0;
-        }
-
-        // Now calculate all outputs from p_w
-        let dbm = -Infinity, dbw = -Infinity, dbv = -Infinity, dbu = -Infinity;
-        let p_mw = 0, vrms = 0, vpk = 0, vpp = 0;
-
-        if (p_w > 0) {
-            p_mw = p_w * 1000;
-            dbw = 10 * Math.log10(p_w);
-            dbm = dbw + 30;
-            
-            vrms = Math.sqrt(p_w * z0);
-            vpk = vrms * Math.SQRT2;
-            vpp = vpk * 2;
-            
-            dbv = 20 * Math.log10(vrms);
-            dbu = 20 * Math.log10(vrms / 0.774596669);
-        }
-
-        document.getElementById('db-out-dbm').innerText = (dbm === -Infinity) ? "-∞" : dbm.toFixed(2);
-        document.getElementById('db-out-dbw').innerText = (dbw === -Infinity) ? "-∞" : dbw.toFixed(2);
-        document.getElementById('db-out-dbv').innerText = (dbv === -Infinity) ? "-∞" : dbv.toFixed(2);
-        document.getElementById('db-out-dbu').innerText = (dbu === -Infinity) ? "-∞" : dbu.toFixed(2);
-        
-        // Format power gracefully
-        if(p_w < 0.001) document.getElementById('db-out-w').innerText = p_w.toExponential(3);
-        else document.getElementById('db-out-w').innerText = p_w.toFixed(4);
-        
-        if(p_mw < 0.001) document.getElementById('db-out-mw').innerText = p_mw.toExponential(3);
-        else document.getElementById('db-out-mw').innerText = p_mw.toFixed(4);
-
-        document.getElementById('db-out-vrms').innerText = vrms.toFixed(4);
-        document.getElementById('db-out-vpk').innerText = vpk.toFixed(4);
-        document.getElementById('db-out-vpp').innerText = vpp.toFixed(4);
+    if (unit === 'dBm') {
+        p_w = Math.pow(10, (val - 30) / 10);
+    } else if (unit === 'dBW') {
+        p_w = Math.pow(10, val / 10);
+    } else if (unit === 'W') {
+        p_w = val;
+    } else if (unit === 'mW') {
+        p_w = val / 1e3;
+    } else if (unit === 'uW') {
+        p_w = val / 1e6;
+    } else if (unit === 'dBV') {
+        const vrms = Math.pow(10, val / 20);
+        p_w = (vrms * vrms) / z0;
+    } else if (unit === 'dBuV') {
+        const vrms = Math.pow(10, (val - 120) / 20);
+        p_w = (vrms * vrms) / z0;
+    } else if (unit === 'dBu') {
+        const vrms = 0.774596669 * Math.pow(10, val / 20);
+        p_w = (vrms * vrms) / z0;
+    } else if (unit === 'Vrms') {
+        p_w = (val * val) / z0;
+    } else if (unit === 'mVrms') {
+        const vrms = val / 1e3;
+        p_w = (vrms * vrms) / z0;
+    } else if (unit === 'Vpk') {
+        const vrms = val / Math.SQRT2;
+        p_w = (vrms * vrms) / z0;
     }
+
+    let dbm = -Infinity, dbw = -Infinity, dbuv = -Infinity, dbv = -Infinity, dbu = -Infinity;
+    let p_mw = 0, vrms = 0, vpk = 0, vpp = 0, irms = 0;
+
+    if (p_w > 0) {
+        p_mw = p_w * 1000;
+        dbw = 10 * Math.log10(p_w);
+        dbm = dbw + 30;
+        
+        vrms = Math.sqrt(p_w * z0);
+        vpk = vrms * Math.SQRT2;
+        vpp = vpk * 2;
+        irms = vrms / z0;
+        
+        dbv = 20 * Math.log10(vrms);
+        dbuv = dbv + 120;
+        dbu = 20 * Math.log10(vrms / 0.774596669);
+    }
+
+    document.getElementById('db-out-dbm').innerText = isFinite(dbm) ? dbm.toFixed(2) : "-∞";
+    document.getElementById('db-out-dbw').innerText = isFinite(dbw) ? dbw.toFixed(2) : "-∞";
+    document.getElementById('db-out-dbuv').innerText = isFinite(dbuv) ? dbuv.toFixed(2) : "-∞";
+    document.getElementById('db-out-dbv').innerText = isFinite(dbv) ? dbv.toFixed(2) : "-∞";
+    document.getElementById('db-out-dbu').innerText = isFinite(dbu) ? dbu.toFixed(2) : "-∞";
     
-    // Initial run
-    setTimeout(updateDbCalc, 100);
+    document.getElementById('db-out-w').innerText = p_w < 0.001 && p_w > 0 ? p_w.toExponential(3) : p_w.toFixed(4);
+    document.getElementById('db-out-mw').innerText = p_mw < 0.001 && p_mw > 0 ? p_mw.toExponential(3) : p_mw.toFixed(4);
+    document.getElementById('db-out-vrms').innerText = vrms.toFixed(4);
+    document.getElementById('db-out-vpk').innerText = `${vpk.toFixed(3)} Vpk / ${vpp.toFixed(3)} Vpp`;
+    document.getElementById('db-out-irms').innerText = irms >= 1 ? `${irms.toFixed(3)} A` : `${(irms * 1e3).toFixed(2)} mA`;
+}
+
+setTimeout(updateDbCalc, 50);
 </script>

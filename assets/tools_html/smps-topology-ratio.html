@@ -1,48 +1,415 @@
-<div id="tool-smps-topology-ratio" class="doc-container flex flex-col">
-                <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
-                    <i class="fa-solid fa-transformer"></i>
-                    <h3 class="font-bold font-mono">SMPS Topology & Ratio</h3>
+<div class="doc-container flex flex-col w-full h-full min-h-[750px]">
+    <!-- Header -->
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="SMPS Topology & Component Ratio Designer">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-bolt-lightning"></i>
+            <h3 class="font-bold font-mono text-base">SMPS Topology & Turns Ratio Workbench</h3>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="font-mono text-[10px] opacity-80 hidden sm:inline">CCM/DCM & Stress Analyzer</span>
+            <button class="px-3 py-1 bg-themeAccent text-themeBg text-xs font-bold hover:opacity-90 rounded transition-all shadow" onclick="calcSMPS()"><i class="fa-solid fa-calculator mr-1"></i>Calculate</button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto space-y-6">
+        
+        <!-- Top Row: Topology Selection & Operating Parameters -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Card 1: Topology & Voltage Specifications -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-3 shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-sitemap"></i> Topology & Rails</h4>
                 </div>
-                <div class="p-4 space-y-3 font-mono text-sm flex-grow">
-                    <select id="smps-type" class="w-full border border-themeBorder px-2 py-1 mb-2 font-bold" onchange="setupSMPSMode()">
-                        <option value="buck">Buck (Step-Down)</option>
+
+                <div>
+                    <label class="text-[10px] text-themeMuted mb-0.5 block">Converter Topology</label>
+                    <select id="smps-topo" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold rounded" onchange="calcSMPS()">
+                        <option value="buck" selected>Buck (Step-Down)</option>
                         <option value="boost">Boost (Step-Up)</option>
                         <option value="buck-boost">Buck-Boost (Inverting)</option>
+                        <option value="sepic">SEPIC (Non-Inverting)</option>
                         <option value="flyback">Isolated Flyback</option>
                         <option value="forward">Forward Converter</option>
-                        <option value="push-pull">Push-Pull</option>
-                        <option value="half-bridge">Half-Bridge</option>
-                        <option value="full-bridge">Full-Bridge</option>
+                        <option value="push-pull">Push-Pull Converter</option>
+                        <option value="half-bridge">Half-Bridge Converter</option>
+                        <option value="full-bridge">Full-Bridge Converter</option>
                     </select>
+                </div>
 
-                    <div class="flex gap-2 mb-2 pb-2 border-b border-themeBorder/20 text-[10px] text-themeMuted font-bold" id="smps-solve-group">
-                        <!-- Solvers injected by JS -->
-                    </div>
-                    
-                    <div id="smps-inputs" class="flex flex-col gap-2">
-                        <!-- Inputs injected by JS -->
-                    </div>
-
-                    <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-2 text-xs">
-                        <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                            <span class="text-themeMuted">Result</span>
-                            <span id="smps-result" class="font-bold text-themeAccent text-lg">-</span>
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Min $V_{in}$</label>
+                        <div class="flex">
+                            <input type="number" id="smps-vin-min" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="9.0" step="0.5" oninput="calcSMPS()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">V</span>
                         </div>
-                        <div class="flex justify-between pb-1 opacity-50" id="smps-ratio-grp">
-                            <span class="whitespace-nowrap text-themeMuted" title="Assuming typical Duty constraint for Vor">Req. Turns Ratio (Np/Ns)</span>
-                            <span id="smps-ratio" class="font-bold text-themeText">--</span>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Max $V_{in}$</label>
+                        <div class="flex">
+                            <input type="number" id="smps-vin-max" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="18.0" step="0.5" oninput="calcSMPS()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">V</span>
                         </div>
                     </div>
                 </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Output $V_{out}$</label>
+                        <div class="flex">
+                            <input type="number" id="smps-vout" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-themeAccent" value="5.0" step="0.1" oninput="calcSMPS()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">V</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Load $I_{out}$</label>
+                        <div class="flex">
+                            <input type="number" id="smps-iout" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold text-red-400" value="2.5" step="0.1" oninput="calcSMPS()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">A</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Switching & Ripple Targets -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-3 shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-clock"></i> Frequency & Ripple</h4>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Switching Freq ($f_{sw}$)</label>
+                        <div class="flex">
+                            <input type="number" id="smps-fsw" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText font-bold" value="400" step="50" oninput="calcSMPS()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">kHz</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Target Ripple Ratio ($r$)</label>
+                        <div class="flex">
+                            <input type="number" id="smps-ripple-ratio" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.30" min="0.1" max="1.5" step="0.05" oninput="calcSMPS()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">&Delta;I/I</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Allowed $V_{out}$ Ripple</label>
+                        <div class="flex">
+                            <input type="number" id="smps-vripple" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="30" step="5" oninput="calcSMPS()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">mV</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Diode Drop ($V_d$)</label>
+                        <div class="flex">
+                            <input type="number" id="smps-vdiode" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.4" step="0.1" oninput="calcSMPS()">
+                            <span class="bg-themeBorder/30 text-themeText px-1.5 py-1 text-[10px] flex items-center">V</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="smps-isolated-params" class="hidden pt-2 border-t border-themeBorder/20 grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Max Target Duty ($D_{max}$)</label>
+                        <input type="number" id="smps-target-dmax" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.45" max="0.8" step="0.05" oninput="calcSMPS()">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-themeMuted mb-0.5 block">Efficiency Est. (&eta;)</label>
+                        <input type="number" id="smps-eff" class="w-full bg-themeBg border border-themeBorder p-1.5 text-themeText" value="0.88" max="0.99" step="0.02" oninput="calcSMPS()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Key Calculated Performance Indicators -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col space-y-2 shadow-inner justify-between">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2">
+                    <h4 class="text-xs font-bold text-themeAccent flex items-center gap-1.5"><i class="fa-solid fa-gauge-high"></i> Operating Summary</h4>
+                    <span id="smps-mode-badge" class="px-2 py-0.5 bg-green-500/10 text-green-400 border border-green-500/30 text-[10px] font-bold rounded">CCM Mode</span>
+                </div>
+
+                <div class="space-y-1.5 text-xs">
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Duty Cycle Range:</span>
+                        <span id="smps-res-duty" class="font-bold text-themeText">27.8% - 55.6%</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Recommended Inductor ($L_{rec}$):</span>
+                        <span id="smps-res-lrec" class="font-bold text-themeAccent text-sm">6.8 &mu;H</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Inductor Peak Current ($I_{pk}$):</span>
+                        <span id="smps-res-ipk" class="font-bold text-themeText">2.88 A</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Min Output Cap ($C_{out}$):</span>
+                        <span id="smps-res-cout" class="font-bold text-themeText">47 &mu;F</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-themeMuted">Max Capacitor ESR:</span>
+                        <span id="smps-res-esr" class="font-bold text-themeText">35 m&Omega;</span>
+                    </div>
+                    <div id="smps-ratio-row" class="hidden flex justify-between pt-1 border-t border-themeBorder/20">
+                        <span class="text-themeMuted">Turns Ratio ($N_p/N_s$):</span>
+                        <span id="smps-res-turns-ratio" class="font-bold text-themeAccent">1.85 : 1</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Row: Component Stress Breakdown & Waveform Canvas -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
-    <!-- Theory & Math Section -->
+            <!-- Component Ratings & Stresses Table -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col shadow-inner">
+                <h4 class="text-xs font-bold text-themeText mb-3 flex items-center gap-2 border-b border-themeBorder/20 pb-2">
+                    <i class="fa-solid fa-shield-halved text-themeAccent"></i> Semiconductor & Passive Stress Ratings
+                </h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs font-mono">
+                        <thead>
+                            <tr class="border-b border-themeBorder/30 text-themeMuted">
+                                <th class="pb-2">Component</th>
+                                <th class="pb-2">Min Voltage Rating</th>
+                                <th class="pb-2">Peak Current</th>
+                                <th class="pb-2">RMS Current</th>
+                            </tr>
+                        </thead>
+                        <tbody id="smps-stress-tbody" class="divide-y divide-themeBorder/10">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Real-Time Waveform Simulator Canvas -->
+            <div class="bg-themeContainer border border-themeBorder/40 p-4 rounded flex flex-col shadow-inner">
+                <div class="flex items-center justify-between border-b border-themeBorder/20 pb-2 mb-2">
+                    <h4 class="text-xs font-bold text-themeText flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-themeAccent"></i> Switching Current Waveforms
+                    </h4>
+                    <div class="flex gap-3 text-[10px] font-bold">
+                        <span class="text-blue-400">● Inductor ($I_L$)</span>
+                        <span class="text-red-400">● Switch ($I_{sw}$)</span>
+                        <span class="text-green-400">● Diode ($I_D$)</span>
+                    </div>
+                </div>
+                <div class="relative w-full h-52 bg-themeBg border border-themeBorder/30 rounded overflow-hidden">
+                    <canvas id="smps-waveform-canvas" class="w-full h-full block"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Theory & Mathematical Formulations -->
     <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
-        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('smpstopologyratio-theory').classList.toggle('hidden')">
-            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('smps-topology-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent flex items-center gap-2"><i class="fa-solid fa-calculator"></i>SMPS Equations & CCM/DCM Physics</h4>
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
-        <div id="smpstopologyratio-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Theory:</strong> Switch-Mode Power Supply (SMPS) topologies (Buck, Boost, Buck-Boost) use different Duty Cycle (\(D\)) ratios. For a buck converter, \(V_{out} = V_{in} \times D\).</p>
+        <div id="smps-topology-theory" class="hidden text-themeMuted mt-3 space-y-2 text-xs leading-relaxed">
+            <p><strong>1. Buck Converter:</strong> $D = \frac{V_{out} + V_d}{V_{in} + V_d}, \quad L_{min} = \frac{(V_{in} - V_{out}) D}{r \cdot I_{out} \cdot f_{sw}}$</p>
+            <p><strong>2. Boost Converter:</strong> $D = \frac{V_{out} - V_{in} + V_d}{V_{out} + V_d}, \quad L_{min} = \frac{V_{in} \cdot D}{r \cdot \frac{I_{out}}{1-D} \cdot f_{sw}}$</p>
+            <p><strong>3. Isolated Flyback:</strong> $\frac{N_p}{N_s} = \frac{V_{in\_min} \cdot D_{max}}{(V_{out} + V_d)(1 - D_{max})}, \quad V_{ds\_max} = V_{in\_max} + \frac{N_p}{N_s}(V_{out} + V_d) + V_{spike}$</p>
+            <p><strong>4. Output Capacitor Sizing:</strong> For buck, $\Delta V_{out} \approx \frac{\Delta I_L}{8 f_{sw} C_{out}} + \Delta I_L \cdot ESR$. For boost/flyback, $C_{out} \ge \frac{I_{out} D_{max}}{f_{sw} \Delta V_{out}}$.</p>
         </div>
     </div>
 </div>
+
+<script>
+function calcSMPS() {
+    const topo = document.getElementById('smps-topo').value;
+    const Vin_min = parseFloat(document.getElementById('smps-vin-min').value) || 9.0;
+    const Vin_max = parseFloat(document.getElementById('smps-vin-max').value) || 18.0;
+    const Vout = parseFloat(document.getElementById('smps-vout').value) || 5.0;
+    const Iout = parseFloat(document.getElementById('smps-iout').value) || 2.0;
+    const fsw_kHz = parseFloat(document.getElementById('smps-fsw').value) || 400;
+    const r = parseFloat(document.getElementById('smps-ripple-ratio').value) || 0.3;
+    const Vripple_mV = parseFloat(document.getElementById('smps-vripple').value) || 30;
+    const Vd = parseFloat(document.getElementById('smps-vdiode').value) || 0.4;
+    const targetDmax = parseFloat(document.getElementById('smps-target-dmax').value) || 0.45;
+    const eff = parseFloat(document.getElementById('smps-eff').value) || 0.88;
+
+    const fsw = fsw_kHz * 1e3;
+    const Tsw = 1 / fsw;
+    const isIsolated = ['flyback', 'forward', 'push-pull', 'half-bridge', 'full-bridge'].includes(topo);
+    
+    // Toggle isolated params visibility
+    document.getElementById('smps-isolated-params').classList.toggle('hidden', !isIsolated);
+    document.getElementById('smps-ratio-row').classList.toggle('hidden', !isIsolated);
+
+    let D_min = 0, D_max = 0, L_rec = 0, deltaIL = 0, Ipk = 0, Cout = 0, esrMax = 0, turnsRatio = 1;
+    let Vds_max = 0, Isw_pk = 0, Isw_rms = 0, Vdiode_max = 0, Idiode_avg = Iout;
+
+    if (topo === 'buck') {
+        D_min = (Vout + Vd) / (Vin_max + Vd);
+        D_max = (Vout + Vd) / (Vin_min + Vd);
+        deltaIL = r * Iout;
+        L_rec = (Vin_max - Vout) * D_min / (deltaIL * fsw);
+        Ipk = Iout + deltaIL / 2;
+        Cout = deltaIL / (8 * fsw * (Vripple_mV * 1e-3));
+        esrMax = (Vripple_mV * 1e-3) / deltaIL;
+        Vds_max = Vin_max * 1.2;
+        Isw_pk = Ipk;
+        Isw_rms = Math.sqrt(D_max * (Iout * Iout + (deltaIL * deltaIL) / 12));
+        Vdiode_max = Vin_max * 1.2;
+    } else if (topo === 'boost') {
+        D_min = (Vout - Vin_max + Vd) / (Vout + Vd);
+        D_max = (Vout - Vin_min + Vd) / (Vout + Vd);
+        const Iin_avg = Iout / (1 - D_max);
+        deltaIL = r * Iin_avg;
+        L_rec = Vin_min * D_max / (deltaIL * fsw);
+        Ipk = Iin_avg + deltaIL / 2;
+        Cout = (Iout * D_max) / (fsw * (Vripple_mV * 1e-3));
+        esrMax = (Vripple_mV * 1e-3) / Ipk;
+        Vds_max = Vout * 1.2;
+        Isw_pk = Ipk;
+        Isw_rms = Math.sqrt(D_max) * Iin_avg;
+        Vdiode_max = Vout * 1.2;
+    } else if (topo === 'flyback') {
+        D_max = targetDmax;
+        turnsRatio = (Vin_min * D_max) / ((Vout + Vd) * (1 - D_max));
+        D_min = (turnsRatio * (Vout + Vd)) / (Vin_max + turnsRatio * (Vout + Vd));
+        const Pin = (Vout * Iout) / eff;
+        const Iin_avg = Pin / Vin_min;
+        const Ipri_pk = (2 * Pin) / (Vin_min * D_max);
+        L_rec = (Vin_min * D_max) / (Ipri_pk * fsw);
+        Ipk = Ipri_pk;
+        deltaIL = Ipri_pk;
+        Cout = (Iout * D_max) / (fsw * (Vripple_mV * 1e-3));
+        esrMax = (Vripple_mV * 1e-3) / (Ipri_pk * turnsRatio);
+        Vds_max = (Vin_max + turnsRatio * (Vout + Vd)) * 1.3;
+        Isw_pk = Ipri_pk;
+        Isw_rms = Ipri_pk * Math.sqrt(D_max / 3);
+        Vdiode_max = ((Vout + Vd) + Vin_max / turnsRatio) * 1.3;
+    } else {
+        // Generic fallback for buck-boost / SEPIC
+        D_min = (Vout + Vd) / (Vin_max + Vout + Vd);
+        D_max = (Vout + Vd) / (Vin_min + Vout + Vd);
+        deltaIL = r * Iout;
+        L_rec = (Vin_min * D_max) / (deltaIL * fsw);
+        Ipk = Iout / (1 - D_max) + deltaIL / 2;
+        Cout = (Iout * D_max) / (fsw * (Vripple_mV * 1e-3));
+        esrMax = (Vripple_mV * 1e-3) / Ipk;
+        Vds_max = (Vin_max + Vout) * 1.2;
+        Isw_pk = Ipk;
+        Isw_rms = Ipk * Math.sqrt(D_max);
+        Vdiode_max = (Vin_max + Vout) * 1.2;
+    }
+
+    // Update UI Stats
+    document.getElementById('smps-res-duty').innerText = `${(D_min * 100).toFixed(1)}% - ${(D_max * 100).toFixed(1)}%`;
+    document.getElementById('smps-res-lrec').innerText = `${(L_rec * 1e6).toFixed(2)} µH`;
+    document.getElementById('smps-res-ipk').innerText = `${Ipk.toFixed(2)} A`;
+    document.getElementById('smps-res-cout').innerText = `${Math.ceil(Cout * 1e6)} µF`;
+    document.getElementById('smps-res-esr').innerText = `${(esrMax * 1e3).toFixed(1)} mΩ`;
+    document.getElementById('smps-res-turns-ratio').innerText = `${turnsRatio.toFixed(2)} : 1`;
+
+    // Populate Stress Table
+    const tbody = document.getElementById('smps-stress-tbody');
+    if (tbody) {
+        tbody.innerHTML = `
+            <tr class="hover:bg-themeBorder/10">
+                <td class="py-2 font-bold text-themeAccent">Power MOSFET</td>
+                <td class="py-2 text-red-400 font-bold">&ge; ${Vds_max.toFixed(1)} V</td>
+                <td class="py-2">${Isw_pk.toFixed(2)} A</td>
+                <td class="py-2 text-themeMuted">${Isw_rms.toFixed(2)} A</td>
+            </tr>
+            <tr class="hover:bg-themeBorder/10">
+                <td class="py-2 font-bold text-themeAccent">Catch Diode / Sync FET</td>
+                <td class="py-2 text-red-400 font-bold">&ge; ${Vdiode_max.toFixed(1)} V</td>
+                <td class="py-2">${Ipk.toFixed(2)} A</td>
+                <td class="py-2 text-themeMuted">${Idiode_avg.toFixed(2)} A</td>
+            </tr>
+            <tr class="hover:bg-themeBorder/10">
+                <td class="py-2 font-bold text-themeAccent">Power Inductor</td>
+                <td class="py-2 text-themeMuted">--</td>
+                <td class="py-2 text-amber-400 font-bold">&ge; ${Ipk.toFixed(2)} A (Isat)</td>
+                <td class="py-2 text-themeMuted">${Iout.toFixed(2)} A (Irms)</td>
+            </tr>
+            <tr class="hover:bg-themeBorder/10">
+                <td class="py-2 font-bold text-themeAccent">Output Capacitor</td>
+                <td class="py-2 text-themeMuted">&ge; ${(Vout * 1.5).toFixed(1)} V</td>
+                <td class="py-2">${(deltaIL / 2).toFixed(2)} A</td>
+                <td class="py-2 text-themeMuted">${(deltaIL / Math.sqrt(12)).toFixed(2)} A (Iripple)</td>
+            </tr>
+        `;
+    }
+
+    drawSMPSWaveforms(D_max, Iout, deltaIL, Ipk);
+}
+
+function drawSMPSWaveforms(D, Iout, deltaIL, Ipk) {
+    const canvas = document.getElementById('smps-waveform-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const width = canvas.parentElement.clientWidth || 380;
+    const height = canvas.parentElement.clientHeight || 200;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
+
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x < width; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); }
+    for (let y = 0; y < height; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+
+    const tPeriod = width * 0.45;
+    const yBaseline = height * 0.85;
+    const maxI = Math.max(1, Ipk * 1.3);
+
+    function toY(iVal) {
+        return yBaseline - (iVal / maxI) * (height * 0.7);
+    }
+
+    const Ivalley = Math.max(0, Ipk - deltaIL);
+
+    // Draw 2 full switching cycles
+    for (let cycle = 0; cycle < 2; cycle++) {
+        const xStart = cycle * tPeriod + 20;
+        const xSwitchOff = xStart + D * tPeriod;
+        const xEnd = xStart + tPeriod;
+
+        // 1. Inductor Current (Blue)
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(xStart, toY(Ivalley));
+        ctx.lineTo(xSwitchOff, toY(Ipk));
+        ctx.lineTo(xEnd, toY(Ivalley));
+        ctx.stroke();
+
+        // 2. Switch Current (Red)
+        ctx.strokeStyle = '#f87171';
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.moveTo(xStart, toY(0));
+        ctx.lineTo(xStart, toY(Ivalley));
+        ctx.lineTo(xSwitchOff, toY(Ipk));
+        ctx.lineTo(xSwitchOff, toY(0));
+        ctx.stroke();
+
+        // 3. Diode Current (Green)
+        ctx.strokeStyle = '#4ade80';
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.moveTo(xSwitchOff, toY(0));
+        ctx.lineTo(xSwitchOff, toY(Ipk));
+        ctx.lineTo(xEnd, toY(Ivalley));
+        ctx.lineTo(xEnd, toY(0));
+        ctx.stroke();
+    }
+}
+
+// Auto-run on load
+setTimeout(calcSMPS, 50);
+</script>

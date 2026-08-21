@@ -68,6 +68,20 @@
             </div>
         </div>
     </div>
+
+    <!-- Theory & Mathematical Formulation -->
+    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
+        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('ohms-law-theory').classList.toggle('hidden')">
+            <h4 class="font-bold text-themeAccent flex items-center gap-2"><i class="fa-solid fa-calculator"></i>The 12 Core Ohm's Law & Power Formulas</h4>
+            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
+        </div>
+        <div id="ohms-law-theory" class="hidden text-themeMuted mt-3 space-y-2 text-xs leading-relaxed">
+            <p><strong>1. Voltage ($V$ in Volts):</strong> $$V = I \cdot R = \frac{P}{I} = \sqrt{P \cdot R}$$</p>
+            <p><strong>2. Current ($I$ in Amperes):</strong> $$I = \frac{V}{R} = \frac{P}{V} = \sqrt{\frac{P}{R}}$$</p>
+            <p><strong>3. Resistance ($R$ in Ohms):</strong> $$R = \frac{V}{I} = \frac{V^2}{P} = \frac{P}{I^2}$$</p>
+            <p><strong>4. Power ($P$ in Watts):</strong> $$P = V \cdot I = I^2 \cdot R = \frac{V^2}{R}$$</p>
+        </div>
+    </div>
 </div>
 
 <script>
