@@ -1,0 +1,33 @@
+/* Traditional document typography for the portfolio's reading pages. */
+body.classic-text {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    line-height: 1.65;
+    background-image: none;
+    --border-color: #b8b8b8;
+    --accent-color: #164c99;
+}
+[data-theme="dark"] body.classic-text {
+    --border-color: #535353;
+    --accent-color: #9fc4f5;
+    --muted-text: #b2afa9;
+}
+.classic-text main :is(h1, h2, h3, h4, p, li, blockquote, .font-sans) { font-family: Georgia, "Times New Roman", serif; }
+.classic-text main :is(h1, h2, h3, h4) { text-transform: none; letter-spacing: normal; }
+.classic-text main h1 { font-size: 2.5rem; line-height: 1.2; }
+.classic-text main h2 { font-size: 1.65rem; line-height: 1.3; }
+.classic-text main h3 { font-size: 1.25rem; }
+.classic-text main p { text-align: left; font-weight: 400; }
+.classic-text main .text-justify { text-align: left; }
+.classic-text main .font-light { font-weight: 400; }
+.classic-text main a { text-decoration: underline; text-underline-offset: .15em; }
+.classic-text main .doc-container { box-shadow: none; }
+.classic-text main .doc-container:hover .img-preview img { transform: none; opacity: 1; }
+.classic-text #global-time-indicator { display: none; }
+.classic-text > nav { top: 0; border-bottom-width: 1px; }
+.classic-text > footer { border-top-width: 1px; }
+.classic-text main h1:hover { letter-spacing: normal; }
+.classic-text main h1 > span { transform: none !important; }
+@media (max-width: 640px) {
+    .classic-text main h1 { font-size: 2rem; }
+}

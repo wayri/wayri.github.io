@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% seo %}
+    <script>
+        try {
+            if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark';
+        } catch (error) { /* Saved preferences are optional. */ }
+    </script>
+    <link rel="stylesheet" href="{{ '/assets/css/reading.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script defer src="{{ '/assets/js/reading.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+</head>
+<body>
+    <header class="site-header">
+        <nav aria-label="Main navigation">
+            <a href="{{ '/' | relative_url }}">Yawar</a>
+            <a href="{{ '/blog/' | relative_url }}" aria-current="page">Blog</a>
+            <a href="{{ '/tools/' | relative_url }}">Tools</a>
+            <a href="{{ '/assets/resume.pdf' | relative_url }}">Resume</a>
+        </nav>
+        <button type="button" id="reading-theme-toggle" aria-pressed="false" hidden>Dark mode</button>
+    </header>
+    {{ content }}
+</body>
+</html>
