@@ -3,6 +3,12 @@ const canvas = document.getElementById('pong-canvas');
 const ctx = canvas.getContext('2d');
 const scoreEl = document.getElementById('score');
 const statusEl = document.getElementById('game-status');
+const timedMatch = window.rocketPongMode === 'timed';
+const timerEl = document.getElementById('match-timer');
+const matchDuration = 180;
+document.getElementById('match-timer-wrapper').classList.toggle('hidden', !timedMatch);
+document.getElementById('score-limit-controls').classList.toggle('hidden', timedMatch);
+document.getElementById('timed-match-label').classList.toggle('hidden', !timedMatch);
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const W = canvas.width, H = canvas.height;
 const paddle = { w: 10, h: 64, speed: 360, left: 48, right: W - 58 };
@@ -13,6 +19,7 @@ function makePlayer() {
 }
 const p1 = makePlayer(), p2 = makePlayer(), keys = Object.create(null);
 let rockets = [], paused = false, muted = false, gameOver = false, winScore = 10, serveDelay = 0, lastFrame = null;
+let timeRemaining = matchDuration, matchDeadline = 0;
 
 function tone(frequency, type, duration) {
     if (muted) return;
@@ -35,9 +42,28 @@ function resetBall(direction) {
     ball.vy = 310 * Math.sin(angle);
     serveDelay = 0.55;
 }
+function matchResult() {
+    return p1.score === p2.score ? 'Draw' : p1.score > p2.score ? 'Player 1 wins' : 'Player 2 wins';
+}
+function updateTimerDisplay() {
+    const seconds = Math.ceil(timeRemaining);
+    const label = String(Math.floor(seconds / 60)).padStart(2, '0') + ':' + String(seconds % 60).padStart(2, '0');
+    if (timerEl.textContent !== label) timerEl.textContent = label;
+    timerEl.style.color = timeRemaining <= 15 ? '#f36b73' : '#f4d68e';
+}
+function updateMatchClock(now) {
+    if (!timedMatch || paused || gameOver) return;
+    timeRemaining = Math.min(matchDuration, Math.max(0, (matchDeadline - now) / 1000));
+    updateTimerDisplay();
+    if (timeRemaining === 0) {
+        gameOver = true;
+        updateStatus();
+        tone(230, 'sine', 0.35);
+    }
+}
 function updateStatus() {
-    statusEl.textContent = gameOver ? (p1.score >= winScore ? 'Player 1 wins · Space to restart' : 'Player 2 wins · Space to restart')
-        : paused ? 'Paused · P to resume' : 'One rocket reloads every 10 seconds';
+    statusEl.textContent = gameOver ? (timedMatch ? 'Time up · ' : '') + matchResult() + ' · Space to restart'
+        : paused ? 'Paused · P to resume' : timedMatch ? 'Three-minute match · One rocket reloads every 10 seconds' : 'One rocket reloads every 10 seconds';
     document.getElementById('pause-btn').textContent = paused ? 'RESUME (P)' : 'PAUSE (P)';
 }
 function resetGame() {
@@ -50,11 +76,21 @@ function resetGame() {
         player.effect = 'none'; player.effectTime = 0;
     }
     rockets = []; paused = false; gameOver = false;
+    timeRemaining = matchDuration;
+    matchDeadline = performance.now() + matchDuration * 1000;
+    if (timedMatch) updateTimerDisplay();
     scoreEl.textContent = '0 : 0';
     resetBall(Math.random() < 0.5 ? -1 : 1);
     updateStatus();
 }
-function togglePause() { if (!gameOver) { paused = !paused; updateStatus(); } }
+function togglePause() {
+    if (gameOver) return;
+    if (!paused) updateMatchClock(performance.now());
+    if (gameOver) return;
+    paused = !paused;
+    if (!paused && timedMatch) matchDeadline = performance.now() + timeRemaining * 1000;
+    updateStatus();
+}
 function toggleMute() {
     muted = !muted;
     document.getElementById('mute-btn').textContent = muted ? 'UNMUTE' : 'MUTE';
@@ -77,7 +113,7 @@ function scorePoint(player, direction) {
     scoreEl.textContent = p1.score + ' : ' + p2.score;
     rockets = [];
     tone(230, 'sine', 0.25);
-    if (player.score >= winScore) { gameOver = true; updateStatus(); }
+    if (!timedMatch && player.score >= winScore) { gameOver = true; updateStatus(); }
     else resetBall(direction);
 }
 function bounce(player, side) {
@@ -189,9 +225,9 @@ function draw() {
     if (paused || gameOver) {
         ctx.fillStyle = 'rgba(6,12,22,.8)'; ctx.fillRect(0, 0, W, H);
         ctx.fillStyle = '#f4d68e'; ctx.font = 'bold 26px "JetBrains Mono", monospace'; ctx.textAlign = 'center';
-        ctx.fillText(gameOver ? (p1.score >= winScore ? 'PLAYER 1 WINS' : 'PLAYER 2 WINS') : 'PAUSED', W / 2, H / 2 - 8);
+        ctx.fillText(gameOver ? matchResult().toUpperCase() : 'PAUSED', W / 2, H / 2 - 8);
         ctx.fillStyle = '#a9b9c7'; ctx.font = '14px "JetBrains Mono", monospace';
-        ctx.fillText(gameOver ? 'SPACE TO PLAY AGAIN' : 'P TO RESUME', W / 2, H / 2 + 24);
+        ctx.fillText(gameOver ? (timedMatch ? 'TIME UP · ' : '') + 'SPACE TO PLAY AGAIN' : 'P TO RESUME', W / 2, H / 2 + 24);
     }
 }
 window.addEventListener('keydown', event => {
@@ -206,6 +242,7 @@ window.addEventListener('keydown', event => {
 window.addEventListener('keyup', event => { keys[event.key.toLowerCase()] = false; });
 window.addEventListener('blur', () => { Object.keys(keys).forEach(key => { keys[key] = false; }); });
 function loop(timestamp) {
+    updateMatchClock(timestamp);
     if (lastFrame === null) lastFrame = timestamp;
     const dt = Math.min((timestamp - lastFrame) / 1000, 0.05);
     lastFrame = timestamp;
