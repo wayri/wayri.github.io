@@ -5,13 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('theme');
     const label = document.getElementById('theme-label');
     
-    if (savedTheme === 'light') {
+    if (savedTheme === 'light' || (!savedTheme && document.body.classList.contains('home-page'))) {
         document.documentElement.removeAttribute('data-theme');
         if(label) label.textContent = "Light";
     } else {
         document.documentElement.setAttribute('data-theme', 'dark');
         if(label) label.textContent = "Dark";
     }
+    updateHomeThemeButton();
 
     // STEAMPUNK ANOMALOUS WIDGET (if present)
     if(document.getElementById('steampunk-clock-text')) {
@@ -35,7 +36,16 @@ function toggleTheme() {
     }
 
     // Dispatch custom event for tools that need to redraw canvas
+    updateHomeThemeButton();
     window.dispatchEvent(new Event('themeChanged'));
+}
+
+function updateHomeThemeButton() {
+    const button = document.getElementById('home-theme-toggle');
+    if (!button) return;
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    button.textContent = dark ? 'Light mode' : 'Dark mode';
+    button.setAttribute('aria-pressed', String(dark));
 }
 
 function toggleMobileMenu() {

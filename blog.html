@@ -9,7 +9,7 @@ permalink: /blog/
         {% for post in site.posts %}
         <article class="entry" id="{{ post.slug | escape }}">
             <header class="entry-header">
-                <h1><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h1>
+                <h1><a href="{{ post.url | relative_url }}">#{{ forloop.index }} {{ post.title | escape }}</a></h1>
                 <p class="entry-meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%B %-d, %Y" }}</time>{% if post.category %} · {{ post.category | escape }}{% endif %}</p>
             </header>
             <div class="article-content">{{ post.content }}</div>
@@ -21,7 +21,7 @@ permalink: /blog/
             <h2>Articles</h2>
             <ul>
                 {% for post in site.posts %}
-                <li><a href="#{{ post.slug | escape }}">{{ post.title | escape }}</a><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time></li>
+                <li><a href="#{{ post.slug | escape }}">#{{ forloop.index }} {{ post.title | escape }}</a><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time></li>
                 {% endfor %}
             </ul>
             <p><a href="{{ '/feed.xml' | relative_url }}" type="application/atom+xml">Atom feed</a></p>

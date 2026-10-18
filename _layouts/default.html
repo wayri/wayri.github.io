@@ -79,8 +79,19 @@
     <script src="{{ page.custom_js | relative_url }}"></script>
     {% endif %}
 </head>
-<body class="{% unless page.url contains '/tools' or page.url contains '/pong' %}classic-text {% endunless %}antialiased selection:bg-themeAccent selection:text-themeBg flex flex-col min-h-screen transition-colors duration-300">
+<body class="{% if page.simple_home %}home-page {% endif %}{% unless page.url contains '/tools' or page.url contains '/pong' %}classic-text {% endunless %}antialiased selection:bg-themeAccent selection:text-themeBg flex flex-col min-h-screen transition-colors duration-300">
 
+    {% if page.simple_home %}
+    <header class="home-navigation">
+        <nav aria-label="Main navigation">
+            <a href="{{ '/' | relative_url }}" aria-current="page">Yawar</a>
+            <a href="{{ '/blog/' | relative_url }}">Blog</a>
+            <a href="{{ '/tools/' | relative_url }}">Tools</a>
+            <a href="{{ '/assets/resume.pdf' | relative_url }}">Resume</a>
+        </nav>
+        <button type="button" onclick="toggleTheme()" id="home-theme-toggle" aria-pressed="false">Dark mode</button>
+    </header>
+    {% else %}
     <!-- Global Time of Day Indicator -->
     <div id="global-time-indicator" class="fixed top-0 left-0 w-full h-1.5 z-[100] bg-themeBg border-b border-themeBorder overflow-hidden hidden md:block">
         <div class="absolute inset-0 bg-gradient-to-r from-themeBorder via-yellow-400 to-themeBorder opacity-20"></div>
@@ -152,13 +163,22 @@
             </div>
         </div>
     </nav>
+    {% endif %}
 
     <!-- MAIN CONTENT -->
-    <main class="flex-grow pt-24 pb-20 px-4 sm:px-6 lg:px-8 {% if page.url contains '/tools' %}max-w-[1600px]{% else %}max-w-6xl{% endif %} mx-auto w-full">
+    <main class="{% if page.simple_home %}home-content {% endif %}flex-grow pt-24 pb-20 px-4 sm:px-6 lg:px-8 {% if page.url contains '/tools' %}max-w-[1600px]{% else %}max-w-6xl{% endif %} mx-auto w-full">
         {{ content }}
     </main>
 
     <!-- Global Footer -->
+    {% if page.simple_home %}
+    <footer class="home-footer">
+        <p>A small break from engineering: <a href="{{ '/pong/' | relative_url }}">Rocket Pong</a>.</p>
+        <p class="game-clue">SYS_RST [CLUE: The key is where the engineering begins, capitalized and underscored with the final decade of the 1900s]</p>
+        <p>&copy; <span id="year"></span> Yawar. Research, Engineering, Electronics, and Design.</p>
+        <p><a href="#contact">Contact</a> · <a href="https://github.com/wayri">GitHub</a> · <a href="https://linkedin.com/in/yawar-badri">LinkedIn</a></p>
+    </footer>
+    {% else %}
     <footer class="mt-auto border-t-2 border-themeBorder bg-themeContainer py-8 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col space-y-6">
             
@@ -187,6 +207,7 @@
             </div>
         </div>
     </footer>
+    {% endif %}
 
 </body>
 </html>

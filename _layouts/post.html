@@ -6,7 +6,8 @@ layout: reading
     <main>
         <article class="entry">
             <header class="entry-header">
-                <h1>{{ page.title | escape }}</h1>
+                {% for post in site.posts %}{% if post.url == page.url %}{% assign article_number = forloop.index %}{% endif %}{% endfor %}
+                <h1>#{{ article_number }} {{ page.title | escape }}</h1>
                 <p class="entry-meta"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>{% if page.category %} · {{ page.category | escape }}{% endif %}</p>
             </header>
             <div class="article-content">{{ content }}</div>
@@ -18,7 +19,7 @@ layout: reading
             <h2>Articles</h2>
             <ul>
                 {% for post in site.posts %}
-                <li><a href="{{ post.url | relative_url }}"{% if page.url == post.url %} aria-current="page"{% endif %}>{{ post.title | escape }}</a><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time></li>
+                <li><a href="{{ post.url | relative_url }}"{% if page.url == post.url %} aria-current="page"{% endif %}>#{{ forloop.index }} {{ post.title | escape }}</a><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time></li>
                 {% endfor %}
             </ul>
             <p><a href="{{ '/feed.xml' | relative_url }}" type="application/atom+xml">Atom feed</a></p>

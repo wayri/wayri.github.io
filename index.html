@@ -1,5 +1,6 @@
 ---
 layout: default
+simple_home: true
 title: Yawar | Engineering the Physical Layer
 ---
 
@@ -626,7 +627,7 @@ title: Yawar | Engineering the Physical Layer
                 {% for post in site.posts limit:2 %}
                 <a href="{{ post.url | relative_url }}" class="doc-container p-6 hover:border-themeAccent transition-colors block group flex flex-col h-full border-l-4 border-l-themeBorder hover:border-l-themeAccent">
                     <div class="font-mono text-xs text-themeAccent font-bold mb-2">{{ post.category | default: 'Engineering' }}</div>
-                    <h3 class="font-bold text-themeText text-lg mb-2 group-hover:text-themeAccent transition-colors">{{ post.title }}</h3>
+                    <h3 class="font-bold text-themeText text-lg mb-2 group-hover:text-themeAccent transition-colors">#{{ forloop.index }} {{ post.title }}</h3>
                     <p class="text-sm text-themeMuted flex-grow">{{ post.excerpt | strip_html | truncatewords: 25 }}</p>
                     <div class="font-mono text-[10px] text-themeMuted mt-4 pt-3 border-t border-themeBorder/20 flex justify-between">
                         <span>{{ post.date | date: '%B %d, %Y' }}</span>
