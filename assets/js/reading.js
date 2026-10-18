@@ -1,13 +1,7 @@
 (() => {
     const root = document.documentElement;
-    const toggle = document.getElementById('reading-theme-toggle');
     const diagrams = [];
     let renderQueue = Promise.resolve();
-
-    function updateButton() {
-        const dark = root.dataset.theme === 'dark';
-        toggle.setAttribute('aria-pressed', String(dark));
-    }
 
     function renderDiagrams() {
         renderQueue = renderQueue.then(async () => {
@@ -31,16 +25,7 @@
         });
     }
 
-    toggle.hidden = false;
-    updateButton();
-    toggle.addEventListener('click', () => {
-        const dark = root.dataset.theme !== 'dark';
-        if (dark) root.dataset.theme = 'dark';
-        else root.removeAttribute('data-theme');
-        try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (error) { /* Optional storage. */ }
-        updateButton();
-        renderDiagrams();
-    });
+    window.addEventListener('themeChanged', renderDiagrams);
 
     document.querySelectorAll('pre code.language-mermaid').forEach(code => {
         const element = document.createElement('div');

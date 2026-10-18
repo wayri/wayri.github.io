@@ -1,0 +1,18 @@
+<header class="portfolio-header">
+    <div class="portfolio-header-row">
+        <a class="portfolio-brand" href="{{ '/index.html' | relative_url }}">YAWAR</a>
+        <button type="button" id="site-theme-toggle" aria-label="Toggle Theme" title="Toggle Theme" aria-pressed="false"><i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i></button>
+        <button type="button" id="site-menu-toggle" aria-label="Toggle Menu" title="Toggle Menu" aria-expanded="false" aria-controls="site-navigation"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+        <nav id="site-navigation" aria-label="Main navigation">
+            <a href="{{ '/index.html' | relative_url }}"{% if page.url == '/' or page.url == '/index.html' %} aria-current="page"{% endif %}>Overview</a>
+            <a href="{{ '/blog/' | relative_url }}"{% if page.url contains '/blog' %} aria-current="page"{% endif %}>Engineering_Log</a>
+            <a href="{{ '/tools/' | relative_url }}"{% if page.url contains '/tools' %} aria-current="page"{% endif %}>EE_Tools</a>
+            <a href="{{ '/assets/resume.pdf' | relative_url }}" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i> Resume</a>
+            <span class="portfolio-socials">
+                <a href="{{ '/' | relative_url }}#contact" aria-label="Contact details" title="Contact details"><i class="fa-brands fa-discord" aria-hidden="true"></i></a>
+                <a href="https://github.com/wayri" aria-label="GitHub" title="GitHub" target="_blank" rel="noopener"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+                <a href="https://linkedin.com/in/yawar-badri" aria-label="LinkedIn" title="LinkedIn" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+            </span>
+        </nav>
+    </div>
+</header>

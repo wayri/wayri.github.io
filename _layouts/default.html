@@ -78,80 +78,12 @@
     {% if page.custom_js %}
     <script src="{{ page.custom_js | relative_url }}"></script>
     {% endif %}
+    <link rel="stylesheet" href="{{ '/assets/css/site-header.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+    <script src="{{ '/assets/js/site-header.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
 </head>
 <body class="{% if page.simple_home %}home-page {% endif %}{% unless page.url contains '/tools' or page.url contains '/pong' %}classic-text {% endunless %}antialiased selection:bg-themeAccent selection:text-themeBg flex flex-col min-h-screen transition-colors duration-300">
 
-    <!-- Global Time of Day Indicator -->
-    <div id="global-time-indicator" class="fixed top-0 left-0 w-full h-1.5 z-[100] bg-themeBg border-b border-themeBorder overflow-hidden hidden md:block">
-        <div class="absolute inset-0 bg-gradient-to-r from-themeBorder via-yellow-400 to-themeBorder opacity-20"></div>
-        
-    </div>
-
-    <!-- Navigation -->
-    <nav class="fixed top-0 md:top-1.5 w-full z-50 bg-themeBg border-b-2 border-themeBorder transition-colors duration-300">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-14">
-                <div class="group relative flex-shrink-0 font-bold tracking-tight text-lg uppercase cursor-pointer flex items-center h-8 overflow-hidden" onclick="window.location.href='{{ '/index.html' | relative_url }}'">
-                    <span class="block transition-transform duration-500 group-hover:-translate-y-full">YAWAR</span>
-                    <span class="absolute top-0 left-0 block transition-transform duration-500 translate-y-full group-hover:translate-y-0 text-themeAccent font-mono tracking-widest">WAYRI</span>
-                </div>
-                
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex space-x-6 font-mono text-sm items-center">
-                    <button onclick="toggleTheme()" class="hover:text-themeAccent flex items-center text-themeMuted transition-colors group" title="Toggle Theme">
-                        <i class="fa-solid fa-circle-half-stroke text-lg group-hover:rotate-180 transition-transform duration-500"></i> 
-                    </button>
-                    <span class="text-themeBorder opacity-30">|</span>
-                    <a href="{{ '/index.html' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url == '/' or page.url == '/index.html' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">Overview</a>
-                    <a href="{{ '/blog/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url contains '/blog' or page.url contains '/posts/' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">Engineering_Log</a>
-
-                    <a href="{{ '/tools/' | relative_url }}" class="hover:text-themeAccent nav-link transition-colors {% if page.url contains '/tools' %}text-themeAccent underline decoration-2 underline-offset-4{% endif %}">EE_Tools</a>
-                    <a href="{{ '/assets/resume.pdf' | relative_url }}" target="_blank" class="text-themeAccent border border-themeAccent/30 hover:bg-themeAccent/10 px-3 py-1 ml-2 transition-colors flex items-center gap-2">
-                        <i class="fa-solid fa-file-pdf"></i> Resume
-                    </a>
-                    <a href="{{ '/' | relative_url }}#contact" title="Contact details" aria-label="Contact details" class="text-themeMuted hover:text-themeAccent transition-colors ml-4">
-                        <i class="fa-brands fa-discord text-xl"></i>
-                    </a>
-                    <a href="https://github.com/wayri" target="_blank" class="text-themeMuted hover:text-themeAccent transition-colors">
-                        <i class="fa-brands fa-github text-xl"></i>
-                    </a>
-                    <a href="https://linkedin.com/in/yawar-badri" target="_blank" class="text-themeMuted hover:text-themeAccent transition-colors">
-                        <i class="fa-brands fa-linkedin text-xl"></i>
-                    </a>
-                </div>
-
-                <!-- Mobile Action Buttons -->
-                <div class="flex md:hidden items-center gap-2">
-                    <button onclick="toggleTheme()" class="hover:text-themeAccent p-2 text-themeMuted focus:outline-none" title="Toggle Theme">
-                        <i class="fa-solid fa-circle-half-stroke text-lg"></i>
-                    </button>
-                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-themeText hover:text-themeAccent focus:outline-none p-2" aria-label="Toggle Menu">
-                        <i id="menu-icon" class="fa-solid fa-bars text-lg"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Dropdown Menu -->
-        <div id="mobile-menu" class="hidden md:hidden border-t border-themeBorder bg-themeBg px-4 py-4 space-y-4 font-mono text-sm shadow-md transition-colors duration-300">
-            <a href="{{ '/index.html' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">Overview</a>
-            <a href="{{ '/blog/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">Engineering_Log</a>
-
-            <a href="{{ '/tools/' | relative_url }}" class="block hover:text-themeAccent py-1 nav-link">EE_Tools</a>
-            <a href="{{ '/assets/resume.pdf' | relative_url }}" target="_blank" class="block text-themeAccent font-bold py-2"><i class="fa-solid fa-file-pdf mr-2"></i>Download Resume</a>
-            <div class="border-t border-themeBorder/10 pt-4 pb-2 flex justify-center space-x-8">
-                <a href="{{ '/' | relative_url }}#contact" title="Contact details" aria-label="Contact details" class="text-themeMuted hover:text-themeAccent transition-colors">
-                    <i class="fa-brands fa-discord text-2xl"></i>
-                </a>
-                <a href="https://github.com/wayri" target="_blank" class="text-themeMuted hover:text-themeAccent transition-colors">
-                    <i class="fa-brands fa-github text-2xl"></i>
-                </a>
-                <a href="https://linkedin.com/in/yawar-badri" target="_blank" class="text-themeMuted hover:text-themeAccent transition-colors">
-                    <i class="fa-brands fa-linkedin text-2xl"></i>
-                </a>
-            </div>
-        </div>
-    </nav>
+    {% include site-header.html %}
 
     <!-- MAIN CONTENT -->
     <main class="{% if page.simple_home %}home-content {% endif %}flex-grow pt-24 pb-20 px-4 sm:px-6 lg:px-8 {% if page.url contains '/tools' %}max-w-[1600px]{% else %}max-w-6xl{% endif %} mx-auto w-full">

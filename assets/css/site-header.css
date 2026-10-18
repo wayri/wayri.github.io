@@ -1,0 +1,41 @@
+.portfolio-header {
+    --header-paper: #fcfcfc;
+    --header-ink: #111;
+    --header-muted: #4b5563;
+    --header-accent: #164c99;
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 100;
+    background: var(--header-paper);
+    color: var(--header-ink);
+    border-bottom: 1px solid var(--header-accent);
+    font: 14px/1.5 system-ui, sans-serif;
+}
+[data-theme="dark"] .portfolio-header {
+    --header-paper: #080808;
+    --header-ink: #e5e5e5;
+    --header-muted: #b2afa9;
+    --header-accent: #d4af37;
+}
+.portfolio-header, .portfolio-header * { box-sizing: border-box; }
+.portfolio-header-row { display: flex; align-items: center; gap: 20px; min-height: 56px; max-width: 1152px; margin: 0 auto; padding: 10px 24px; }
+.portfolio-header a { color: var(--header-muted); text-decoration: none; }
+.portfolio-header a:hover, .portfolio-header button:hover { color: var(--header-accent); }
+.portfolio-header .portfolio-brand { color: var(--header-ink); font-size: 18px; font-weight: 700; letter-spacing: -.025em; }
+.portfolio-header a[aria-current="page"] { color: var(--header-accent); text-decoration: underline; text-underline-offset: 5px; }
+.portfolio-header :is(a, button):focus-visible { outline: 2px solid var(--header-accent); outline-offset: 4px; }
+.portfolio-header button { display: inline-flex; justify-content: center; align-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--header-muted); font: inherit; cursor: pointer; }
+.portfolio-header button i { font-size: 18px; }
+.portfolio-header #site-navigation { display: flex; align-items: center; justify-content: flex-end; gap: 20px; flex: 1; }
+.portfolio-header .portfolio-socials { display: flex; align-items: center; gap: 18px; }
+.portfolio-header .portfolio-socials i { font-size: 18px; }
+.portfolio-header #site-menu-toggle { display: none; }
+@media (max-width: 760px) {
+    .portfolio-header-row { flex-wrap: wrap; gap: 8px; padding-inline: 18px; }
+    .portfolio-header .portfolio-brand { margin-right: auto; }
+    .portfolio-header #site-menu-toggle { display: inline-flex; }
+    .portfolio-header #site-navigation { display: none; flex-basis: 100%; flex-wrap: wrap; justify-content: flex-start; gap: 16px; padding: 12px 0 6px; }
+    .portfolio-header #site-navigation.is-open { display: flex; }
+    .portfolio-header .portfolio-socials { flex-basis: 100%; padding-block: 6px; }
+}
+@media print { .portfolio-header { display: none; } }
