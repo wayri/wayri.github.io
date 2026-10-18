@@ -9,7 +9,7 @@ body.classic-text {
 }
 [data-theme="dark"] body.classic-text {
     --border-color: #535353;
-    --accent-color: #9fc4f5;
+    --accent-color: #d4af37;
     --muted-text: #b2afa9;
 }
 .classic-text main :is(h1, h2, h3, h4, p, li, blockquote, .font-sans) { font-family: Georgia, "Times New Roman", serif; }
