@@ -328,7 +328,7 @@ function renderWelcomeGrid() {
     let gridHtml = `<div class="w-full max-w-6xl mx-auto p-6 flex flex-col gap-8">
         <div class="text-center mb-4">
             <h2 class="text-3xl font-bold font-mono text-themeText"><i class="fa-solid fa-toolbox text-themeAccent mr-3"></i>Engineering Toolkit</h2>
-            <p class="text-themeMuted mt-2 text-sm max-w-2xl mx-auto">A curated, unified suite of high-performance interactive design calculators, simulation solvers, and engineering utilities.</p>
+            <p class="text-themeMuted mt-2 text-sm max-w-2xl mx-auto">Interactive calculators, simulation tools, and utilities for engineering work.</p>
             <div class="max-w-3xl mx-auto mt-6 bg-themeBorder/10 border-l-4 border-themeAccent p-4 text-left">
                 <p class="text-sm text-themeMuted leading-relaxed">
                     These browser tools support calculations, tolerance checks, magnetics design, and early design exploration. Many are experimental; check the assumptions, units, and results against measurements or a suitable reference before relying on them for a design.

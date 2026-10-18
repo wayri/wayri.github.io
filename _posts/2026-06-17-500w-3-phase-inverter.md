@@ -1,19 +1,19 @@
 ---
 layout: post
-title: "Case Study: Architecting a 500W 3-Phase Inverter Board"
+title: "500W Three-Phase Inverter: Architecture and Layout"
 date: 2026-06-17
 category: Power Electronics
 ---
 
-Designing a medium-power 3-phase inverter involves much more than simply stringing together six MOSFETs. When pushing 500W of continuous power, parasitic inductance, thermal dissipation, and gate drive isolation become critical engineering challenges. 
+This article describes the architecture and layout choices for a three-phase inverter board tested at 500 W continuous power. The main design concerns include switching loops, heat removal, gate drive, and protection.
 
-This case study breaks down the architecture and design decisions behind my **[500W 3-Phase Inverter Board](https://github.com/wayri/3-Phase-inverter-board)**, focusing on robustness, filter integration, and physical layout.
+The linked **[inverter board](https://github.com/wayri/3-Phase-inverter-board)** provides the project context. The sections below focus on its supporting circuits and physical layout.
 
 ---
 
 ### System Architecture
 
-The core topology is a standard 3-phase, 2-level Voltage Source Inverter (VSI). However, the complexity lies in the supporting subsystems required to make it reliable at scale.
+The core topology is a three-phase, two-level voltage-source inverter (VSI). The supporting circuits handle sensing, gate drive, and filtering.
 
 ```mermaid
 graph TD
@@ -32,7 +32,7 @@ graph TD
 ```
 
 #### The DC-Link and Decoupling
-One of the most critical aspects of any high-power inverter is the DC-link capacitor bank. High-frequency PWM switching draws massive ripple currents. If the DC-link capacitors have high Equivalent Series Resistance (ESR) or Equivalent Series Inductance (ESL), it leads to severe voltage ringing and premature capacitor failure due to heating.
+The DC-link capacitor bank supplies switching current near the bridge. Excess series resistance (ESR) raises capacitor heating, while loop inductance (including capacitor ESL) contributes to voltage overshoot during switching.
 
 To mitigate this, the board supports multiple capacitor footprint options, allowing for a mix of bulk electrolytic capacitors (for low-frequency energy storage) and high-frequency ceramic/film capacitors placed immediately adjacent to the switching nodes.
 
@@ -40,7 +40,7 @@ To mitigate this, the board supports multiple capacitor footprint options, allow
 
 ### Gate Drive and Isolation
 
-Switching 500W efficiently requires fast turn-on and turn-off times to minimize switching losses ($P_{sw}$). However, high $dV/dt$ rates induce parasitic ringing and EMI.
+Gate-drive timing affects switching loss, voltage overshoot, and electromagnetic interference (EMI). Faster edges can reduce transition loss but may increase ringing.
 
 ```ascii
      +HV DC
@@ -54,28 +54,28 @@ Switching 500W efficiently requires fast turn-on and turn-off times to minimize 
       GND
 ```
 
-To drive the high-side MOSFETs, a bootstrap topology is often sufficient, but true galvanic isolation is preferred for robustness against fault conditions. The architecture incorporates:
-1. **Digital Isolators**: Separating the delicate MCU logic signals from the noisy power stage.
-2. **Robust Gate Drivers**: Capable of sinking/sourcing peak currents necessary to charge the MOSFET gate capacitance rapidly.
-3. **Desaturation Protection**: (Optional depending on the exact switch choice) to detect overcurrent conditions and safely shut down the bridge before thermal runaway occurs.
+The gate-drive path uses:
+1. **Digital isolators** to separate control signals from the power stage.
+2. **Gate drivers** sized for the selected MOSFETs and switching rate.
+3. **Overcurrent protection provisions**, whose sensing and shutdown method depend on the final switch and driver choices.
 
 ---
 
 ### Output Filter Design
 
-A raw PWM output is highly harmonic. For applications requiring a clean sinusoidal voltage (like driving sensitive AC motors or grid-tie applications), a robust low-pass filter is mandatory.
+PWM output contains switching-frequency components. Where the load or interface requires lower ripple, an output filter can attenuate those components; its values depend on the application.
 
-This board was designed with **on-board filter options**. 
-- The **Inductor ($L$)** limits the current ripple. Careful attention was paid to the magnetic core material to prevent saturation at peak 500W currents.
-- The **Capacitor ($C$)** shunts high-frequency switching noise to ground.
+This board includes **on-board filter options**.
+- The **inductor ($L$)** limits current ripple and must be checked for saturation at the expected peak current.
+- The **capacitor ($C$)** provides a high-frequency current path; its connection and rating depend on the chosen filter topology.
 
-By integrating the filter directly onto the board, the EMI footprint of the entire system is drastically reduced compared to running noisy PWM signals over long cables to an external filter.
+The filter is integrated on the board to keep high-frequency current paths short and make EMI easier to manage.
 
 ---
 
 ### Physical Layout & Thermal Management
 
-The physical layer is unforgiving. A schematic can be flawless, but a poor PCB layout will destroy a 500W inverter in seconds.
+PCB layout affects voltage spikes, thermal behavior, and reliability, even when the schematic is sound.
 
 **Key Layout Principles Applied:**
 1. **Minimizing Commutation Loops**: The loop from the DC-link capacitor, through the high-side switch, through the low-side switch, and back to the capacitor must be physically as small as possible to minimize parasitic inductance ($L_{loop}$). High $L_{loop}$ combined with high $di/dt$ causes destructive voltage spikes ($V = L \cdot di/dt$).
@@ -84,4 +84,4 @@ The physical layer is unforgiving. A schematic can be flawless, but a poor PCB l
 
 ### Conclusion
 
-Building a 500W 3-Phase Inverter is an exercise in balancing opposing forces: switching fast enough to be efficient, but slow enough to manage EMI; keeping loops tight while maintaining high-voltage clearances. The resulting board serves as a robust platform for motor control and power conversion R&D.
+The board is a test platform for motor-control and power-conversion work. Switching speed, layout, thermal design, and clearances all need to be considered together.

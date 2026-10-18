@@ -12,3 +12,5 @@ __pycache__/
 # Local planning documents
 rf_roadmap.*
 motor_roadmap.*
+*-skill-candidates/
+cleanup-records/

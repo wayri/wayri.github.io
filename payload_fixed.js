@@ -1,268 +1,218 @@
-const docStyle = getComputedStyle(document.documentElement);
-const bgColor = docStyle.getPropertyValue('--bg-color').trim() || '#0a0a0a';
-const accentColor = docStyle.getPropertyValue('--accent-color').trim() || '#D4AF37';
-// Rocket Pong Engine
+// Rocket Pong source. Encrypt this file into pong.html after editing.
 const canvas = document.getElementById('pong-canvas');
 const ctx = canvas.getContext('2d');
 const scoreEl = document.getElementById('score');
-const p1RocketsEl = document.getElementById('p1-rockets');
-const p2RocketsEl = document.getElementById('p2-rockets');
+const statusEl = document.getElementById('game-status');
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const W = canvas.width, H = canvas.height;
+const paddle = { w: 10, h: 64, speed: 360, left: 48, right: W - 58 };
+const capacity = 6, reloadTime = 10, fireInterval = 0.65;
+const ball = { x: W / 2, y: H / 2, r: 6, vx: 0, vy: 0 };
+function makePlayer() {
+    return { y: (H - paddle.h) / 2, score: 0, stock: [], reload: 0, cooldown: 0, effect: 'none', effectTime: 0 };
+}
+const p1 = makePlayer(), p2 = makePlayer(), keys = Object.create(null);
+let rockets = [], paused = false, muted = false, gameOver = false, winScore = 10, serveDelay = 0, lastFrame = null;
 
-let w = canvas.width, h = canvas.height;
-let isPaused = false;
-let isMuted = false;
-let winScore = 10;
-let gameOver = false;
-
-// Entities
-const paddle = { w: 10, h: 60, speed: 6 };
-const ball = { x: w/2, y: h/2, r: 5, vx: 5, vy: 5, speed: 5 };
-const p1 = { y: h/2 - paddle.h/2, score: 0, rockets: 6, lastRocket: 0, badges: [], effectTimer: 0, effect: 'none' };
-const p2 = { y: h/2 - paddle.h/2, score: 0, rockets: 6, lastRocket: 0, badges: [], effectTimer: 0, effect: 'none' };
-let rockets = []; 
-
-const keys = {};
-window.addEventListener('keydown', e => {
-    keys[e.key.toLowerCase()] = true;
-    if(e.key.toLowerCase() === 'p') togglePause();
-    if(e.key === ' ') resetGame();
-});
-window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
-
-function playTone(freq, type, duration) {
-    if(isMuted) return;
+function tone(frequency, type, duration) {
+    if (muted) return;
     try {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
         osc.type = type;
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-    } catch(e) {}
+        osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.07, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
+    } catch (_) { /* Audio is optional. */ }
 }
-
-function initRockets(player) {
-    player.badges = [];
-    for(let i=0; i<6; i++) {
-        player.badges.push(Math.random() > 0.5 ? 'tracking' : 'normal');
-    }
-    updateRocketsUI();
+function rocketType() { return Math.random() < 0.5 ? 'tracking' : 'normal'; }
+function resetBall(direction) {
+    const angle = Math.random() * 0.8 - 0.4;
+    ball.x = W / 2; ball.y = H / 2;
+    ball.vx = direction * 310 * Math.cos(angle);
+    ball.vy = 310 * Math.sin(angle);
+    serveDelay = 0.55;
 }
-
-function updateRocketsUI() {
-    p1RocketsEl.innerHTML = p1.badges.map(b => '<span class="pong-badge ' + b + '"></span>').join('');
-    p2RocketsEl.innerHTML = p2.badges.map(b => '<span class="pong-badge ' + b + '"></span>').join('');
+function updateStatus() {
+    statusEl.textContent = gameOver ? (p1.score >= winScore ? 'Player 1 wins · Space to restart' : 'Player 2 wins · Space to restart')
+        : paused ? 'Paused · P to resume' : 'One rocket reloads every 10 seconds';
+    document.getElementById('pause-btn').textContent = paused ? 'RESUME (P)' : 'PAUSE (P)';
 }
-
-function fireRocket(ownerStr) {
-    const now = Date.now();
-    const owner = ownerStr === 'p1' ? p1 : p2;
-    if(owner.badges.length === 0 || now - owner.lastRocket < 1000) return; 
-    
-    owner.lastRocket = now;
-    const type = owner.badges.shift();
-    updateRocketsUI();
-    
-    const x = ownerStr === 'p1' ? 30 : w - 30;
-    const y = owner.y + paddle.h/2;
-    const vx = ownerStr === 'p1' ? 7 : -7;
-    
-    rockets.push({ x, y, vx, vy: 0, type, owner: ownerStr, active: true });
-    playTone(150, 'sawtooth', 0.2);
-}
-
 function resetGame() {
-    const ws = document.getElementById('win-score');
-    if(ws) winScore = parseInt(ws.value) || 10;
-    p1.score = 0; p2.score = 0;
-    p1.y = h/2 - paddle.h/2; p2.y = h/2 - paddle.h/2;
-    p1.effect = 'none'; p1.effectTimer = 0;
-    p2.effect = 'none'; p2.effectTimer = 0;
-    gameOver = false;
-    isPaused = false;
-    rockets = [];
-    initRockets(p1); initRockets(p2);
-    resetBall();
-    updateScore();
-}
-
-function resetBall() {
-    ball.x = w/2; ball.y = h/2;
-    ball.vx = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
-    ball.vy = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
-}
-
-function togglePause() { isPaused = !isPaused; }
-function toggleMute() { 
-    isMuted = !isMuted; 
-    const mb = document.getElementById('mute-btn');
-    if(mb) mb.textContent = isMuted ? 'UNMUTE' : 'MUTE';
-}
-
-function updateScore() {
-    scoreEl.textContent = p1.score + ' : ' + p2.score;
-    if(p1.score >= winScore || p2.score >= winScore) {
-        gameOver = true;
+    const selected = Number(document.getElementById('win-score').value);
+    winScore = Number.isFinite(selected) && selected > 0 ? selected : 10;
+    for (const player of [p1, p2]) {
+        player.y = (H - paddle.h) / 2; player.score = 0;
+        player.stock = Array.from({ length: capacity }, rocketType);
+        player.reload = 0; player.cooldown = 0;
+        player.effect = 'none'; player.effectTime = 0;
     }
+    rockets = []; paused = false; gameOver = false;
+    scoreEl.textContent = '0 : 0';
+    resetBall(Math.random() < 0.5 ? -1 : 1);
+    updateStatus();
 }
-
+function togglePause() { if (!gameOver) { paused = !paused; updateStatus(); } }
+function toggleMute() {
+    muted = !muted;
+    document.getElementById('mute-btn').textContent = muted ? 'UNMUTE' : 'MUTE';
+}
+function fireRocket(player, side) {
+    if (player.cooldown > 0 || player.stock.length === 0) return;
+    const type = player.stock.shift(), direction = side === 'left' ? 1 : -1;
+    rockets.push({ x: side === 'left' ? paddle.left + paddle.w + 8 : paddle.right - 8,
+        y: player.y + paddle.h / 2, vx: direction * 445, vy: 0, type, side });
+    player.cooldown = fireInterval;
+    tone(165, 'sawtooth', 0.12);
+}
 function applyEffect(player, type) {
-    if (type === 'tracking') {
-        player.effect = 'freeze';
-        player.effectTimer = 120; // 2 seconds at 60fps
-        playTone(50, 'sawtooth', 1.0);
-    } else {
-        player.effect = 'slow';
-        player.effectTimer = 180; // 3 seconds at 60fps
-        playTone(80, 'square', 0.5);
-    }
+    player.effect = type === 'tracking' ? 'freeze' : 'slow';
+    player.effectTime = type === 'tracking' ? 1.2 : 2.5;
+    tone(type === 'tracking' ? 95 : 130, 'square', 0.18);
 }
-
-function update() {
-    if(isPaused || gameOver) return;
-
-    if (p1.effectTimer > 0) p1.effectTimer--;
-    else p1.effect = 'none';
-    if (p2.effectTimer > 0) p2.effectTimer--;
-    else p2.effect = 'none';
-
-    let p1Speed = p1.effect === 'freeze' ? 0 : (p1.effect === 'slow' ? paddle.speed * 0.4 : paddle.speed);
-    let p2Speed = p2.effect === 'freeze' ? 0 : (p2.effect === 'slow' ? paddle.speed * 0.4 : paddle.speed);
-
-    if(keys['w']) p1.y = Math.max(0, p1.y - p1Speed);
-    if(keys['s']) p1.y = Math.min(h - paddle.h, p1.y + p1Speed);
-    if(keys['arrowup']) p2.y = Math.max(0, p2.y - p2Speed);
-    if(keys['arrowdown']) p2.y = Math.min(h - paddle.h, p2.y + p2Speed);
-    
-    if(keys['d']) { fireRocket('p1'); keys['d'] = false; }
-    if(keys['arrowleft']) { fireRocket('p2'); keys['arrowleft'] = false; }
-
-    ball.x += ball.vx;
-    ball.y += ball.vy;
-
-    if(ball.y - ball.r < 0 || ball.y + ball.r > h) {
-        ball.vy *= -1;
-        playTone(400, 'square', 0.1);
-    }
-
-    if(ball.x < 0) { p2.score++; playTone(200, 'sine', 0.5); resetBall(); updateScore(); }
-    if(ball.x > w) { p1.score++; playTone(200, 'sine', 0.5); resetBall(); updateScore(); }
-
-    if(ball.vx < 0 && ball.x - ball.r < 20 && ball.y > p1.y && ball.y < p1.y + paddle.h) {
-        ball.vx *= -1.1;
-        ball.vy = (ball.y - (p1.y + paddle.h/2)) * 0.2;
-        playTone(600, 'square', 0.1);
-    }
-    if(ball.vx > 0 && ball.x + ball.r > w - 20 && ball.y > p2.y && ball.y < p2.y + paddle.h) {
-        ball.vx *= -1.1;
-        ball.vy = (ball.y - (p2.y + paddle.h/2)) * 0.2;
-        playTone(600, 'square', 0.1);
-    }
-
-    for(let i=rockets.length-1; i>=0; i--) {
-        let r = rockets[i];
-        if(!r.active) continue;
-        
-        r.x += r.vx;
-        r.y += r.vy;
-
-        if(r.type === 'tracking') {
-            const target = r.owner === 'p1' ? p2 : p1;
-            const targetY = target.y + paddle.h/2;
-            if(r.y < targetY - 10) r.vy += 0.2;
-            else if(r.y > targetY + 10) r.vy -= 0.2;
-            r.vy *= 0.95;
-        }
-
-        ctx.beginPath();
-        ctx.arc(ball.x, ball.y, ball.r+5, 0, Math.PI*2);
-        if(ctx.isPointInPath(r.x, r.y)) {
-            ball.vx = r.vx * 1.5;
-            ball.vy = (Math.random() > 0.5 ? 5 : -5);
-            playTone(800, 'triangle', 0.3);
-            r.active = false;
-        }
-
-        if(r.owner === 'p1' && r.x > w - 20 && r.y > p2.y && r.y < p2.y + paddle.h) {
-            applyEffect(p2, r.type);
-            r.active = false;
-        }
-        else if(r.owner === 'p2' && r.x < 20 && r.y > p1.y && r.y < p1.y + paddle.h) {
-            applyEffect(p1, r.type);
-            r.active = false;
-        }
-
-        if(r.x < 0 || r.x > w) r.active = false;
-    }
+function scorePoint(player, direction) {
+    player.score++;
+    scoreEl.textContent = p1.score + ' : ' + p2.score;
+    rockets = [];
+    tone(230, 'sine', 0.25);
+    if (player.score >= winScore) { gameOver = true; updateStatus(); }
+    else resetBall(direction);
 }
-
-function draw() {
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(0, 0, w, h);
-
-    ctx.strokeStyle = '#D4AF37';
-    ctx.setLineDash([10, 15]);
-    ctx.beginPath(); ctx.moveTo(w/2, 0); ctx.lineTo(w/2, h); ctx.stroke();
-    ctx.setLineDash([]);
-
-    ctx.fillStyle = p1.effect === 'freeze' ? '#00e5ff' : (p1.effect === 'slow' ? '#ffaa00' : '#D4AF37');
-    if (p1.effect !== 'none' && Math.floor(Date.now() / 100) % 2 === 0) ctx.globalAlpha = 0.5;
-    ctx.fillRect(10, p1.y, paddle.w, paddle.h);
-    ctx.globalAlpha = 1.0;
-
-    ctx.fillStyle = p2.effect === 'freeze' ? '#00e5ff' : (p2.effect === 'slow' ? '#ffaa00' : '#D4AF37');
-    if (p2.effect !== 'none' && Math.floor(Date.now() / 100) % 2 === 0) ctx.globalAlpha = 0.5;
-    ctx.fillRect(w - 20, p2.y, paddle.w, paddle.h);
-    ctx.globalAlpha = 1.0;
-
-    ctx.fillStyle = accentColor;
+function bounce(player, side) {
+    const offset = Math.max(-1, Math.min(1, (ball.y - player.y - paddle.h / 2) / (paddle.h / 2)));
+    const speed = Math.min(620, Math.hypot(ball.vx, ball.vy) + 22);
+    ball.vx = (side === 'left' ? 1 : -1) * speed * Math.cos(offset * 0.9);
+    ball.vy = speed * Math.sin(offset * 0.9);
+    ball.x = side === 'left' ? paddle.left + paddle.w + ball.r : paddle.right - ball.r;
+    tone(530, 'triangle', 0.08);
+}
+function updatePlayer(player, up, down, dt) {
+    player.cooldown = Math.max(0, player.cooldown - dt);
+    if (player.effectTime > 0) {
+        player.effectTime = Math.max(0, player.effectTime - dt);
+        if (player.effectTime === 0) player.effect = 'none';
+    }
+    if (player.stock.length < capacity) {
+        player.reload += dt;
+        while (player.reload >= reloadTime && player.stock.length < capacity) {
+            player.stock.push(rocketType()); player.reload -= reloadTime;
+        }
+    } else player.reload = 0;
+    const speed = player.effect === 'freeze' ? 0 : paddle.speed * (player.effect === 'slow' ? 0.5 : 1);
+    const movement = ((keys[down] ? 1 : 0) - (keys[up] ? 1 : 0)) * speed * dt;
+    player.y = Math.max(0, Math.min(H - paddle.h, player.y + movement));
+}
+function update(dt) {
+    if (paused || gameOver) return;
+    updatePlayer(p1, 'w', 's', dt);
+    updatePlayer(p2, 'arrowup', 'arrowdown', dt);
+    if (keys.d) { fireRocket(p1, 'left'); keys.d = false; }
+    if (keys.arrowleft) { fireRocket(p2, 'right'); keys.arrowleft = false; }
+    if (serveDelay > 0) { serveDelay = Math.max(0, serveDelay - dt); return; }
+    const previousX = ball.x;
+    ball.x += ball.vx * dt; ball.y += ball.vy * dt;
+    if (ball.y - ball.r < 0) { ball.y = ball.r; ball.vy = Math.abs(ball.vy); tone(390, 'triangle', 0.06); }
+    else if (ball.y + ball.r > H) { ball.y = H - ball.r; ball.vy = -Math.abs(ball.vy); tone(390, 'triangle', 0.06); }
+    if (ball.vx < 0 && previousX - ball.r >= paddle.left + paddle.w &&
+        ball.x - ball.r <= paddle.left + paddle.w &&
+        ball.y + ball.r >= p1.y && ball.y - ball.r <= p1.y + paddle.h) bounce(p1, 'left');
+    else if (ball.vx > 0 && previousX + ball.r <= paddle.right &&
+        ball.x + ball.r >= paddle.right &&
+        ball.y + ball.r >= p2.y && ball.y - ball.r <= p2.y + paddle.h) bounce(p2, 'right');
+    if (ball.x + ball.r < 0) { scorePoint(p2, -1); return; }
+    if (ball.x - ball.r > W) { scorePoint(p1, 1); return; }
+    rockets = rockets.filter(rocket => {
+        const target = rocket.side === 'left' ? p2 : p1;
+        const targetX = rocket.side === 'left' ? paddle.right : paddle.left + paddle.w;
+        if (rocket.type === 'tracking') {
+            const delta = target.y + paddle.h / 2 - rocket.y;
+            rocket.vy = Math.max(-155, Math.min(155, rocket.vy + Math.sign(delta) * 460 * dt));
+        }
+        rocket.x += rocket.vx * dt;
+        rocket.y = Math.max(5, Math.min(H - 5, rocket.y + rocket.vy * dt));
+        if (Math.hypot(rocket.x - ball.x, rocket.y - ball.y) < ball.r + 6) {
+            ball.vx = rocket.vx * 0.9;
+            ball.vy = Math.max(-220, Math.min(220, (ball.y - rocket.y) * 20 + rocket.vy));
+            tone(760, 'triangle', 0.12);
+            return false;
+        }
+        if ((rocket.side === 'left' ? rocket.x >= targetX : rocket.x <= targetX) &&
+            rocket.y >= target.y && rocket.y <= target.y + paddle.h) {
+            applyEffect(target, rocket.type);
+            return false;
+        }
+        return rocket.x >= 0 && rocket.x <= W;
+    });
+}
+function drawRocket(x, y, direction, type, scale) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(direction * scale, scale);
+    ctx.fillStyle = type === 'tracking' ? '#f36b73' : '#f6bd60';
     ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
-    ctx.fill();
-
-    for(let r of rockets) {
-        if(!r.active) continue;
-        ctx.fillStyle = r.type === 'tracking' ? '#ff3333' : '#ff8c00';
-        ctx.shadowColor = ctx.fillStyle;
-        ctx.shadowBlur = 10;
-        ctx.beginPath();
-        ctx.arc(r.x, r.y, 4, 0, Math.PI*2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
-        
-        ctx.fillStyle = 'rgba(255,255,255,0.5)';
-        ctx.beginPath();
-        ctx.arc(r.x - r.vx*1.5, r.y - r.vy*1.5, 2, 0, Math.PI*2);
-        ctx.fill();
+    ctx.moveTo(7, 0); ctx.lineTo(-2, -4); ctx.lineTo(-5, -4);
+    ctx.lineTo(-5, 4); ctx.lineTo(-2, 4); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#85c9d3'; ctx.fillRect(-9, -2, 4, 4); ctx.restore();
+}
+function drawPlayer(player, side) {
+    const x = side === 'left' ? paddle.left : paddle.right;
+    const direction = side === 'left' ? 1 : -1;
+    const stockX = side === 'left' ? 25 : W - 25;
+    const center = player.y + paddle.h / 2;
+    player.stock.forEach((type, index) => {
+        const slot = index === 0 ? 0 : (index % 2 ? -1 : 1) * Math.ceil(index / 2) * 10;
+        drawRocket(stockX, center + slot, direction, type, index === 0 ? 0.9 : 0.72);
+    });
+    ctx.fillStyle = player.effect === 'freeze' ? '#8bd7e7' : player.effect === 'slow' ? '#f2a65a' : '#e8c878';
+    ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 14;
+    ctx.fillRect(x, player.y, paddle.w, paddle.h); ctx.shadowBlur = 0;
+}
+function draw() {
+    ctx.fillStyle = '#0a1320'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = 'rgba(157,190,208,.08)'; ctx.lineWidth = 1;
+    for (let x = 40; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+    for (let y = 40; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(232,200,120,.35)'; ctx.setLineDash([8, 12]);
+    ctx.beginPath(); ctx.moveTo(W / 2, 0); ctx.lineTo(W / 2, H); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle = 'rgba(232,200,120,.22)';
+    ctx.beginPath(); ctx.arc(W / 2, H / 2, 48, 0, Math.PI * 2); ctx.stroke();
+    drawPlayer(p1, 'left'); drawPlayer(p2, 'right');
+    for (const rocket of rockets) {
+        ctx.strokeStyle = rocket.type === 'tracking' ? 'rgba(243,107,115,.35)' : 'rgba(246,189,96,.35)';
+        ctx.lineWidth = 2; ctx.beginPath();
+        ctx.moveTo(rocket.x - Math.sign(rocket.vx) * 16, rocket.y);
+        ctx.lineTo(rocket.x, rocket.y); ctx.stroke();
+        drawRocket(rocket.x, rocket.y, Math.sign(rocket.vx), rocket.type, 1);
     }
-
-    if(gameOver) {
-        ctx.fillStyle = 'rgba(0,0,0,0.7)';
-        ctx.fillRect(0,0,w,h);
-        ctx.fillStyle = accentColor;
-        ctx.font = '30px "JetBrains Mono"';
-        ctx.textAlign = 'center';
-        const winner = p1.score >= winScore ? 'PLAYER 1' : 'PLAYER 2';
-        ctx.fillText(winner + ' WINS THE SIMULATION', w/2, h/2 - 20);
-        ctx.font = '14px "JetBrains Mono"';
-        ctx.fillText('Press SPACE to restart', w/2, h/2 + 20);
+    ctx.fillStyle = '#fff3cd'; ctx.shadowColor = '#fff3cd'; ctx.shadowBlur = 15;
+    ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+    if (paused || gameOver) {
+        ctx.fillStyle = 'rgba(6,12,22,.8)'; ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = '#f4d68e'; ctx.font = 'bold 26px "JetBrains Mono", monospace'; ctx.textAlign = 'center';
+        ctx.fillText(gameOver ? (p1.score >= winScore ? 'PLAYER 1 WINS' : 'PLAYER 2 WINS') : 'PAUSED', W / 2, H / 2 - 8);
+        ctx.fillStyle = '#a9b9c7'; ctx.font = '14px "JetBrains Mono", monospace';
+        ctx.fillText(gameOver ? 'SPACE TO PLAY AGAIN' : 'P TO RESUME', W / 2, H / 2 + 24);
     }
 }
-
-function loop() {
-    update();
-    draw();
-    requestAnimationFrame(loop);
+window.addEventListener('keydown', event => {
+    if (event.target instanceof HTMLElement && /^(INPUT|SELECT|TEXTAREA|BUTTON)$/.test(event.target.tagName)) return;
+    const key = event.key.toLowerCase();
+    if (['arrowup', 'arrowdown', 'arrowleft', ' '].includes(key)) event.preventDefault();
+    if (event.repeat && (key === 'p' || key === ' ')) return;
+    keys[key] = true;
+    if (key === 'p') togglePause();
+    if (key === ' ') resetGame();
+});
+window.addEventListener('keyup', event => { keys[event.key.toLowerCase()] = false; });
+window.addEventListener('blur', () => { Object.keys(keys).forEach(key => { keys[key] = false; }); });
+function loop(timestamp) {
+    if (lastFrame === null) lastFrame = timestamp;
+    const dt = Math.min((timestamp - lastFrame) / 1000, 0.05);
+    lastFrame = timestamp;
+    update(dt); draw(); requestAnimationFrame(loop);
 }
-
 window.resetGame = resetGame;
 window.togglePause = togglePause;
 window.toggleMute = toggleMute;
-
 resetGame();
-loop();
+requestAnimationFrame(loop);

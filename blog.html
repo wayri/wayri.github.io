@@ -23,9 +23,9 @@ permalink: /blog/
                 <li><button class="hover:text-themeAccent transition-colors font-bold text-themeAccent text-left w-full" onclick="filterBlog('all', this)">[ All Logs ]</button></li>
             </ul>
         </div>
-        <div class="mt-4 border border-themeBorder p-4 font-mono text-xs text-themeMuted text-center bg-themeBg">
-            RSS Feed <br><span class="opacity-50">(Coming Soon)</span>
-        </div>
+        <a href="{{ '/feed.xml' | relative_url }}" type="application/atom+xml" class="block mt-4 border border-themeBorder p-4 font-mono text-xs text-themeAccent text-center bg-themeBg hover:bg-themeBorder/10 transition-colors">
+            Subscribe to the Atom feed <i class="fa-solid fa-arrow-up-right-from-square ml-1" aria-hidden="true"></i>
+        </a>
     </div>
 
     <!-- Posts Grid -->
