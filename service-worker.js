@@ -1,5 +1,5 @@
 // Service Worker for Full Offline Engineering Suite Hosting
-const CACHE_NAME = 'eng-tools-suite-v1';
+const CACHE_NAME = 'eng-tools-suite-v2';
 
 const PRECACHE_URLS = [
     '/',
@@ -7,6 +7,7 @@ const PRECACHE_URLS = [
     '/tools/',
     '/tools/index.html',
     '/assets/css/style.css',
+    '/assets/css/tools-workspace.css',
     '/assets/js/main.js',
     '/assets/js/tools.js',
     '/assets/js/tools_ui.js',
@@ -32,7 +33,7 @@ self.addEventListener('activate', event => {
         caches.keys().then(cacheNames => {
             return Promise.all(
                 cacheNames.map(name => {
-                    if (name !== CACHE_NAME) {
+                    if (name.startsWith('eng-tools-suite-') && name !== CACHE_NAME) {
                         return caches.delete(name);
                     }
                 })
@@ -41,38 +42,27 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Fetch Event - Cache-first with network fallback
+// Prefer current files online; retain a stable cache key for offline tool navigation.
 self.addEventListener('fetch', event => {
-    // Only handle GET requests
-    if (event.request.method !== 'GET') return;
-
-    event.respondWith(
-        caches.match(event.request).then(cachedResponse => {
-            if (cachedResponse) {
-                // Fetch in background to update cache
-                fetch(event.request).then(networkResponse => {
-                    if (networkResponse && networkResponse.status === 200) {
-                        caches.open(CACHE_NAME).then(cache => {
-                            cache.put(event.request, networkResponse);
-                        });
-                    }
-                }).catch(() => {});
-                return cachedResponse;
+    const url = new URL(event.request.url);
+    if (event.request.method !== 'GET' || url.origin !== self.location.origin) return;
+    const cacheKey = url.origin + url.pathname;
+    event.respondWith((async () => {
+        const cache = await caches.open(CACHE_NAME);
+        try {
+            const response = await fetch(event.request);
+            if (response.ok && response.type === 'basic') {
+                event.waitUntil(cache.put(cacheKey, response.clone()).catch(() => {}));
             }
-
-            return fetch(event.request).then(networkResponse => {
-                if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-                    return networkResponse;
-                }
-                const responseToCache = networkResponse.clone();
-                caches.open(CACHE_NAME).then(cache => {
-                    cache.put(event.request, responseToCache);
-                });
-                return networkResponse;
-            }).catch(() => {
-                // Return offline fallback if available
-                return caches.match('/tools/index.html');
-            });
-        })
-    );
+            return response;
+        } catch (error) {
+            const cached = await cache.match(cacheKey);
+            if (cached) return cached;
+            if (event.request.mode === 'navigate') {
+                const fallback = await cache.match('/tools/');
+                if (fallback) return fallback;
+            }
+            return Response.error();
+        }
+    })());
 });

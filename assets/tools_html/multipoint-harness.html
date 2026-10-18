@@ -1,4 +1,4 @@
-<div class="doc-container flex flex-col w-full h-full min-h-[700px]">
+<div id="tool-multipoint-harness" class="doc-container flex flex-col w-full">
     <!-- Header -->
     <div class="p-3 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center flex-wrap gap-2" title="Industrial Multipoint Wire Harness & Pinout Designer">
         <div class="flex items-center gap-2">
@@ -7,7 +7,7 @@
         </div>
         <div class="flex gap-2 flex-wrap items-center">
             <!-- Preset Selector -->
-            <select class="bg-themeBg text-themeText border border-themeBorder text-xs px-2 py-1 font-bold rounded" onchange="window.HarnessApp.loadPreset(this.value)">
+            <select id="harness-preset" aria-label="Harness preset" class="bg-themeBg text-themeText border border-themeBorder text-xs px-2 py-1 font-bold rounded" onchange="window.HarnessApp.loadPreset(this.value)">
                 <option value="quadcopter">Preset: Drone / ESC Harness</option>
                 <option value="automotive">Preset: Automotive Sensor Harness</option>
             </select>
@@ -20,18 +20,21 @@
     </div>
     
     <!-- Main Interactive Canvas & Floating Inspector -->
-    <div class="flex flex-grow relative overflow-hidden bg-themeBg font-mono min-h-[500px]">
+    <div class="harness-workbench bg-themeBg font-mono">
         <!-- Canvas Container -->
-        <div class="flex-grow relative overflow-hidden" id="harness-canvas-container">
-            <canvas id="harness-canvas" class="absolute inset-0 w-full h-full block"></canvas>
+        <div class="harness-scroll-pane" tabindex="0" aria-label="Harness diagram. Scroll horizontally to see all connectors.">
+          <div class="relative" id="harness-canvas-container">
+            <canvas id="harness-canvas" class="absolute inset-0 w-full h-full block" aria-label="Interactive harness diagram. Use Route Pin Wire to connect pins; drag connectors to move them."></canvas>
             
             <!-- Quick Helper Overlay -->
             <div class="absolute bottom-3 left-3 bg-themeContainer/90 border border-themeBorder/40 p-2 rounded text-[11px] text-themeMuted shadow backdrop-blur-sm pointer-events-none hidden sm:block">
                 <span class="text-themeAccent font-bold">Tip:</span> Click <kbd class="bg-themeBorder/20 px-1 py-0.5 rounded">Route Pin Wire</kbd> then click source & target pins. Drag connectors to reposition.
             </div>
 
-            <!-- Floating Properties Inspector Panel -->
-            <div class="w-80 absolute top-3 right-3 border border-themeBorder bg-themeContainer/95 backdrop-blur-md flex flex-col shadow-2xl rounded-lg z-20 max-h-[92%] overflow-hidden" id="harness-props">
+          </div>
+        </div>
+            <!-- Properties Inspector -->
+            <div class="border-l border-themeBorder bg-themeContainer flex flex-col" id="harness-props">
                 <div class="p-2.5 border-b border-themeBorder font-bold text-xs bg-themeBorder/20 flex justify-between items-center">
                     <span class="flex items-center gap-1.5 text-themeAccent"><i class="fa-solid fa-sliders"></i> Inspector</span>
                     <span class="text-[10px] text-themeMuted" id="harness-selection-info">Nothing selected</span>
@@ -40,7 +43,6 @@
                     <div class="text-themeMuted text-center mt-10">Click a connector or wire to inspect and edit net properties.</div>
                 </div>
             </div>
-        </div>
     </div>
 
     <!-- Bottom DRC & Auto-Solve Recommendations Bar -->
@@ -80,7 +82,7 @@
                 <h3 class="font-bold font-mono text-themeAccent text-sm md:text-base"><i class="fa-solid fa-table-list mr-2"></i>Wire Run List & Bill of Materials (BOM)</h3>
                 <div class="flex gap-2">
                     <button class="text-xs bg-themeAccent text-themeBg px-3 py-1 font-bold rounded hover:opacity-80 flex items-center gap-1" onclick="window.HarnessApp.downloadCSV()"><i class="fa-solid fa-download"></i> Export CSV</button>
-                    <button class="hover:text-red-500 text-themeText px-2 py-1" onclick="document.getElementById('harness-table-modal').classList.add('hidden'); document.getElementById('harness-table-modal').classList.remove('flex');"><i class="fa-solid fa-xmark fa-lg"></i></button>
+                    <button aria-label="Close netlist" class="hover:text-red-500 text-themeText px-2 py-1" onclick="document.getElementById('harness-table-modal').classList.add('hidden'); document.getElementById('harness-table-modal').classList.remove('flex');"><i class="fa-solid fa-xmark fa-lg"></i></button>
                 </div>
             </div>
             <div class="p-4 overflow-auto flex-grow text-xs font-mono space-y-4">

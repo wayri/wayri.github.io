@@ -1,0 +1,183 @@
+/* Engineering tools workspace only; shared site styles remain untouched. */
+#tools-workspace {
+    min-height: 420px;
+    height: calc(100dvh - 172px);
+    color: var(--text-color);
+}
+
+html:not([data-theme="dark"]) #tools-workspace {
+    color-scheme: light;
+}
+
+[data-theme="dark"] #tools-workspace {
+    color-scheme: dark;
+}
+
+#tools-workspace .tools-sidebar,
+#tools-workspace .tools-main {
+    min-width: 0;
+    min-height: 0;
+    border-color: color-mix(in srgb, var(--border-color) 55%, transparent);
+}
+
+#tools-workspace .tool-card { min-width: 0; }
+#tools-workspace .tool-card:hover { background-color: color-mix(in srgb, var(--accent-color) 6%, var(--container-bg)); }
+html:not([data-theme="dark"]) #tools-workspace :is(.text-red-400, .text-red-500) { color: #b91c1c; }
+html:not([data-theme="dark"]) #tools-workspace :is(.text-green-400, .text-green-500) { color: #166534; }
+html:not([data-theme="dark"]) #tools-workspace :is(.text-sky-400, .text-blue-400) { color: #075985; }
+html:not([data-theme="dark"]) #tools-workspace :is(.text-yellow-300, .text-yellow-400, .text-amber-400) { color: #92400e; }
+
+#tool-multipoint-harness { container-type: inline-size; }
+#tool-multipoint-harness .harness-workbench { display: grid; grid-template-columns: minmax(0, 1fr) 280px; }
+#tool-multipoint-harness .harness-scroll-pane { min-width: 0; overflow: auto; }
+#harness-canvas-container { min-width: 760px; width: 100%; height: 540px; }
+#harness-canvas { touch-action: none; }
+#harness-props { min-width: 0; max-height: 540px; }
+@container (max-width: 1000px) {
+    #tool-multipoint-harness .harness-workbench { grid-template-columns: minmax(0, 1fr); }
+    #harness-props { border-left: 0; border-top: 1px solid var(--border-color); max-height: 360px; }
+}
+
+#tools-workspace .tools-sidebar {
+    flex: 0 0 224px;
+    width: 224px;
+    background: var(--bg-color);
+    scrollbar-color: var(--accent-color) var(--bg-color);
+}
+
+#tools-workspace .tools-main {
+    flex: 1 1 0;
+    background: var(--container-bg);
+    scrollbar-color: var(--accent-color) var(--container-bg);
+}
+
+#tools-workspace #tools-content {
+    min-width: 0;
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+}
+
+#tools-workspace #tools-sidebar button,
+#tools-workspace #tools-sidebar input {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+}
+
+#tools-workspace #tools-sidebar .tool-item-btn {
+    min-height: 2.5rem;
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+    padding-left: 16px;
+}
+
+.tools-workspace-toolbar { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; font: 12px 'JetBrains Mono', monospace; }
+.tools-workspace-toolbar button { border: 1px solid var(--border-color); background: var(--container-bg); color: var(--text-color); padding: 8px 12px; }
+.tools-workspace-toolbar button:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 3px; }
+.tools-workspace-toolbar span { color: var(--muted-text); }
+#tools-workspace.tools-sidebar-collapsed .tools-sidebar { display: none; }
+
+#tools-workspace #tools-content label,
+#tools-workspace #tools-content input,
+#tools-workspace #tools-content select,
+#tools-workspace #tools-content textarea {
+    font-size: max(0.875rem, 1em);
+    line-height: 1.4;
+}
+
+#tools-workspace #tools-content input:not([type="checkbox"]):not([type="radio"]),
+#tools-workspace #tools-content select,
+#tools-workspace #tools-content textarea {
+    color: var(--text-color);
+    background-color: var(--input-bg);
+    border-color: color-mix(in srgb, var(--border-color) 55%, transparent);
+    min-height: 2.5rem;
+}
+
+#tools-workspace #tools-content select option {
+    color: var(--text-color);
+    background-color: var(--input-bg);
+}
+
+#tools-workspace #tools-content input::placeholder,
+#tools-workspace #tools-content textarea::placeholder {
+    color: var(--muted-text);
+    opacity: 0.85;
+}
+
+#tools-workspace :is(button, input, select, textarea, a):focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* Raise tiny utility labels while leaving canvas, chart, and SVG rendering intact. */
+#tools-workspace #tools-content [class*="text-[10px]"],
+#tools-workspace #tools-content [class*="text-[11px]"] {
+    font-size: max(0.75rem, 1em);
+}
+
+#tools-workspace #tools-content [class*="text-[8px]"],
+#tools-workspace #tools-content [class*="text-[9px]"] {
+    font-size: max(0.6875rem, 1em);
+}
+
+#tools-workspace #tools-welcome {
+    color: var(--text-color);
+    opacity: 1;
+}
+
+#tools-workspace #tools-welcome .text-themeMuted {
+    color: var(--muted-text);
+}
+
+/* Some older tools use Tailwind's fixed gray instead of the shared theme color. */
+#tools-workspace #tools-content .text-gray-500 {
+    color: var(--muted-text);
+}
+
+/* Shared style.css inverts light-theme diagrams but screens them, hiding dark lines. */
+html:not([data-theme="dark"]) #tools-workspace #tools-content .diagram-img {
+    opacity: 1;
+    mix-blend-mode: multiply;
+}
+
+[data-theme="dark"] #tools-workspace #tools-content .diagram-img {
+    opacity: 1;
+}
+
+@media (max-width: 767px) {
+    #tools-workspace {
+        height: auto;
+        min-height: 0;
+    }
+
+    #tools-workspace .tools-sidebar {
+        flex: 0 0 auto;
+        width: 100%;
+        max-height: 38vh;
+        min-height: 12rem;
+    }
+
+    #tools-workspace .tools-main {
+        min-height: 58vh;
+        overflow: visible;
+    }
+
+    #tools-workspace #tools-welcome {
+        position: relative;
+        min-height: 58vh;
+    }
+
+    #tools-workspace #tools-content {
+        padding: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #tools-workspace *,
+    #tools-workspace *::before,
+    #tools-workspace *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}

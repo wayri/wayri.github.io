@@ -29,6 +29,8 @@ class HarnessDesigner {
         this.canvas = null;
         this.ctx = null;
         this.ro = null;
+        this.events = null;
+        this.preset = 'quadcopter';
         
         // Standard AWG Copper Resistance (ohms / 1000m at 20°C) and Max Chassis Ampacity (A)
         this.awgSpecs = {
@@ -58,8 +60,10 @@ class HarnessDesigner {
     }
 
     init() {
-        this.canvas = document.getElementById('harness-canvas');
-        if(!this.canvas) return;
+        const canvas = document.getElementById('harness-canvas');
+        if (!canvas || (this.canvas === canvas && this.events)) return;
+        this.destroy();
+        this.canvas = canvas;
         const container = document.getElementById('harness-canvas-container');
         this.ctx = this.canvas.getContext('2d');
         
@@ -83,6 +87,8 @@ class HarnessDesigner {
         if (this.nodes.length === 0) {
             this.loadPreset('quadcopter');
         }
+        const preset = document.getElementById('harness-preset');
+        if (preset) preset.value = this.preset;
 
         this.attachEvents();
         this.draw();
@@ -90,9 +96,43 @@ class HarnessDesigner {
         this.runDRC();
     }
 
+    destroy() {
+        if (this.events) this.events.abort();
+        if (this.ro) this.ro.disconnect();
+        this.events = null;
+        this.ro = null;
+        this.canvas = null;
+        this.ctx = null;
+        this.draggingNode = null;
+        this.hoveredPin = null;
+        this.wireStartNode = null;
+        this.mode = 'select';
+    }
+
+    getTheme() {
+        const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+        return {
+            dark,
+            accent: getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#D4AF37',
+            background: dark ? '#0a0f1d' : '#f8fafc',
+            grid: dark ? 'rgba(255,255,255,0.07)' : 'rgba(15,23,42,0.09)',
+            surface: dark ? '#0f172a' : '#ffffff',
+            header: dark ? '#1e293b' : '#e2e8f0',
+            border: dark ? '#64748b' : '#64748b',
+            text: dark ? '#f8fafc' : '#0f172a',
+            muted: dark ? '#b6c4d5' : '#475569',
+            selectedText: dark ? '#111111' : '#ffffff'
+        };
+    }
+
     loadPreset(name) {
+        if (!['quadcopter', 'automotive'].includes(name)) return;
+        this.preset = name;
         this.selectedNodes.clear();
         this.selectedWires.clear();
+        this.mode = 'select';
+        this.wireStartNode = null;
+        this.hoveredPin = null;
 
         if (name === 'quadcopter') {
             this.nodes = [
@@ -130,6 +170,7 @@ class HarnessDesigner {
             ];
         }
 
+        this.updateUIState();
         this.draw();
         this.updatePropertiesPanel();
         this.runDRC();
@@ -137,20 +178,28 @@ class HarnessDesigner {
 
     attachEvents() {
         if (!this.canvas) return;
-        this.canvas.addEventListener('mousedown', e => this.onMouseDown(e));
-        this.canvas.addEventListener('mousemove', e => this.onMouseMove(e));
-        this.canvas.addEventListener('mouseup', () => this.onMouseUp());
-        this.canvas.addEventListener('mouseleave', () => this.onMouseUp());
+        this.events = new AbortController();
+        const options = { signal: this.events.signal };
+        this.canvas.addEventListener('pointerdown', e => {
+            if (e.button !== 0) return;
+            this.canvas.setPointerCapture(e.pointerId);
+            this.onMouseDown(e);
+        }, options);
+        this.canvas.addEventListener('pointermove', e => this.onMouseMove(e), options);
+        this.canvas.addEventListener('pointerup', () => this.onMouseUp(), options);
+        this.canvas.addEventListener('pointercancel', () => this.onMouseUp(), options);
+        window.addEventListener('themeChanged', () => this.draw(), options);
         
         document.addEventListener('keydown', e => {
-            if(document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'SELECT') return;
+            if (!this.canvas?.isConnected || document.activeElement.closest('input,select,textarea,button,[contenteditable="true"]')) return;
             if(e.key === 'Delete' || e.key === 'Backspace') {
+                e.preventDefault();
                 this.deleteSelected();
             }
             if(e.key === 'Escape') {
                 this.cancelAction();
             }
-        });
+        }, options);
     }
 
     // ---------- Rendering Engine ----------
@@ -160,13 +209,14 @@ class HarnessDesigner {
         const ctx = this.ctx;
         const w = this.canvasWidth || 800;
         const h = this.canvasHeight || 500;
+        const theme = this.getTheme();
         
         // Background
-        ctx.fillStyle = '#0a0f1d';
+        ctx.fillStyle = theme.background;
         ctx.fillRect(0, 0, w, h);
         
         // Engineering Grid
-        ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+        ctx.strokeStyle = theme.grid;
         ctx.lineWidth = 1;
         ctx.beginPath();
         for(let i=0; i<w; i+=25) { ctx.moveTo(i,0); ctx.lineTo(i,h); }
@@ -231,6 +281,7 @@ class HarnessDesigner {
     }
 
     drawWires() {
+        const theme = this.getTheme();
         const segments = {}; 
         
         for (let w of this.wires) {
@@ -265,7 +316,7 @@ class HarnessDesigner {
                 this.routePath(ctx, p1Center.x, p1Center.y, p2Center.x, p2Center.y, this.routingStyle);
                 ctx.lineWidth = Math.min(sWires.length * 4 + 8, 30);
                 ctx.lineCap = 'round';
-                ctx.strokeStyle = isBundleSelected ? 'rgba(212, 175, 55, 0.35)' : 'rgba(255, 255, 255, 0.08)';
+                ctx.strokeStyle = isBundleSelected ? theme.accent : theme.grid;
                 ctx.stroke();
             }
 
@@ -276,28 +327,33 @@ class HarnessDesigner {
             sWires.forEach((item, idx) => {
                 const w = item.wire;
                 const isWireSel = this.selectedWires.has(w);
+                const source = this.nodes.find(n => n.id === w.path[item.segmentIndex]);
+                const target = this.nodes.find(n => n.id === w.path[item.segmentIndex + 1]);
+                if (!source || !target) return;
                 
-                let p1 = (item.segmentIndex === 0 && n1.type === 'connector') ? 
-                         this.getPinAbsolutePos(n1, w.fromPin) : 
-                         (n1.type === 'beta' ? {x: n1.x, y: n1.y} : {x: n1.x + 110, y: n1.y + 25});
+                let p1 = this.getPinAbsolutePos(source, item.segmentIndex === 0 ? w.fromPin : 1);
                          
-                let p2 = (item.segmentIndex === w.path.length - 2 && n2.type === 'connector') ? 
-                         (n2.id === w.path[w.path.length-1] ? {x: n2.x, y: n2.y + 35 + ((w.toPin - 0.5) * 18)} : this.getPinAbsolutePos(n2, w.fromPin)) : 
-                         (n2.type === 'beta' ? {x: n2.x, y: n2.y} : {x: n2.x, y: n2.y + 25});
+                let p2 = this.getPinAbsolutePos(target, item.segmentIndex === w.path.length - 2 ? w.toPin : 1);
 
                 let wOffset = startOffset + (idx * offsetStep);
                 ctx.beginPath();
                 this.routePath(ctx, p1.x, p1.y, p2.x, p2.y, this.routingStyle, wOffset);
                 
                 ctx.lineWidth = isWireSel ? 3.5 : (parseInt(w.awg) <= 14 ? 2.5 : 1.8);
-                ctx.strokeStyle = isWireSel ? '#D4AF37' : (w.color || '#3b82f6');
+                if (!isWireSel && ((theme.dark && w.color === '#1e293b') || (!theme.dark && w.color === '#f8fafc'))) {
+                    ctx.lineWidth += 2;
+                    ctx.strokeStyle = '#94a3b8';
+                    ctx.stroke();
+                    ctx.lineWidth -= 2;
+                }
+                ctx.strokeStyle = isWireSel ? theme.accent : (w.color || '#3b82f6');
                 ctx.stroke();
 
                 // Shielding braid texture
                 if (w.shielded) {
                     ctx.save();
                     ctx.setLineDash([2, 4]);
-                    ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+                    ctx.strokeStyle = theme.muted;
                     ctx.lineWidth = 1;
                     ctx.stroke();
                     ctx.restore();
@@ -308,6 +364,8 @@ class HarnessDesigner {
 
     drawNodes() {
         const ctx = this.ctx;
+        const theme = this.getTheme();
+        ctx.textBaseline = 'alphabetic';
         this.nodes.forEach(n => {
             const isSelected = this.selectedNodes.has(n);
             
@@ -316,24 +374,24 @@ class HarnessDesigner {
                 const h = 45 + (n.pins * 18);
                 
                 // Connector Housing Box
-                ctx.fillStyle = '#0f172a';
+                ctx.fillStyle = theme.surface;
                 ctx.fillRect(n.x, n.y, w, h);
                 
                 ctx.lineWidth = isSelected ? 2.5 : 1.5;
-                ctx.strokeStyle = isSelected ? '#D4AF37' : '#334155';
+                ctx.strokeStyle = isSelected ? theme.accent : theme.border;
                 ctx.strokeRect(n.x, n.y, w, h);
                 
                 // Header Bar
-                ctx.fillStyle = isSelected ? '#D4AF37' : '#1e293b';
+                ctx.fillStyle = isSelected ? theme.accent : theme.header;
                 ctx.fillRect(n.x, n.y, w, 24);
                 
-                ctx.fillStyle = isSelected ? '#000' : '#f8fafc';
+                ctx.fillStyle = isSelected ? theme.selectedText : theme.text;
                 ctx.font = 'bold 11px monospace';
                 ctx.textAlign = 'left';
                 ctx.fillText(n.id, n.x + 8, n.y + 16);
                 
-                ctx.fillStyle = '#94a3b8';
-                ctx.font = '9px monospace';
+                ctx.fillStyle = theme.muted;
+                ctx.font = '11px monospace';
                 const truncName = n.name.length > 15 ? n.name.substring(0, 14) + '…' : n.name;
                 ctx.fillText(truncName, n.x + 8, n.y + 36);
                 
@@ -347,21 +405,21 @@ class HarnessDesigner {
                     ctx.fillRect(n.x + w - 10, py - 5, 10, 10);
                     
                     // Pin Label & Net Signal preview
-                    ctx.fillStyle = isPinHovered ? '#38bdf8' : '#cbd5e1';
-                    ctx.font = '10px monospace';
+                    ctx.fillStyle = isPinHovered ? theme.accent : theme.text;
+                    ctx.font = '11px monospace';
                     ctx.fillText(`P${i}`, n.x + w - 28, py + 3);
                 }
             } else if (n.type === 'beta') {
                 // Breakout / Splice Junction Node
                 ctx.beginPath();
                 ctx.arc(n.x, n.y, 14, 0, Math.PI * 2);
-                ctx.fillStyle = '#0f172a';
+                ctx.fillStyle = theme.surface;
                 ctx.fill();
                 ctx.lineWidth = isSelected ? 3 : 2;
-                ctx.strokeStyle = isSelected ? '#D4AF37' : '#38bdf8';
+                ctx.strokeStyle = isSelected ? theme.accent : '#0284c7';
                 ctx.stroke();
                 
-                ctx.fillStyle = '#38bdf8';
+                ctx.fillStyle = theme.text;
                 ctx.font = 'bold 10px monospace';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
@@ -450,7 +508,8 @@ class HarnessDesigner {
         }
 
         if (this.mode === 'add_beta') {
-            const count = this.nodes.filter(n => n.type === 'beta').length + 1;
+            let count = 1;
+            while (this.nodes.some(n => n.id === 'SPLICE_' + count)) count++;
             this.nodes.push({id: 'SPLICE_' + count, type: 'beta', x: x, y: y, name: 'Splice ' + count});
             this.mode = 'select';
             this.updateUIState();
@@ -459,7 +518,8 @@ class HarnessDesigner {
         }
 
         if (this.mode === 'add_connector') {
-            const count = this.nodes.filter(n => n.type === 'connector').length + 1;
+            let count = 1;
+            while (this.nodes.some(n => n.id === 'J' + count)) count++;
             this.nodes.push({id: 'J' + count, type: 'connector', x: x, y: y, pins: 4, name: 'Sub-Module ' + count, partNo: 'Standard Molex 4P'});
             this.mode = 'select';
             this.updateUIState();
@@ -511,11 +571,14 @@ class HarnessDesigner {
                 let n2 = this.nodes.find(n => n.id === w.path[i+1]);
                 if (!n1 || !n2) continue;
 
-                let p1 = (i === 0 && n1.type === 'connector') ? this.getPinAbsolutePos(n1, w.fromPin) : {x: n1.x, y: n1.y};
-                let p2 = (i === w.path.length - 2 && n2.type === 'connector') ? {x: n2.x, y: n2.y + 35 + ((w.toPin - 0.5) * 18)} : {x: n2.x, y: n2.y};
+                let p1 = this.getPinAbsolutePos(n1, i === 0 ? w.fromPin : 1);
+                let p2 = this.getPinAbsolutePos(n2, i === w.path.length - 2 ? w.toPin : 1);
+                const peers = this.wires.filter(wire => wire.path?.some((id, j) => j < wire.path.length - 1 &&
+                    ((id === n1.id && wire.path[j + 1] === n2.id) || (id === n2.id && wire.path[j + 1] === n1.id))));
+                const offset = peers.length > 1 ? (peers.indexOf(w) - (peers.length - 1) / 2) * 5 : 0;
 
                 hitCtx.beginPath();
-                this.routePath(hitCtx, p1.x, p1.y, p2.x, p2.y, this.routingStyle);
+                this.routePath(hitCtx, p1.x, p1.y, p2.x, p2.y, this.routingStyle, offset);
                 hitCtx.lineWidth = 12;
                 if (hitCtx.isPointInStroke(x, y)) {
                     return w;
@@ -691,6 +754,18 @@ class HarnessDesigner {
     updateNodeProp(id, prop, val) {
         const node = this.nodes.find(n => n.id === id);
         if (node) {
+            if (prop === 'id') {
+                val = String(val).trim();
+                if (!val || this.nodes.some(n => n !== node && n.id === val)) {
+                    this.updatePropertiesPanel();
+                    return;
+                }
+                this.wires.forEach(wire => { wire.path = wire.path.map(part => part === id ? val : part); });
+            }
+            if (prop === 'pins' && (!Number.isInteger(val) || val < 1 || val > 64)) {
+                this.updatePropertiesPanel();
+                return;
+            }
             node[prop] = val;
             this.draw();
             this.runDRC();

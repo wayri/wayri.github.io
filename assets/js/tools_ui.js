@@ -1,3 +1,4 @@
+const toolsAssetVersion = new URL(document.currentScript.src).searchParams.get('v') || '1';
 const TOOL_REGISTRY = [
     {
         category: "Basic EE",
@@ -157,7 +158,7 @@ function initSidebar() {
         <div class="p-2 border-b border-themeBorder/40 bg-themeBg/80 sticky top-0 z-20">
             <div class="relative flex items-center">
                 <i class="fa-solid fa-search absolute left-2.5 text-themeMuted text-xs"></i>
-                <input type="text" id="tools-search-input" placeholder="Search 60+ tools..." 
+                <input type="text" id="tools-search-input" aria-label="Search engineering tools" placeholder="Search 60+ tools..."
                     class="w-full bg-themeContainer border border-themeBorder text-xs text-themeText pl-8 pr-2 py-1.5 rounded outline-none focus:border-themeAccent transition-colors font-mono"
                     oninput="filterTools(this.value)">
             </div>
@@ -167,7 +168,7 @@ function initSidebar() {
     TOOL_REGISTRY.forEach((category, catIdx) => {
         html += `
             <div class="border-b border-themeBorder/50 category-group" id="cat-group-${catIdx}">
-                <button class="w-full text-left p-3 flex justify-between items-center hover:bg-themeBorder/10 transition-colors focus:outline-none" onclick="toggleCategory(${catIdx})">
+                <button aria-expanded="false" aria-controls="cat-content-${catIdx}" class="w-full text-left p-3 flex justify-between items-center hover:bg-themeBorder/10 transition-colors focus:outline-none" onclick="toggleCategory(${catIdx})">
                     <span class="font-bold text-themeText flex items-center gap-2"><i class="fa-solid ${category.icon} w-4 text-center"></i> ${category.category}</span>
                     <i class="fa-solid fa-chevron-down text-xs text-themeMuted transition-transform duration-200" id="cat-icon-${catIdx}"></i>
                 </button>
@@ -175,7 +176,7 @@ function initSidebar() {
         `;
         category.tools.forEach(tool => {
             html += `
-                <button class="tool-item-btn text-left pl-10 py-2 pr-4 text-themeMuted hover:text-themeAccent hover:bg-themeBorder/20 transition-colors text-xs border-l-2 border-transparent hover:border-themeAccent" data-tool-name="${tool.name.toLowerCase()}" data-cat-idx="${catIdx}" onclick="loadTool('${tool.id}', '${tool.file}', this)">
+                <button class="tool-item-btn text-left pl-10 py-2 pr-4 text-themeMuted hover:text-themeAccent hover:bg-themeBorder/20 transition-colors text-xs border-l-2 border-transparent hover:border-themeAccent" data-tool-id="${tool.id}" data-tool-name="${tool.name.toLowerCase()}" data-cat-idx="${catIdx}" onclick="loadTool('${tool.id}', '${tool.file}', this)">
                     ${tool.name}
                 </button>
             `;
@@ -192,6 +193,7 @@ function filterTools(query) {
         const content = document.getElementById(`cat-content-${catIdx}`);
         const icon = document.getElementById(`cat-icon-${catIdx}`);
         if (!group || !content) return;
+        const categoryButton = group.querySelector('[aria-expanded]');
 
         let visibleCount = 0;
         const toolBtns = group.querySelectorAll('.tool-item-btn');
@@ -218,12 +220,15 @@ function filterTools(query) {
         } else {
             group.style.display = 'none';
         }
+        if (categoryButton) categoryButton.setAttribute('aria-expanded', String(!!q && visibleCount > 0));
     });
 }
 
 function toggleCategory(idx) {
     const content = document.getElementById(`cat-content-${idx}`);
     const icon = document.getElementById(`cat-icon-${idx}`);
+    const button = document.querySelector(`[aria-controls="cat-content-${idx}"]`);
+    if (button) button.setAttribute('aria-expanded', String(content.classList.contains('hidden')));
     if(content.classList.contains('hidden')) {
         content.classList.remove('hidden');
         content.classList.add('flex');
@@ -235,7 +240,32 @@ function toggleCategory(idx) {
     }
 }
 
+let toolRequest = 0;
+let toolFetchController = null;
+const loadedToolScripts = new Map();
+function setToolBrowserCollapsed(collapsed) {
+    const workspace = document.getElementById('tools-workspace');
+    const toggle = document.getElementById('tools-browser-toggle');
+    if (!workspace || !toggle) return;
+    workspace.classList.toggle('tools-sidebar-collapsed', collapsed);
+    toggle.setAttribute('aria-expanded', String(!collapsed));
+    toggle.textContent = collapsed ? 'Browse tools' : 'Hide tools';
+}
+document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('tools-browser-toggle');
+    if (!toggle) return;
+    toggle.addEventListener('click', () => setToolBrowserCollapsed(toggle.getAttribute('aria-expanded') === 'true'));
+    setToolBrowserCollapsed(window.matchMedia('(max-width: 767px)').matches);
+});
 async function loadTool(toolId, fileName, btnElement) {
+    const request = ++toolRequest;
+    if (toolFetchController) toolFetchController.abort();
+    const controller = toolFetchController = new AbortController();
+    if (window.HarnessApp) window.HarnessApp.destroy();
+    const tool = TOOL_REGISTRY.flatMap(category => category.tools).find(tool => tool.id === toolId);
+    const label = document.getElementById('tools-current-label');
+    if (label) label.textContent = tool ? tool.name : 'Engineering tool';
+    if (window.matchMedia('(max-width: 767px)').matches) setToolBrowserCollapsed(true);
     // Update Active State on Buttons
     document.querySelectorAll('#tools-sidebar button').forEach(b => {
         b.classList.remove('text-themeAccent', 'border-themeAccent', 'bg-themeBorder/10');
@@ -243,6 +273,7 @@ async function loadTool(toolId, fileName, btnElement) {
             b.classList.add('text-themeMuted', 'border-transparent');
         }
     });
+    if (!btnElement) btnElement = document.querySelector(`[data-tool-id="${toolId}"]`);
     if(btnElement) {
         btnElement.classList.add('text-themeAccent', 'border-themeAccent', 'bg-themeBorder/10');
         btnElement.classList.remove('text-themeMuted', 'border-transparent');
@@ -250,32 +281,58 @@ async function loadTool(toolId, fileName, btnElement) {
 
     const mainArea = document.getElementById('tools-content');
     const welcome = document.getElementById('tools-welcome');
+    if (window.Chart) {
+        Object.values(window.Chart.instances).forEach(chart => {
+            if (mainArea.contains(chart.canvas)) chart.destroy();
+        });
+    }
     
     welcome.classList.add('hidden');
     mainArea.classList.remove('hidden');
     mainArea.classList.add('flex');
+    mainArea.setAttribute('aria-busy', 'true');
     
     mainArea.innerHTML = `<div class="flex justify-center p-12 text-themeMuted"><i class="fa-solid fa-spinner fa-spin text-2xl"></i><span class="ml-2 font-mono">Loading tool...</span></div>`;
 
     try {
         // Fetch the HTML content for the selected tool with cache-busting
-        const response = await fetch(`/assets/tools_html/${fileName}?v=${new Date().getTime()}`);
+        const response = await fetch(`/assets/tools_html/${fileName}?v=${encodeURIComponent(toolsAssetVersion)}`, { signal: controller.signal, cache: 'no-cache' });
         if (!response.ok) throw new Error('Tool file not found');
         const html = await response.text();
+        if (request !== toolRequest) return;
         
         mainArea.innerHTML = html;
+        mainArea.dataset.toolId = toolId;
 
         // Execute scripts found in the fetched HTML
         const scripts = mainArea.querySelectorAll('script');
-        scripts.forEach(oldScript => {
+        for (const oldScript of scripts) {
+            if (request !== toolRequest) return;
             const newScript = document.createElement('script');
             Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-            oldScript.parentNode.replaceChild(newScript, oldScript);
-        });
+            if (oldScript.src) {
+                let loaded = loadedToolScripts.get(oldScript.src);
+                if (!loaded) {
+                    newScript.async = false;
+                    loaded = new Promise((resolve, reject) => {
+                        newScript.onload = resolve;
+                        newScript.onerror = () => reject(new Error('Could not load the tool engine. Please retry.'));
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
+                    loadedToolScripts.set(oldScript.src, loaded);
+                    loaded.catch(() => loadedToolScripts.delete(oldScript.src));
+                } else oldScript.remove();
+                await loaded;
+            } else {
+                newScript.textContent = oldScript.textContent;
+                oldScript.parentNode.replaceChild(newScript, oldScript);
+            }
+        }
         
         // Universal Lifecycle Auto-Initializer
-        setTimeout(() => {
+        if (request !== toolRequest) return;
+        requestAnimationFrame(() => {
+            if (request !== toolRequest || !mainArea.isConnected) return;
             // Trigger MathJax typesetting for equations in the newly loaded tool
             if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
                 MathJax.typesetPromise([mainArea]).catch((err) => console.log('MathJax typeset failed: ' + err.message));
@@ -311,13 +368,13 @@ async function loadTool(toolId, fileName, btnElement) {
             if(toolId === 'tool-battery-pack-s-p-config' && typeof runBattery === 'function') runBattery();
             if(toolId === 'tool-magnetic-core' && typeof runInductor === 'function') runInductor();
             if(toolId === 'tool-via-comprehensive' && typeof updateVia === 'function') updateVia();
-            if(toolId === 'tool-multipoint-harness' && window.HarnessApp && typeof window.HarnessApp.init === 'function') {
-                if(!window.HarnessApp.canvas) window.HarnessApp.init();
-            }
-        }, 100);
+        });
 
     } catch (error) {
+        if (request !== toolRequest || error.name === 'AbortError') return;
         mainArea.innerHTML = `<div class="p-6 border border-red-500/50 bg-red-500/10 text-red-400 font-mono"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Error loading tool: ${error.message}<br><br>Tool File: ${fileName}</div>`;
+    } finally {
+        if (request === toolRequest) mainArea.setAttribute('aria-busy', 'false');
     }
 }
 
@@ -346,10 +403,10 @@ function renderWelcomeGrid() {
         
         category.tools.forEach(tool => {
             gridHtml += `
-                <div class="group border border-themeBorder bg-themeContainer hover:border-themeAccent hover:shadow-[0_0_15px_rgba(var(--theme-accent-rgb),0.2)] rounded p-4 cursor-pointer transition-all flex flex-col gap-2" onclick="loadTool('${tool.id}', '${tool.file}')">
+                <button type="button" class="tool-card text-left group border border-themeBorder bg-themeContainer hover:border-themeAccent hover:shadow-[0_0_15px_rgba(var(--theme-accent-rgb),0.15)] rounded p-4 cursor-pointer transition-all flex flex-col gap-2" onclick="loadTool('${tool.id}', '${tool.file}')">
                     <h4 class="font-bold font-mono text-themeAccent group-hover:text-themeText transition-colors">${tool.name}</h4>
                     <p class="text-xs text-themeMuted leading-relaxed">${tool.desc || 'Interactive engineering design utility.'}</p>
-                </div>
+                </button>
             `;
         });
         
@@ -371,7 +428,45 @@ initSidebar = function() {
     renderWelcomeGrid();
 };
 
-// Register PWA Service Worker for 100% Offline Capability
+// Keep axes and labels readable when switching the workspace theme.
+if (window.Chart) {
+    const originalColors = new WeakMap();
+    window.Chart.register({
+        id: 'toolsWorkspaceTheme',
+        beforeUpdate(chart) {
+            if (!chart.canvas.closest('#tools-workspace')) return;
+            const style = getComputedStyle(document.documentElement);
+            const text = style.getPropertyValue('--text-color').trim();
+            const muted = style.getPropertyValue('--muted-text').trim();
+            const accent = style.getPropertyValue('--accent-color').trim();
+            const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const options = chart.config.options;
+            options.color = text;
+            for (const scale of Object.values(options.scales || {})) {
+                scale.ticks = { ...scale.ticks, color: muted };
+                scale.title = { ...scale.title, color: text };
+                scale.grid = { ...scale.grid, color: dark ? '#ffffff20' : '#0f172a20' };
+                scale.border = { ...scale.border, color: muted };
+            }
+            if (options.plugins?.legend) options.plugins.legend.labels = { ...options.plugins.legend.labels, color: text };
+            const lightColors = { '#4ade80': '#15803d', '#60a5fa': '#1d4ed8', '#f87171': '#b91c1c', '#facc15': '#a16207', '#38bdf8': '#0369a1' };
+            chart.data.datasets.forEach(dataset => {
+                if (!originalColors.has(dataset)) originalColors.set(dataset, dataset.borderColor);
+                const original = originalColors.get(dataset);
+                if (typeof original !== 'string') return;
+                const color = original.toLowerCase();
+                dataset.borderColor = ['#d4af37', '#cda434'].includes(color) ? accent : !dark && lightColors[color] ? lightColors[color] : original;
+            });
+        }
+    });
+    window.addEventListener('themeChanged', () => {
+        Object.values(window.Chart.instances).forEach(chart => {
+            if (chart.canvas.closest('#tools-workspace')) chart.update('none');
+        });
+    });
+}
+
+// Register the tools service worker for offline use.
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
