@@ -1,0 +1,62 @@
+<link rel="stylesheet" href="{{ '/assets/css/power-budget.css' | relative_url }}">
+<section id="power-budget" class="power-budget mb-12" aria-labelledby="power-budget-title">
+    <header class="budget-heading">
+        <div>
+            <span class="budget-eyebrow">A small engineering sandbox</span>
+            <h2 id="power-budget-title">Where does the power go?</h2>
+            <p>Change a load or its duty cycle. See what it costs in battery life.</p>
+        </div>
+        <button type="button" id="budget-reset" class="budget-reset">Reset example <span aria-hidden="true">↺</span></button>
+    </header>
+
+    <div class="budget-workspace">
+        <div class="budget-inputs">
+            <div class="budget-column-labels" aria-hidden="true"><span>Load</span><span>When on · W</span><span>Duty cycle</span></div>
+            <div class="budget-load" data-budget-load="Controller">
+                <label for="budget-controller">Controller</label>
+                <input id="budget-controller" data-load-watts type="number" min="0" max="10000" step="any" value="0.8" aria-label="Controller power in watts">
+                <label class="budget-duty"><input data-load-duty type="range" min="0" max="100" value="100" aria-label="Controller duty cycle"><output>100%</output></label>
+            </div>
+            <div class="budget-load" data-budget-load="Sensors">
+                <label for="budget-sensors">Sensors</label>
+                <input id="budget-sensors" data-load-watts type="number" min="0" max="10000" step="any" value="0.35" aria-label="Sensor power in watts">
+                <label class="budget-duty"><input data-load-duty type="range" min="0" max="100" value="100" aria-label="Sensor duty cycle"><output>100%</output></label>
+            </div>
+            <div class="budget-load" data-budget-load="Radio">
+                <label for="budget-radio">Radio</label>
+                <input id="budget-radio" data-load-watts type="number" min="0" max="10000" step="any" value="4" aria-label="Radio power in watts">
+                <label class="budget-duty"><input data-load-duty type="range" min="0" max="100" value="20" aria-label="Radio duty cycle"><output>20%</output></label>
+            </div>
+            <div class="budget-load" data-budget-load="Heater">
+                <label for="budget-heater">Heater</label>
+                <input id="budget-heater" data-load-watts type="number" min="0" max="10000" step="any" value="6" aria-label="Heater power in watts">
+                <label class="budget-duty"><input data-load-duty type="range" min="0" max="100" value="0" aria-label="Heater duty cycle"><output>0%</output></label>
+            </div>
+            <div class="budget-supply">
+                <label for="budget-energy">Usable battery energy <span class="budget-energy-input"><input id="budget-energy" type="number" min="0" max="100000" step="any" value="20"><span>Wh</span></span></label>
+                <label for="budget-efficiency">Converter efficiency <span class="budget-duty"><input id="budget-efficiency" type="range" min="50" max="100" value="90"><output id="budget-efficiency-value">90%</output></span></label>
+            </div>
+        </div>
+
+        <div class="budget-results">
+            <div class="budget-runtime-label">Estimated runtime</div>
+            <div id="budget-runtime" class="budget-runtime">9<span>h</span> 14<span>m</span></div>
+            <div class="budget-breakdown" role="img" aria-label="Average load power distribution" id="budget-breakdown"></div>
+            <div id="budget-legend" class="budget-legend"></div>
+            <dl class="budget-readings">
+                <div><dt>Average load</dt><dd id="budget-average">1.95 W</dd></div>
+                <div><dt>Battery draw</dt><dd id="budget-draw">2.17 W</dd></div>
+                <div><dt>Conversion loss</dt><dd id="budget-loss">0.22 W</dd></div>
+                <div><dt>Peak load ceiling <span title="Sum of on-state powers for enabled loads, assuming they can all be on at once.">ⓘ</span></dt><dd id="budget-peak">5.15 W</dd></div>
+            </dl>
+            <p id="budget-insight" class="budget-insight" role="status" aria-live="polite">Radio uses 41% of the average load power.</p>
+        </div>
+    </div>
+    <details class="budget-assumptions">
+        <summary>How this estimate works</summary>
+        <p>Average load = Σ(on-state power × duty cycle). Battery draw = average load ÷ converter efficiency. Runtime = usable battery energy ÷ battery draw. Peak load ceiling assumes every load with a nonzero duty cycle can turn on together; it is measured at the load, before converter losses.</p>
+        <p>The values are an editable example, not measurements from a project. This simple model assumes constant conversion efficiency and zero off-state power. Enter usable energy after any battery derating; standby draw, temperature effects, startup surges, and changes in efficiency need a more detailed budget.</p>
+    </details>
+    <noscript><p class="budget-no-script">Enable JavaScript to change the example and calculate a new budget.</p></noscript>
+</section>
+<script src="{{ '/assets/js/power-budget.js' | relative_url }}" defer></script>
