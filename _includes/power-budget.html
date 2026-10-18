@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ '/assets/css/power-budget.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/power-budget.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 <section id="power-budget" class="power-budget mb-12" aria-labelledby="power-budget-title">
     <header class="budget-heading">
         <div>
@@ -59,4 +59,4 @@
     </details>
     <noscript><p class="budget-no-script">Enable JavaScript to change the example and calculate a new budget.</p></noscript>
 </section>
-<script src="{{ '/assets/js/power-budget.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/power-budget.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
