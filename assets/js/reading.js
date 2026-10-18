@@ -6,7 +6,6 @@
 
     function updateButton() {
         const dark = root.dataset.theme === 'dark';
-        toggle.textContent = dark ? 'Light mode' : 'Dark mode';
         toggle.setAttribute('aria-pressed', String(dark));
     }
 

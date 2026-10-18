@@ -43,6 +43,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--link); outline-
     font: 15px/1.5 system-ui, sans-serif;
 }
 .site-header nav { display: flex; flex-wrap: wrap; gap: .6rem 1.25rem; }
+.site-header .site-brand { color: var(--ink); font-weight: 700; text-decoration: none; }
+.site-header [aria-current="page"] { font-weight: 600; }
+.site-header i { font-size: 1rem; }
 .site-header button {
     flex-shrink: 0;
     font: inherit;

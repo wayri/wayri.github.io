@@ -1,102 +1,26 @@
-/* Traditional document typography for the portfolio's reading pages. */
+/* Traditional typography with the portfolio's cards and controls preserved. */
 body.classic-text {
     font-family: Georgia, "Times New Roman", serif;
     font-size: 18px;
     line-height: 1.65;
     background-image: none;
-    --border-color: #b8b8b8;
     --accent-color: #164c99;
 }
 [data-theme="dark"] body.classic-text {
-    --border-color: #535353;
     --accent-color: #d4af37;
     --muted-text: #b2afa9;
 }
 .classic-text main :is(h1, h2, h3, h4, p, li, blockquote, .font-sans) { font-family: Georgia, "Times New Roman", serif; }
-.classic-text main :is(h1, h2, h3, h4) { text-transform: none; letter-spacing: normal; }
-.classic-text main h1 { font-size: 2.5rem; line-height: 1.2; }
-.classic-text main h2 { font-size: 1.65rem; line-height: 1.3; }
-.classic-text main h3 { font-size: 1.25rem; }
 .classic-text main p { text-align: left; font-weight: 400; }
 .classic-text main .text-justify { text-align: left; }
 .classic-text main .font-light { font-weight: 400; }
-.classic-text main a { text-decoration: underline; text-underline-offset: .15em; }
-.classic-text main .doc-container { box-shadow: none; }
-.classic-text main .doc-container:hover .img-preview img { transform: none; opacity: 1; }
-.classic-text #global-time-indicator { display: none; }
-.classic-text > nav { top: 0; border-bottom-width: 1px; }
-.classic-text > footer { border-top-width: 1px; }
-.classic-text main h1:hover { letter-spacing: normal; }
-.classic-text main h1 > span { transform: none !important; }
-@media (max-width: 640px) {
-    .classic-text main h1 { font-size: 2rem; }
-}
-
-/* The home page is a document; the tools and game keep their own interfaces. */
-body.home-page {
-    --bg-color: #fff;
-    --container-bg: #fff;
-    --text-color: #202020;
-    --muted-text: #55585d;
-    --border-color: #d5d5d5;
-    --input-bg: #f5f5f5;
-    color-scheme: light;
-    font-size: 17px;
-    line-height: 1.75;
-}
-[data-theme="dark"] body.home-page {
-    --bg-color: #171717;
-    --container-bg: #171717;
-    --text-color: #e5e2dc;
-    --muted-text: #c4c1bb;
-    --border-color: #454545;
-    --input-bg: #242424;
-    color-scheme: dark;
-}
-.home-navigation, .home-page .home-content, .home-footer { width: calc(100% - 3rem); max-width: 1100px; margin-inline: auto; }
-.home-navigation { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border-color); font: 15px/1.5 system-ui, sans-serif; }
-.home-navigation nav { display: flex; flex-wrap: wrap; gap: .6rem 1.25rem; }
-.home-page a, .home-page #contact button { color: var(--accent-color); text-decoration: underline; text-underline-offset: .15em; }
-.home-navigation button { flex-shrink: 0; border: 1px solid var(--border-color); border-radius: 3px; padding: .25rem .6rem; font: inherit; color: var(--text-color); background: var(--bg-color); }
-.home-page :is(a, button):focus-visible { outline: 2px solid var(--accent-color); outline-offset: 4px; }
-.home-page .home-content { padding: 2.5rem 0 3rem; }
-.home-page .home-content > header { margin-bottom: 2.5rem; }
-.home-page .home-content > header > div:first-child { align-items: start; border: 0; padding: 0; }
+.classic-text main .doc-container { box-shadow: 2px 2px 0 var(--border-color); }
+.classic-text main .doc-container:hover { box-shadow: 2px 2px 0 var(--border-color); }
 .home-page .home-content h1 { font-size: clamp(3rem, 6vw, 4.5rem); line-height: 1.1; }
-.home-page .home-content h2 { font-size: clamp(2rem, 4vw, 2.8rem); line-height: 1.2; margin-bottom: 1.5rem; }
-.home-page .home-content h3 { font-size: 1.5rem; line-height: 1.3; }
-.home-page .home-content h4 { font-size: 1.3rem; line-height: 1.35; }
-.home-page .home-content p { font-size: 17px; line-height: 1.75; color: var(--muted-text); }
-.home-page .home-content :is(h1, h2, h3, h4) { color: var(--text-color); }
-.home-page .home-content > :not(#power-budget) :is([class*="border"], [class*="bg-theme"], [class*="shadow"]) { border: 0; box-shadow: none; background: transparent; }
-.home-page .home-content > :not(#power-budget) :is(a, .doc-container, img) { transform: none; transition: none; box-shadow: none; }
-.home-page .home-content > :not(#power-budget) .doc-container { padding: 0; margin-bottom: 2rem; }
-.home-page .home-content > :not(#power-budget) .grid { display: block; }
-.home-page .home-content > :not(#power-budget) .grid > * { margin-bottom: 2rem; }
-.home-page .home-content > :not(#power-budget) .grid > .group { padding: 0; }
-.home-page .home-content > :not(#power-budget) i { display: none; }
-.home-page .home-content > :not(#power-budget) a[class*="bg-theme"] { display: block; width: fit-content; padding: 0; font: inherit; text-transform: none; letter-spacing: normal; }
-.home-page .home-content > :not(#power-budget) a.doc-container { width: 100%; }
-.home-page .home-content > :not(#power-budget) .font-mono { font-family: Georgia, "Times New Roman", serif; letter-spacing: normal; text-transform: none; }
-.home-page .home-content > :not(#power-budget) :is(.text-xs, .text-\[10px\]) { font-size: 14px; line-height: 1.6; }
-.home-page .home-content > :not(#power-budget) img { width: auto; max-width: 100%; height: auto; max-height: 32rem; object-fit: contain; border-radius: 0; }
-.home-page .home-content > section:not(#power-budget), .home-page .home-content > div:has(> h2) { border: 0; border-top: 1px solid var(--border-color); padding-top: 2rem; margin-top: 2rem; margin-bottom: 3rem; }
-.home-page .home-content > section:first-of-type { border: 0; padding-top: 0; margin-top: 0; }
-.home-page .home-content #skill-marquee-view { border-block: 1px solid var(--border-color); background: transparent; margin-bottom: 2.5rem; }
-.home-page #skill-marquee-view .font-mono { font-family: Georgia, "Times New Roman", serif; font-size: 15px; }
-.home-page #skill-table-view { margin-bottom: 2.5rem; }
-.home-page #skill-table-view span { border: 0; box-shadow: none; background: transparent; font-size: 15px; }
-.home-page .home-content details { border-block: 1px solid var(--border-color); }
-.home-page #contact > div { padding: 0; text-align: left; }
-.home-page #contact p { max-width: none; }
-.home-page .power-budget { box-shadow: none; }
-.home-footer { border-top: 1px solid var(--border-color); padding: 1.5rem 0 2rem; font: 14px/1.6 system-ui, sans-serif; color: var(--muted-text); }
-.home-footer p { margin-bottom: .6rem; }
-.home-footer .game-clue { font-size: 12px; }
-@media (max-width: 640px) {
-    .home-navigation, .home-page .home-content, .home-footer { width: calc(100% - 2.2rem); }
-    .home-navigation { font-size: 14px; gap: .6rem; }
-    .home-navigation nav { gap: .4rem .8rem; }
-    .home-page .home-content { padding-top: 2rem; }
-    .home-page .home-content > header > div:first-child > div:last-child { text-align: left; }
-}
+.home-page .home-content h2 { font-size: clamp(2rem, 4vw, 2.8rem); line-height: 1.2; }
+.home-page .home-content h3 { font-size: 1.4rem; line-height: 1.3; }
+.home-page .home-content h4 { font-size: 1.25rem; line-height: 1.35; }
+.home-page .home-content p { font-size: 16px; line-height: 1.75; }
+.home-page .home-content > header p { font-size: 17px; }
+.home-page .home-content > header > div:first-child > div:first-child > p { font-size: clamp(1.3rem, 3vw, 1.6rem); }
+.home-page .home-content :is(a, button):focus-visible { outline: 2px solid var(--accent-color); outline-offset: 4px; }

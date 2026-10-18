@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% seo %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         try {
             if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark';
@@ -23,12 +24,16 @@
 <body>
     <header class="site-header">
         <nav aria-label="Main navigation">
-            <a href="{{ '/' | relative_url }}">Yawar</a>
-            <a href="{{ '/blog/' | relative_url }}" aria-current="page">Blog</a>
-            <a href="{{ '/tools/' | relative_url }}">Tools</a>
-            <a href="{{ '/assets/resume.pdf' | relative_url }}">Resume</a>
+            <a href="{{ '/' | relative_url }}" class="site-brand">YAWAR</a>
+            <a href="{{ '/' | relative_url }}">Overview</a>
+            <a href="{{ '/blog/' | relative_url }}" aria-current="page">Engineering_Log</a>
+            <a href="{{ '/tools/' | relative_url }}">EE_Tools</a>
+            <a href="{{ '/assets/resume.pdf' | relative_url }}"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i> Resume</a>
+            <a href="{{ '/' | relative_url }}#contact" aria-label="Contact details" title="Contact details"><i class="fa-brands fa-discord" aria-hidden="true"></i></a>
+            <a href="https://github.com/wayri" aria-label="GitHub" title="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+            <a href="https://linkedin.com/in/yawar-badri" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
         </nav>
-        <button type="button" id="reading-theme-toggle" aria-pressed="false" hidden>Dark mode</button>
+        <button type="button" id="reading-theme-toggle" aria-label="Toggle Theme" title="Toggle Theme" aria-pressed="false" hidden><i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i></button>
     </header>
     {{ content }}
 </body>
