@@ -6,6 +6,7 @@
     border: 1px solid var(--border-color);
     background: var(--container-bg);
     box-shadow: 4px 4px 0 var(--border-color);
+    scroll-margin-top: 90px;
 }
 .budget-heading { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 24px 28px; border-bottom: 1px solid color-mix(in srgb, var(--border-color) 30%, transparent); }
 .budget-eyebrow { color: var(--accent-color); font: 10px 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: .15em; }
@@ -51,7 +52,7 @@
 .budget-assumptions summary { cursor: pointer; width: fit-content; font: 10px 'JetBrains Mono', monospace; }
 .budget-assumptions p { max-width: 900px; margin-top: 12px; line-height: 1.7; }
 .budget-no-script { padding: 16px 28px; font-size: 12px; }
-@media (max-width: 800px) {
+@media (max-width: 740px) {
     .budget-workspace { grid-template-columns: 1fr; }
     .budget-results { border-left: 0; border-top: 1px solid color-mix(in srgb, var(--border-color) 30%, transparent); }
     .budget-runtime { font-size: 40px; }
