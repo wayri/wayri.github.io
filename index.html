@@ -237,6 +237,7 @@ title: Yawar | Engineering the Physical Layer
             </div>
         </section>
 
+        <link rel="stylesheet" href="{{ '/assets/css/project-showcase.css' | relative_url }}?v={{ site.time | date: '%s' }}">
         <!-- Projects Portfolio -->
         <div class="mb-16">
             <h2 class="text-2xl font-bold mb-6 border-b border-themeBorder pb-2 text-themeText">Selected projects</h2>
@@ -345,6 +346,8 @@ title: Yawar | Engineering the Physical Layer
             <h3 class="text-xl font-bold mb-4 text-themeText">Software</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
+                {% include current-software-projects.html %}
+
                 <div class="doc-container p-4 border-l-4 border-l-themeBorder">
                     <div class="flex justify-between items-start mb-1">
                         <h4 class="font-bold text-themeText text-lg">CATS (CAN Automated Testing Software)</h4>
@@ -368,18 +371,7 @@ title: Yawar | Engineering the Physical Layer
                     <p class="text-sm text-themeMuted mt-1">Built software tools for transformer and inductor calculations and design.</p>
                 </div>
 
-                <a href="https://github.com/wayri/WayriCAD" target="_blank" rel="noopener noreferrer" class="doc-container p-4 block hover:border-themeBorder transition-all duration-300 border-l-4 border-l-themeBorder group hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl relative overflow-hidden bg-themeContainer">
-                    <i class="fa-brands fa-github absolute -bottom-10 -right-10 text-[12rem] text-themeText opacity-5 group-hover:opacity-15 transition-all duration-700 group-hover:-rotate-90 group-hover:scale-150 pointer-events-none"></i>
-                    <div class="relative z-10">
-                        <div class="flex justify-between items-start mb-1">
-                            <h4 class="font-bold text-themeText text-lg group-hover:text-themeMuted transition-colors">WayriCAD <span class="text-sm font-normal text-themeMuted">(formerly KiWay)</span><i class="fa-brands fa-github text-sm ml-2 text-themeMuted animate-[spin_4s_linear_infinite]"></i></h4>
-                            <span class="text-[10px] font-mono bg-themeBorder/10 text-themeText border border-themeBorder/20 px-2 py-0.5 uppercase">Software / EDA</span>
-                        </div>
-                        <p class="text-sm text-themeMuted mt-1">Open-source KiCad plugin suite for PCB design and analysis, including fanout routing, via stitching, BOM editing, trace RLC analysis, and power and signal integrity checks.</p>
-                    </div>
-                </a>
-
-                <a href="https://github.com/wayri/sigLib" target="_blank" class="doc-container p-4 block hover:border-themeBorder transition-all duration-300 border-l-4 border-l-themeBorder group hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl relative overflow-hidden bg-themeContainer">
+<a href="https://github.com/wayri/sigLib" target="_blank" class="doc-container p-4 block hover:border-themeBorder transition-all duration-300 border-l-4 border-l-themeBorder group hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl relative overflow-hidden bg-themeContainer">
                     <i class="fa-brands fa-github absolute -bottom-10 -right-10 text-[12rem] text-themeText opacity-5 group-hover:opacity-15 transition-all duration-700 group-hover:-rotate-90 group-hover:scale-150 pointer-events-none"></i>
                     <div class="relative z-10">
                         <div class="flex justify-between items-start mb-1">

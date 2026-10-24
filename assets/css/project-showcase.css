@@ -1,0 +1,7 @@
+.project-picture { margin: 0 0 16px; }
+.project-picture img { display: block; width: 100%; height: 240px; object-fit: contain; background: #eef1f4; border: 1px solid color-mix(in srgb, var(--border-color) 35%, transparent); }
+.project-picture figcaption { margin-top: 7px; color: var(--muted-text); font: 11px/1.6 'JetBrains Mono', monospace; }
+.project-links { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 16px; font: 12px/1.7 'JetBrains Mono', monospace; }
+.project-links a { color: var(--accent-color); text-decoration: underline; text-underline-offset: 3px; }
+.home-page .home-content .project-availability { margin-top: 12px; color: var(--muted-text); font: 11px/1.6 'JetBrains Mono', monospace; }
+@media (max-width: 600px) { .project-picture img { height: auto; max-height: 300px; } }

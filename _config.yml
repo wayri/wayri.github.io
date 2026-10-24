@@ -3,6 +3,7 @@ description: Electrical engineering, power electronics, embedded systems, and en
 author: Yawar Badri
 baseurl: ""
 url: "https://wayri.github.io"
+timezone: Asia/Kolkata
 
 markdown: kramdown
 highlighter: rouge
