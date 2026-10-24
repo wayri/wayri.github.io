@@ -48,6 +48,6 @@ test('a clean cruise run can reach the finish across several course seeds', () =
             if (s.grounded && s.entities.some(e => e.type === 'leak' && !e.used && e.x > s.x && e.x - s.x < 65)) E.jump(s);
             E.step(s, {}, 1 / 60);
         }
-        assert.equal(s.status, 'won', `seed ${seed}`); assert.equal(s.x, E.GOAL); assert.equal(s.leaks, 0); assert.ok(s.charge > 0);
+        assert.equal(s.status, 'briefing', `seed ${seed}`); assert.equal(s.phase, 'launch'); assert.equal(s.x, E.GOAL); assert.equal(s.leaks, 0); assert.ok(s.charge > 0);
     }
 });
