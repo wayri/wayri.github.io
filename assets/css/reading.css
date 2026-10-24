@@ -77,6 +77,7 @@ mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: h
 @media (max-width: 760px) {
     body { padding: 0 1.1rem 3rem; font-size: 18px; }
     .reading-layout { display: flex; flex-direction: column; gap: 2rem; }
+    .reading-layout > main { width: 100%; }
     .article-index { position: static; order: -1; max-height: none; width: 100%; border-bottom: 1px solid var(--rule); padding-bottom: 1rem; }
     .article-index li { margin-bottom: .7rem; }
     .article-index time { display: inline; margin-left: .4rem; }
