@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="{{ '/assets/css/power-runner.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+<section id="power-runner" class="power-runner mb-12" aria-labelledby="power-runner-title">
+    <header class="runner-heading">
+        <div><span class="runner-eyebrow">A small engineering escape</span><h2 id="power-runner-title">Where does my power go?</h2><p>Keep your charge. Jump the leaks. Outrun your backlog.</p></div>
+        <button type="button" id="runner-pause" disabled><i class="fa-solid fa-pause" aria-hidden="true"></i> Pause</button>
+    </header>
+    <div class="runner-hud" aria-label="Run information">
+        <div class="runner-charge"><span>Charge <strong id="runner-charge-text">100%</strong></span><meter id="runner-charge" min="0" max="100" low="25" optimum="100" value="100">100%</meter></div>
+        <div><span>Delivery</span><strong><span id="runner-distance">0</span> / 1,000 m</strong></div>
+        <div><span>Backlog gap</span><strong id="runner-gap">170 m</strong></div>
+        <div><span>Power mode</span><strong id="runner-mode">Cruise</strong></div>
+    </div>
+    <div class="runner-stage">
+        <canvas id="runner-canvas" tabindex="0" aria-label="Battery-powered rover game. Space or Up jumps, Right boosts, Down saves power, P pauses. Deliver the rover to 1,000 metres before charge runs out or the task monsters catch you.">A side-scrolling game: collect batteries, jump over leaks, and stay ahead of three task monsters.</canvas>
+        <div id="runner-overlay" class="runner-overlay">
+            <div class="runner-overlay-card"><span class="runner-eyebrow" id="runner-overline">One battery. Three unfinished tasks.</span><h3 id="runner-overlay-title">The backlog is gaining.</h3><p id="runner-overlay-copy">Get your rover to 1,000 m. Battery packs refill charge; energy leaks cost charge and slow you down.</p><button type="button" id="runner-start"><i class="fa-solid fa-play" aria-hidden="true"></i> Start run</button><p class="runner-best">Best delivery: <span id="runner-best">0 m</span></p></div>
+        </div>
+    </div>
+    <div class="runner-controls" aria-label="Game controls">
+        <button type="button" id="runner-eco"><i class="fa-solid fa-leaf" aria-hidden="true"></i> Eco <small>hold ↓</small></button>
+        <button type="button" id="runner-jump"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i> Jump <small>Space / ↑</small></button>
+        <button type="button" id="runner-boost"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Boost <small>hold →</small></button>
+    </div>
+    <p class="runner-help">Hold Eco or Boost; tap Jump. Click the game to use the keyboard. <kbd>P</kbd> pauses. Charge and distance are arcade units, not a battery simulation.</p>
+    <p id="runner-announcement" class="runner-announcement" role="status" aria-live="polite"></p>
+    <details class="runner-calculator"><summary>Open the original power budget calculator</summary>{% include power-budget.html %}</details>
+    <noscript><p>Enable JavaScript to play. Use the controls below the game on a touchscreen.</p></noscript>
+</section>
+<script src="{{ '/assets/js/power-runner-engine.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+<script src="{{ '/assets/js/power-runner.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
