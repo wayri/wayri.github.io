@@ -39,3 +39,16 @@
     .portfolio-header .portfolio-socials { flex-basis: 100%; padding-block: 6px; }
 }
 @media print { .portfolio-header { display: none; } }
+
+/* Shared name flip for the homepage title and home link. */
+.name-flip { display: inline-grid; perspective: 600px; vertical-align: baseline; }
+.name-flip > span { grid-area: 1 / 1; display: block; backface-visibility: hidden; transform-origin: center; }
+.name-flip-front { transform: rotateX(0deg); animation: name-front-flip 12s ease-in-out infinite; }
+.name-flip-back { transform: rotateX(-180deg); color: var(--header-accent, var(--accent-color)); animation: name-back-flip 12s ease-in-out infinite; }
+.name-flip:hover > span, .portfolio-brand:focus-visible .name-flip > span { animation: none; }
+.name-flip:hover .name-flip-front, .portfolio-brand:focus-visible .name-flip-front { transform: rotateX(180deg); }
+.name-flip:hover .name-flip-back, .portfolio-brand:focus-visible .name-flip-back { transform: rotateX(0deg); }
+@keyframes name-front-flip { 0%, 20%, 95%, 100% { transform: rotateX(0deg); } 28%, 87% { transform: rotateX(180deg); } }
+@keyframes name-back-flip { 0%, 20%, 95%, 100% { transform: rotateX(-180deg); } 28%, 87% { transform: rotateX(0deg); } }
+@media (prefers-reduced-motion: reduce) { .name-flip > span { animation: none; } }
+@media print { .name-flip > span { animation: none; } }

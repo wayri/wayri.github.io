@@ -84,45 +84,7 @@ function triggerAnomaly() {
     if(glitchCounter > 0) return;
     glitchCounter = 25; 
     
-    const y = document.getElementById('hero-y');
-    const a1 = document.getElementById('hero-a1');
-    const w = document.getElementById('hero-w');
-    const a2 = document.getElementById('hero-a2');
-    const r = document.getElementById('hero-r');
-    const dot = document.getElementById('hero-dot');
-    if(!y || !a1 || !w || !a2 || !r || !dot) return;
-    
-    w.style.transform = 'translateX(-1.35em)';
-    a2.style.transform = 'translateX(-1.45em)';
-    y.style.transform = 'translateX(1.4em)';
-    r.style.transform = 'translateX(-0.6em)';
-    
-    a1.style.transform = 'translateX(2.6em)';
-    
-    setTimeout(() => {
-        a1.innerText = 'I';
-        dot.style.transform = 'scale(0)';
-        dot.style.opacity = '0';
-    }, 250);
-    
-    setTimeout(() => {
-        a1.style.transform = 'translateX(2.6em) scaleY(0.2) translateY(12px)';
-        a1.style.opacity = '0';
-        
-        setTimeout(() => {
-            dot.style.transform = 'scale(1)';
-            dot.style.opacity = '1';
-            
-            a1.innerText = 'A';
-            a1.style.opacity = '1';
-            a1.style.transform = 'translateX(0) scaleY(1) translateY(0)';
-            
-            y.style.transform = 'translateX(0)';
-            w.style.transform = 'translateX(0)';
-            a2.style.transform = 'translateX(0)';
-            r.style.transform = 'translateX(0)';
-        }, 200);
-    }, 3000);
+
 }
 
 function drawSteampunkScope() {
