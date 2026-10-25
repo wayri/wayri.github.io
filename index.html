@@ -177,7 +177,7 @@ title: Yawar | Engineering the Physical Layer
         </div>
 
         <!-- Ongoing R&D Projects -->
-        <section class="mb-16 border-t border-themeBorder/20 pt-10">
+        <section id="current-work" class="mb-16 border-t border-themeBorder/20 pt-10">
             <h2 class="text-2xl font-bold text-themeText mb-6 border-b-2 border-themeBorder pb-2">Current work</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -188,15 +188,6 @@ title: Yawar | Engineering the Physical Layer
                         <span class="text-[10px] font-mono bg-themeMuted/20 px-2 py-0.5 rounded text-themeMuted uppercase">Closed Source</span>
                     </div>
                     <p class="text-sm text-themeMuted mb-0">Developing a pluggable camera hardware interface, with attention to high-speed signal integrity and system integration.</p>
-                </div>
-
-                <!-- Project 2 -->
-                <div class="bg-themeContainer border border-themeBorder/30 p-5 hover:border-themeAccent/50 transition-colors group">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors">Precision PCB Heater</h3>
-                        <span class="text-[10px] font-mono bg-themeMuted/20 px-2 py-0.5 rounded text-themeMuted uppercase">Active R&D</span>
-                    </div>
-                    <p class="text-sm text-themeMuted mb-0">Designing a PCB heater with thermistor feedback and PWM power control for controlled thermal environments.</p>
                 </div>
 
                 <!-- Project 3 -->
@@ -215,6 +206,22 @@ title: Yawar | Engineering the Physical Layer
                         <span class="text-[10px] font-mono bg-themeMuted/20 px-2 py-0.5 rounded text-themeMuted uppercase">Exploratory</span>
                     </div>
                     <p class="text-sm text-themeMuted mb-0">Exploring line scanners and Magneto-Optic Kerr Effect (MOKE) instrumentation for measurement and sensing.</p>
+                </div>
+
+                <div class="bg-themeContainer border border-themeBorder/30 p-5 hover:border-themeAccent/50 transition-colors group">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors"><a href="#project-wayricad">WayriCAD</a></h3>
+                        <span class="text-[10px] font-mono bg-themeMuted/20 px-2 py-0.5 rounded text-themeMuted uppercase">Active development</span>
+                    </div>
+                    <p class="text-sm text-themeMuted mb-0">Developing KiCad tools for PCB design and review, including Quick PI, Quick SI and QuickTherm.</p>
+                </div>
+
+                <div class="bg-themeContainer border border-themeBorder/30 p-5 hover:border-themeAccent/50 transition-colors group">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-themeText group-hover:text-themeAccent transition-colors"><a href="#project-spike">SPIKE</a></h3>
+                        <span class="text-[10px] font-mono bg-themeMuted/20 px-2 py-0.5 rounded text-themeMuted uppercase">Active development</span>
+                    </div>
+                    <p class="text-sm text-themeMuted mb-0">Developing a local PCB and assembly simulation workbench for geometry, study setup, analysis and results.</p>
                 </div>
             </div>
         </section>
@@ -245,6 +252,14 @@ title: Yawar | Engineering the Physical Layer
             <!-- HARDWARE SECTION -->
             <h3 class="text-xl font-bold mb-4 text-themeAccent">Hardware & embedded systems</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+
+                <article id="project-pcb-heater" class="doc-container p-4 border-l-4 border-l-themeAccent">
+                    <div class="flex justify-between items-start mb-1">
+                        <h4 class="font-bold text-themeText text-lg">Precision PCB Heater</h4>
+                        <span class="text-[10px] font-mono bg-themeAccent/10 text-themeAccent border border-themeAccent/20 px-2 py-0.5 uppercase">Completed</span>
+                    </div>
+                    <p class="text-sm text-themeMuted mt-1">Designed a PCB heater with thermistor feedback and PWM power control for controlled thermal environments.</p>
+                </article>
 
                 <div class="doc-container p-4 border-l-4 border-l-themeAccent">
                     <img src="/assets/images/projects/power-logger.jpg" alt="Power Logger" class="w-full h-48 object-cover rounded border border-themeBorder mb-4" onerror="this.style.display='none'">
