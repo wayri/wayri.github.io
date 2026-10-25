@@ -5,3 +5,8 @@
 .project-links a { color: var(--accent-color); text-decoration: underline; text-underline-offset: 3px; }
 .home-page .home-content .project-availability { margin-top: 12px; color: var(--muted-text); font: 11px/1.6 'JetBrains Mono', monospace; }
 @media (max-width: 600px) { .project-picture img { height: auto; max-height: 300px; } }
+
+.project-phone-pictures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.project-phone-pictures a { display: block; min-width: 0; }
+.project-phone-pictures img { height: 240px; background: #101923; }
+@media (max-width: 600px) { .project-phone-pictures img { height: 240px; max-height: none; } }
