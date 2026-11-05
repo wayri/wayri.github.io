@@ -1,0 +1,2 @@
+# Preserve vendored bundle hashes and analysis binding to the exact saved PCB.
+assets/lib/kicad-webview/** -text
