@@ -8,6 +8,26 @@
       "sha256": "3ac4c1e54a737d44dd791eafba6f3592c2e2d8bba870879c809d6b1a34457b96"
     },
     {
+      "path": "analysis/inverter-real-dc-method.md",
+      "bytes": 3940,
+      "sha256": "ee135d45ead2a16d90ab3a912f7d7d4937da54300cfcb6c22aaba3e273fadb77"
+    },
+    {
+      "path": "analysis/inverter-real-dc-report.json",
+      "bytes": 5307,
+      "sha256": "365b08e57804a376364d1b9ff861d50b43d022937f26c4e4795aae5fc5b0e4cd"
+    },
+    {
+      "path": "analysis/inverter-real-dc.json",
+      "bytes": 57407,
+      "sha256": "c3096e4f7429863983f458dc4eb83e1173d5738e033d4aaad631b7b796acf3ea"
+    },
+    {
+      "path": "analysis/inverter-real-dc.png",
+      "bytes": 288010,
+      "sha256": "c941297a6385556251c2c58eb7f05f6b67d33ee6e696e44283d492c224fad6ed"
+    },
+    {
       "path": "demo/3PD+IB.kicad_pcb",
       "bytes": 2131833,
       "sha256": "09bc4def38e6d866ee38c2ba4f87c349945c3514a4f3b3195c14b89e530fa75d"
@@ -69,13 +89,18 @@
     },
     {
       "path": "kicad-webview.min.js",
-      "bytes": 1420260,
-      "sha256": "6d2717fa7309a3cd6d135e2aee9bc4367f3027575171c1739876b89c826a220a"
+      "bytes": 1510992,
+      "sha256": "6069c1cb89ccb97ed41b858d702c3cec05b5e523e967c816811ee221b9745c4c"
     },
     {
       "path": "LICENSE",
-      "bytes": 6659,
-      "sha256": "8a5131d028af307f125f5d1605eb46a033402623f9aefb0f6b96c1e7e124fe0a"
+      "bytes": 7594,
+      "sha256": "59cba7940c679ec3a577eb6e622b0eddc5dc117e923a018342319e59339fb7f3"
+    },
+    {
+      "path": "licenses/kicad-web-view-Source-Available-1.0.txt",
+      "bytes": 6548,
+      "sha256": "3f31d57ed802b4c7419d3b3e027926383239ec0fc08d6af68d29614da606362e"
     },
     {
       "path": "licenses/Pocket-KiView-Source-Available-1.0.txt",
@@ -84,8 +109,8 @@
     },
     {
       "path": "LICENSING.md",
-      "bytes": 3280,
-      "sha256": "0e284b2db70d4788292da471088e1ef0973484a5e7dd2a1ec48ef23dd3518e53"
+      "bytes": 5002,
+      "sha256": "2d60fd961f3177b2057dfc94ae67648280455a6a53d2159229f6f153c27a94d3"
     },
     {
       "path": "manufacturing/inverter-fabrication.zip",
@@ -104,38 +129,24 @@
     },
     {
       "path": "SPIKE-ENGINE-NOTICE.md",
-      "bytes": 1131,
-      "sha256": "5ff06e840e6556ed190a94537b68cd2545a16305288e6f1e730abf096d2e881a"
+      "bytes": 1185,
+      "sha256": "9029113aa63d0f490a023f46ed4570ea8427a11131c4f7184c8833134fae2ca0"
     },
     {
       "path": "THIRD-PARTY-NOTICES.md",
-      "bytes": 929,
-      "sha256": "e851336be47b9dc32178bff2be69a6d3550f22ef2572f03eabf7ee496b830c76"
+      "bytes": 983,
+      "sha256": "11bee10aa6225f2e1b2e7e71616f3ccece1309d13f0aa3b8fb9813fae4a8be14"
     },
     {
       "path": "THREE-LICENSE",
       "bytes": 1081,
       "sha256": "4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454"
-    },
-    {
-      "path": "analysis/inverter-real-dc-method.md",
-      "bytes": 3940,
-      "sha256": "ee135d45ead2a16d90ab3a912f7d7d4937da54300cfcb6c22aaba3e273fadb77"
-    },
-    {
-      "path": "analysis/inverter-real-dc-report.json",
-      "bytes": 5307,
-      "sha256": "365b08e57804a376364d1b9ff861d50b43d022937f26c4e4795aae5fc5b0e4cd"
-    },
-    {
-      "path": "analysis/inverter-real-dc.json",
-      "bytes": 57407,
-      "sha256": "c3096e4f7429863983f458dc4eb83e1173d5738e033d4aaad631b7b796acf3ea"
-    },
-    {
-      "path": "analysis/inverter-real-dc.png",
-      "bytes": 288010,
-      "sha256": "c941297a6385556251c2c58eb7f05f6b67d33ee6e696e44283d492c224fad6ed"
     }
-  ]
+  ],
+  "runtimeSource": {
+    "repository": "https://github.com/wayri/kicad-webview",
+    "revision": "d8310a1f62fa68f9a7614ac3156793c6b3c789c0",
+    "workingTreeSnapshot": true,
+    "note": "Existing built runtime refreshed for saved-selection cross-probing and shareable view controls. Exact distribution bytes are hashed below."
+  }
 }
