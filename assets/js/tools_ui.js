@@ -148,6 +148,9 @@ let loadedStyles = new Set();
 
 document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
+    const requested = new URL(location.href).searchParams.get('tool');
+    const tool = TOOL_REGISTRY.flatMap(category => category.tools).find(item => item.id === requested);
+    if (tool) loadTool(tool.id, tool.file);
 });
 
 function initSidebar() {
