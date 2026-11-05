@@ -74,3 +74,12 @@
 @media (max-width: 600px) { .wv-lab-grid { grid-template-columns: 1fr; } .wv-lab-heading { display: block; } }
 @media (max-width: 800px) { .wv-simple-grid, .wv-analysis, .wv-license { grid-template-columns: 1fr; gap: 1.5rem; } .wv-feature-grid { grid-template-columns: 1fr 1fr; } .wv-section-heading { align-items: start; flex-direction: column; gap: .3rem; } .wv-section-heading > p { max-width: none; margin-top: 0; } }
 @media (max-width: 480px) { .webview-product { padding-top: 5rem; } .wv-hero { padding-top: 1rem; } .wv-eyebrow { flex-wrap: wrap; } .wv-board { min-height: 510px; height: 70vh; } .wv-note, .wv-analysis { padding: 1rem; } .wv-feature-grid { grid-template-columns: 1fr; gap: 1rem; } .wv-section { padding-block: 2.5rem; } .wv-view-switch button { flex: 1 0 40%; } }
+
+.wv-presentation { padding: .7rem 1rem; border-bottom: 1px solid var(--rule); background: var(--paper); }
+.wv-tour-choice { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin-bottom: .65rem; }
+.wv-tour-choice > span { color: var(--muted); font-size: 12px; margin-right: .35rem; }
+.wv-presentation .wv-caption { margin: .5rem 0 0; }
+#demo-carousel section > span { flex: 1 1 240px; min-width: 0; color: var(--body-ink); font-size: 13px; }
+#demo-carousel button { flex-shrink: 0; }
+#advanced-board[aria-busy="true"] { pointer-events: none; }
+.webview-product button:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }

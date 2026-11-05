@@ -24,6 +24,11 @@ permalink: /kicad-webview/
                 <button type="button" data-view="manufacturing" aria-pressed="false">Fabrication ZIP</button>
                 <button type="button" data-field="voltage-drop">Illustrative analysis</button>
             </div>
+            <div class="wv-presentation" aria-label="Live design tours">
+                <div class="wv-tour-choice" role="group" aria-label="Choose a tour"><span>Explore with a tour</span><button type="button" data-tour="project" aria-pressed="true">Project story</button><button type="button" data-tour="board" aria-pressed="false">3D board tour</button></div>
+                <div id="demo-carousel" aria-label="Tour playback controls"></div>
+                <p class="wv-caption">Every slide is interactive. Use Previous / Next or opt in to Play. Interacting with the viewer pauses playback; press Play to resume.</p>
+            </div>
             <div id="advanced-board" class="wv-board" aria-label="Interactive inverter viewer"></div>
             <p id="demo-readout" class="wv-readout" role="status">Loading the self-hosted inverter…</p>
         </div>

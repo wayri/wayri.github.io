@@ -14,14 +14,62 @@
     const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
     const viewer = new KiCadWebView.Viewer('#advanced-board', { theme: theme() });
     const simple = document.getElementById('simple-board');
-    let busy = false, localLoaded = false;
-    function lock(value) {
-        busy = value;
-        page.querySelectorAll('[data-view], [data-action], [data-layer], [data-part], [data-field], #local-design').forEach(button => button.disabled = value);
-        document.getElementById('advanced-board').setAttribute('aria-busy', String(value));
+    let busy = false, commandBusy = false, localLoaded = false, carousel;
+    const tourHost = document.getElementById('demo-carousel');
+    const projectSlides = [
+        { label: 'Inverter layout · 153 saved PCB parts', input: source, view: 'pcb', clearSelection: true },
+        { label: 'Main schematic · saved top sheet', input: source, options: { file: '3PD+IB.kicad_sch' }, view: 'schematic', clearSelection: true },
+        { label: 'Gate-driver schematic · HBD21094', input: source, options: { file: 'HBD21094.kicad_sch' }, view: 'schematic', clearSelection: true },
+        { label: 'GPa · saved gate-drive copper', input: source, view: 'pcb', clearSelection: true, net: 'GPa' },
+        { label: 'Follow GPa into 3D · cyan copper, grey context', view: '3d', camera3D: 'top', net: 'GPa' },
+        { label: 'Assembly overview · selection cleared', view: '3d', camera3D: 'isometric', clearSelection: true }
+    ];
+    const boardSlides = [
+        { label: 'Assembly · isometric', input: source, view: '3d', camera3D: 'isometric', clearSelection: true },
+        { label: 'GPa · top-side saved copper', view: '3d', camera3D: 'top', net: 'GPa' },
+        { label: 'GPa · bottom view, selection preserved', view: '3d', camera3D: 'bottom', net: 'GPa' },
+        { label: 'Board profile · front, selection cleared', view: '3d', camera3D: 'front', clearSelection: true },
+        { label: 'Assembly overview · all surroundings restored', view: '3d', camera3D: 'isometric', clearSelection: true }
+    ];
+    function pauseTour() { carousel?.pause(); }
+    async function chooseTour(name) {
+        carousel?.dispose();
+        tourHost.replaceChildren();
+        localLoaded = false;
+        viewer.clearAnalysis();
+        viewer.setInspectorOpen(false);
+        page.querySelectorAll('[data-tour]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.tour === name)));
+        carousel = new KiCadWebView.ViewerCarousel(tourHost, { viewer, slides: name === 'project' ? projectSlides : boardSlides, interval: 8000 });
+        carousel.addEventListener('slidechange', event => {
+            hint.textContent = event.detail.label + '. Pan, zoom or inspect this live view. Hidden copper stays hidden; component stand-ins are approximate.';
+        });
+        carousel.addEventListener('error', event => { status.textContent = 'Tour paused: ' + event.detail.error.message; });
+        await carousel.show(0);
     }
-    async function run(action) {
+    // The carousel announces pending transitions on its controls. Keep other
+    // demo commands from loading a competing drawing while one is in flight.
+    const tourObserver = new MutationObserver(updateLock);
+    tourObserver.observe(tourHost, { subtree: true, attributes: true, attributeFilter: ['aria-busy'] });
+    page.querySelectorAll('[data-tour]').forEach(button => button.addEventListener('click', () => run(() => chooseTour(button.dataset.tour), true)));
+    page.addEventListener('focusin', event => { if (!tourHost.contains(event.target)) pauseTour(); });
+    for (const type of ['pointerdown', 'wheel', 'keydown']) document.getElementById('advanced-board').addEventListener(type, pauseTour, { passive: true });
+    function lock(value) {
+        commandBusy = value;
+        updateLock();
+    }
+    function updateLock() {
+        busy = commandBusy || tourHost.querySelector('[aria-busy="true"]') !== null;
+        page.querySelectorAll('[data-view], [data-action], [data-layer], [data-part], [data-field], [data-tour], #local-design').forEach(button => button.disabled = busy);
+        document.getElementById('advanced-board').setAttribute('aria-busy', String(busy));
+    }
+    async function run(action, presenting = false) {
         if (busy) return;
+        pauseTour();
+        if (!presenting && carousel) {
+            carousel.dispose(); carousel = undefined;
+            tourHost.textContent = 'Choose a tour above to restart its slides.';
+            page.querySelectorAll('[data-tour]').forEach(button => button.setAttribute('aria-pressed', 'false'));
+        }
         lock(true);
         try { await action(); }
         catch (error) { status.textContent = 'Could not open this view: ' + error.message; }
@@ -50,7 +98,7 @@
         else { await board(); if (view === '3d') await viewer.setView('3d'); }
         hint.textContent = view === 'manufacturing' ? 'Six real exported layers. Open Layers to toggle copper or drills; use the ruler for a two-click measurement in mm.' : view === '3d' ? 'Drag to orbit, scroll to zoom. Open the 3D View / Measure / Display controls. Component stand-ins are approximate.' : view === 'schematic' ? 'HBD21094 schematic sheet. Use the drawing selector for other sheets; Inspect searches this sheet’s saved symbols.' : 'Pan, zoom and Fit. Open Inspect to search parts, or try the U2 shortcut below.';
     })));
-    function reveal() { document.getElementById('demo').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    function reveal() { document.getElementById('demo').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); }
     page.querySelectorAll('.wv-lab [data-view]').forEach(button => button.addEventListener('click', reveal));
     page.querySelectorAll('[data-action="u2"]').forEach(button => button.addEventListener('click', () => run(async () => {
         await board();
@@ -148,6 +196,6 @@
     }, { rootMargin: '150px' });
     observer.observe(simple);
     window.addEventListener('themeChanged', () => { viewer.setTheme(theme()); simple.viewer?.setTheme(theme()); });
-    window.addEventListener('pagehide', () => { observer.disconnect(); viewer.dispose(); simple.viewer?.dispose(); }, { once: true });
-    run(async () => { await viewer.load(source); demoParts = viewer.getParts(); searchParts(); });
+    window.addEventListener('pagehide', () => { observer.disconnect(); tourObserver.disconnect(); carousel?.dispose(); viewer.dispose(); simple.viewer?.dispose(); }, { once: true });
+    run(async () => { await chooseTour('project'); demoParts = viewer.getParts(); searchParts(); });
 })();

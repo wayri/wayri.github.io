@@ -1,5 +1,5 @@
 {
-  "sourceCommit": "62a482400aec059ee485b58ad439b6d2de90a563",
+  "sourceCommit": "7f081d21ebf5e9148cac4a3b3345c481eaa89800",
   "description": "Curated self-hosted runtime, owner-authorized inverter and explicitly illustrative overlay data.",
   "files": [
     {
@@ -69,8 +69,8 @@
     },
     {
       "path": "kicad-webview.min.js",
-      "bytes": 1411749,
-      "sha256": "36fae3231798725089730a508b29105ab17b51f68dd110f1b01c8947b6741c11"
+      "bytes": 1420260,
+      "sha256": "6d2717fa7309a3cd6d135e2aee9bc4367f3027575171c1739876b89c826a220a"
     },
     {
       "path": "LICENSE",
