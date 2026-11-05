@@ -38,7 +38,7 @@
 .lab-project-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px; }
 .lab-project { position:relative; min-width:0; background:var(--container-bg); border:1px solid var(--border-color); display:flex; flex-direction:column; scroll-margin-top:85px; }
 .lab-project-media { display:block; border-bottom:1px solid var(--border-color); background:#e8ecf0; }
-.lab-project-media img { display:block; width:100%; height:230px; object-fit:contain; }
+.lab-project-media img { display:block; width:100%; height:auto; aspect-ratio:16 / 10; object-fit:contain; }
 .lab-project-body { padding:24px; display:flex; flex-direction:column; flex:1; }
 .lab-project h3 { font-size:26px; font-weight:600; line-height:1.2; letter-spacing:-.03em; margin:4px 0 12px; }
 .lab-project h3 small { display:inline-block; font-size:12px; font-weight:400; color:var(--muted-text); letter-spacing:0; }
@@ -81,7 +81,7 @@
 .lab-footer nav a { font-size:12px; color:var(--accent-color); text-decoration:none; }
 .lab-footer .lab-copyright { width:100%; margin:0; }
 @media(max-width:1000px) { .lab-hero { gap:28px; } .lab-intro h1 { font-size:clamp(2.8rem,5.8vw,3.7rem); } .lab-footer { margin-inline:32px; } }
-@media(max-width:760px) { .lab-main { padding:88px 20px 45px; } .lab-hero { grid-template-columns:1fr; gap:30px; padding-top:10px; } .lab-intro h1 { font-size:clamp(2.8rem,10vw,4rem); } .lab-live-feature figure img { height:250px; } .lab-project-grid,.lab-toolbox,.lab-work-grid { grid-template-columns:1fr; } .lab-section { margin-top:46px; } .lab-section-heading { align-items:start; flex-direction:column; gap:14px; } .lab-toolbox { gap:20px; } .lab-after-hours { align-items:start; flex-direction:column; padding:22px; } .lab-footer { margin-inline:20px; } .lab-project-body { padding:20px; } .lab-project-media img { height:210px; } }
+@media(max-width:760px) { .lab-main { padding:88px 20px 45px; } .lab-hero { grid-template-columns:1fr; gap:30px; padding-top:10px; } .lab-intro h1 { font-size:clamp(2.8rem,10vw,4rem); } .lab-live-feature figure img { height:250px; } .lab-project-grid,.lab-toolbox,.lab-work-grid { grid-template-columns:1fr; } .lab-section { margin-top:46px; } .lab-section-heading { align-items:start; flex-direction:column; gap:14px; } .lab-toolbox { gap:20px; } .lab-after-hours { align-items:start; flex-direction:column; padding:22px; } .lab-footer { margin-inline:20px; } .lab-project-body { padding:20px; } }
 @media(max-width:380px) { .lab-main { padding-inline:16px; } .lab-actions { flex-direction:column; align-items:stretch; } }
 @media(prefers-reduced-motion:reduce) { .lab-home * { scroll-behavior:auto!important; } }
 
