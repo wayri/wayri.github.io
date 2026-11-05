@@ -1,0 +1,84 @@
+{
+  "source_sha256": "8c3fdd99685f964141f2bd4970ebd5c2fda83e927949fa32f74262a0bee14277",
+  "kicad_version": "10.0.6",
+  "assembly_bytes": 5531048,
+  "assembly_sha256": "7dd00c28f381f1c4b0f665b94ceffc868ab4e24815927e735445630100e0d2c9",
+  "board_thickness_mm": 1.6,
+  "coordinates": {
+    "unit": "mm",
+    "axes": "X right, Y opposite saved PCB Y, Z upward",
+    "origin": "Display assembly center and PCB midplane"
+  },
+  "assembly_bounds_mm": {
+    "min": [
+      -30.930000000056836,
+      -25.799997045993806,
+      -12.22382795291616
+    ],
+    "max": [
+      30.690001304149632,
+      26.370000084638583,
+      9.334999835193155
+    ]
+  },
+  "geometry": {
+    "instances": 178,
+    "primitive_instances": 13016,
+    "triangles": 177121
+  },
+  "materials": 46,
+  "display_derivative": true,
+  "original_design_included": false,
+  "omitted_data": [
+    "Original PCB and schematic",
+    "netlist and copper routes",
+    "BOM and design fields",
+    "individual STEP/VRML model files",
+    "original node and material names"
+  ],
+  "limitations": [
+    "One IC uses a nominal same-dimension SOIC-8 package in place of the absent legacy SOP-8 model.",
+    "Three absent legacy alternate models are omitted where the supplied custom STEP model covers the same component.",
+    "This is a visual assembly mesh, not editable ECAD or a mechanically qualified release."
+  ],
+  "source_footprint_count": 59,
+  "footprints_with_supplied_model_declarations": 50,
+  "pad_only_footprints": 9,
+  "resolved_visible_model_declarations": 52,
+  "nominal_package_substitutions": 1,
+  "source_design_kept_private": true,
+  "carrier_contains_original_circuit": false,
+  "carrier_pads": 0,
+  "carrier_tracks": 0,
+  "carrier_zones": 0,
+  "render": {
+    "engine": "KiCad 10.0.6 native ray tracer",
+    "file": "assembly-preview.png",
+    "width": 1400,
+    "height": 1000,
+    "full_frame": true,
+    "sha256": "4f14cb922fafdb4bcf8d8cd6c0620f9b3240aef83f32738726db5b496790280d"
+  },
+  "files": [
+    {
+      "path": "assembly.glb",
+      "bytes": 5531048,
+      "sha256": "7dd00c28f381f1c4b0f665b94ceffc868ab4e24815927e735445630100e0d2c9"
+    },
+    {
+      "path": "assembly-display.kicad_pcb",
+      "bytes": 971,
+      "sha256": "25312255f20b639d21484fd72957097b888b9d259e0c67bded463535175b0d39"
+    },
+    {
+      "path": "project.json",
+      "bytes": 235,
+      "sha256": "bde154199462d6061ca83f48daed4f1083587fe3dbe2a8cee76dffd5af5cea40"
+    },
+    {
+      "path": "assembly-preview.png",
+      "bytes": 348973,
+      "sha256": "4f14cb922fafdb4bcf8d8cd6c0620f9b3240aef83f32738726db5b496790280d"
+    }
+  ]
+}

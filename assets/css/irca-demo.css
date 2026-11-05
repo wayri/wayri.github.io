@@ -1,0 +1,39 @@
+.irca-demo { --irca-bg:var(--container-bg,var(--paper,#fff)); --irca-ink:var(--text-color,var(--ink,#222)); --irca-muted:var(--muted-text,var(--muted,#677)); --irca-accent:var(--accent-color,var(--link,#164c99)); --irca-rule:var(--border-color,var(--rule,#ccd3da)); background:var(--irca-bg); color:var(--irca-ink); min-width:0; border:1px solid color-mix(in srgb,var(--irca-accent) 35%,var(--irca-rule)); border-radius:8px; overflow:hidden; box-shadow:0 18px 48px #00000016; }
+.irca-demo [hidden] { display:none!important; }
+.irca-heading { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; padding:20px; }
+.irca-heading p { margin:0 0 7px; color:var(--irca-accent); font:12px/1.5 system-ui,sans-serif; }
+.irca-demo .irca-heading h2 { margin:0; font:550 23px/1.2 system-ui,sans-serif; letter-spacing:-.025em; }
+.irca-badge { color:var(--irca-muted); font:11px/1.5 system-ui,sans-serif; }
+.irca-badge > span { color:var(--irca-accent); margin-right:5px; }
+.irca-modes { display:flex; gap:6px; padding:10px 14px; border-block:1px solid var(--irca-rule); }
+.irca-demo .irca-modes button { border:1px solid transparent; border-radius:4px; padding:9px 13px; color:var(--irca-muted); background:transparent; font:13px/1.4 system-ui,sans-serif; cursor:pointer; }
+.irca-modes button i { margin-right:6px; }
+.irca-demo .irca-modes button[aria-pressed="true"] { background:var(--irca-accent); color:var(--irca-bg); }
+.irca-demo button:focus-visible,.irca-demo summary:focus-visible { outline:2px solid var(--irca-accent); outline-offset:3px; }
+.irca-stage { position:relative; background:#101923; min-height:420px; }
+.irca-stage.is-loading .irca-preview { position:absolute; inset:0; height:100%; z-index:2; }
+.irca-preview { width:100%; height:440px; display:block; object-fit:contain; }
+.irca-board { width:100%; height:460px; }
+.irca-carousel { border-top:1px solid var(--irca-rule); padding:12px 16px; }
+.irca-carousel:empty { display:none; }
+.irca-carousel section { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.irca-carousel section > span { flex:1 1 200px; color:var(--irca-muted); font:12px/1.5 system-ui,sans-serif; }
+.irca-carousel button,.irca-demo .irca-start { border:1px solid var(--irca-rule); border-radius:4px; color:var(--irca-ink); background:var(--irca-bg); padding:8px 11px; font:12px/1.5 system-ui,sans-serif; cursor:pointer; }
+.irca-demo button:disabled { opacity:.5; cursor:wait; }
+.irca-carousel button:hover:not(:disabled),.irca-demo .irca-start:hover { border-color:var(--irca-accent); color:var(--irca-accent); }
+.irca-footer { padding:14px 20px; border-top:1px solid var(--irca-rule); }
+.irca-footer p { margin:0; font:12px/1.7 system-ui,sans-serif; color:var(--irca-muted); }
+.irca-footer .irca-model-note { font-size:11px; margin-top:5px; }
+.irca-demo .irca-start { margin-top:10px; border-color:var(--irca-accent); color:var(--irca-accent); }
+.irca-pi > img { display:block; width:100%; height:auto; background:#101923; }
+.irca-metrics { display:flex; flex-wrap:wrap; gap:12px 24px; border-block:1px solid var(--irca-rule); padding:14px 20px; font:12px/1.6 system-ui,sans-serif; }
+.irca-metrics strong { color:var(--irca-accent); font-size:20px; font-weight:550; margin-right:5px; }
+.irca-study-note { margin:12px 20px; font:12px/1.7 system-ui,sans-serif; color:var(--irca-muted); }
+.irca-pi details { margin:0 20px 16px; font:12px/1.7 system-ui,sans-serif; color:var(--irca-muted); }
+.irca-pi summary { color:var(--irca-accent); cursor:pointer; }
+.irca-study-details p { margin:10px 0; }
+.irca-study-details ul { margin:10px 0; padding-left:20px; }
+.wv-irca-showcase { margin:1rem 0 4rem; }
+.wv-irca-showcase .irca-board { height:620px; }
+.wv-irca-showcase .irca-preview { height:560px; }
+@media(max-width:600px) { .irca-heading { padding:16px; } .irca-demo .irca-heading h2 { font-size:21px; } .irca-stage { min-height:350px; } .irca-board,.wv-irca-showcase .irca-board { height:420px; } .irca-preview,.wv-irca-showcase .irca-preview { height:350px; } .irca-carousel section > span { flex-basis:100%; order:3; } }

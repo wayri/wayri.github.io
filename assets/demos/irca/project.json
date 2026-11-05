@@ -1,0 +1,13 @@
+{
+  "entry": "assembly-display.kicad_pcb",
+  "files": [
+    {
+      "path": "assembly-display.kicad_pcb",
+      "url": "./assembly-display.kicad_pcb"
+    },
+    {
+      "path": "assembly.glb",
+      "url": "./assembly.glb"
+    }
+  ]
+}

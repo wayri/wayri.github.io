@@ -1,16 +1,14 @@
 <article id="project-webview" class="doc-container p-4 border-l-4 border-l-themeAccent relative overflow-hidden bg-themeContainer">
-    <figure id="webview-card-picture" class="project-picture">
-        <a href="{{ '/kicad-webview/#analysis' | relative_url }}"><img src="{{ '/assets/lib/kicad-webview/analysis/inverter-real-dc.png' | relative_url }}" alt="Computed Vdc copper voltage drop from J10.1 to Q4.2 under a normalized 1 ampere load" width="1800" height="1080" loading="lazy"></a>
-        <figcaption>Executed Quick PI copper study · normalized 1 A, not the inverter’s 500 W operating point.</figcaption>
+    <figure class="project-picture">
+        <a href="{{ '/kicad-webview/#project-irca' | relative_url }}"><img src="{{ '/assets/demos/irca/assembly-preview.png' | relative_url }}" alt="Native IRCA full assembly render with camera, display and controller modules" width="1400" height="1000" loading="lazy"></a>
+        <figcaption>IRCA display-only assembly · original design files are not included; one IC uses a nominal package model.</figcaption>
     </figure>
-    <div id="webview-card-board" class="webview-card-board" aria-label="Interactive inverter PCB viewer" hidden></div>
-    <div class="webview-card-controls"><button id="webview-card-toggle" type="button" aria-expanded="false" aria-controls="webview-card-board" data-runtime="{{ '/assets/lib/kicad-webview/kicad-webview.min.js' | relative_url }}?v={{ site.time | date: '%s' }}" data-source="{{ '/assets/lib/kicad-webview/demo/project.json' | relative_url }}"><i class="fa-solid fa-play" aria-hidden="true"></i> Try interactive viewer</button><span id="webview-card-status" role="status">Pan, zoom, inspect parts and switch to 3D.</span></div>
+    <div class="project-links"><a href="{{ '/kicad-webview/#project-irca' | relative_url }}">Explore IRCA assembly &amp; Fast PI <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
     <div class="flex justify-between items-start gap-3 mb-2"><h4 class="font-bold text-themeText text-lg"><a href="{{ '/kicad-webview/' | relative_url }}"><i class="fa-solid fa-cube text-themeAccent" aria-hidden="true"></i> KiCad WebView</a></h4><span class="text-[10px] font-mono text-themeMuted uppercase">Browser library · Beta</span></div>
     <p class="text-sm text-themeMuted">A self-contained, read-only viewer for KiCad schematics, PCB layouts, 3D boards, Gerber layers and Excellon drills. Embed a design in a website or engineering note, inspect saved part and pad properties, and explore manufacturing ZIPs without a rendering server.</p>
     <div class="project-links"><a href="{{ '/kicad-webview/' | relative_url }}">Product &amp; live demo <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a><a href="{{ '/kicad-webview/#embed' | relative_url }}">Embedding examples</a><a href="{{ '/kicad-webview/#licensing' | relative_url }}">License</a></div>
     <p class="project-availability">Source-available; all commercial use requires explicit prior written permission. Approximate 3D stand-ins remain labelled in the viewer.</p>
 </article>
-<script src="{{ '/assets/js/webview-project-card.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 
 <article id="project-wayricad" class="doc-container p-4 border-l-4 border-l-themeBorder relative overflow-hidden bg-themeContainer">
     <figure class="project-picture">

@@ -1,0 +1,97 @@
+{
+  "schema": "portfolio.display-dc-summary/v1",
+  "project": "IRCA",
+  "sourcePcbSha256": "8c3fdd99685f964141f2bd4970ebd5c2fda83e927949fa32f74262a0bee14277",
+  "generatedAt": "2026-11-05T15:52:41.702849+00:00",
+  "rail": "3.3 V",
+  "source": "Power regulator",
+  "load": "Controller",
+  "currentA": 1.0,
+  "nominalSourceV": 3.3,
+  "copperThicknessUm": 35.0,
+  "temperatureC": 20.0,
+  "assumedPlatingUm": 25.0,
+  "meshMm": 0.5,
+  "maxVoltageDropMv": 39.97668114101272,
+  "copperLossW": 0.03997668114101279,
+  "convergenceChangePercent": 0.4720378387653859,
+  "meshRefinement": [
+    {
+      "meshMm": 2.0,
+      "nodes": 2728,
+      "triangles": 3272,
+      "voltageDropMv": 39.72799073301646,
+      "copperLossW": 0.03972799073301648,
+      "peakCurrentDensityAmm2": 358.88780264614627,
+      "currentBalanceErrorA": 0.0,
+      "maxNodalResidualA": 8.595330003302593e-11,
+      "energyRelativeError": 3.4932015316548947e-16,
+      "lossAccountingErrorW": 2.0816681711721685e-17,
+      "seconds": 1.61
+    },
+    {
+      "meshMm": 1.0,
+      "nodes": 2942,
+      "triangles": 3700,
+      "voltageDropMv": 39.787976079344595,
+      "copperLossW": 0.03978797607934459,
+      "peakCurrentDensityAmm2": 358.88780264614627,
+      "currentBalanceErrorA": 4.440892098500626e-16,
+      "maxNodalResidualA": 8.346137669867915e-11,
+      "energyRelativeError": 1.7439675468965268e-16,
+      "lossAccountingErrorW": 0.0,
+      "seconds": 0.343,
+      "dropChangePercent": 0.1507624972140115,
+      "peakJChangePercent": 0.0
+    },
+    {
+      "meshMm": 0.5,
+      "nodes": 4634,
+      "triangles": 7084,
+      "voltageDropMv": 39.97668114101276,
+      "copperLossW": 0.03997668114101279,
+      "peakCurrentDensityAmm2": 355.46454792409423,
+      "currentBalanceErrorA": 1.5543122344752192e-15,
+      "maxNodalResidualA": 1.9595186584453472e-10,
+      "energyRelativeError": 6.942941440717547e-16,
+      "lossAccountingErrorW": 2.0816681711721685e-17,
+      "seconds": 0.5,
+      "dropChangePercent": 0.4720378387653859,
+      "peakJChangePercent": 0.9630368885009136
+    }
+  ],
+  "analyticalRectangle": {
+    "expectedResistanceOhm": 0.0009851428571428574,
+    "computedResistanceOhm": 0.0009851428571428572,
+    "relativeError": 2.2011064986654667e-16,
+    "tolerance": 1e-09
+  },
+  "solver": {
+    "name": "WayriCAD Quick PI",
+    "method": "2.5D layered linear triangular DC conductivity FEM",
+    "revision": "457ebc512b49608f5d9e91ba9ef81a49199cb7d8",
+    "kicad": "10.0.6",
+    "python": "3.11.5",
+    "numpy": "2.4.2",
+    "scipy": "1.17.1",
+    "moduleSha256": {
+      "board_geometry.py": "59ad129bc6439fce19f1c8238e550d77479df5c8c988a58c5c1f281f781500b0",
+      "mesh.py": "f70e8ff760a47c4f491d9553004faec62a48a6d12ce41c4be663be4cdf2ccd61",
+      "solver.py": "ce7b22afcd8120436044b52abfa8e1a5ab65b64bf52d2d608514a898ed5c3b39",
+      "service.py": "915daacd9e55bb97beb87d933c657dfa804ae93b85e7ffdc456a887b07bc7e8c",
+      "analytics.py": "222af42c522ac6e5450a56377d9c851800ed337bcedcba147059e0b24c4fd331"
+    }
+  },
+  "assumptions": [
+    "The saved nominal 3.3 V regulator rail is evaluated at an explicit normalized 1 A controller load. This is not a documented device operating current or measured performance.",
+    "A single saved regulator output contact is an ideal equipotential source; the controller supply contact is an ideal equipotential current sink. Other contacts draw no external current.",
+    "Saved 35 micrometre F.Cu and B.Cu copper is solved together at 20 C; via plating is an explicit 25 micrometre assumption.",
+    "The plot shows actual solved finite-element copper triangles. It is display imagery, not a downloadable PCB, schematic, netlist, BOM or field mesh.",
+    "No regulator dynamics, semiconductor/package/contact resistance, loaded return path, AC impedance, thermal field or measurements are included.",
+    "Mesh stability and conservation checks describe numerical execution only. Local current-density peaks remain mesh/contact dependent and are not certified conductor ratings."
+  ],
+  "totalDropStableWithinOnePercent": true,
+  "peakJStableAcrossSampledMeshes": true,
+  "peakJConverged": false,
+  "peakJLimit": "No contact-specific local refinement or independent physical comparison was performed; sampled global-mesh stability does not qualify a current-density peak."
+}

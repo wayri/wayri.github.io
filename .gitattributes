@@ -1,2 +1,4 @@
 # Preserve vendored bundle hashes and analysis binding to the exact saved PCB.
 assets/lib/kicad-webview/** -text
+# Keep display-only assembly and study asset hashes stable across checkouts.
+assets/demos/irca/** -text
