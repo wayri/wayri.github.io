@@ -1,0 +1,29 @@
+.software-project { padding-top: 5.5rem; font: 16px/1.7 system-ui, sans-serif; }
+.software-project h1, .software-project h2, .software-project h3 { font-family: system-ui, sans-serif; letter-spacing: -.035em; line-height: 1.15; }
+.software-project h1 { font-size: clamp(2.8rem, 7vw, 5rem); margin: .5rem 0; }
+.software-project h1 small { display: block; margin-top: .6rem; font-size: 1rem; font-weight: 400; letter-spacing: 0; color: var(--muted); }
+.software-project h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: .5rem 0 1rem; }
+.software-project h3 { font-size: 1.25rem; }
+.software-project .software-lead { max-width: 760px; font-size: 1.2rem; color: var(--body-ink); }
+.software-project .software-kicker { color: var(--link); font: 12px/1.6 'Courier New', monospace; text-transform: uppercase; letter-spacing: .08em; }
+.software-project .software-actions, .software-project .software-related { display: flex; flex-wrap: wrap; gap: .7rem; margin: 1.5rem 0; }
+.software-actions a { display: inline-flex; align-items: center; gap: .6rem; padding: .7rem 1rem; border: 1px solid var(--rule); border-radius: 5px; text-decoration: none; font-size: .9rem; }
+.software-actions a:first-child { background: var(--link); border-color: var(--link); color: var(--paper); }
+.software-actions a:hover { outline: 1px solid var(--link); }
+.software-project a:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
+.software-project section { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--rule); scroll-margin-top: 5rem; }
+.software-project figure { margin: 1.5rem 0; }
+.software-project figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 6px; }
+.software-project figcaption, .software-project .software-note { font-size: .8rem; color: var(--muted); line-height: 1.6; }
+.software-project .software-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.software-grid article { padding: 1.25rem; border: 1px solid var(--rule); border-radius: 6px; background: var(--code); }
+.software-grid article i { color: var(--link); font-size: 1.35rem; }
+.software-grid article p { font-size: .95rem; }
+.software-project .software-platforms { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.software-project .software-phones { display: flex; justify-content: center; flex-wrap: wrap; gap: 1.5rem; }
+.software-phones a { flex: 0 1 260px; }
+.software-phones img { max-height: 560px; object-fit: contain; }
+.software-project .project-gallery { margin: 1.5rem 0; }
+.software-project footer { margin-top: 4rem; padding: 1.5rem 0; border-top: 1px solid var(--rule); }
+.software-related a { padding: .4rem .7rem; border: 1px solid var(--rule); border-radius: 4px; font-size: .9rem; }
+@media (max-width: 700px) { .software-project .software-grid, .software-project .software-platforms { grid-template-columns: 1fr; } .software-actions a { flex: 1 1 160px; justify-content: center; } }

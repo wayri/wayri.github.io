@@ -122,3 +122,7 @@
 .lab-design-footer > a { font-size:12px; color:var(--accent-color); text-decoration:none; }
 @media(max-width:1000px) { .lab-hero-personal { gap:28px; grid-template-columns:.85fr 1.15fr; } }
 @media(max-width:760px) { .lab-hero-personal { grid-template-columns:1fr; } .lab-hero-personal .lab-intro { padding:0; } .lab-hero-personal .lab-intro h1 { font-size:clamp(2.6rem,9vw,3.3rem); } .lab-design-stage { min-height:300px; } #home-design-board { height:330px; } .lab-design-feature .lab-design-stage img { height:300px; } .lab-design-feature .lab-feature-heading { padding:16px; } }
+.lab-product-sites { display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin-bottom:24px; font:13px/1.6 system-ui,sans-serif; }
+.lab-product-sites span { color:var(--muted-text); }
+.lab-product-sites a { color:var(--accent-color); text-decoration:underline; text-underline-offset:4px; }
+.lab-product-sites a:focus-visible { outline:2px solid var(--accent-color); outline-offset:4px; }
