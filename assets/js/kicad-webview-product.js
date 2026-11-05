@@ -62,6 +62,15 @@
     })));
     page.querySelectorAll('[data-action="copper"]').forEach(button => button.addEventListener('click', () => run(async () => { await board(); viewer.setLayers(viewer.getLayers().filter(layer => ['F.Cu', 'B.Cu'].includes(layer))); viewer.clearSelection(); viewer.fit(); hint.textContent = 'Front and back copper only. Use Layers to restore individual layers, or Reset board to restore the demo.'; reveal(); })));
     page.querySelectorAll('[data-action="reset"]').forEach(button => button.addEventListener('click', () => run(async () => { await viewer.load(source); localLoaded = false; viewer.setInspectorOpen(false); viewer.fit(); hint.textContent = 'Inverter demo restored. Pan, zoom, inspect parts or switch views.'; reveal(); })));
+    page.querySelectorAll('[data-action="net"]').forEach(button => button.addEventListener('click', () => run(async () => {
+        await board();
+        const nets = viewer.getNets().filter(net => net.count > 0);
+        const net = nets.find(net => net.name === 'GPa') || nets.find(net => net.name === 'GND') || nets[0];
+        if (!net || !viewer.selectNet(net.id, { locate: true })) throw new Error('No selectable saved copper net is available.');
+        viewer.setInspectorOpen(true);
+        hint.textContent = 'Saved net ' + net.name + ' highlighted. Associated copper stays bright and unrelated geometry dims. Search other nets in Inspect → Nets; turn off “Highlight entire net” to inspect a single selected trace or pad. Hidden layers stay hidden.';
+        reveal();
+    })));
     page.querySelectorAll('[data-layer]').forEach(button => button.addEventListener('click', () => run(async () => {
         await board(); viewer.setLayers([button.dataset.layer]); viewer.clearSelection(); viewer.fit();
         hint.textContent = button.textContent + ' isolated. Select geometry to inspect its saved net; All layers restores the complete drawing.';

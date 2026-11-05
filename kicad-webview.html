@@ -10,7 +10,7 @@ permalink: /kicad-webview/
         <p class="wv-eyebrow"><svg class="wv-mark" viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="8" width="32" height="32" rx="6"/><path d="M0 16h8m-8 16h8m32-16h8m-8 16h8M16 0v8m16-8v8M16 40v8m16-8v8M16 16h16v16H16z"/></svg> KiCad WebView <span>Browser library · Beta</span></p>
         <h1>Explore the board.</h1>
         <p class="wv-lead">An interactive schematic. A board you can inspect. A 3D view you can turn. Bring the design into your documentation with a small browser embed.</p>
-        <div class="wv-actions"><a href="#embed">Embed it yourself</a><a href="#licensing">Licensing</a></div>
+        <div class="wv-actions"><a href="#workspace">Advanced workspace</a><a href="#embed">Embed it yourself</a><a href="#licensing">Licensing</a></div>
         <ul class="wv-facts"><li>Read-only</li><li>Self-hosted</li><li>No rendering server</li><li>KiCad · Gerber · Excellon</li></ul>
     </header>
 
@@ -28,7 +28,7 @@ permalink: /kicad-webview/
             <p id="demo-readout" class="wv-readout" role="status">Loading the self-hosted inverter…</p>
         </div>
         <div class="wv-tour" role="group" aria-label="Inspection shortcuts">
-            <span>Try this:</span><button type="button" data-action="u2">Inspect U2</button><button type="button" data-action="copper">Copper only</button><button type="button" data-action="reset">Reset board</button>
+            <span>Try this:</span><button type="button" data-action="u2">Inspect U2</button><button type="button" data-action="net">Follow a copper net</button><button type="button" data-action="copper">Copper only</button><button type="button" data-action="reset">Reset board</button>
             <label class="wv-file">Open your files<input id="local-design" type="file" multiple accept=".kicad_pcb,.kicad_sch,.zip,.gbr,.ger,.gtl,.gbl,.gto,.gbo,.gts,.gbs,.gm1,.drl,.xln,.txt"></label>
         </div>
         <p id="demo-hint" class="wv-caption">Pan and zoom the drawing; Fit restores its framing. Open Inspect to search parts. In 3D, drag to orbit and use the surface measurement controls. In fabrication view, toggle layers or measure distances in mm.</p>
@@ -41,10 +41,25 @@ permalink: /kicad-webview/
                 <section class="wv-experiment"><span class="wv-step">04 / Inspect a pad</span><h3>Find the data behind the drawing.</h3><button type="button" data-action="u2">Locate U2 & open properties</button><p class="wv-caption">Then choose <strong>Pad 2 · GPa</strong> in Inspect to see the saved pad function, net, dimensions and layers. These are source properties, not simulation results.</p></section>
                 <section class="wv-experiment"><span class="wv-step">05 / Explore in 3D</span><h3>Turn the layout into a board.</h3><button type="button" data-view="3d">Open interactive 3D</button><p class="wv-caption">Drag to orbit; scroll to zoom. Use the viewer’s View / Measure / Display controls to examine surfaces. Missing models use approximate stand-ins.</p></section>
                 <section class="wv-experiment"><span class="wv-step">06 / Check fabrication</span><h3>Open the actual manufacturing ZIP.</h3><button type="button" data-view="manufacturing">Load Gerbers & drills</button><p class="wv-caption">Toggle the six exported layers in Layers. Select drill geometry for supplied tool attributes, or use the ruler for a two-click measurement in mm.</p></section>
+                <section class="wv-experiment"><span class="wv-step">07 / Follow the copper</span><h3>See the path behind a net.</h3><button type="button" data-action="net">Highlight a saved net</button><p class="wv-caption">Select a trace or use Inspect → Nets to search saved net names. Associated copper is highlighted while unrelated geometry dims. Turn off “Highlight entire net” for object-only selection. Hidden layers stay hidden.</p></section>
             </div>
         </div>
         <p class="wv-disclosure">Read-only preview. Missing component models use <strong>approximate stand-ins</strong>, not verified mechanical geometry. The viewer does not edit designs, run ERC/DRC or execute simulation solvers. Local files opened here are read in your browser, not uploaded by this page.</p>
         <noscript><p>Enable JavaScript to use the viewer. You can still read the embedding examples and licensing information below.</p></noscript>
+    </section>
+
+    <section id="workspace" class="wv-section" aria-labelledby="workspace-title">
+        <div class="wv-section-heading"><div><p class="wv-eyebrow">Advanced / Project workspace</p><h2 id="workspace-title">Two drawings. One place to inspect.</h2></div><p>Search the project and compare schematic, PCB and 3D panes.</p></div>
+        <div class="wv-tour"><button id="workspace-load" type="button" aria-expanded="false" aria-controls="project-workspace">Open Advanced viewer</button><span id="workspace-status" role="status">Loads on request; the compact demo above stays available.</span></div>
+        <div id="project-workspace" class="wv-workspace" aria-label="Advanced read-only inverter project" hidden></div>
+        <div class="wv-workspace-guide"><p><strong>Navigate:</strong> search Files, Parts or Nets. Choose the active pane before opening a drawing. Saved child-sheet links open listed project sheets; unresolved links stay disabled.</p><p><strong>Compare:</strong> switch between split and single panes. Open a driver schematic in one pane and the PCB or 3D view in the other. Link parts uses unambiguous saved symbol identities between loaded drawings.</p></div>
+        <p class="wv-disclosure">Read-only, with no comments or annotation editor. Component linking does not infer identity from reference labels. Nets remain local to their drawing: matching short names across sheets are not proof of connectivity. Approximate 3D model notices still apply.</p>
+        <details class="wv-advanced-code"><summary>Embed the Advanced viewer</summary><pre><code id="advanced-snippet">const project = new KiCadWebView.AdvancedKiCadViewer('#project', {
+  theme: 'dark', layout: 'split', linkedSelection: true
+});
+await project.load('/assets/lib/kicad-webview/demo/project.json');
+// Give #project an explicit height, e.g. 760px.
+// project.dispose() releases both panes when leaving.</code></pre><button class="wv-copy" data-copy="advanced-snippet" type="button">Copy Advanced example</button></details>
     </section>
 
     <section id="embed" class="wv-section" aria-labelledby="embed-title">
@@ -63,7 +78,7 @@ viewer.setInspectorOpen(true);
     </section>
 
     <section id="analysis" class="wv-section wv-analysis" aria-labelledby="analysis-title">
-        <div><p class="wv-eyebrow">07 / Imported analysis · Beta</p><h2 id="analysis-title">Explore a field<br>on the board.</h2><p class="wv-disclosure"><strong>Illustrative data only.</strong> The demo is a deterministic interface example, not an electrical or thermal solve, measurement or validation of this inverter.</p></div>
+        <div><p class="wv-eyebrow">Imported analysis · Beta</p><h2 id="analysis-title">Explore a field<br>on the board.</h2><p class="wv-disclosure"><strong>Illustrative data only.</strong> The demo is a deterministic interface example, not an electrical or thermal solve, measurement or validation of this inverter.</p></div>
         <div><p>Load a sample overlay in the live viewer above. Switch fields, adjust opacity and probe cells to see values with their units. Pan and zoom keep the overlay aligned with the board.</p><div class="wv-control-row"><button type="button" data-field="voltage-drop">Voltage drop · mV</button><button type="button" data-field="current-density">Current density · A/mm²</button><button type="button" data-field="temperature">Temperature · °C</button><button type="button" data-action="clear-analysis">Clear overlay</button></div><p class="wv-caption">Use Analysis in the viewer for visibility, fixed colour scale, opacity and run assumptions. Layer-linked fields follow saved layer visibility; 3D pauses the overlay. Results must match the exact PCB source hash.</p><p class="wv-caption">No PI, SI or thermal solver runs here. A direct SPIKE / Quick PI exporter is a future integration.</p></div>
     </section>
 
@@ -79,3 +94,4 @@ viewer.setInspectorOpen(true);
 </main>
 <script src="{{ '/assets/lib/kicad-webview/kicad-webview.min.js' | relative_url }}" defer></script>
 <script src="{{ '/assets/js/kicad-webview-product.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+<script src="{{ '/assets/js/kicad-webview-workspace.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
