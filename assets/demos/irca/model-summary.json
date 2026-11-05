@@ -1,84 +1,164 @@
 {
-  "source_sha256": "8c3fdd99685f964141f2bd4970ebd5c2fda83e927949fa32f74262a0bee14277",
-  "kicad_version": "10.0.6",
-  "assembly_bytes": 5531048,
-  "assembly_sha256": "7dd00c28f381f1c4b0f665b94ceffc868ab4e24815927e735445630100e0d2c9",
-  "board_thickness_mm": 1.6,
-  "coordinates": {
-    "unit": "mm",
-    "axes": "X right, Y opposite saved PCB Y, Z upward",
-    "origin": "Display assembly center and PCB midplane"
-  },
-  "assembly_bounds_mm": {
-    "min": [
-      -30.930000000056836,
-      -25.799997045993806,
-      -12.22382795291616
-    ],
-    "max": [
-      30.690001304149632,
-      26.370000084638583,
-      9.334999835193155
-    ]
-  },
-  "geometry": {
-    "instances": 178,
-    "primitive_instances": 13016,
-    "triangles": 177121
-  },
-  "materials": 46,
-  "display_derivative": true,
-  "original_design_included": false,
-  "omitted_data": [
-    "Original PCB and schematic",
-    "netlist and copper routes",
-    "BOM and design fields",
-    "individual STEP/VRML model files",
-    "original node and material names"
+  "schema": "irca.review-models/v2",
+  "sourcePcbSha256": "8c3fdd99685f964141f2bd4970ebd5c2fda83e927949fa32f74262a0bee14277",
+  "reviewPcbSha256": "64ca5ababdf69758413892dd160d2fe37914afc8871516c0b193316678f870d4",
+  "footprints": 59,
+  "linkedModelFootprints": 50,
+  "padOnlyFootprints": 9,
+  "linkedNativeModelInstances": 52,
+  "modelAssets": [
+    {
+      "path": "models/02dc8f66d7645297bd91c94c.glb",
+      "bytes": 47016,
+      "sha256": "02dc8f66d7645297bd91c94c0f2b871947c7b99db9498376b006cd1f44b0c19b"
+    },
+    {
+      "path": "models/0a2febf3bd7280f4a2a5b6d1.glb",
+      "bytes": 8928,
+      "sha256": "0a2febf3bd7280f4a2a5b6d153ead29ed760842ab8a04fba8f9d0de66d663cd0"
+    },
+    {
+      "path": "models/0d301490849f89ce8c272107.glb",
+      "bytes": 12208,
+      "sha256": "0d301490849f89ce8c27210786d49978566e33dadca76339e2a67aadae20e85f"
+    },
+    {
+      "path": "models/0fb035181613f2320ac12157.glb",
+      "bytes": 12208,
+      "sha256": "0fb035181613f2320ac121570ebb5848e85d2fc2e043bd0650bccb2be601470c"
+    },
+    {
+      "path": "models/1a216d5435474a7b5e6452c1.glb",
+      "bytes": 10320,
+      "sha256": "1a216d5435474a7b5e6452c19241248b78ff5a64e59a5ea7fc3abb028ac253ae"
+    },
+    {
+      "path": "models/1d31dae664c89feb1cd6b198.glb",
+      "bytes": 10312,
+      "sha256": "1d31dae664c89feb1cd6b198088793a15353b22e07221de3cf0ec715d9e4e1fa"
+    },
+    {
+      "path": "models/31f544c791e6c99150905ebd.glb",
+      "bytes": 533608,
+      "sha256": "31f544c791e6c99150905ebdfeff9d22d4ee5a3229c9072c689706fa3a61a1a4"
+    },
+    {
+      "path": "models/3eb77f5e06312dcd0df46077.glb",
+      "bytes": 7676,
+      "sha256": "3eb77f5e06312dcd0df46077cb69f13b7538c3c4244ceed3359f75dab0560a35"
+    },
+    {
+      "path": "models/497bdc4b63be39d41fbd72eb.glb",
+      "bytes": 8932,
+      "sha256": "497bdc4b63be39d41fbd72eb8be64f5d624b45c5b040683109c238322b5485d1"
+    },
+    {
+      "path": "models/4ea9a675a08c48a85fbca5c6.glb",
+      "bytes": 47016,
+      "sha256": "4ea9a675a08c48a85fbca5c619e9c8820f6aff434262f417228c53a7d6246185"
+    },
+    {
+      "path": "models/64c596cdfd0155938871a8ab.glb",
+      "bytes": 700928,
+      "sha256": "64c596cdfd0155938871a8abe338ebe5bd219e7101a0e1807129477a1b3bb801"
+    },
+    {
+      "path": "models/6c16bc3c81b640b5e00233c1.glb",
+      "bytes": 10500,
+      "sha256": "6c16bc3c81b640b5e00233c151455db585a8539691a78c73db2a916f74a4014c"
+    },
+    {
+      "path": "models/6f4e74fbfd16171bbd83c868.glb",
+      "bytes": 23552,
+      "sha256": "6f4e74fbfd16171bbd83c8687a1ff6a14fa0dda58ed30d92b045b19d38f87d74"
+    },
+    {
+      "path": "models/726a22489bf1842ff8ab5d26.glb",
+      "bytes": 34448,
+      "sha256": "726a22489bf1842ff8ab5d26f29f46e125062bced0d507706c6e902933c20e54"
+    },
+    {
+      "path": "models/7ec05e61a96e482529ad5dce.glb",
+      "bytes": 43392,
+      "sha256": "7ec05e61a96e482529ad5dce5ff83ab2fdd98ece7b5c4dfe0f01c6ad96d8824c"
+    },
+    {
+      "path": "models/84b4940f71fc997c0232eaee.glb",
+      "bytes": 10500,
+      "sha256": "84b4940f71fc997c0232eaee7317c676458b737407877b86ccfec689df4ff9ae"
+    },
+    {
+      "path": "models/89c9a6dde0f9a41fec2b966e.glb",
+      "bytes": 10500,
+      "sha256": "89c9a6dde0f9a41fec2b966e05484c6379c7547cbb2973256b9417fa083dd81d"
+    },
+    {
+      "path": "models/9bdfcc20c6b0f49564f72089.glb",
+      "bytes": 34836,
+      "sha256": "9bdfcc20c6b0f49564f72089ad8d18e125279ba0dd05a3664dc0d61aaae44315"
+    },
+    {
+      "path": "models/a253307b9f3c5f4ee7a5354b.glb",
+      "bytes": 8928,
+      "sha256": "a253307b9f3c5f4ee7a5354b0c0f7c01dde65599d4b0bb8d980a2544d5fc6917"
+    },
+    {
+      "path": "models/a33a73417ed6b970a28ab091.glb",
+      "bytes": 8932,
+      "sha256": "a33a73417ed6b970a28ab09189f4f207b1d42e9c81866a5eda345ea450b50cd3"
+    },
+    {
+      "path": "models/b0261a065d61d06a1ff8c8f4.glb",
+      "bytes": 10320,
+      "sha256": "b0261a065d61d06a1ff8c8f4976f0addbc2f5473c315f18c48d9f2a1a10ac287"
+    },
+    {
+      "path": "models/b95008da939e844c346b3d9c.glb",
+      "bytes": 10500,
+      "sha256": "b95008da939e844c346b3d9c71d6934c63ff1c5321e01507535888ac66263b59"
+    },
+    {
+      "path": "models/d1274ae0037c2dd5616bf594.glb",
+      "bytes": 10504,
+      "sha256": "d1274ae0037c2dd5616bf594162c39741cc392f7d96fd071b05679585eb9ad3f"
+    },
+    {
+      "path": "models/e708ee240144b161b2297ed3.glb",
+      "bytes": 193264,
+      "sha256": "e708ee240144b161b2297ed320a36d0a3f1145b7c31f2436290d53e0769e716b"
+    },
+    {
+      "path": "models/f471cc9c963bc4cbd14bd7ee.glb",
+      "bytes": 716524,
+      "sha256": "f471cc9c963bc4cbd14bd7eeb21c17f6f62ee61adbfe47f56e37ecf1c4394d8f"
+    },
+    {
+      "path": "models/f6fbecea01a1c7d8b5b59184.glb",
+      "bytes": 43392,
+      "sha256": "f6fbecea01a1c7d8b5b59184fa66f40c9252c7e254e2bccee7ee0e4ab9a922b5"
+    },
+    {
+      "path": "models/f7fdd13ae15811cedc0e4340.glb",
+      "bytes": 24620,
+      "sha256": "f7fdd13ae15811cedc0e43402e66b56120eed448e86777a61173691482489a4c"
+    },
+    {
+      "path": "models/fd924fbb66ba5f62d2907063.glb",
+      "bytes": 32080,
+      "sha256": "fd924fbb66ba5f62d290706346db958e5a7be045166c5971e1a3bc33270ec13a"
+    }
   ],
-  "limitations": [
-    "One IC uses a nominal same-dimension SOIC-8 package in place of the absent legacy SOP-8 model.",
-    "Three absent legacy alternate models are omitted where the supplied custom STEP model covers the same component.",
-    "This is a visual assembly mesh, not editable ECAD or a mechanically qualified release."
-  ],
-  "source_footprint_count": 59,
-  "footprints_with_supplied_model_declarations": 50,
-  "pad_only_footprints": 9,
-  "resolved_visible_model_declarations": 52,
-  "nominal_package_substitutions": 1,
-  "source_design_kept_private": true,
-  "carrier_contains_original_circuit": false,
-  "carrier_pads": 0,
-  "carrier_tracks": 0,
-  "carrier_zones": 0,
-  "render": {
-    "engine": "KiCad 10.0.6 native ray tracer",
-    "file": "assembly-preview.png",
-    "width": 1400,
-    "height": 1000,
-    "full_frame": true,
+  "componentTriangles": 92798,
+  "maxTransformRoundtripErrorMm": 6.23859340009858e-06,
+  "nativeExporter": "KiCad 10.0.6",
+  "assemblyPreview": {
+    "path": "assembly-preview.png",
     "sha256": "4f14cb922fafdb4bcf8d8cd6c0620f9b3240aef83f32738726db5b496790280d"
   },
-  "files": [
-    {
-      "path": "assembly.glb",
-      "bytes": 5531048,
-      "sha256": "7dd00c28f381f1c4b0f665b94ceffc868ab4e24815927e735445630100e0d2c9"
-    },
-    {
-      "path": "assembly-display.kicad_pcb",
-      "bytes": 971,
-      "sha256": "25312255f20b639d21484fd72957097b888b9d259e0c67bded463535175b0d39"
-    },
-    {
-      "path": "project.json",
-      "bytes": 235,
-      "sha256": "bde154199462d6061ca83f48daed4f1083587fe3dbe2a8cee76dffd5af5cea40"
-    },
-    {
-      "path": "assembly-preview.png",
-      "bytes": 348973,
-      "sha256": "4f14cb922fafdb4bcf8d8cd6c0620f9b3240aef83f32738726db5b496790280d"
-    }
-  ]
+  "limitations": [
+    "One IC uses a nominal same-dimension package model.",
+    "The renderer reports unsupported mask/pad and drill-triangulation details; native design verification remains separate.",
+    "Browser-loaded review geometry remains retrievable. Original KiCad project, library and STEP source files are not included."
+  ],
+  "fieldBinding": "Copper, pads, footprint poses and layers were compared unchanged against the source before binding the executed FEM field to the review-source hash."
 }

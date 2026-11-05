@@ -5,7 +5,7 @@
 .irca-demo .irca-heading h2 { margin:0; font:550 23px/1.2 system-ui,sans-serif; letter-spacing:-.025em; }
 .irca-badge { color:var(--irca-muted); font:11px/1.5 system-ui,sans-serif; }
 .irca-badge > span { color:var(--irca-accent); margin-right:5px; }
-.irca-modes { display:flex; gap:6px; padding:10px 14px; border-block:1px solid var(--irca-rule); }
+.irca-modes { display:flex; flex-wrap:wrap; gap:6px; padding:10px 14px; border-block:1px solid var(--irca-rule); }
 .irca-demo .irca-modes button { border:1px solid transparent; border-radius:4px; padding:9px 13px; color:var(--irca-muted); background:transparent; font:13px/1.4 system-ui,sans-serif; cursor:pointer; }
 .irca-modes button i { margin-right:6px; }
 .irca-demo .irca-modes button[aria-pressed="true"] { background:var(--irca-accent); color:var(--irca-bg); }
@@ -18,7 +18,8 @@
 .irca-carousel:empty { display:none; }
 .irca-carousel section { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
 .irca-carousel section > span { flex:1 1 200px; color:var(--irca-muted); font:12px/1.5 system-ui,sans-serif; }
-.irca-carousel button,.irca-demo .irca-start { border:1px solid var(--irca-rule); border-radius:4px; color:var(--irca-ink); background:var(--irca-bg); padding:8px 11px; font:12px/1.5 system-ui,sans-serif; cursor:pointer; }
+.irca-carousel button,.irca-demo .irca-start,.irca-demo .irca-inspect { border:1px solid var(--irca-rule); border-radius:4px; color:var(--irca-ink); background:var(--irca-bg); padding:8px 11px; font:12px/1.5 system-ui,sans-serif; cursor:pointer; }
+.irca-demo .irca-inspect { margin-top:8px; color:var(--irca-accent); }
 .irca-demo button:disabled { opacity:.5; cursor:wait; }
 .irca-carousel button:hover:not(:disabled),.irca-demo .irca-start:hover { border-color:var(--irca-accent); color:var(--irca-accent); }
 .irca-footer { padding:14px 20px; border-top:1px solid var(--irca-rule); }
