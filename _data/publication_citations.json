@@ -1,0 +1,27 @@
+{
+  "source": "Google Scholar",
+  "profile_url": "https://scholar.google.com/citations?user=s_0A8yEAAAAJ&hl=en",
+  "checked_on": "2026-11-05",
+  "works": {
+    "ultracapacitor": {
+      "doi": "10.1016/j.est.2023.109200",
+      "count": 22,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=s_0A8yEAAAAJ&citation_for_view=s_0A8yEAAAAJ:9yKSN-GCB0IC"
+    },
+    "v2v": {
+      "doi": "10.1109/peccon55017.2022.9851081",
+      "count": 7,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=s_0A8yEAAAAJ&citation_for_view=s_0A8yEAAAAJ:d1gkVwhDpl0C"
+    },
+    "rlmls": {
+      "doi": "10.1007/s12652-023-04578-w",
+      "count": 2,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=s_0A8yEAAAAJ&citation_for_view=s_0A8yEAAAAJ:2osOgNQ5qMEC"
+    },
+    "multilevel": {
+      "doi": "10.1007/978-981-16-1186-5_8",
+      "count": 0,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=s_0A8yEAAAAJ&citation_for_view=s_0A8yEAAAAJ:u-x6o8ySG0sC"
+    }
+  }
+}
