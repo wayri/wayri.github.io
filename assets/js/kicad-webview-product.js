@@ -155,11 +155,14 @@
         await board();
         // Restore source layers so a previous copper-only demo cannot hide the field.
         await viewer.load(source); localLoaded = false;
-        const response = await fetch(base + 'analysis/inverter-illustrative.json');
-        if (!response.ok) throw new Error('Illustrative overlay unavailable.');
-        await viewer.setAnalysis(await response.json());
+        const response = await fetch(base + 'analysis/inverter-real-dc.json');
+        if (!response.ok) throw new Error('Computed DC study unavailable.');
+        const data = await response.json();
+        await viewer.setAnalysis(data);
+        const result = data.summary;
+        document.getElementById('dc-study-summary').textContent = `${result.maxVoltageDropMv.toFixed(3)} mV maximum drop · ${(result.copperLossW*1000).toFixed(3)} mW copper loss · ${result.currentA} A normalized current.`;
         viewer.setAnalysisField(button.dataset.field);
-        hint.textContent = 'ILLUSTRATIVE DATA ONLY · ' + button.textContent + '. Move over coloured cells to probe values. Analysis controls provide opacity, scale and run assumptions. No solver has run.';
+        hint.textContent = 'COMPUTED DC COPPER STUDY · ' + button.textContent + '. Normalized 1 A: J10.1 → Q4.2 on Vdc; not a measured operating point. Probe cells and open Analysis for assumptions. See the study report below for numerical checks.';
         reveal();
     })));
     page.querySelector('[data-action="clear-analysis"]').addEventListener('click', () => run(async () => {

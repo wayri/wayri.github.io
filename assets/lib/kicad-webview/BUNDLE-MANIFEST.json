@@ -1,6 +1,6 @@
 {
   "sourceCommit": "7f081d21ebf5e9148cac4a3b3345c481eaa89800",
-  "description": "Curated self-hosted runtime, owner-authorized inverter and explicitly illustrative overlay data.",
+  "description": "Curated self-hosted runtime and owner-authorized inverter; original illustrative fixture retained for provenance, with an executed normalized DC copper study added by the host site.",
   "files": [
     {
       "path": "analysis/inverter-illustrative.json",
@@ -116,6 +116,26 @@
       "path": "THREE-LICENSE",
       "bytes": 1081,
       "sha256": "4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454"
+    },
+    {
+      "path": "analysis/inverter-real-dc-method.md",
+      "bytes": 3940,
+      "sha256": "ee135d45ead2a16d90ab3a912f7d7d4937da54300cfcb6c22aaba3e273fadb77"
+    },
+    {
+      "path": "analysis/inverter-real-dc-report.json",
+      "bytes": 5307,
+      "sha256": "365b08e57804a376364d1b9ff861d50b43d022937f26c4e4795aae5fc5b0e4cd"
+    },
+    {
+      "path": "analysis/inverter-real-dc.json",
+      "bytes": 57407,
+      "sha256": "c3096e4f7429863983f458dc4eb83e1173d5738e033d4aaad631b7b796acf3ea"
+    },
+    {
+      "path": "analysis/inverter-real-dc.png",
+      "bytes": 288010,
+      "sha256": "c941297a6385556251c2c58eb7f05f6b67d33ee6e696e44283d492c224fad6ed"
     }
   ]
 }

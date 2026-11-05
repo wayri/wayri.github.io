@@ -53,6 +53,9 @@
 .wv-analysis, .wv-license { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
 .wv-analysis { background: linear-gradient(110deg, color-mix(in srgb, var(--link) 5%, var(--paper)), var(--paper)); padding: 2rem; border: 1px solid var(--rule); border-radius: 8px; }
 .wv-analysis p:first-child, .wv-license p:first-child { margin-top: 0; }
+.wv-study-figure { grid-column:1 / -1; margin:0; }
+.wv-study-figure img { display:block; width:100%; height:auto; border-radius:4px; }
+.wv-study-figure figcaption { color:var(--muted); font-size:12px; margin-top:.6rem; }
 .wv-feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 2rem; }
 .wv-feature-grid i { color: var(--link); font-size: 1.5rem; }
 .wv-feature-grid p { color: var(--muted); font-size: 14px; }
