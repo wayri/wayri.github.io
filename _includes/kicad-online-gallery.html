@@ -1,5 +1,13 @@
 <link rel="stylesheet" href="{{ '/assets/css/project-gallery.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 <div class="project-gallery" data-project-gallery role="region" aria-roledescription="carousel" aria-label="KiCad Online screenshots">
+    <nav class="kicad-platforms" aria-label="KiCad Online available platforms">
+        <span class="kicad-platforms-label">Available on</span>
+        <a href="https://chromewebstore.google.com/detail/klfdjlbngpoopegjmbajaidgodpmjaoc"><i class="fa-brands fa-chrome" aria-hidden="true"></i><span>Chrome<small>Desktop</small></span></a>
+        <a href="https://addons.mozilla.org/en-US/firefox/addon/pocket-kiview-kicad-review/"><i class="fa-brands fa-firefox-browser" aria-hidden="true"></i><span>Firefox<small>Desktop</small></span></a>
+        <a href="https://addons.mozilla.org/en-US/firefox/addon/pocket-kiview-kicad-review/"><i class="fa-brands fa-firefox-browser" aria-hidden="true"></i><span>Firefox<small>Mobile · Android</small></span></a>
+        <a href="https://github.com/wayri/KiCad-Online/releases"><i class="fa-brands fa-android" aria-hidden="true"></i><span>Android app<small>Preview download</small></span></a>
+        <a href="https://marketplace.visualstudio.com/items?itemName=wayri.kicad-visual-review"><i class="fa-solid fa-code" aria-hidden="true"></i><span>VS Code<small>Marketplace</small></span></a>
+    </nav>
     <div class="project-gallery-stage">
         <figure data-gallery-slide data-label="PCB layout"><a href="{{ '/assets/images/projects/kicad-online/03-layout.jpg' | relative_url }}" target="_blank" rel="noopener"><img src="{{ '/assets/images/projects/kicad-online/03-layout.jpg' | relative_url }}" width="1707" height="920" loading="lazy" alt="KiCad Online PCB layout showing the public OLIMEX ESP32-PoE M2 board"></a><figcaption>PCB layout · public OLIMEX ESP32-PoE M2 design.</figcaption></figure>
         <figure data-gallery-slide data-label="Schematic" hidden><a href="{{ '/assets/images/projects/kicad-online/02-schematic.jpg' | relative_url }}" target="_blank" rel="noopener"><img src="{{ '/assets/images/projects/kicad-online/02-schematic.jpg' | relative_url }}" width="1707" height="920" loading="lazy" alt="KiCad Online schematic viewer displaying the OLIMEX ESP32-PoE M2 circuit"></a><figcaption>Schematic navigation · the same public OLIMEX board.</figcaption></figure>
