@@ -7,17 +7,33 @@ permalink: /kicad-webview/
 
 <main class="webview-product" data-assets="{{ '/assets/lib/kicad-webview/' | relative_url }}">
     <header class="wv-hero">
-        <p class="wv-eyebrow"><svg class="wv-mark" viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="8" width="32" height="32" rx="6"/><path d="M0 16h8m-8 16h8m32-16h8m-8 16h8M16 0v8m16-8v8M16 40v8m16-8v8M16 16h16v16H16z"/></svg> KiCad WebView <span>Browser library · Beta</span></p>
-        <h1>Explore the board.</h1>
+        <div class="wv-hero-copy">
+        <p class="wv-eyebrow"><svg class="wv-mark" viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="8" width="32" height="32" rx="6"/><path d="M0 16h8m-8 16h8m32-16h8m-8 16h8M16 0v8m16-8v8M16 40v8m16-8v8M16 16h16v16H16z"/></svg> <span>Browser library · Beta</span></p>
+        <h1>KiCad WebView</h1>
+        <p class="wv-hero-tagline">Explore the board.</p>
         <p class="wv-lead">An interactive schematic. A board you can inspect. A 3D view you can turn. Bring the design into your documentation with a small browser embed.</p>
         <nav class="wv-actions" aria-label="KiCad WebView actions"><a class="wv-action wv-action-primary" href="#workspace"><i class="fa-solid fa-table-columns" aria-hidden="true"></i> Advanced workspace <span aria-hidden="true">↓</span></a><a class="wv-action" href="#embed"><i class="fa-solid fa-code" aria-hidden="true"></i> Embed it yourself <span aria-hidden="true">↓</span></a><a class="wv-action" href="#licensing"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> Licensing <span aria-hidden="true">↓</span></a></nav>
         <ul class="wv-facts"><li>Read-only</li><li>Self-hosted</li><li>No rendering server</li><li>KiCad · Gerber · Excellon</li></ul>
+        </div>
+        <section class="wv-irca-showcase" aria-label="IRCA assembly and Fast PI demonstration">{% include irca-demo.html %}</section>
     </header>
 
-    <section class="wv-irca-showcase" aria-label="IRCA assembly and Fast PI demonstration">{% include irca-demo.html %}</section>
+    <nav id="capabilities" class="wv-capabilities" aria-labelledby="capabilities-title">
+        <div class="wv-section-heading"><div><p class="wv-eyebrow">Explore the capabilities</p><h2 id="capabilities-title">Choose what to inspect.</h2></div><p>Working examples, with the saved design and its context.</p></div>
+        <div class="wv-feature-grid">
+            <a href="#demo"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i><span><strong>Schematics &amp; PCB</strong><small>Find parts, inspect pads, follow copper and switch layers.</small></span><span aria-hidden="true">↗</span></a>
+            <a href="#project-irca"><i class="fa-solid fa-cube" aria-hidden="true"></i><span><strong>Full 3D assemblies</strong><small>Rotate IRCA, inspect both sides and take a guided tour.</small></span><span aria-hidden="true">↗</span></a>
+            <a href="#workspace"><i class="fa-solid fa-table-columns" aria-hidden="true"></i><span><strong>Cross-probe &amp; share</strong><small>Link saved components across panes and save a view link.</small></span><span aria-hidden="true">↗</span></a>
+            <a href="#demo"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span><strong>Fabrication layers</strong><small>Use Fabrication ZIP to inspect Gerbers and Excellon drills.</small></span><span aria-hidden="true">↗</span></a>
+            <a href="#analysis"><i class="fa-solid fa-bolt" aria-hidden="true"></i><span><strong>Calculated DC fields</strong><small>Inspect computed copper drop, assumptions and convergence.</small></span><span aria-hidden="true">↗</span></a>
+            <a href="#embed"><i class="fa-solid fa-code" aria-hidden="true"></i><span><strong>Embed it yourself</strong><small>Add a read-only drawing to a website or engineering note.</small></span><span aria-hidden="true">↗</span></a>
+        </div>
+    </nav>
 
     <section id="demo" class="wv-showcase" aria-labelledby="demo-title">
-        <div class="wv-section-heading"><div><h2 id="demo-title">Additional PCB &amp; schematic example</h2></div><p>Public inverter design · 153 PCB parts · separate feature example</p></div>
+        <div class="wv-section-heading"><div><p class="wv-eyebrow">Interactive design workspace</p><h2 id="demo-title">Inspect the design.</h2></div><p>Public inverter design · 153 PCB parts · separate feature example</p></div>
+        <div class="wv-demo-layout">
+        <div class="wv-viewer-column">
         <div class="wv-demo-frame">
             <div class="wv-view-switch" role="group" aria-label="Demo views">
                 <button type="button" data-view="pcb" aria-pressed="true">PCB layout</button>
@@ -26,12 +42,12 @@ permalink: /kicad-webview/
                 <button type="button" data-view="manufacturing" aria-pressed="false">Fabrication ZIP</button>
                 <button type="button" data-field="voltage-drop">Computed DC analysis</button>
             </div>
+            <div id="advanced-board" class="wv-board" aria-label="Interactive inverter viewer"></div>
             <div class="wv-presentation" aria-label="Live design tours">
                 <div class="wv-tour-choice" role="group" aria-label="Choose a tour"><span>Explore with a tour</span><button type="button" data-tour="project" aria-pressed="true">Project story</button><button type="button" data-tour="board" aria-pressed="false">3D board tour</button></div>
                 <div id="demo-carousel" aria-label="Tour playback controls"></div>
                 <p class="wv-caption">Every slide is interactive. Use Previous / Next or opt in to Play. Interacting with the viewer pauses playback; press Play to resume.</p>
             </div>
-            <div id="advanced-board" class="wv-board" aria-label="Interactive inverter viewer"></div>
             <p id="demo-readout" class="wv-readout" role="status">Loading the self-hosted inverter…</p>
         </div>
         <div class="wv-tour" role="group" aria-label="Inspection shortcuts">
@@ -39,8 +55,9 @@ permalink: /kicad-webview/
             <label class="wv-file">Open your files<input id="local-design" type="file" multiple accept=".kicad_pcb,.kicad_sch,.zip,.gbr,.ger,.gtl,.gbl,.gto,.gbo,.gts,.gbs,.gm1,.drl,.xln,.txt"></label>
         </div>
         <p id="demo-hint" class="wv-caption">Pan and zoom the drawing; Fit restores its framing. Open Inspect to search parts. In 3D, drag to orbit and use the surface measurement controls. In fabrication view, toggle layers or measure distances in mm.</p>
+        </div>
         <div class="wv-lab" aria-labelledby="lab-title">
-            <div class="wv-lab-heading"><h3 id="lab-title">Try the features on this board</h3><p>Every control below changes the live viewer above.</p></div>
+            <div class="wv-lab-heading"><h3 id="lab-title">Inspection controls</h3><p>Every control updates the live design.</p></div>
             <div class="wv-lab-grid">
                 <section class="wv-experiment"><span class="wv-step">01 / Find a component</span><h3>Go from reference to geometry.</h3><label for="part-search">Reference, value or footprint</label><input id="part-search" type="search" placeholder="Try U2, MOSFET or 100n" autocomplete="off"><div id="part-results" class="wv-part-results" aria-label="Matching parts"></div><p class="wv-caption" id="part-count" role="status"></p></section>
                 <section class="wv-experiment"><span class="wv-step">02 / Peel back the board</span><h3>Separate the copper layers.</h3><div class="wv-control-row"><button type="button" data-layer="F.Cu">Front copper</button><button type="button" data-layer="B.Cu">Back copper</button><button type="button" data-action="copper">Both copper layers</button><button type="button" data-action="reset">All layers</button></div><p class="wv-caption">Isolate saved copper geometry. Zoom in to follow individual tracks; select a track to inspect its saved net.</p></section>
@@ -50,6 +67,7 @@ permalink: /kicad-webview/
                 <section class="wv-experiment"><span class="wv-step">06 / Check fabrication</span><h3>Open the actual manufacturing ZIP.</h3><button type="button" data-view="manufacturing">Load Gerbers & drills</button><p class="wv-caption">Toggle the six exported layers in Layers. Select drill geometry for supplied tool attributes, or use the ruler for a two-click measurement in mm.</p></section>
                 <section class="wv-experiment"><span class="wv-step">07 / Follow the copper</span><h3>See the path behind a net.</h3><button type="button" data-action="net">Highlight a saved net</button><p class="wv-caption">Select a trace or use Inspect → Nets to search saved net names. Associated copper is highlighted while unrelated geometry dims. Turn off “Highlight entire net” for object-only selection. Hidden layers stay hidden.</p></section>
             </div>
+        </div>
         </div>
         <p class="wv-disclosure">Read-only preview. Missing component models use <strong>approximate stand-ins</strong>, not verified mechanical geometry. The viewer does not edit designs, run ERC/DRC or execute simulation solvers. Local files opened here are read in your browser, not uploaded by this page.</p>
         <noscript><p>Enable JavaScript to use the viewer. You can still read the embedding examples and licensing information below.</p></noscript>
@@ -89,13 +107,6 @@ viewer.setInspectorOpen(true);
         <div><p>The field is computed offline with Quick PI from the exact saved PCB geometry. The browser displays the calculated samples; it does not run a solver. Pan, zoom, adjust opacity, and probe the field in the viewer above.</p><div class="wv-control-row"><button type="button" data-field="voltage-drop">Voltage drop · mV</button><button type="button" data-field="current-density">Current density · A/mm²</button><button type="button" data-action="clear-analysis">Clear overlay</button></div><p class="wv-caption">The model covers one Vdc copper path with declared source/load electrodes. It excludes switching behavior, the return path, component losses, and thermal feedback. Voltage drop changed 0.31% in the final mesh refinement. Local current-density peaks changed 16.3% and are <strong>not converged</strong>; do not treat their magnitude as a qualified hotspot prediction.</p><p class="wv-caption"><a href="{{ '/assets/lib/kicad-webview/analysis/inverter-real-dc-report.json' | relative_url }}">Numerical results &amp; convergence report</a> · <a href="{{ '/assets/lib/kicad-webview/analysis/inverter-real-dc.json' | relative_url }}">Source-bound field data</a> · <a href="{{ '/tools/compute-inverter-dc.py' | relative_url }}">Reproduction script</a></p></div>
         <figure class="wv-study-figure"><a href="{{ '/assets/lib/kicad-webview/analysis/inverter-real-dc.png' | relative_url }}"><img src="{{ '/assets/lib/kicad-webview/analysis/inverter-real-dc.png' | relative_url }}" width="1800" height="1080" loading="lazy" alt="Actual finite-element voltage-drop field for Vdc copper from source J10.1 to load Q4.2, normalized 1 A"></a><figcaption>Full finite-element field, rather than the conservatively sampled browser overlay. Open the figure to inspect the source/load markers and scale.</figcaption></figure>
     </section>
-
-    <section class="wv-section wv-capabilities" aria-labelledby="capabilities-title"><h2 id="capabilities-title">From a drawing to a closer look.</h2><div class="wv-feature-grid">
-        <article><i class="fa-solid fa-diagram-project" aria-hidden="true"></i><h3>Saved design, accessible</h3><p>Open schematic sheets and PCB layouts. Pan, zoom, fit and switch drawings from a project manifest.</p></article>
-        <article><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><h3>Inspect what is there</h3><p>Find references and inspect supplied fields, pad numbers, saved nets and layers. Values come from the source file.</p></article>
-        <article><i class="fa-solid fa-cube" aria-hidden="true"></i><h3>Turn the board around</h3><p>Orbit the 3D board and inspect surfaces. Supported WRL or self-contained GLB assets can supply real component models.</p></article>
-        <article><i class="fa-solid fa-layer-group" aria-hidden="true"></i><h3>Look at fabrication</h3><p>Explore Gerber layers, Excellon drills and ZIP bundles. Toggle manufacturing layers and inspect supplied attributes.</p></article>
-    </div></section>
 
     <section id="licensing" class="wv-section wv-license" aria-labelledby="license-title"><div><p class="wv-eyebrow">Use & availability</p><h2 id="license-title">Self-host it.<br>Keep the context.</h2></div><div><p>KiCad WebView uses a <a href="{{ '/assets/lib/kicad-webview/LICENSE' | relative_url }}">source-available license</a>. Community use, ordinary business work and website embeds are permitted under its terms. <strong>Selling the viewer/SDK or operating a paid viewer-focused service requires a commercial agreement.</strong></p><p>Contact <a href="mailto:support.kivi@sigharmonic.com">support.kivi@sigharmonic.com</a> for commercial permission. The source repository remains private; npm/CDN publication and live Slack, Confluence and Notion integrations are not claimed here.</p><div class="wv-actions"><a href="{{ '/assets/lib/kicad-webview/kicad-webview.min.js' | relative_url }}" download>Browser script ↓</a><a href="{{ '/assets/lib/kicad-webview/THIRD-PARTY-NOTICES.md' | relative_url }}">Third-party notices</a><a href="{{ '/assets/lib/kicad-webview/BUNDLE-MANIFEST.json' | relative_url }}">Bundle hashes</a></div></div></section>
     <footer class="wv-footer"><p>Demo design by Yawar Badri · <a href="https://github.com/wayri/3-Phase-inverter-board/tree/283f41b65c193abcc7e63c8c919dacdbccc89829">Pinned inverter source</a> · <a href="{{ '/assets/lib/kicad-webview/demo/PROVENANCE.json' | relative_url }}">Design provenance</a> · <a href="{{ '/assets/lib/kicad-webview/manufacturing/PROVENANCE.json' | relative_url }}">Fabrication provenance</a></p><p>The inverter is an owner-authorized public demo; its upstream repository has no license file. Viewing it here does not grant a design license. Independent of KiCad; no upstream endorsement is implied.</p><a href="{{ '/' | relative_url }}#project-webview">Back to projects</a></footer>
