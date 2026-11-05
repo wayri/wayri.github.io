@@ -1,0 +1,121 @@
+{
+  "sourceCommit": "871175e",
+  "description": "Curated self-hosted runtime, owner-authorized inverter and explicitly illustrative overlay data.",
+  "files": [
+    {
+      "path": "analysis/inverter-illustrative.json",
+      "bytes": 50068,
+      "sha256": "3ac4c1e54a737d44dd791eafba6f3592c2e2d8bba870879c809d6b1a34457b96"
+    },
+    {
+      "path": "demo/3PD+IB.kicad_pcb",
+      "bytes": 2131833,
+      "sha256": "09bc4def38e6d866ee38c2ba4f87c349945c3514a4f3b3195c14b89e530fa75d"
+    },
+    {
+      "path": "demo/3PD+IB.kicad_sch",
+      "bytes": 203167,
+      "sha256": "6f9f45dfe7b94ca6adb43ef53ece0462e9eab8815d9899f412ead4ef2595c551"
+    },
+    {
+      "path": "demo/DCL_Sens.kicad_sch",
+      "bytes": 32373,
+      "sha256": "b47938e4dc6ddab604a10f22b024d1d7adef53e4edfe08a92507dda5878bdd6a"
+    },
+    {
+      "path": "demo/HBD21094.kicad_sch",
+      "bytes": 30818,
+      "sha256": "158e846d9d16c73dd64b0ccccc9bb7b9578d16c2a02bf47c0e5733bbe0f850cf"
+    },
+    {
+      "path": "demo/HBD21094B.kicad_sch",
+      "bytes": 30818,
+      "sha256": "4c429d9efa4861ffefff6cc16e20c635c7e1f117867482c884cd21554df83fd3"
+    },
+    {
+      "path": "demo/HBD21094C.kicad_sch",
+      "bytes": 30818,
+      "sha256": "183d86adaca2850b23a3fd0806693ca2d3222244976c80cedfdb4af2f0d81e41"
+    },
+    {
+      "path": "demo/outputFilter.kicad_sch",
+      "bytes": 35632,
+      "sha256": "8bcf2bfbeefcb281a6617612e497423ecc7f3960576ba6080555d51003ec02e7"
+    },
+    {
+      "path": "demo/project.json",
+      "bytes": 735,
+      "sha256": "bd2981d5e84609ed9f2252ad2a902a18ba0d9a29f344849d0e3c2cc0b20e1bf7"
+    },
+    {
+      "path": "demo/PROVENANCE.json",
+      "bytes": 3164,
+      "sha256": "8cb1703fdca189a7d65bbe6d1ab893f6c2f3baa0ac4263255d2b26f262ee58ea"
+    },
+    {
+      "path": "demo/README.md",
+      "bytes": 904,
+      "sha256": "933ad80a567066bf7031c6a0ee6f7aa07e1624bc52e1001a318fffd7b8b73fe7"
+    },
+    {
+      "path": "demo/T_sens.kicad_sch",
+      "bytes": 43957,
+      "sha256": "79f21b6ba851fa56c525736d63a436852b4e8e46d8919e37d130e205aebc4d03"
+    },
+    {
+      "path": "FZSTD-LICENSE",
+      "bytes": 1069,
+      "sha256": "62249119bb7df6e54300f37a37145c26a6d4420410aac8881a119c5b427cf751"
+    },
+    {
+      "path": "kicad-webview.min.js",
+      "bytes": 1367287,
+      "sha256": "68092c6c26a4b7337c45cba8a1a7cd6ea2bff1bc9e84742b72591ce32d558ea6"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 6659,
+      "sha256": "8a5131d028af307f125f5d1605eb46a033402623f9aefb0f6b96c1e7e124fe0a"
+    },
+    {
+      "path": "licenses/Pocket-KiView-Source-Available-1.0.txt",
+      "bytes": 5836,
+      "sha256": "6e0b3232c49c4aee1afd5b97e39c45d0eecc4071a2f69fc23f733b8aa12e6fc8"
+    },
+    {
+      "path": "LICENSING.md",
+      "bytes": 3280,
+      "sha256": "0e284b2db70d4788292da471088e1ef0973484a5e7dd2a1ec48ef23dd3518e53"
+    },
+    {
+      "path": "manufacturing/inverter-fabrication.zip",
+      "bytes": 325482,
+      "sha256": "31cba18309c7867af2604a2c918b9363e0449488893ca8cbb60a694043301482"
+    },
+    {
+      "path": "manufacturing/PROVENANCE.json",
+      "bytes": 1866,
+      "sha256": "aab4e9f5e03c9123fd56f705aa70ad913e911020c7fd1325760f998eca53eda5"
+    },
+    {
+      "path": "SOURCE-PROVENANCE.json",
+      "bytes": 17743,
+      "sha256": "03e1d6054018769832fed61a393244c00b98d0461183c42bc7fbd60a9de15814"
+    },
+    {
+      "path": "SPIKE-ENGINE-NOTICE.md",
+      "bytes": 1131,
+      "sha256": "5ff06e840e6556ed190a94537b68cd2545a16305288e6f1e730abf096d2e881a"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "bytes": 929,
+      "sha256": "e851336be47b9dc32178bff2be69a6d3550f22ef2572f03eabf7ee496b830c76"
+    },
+    {
+      "path": "THREE-LICENSE",
+      "bytes": 1081,
+      "sha256": "4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454"
+    }
+  ]
+}

@@ -6,6 +6,7 @@
         <nav id="site-navigation" aria-label="Main navigation">
             <a href="{{ '/index.html' | relative_url }}"{% if page.url == '/' or page.url == '/index.html' %} aria-current="page"{% endif %}>Overview</a>
             <a href="{{ '/blog/' | relative_url }}"{% if page.url contains '/blog' %} aria-current="page"{% endif %}>Engineering_Log</a>
+            <a href="{{ '/kicad-webview/' | relative_url }}"{% if page.url contains '/kicad-webview' %} aria-current="page"{% endif %}>KiCad WebView</a>
             <a href="{{ '/tools/' | relative_url }}"{% if page.url contains '/tools' %} aria-current="page"{% endif %}>EE_Tools</a>
             <a href="{{ '/assets/resume.pdf' | relative_url }}" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i> Resume</a>
             <span class="portfolio-socials">

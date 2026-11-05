@@ -1,0 +1,81 @@
+---
+layout: product
+title: KiCad WebView
+description: Embed interactive KiCad schematics, PCB layouts, 3D boards and manufacturing layers in your website. Try the read-only inverter demo.
+permalink: /kicad-webview/
+---
+
+<main class="webview-product" data-assets="{{ '/assets/lib/kicad-webview/' | relative_url }}">
+    <header class="wv-hero">
+        <p class="wv-eyebrow"><svg class="wv-mark" viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="8" width="32" height="32" rx="6"/><path d="M0 16h8m-8 16h8m32-16h8m-8 16h8M16 0v8m16-8v8M16 40v8m16-8v8M16 16h16v16H16z"/></svg> KiCad WebView <span>Browser library · Beta</span></p>
+        <h1>Explore the board.</h1>
+        <p class="wv-lead">An interactive schematic. A board you can inspect. A 3D view you can turn. Bring the design into your documentation with a small browser embed.</p>
+        <div class="wv-actions"><a href="#embed">Embed it yourself</a><a href="#licensing">Licensing</a></div>
+        <ul class="wv-facts"><li>Read-only</li><li>Self-hosted</li><li>No rendering server</li><li>KiCad · Gerber · Excellon</li></ul>
+    </header>
+
+    <section id="demo" class="wv-showcase" aria-labelledby="demo-title">
+        <div class="wv-section-heading"><div><h2 id="demo-title">Three-phase inverter</h2></div><p>Real saved geometry · 153 PCB parts · interactive</p></div>
+        <div class="wv-demo-frame">
+            <div class="wv-view-switch" role="group" aria-label="Demo views">
+                <button type="button" data-view="pcb" aria-pressed="true">PCB layout</button>
+                <button type="button" data-view="schematic" aria-pressed="false">Schematic</button>
+                <button type="button" data-view="3d" aria-pressed="false">3D board</button>
+                <button type="button" data-view="manufacturing" aria-pressed="false">Fabrication ZIP</button>
+                <button type="button" data-field="voltage-drop">Illustrative analysis</button>
+            </div>
+            <div id="advanced-board" class="wv-board" aria-label="Interactive inverter viewer"></div>
+            <p id="demo-readout" class="wv-readout" role="status">Loading the self-hosted inverter…</p>
+        </div>
+        <div class="wv-tour" role="group" aria-label="Inspection shortcuts">
+            <span>Try this:</span><button type="button" data-action="u2">Inspect U2</button><button type="button" data-action="copper">Copper only</button><button type="button" data-action="reset">Reset board</button>
+            <label class="wv-file">Open your files<input id="local-design" type="file" multiple accept=".kicad_pcb,.kicad_sch,.zip,.gbr,.ger,.gtl,.gbl,.gto,.gbo,.gts,.gbs,.gm1,.drl,.xln,.txt"></label>
+        </div>
+        <p id="demo-hint" class="wv-caption">Pan and zoom the drawing; Fit restores its framing. Open Inspect to search parts. In 3D, drag to orbit and use the surface measurement controls. In fabrication view, toggle layers or measure distances in mm.</p>
+        <div class="wv-lab" aria-labelledby="lab-title">
+            <div class="wv-lab-heading"><h3 id="lab-title">Try the features on this board</h3><p>Every control below changes the live viewer above.</p></div>
+            <div class="wv-lab-grid">
+                <section class="wv-experiment"><span class="wv-step">01 / Find a component</span><h3>Go from reference to geometry.</h3><label for="part-search">Reference, value or footprint</label><input id="part-search" type="search" placeholder="Try U2, MOSFET or 100n" autocomplete="off"><div id="part-results" class="wv-part-results" aria-label="Matching parts"></div><p class="wv-caption" id="part-count" role="status"></p></section>
+                <section class="wv-experiment"><span class="wv-step">02 / Peel back the board</span><h3>Separate the copper layers.</h3><div class="wv-control-row"><button type="button" data-layer="F.Cu">Front copper</button><button type="button" data-layer="B.Cu">Back copper</button><button type="button" data-action="copper">Both copper layers</button><button type="button" data-action="reset">All layers</button></div><p class="wv-caption">Isolate saved copper geometry. Zoom in to follow individual tracks; select a track to inspect its saved net.</p></section>
+                <section class="wv-experiment"><span class="wv-step">03 / Read the circuit</span><h3>Open a schematic sheet.</h3><label for="sheet-select">Inverter project sheets</label><select id="sheet-select"><option value="3PD+IB.kicad_sch">Main schematic</option><option value="HBD21094.kicad_sch">Gate driver A</option><option value="HBD21094B.kicad_sch">Gate driver B</option><option value="HBD21094C.kicad_sch">Gate driver C</option><option value="DCL_Sens.kicad_sch">DC-link sensing</option><option value="T_sens.kicad_sch">Temperature sensing</option><option value="outputFilter.kicad_sch">Output filter</option></select><button type="button" data-action="sheet">Open selected sheet</button><p class="wv-caption">Each saved sheet is independently navigable. Inspect shows that sheet’s symbols and properties.</p></section>
+                <section class="wv-experiment"><span class="wv-step">04 / Inspect a pad</span><h3>Find the data behind the drawing.</h3><button type="button" data-action="u2">Locate U2 & open properties</button><p class="wv-caption">Then choose <strong>Pad 2 · GPa</strong> in Inspect to see the saved pad function, net, dimensions and layers. These are source properties, not simulation results.</p></section>
+                <section class="wv-experiment"><span class="wv-step">05 / Explore in 3D</span><h3>Turn the layout into a board.</h3><button type="button" data-view="3d">Open interactive 3D</button><p class="wv-caption">Drag to orbit; scroll to zoom. Use the viewer’s View / Measure / Display controls to examine surfaces. Missing models use approximate stand-ins.</p></section>
+                <section class="wv-experiment"><span class="wv-step">06 / Check fabrication</span><h3>Open the actual manufacturing ZIP.</h3><button type="button" data-view="manufacturing">Load Gerbers & drills</button><p class="wv-caption">Toggle the six exported layers in Layers. Select drill geometry for supplied tool attributes, or use the ruler for a two-click measurement in mm.</p></section>
+            </div>
+        </div>
+        <p class="wv-disclosure">Read-only preview. Missing component models use <strong>approximate stand-ins</strong>, not verified mechanical geometry. The viewer does not edit designs, run ERC/DRC or execute simulation solvers. Local files opened here are read in your browser, not uploaded by this page.</p>
+        <noscript><p>Enable JavaScript to use the viewer. You can still read the embedding examples and licensing information below.</p></noscript>
+    </section>
+
+    <section id="embed" class="wv-section" aria-labelledby="embed-title">
+        <div class="wv-section-heading"><div><p class="wv-eyebrow">02 / Simple</p><h2 id="embed-title">A board in a blog post.</h2></div><p>Keep the article simple. Let the drawing do the explaining.</p></div>
+        <div class="wv-simple-grid">
+            <article class="wv-note"><p class="wv-eyebrow">From the bench / Inverter layout</p><h3>Follow the copper.</h3><p>A static picture gives an overview. An embedded drawing lets readers zoom into routing, inspect saved component properties and choose the layers they want to see.</p><kicad-viewer id="simple-board" class="wv-simple-board" aria-label="Simple inline inverter embed"></kicad-viewer><p class="wv-caption">The same saved inverter PCB, embedded in the article. Click a part to inspect it.</p></article>
+            <div class="wv-code-panel"><h3>Start with two elements.</h3><p>Self-host the script and project files. No Node runtime is needed on the host server or in the visitor’s setup.</p><pre><code id="html-snippet">&lt;script src="https://wayri.github.io/assets/lib/kicad-webview/kicad-webview.min.js"&gt;&lt;/script&gt;
+&lt;kicad-viewer
+  src="https://wayri.github.io/assets/lib/kicad-webview/demo/project.json"
+  style="display:block;height:500px"&gt;
+&lt;/kicad-viewer&gt;</code></pre><button class="wv-copy" data-copy="html-snippet" type="button">Copy HTML</button><details><summary>Or use a few lines of JavaScript</summary><pre><code id="js-snippet">const viewer = new KiCadWebView.Viewer('#board');
+await viewer.load('/assets/lib/kicad-webview/demo/project.json');
+viewer.setInspectorOpen(true);
+// Give #board an explicit height, e.g. 500px.</code></pre><button class="wv-copy" data-copy="js-snippet" type="button">Copy JavaScript</button></details><p class="wv-caption">For another site, use the full project URL or host your own copy. Cross-origin sources must permit CORS. See the license before integrating commercially.</p></div>
+        </div>
+    </section>
+
+    <section id="analysis" class="wv-section wv-analysis" aria-labelledby="analysis-title">
+        <div><p class="wv-eyebrow">07 / Imported analysis · Beta</p><h2 id="analysis-title">Explore a field<br>on the board.</h2><p class="wv-disclosure"><strong>Illustrative data only.</strong> The demo is a deterministic interface example, not an electrical or thermal solve, measurement or validation of this inverter.</p></div>
+        <div><p>Load a sample overlay in the live viewer above. Switch fields, adjust opacity and probe cells to see values with their units. Pan and zoom keep the overlay aligned with the board.</p><div class="wv-control-row"><button type="button" data-field="voltage-drop">Voltage drop · mV</button><button type="button" data-field="current-density">Current density · A/mm²</button><button type="button" data-field="temperature">Temperature · °C</button><button type="button" data-action="clear-analysis">Clear overlay</button></div><p class="wv-caption">Use Analysis in the viewer for visibility, fixed colour scale, opacity and run assumptions. Layer-linked fields follow saved layer visibility; 3D pauses the overlay. Results must match the exact PCB source hash.</p><p class="wv-caption">No PI, SI or thermal solver runs here. A direct SPIKE / Quick PI exporter is a future integration.</p></div>
+    </section>
+
+    <section class="wv-section wv-capabilities" aria-labelledby="capabilities-title"><h2 id="capabilities-title">From a drawing to a closer look.</h2><div class="wv-feature-grid">
+        <article><i class="fa-solid fa-diagram-project" aria-hidden="true"></i><h3>Saved design, accessible</h3><p>Open schematic sheets and PCB layouts. Pan, zoom, fit and switch drawings from a project manifest.</p></article>
+        <article><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><h3>Inspect what is there</h3><p>Find references and inspect supplied fields, pad numbers, saved nets and layers. Values come from the source file.</p></article>
+        <article><i class="fa-solid fa-cube" aria-hidden="true"></i><h3>Turn the board around</h3><p>Orbit the 3D board and inspect surfaces. Supported WRL or self-contained GLB assets can supply real component models.</p></article>
+        <article><i class="fa-solid fa-layer-group" aria-hidden="true"></i><h3>Look at fabrication</h3><p>Explore Gerber layers, Excellon drills and ZIP bundles. Toggle manufacturing layers and inspect supplied attributes.</p></article>
+    </div></section>
+
+    <section id="licensing" class="wv-section wv-license" aria-labelledby="license-title"><div><p class="wv-eyebrow">Use & availability</p><h2 id="license-title">Self-host it.<br>Keep the context.</h2></div><div><p>KiCad WebView uses a <a href="{{ '/assets/lib/kicad-webview/LICENSE' | relative_url }}">source-available license</a>. Non-commercial use is permitted under its terms. <strong>All commercial use requires explicit prior written permission</strong>, including internal business use and commercial website integration.</p><p>Contact <a href="mailto:support.kivi@sigharmonic.com">support.kivi@sigharmonic.com</a> for commercial permission. The source repository remains private; npm/CDN publication and live Slack, Confluence and Notion integrations are not claimed here.</p><div class="wv-actions"><a href="{{ '/assets/lib/kicad-webview/kicad-webview.min.js' | relative_url }}" download>Browser script ↓</a><a href="{{ '/assets/lib/kicad-webview/THIRD-PARTY-NOTICES.md' | relative_url }}">Third-party notices</a><a href="{{ '/assets/lib/kicad-webview/BUNDLE-MANIFEST.json' | relative_url }}">Bundle hashes</a></div></div></section>
+    <footer class="wv-footer"><p>Demo design by Yawar Badri · <a href="https://github.com/wayri/3-Phase-inverter-board/tree/283f41b65c193abcc7e63c8c919dacdbccc89829">Pinned inverter source</a> · <a href="{{ '/assets/lib/kicad-webview/demo/PROVENANCE.json' | relative_url }}">Design provenance</a> · <a href="{{ '/assets/lib/kicad-webview/manufacturing/PROVENANCE.json' | relative_url }}">Fabrication provenance</a></p><p>The inverter is an owner-authorized public demo; its upstream repository has no license file. Viewing it here does not grant a design license. Independent of KiCad; no upstream endorsement is implied.</p><a href="{{ '/' | relative_url }}#project-webview">Back to projects</a></footer>
+</main>
+<script src="{{ '/assets/lib/kicad-webview/kicad-webview.min.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/kicad-webview-product.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>

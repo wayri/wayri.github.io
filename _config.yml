@@ -31,3 +31,6 @@ exclude:
   - node_modules
   - vendor
   - tests
+
+include:
+  - assets/lib/kicad-webview/licenses/Pocket-KiView-Source-Available-1.0.txt
