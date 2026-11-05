@@ -44,6 +44,9 @@ permalink: /about/
                 </div>
             </div>
         </header>
+<nav aria-label="About sections" class="mb-12 border-y border-themeBorder/30 py-4 flex flex-wrap gap-x-6 gap-y-3 text-sm font-mono text-themeAccent">
+    <a href="#skills">Skills &amp; tools</a><a href="#current-work">Current work</a><a href="#selected-projects">Selected projects</a><a href="#areas-of-work">Areas of work</a><a href="#experience">Experience</a><a href="#engineering-logs">Engineering logs</a><a href="#education">Education</a><a href="#publications">Publications</a>
+</nav>
 <section class="mb-8 mt-8">            <div class="flex flex-wrap justify-center gap-3 mt-8">
                 <span class="bg-themeAccent/10 border border-themeAccent/30 px-3 py-1.5 text-sm font-mono text-themeText rounded-sm shadow-[2px_2px_0px_var(--accent-color)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_var(--accent-color)] transition-all">Hardware Architecture</span>
                 <span class="bg-themeAccent/10 border border-themeAccent/30 px-3 py-1.5 text-sm font-mono text-themeText rounded-sm shadow-[2px_2px_0px_var(--accent-color)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_var(--accent-color)] transition-all">Space / Aerospace</span>
@@ -74,7 +77,26 @@ permalink: /about/
                 </div>
             </div>
         </section>
-<section class="mb-20">
+        <!-- Featured EE Tools -->
+        <section class="mb-16">
+            <div class="doc-container p-8 border-l-4 border-l-themeAccent bg-themeAccent/5 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <h2 class="text-2xl font-bold mb-2 text-themeText flex items-center gap-2">
+                        <i class="fa-solid fa-toolbox text-themeAccent"></i> Interactive Engineering Tools
+                    </h2>
+                    <p class="text-themeMuted mb-4">Engineering calculators for loop compensation, IPC trace width, and magnetic component parameters.</p>
+                    <a href="{{ '/tools/' | relative_url }}" class="inline-block px-6 py-2 bg-themeAccent text-themeBg font-bold font-mono text-sm hover:opacity-90 transition-opacity">
+                        LAUNCH TOOLS <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                <div class="text-themeAccent opacity-20 hidden md:block">
+                    <i class="fa-solid fa-gears text-8xl"></i>
+                </div>
+            </div>
+        </section>
+
+{% include project-catalogue.html %}
+<section id="areas-of-work" class="mb-20">
             <h2 class="text-2xl font-bold mb-8 text-themeText border-b border-themeBorder pb-2">Areas of work</h2>
 
             <div class="space-y-8">
@@ -204,7 +226,7 @@ permalink: /about/
         </section>
 
         <!-- Work Experience -->
-        <section class="mb-16">
+        <section id="experience" class="mb-16">
             <h2 class="text-2xl font-bold mb-6 border-b border-themeBorder pb-2 text-themeText">Experience Timeline</h2>
 
             <div class="space-y-6 pl-2">
@@ -279,7 +301,30 @@ permalink: /about/
                 </div>
             </div>
         </section>
-<section class="mb-16">
+        <!-- Latest Engineering Logs -->
+        <section id="engineering-logs" class="mb-16">
+            <h2 class="text-2xl font-bold mb-6 border-b border-themeBorder pb-2 text-themeText flex items-center gap-2">
+                <i class="fa-solid fa-terminal text-themeMuted text-lg"></i> Latest Engineering Logs
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for post in site.posts limit:2 %}
+                <a href="{{ post.url | relative_url }}" class="doc-container p-6 hover:border-themeAccent transition-colors block group flex flex-col h-full border-l-4 border-l-themeBorder hover:border-l-themeAccent">
+                    <div class="font-mono text-xs text-themeAccent font-bold mb-2">{{ post.category | default: 'Engineering' }}</div>
+                    <h3 class="font-bold text-themeText text-lg mb-2 group-hover:text-themeAccent transition-colors">#{{ site.posts.size | minus: forloop.index0 }} {{ post.title }}</h3>
+                    <p class="text-sm text-themeMuted flex-grow">{{ post.excerpt | strip_html | truncatewords: 25 }}</p>
+                    <div class="font-mono text-[10px] text-themeMuted mt-4 pt-3 border-t border-themeBorder/20 flex justify-between">
+                        <span>{{ post.date | date: '%B %d, %Y' }}</span>
+                        <span>READ <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            <div class="mt-4 text-right">
+                <a href="{{ '/blog/' | relative_url }}" class="text-sm font-mono text-themeAccent hover:underline">View all logs &rarr;</a>
+            </div>
+        </section>
+
+<section id="education" class="mb-16">
             <h2 class="text-2xl font-bold mb-6 border-b border-themeBorder pb-2 text-themeText flex items-center gap-2">
                 <i class="fa-solid fa-graduation-cap text-themeMuted text-lg"></i> Education
             </h2>
