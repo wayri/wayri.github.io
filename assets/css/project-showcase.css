@@ -10,3 +10,10 @@
 .project-phone-pictures a { display: block; min-width: 0; }
 .project-phone-pictures img { height: 240px; background: #101923; }
 @media (max-width: 600px) { .project-phone-pictures img { height: 240px; max-height: none; } }
+.webview-card-board { height: 430px; width: 100%; margin-bottom: 12px; border: 1px solid var(--border-color); }
+.webview-card-board[hidden], #webview-card-picture[hidden] { display: none !important; }
+.webview-card-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 18px; }
+.webview-card-controls button { border: 1px solid var(--accent-color); background: var(--container-bg); color: var(--accent-color); padding: 8px 12px; font: 12px/1.5 'JetBrains Mono', monospace; cursor: pointer; }
+.webview-card-controls button:disabled { opacity: .6; cursor: wait; }
+.webview-card-controls button:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 3px; }
+.webview-card-controls span { color: var(--muted-text); font: 11px/1.6 'JetBrains Mono', monospace; }

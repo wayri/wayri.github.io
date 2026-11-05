@@ -1,9 +1,16 @@
 <article id="project-webview" class="doc-container p-4 border-l-4 border-l-themeAccent relative overflow-hidden bg-themeContainer">
+    <figure id="webview-card-picture" class="project-picture">
+        <a href="{{ '/kicad-webview/' | relative_url }}"><img src="{{ '/assets/images/projects/kicad-webview-inverter.jpg' | relative_url }}" alt="KiCad WebView displaying the three-phase inverter PCB with an illustrative voltage-drop overlay" width="2276" height="1280" loading="lazy"></a>
+        <figcaption>Real inverter geometry · screenshot overlay is illustrative, not solver results.</figcaption>
+    </figure>
+    <div id="webview-card-board" class="webview-card-board" aria-label="Interactive inverter PCB viewer" hidden></div>
+    <div class="webview-card-controls"><button id="webview-card-toggle" type="button" aria-expanded="false" aria-controls="webview-card-board" data-runtime="{{ '/assets/lib/kicad-webview/kicad-webview.min.js' | relative_url }}" data-source="{{ '/assets/lib/kicad-webview/demo/project.json' | relative_url }}"><i class="fa-solid fa-play" aria-hidden="true"></i> Try interactive viewer</button><span id="webview-card-status" role="status">Pan, zoom, inspect parts and switch to 3D.</span></div>
     <div class="flex justify-between items-start gap-3 mb-2"><h4 class="font-bold text-themeText text-lg"><a href="{{ '/kicad-webview/' | relative_url }}"><i class="fa-solid fa-cube text-themeAccent" aria-hidden="true"></i> KiCad WebView</a></h4><span class="text-[10px] font-mono text-themeMuted uppercase">Browser library · Beta</span></div>
     <p class="text-sm text-themeMuted">A self-contained, read-only viewer for KiCad schematics, PCB layouts, 3D boards, Gerber layers and Excellon drills. Embed a design in a website or engineering note, inspect saved part and pad properties, and explore manufacturing ZIPs without a rendering server.</p>
     <div class="project-links"><a href="{{ '/kicad-webview/' | relative_url }}">Product &amp; live demo <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a><a href="{{ '/kicad-webview/#embed' | relative_url }}">Embedding examples</a><a href="{{ '/kicad-webview/#licensing' | relative_url }}">License</a></div>
     <p class="project-availability">Source-available; all commercial use requires explicit prior written permission. Approximate 3D stand-ins remain labelled in the viewer.</p>
 </article>
+<script src="{{ '/assets/js/webview-project-card.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 
 <article id="project-wayricad" class="doc-container p-4 border-l-4 border-l-themeBorder relative overflow-hidden bg-themeContainer">
     <figure class="project-picture">
