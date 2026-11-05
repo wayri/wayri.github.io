@@ -37,6 +37,160 @@
         }
         box(c, -35, -6, 12, 12, '#8c9da5', 2); box(c, -39, -8, 5, 16, p.ink, 1);
     }
+    function carrier(c, p, time, throttle = 0, heat = 0, fold = 0, hatch = false) {
+        // Local +X is the nose. The same carrier is used at the loading bay and in flight.
+        if (throttle > .01) {
+            const length = 34 + throttle * 100 + Math.sin(time * 41) * 10;
+            path(c, [[-57, -11], [-57 - length, 0], [-57, 11]], '#ec8753', 1, true);
+            path(c, [[-57, -6], [-57 - length * .66, 0], [-57, 6]], '#fff0b5', 1, true);
+            path(c, [[-57, -2], [-57 - length * .4, 0], [-57, 2]], '#e7fbff', 1, true);
+        }
+        c.save(); c.rotate(-fold * .4);
+        path(c, [[-52, -18], [0, -18], [0, 18], [-52, 18]], '#e5e9df', 1, true);
+        c.save(); c.rotate(fold);
+        path(c, [[0, -18], [25, -18], [61, 0], [25, 18], [0, 18]], '#e5e9df', 1, true);
+        path(c, [[25, -18], [61, 0], [25, 18], [31, 0]], '#8babb6', 1, true);
+        box(c, 13, -13, 6, 26, p.accent, 1); c.restore();
+        path(c, [[-44, -18], [-62, -37], [-60, -13], [-42, -7]], p.accent, 1, true);
+        path(c, [[-44, 18], [-62, 37], [-60, 13], [-42, 7]], p.accent, 1, true);
+        box(c, -30, -15, 41, 30, '#1c3646', 4);
+        c.save(); c.translate(-6, 0); c.scale(.44, .44); rover(c, p, time, fold); c.restore();
+        if (!hatch) { c.globalAlpha = .35; box(c, -28, -13, 37, 26, '#7fced5', 3); c.globalAlpha = 1; }
+        box(c, -58, -12, 8, 24, '#48606d', 1);
+        if (heat > 15) {
+            c.save(); c.globalAlpha = clamp(heat / 120, 0, .8); c.shadowColor = '#ff6c30'; c.shadowBlur = 20;
+            path(c, [[-35, -23], [27, -23], [68, 0], [27, 23], [-35, 23]], '#ff9b50', 3); c.restore();
+        }
+        c.restore();
+    }
+    function drawRoad(c, w, h, s, p, options = {}) {
+        const engine = window.PowerRunner, ground = engine.ground, goal = engine.GOAL;
+        const scale = clamp(w / 1000, .68, 1.25), anchor = w * .34;
+        const progress = s.phase === 'boarding' ? clamp((s.boarding || {}).progress || 0, 0, 1) : 0;
+        const cam = s.x - anchor / scale, base = h * .76, t = Number(s.time) || 0;
+        const sx = x => (x - cam) * scale, sy = x => base + ground(x) * scale;
+        const sky = c.createLinearGradient(0, 0, 0, h);
+        sky.addColorStop(0, p.dark ? '#101c2b' : '#d9eef7'); sky.addColorStop(1, p.dark ? '#36505a' : '#f0e9d4');
+        c.fillStyle = sky; c.fillRect(0, 0, w, h);
+        circle(c, w * .79 - Math.sin(s.x / 9000) * 45, h * .19, 27, p.dark ? '#c5d9d1' : '#fff5c9');
+        for (let layer = 0; layer < 3; layer++) {
+            const pts = [[0, h]];
+            for (let x = 0; x <= w + 12; x += 12) { const world = x + cam * (.08 + layer * .1); pts.push([x, h * (.4 + layer * .105) + Math.sin(world / (150 - layer * 25)) * (30 - layer * 4) + Math.sin(world / 53) * 11]); }
+            pts.push([w + 12, h]); path(c, pts, [p.horizon, p.mountain, p.edge][layer], 1, true);
+        }
+        // Landmarks make the journey readable even before the loading gantry comes into view.
+        for (let i = Math.floor(cam / 420) - 1; i < (cam + w / scale) / 420 + 1; i++) {
+            if (i < 0) continue;
+            const x = sx(i * 420), y = h * .62 + Math.sin(i * 1.7) * 10;
+            c.save(); c.globalAlpha = .65;
+            if (i % 3 === 0) {
+                path(c, [[x, y], [x, y - 55]], p.mountain, 3);
+                for (let j = 0; j < 3; j++) { const a = t * .65 + j * TAU / 3; path(c, [[x, y - 55], [x + Math.cos(a) * 25, y - 55 + Math.sin(a) * 25]], p.mountain, 3); }
+            } else if (i % 3 === 1) {
+                for (let j = 0; j < 4; j++) { path(c, [[x + j * 17, y - 8], [x + j * 17 + 12, y - 25], [x + j * 17 + 28, y - 25], [x + j * 17 + 16, y - 8]], '#385f75', 1, true); }
+            } else {
+                box(c, x, y - 25, 49, 25, p.mountain, 1); box(c, x + 8, y - 47, 8, 22, p.mountain, 1); box(c, x + 28, y - 38, 6, 13, p.mountain, 1);
+            } c.restore();
+        }
+        const terrain = [[-5, h]];
+        for (let x = -5; x <= w + 10; x += 5) terrain.push([x, sy(cam + x / scale)]);
+        terrain.push([w + 10, h]); path(c, terrain, p.soil, 1, true); path(c, terrain.slice(1, -1), p.edge, 3);
+        for (let i = Math.floor(cam / 100); i < (cam + w / scale) / 100; i++) {
+            const x = sx(i * 100), y = sy(i * 100); path(c, [[x, y + 13], [x + 15 * scale, y + 13]], p.edge, 2);
+        }
+        for (const item of s.entities || []) {
+            const x = sx(item.x), y = sy(item.x);
+            if (item.used || x < -70 || x > w + 70) continue;
+            c.save(); c.translate(x, y); c.scale(scale, scale);
+            if (item.type === 'pack') {
+                c.translate(0, -item.lift + Math.sin(t * 4 + item.x) * 3);
+                c.globalAlpha = .16; circle(c, 0, 0, 26, p.accent); c.globalAlpha = 1;
+                box(c, -12, -16, 24, 32, p.accent, 4); box(c, -5, -20, 10, 5, p.accent, 1);
+                path(c, [[2, -11], [-6, 2], [0, 2], [-2, 12], [7, -2], [1, -2]], p.sky, 1, true);
+            } else if (item.type === 'gate') {
+                path(c, [[-34, 0], [-34, -103], [34, -103], [34, 0]], '#a4afb0', 5);
+                box(c, -34, -103, 68, 29, '#b8614b', 2);
+                for (let j = 0; j < 5; j++) path(c, [[-27 + j * 12, -100], [-16 + j * 12, -77]], '#f5ce76', 4);
+                label(c, 'STAY LOW', 0, -116, p.ink, 10, 'center');
+            } else if (item.type === 'slick') {
+                c.fillStyle = '#5192ac'; c.beginPath(); c.ellipse(0, -2, 40, 5, 0, 0, TAU); c.fill();
+                path(c, [[-29, -3], [-9, -5], [13, -2], [29, -4]], '#a4d4dc', 2); label(c, 'COOLANT', 0, 20, p.muted, 10, 'center');
+            } else if (item.type === 'solar') {
+                path(c, [[-44, -2], [-28, -15], [44, -15], [28, -2]], '#367993', 1, true);
+                for (let j = 0; j < 6; j++) path(c, [[-32 + j * 12, -13], [-39 + j * 12, -3]], '#9cdde2');
+                label(c, 'CHARGE LANE', 0, 22, p.accent, 10, 'center');
+            } else if (item.type === 'drone') {
+                const hover = -150 + Math.sin(t * 3 + item.x) * 6, active = !!item.active;
+                if (active) {
+                    c.save(); c.globalAlpha = .22 + Math.sin(t * 18) * .07;
+                    path(c, [[-8, hover + 12], [8, hover + 12], [24, 0], [-24, 0]], '#f38a59', 1, true); c.restore();
+                    path(c, [[0, hover + 12], [0, -2]], '#f9b67f', 1);
+                }
+                path(c, [[-24, hover], [24, hover]], '#9baec0', 4);
+                circle(c, -24, hover, 10, '#9baec0', true); circle(c, 24, hover, 10, '#9baec0', true);
+                box(c, -14, hover - 10, 28, 22, '#294657', 6); circle(c, 0, hover + 6, 4, active ? '#ff9962' : '#93d8ac');
+                label(c, active ? 'SCAN · WAIT' : 'CLEAR · GO', 0, hover - 25, active ? '#f0ad7b' : '#8ac9a4', 10, 'center');
+            } else if (item.type === 'crate') {
+                box(c, -20, -37, 40, 37, '#ae8052', 2);
+                path(c, [[-17, -34], [17, -3], [-17, -3], [17, -34]], '#e2bf7e', 3); label(c, 'JUMP', 0, -49, p.ink, 10, 'center');
+            } else {
+                box(c, -15, -25, 30, 25, '#b8614b', 4);
+                const bolt = [[2, -24], [-8, -10], [-1, -10], [-3, -1], [9, -16], [1, -16]]; path(c, bolt, '#ffe0a3', 1, true);
+                for (let j = 0; j < 3; j++) { const a = t * 5 + j * 2; path(c, [[Math.sin(a) * 10, -27], [Math.sin(a + 1) * 16, -39], [Math.sin(a + 2) * 19, -44]], '#edb957', 1); }
+            } c.restore();
+        }
+        const shipX = sx(goal), shipGround = sy(goal);
+        if (shipX < w + 160 && shipX > -180) {
+            box(c, shipX - 18 * scale, shipGround - 177 * scale, 12 * scale, 177 * scale, '#667d87', 1);
+            for (let i = 0; i < 5; i++) path(c, [[shipX - 18 * scale, shipGround - i * 34 * scale], [shipX - 6 * scale, shipGround - (i + 1) * 34 * scale]], '#a4bab9', 2);
+            c.save(); c.translate(shipX + 33 * scale, shipGround - 75 * scale); c.rotate(-Math.PI / 2); c.scale(1.08 * scale, 1.08 * scale); carrier(c, p, t, 0, 0, 0, true); c.restore();
+            path(c, [[shipX - 93 * scale, shipGround], [shipX + 24 * scale, shipGround - 61 * scale]], '#bac9c4', 6 * scale);
+            path(c, [[shipX - 93 * scale, shipGround + 4], [shipX + 24 * scale, shipGround - 57 * scale]], p.accent, 2);
+            label(c, 'ORBITAL CARRIER', shipX + 10, shipGround - 193 * scale, p.ink, 11, 'center');
+            label(c, 'BRAKE · DOCK SLOWLY', clamp(shipX - 60, 100, w - 110), shipGround + 36, p.accent, 11, 'center');
+        }
+        for (const [i, chaser] of (s.chasers || []).entries()) {
+            if (chaser.escaped) continue;
+            const rawX = sx(chaser.x), x = clamp(rawX, 18, w + 40), color = ['#d48162', '#76b7ab', '#b69bd3'][i % 3];
+            if (rawX < -25) { label(c, `← ${chaser.name} ${Math.round(Math.max(0, s.x - chaser.x) / 8)}m`, 12, 48 + i * 18, color, 10); continue; }
+            const bob = Math.abs(Math.sin(t * (chaser.type === 'sprinter' ? 15 : 8) + i)) * 8;
+            const y = sy(chaser.x) - bob;
+            c.save(); c.translate(x, y); c.scale(scale, scale);
+            if (chaser.type === 'jammer') {
+                c.translate(0, -35); c.globalAlpha = .25 + .2 * Math.sin(t * 6); circle(c, 0, 0, 28 + Math.sin(t * 4) * 8, color, true); c.globalAlpha = 1;
+                path(c, [[-25, -3], [25, -3]], color, 4); circle(c, -24, -3, 9, color, true); circle(c, 24, -3, 9, color, true);
+            } else if (chaser.type === 'tracker') {
+                for (let leg = 0; leg < 4; leg++) { const lx = -17 + leg * 11; path(c, [[lx, -12], [lx + Math.sin(t * 10 + leg) * 8, 1]], color, 4); }
+            } else {
+                for (let leg = 0; leg < 2; leg++) path(c, [[leg ? 10 : -10, -12], [Math.sin(t * 17 + leg * Math.PI) * 18, 2]], color, 5);
+                if (chaser.state === 'sprint') for (let j = 0; j < 3; j++) path(c, [[-24 - j * 7, -13 - j * 6], [-43 - j * 7, -13 - j * 6]], color, 2);
+            }
+            box(c, -18, -38, 36, 28, color, 9); path(c, [[-12, -34], [-17, -49], [-3, -38], [10, -38], [17, -47], [14, -30]], color, 1, true);
+            for (const eyeX of [-8, 6]) { box(c, eyeX, -30, 8, 9, '#f9f5e8', 2); box(c, eyeX + 4, -27, 3, 5, '#1d2832', 1); }
+            label(c, chaser.name.toUpperCase(), 0, -61, color, 10, 'center');
+            if (chaser.stun > 0) label(c, '✦ ✦ ✦', 0, -76, '#ffe4a4', 13, 'center'); c.restore();
+        }
+        let rx = anchor, ry = base + s.y * scale - 19 * scale;
+        if (s.phase === 'boarding') { rx += 24 * progress * scale; ry -= progress * 65 * scale; }
+        c.save(); c.translate(rx, ry); c.scale(scale, scale);
+        if (s.grounded && !progress) c.rotate(Math.atan2(ground(s.x + 8) - ground(s.x - 8), 16) * .55);
+        if (s.invulnerable > 0 && Math.floor(t * 15) % 2) c.globalAlpha = .45;
+        if (s.mode === 'Boost' && s.status === 'running') {
+            path(c, [[-38, -5], [-75 - Math.sin(t * 40) * 12, 0], [-38, 5]], p.accent, 1, true);
+            for (let i = 0; i < 4; i++) path(c, [[-75 - (t * 200 + i * 27) % 120, 8 + i * 3], [-90 - (t * 200 + i * 27) % 120, 8 + i * 3]], p.accent, 1);
+        }
+        if (s.reason === 'dock-crash' && s.status === 'lost') {
+            const ft = options.failureTime || 0; c.rotate(ft * 3);
+            for (let i = 0; i < 18; i++) { const a = i * 2.4, r = 12 + ft * (40 + i * 6); circle(c, Math.cos(a) * r, Math.sin(a) * r, Math.max(1, 7 - ft * 3), i % 2 ? '#ffb665' : '#d76a48'); }
+        }
+        rover(c, p, s.x / 9); c.restore();
+        if (s.mode === 'Brake' && s.grounded && s.speed > 20) for (let i = 0; i < 6; i++) { const age = (t * 5 + i / 6) % 1; c.globalAlpha = (1 - age) * .3; circle(c, rx - 20 - age * 70, ry + 12 - age * 12, 4 + age * 14, p.muted); } c.globalAlpha = 1;
+        if (s.noticeTime > 0) label(c, s.notice, clamp(rx, 110, w - 110), ry - 66, s.notice.startsWith('+') ? p.accent : '#e6a077', w < 480 ? 10 : 12, 'center');
+        label(c, 'POWER ROAD', 14, 23, p.ink, 12); label(c, `${Math.round(s.speed / 8)} m/s`, w - 14, 23, p.ink, 13, 'right');
+        const journeyW = Math.min(240, w * .42), journeyX = (w - journeyW) / 2;
+        box(c, journeyX, 17, journeyW, 3, p.mountain, 1); box(c, journeyX, 17, journeyW * clamp(s.x / goal, 0, 1), 3, p.accent, 1);
+        label(c, s.phase === 'boarding' ? 'ROVER SECURED · BOARDING CARRIER' : s.roadStage === 'approach' ? 'SPACEPORT APPROACH · BRAKE BEFORE THE RAMP' : 'JUMP CRATES · STAY LOW UNDER GATES · FIND CHARGE', w / 2, h - 17, p.ink, w < 500 ? 8 : 11, 'center');
+    }
     function space(c, w, h, p, altitude, time) {
         const blend = clamp(altitude / 100, 0, 1), sky = c.createLinearGradient(0, 0, 0, h);
         sky.addColorStop(0, blend > .45 ? '#071324' : '#294760'); sky.addColorStop(1, '#437f9b');
@@ -58,7 +212,26 @@
         const f = Object.assign({ altitude: 0, pitch: 90, targetPitch: 90, vertical: 0, horizontal: 0, throttle: 0, burnLeft: 0, elapsed: 0 }, s.flight);
         const t = Number(s.time) || 0, failed = s.status === 'lost', ft = Math.max(0, options.failureTime || 0), reason = s.reason;
         space(c, w, h, p, f.altitude, t);
-        const x = w * .47, y = h * .45, scale = clamp(w / 600, .83, 1.15);
+        const x = w * .47, y = h * .45, scale = clamp(w / 700, .75, 1.3);
+        const atmospheric = clamp(1 - f.altitude / 95, 0, 1), q = Math.max(0, f.q || 0);
+        // Clouds, contrails and airflow accelerate past the craft instead of becoming a static sky.
+        c.save(); c.globalAlpha = atmospheric * .38;
+        for (let i = 0; i < 18; i++) {
+            const cloudX = (i * 157.3 - (f.downrange || 0) * 4) % (w + 220) - 80;
+            const cloudY = ((i * 83 + f.altitude * 8) % (h + 180)) - 90;
+            c.fillStyle = '#d8e8e7'; c.beginPath(); c.ellipse(cloudX, cloudY, 38 + i % 4 * 16, 8 + i % 3 * 4, -.1, 0, TAU); c.fill();
+        }
+        c.restore();
+        if (f.altitude < 3) {
+            const yGround = h * .81 + f.altitude * 36;
+            box(c, 0, yGround, w, h, p.soil, 0); path(c, [[0, yGround], [w, yGround]], p.edge, 3);
+            box(c, x - 85, yGround - 170, 11, 170, '#6c8390', 1);
+            for (let i = 0; i < 5; i++) path(c, [[x - 85, yGround - i * 34], [x - 74, yGround - (i + 1) * 34]], '#a0b6bb', 2);
+            if (f.throttle > 0 && f.countdown <= 0) for (let i = 0; i < 14; i++) {
+                const age = (t * 1.5 + i / 14) % 1;
+                c.save(); c.globalAlpha = (1 - age) * .35; c.fillStyle = '#d5d9ce'; c.beginPath(); c.ellipse(x + Math.sin(i * 17) * age * 160, yGround - age * 16, 10 + age * 45, 6 + age * 15, 0, 0, TAU); c.fill(); c.restore();
+            }
+        }
         c.save(); c.setLineDash([3, 7]);
         path(c, Array.from({ length: 30 }, (_, i) => [x - (29 - i) * (2 + f.horizontal * 2), y + (29 - i) * (2 + Math.max(0, f.vertical) * 1.7)]), '#759bb4'); c.setLineDash([]); c.restore();
         // Pitch guides share the actual vehicle origin, so a turn is directly readable.
@@ -74,12 +247,15 @@
         c.save();
         const escape = failed && reason === 'escape';
         c.translate(x + (escape ? Math.min(w * .35, ft * 35) : 0), y + (failed && reason === 'ballistic' ? Math.min(h * .47, ft * ft * 21) : escape ? -ft * 18 : 0));
+        if (!options.reducedMotion && !failed && q > 12) c.translate(Math.sin(t * 83) * Math.min(4, q / 18), Math.cos(t * 71) * Math.min(3, q / 22));
         c.scale(scale * (escape ? Math.max(.08, Math.exp(-ft * .37)) : 1), scale * (escape ? Math.max(.08, Math.exp(-ft * .37)) : 1));
         c.rotate(-f.pitch * rad + (failed && reason === 'ballistic' ? ft * .6 : 0));
-        if (!failed && f.throttle > .01 && f.burnLeft > 0) {
-            const length = 18 + f.throttle * 52 + Math.sin(t * 49) * 6;
-            path(c, [[-38, -7], [-38 - length, 0], [-38, 7]], '#ec8d55', 1, true);
-            path(c, [[-38, -4], [-38 - length * .7, 0], [-38, 4]], '#fff0ac', 1, true);
+        if (!failed && atmospheric > .01 && (f.mach || 0) > .85) {
+            c.save(); c.globalAlpha = atmospheric * .6;
+            const cone = clamp(70 / Math.max(1, f.mach || 1), 12, 60);
+            path(c, [[-100, -cone], [68, 0], [-100, cone]], '#c6eeef', 2);
+            if (q > 25) { c.globalAlpha = atmospheric * .24; c.fillStyle = '#d8f3ed'; c.beginPath(); c.ellipse(-22, 0, 14, 41, 0, 0, TAU); c.fill(); }
+            c.restore();
         }
         if (failed && (reason === 'burnup' || reason === 'ballistic')) {
             for (let i = 0; i < 16; i++) {
@@ -89,10 +265,34 @@
                 box(c, px, py, 5, 4, p.ink, 1);
             }
         }
-        if (!(failed && reason === 'burnup' && ft > .8)) rover(c, p, t, failed && reason === 'maxq' ? clamp(ft / 1.5, 0, 1) * .85 : 0);
+        if (!(failed && reason === 'burnup' && ft > .8)) carrier(c, p, t, !failed && !(f.countdown > 0) && f.burnLeft > 0 ? f.throttle : 0, f.heat || 0, failed && reason === 'maxq' ? clamp(ft / 1.5, 0, 1) * 1.8 : 0);
         c.restore();
+        const meterW = Math.min(170, w * .29), meterX = 15, meterY = h - 93;
+        for (const [i, item] of [['Q / 50 kPa', q / 50, '#8fc7de'], ['HEAT', (f.heat || 0) / 100, '#e5915e'], ['STRUCTURE', (f.stress || 0) / 100, '#c8a2d6']].entries()) {
+            label(c, item[0], meterX, meterY + i * 21, '#e3ece6', 8);
+            box(c, meterX + 72, meterY - 7 + i * 21, meterW - 72, 6, '#36535f', 1);
+            box(c, meterX + 72, meterY - 7 + i * 21, (meterW - 72) * clamp(item[1], 0, 1), 6, item[2], 1);
+        }
+        if (s.phase === 'launch' || f.countdown > 0) {
+            label(c, s.phase === 'launch' ? 'CARRIER LOADED' : String(Math.ceil(f.countdown)), w * .5, h * .2, '#f5e3ad', s.phase === 'launch' ? 20 : 46, 'center');
+            label(c, 'UP / DOWN: PITCH  ·  LEFT / RIGHT: THROTTLE', w * .5, h * .2 + 25, '#cddfdf', w < 480 ? 8 : 10, 'center');
+        }
+        if (w > 520) orbitalInset(c, w - 103, h - 100, 65, f, p, false);
         const caption = failed ? ({ maxq: 'STRUCTURAL FAILURE · MAX Q', burnup: 'THERMAL BREAKUP', escape: 'SIGNAL LOST · ESCAPE TRAJECTORY', ballistic: 'BALLISTIC REENTRY' }[reason] || 'MISSION LOST') : s.phase === 'launch' ? 'BOOSTER ARMED · READY FOR ASCENT' : f.burnLeft > 0 ? 'POWERED ASCENT' : 'COASTING · BOOSTER SPENT';
         label(c, caption, w / 2, h - 19, failed ? '#ffc08a' : '#dbe9e8', w < 430 ? 10 : 12, 'center');
+    }
+    function orbitalInset(c, x, y, radius, f, p, inOrbit) {
+        c.save(); box(c, x - radius - 17, y - radius - 17, radius * 2 + 34, radius * 2 + 40, '#0c2230', 5);
+        circle(c, x, y, radius * .56, '#326478'); circle(c, x, y, radius * .58, '#7db6bd', true);
+        const peri = Math.max(0, f.periapsis || 0), apo = Number.isFinite(f.apoapsis) ? Math.max(0, f.apoapsis) : 8000;
+        const eccentricity = clamp((apo - peri) / (12742 + apo + peri), 0, .8);
+        const a = radius * .8, b = a * Math.sqrt(1 - eccentricity * eccentricity);
+        c.save(); c.setLineDash([3, 4]); c.strokeStyle = peri >= 100 ? '#8cd8ac' : '#d4af69'; c.lineWidth = 1.3;
+        c.beginPath(); c.ellipse(x - eccentricity * a, y, a, b, -.35, 0, TAU); c.stroke(); c.restore();
+        const angle = Number(f.orbitalAngle) || -.85;
+        const ox = Math.cos(angle) * a - eccentricity * a, oy = Math.sin(angle) * b;
+        circle(c, x + ox, y + oy, 3, p.accent); path(c, [[x, y], [x + ox, y + oy]], '#75979f');
+        label(c, inOrbit ? 'ORBIT / GROUND TRACK' : 'TRAJECTORY', x, y + radius + 15, '#c5d9d9', 8, 'center'); c.restore();
     }
     function island(c, x, y, rx, ry, seed, color) {
         const pts = Array.from({ length: 30 }, (_, i) => { const a = i / 30 * TAU, k = 1 + .13 * Math.sin(i * 2.3 + seed) + .09 * Math.cos(i * 1.7 + seed); return [x + Math.cos(a) * rx * k, y + Math.sin(a) * ry * k]; });
@@ -135,7 +335,43 @@
             path(c, [[-37, 7], [-15, 13], [3, 8], [28, 15]], '#729b9a', 2);
         }
     }
+    function orbitNavigation(c, w, h, s, p) {
+        const o = s.orbit, f = s.flight || {}, track = o.track || {};
+        c.fillStyle = '#07141f'; c.fillRect(0, 0, w, h);
+        for (let i = 0; i < 100; i++) circle(c, (i * 173.27) % w, (i * 79.31) % h, i % 11 ? .65 : 1.2, '#a8c4cf');
+        const cx = w * .5, cy = h * .49, points = o.trajectory || [];
+        const extent = Math.max(6800, ...points.map(v => Math.hypot(v.x, v.y)));
+        const k = Math.min(w * .34, h * .36) / extent, radius = 6371 * k;
+        c.save(); c.shadowColor = '#5cb3d5'; c.shadowBlur = 20; circle(c, cx, cy, radius + 2, '#74bfd3'); c.shadowBlur = 0;
+        circle(c, cx, cy, radius, '#275f79'); c.beginPath(); c.arc(cx, cy, radius, 0, TAU); c.clip();
+        c.translate(cx, cy); c.scale(radius, radius);
+        island(c, -.31, -.12, .33, .59, 3, '#648765'); island(c, .38, .21, .42, .28, 9, '#91a078'); island(c, .25, -.72, .5, .17, 2, '#d5dfd1');
+        for (let i = 0; i < 13; i++) {
+            c.globalAlpha = .55; c.fillStyle = '#d1e5dd'; c.beginPath(); c.ellipse(Math.sin(i * 2.9 + o.time * .004) * .8, Math.cos(i * 2.1) * .8, .25, .035, -.4, 0, TAU); c.fill();
+        }
+        c.globalAlpha = .45; c.fillStyle = '#07141f'; c.beginPath(); c.ellipse(.57, 0, .55, 1.1, -.16, 0, TAU); c.fill(); c.restore();
+        if (points.length) {
+            c.save(); c.strokeStyle = '#91d6b0'; c.lineWidth = 1.5; c.setLineDash([5, 5]); c.beginPath();
+            points.forEach((v, i) => i ? c.lineTo(cx + v.x * k, cy - v.y * k) : c.moveTo(cx + v.x * k, cy - v.y * k)); c.stroke(); c.restore();
+        }
+        if (o.craft) {
+            const craft = o.craft, x = cx + craft.x * k, y = cy - craft.y * k;
+            path(c, [[cx, cy], [x, y]], '#5e8c9c');
+            c.save(); c.translate(x, y); c.rotate(-Math.atan2(craft.vy, craft.vx)); c.scale(.35, .35); carrier(c, p, o.time); c.restore();
+            circle(c, x, y, 22, '#c6e4dc', true);
+            label(c, 'CARRIER / ROVER ABOARD', clamp(x, 96, w - 96), y < cy ? y - 34 : y + 41, '#e9dfb3', w < 480 ? 8 : 10, 'center');
+        }
+        label(c, 'ORBIT ACHIEVED', 18, 27, '#addeb6', 14);
+        label(c, 'TWO-BODY COAST · MISSION CLOCK 45×', 18, 46, '#8eaebc', 9);
+        label(c, `${Math.round(track.altitude || f.altitude || 0)} km ALTITUDE`, w - 18, 27, '#e0eae6', 11, 'right');
+        label(c, `${(track.speed || Math.hypot(f.vertical || 0, f.horizontal || 0)).toFixed(2)} km/s`, w - 18, 46, '#92bfd2', 11, 'right');
+        const py = h - 65;
+        label(c, `PERIAPSIS ${Math.round(f.periapsis || 0)} km`, w * .25, py, '#b7d8bc', w < 480 ? 9 : 11, 'center');
+        label(c, `APOAPSIS ${Math.round(f.apoapsis || 0)} km`, w * .75, py, '#b7d8bc', w < 480 ? 9 : 11, 'center');
+        label(c, 'OPEN THE SATELLITE CAMERA TO BEGIN YOUR SURVEY', w / 2, h - 25, '#e7dfb1', w < 480 ? 8 : 11, 'center');
+    }
     function orbit(c, w, h, s, p, options) {
+        if (!options.cameraActive) { orbitNavigation(c, w, h, s, p); return; }
         const o = Object.assign({ cameraX: .5, cameraY: .5, zoom: 1, time: 0 }, s.orbit), z = o.zoom;
         const targets = (window.PowerRunner && window.PowerRunner.TARGETS) || fallbackTargets;
         const sx = x => (x - o.cameraX) * w * z + w / 2, sy = y => (y - o.cameraY) * h * z + h / 2;
@@ -164,6 +400,26 @@
         path(c, [[w / 2 - 7, h / 2], [w / 2 + 7, h / 2]], '#dfebd8'); path(c, [[w / 2, h / 2 - 7], [w / 2, h / 2 + 7]], '#dfebd8'); c.restore();
         box(c, 10, 10, 166, 38, '#102f40', 4); label(c, 'ORBITAL SURVEY / FICTIONAL', 19, 25, '#d1e5df', 9); label(c, `${z.toFixed(1)}×  ·  ${(o.steady || 0) >= 1.2 ? 'CAMERA STEADY' : 'STABILIZING'}`, 19, 40, p.accent, 10);
         label(c, 'N ↑', w - 18, 25, '#e3e9dc', 11, 'right');
+        // A small navigation view is separate from the steerable survey camera.
+        // Its polyline and vehicle position come from the propagated two-body state.
+        if (w > 500 && o.craft && Array.isArray(o.trajectory)) {
+            const size = Math.min(136, h * .29), cx = w - size / 2 - 18, cy = size / 2 + 42;
+            box(c, cx - size / 2 - 6, cy - size / 2 - 6, size + 12, size + 39, '#102f40', 4);
+            const extent = Math.max(6600, ...o.trajectory.map(v => Math.hypot(v.x, v.y))), k = (size / 2 - 5) / extent;
+            circle(c, cx, cy, 6371 * k, '#356575'); circle(c, cx, cy, 6471 * k, '#6bb8c7', true);
+            c.save(); c.strokeStyle = '#9bdcb4'; c.lineWidth = 1.2; c.beginPath();
+            o.trajectory.forEach((v, i) => i ? c.lineTo(cx + v.x * k, cy - v.y * k) : c.moveTo(cx + v.x * k, cy - v.y * k)); c.stroke(); c.restore();
+            circle(c, cx + o.craft.x * k, cy - o.craft.y * k, 3, p.accent);
+            label(c, 'LIVE ORBIT', cx, cy + size / 2 + 12, '#d6e8df', 9, 'center');
+            label(c, `${Math.round((o.track || {}).altitude || 0)}km · ${((o.track || {}).speed || 0).toFixed(2)}km/s`, cx, cy + size / 2 + 25, '#a8cbd0', 8, 'center');
+        }
+        // Faint moving scan lines and a camera readout retain the feeling of a satellite pass.
+        c.save(); c.globalAlpha = .14; path(c, [[0, (o.time * 17) % h], [w, (o.time * 17) % h]], '#d0eae1'); c.restore();
+        if (selected) {
+            const distance = Math.hypot(selected.x - o.cameraX, selected.y - o.cameraY);
+            const centred = distance * z < .045, stable = (o.steady || 0) >= 1.2;
+            label(c, `${centred ? '● FRAMED' : '○ ALIGN TARGET'}  /  ${Math.abs(z - 3) < .4 ? 'DETAIL READY' : 'ZOOM ≈ 3×'}  /  ${stable ? 'STEADY' : 'SETTLING'}`, w / 2, h - 38, centred && stable ? '#aff0be' : '#e9e1ad', w < 500 ? 8 : 10, 'center');
+        }
         const length = Math.min(w * .16, 100); path(c, [[w - length - 16, h - 23], [w - 16, h - 23]], '#e3e9dc', 2); label(c, 'SURVEY SCALE', w - 16, h - 10, '#e3e9dc', 8, 'right');
         if (options.flash > 0) { c.fillStyle = `rgba(255,250,227,${clamp(options.flash, 0, 1) * .8})`; c.fillRect(0, 0, w, h); }
     }
@@ -223,10 +479,11 @@
     window.PowerMissionScenes = { draw(ctx, width, height, state, palette, options = {}) {
         if (!ctx || !state || !palette || width <= 0 || height <= 0) return;
         ctx.save(); ctx.beginPath(); ctx.rect(0, 0, width, height); ctx.clip();
-        if (state.phase === 'orbit') orbit(ctx, width, height, state, palette, options);
+        if (state.phase === 'road' || state.phase === 'boarding') drawRoad(ctx, width, height, state, palette, options);
+        else if (state.phase === 'orbit') orbit(ctx, width, height, state, palette, options);
         else if (state.phase === 'grid') grid(ctx, width, height, state, palette);
         else if (state.phase === 'return') returning(ctx, width, height, state, palette);
         else flight(ctx, width, height, state, palette, options);
         ctx.restore();
-    } };
+    }, drawRoad };
 })();

@@ -6,6 +6,7 @@ function launched() {
     const s = E.create();
     Object.assign(s, { x: E.GOAL, phase: 'launch', status: 'briefing' });
     assert.equal(E.launch(s), true);
+    s.flight.countdown = 0;
     return s;
 }
 function advance(s, seconds, controls = {}, dt = 1 / 60) {
@@ -56,6 +57,24 @@ test('manually tracking guidance establishes a bounded orbit at multiple frame r
         assert.equal(f.throttle, 0);
         assert.match(E.guidance(s), /camera|landmark/);
     }
+});
+
+test('earned launch has a real ignition countdown without spending fuel on the pad', () => {
+    const s = E.create(); Object.assign(s, { x: E.GOAL, phase: 'launch', status: 'briefing' });
+    E.launch(s); advance(s, 2);
+    assert.ok(s.flight.countdown > 0); assert.equal(s.flight.altitude, 0); assert.equal(s.flight.fuel, 100);
+    advance(s, 2); assert.ok(s.flight.altitude > 0);
+});
+
+test('orbit propagates position and conserves orbital energy rather than freezing at insertion', () => {
+    const s = guided(), c = s.orbit.craft;
+    const energy = () => (c.vx ** 2 + c.vy ** 2) / 2 - 398600 / Math.hypot(c.x, c.y);
+    const before = energy(), angle = s.orbit.track.angle;
+    advance(s, 90);
+    assert.equal(s.status, 'running'); assert.notEqual(s.orbit.track.angle, angle);
+    assert.ok(Math.abs(energy() - before) < .001);
+    assert.ok(s.orbit.track.period > 4000 && s.orbit.track.period < 10000);
+    assert.equal(s.orbit.trajectory.length, 97); assert.ok(s.flight.periapsis >= 99);
 });
 
 test('pitch and throttle commands change flight; an exhausted booster cannot refill', () => {

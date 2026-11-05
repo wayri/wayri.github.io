@@ -1,8 +1,8 @@
 <link rel="stylesheet" href="{{ '/assets/css/power-runner.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 <section id="power-runner" class="power-runner mb-12" aria-labelledby="power-runner-title">
     <header class="runner-heading">
-        <div><span class="runner-eyebrow">A small engineering escape</span><h2 id="power-runner-title">Where does my power go?</h2><p>Outrun the backlog. Reach orbit. Bring the grid back into balance.</p></div>
-        <button type="button" id="runner-pause" disabled><i class="fa-solid fa-pause" aria-hidden="true"></i> Pause</button>
+        <div><span class="runner-eyebrow">Road → spacecraft → orbit → grid</span><h2 id="power-runner-title">Where does my power go?</h2><p>Outrun the backlog. Reach orbit. Bring the grid back into balance.</p></div>
+        <div class="runner-view-actions"><button type="button" id="runner-expand" aria-pressed="false">Expand game</button><button type="button" id="runner-pause" disabled><i class="fa-solid fa-pause" aria-hidden="true"></i> Pause</button></div>
     </header>
     <ol class="runner-stages" aria-label="Mission stages"><li data-phase="road" aria-current="step">01 · Road</li><li data-phase="ascent">02 · Launch</li><li data-phase="orbit">03 · Photograph</li><li data-phase="grid">04 · Balance</li></ol>
     <div class="runner-hud" aria-label="Mission dashboard">
@@ -12,16 +12,18 @@
         <div><span id="runner-mode-label">Power mode</span><strong id="runner-mode">Cruise</strong></div>
     </div>
     <p id="runner-guidance" class="runner-guidance">Reach 1,000 m to earn one orbital booster. The tasks will not follow you to space. Probably.</p>
+    <div id="runner-road-readings" class="runner-road-readings"><strong id="runner-speed">0 m/s</strong><span id="runner-road-detail">Break contact with each pursuer.</span><ul id="runner-pursuers" aria-label="Pursuer distances"></ul></div>
     <div id="runner-flight-readings" class="runner-flight-readings" hidden>
         <div><span>Sideways speed</span><strong id="runner-horizontal">0 km/s</strong></div><div><span>Vertical speed</span><strong id="runner-vertical">0 km/s</strong></div><div><span>Lowest altitude</span><strong id="runner-periapsis">—</strong></div><div><span>Highest altitude</span><strong id="runner-apoapsis">—</strong></div><div><span>Booster remaining</span><strong id="runner-burn">—</strong></div><div><span>Heat / bending</span><strong id="runner-structure">0% / 0%</strong></div>
     </div>
     <div class="runner-stage">
-        <canvas id="runner-canvas" tabindex="0" aria-label="Engineering adventure game. Road: Space jumps, Right boosts, Down saves charge. Flight: Up and Down steer pitch, Right and Left adjust throttle. Orbit: arrows pan, plus and minus zoom, Space photographs. Grid: arrows adjust supply and storage. P pauses. On-screen controls are available below.">Run to a launchpad, guide a rocket to orbit, photograph a fictional planet and balance a fictional electricity grid.</canvas>
+        <canvas id="runner-canvas" tabindex="0" aria-label="Engineering adventure game. Road: Space jumps, Right boosts, Down saves charge, Left brakes. Flight: Up and Down steer pitch, Right and Left adjust throttle. Orbit: arrows pan, plus and minus zoom, Space photographs. Grid: arrows adjust supply and storage. P pauses. On-screen controls are available below.">Run to a launchpad, guide a rocket to orbit, photograph a fictional planet and balance a fictional electricity grid.</canvas>
         <div id="runner-overlay" class="runner-overlay">
-            <div class="runner-overlay-card"><span class="runner-eyebrow" id="runner-overline">One battery. A much longer day.</span><h3 id="runner-overlay-title">The backlog is gaining.</h3><p id="runner-overlay-copy">Run 1,000 m to earn a one-time rocket booster. Then fly to orbit, photograph landmarks, and discover a grid-balancing detour back to the road.</p><button type="button" id="runner-start"><i class="fa-solid fa-play" aria-hidden="true"></i> Start run</button><button type="button" id="runner-reset" class="runner-secondary" hidden>Start from the road</button><p class="runner-best">Best road run: <span id="runner-best">0 m</span> · Loops: <span id="runner-loops">0</span></p></div>
+            <div class="runner-overlay-card"><span class="runner-eyebrow" id="runner-overline">One battery. A much longer day.</span><h3 id="runner-overlay-title">The backlog is gaining.</h3><p id="runner-overlay-copy">Three pursuers, different tricks. Pick up charge, dodge barriers and drones, and use boost to break contact. At 1,000 m, brake into the spacecraft — then fly it to orbit and bring home photographs.</p><button type="button" id="runner-start"><i class="fa-solid fa-play" aria-hidden="true"></i> Start run</button><button type="button" id="runner-reset" class="runner-secondary" hidden>Start from the road</button><p class="runner-best">Best road run: <span id="runner-best">0 m</span> · Loops: <span id="runner-loops">0</span></p></div>
         </div>
     </div>
-    <div class="runner-controls" id="runner-road-controls" aria-label="Road controls">
+    <div class="runner-controls runner-four-controls" id="runner-road-controls" aria-label="Road controls">
+        <button type="button" id="runner-brake"><i class="fa-solid fa-hand" aria-hidden="true"></i> Brake <small>hold ←</small></button>
         <button type="button" id="runner-eco"><i class="fa-solid fa-leaf" aria-hidden="true"></i> Eco <small>hold ↓</small></button>
         <button type="button" id="runner-jump"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i> Jump <small>Space / ↑</small></button>
         <button type="button" id="runner-boost"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Boost <small>hold →</small></button>
@@ -30,9 +32,12 @@
         <button type="button" id="runner-pitch-down">Pitch down <small>hold ↓</small></button><button type="button" id="runner-pitch-up">Pitch up <small>hold ↑</small></button><button type="button" id="runner-throttle-down">Throttle − <small>hold ←</small></button><button type="button" id="runner-throttle-up">Throttle + <small>hold →</small></button>
     </div>
     <div id="runner-orbit-controls" class="runner-orbit-controls" hidden>
+        <button type="button" id="runner-camera-toggle" aria-pressed="false"><i class="fa-solid fa-camera" aria-hidden="true"></i> Open satellite camera</button>
+        <div id="runner-camera-panel" hidden>
         <label>Target guide <select id="runner-target"></select></label>
         <div class="runner-camera-controls"><button type="button" id="runner-pan-left" aria-label="Pan camera left">←</button><button type="button" id="runner-pan-up" aria-label="Pan camera up">↑</button><button type="button" id="runner-pan-down" aria-label="Pan camera down">↓</button><button type="button" id="runner-pan-right" aria-label="Pan camera right">→</button><button type="button" id="runner-zoom-out" aria-label="Zoom camera out">−</button><button type="button" id="runner-zoom-in" aria-label="Zoom camera in">+</button><button type="button" id="runner-capture"><i class="fa-solid fa-camera" aria-hidden="true"></i> Take photo</button></div>
         <p id="runner-photo-feedback">Centre a target, zoom to 3×, then hold still for a sharp picture.</p>
+        </div>
     </div>
     <div id="runner-grid-offer" class="runner-grid-offer" hidden><h3>Electrical infrastructure captured. Hack into the grid?</h3><p>This opens a fictional island-grid sandbox. Match supply to demand and keep the lights on.</p><div><button type="button" id="runner-grid-yes">Yes · open grid sandbox</button><button type="button" id="runner-grid-no">No · keep photographing</button></div></div>
     <div id="runner-grid-controls" class="runner-grid-controls" hidden>

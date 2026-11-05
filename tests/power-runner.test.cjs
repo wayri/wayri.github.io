@@ -22,8 +22,8 @@ test('leaks slow and damage the rover; an airborne rover clears them', () => {
     clear.y = -90; clear.grounded = false;
     E.step(hit, {}, 1 / 60); E.step(clear, {}, 1 / 60);
     assert.equal(hit.leaks, 1); assert.equal(clear.leaks, 0);
-    assert.ok(hit.charge < clear.charge - 13); assert.ok(hit.gap < clear.gap);
-    const before = hit.x; E.step(hit, {}, 1 / 60); assert.ok(hit.x - before < 2);
+    assert.ok(hit.charge < clear.charge - 13);
+    advance(hit, .3); advance(clear, .3); assert.ok(hit.speed < clear.speed);
 });
 test('jump costs charge, cannot repeat in midair, and lands back on terrain', () => {
     const s = running(); assert.equal(E.jump(s), true); assert.equal(s.charge, 97);
@@ -41,13 +41,54 @@ test('pause freezes charge, distance, and tasks; terminal states stay terminal',
     E.step(s, { boost: true }, 1 / 60); assert.equal(JSON.stringify(s), snapshot);
     s.status = 'lost'; E.step(s, {}, 1 / 60); assert.equal(s.x, 0);
 });
-test('a clean cruise run can reach the finish across several course seeds', () => {
-    for (const seed of [17, 1, 42, 99]) {
+test('a road pilot can clear mixed hazards and brake into the launch ship across course seeds', () => {
+    for (const seed of [17, 1, 42, 99, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]) {
         const s = E.create(seed); s.status = 'running';
         for (let frame = 0; frame < 120 * 60 && s.status === 'running'; frame++) {
-            if (s.grounded && s.entities.some(e => e.type === 'leak' && !e.used && e.x > s.x && e.x - s.x < 65)) E.jump(s);
-            E.step(s, {}, 1 / 60);
+            if (s.grounded && s.entities.some(e => ['leak', 'crate', 'slick'].includes(e.type) && !e.used && e.x > s.x && e.x - s.x < 65)) E.jump(s);
+            const scanner = s.entities.find(e => !e.used && e.type === 'drone' && e.x > s.x && e.x - s.x < 180);
+            E.step(s, { brake: s.x > E.GOAL - 150 || !!(scanner && scanner.active), boost: !!(scanner && !scanner.active) }, 1 / 60);
         }
-        assert.equal(s.status, 'briefing', `seed ${seed}`); assert.equal(s.phase, 'launch'); assert.equal(s.x, E.GOAL); assert.equal(s.leaks, 0); assert.ok(s.charge > 0);
+        assert.equal(s.status, 'briefing', `seed ${seed}`); assert.equal(s.phase, 'launch'); assert.equal(s.x, E.GOAL); assert.ok(s.charge > 0);
     }
+});
+
+test('scanner timing matters and an airborne rover cannot bypass an active beam', () => {
+    const active = running(), dark = running();
+    for (const s of [active, dark]) { s.entities = [{ type: 'drone', x: 2, used: false }]; s.grounded = false; s.y = -70; }
+    active.time = 1; dark.time = 3;
+    E.step(active, {}, 1 / 60); E.step(dark, {}, 1 / 60);
+    assert.equal(active.leaks, 1); assert.equal(dark.leaks, 0);
+});
+
+test('boost opens actual pursuit separation, distinct tactics activate, and escaped pursuers stay gone', () => {
+    const s = running(); advance(s, 8, { boost: true });
+    assert.ok(s.escaped >= 1); assert.ok(s.chasers.some(c => c.escaped));
+    const escaped = s.chasers.find(c => c.escaped), position = escaped.x;
+    advance(s, 4); assert.equal(escaped.x, position);
+    const t = running(); t.time = 10; E.step(t, {}, 1 / 60);
+    assert.equal(t.chasers[0].state, 'sprint'); assert.ok(t.chasers[0].speed > t.chasers[1].speed);
+    t.chasers[2].x = t.x - 100; const charge = t.charge; E.step(t, {}, 1 / 60);
+    assert.ok(t.charge < charge - 4);
+});
+
+test('hangar collision is speed-sensitive and successful boarding bridges the drive into launch', () => {
+    const fast = running(); Object.assign(fast, { x: E.GOAL - 1, speed: 250 });
+    E.step(fast, {}, 1 / 60); assert.equal(fast.reason, 'dock-crash');
+    const safe = running(); Object.assign(safe, { x: E.GOAL - 1, speed: 30 });
+    advance(safe, .1, { brake: true }); assert.equal(safe.phase, 'boarding');
+    assert.equal(safe.status, 'running'); advance(safe, 3);
+    assert.equal(safe.phase, 'launch'); assert.equal(safe.status, 'briefing');
+});
+
+test('overhead gantries punish jumping while solar strips reward grounded slower driving', () => {
+    const low = running(), high = running();
+    for (const s of [low, high]) s.entities = [{ type: 'gate', x: 2, used: false }];
+    high.grounded = false; high.y = -70;
+    E.step(low, {}, 1 / 60); E.step(high, {}, 1 / 60);
+    assert.equal(low.leaks, 0); assert.equal(high.leaks, 1);
+    const slow = running(), fast = running();
+    for (const s of [slow, fast]) { s.charge = 50; s.entities = [{ type: 'solar', x: 2, used: false }]; }
+    E.step(slow, {}, 1 / 60); E.step(fast, { boost: true }, 1 / 60);
+    assert.ok(slow.charge > fast.charge + 6);
 });
