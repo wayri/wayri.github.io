@@ -1,5 +1,5 @@
 #project-kiview { scroll-margin-top:80px; }
-.project-gallery { width:100%; min-width:0; color:var(--text-color); background:var(--container-bg); }
+.project-gallery { width:100%; min-width:0; container-type:inline-size; color:var(--text-color); background:var(--container-bg); }
 .kicad-platforms { display:flex; flex-wrap:wrap; align-items:center; gap:5px; padding:8px; border-bottom:1px solid var(--border-color,var(--rule,#ccd3da)); background:var(--container-bg,var(--paper,#fff)); }
 .kicad-platforms .kicad-platforms-label { color:var(--muted-text,var(--muted,#53606b)); font:10px/1.5 system-ui,sans-serif; margin-right:3px; }
 .kicad-platforms a { display:inline-flex; align-items:center; gap:5px; padding:4px 6px; border:1px solid color-mix(in srgb,var(--border-color,var(--rule,#ccd3da)) 45%,transparent); border-radius:3px; color:var(--text-color,var(--ink,#20272d)); text-decoration:none; font:600 10px/1.4 system-ui,sans-serif; }
@@ -20,4 +20,4 @@
 .project-gallery-controls [role="status"] { color:var(--muted-text); font:11px/1.6 ui-monospace,'Courier New',monospace; }
 .project-gallery .project-gallery-credit { margin:0; padding:0 12px 12px; color:var(--muted-text); font:11px/1.65 ui-monospace,'Courier New',monospace; }
 .project-gallery-credit a { color:var(--accent-color); text-decoration:underline; text-underline-offset:3px; }
-@media(max-width:420px) { .project-gallery-controls button { flex:1 1 0; min-width:0; padding-inline:12px; } .project-gallery-controls [role="status"] { order:3; flex-basis:100%; text-align:center; } }
+@container(max-width:480px) { .project-gallery-controls button { flex:1 1 0; min-width:0; padding-inline:12px; } .project-gallery-controls [role="status"] { order:3; flex-basis:100%; text-align:center; } }
