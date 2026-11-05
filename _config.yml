@@ -27,7 +27,6 @@ exclude:
   - warya_recovery2_utf8.txt
   - tool_responses.txt
   - "*.py"
-  - "*.txt"
   - node_modules
   - vendor
   - tests
