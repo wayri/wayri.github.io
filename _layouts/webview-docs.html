@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    {% seo %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ '/assets/css/reading.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+    <link rel="stylesheet" href="{{ '/assets/css/site-header.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+    <link rel="stylesheet" href="{{ '/assets/css/webview-docs.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+    <script src="{{ '/assets/js/site-header.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+    <script src="{{ '/assets/js/webview-docs.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+</head>
+<body class="wv-docs">
+    {% include site-header.html %}
+    <a class="wv-docs-skip" href="#doc-content">Skip to documentation</a>
+    <header class="wv-docs-header"><div><a href="{{ '/kicad-webview/' | relative_url }}">KiCad WebView</a><span>Documentation · 0.1.0-beta.1</span></div><a href="{{ '/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.1.zip' | relative_url }}" download>Download release ↓</a></header>
+    <div class="wv-docs-layout">
+        <aside class="wv-docs-sidebar"><button class="wv-docs-menu" type="button" aria-expanded="false" aria-controls="wv-docs-navigation">Documentation menu <span aria-hidden="true">+</span></button>{% include webview-docs-nav.html %}</aside>
+        <main id="doc-content" class="wv-docs-article"><h1>{{ page.title }}</h1><p class="wv-docs-version">Release 0.1.0-beta.1 · API 1.0-beta · <a href="{{ '/kicad-webview/docs/license/' | relative_url }}">Source-available license 1.0</a></p>{{ content }}<footer class="wv-docs-footer"><a href="{{ '/kicad-webview/docs/' | relative_url }}">Documentation overview</a><a href="{{ '/kicad-webview/' | relative_url }}">Product &amp; live demonstrations</a></footer></main>
+    </div>
+</body>
+</html>

@@ -132,13 +132,18 @@
 .wv-linked-guide h3 { margin-top: 0; }
 .wv-linked-guide code { overflow-wrap: anywhere; }
 .wv-distributions { margin-top: 2.5rem; }
-.wv-distribution-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: .8rem; }
+.wv-distribution-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .8rem; }
 .wv-distribution-grid article { min-width: 0; border: 1px solid var(--rule); border-radius: 6px; padding: 1rem; background: var(--code); }
 .wv-distribution-grid i { color: var(--link); font-size: 1.3rem; }
 .wv-distribution-grid h4 { font-size: 16px; margin: .6rem 0; }
 .wv-distribution-grid p { font-size: 13px; color: var(--body-ink); }
 .wv-distribution-grid a, .wv-distribution-grid span { font-size: 12px; }
 .wv-distribution-grid span { color: var(--muted); }
+.wv-distribution-grid article > a { display:block; margin-top:.6rem; min-height:32px; overflow-wrap:anywhere; }
+#distribution { scroll-margin-top:80px; }
+#distribution details { margin-top:1rem; }
+#distribution details pre { padding:1rem; overflow-x:auto; background:var(--code); font-size:12px; }
+@media(max-width:600px) { .wv-distribution-grid article > a { min-height:44px; } }
 .wv-related-projects { display: flex; flex-wrap: wrap; gap: .6rem 1.3rem; align-items: center; padding: .8rem 0; font-size: 13px; }
 .wv-related-projects span { color: var(--muted); }
 @media (max-width: 900px) { .wv-distribution-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }

@@ -1,0 +1,16 @@
+<nav id="wv-docs-navigation" aria-label="KiCad WebView documentation">
+    <p>Start here</p>
+    <a href="{{ '/kicad-webview/docs/' | relative_url }}"{% if page.doc_section == 'overview' %} aria-current="page"{% endif %}>Overview</a>
+    <a href="{{ '/kicad-webview/docs/quick-start/' | relative_url }}"{% if page.doc_section == 'quick-start' %} aria-current="page"{% endif %}>Quick start</a>
+    <a href="{{ '/kicad-webview/docs/user-guide/' | relative_url }}"{% if page.doc_section == 'user-guide' %} aria-current="page"{% endif %}>User guide</a>
+    <a href="{{ '/kicad-webview/docs/examples/' | relative_url }}"{% if page.doc_section == 'examples' %} aria-current="page"{% endif %}>Examples</a>
+    <p>Reference</p>
+    <a href="{{ '/kicad-webview/docs/api/' | relative_url }}"{% if page.url == '/kicad-webview/docs/api/' %} aria-current="page"{% endif %}>API &amp; exports</a>
+    <a href="{{ '/kicad-webview/docs/api-viewer/' | relative_url }}"{% if page.url == '/kicad-webview/docs/api-viewer/' %} aria-current="page"{% endif %}>Viewer methods</a>
+    <a href="{{ '/kicad-webview/docs/api-project/' | relative_url }}"{% if page.url == '/kicad-webview/docs/api-project/' %} aria-current="page"{% endif %}>Projects &amp; presentation</a>
+    <a href="{{ '/kicad-webview/docs/api-utilities/' | relative_url }}"{% if page.url == '/kicad-webview/docs/api-utilities/' %} aria-current="page"{% endif %}>Sources, analysis &amp; utilities</a>
+    <p>Deploy &amp; support</p>
+    <a href="{{ '/kicad-webview/docs/hosting/' | relative_url }}"{% if page.doc_section == 'hosting' %} aria-current="page"{% endif %}>Hosting &amp; integrations</a>
+    <a href="{{ '/kicad-webview/docs/troubleshooting/' | relative_url }}"{% if page.doc_section == 'troubleshooting' %} aria-current="page"{% endif %}>Troubleshooting</a>
+    <a href="{{ '/kicad-webview/docs/license/' | relative_url }}"{% if page.doc_section == 'license' %} aria-current="page"{% endif %}>License &amp; release files</a>
+</nav>
