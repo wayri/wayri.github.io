@@ -126,3 +126,14 @@
 .lab-product-sites span { color:var(--muted-text); }
 .lab-product-sites a { color:var(--accent-color); text-decoration:underline; text-underline-offset:4px; }
 .lab-product-sites a:focus-visible { outline:2px solid var(--accent-color); outline-offset:4px; }
+@media(max-width:760px) {
+    .lab-hero > *,.lab-project-body { min-width:0; }
+    .lab-project-body,.lab-reach { overflow-wrap:anywhere; }
+    .lab-product-sites { gap:4px 16px; }
+    .lab-product-sites > span { flex-basis:100%; }
+    .lab-product-sites a,.lab-project-links a,.lab-footer nav a { display:inline-flex; align-items:center; min-height:44px; }
+    .lab-home .lab-intro > .lab-text-link { display:inline-flex; align-items:center; min-height:44px; }
+    .lab-project-links { gap:4px 18px; }
+    .lab-footer nav { gap:4px 20px; }
+    .lab-intro blockquote { margin-top:16px; }
+}

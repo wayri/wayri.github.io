@@ -53,4 +53,18 @@
 .irca-demo.is-screen-active .irca-stage { flex:1; min-height:0; }
 .irca-demo.is-screen-active .irca-stage .irca-board { height:100%; }
 .irca-demo.is-screen-active .irca-demo-playback,.irca-demo.is-screen-active .irca-carousel { display:none; }
+.irca-screen-toolbar { padding-top:max(12px,env(safe-area-inset-top)); padding-left:max(16px,env(safe-area-inset-left)); padding-right:max(16px,env(safe-area-inset-right)); }
+.irca-screen-toolbar button { min-height:44px; flex-shrink:0; }
+@media(max-width:600px) {
+    .irca-demo .irca-modes { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; padding:10px; }
+    .irca-demo .irca-modes button { min-height:44px; padding:8px; }
+    .irca-demo-playback { gap:8px; padding:10px; }
+    .irca-demo-playback > button { min-height:44px; flex:1 1 auto; }
+    .irca-demo-playback > span { flex-basis:100%; }
+    .irca-demo .irca-carousel button,.irca-demo .irca-study-open,.irca-demo .irca-inspect { min-height:44px; }
+    .irca-demo .irca-carousel section > span { min-width:0; }
+    .irca-result-teaser { padding:12px; }
+    .irca-result-teaser strong { font-size:14px; }
+    .irca-screen-toolbar { font-size:12px; gap:8px; }
+}
 @media(max-width:600px) { .irca-heading { padding:16px; } .irca-demo .irca-heading h2 { font-size:21px; } .irca-stage { min-height:350px; } .irca-board,.wv-irca-showcase .irca-board { height:420px; } .irca-preview,.wv-irca-showcase .irca-preview { height:350px; } .irca-carousel section > span { flex-basis:100%; order:3; } }

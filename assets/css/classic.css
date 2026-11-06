@@ -24,3 +24,12 @@ body.classic-text {
 .home-page .home-content > header p { font-size: 17px; }
 .home-page .home-content > header > div:first-child > div:first-child > p { font-size: clamp(1.3rem, 3vw, 1.6rem); }
 .home-page .home-content :is(a, button):focus-visible { outline: 2px solid var(--accent-color); outline-offset: 4px; }
+@media(max-width:760px) {
+    .classic-text main { overflow-wrap:anywhere; }
+    .classic-text main img { max-width:100%; height:auto; }
+    .classic-text main header .text-right { text-align:left; }
+    .classic-text main [data-publication] .doc-container > div { flex-wrap:wrap; gap:8px; }
+    .classic-text main [data-publication] h3 { flex-basis:100%; }
+    .classic-text main .citation-container { margin-left:0; }
+    .classic-text main input,.classic-text main select,.classic-text main textarea { font-size:16px; max-width:100%; }
+}

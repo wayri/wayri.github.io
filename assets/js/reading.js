@@ -2,6 +2,23 @@
     const root = document.documentElement;
     const diagrams = [];
     let renderQueue = Promise.resolve();
+    const index = document.querySelector('.article-index');
+    if (index) {
+        const navigation = index.querySelector('nav');
+        const toggle = document.createElement('button');
+        toggle.type = 'button'; toggle.className = 'article-index-toggle';
+        toggle.textContent = 'Browse articles'; toggle.setAttribute('aria-expanded', 'false');
+        navigation.id = 'article-index-navigation'; toggle.setAttribute('aria-controls', navigation.id);
+        index.classList.add('is-collapsed'); index.prepend(toggle);
+        toggle.addEventListener('click', () => {
+            const collapsed = index.classList.toggle('is-collapsed');
+            toggle.setAttribute('aria-expanded', String(!collapsed));
+        });
+        navigation.addEventListener('click', event => {
+            if (!event.target.closest('a') || !window.matchMedia('(max-width: 760px)').matches) return;
+            index.classList.add('is-collapsed'); toggle.setAttribute('aria-expanded', 'false');
+        });
+    }
 
     function renderDiagrams() {
         renderQueue = renderQueue.then(async () => {

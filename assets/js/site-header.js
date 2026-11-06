@@ -19,16 +19,24 @@
             updateTheme();
             window.dispatchEvent(new Event('themeChanged'));
         });
-        menu.addEventListener('click', () => {
-            const open = navigation.classList.toggle('is-open');
+        const setMenu = open => {
+            navigation.classList.toggle('is-open', open);
             menu.setAttribute('aria-expanded', String(open));
             menu.querySelector('i').className = open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        };
+        menu.addEventListener('click', () => {
+            setMenu(!navigation.classList.contains('is-open'));
         });
         navigation.addEventListener('click', event => {
             if (!event.target.closest('a')) return;
-            navigation.classList.remove('is-open');
-            menu.setAttribute('aria-expanded', 'false');
-            menu.querySelector('i').className = 'fa-solid fa-bars';
+            setMenu(false);
+        });
+        document.addEventListener('keydown', event => {
+            if (event.key !== 'Escape' || !navigation.classList.contains('is-open')) return;
+            setMenu(false); menu.focus();
+        });
+        document.addEventListener('click', event => {
+            if (!event.target.closest('.portfolio-header')) setMenu(false);
         });
     });
 })();

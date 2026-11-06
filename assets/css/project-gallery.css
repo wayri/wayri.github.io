@@ -21,3 +21,10 @@
 .project-gallery .project-gallery-credit { margin:0; padding:0 12px 12px; color:var(--muted-text); font:11px/1.65 ui-monospace,'Courier New',monospace; }
 .project-gallery-credit a { color:var(--accent-color); text-decoration:underline; text-underline-offset:3px; }
 @container(max-width:480px) { .project-gallery-controls button { flex:1 1 0; min-width:0; padding-inline:12px; } .project-gallery-controls [role="status"] { order:3; flex-basis:100%; text-align:center; } }
+@media (max-width:600px) {
+    .kicad-platforms a { min-height:36px; padding:5px 7px; font-size:11px; }
+    .kicad-platforms a small { font-size:10px; }
+    .project-gallery-controls { gap:8px; padding:12px 8px; }
+    .project-gallery-controls button { min-height:44px; font-size:13px; gap:6px; }
+    .project-gallery-stage figcaption,.project-gallery-credit { overflow-wrap:anywhere; }
+}

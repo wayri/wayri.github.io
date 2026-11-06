@@ -26,6 +26,14 @@ permalink: /pong/
         .pong-badge { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:4px; }
         .pong-badge.normal { background: #ff8c00; }
         .pong-badge.tracking { background: #ff3333; box-shadow: 0 0 6px #ff3333; }
+        @media(max-width:600px) {
+            #gate-ui { padding:24px 16px; gap:16px; }
+            #decryption-key { font-size:16px; min-height:44px; }
+            #gate-ui button,.game-control { min-height:44px; }
+            nav > div { gap:12px; }
+            nav > div > span { max-width:55%; font-size:10px; text-align:right; }
+            #score-limit-controls { flex-wrap:wrap; }
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">

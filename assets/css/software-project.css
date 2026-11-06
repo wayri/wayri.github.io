@@ -17,6 +17,7 @@
 .software-project figcaption, .software-project .software-note { font-size: .8rem; color: var(--muted); line-height: 1.6; }
 .software-project .software-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
 .software-grid article { padding: 1.25rem; border: 1px solid var(--rule); border-radius: 6px; background: var(--code); }
+.software-grid article, .software-project .software-actions > *, .software-project .software-related > * { min-width: 0; overflow-wrap: anywhere; }
 .software-grid article i { color: var(--link); font-size: 1.35rem; }
 .software-grid article p { font-size: .95rem; }
 .software-project .software-platforms { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -27,3 +28,10 @@
 .software-project footer { margin-top: 4rem; padding: 1.5rem 0; border-top: 1px solid var(--rule); }
 .software-related a { padding: .4rem .7rem; border: 1px solid var(--rule); border-radius: 4px; font-size: .9rem; }
 @media (max-width: 700px) { .software-project .software-grid, .software-project .software-platforms { grid-template-columns: 1fr; } .software-actions a { flex: 1 1 160px; justify-content: center; } }
+@media (max-width: 480px) {
+    .software-project h1 { font-size: clamp(2.35rem, 12vw, 3.2rem); }
+    .software-project .software-lead { font-size: 1.05rem; }
+    .software-project section { margin-top: 2rem; padding-top: 1.5rem; }
+    .software-grid article { padding: 1rem; }
+    .software-related a { display: inline-flex; align-items: center; min-height: 44px; }
+}

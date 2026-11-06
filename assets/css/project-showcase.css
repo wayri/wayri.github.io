@@ -20,3 +20,10 @@
 .webview-card-controls [aria-pressed="true"] { background: var(--accent-color); color: var(--container-bg); }
 .webview-card-controls #webview-card-status { flex-basis: 100%; }
 @media (max-width: 600px) { .webview-card-board { height: 460px; } .webview-card-controls { gap: 8px; } .webview-card-controls button { padding: 8px; font-size: 11px; } }
+@media (max-width:600px) {
+    .project-links { gap:6px 14px; }
+    .project-links a { display:inline-flex; align-items:center; min-height:44px; overflow-wrap:anywhere; }
+    .webview-card-controls button { min-height:44px; padding:10px 12px; font-size:12px; }
+    .project-phone-pictures { gap:8px; }
+    .project-phone-pictures img { height:auto; max-height:280px; }
+}

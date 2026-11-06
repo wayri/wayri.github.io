@@ -74,6 +74,7 @@ mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: h
 .article-index time { display: block; color: var(--muted); font-size: 12px; margin-top: .3rem; }
 .article-index p { margin-top: 2rem; }
 .back-link { margin-top: 3rem; font: 15px/1.5 system-ui, sans-serif; }
+.article-index-toggle { display:none; }
 @media (max-width: 760px) {
     body { padding: 0 1.1rem 3rem; font-size: 18px; }
     .reading-layout { display: flex; flex-direction: column; gap: 2rem; }
@@ -82,6 +83,17 @@ mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: h
     .article-index li { margin-bottom: .7rem; }
     .article-index time { display: inline; margin-left: .4rem; }
     .article-index p { margin: 1rem 0 0; }
+    html { scroll-padding-top:80px; }
+    .reading-layout { padding-top:88px; gap:24px; }
+    h1 { font-size:clamp(2rem,7.8vw,2.6rem); overflow-wrap:anywhere; }
+    .article-index-toggle { display:flex; align-items:center; justify-content:space-between; width:100%; min-height:44px; padding:8px 12px; color:var(--link); background:var(--paper); border:1px solid var(--rule); font:600 15px/1.5 system-ui,sans-serif; cursor:pointer; }
+    .article-index-toggle::after { content:'+'; font-size:20px; }
+    .article-index-toggle[aria-expanded="true"]::after { content:'−'; }
+    .article-index.is-collapsed > nav { display:none; }
+    .article-index nav { padding-top:16px; }
+    .article-index li a { display:block; min-height:44px; padding-block:6px; }
+    .article-index time { display:block; margin-left:0; }
+    .article-content pre,.article-content table,.mermaid,mjx-container[display="true"] { overscroll-behavior-x:contain; }
 }
 @media print {
     .article-index, .back-link { display: none; }

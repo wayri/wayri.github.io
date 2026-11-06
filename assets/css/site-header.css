@@ -37,6 +37,13 @@
     .portfolio-header #site-navigation { display: none; flex-basis: 100%; flex-wrap: wrap; justify-content: flex-start; gap: 16px; padding: 12px 0 6px; }
     .portfolio-header #site-navigation.is-open { display: flex; }
     .portfolio-header .portfolio-socials { flex-basis: 100%; padding-block: 6px; }
+    .portfolio-header-row { min-height:64px; padding:8px 16px; }
+    .portfolio-header button,.portfolio-header .portfolio-brand { min-width:44px; min-height:44px; }
+    .portfolio-header .portfolio-brand { display:inline-flex; align-items:center; }
+    .portfolio-header #site-navigation { max-height:calc(100dvh - 64px); overflow-y:auto; overscroll-behavior:contain; padding:8px 0 12px; gap:4px 12px; }
+    .portfolio-header #site-navigation > a { display:flex; align-items:center; flex:1 0 calc(50% - 12px); min-height:44px; padding:8px 10px; border-bottom:1px solid color-mix(in srgb,var(--header-muted) 20%,transparent); }
+    .portfolio-header .portfolio-socials { gap:12px; }
+    .portfolio-header .portfolio-socials a { display:inline-flex; align-items:center; justify-content:center; min-width:44px; min-height:44px; }
 }
 @media print { .portfolio-header { display: none; } }
 
