@@ -94,7 +94,7 @@
             $('.irca-carousel').addEventListener('keydown', stopRotation);
             await carousel.show(0); if (disposed) return;
             const camera = viewer.getCamera3D();
-            if (camera) viewer.setCamera3D({ ...camera, position: camera.position.map((value, index) => camera.target[index] + (value - camera.target[index]) * .4) });
+            if (camera) viewer.setCamera3D({ ...camera, position: camera.position.map((value, index) => camera.target[index] + (value - camera.target[index]) * .48) });
             preview.hidden = true; start.hidden = true; inspect.textContent = 'Inspect ' + metadata.defaultPart;
             rotate.disabled = false;
             status.textContent = 'IRCA · 59 PCB parts. Slow rotation uses the viewer API; drag, zoom or inspect a component to pause.';
