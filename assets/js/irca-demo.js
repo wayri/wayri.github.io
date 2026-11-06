@@ -5,10 +5,29 @@
     const $ = selector => host.querySelector(selector);
     const stage = $('.irca-board'), preview = $('.irca-preview'), status = $('.irca-status');
     const start = $('.irca-start'), inspect = $('.irca-inspect');
+    const rotate = $('.irca-rotate');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const modes = [...host.querySelectorAll('[data-irca-mode]')];
     const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
     const views = { assembly: '3d', pcb: 'pcb', schematic: 'schematic' };
     let viewer, carousel, loading = false, changing = false, disposed = false, runtime, study, metadata, mode = 'assembly';
+    let rotating = false, rotationFrame = 0, lastRotation = 0, visible = false;
+    function stopRotation() {
+        rotating = false; cancelAnimationFrame(rotationFrame); rotationFrame = 0; lastRotation = 0;
+        rotate.textContent = 'Rotate board'; rotate.setAttribute('aria-pressed', 'false');
+    }
+    function rotationTick(now) {
+        rotationFrame = 0;
+        if (!rotating || disposed || document.hidden || !visible || viewer?.view !== '3d' || mode !== 'assembly') { lastRotation = 0; return; }
+        if (lastRotation) viewer.rotate3D('left', Math.min(now - lastRotation, 80) * .008);
+        lastRotation = now; rotationFrame = requestAnimationFrame(rotationTick);
+    }
+    function startRotation() {
+        if (!viewer || disposed || viewer.view !== '3d') return;
+        viewer.setInspectorOpen(false); viewer.clearSelection();
+        carousel?.pause(); rotating = true; rotate.textContent = 'Pause rotation'; rotate.setAttribute('aria-pressed', 'true');
+        if (!rotationFrame && visible && !document.hidden) rotationFrame = requestAnimationFrame(rotationTick);
+    }
     function display(next) {
         mode = next;
         modes.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.ircaMode === mode)));
@@ -48,6 +67,7 @@
             stage.hidden = false; $('.irca-stage').classList.add('is-loading');
             viewer = window.IRCAProject.createViewer(stage, { theme: theme() });
             viewer.addEventListener('viewchange', event => {
+                if (event.detail.view !== '3d') stopRotation();
                 if (loading || changing || mode === 'pi') return;
                 display(event.detail.view === '3d' ? 'assembly' : event.detail.view);
                 status.textContent = 'IRCA · ' + metadata.partCount + ' PCB parts. Select a component or pad to inspect it.';
@@ -70,9 +90,15 @@
                 { label: 'Assembly overview', view: '3d', camera3D: 'isometric' }
             ]});
             carousel.addEventListener('error', () => { status.textContent = 'The IRCA tour paused. Choose a view or use Fit drawing.'; });
+            $('.irca-carousel').addEventListener('pointerdown', stopRotation);
+            $('.irca-carousel').addEventListener('keydown', stopRotation);
             await carousel.show(0); if (disposed) return;
+            const camera = viewer.getCamera3D();
+            if (camera) viewer.setCamera3D({ ...camera, position: camera.position.map((value, index) => camera.target[index] + (value - camera.target[index]) * .75) });
             preview.hidden = true; start.hidden = true; inspect.textContent = 'Inspect ' + metadata.defaultPart;
-            status.textContent = 'IRCA · 59 PCB parts. Select a component in layout or 3D, or use Inspect to search. Tour playback is opt-in.';
+            rotate.disabled = false;
+            status.textContent = 'IRCA · 59 PCB parts. Slow rotation uses the viewer API; drag, zoom or inspect a component to pause.';
+            if (!reducedMotion.matches) startRotation();
         } catch (error) {
             if (!disposed) {
                 carousel?.dispose(); carousel = null; viewer?.dispose(); viewer = null;
@@ -85,6 +111,7 @@
         }
     }
     async function choose(next) {
+        stopRotation();
         display(next); carousel?.pause();
         if (mode === 'pi') {
             start.hidden = true; status.textContent = 'Fast PI · actual precomputed IRCA copper field; assumptions and numerical checks below.';
@@ -105,6 +132,10 @@
         finally { changing = false; }
     }
     modes.forEach(button => button.addEventListener('click', () => choose(button.dataset.ircaMode)));
+    rotate.addEventListener('click', async () => {
+        if (rotating) { stopRotation(); return; }
+        await choose('assembly'); startRotation();
+    });
     $('.irca-study-open').addEventListener('click', () => choose('pi'));
     loadStudy().catch(() => { /* The result view retains an explicit retry on selection. */ });
     start.addEventListener('click', () => choose(mode));
@@ -113,10 +144,19 @@
         const part = viewer?.getParts().find(item => item.reference === metadata.defaultPart);
         if (part && viewer.selectPart(part.id, { locate: true })) viewer.setInspectorOpen(true);
     });
-    for (const event of ['pointerdown', 'wheel', 'keydown']) stage.addEventListener(event, () => carousel?.pause(), { passive: true });
+    for (const event of ['pointerdown', 'wheel', 'keydown']) stage.addEventListener(event, () => { carousel?.pause(); stopRotation(); }, { passive: true });
     const observer = new IntersectionObserver(entries => {
-        if (entries.some(entry => entry.isIntersecting)) { observer.disconnect(); if (!navigator.connection?.saveData) choose(mode); }
+        visible = entries.some(entry => entry.isIntersecting);
+        if (visible) {
+            if (!viewer && !loading && !navigator.connection?.saveData) choose(mode);
+            else if (rotating && !rotationFrame && !document.hidden) rotationFrame = requestAnimationFrame(rotationTick);
+        } else { cancelAnimationFrame(rotationFrame); rotationFrame = 0; lastRotation = 0; }
     }, { threshold: .2 }); observer.observe(host);
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) { cancelAnimationFrame(rotationFrame); rotationFrame = 0; lastRotation = 0; }
+        else if (rotating && visible && !rotationFrame) rotationFrame = requestAnimationFrame(rotationTick);
+    });
+    reducedMotion.addEventListener('change', event => { if (event.matches) stopRotation(); });
     window.addEventListener('themeChanged', () => viewer?.setTheme(theme()));
-    window.addEventListener('pagehide', () => { disposed = true; observer.disconnect(); carousel?.dispose(); viewer?.dispose(); }, { once: true });
+    window.addEventListener('pagehide', () => { disposed = true; stopRotation(); observer.disconnect(); carousel?.dispose(); viewer?.dispose(); }, { once: true });
 })();
