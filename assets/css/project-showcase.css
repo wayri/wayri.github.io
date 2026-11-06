@@ -17,3 +17,6 @@
 .webview-card-controls button:disabled { opacity: .6; cursor: wait; }
 .webview-card-controls button:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 3px; }
 .webview-card-controls span { color: var(--muted-text); font: 11px/1.6 'JetBrains Mono', monospace; }
+.webview-card-controls [aria-pressed="true"] { background: var(--accent-color); color: var(--container-bg); }
+.webview-card-controls #webview-card-status { flex-basis: 100%; }
+@media (max-width: 600px) { .webview-card-board { height: 460px; } .webview-card-controls { gap: 8px; } .webview-card-controls button { padding: 8px; font-size: 11px; } }

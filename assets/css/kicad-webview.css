@@ -144,3 +144,12 @@
 @media (max-width: 900px) { .wv-distribution-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media (max-width: 800px) { .wv-capability-demo { grid-template-columns: minmax(0,1fr); } .wv-demo-console { border-left: 0; border-top: 1px solid var(--rule); } .wv-demo-console .wv-control-row { flex-direction: row; } .wv-scripted-board { height: 440px; } }
 @media (max-width: 480px) { .wv-scripted-board { height: 380px; } .wv-distribution-grid { grid-template-columns: minmax(0,1fr); } .wv-hierarchy-controls > button, .wv-hierarchy-controls > label { flex: 1 1 130px; text-align: center; } }
+.wv-pi-result { display:flex; flex-wrap:wrap; align-items:center; gap:20px 32px; padding:24px; margin:0 0 24px; border:1px solid var(--link); border-left:4px solid var(--link); background:color-mix(in srgb,var(--link) 7%,var(--paper)); border-radius:6px; }
+.wv-pi-result > div:first-child { flex:1 1 280px; }
+.wv-pi-result h3 { margin:0 0 8px; font-size:22px; }
+.wv-pi-result p { margin:0; font-size:13px; color:var(--muted); }
+.wv-pi-result .wv-eyebrow { margin-bottom:10px; color:var(--link); }
+.wv-pi-metric { display:flex; flex-direction:column; gap:5px; font:12px/1.5 system-ui,sans-serif; color:var(--muted); }
+.wv-pi-metric strong { color:var(--link); font:600 clamp(28px,4vw,40px)/1.1 system-ui,sans-serif; font-variant-numeric:tabular-nums; }
+.wv-pi-result .wv-control-row { flex:1 1 100%; margin:0; }
+.wv-pi-result .wv-control-row button:first-child { background:var(--link); color:var(--paper); }

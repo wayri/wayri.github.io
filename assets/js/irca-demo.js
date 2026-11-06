@@ -33,6 +33,7 @@
             const item = document.createElement('span'), value = document.createElement('strong');
             value.textContent = number.toFixed(2) + ' ' + unit; item.append(value, document.createTextNode(label)); return item;
         }));
+        $('.irca-result-value').textContent = data.maxVoltageDropMv.toFixed(2) + ' mV max drop · ' + (data.copperLossW * 1000).toFixed(2) + ' mW copper loss';
         const checks = document.createElement('p'), list = document.createElement('ul');
         checks.textContent = `${data.meshMm} mm final mesh · ${data.convergenceChangePercent.toFixed(3)}% final drop change. Current conservation, power balance and an analytical conductor reference were checked. Local current-density peaks are not qualified.`;
         for (const text of data.assumptions || []) { const li = document.createElement('li'); li.textContent = text; list.append(li); }
@@ -104,6 +105,8 @@
         finally { changing = false; }
     }
     modes.forEach(button => button.addEventListener('click', () => choose(button.dataset.ircaMode)));
+    $('.irca-study-open').addEventListener('click', () => choose('pi'));
+    loadStudy().catch(() => { /* The result view retains an explicit retry on selection. */ });
     start.addEventListener('click', () => choose(mode));
     inspect.addEventListener('click', async () => {
         await choose(mode === 'pi' ? 'pcb' : mode);

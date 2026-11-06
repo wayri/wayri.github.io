@@ -8,6 +8,11 @@
 .irca-modes { display:flex; flex-wrap:wrap; gap:6px; padding:10px 14px; border-block:1px solid var(--irca-rule); }
 .irca-demo .irca-modes button { border:1px solid transparent; border-radius:4px; padding:9px 13px; color:var(--irca-muted); background:transparent; font:13px/1.4 system-ui,sans-serif; cursor:pointer; }
 .irca-modes button i { margin-right:6px; }
+.irca-result-teaser { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; padding:14px 18px; border-bottom:1px solid var(--irca-rule); background:color-mix(in srgb,var(--irca-accent) 8%,var(--irca-bg)); }
+.irca-result-teaser > div { display:flex; flex-direction:column; gap:5px; }
+.irca-result-teaser > div > span { color:var(--irca-muted); font:11px/1.5 system-ui,sans-serif; }
+.irca-result-teaser strong { color:var(--irca-accent); font:600 15px/1.5 system-ui,sans-serif; }
+.irca-demo .irca-study-open { padding:8px 11px; border:1px solid var(--irca-accent); border-radius:4px; background:var(--irca-bg); color:var(--irca-accent); font:12px/1.5 system-ui,sans-serif; cursor:pointer; }
 .irca-demo .irca-modes button[aria-pressed="true"] { background:var(--irca-accent); color:var(--irca-bg); }
 .irca-demo button:focus-visible,.irca-demo summary:focus-visible { outline:2px solid var(--irca-accent); outline-offset:3px; }
 .irca-stage { position:relative; background:#101923; min-height:420px; }
@@ -26,6 +31,8 @@
 .irca-footer p { margin:0; font:12px/1.7 system-ui,sans-serif; color:var(--irca-muted); }
 .irca-footer .irca-model-note { font-size:11px; margin-top:5px; }
 .irca-demo .irca-start { margin-top:10px; border-color:var(--irca-accent); color:var(--irca-accent); }
+.irca-pi { display:flex; flex-direction:column; }
+.irca-pi > .irca-metrics { order:-1; }
 .irca-pi > img { display:block; width:100%; height:auto; background:#101923; }
 .irca-metrics { display:flex; flex-wrap:wrap; gap:12px 24px; border-block:1px solid var(--irca-rule); padding:14px 20px; font:12px/1.6 system-ui,sans-serif; }
 .irca-metrics strong { color:var(--irca-accent); font-size:20px; font-weight:550; margin-right:5px; }

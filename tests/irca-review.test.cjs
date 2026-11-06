@@ -72,3 +72,23 @@ test('all IRCA surfaces share identical source bytes; native fabrication and PI 
     const originals = ['assets/demos/irca/IRCA.kicad_pcb', 'assets/demos/irca/IRCA.kicad_sch'];
     originals.forEach(name => assert.equal(fs.existsSync(path.join(root, name)), false));
 });
+
+test('IRCA gradient covers every finite FEM triangle and preserves the computed extrema', async () => {
+    const { project, context } = fixture();
+    const data = await project.analysis(), study = await project.study();
+    const accepted = context.KiCadWebView.parseAnalysis(data);
+    const triangles = accepted.fields.flatMap(field => field.triangles);
+    assert.equal(triangles.length, study.meshRefinement.at(-1).triangles);
+    assert.deepEqual(Array.from(accepted.fields, field => field.triangles.length), [4389, 2695]);
+    let area = 0, peak = -Infinity;
+    for (const triangle of triangles) {
+        const [a, b, c] = triangle.points;
+        const twiceArea = (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+        assert.ok(Number.isFinite(twiceArea) && twiceArea !== 0, 'every exported element has a real area');
+        area += Math.abs(twiceArea) / 2;
+        for (const value of triangle.values) { assert.ok(Number.isFinite(value)); peak = Math.max(peak, value); }
+    }
+    assert.ok(Math.abs(area - 181.2919399517) < 1e-8, 'full solved-domain area is retained');
+    assert.ok(Math.abs(peak - study.maxVoltageDropMv) < 1e-8, 'the gradient retains the actual computed maximum');
+    assert.ok(Object.isFrozen(accepted.fields[0].triangles[0].values));
+});

@@ -116,11 +116,14 @@
     async function showStudy(field = 'voltage-drop-front') {
         await board();
         await project.load(viewer, { view: 'pcb' });
+        viewer.setLayers([field === 'voltage-drop-back' ? 'B.Cu' : 'F.Cu']);
+        viewer.selectNet(metadata.defaultNet, { locate: true });
+        viewer.setInspectorOpen(false);
         await viewer.setAnalysis(await project.analysis());
         viewer.setAnalysisField(field);
         const data = await project.study();
         document.getElementById('dc-study-summary').textContent = `${data.maxVoltageDropMv.toFixed(2)} mV maximum drop · ${(data.copperLossW * 1000).toFixed(2)} mW copper loss · ${data.currentA} A normalized load.`;
-        hint.textContent = 'Computed IRCA DC copper drop · 1 A normalized load. Sample patches lie inside actual FEM triangles and cover 31.15% of their area; gaps are not zero-valued copper. The complete field and assumptions are below.';
+        hint.textContent = 'Continuous computed voltage-drop gradient · 1 A normalized load. Pan, zoom and hover over the solved copper to probe the interpolated value. Unsolved regions remain blank.';
         reveal();
     }
     async function loadSimple() {
@@ -195,6 +198,12 @@
     commandBusy = true; updateLock();
     try {
         metadata = await project.ready(); if (disposed) return;
+        project.study().then(data => {
+            if (disposed) return;
+            page.querySelectorAll('[data-pi-drop]').forEach(node => { node.textContent = data.maxVoltageDropMv.toFixed(2); });
+            page.querySelectorAll('[data-pi-loss]').forEach(node => { node.textContent = (data.copperLossW * 1000).toFixed(2); });
+            document.getElementById('dc-study-summary').textContent = `${data.maxVoltageDropMv.toFixed(2)} mV maximum drop · ${(data.copperLossW * 1000).toFixed(2)} mW copper loss · ${data.currentA} A normalized load.`;
+        }).catch(() => { document.getElementById('dc-study-summary').textContent = 'Study summary unavailable. Try opening the gradient again.'; });
         replaceViewer();
         page.querySelectorAll('[data-irca-part-count]').forEach(node => { node.textContent = metadata.partCount + ' PCB parts · IRCA review geometry'; });
         const sheet = document.getElementById('sheet-select'); sheet.replaceChildren(new Option('IRCA schematic', metadata.schematicPath));

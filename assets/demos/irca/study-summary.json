@@ -86,7 +86,7 @@
     "The saved nominal 3.3 V regulator rail is evaluated at an explicit normalized 1 A controller load. This is not a documented device operating current or measured performance.",
     "A single saved regulator output contact is an ideal equipotential source; the controller supply contact is an ideal equipotential current sink. Other contacts draw no external current.",
     "Saved 35 micrometre F.Cu and B.Cu copper is solved together at 20 C; via plating is an explicit 25 micrometre assumption.",
-    "The plot shows actual solved finite-element copper triangles. It is display imagery, not a downloadable PCB, schematic, netlist, BOM or field mesh.",
+    "The plot and interactive gradient show actual solved finite-element copper triangles. Display geometry and scalar field values are public; original editable PCB, schematic, netlist and CAD model source files are not offered as downloads.",
     "No regulator dynamics, semiconductor/package/contact resistance, loaded return path, AC impedance, thermal field or measurements are included.",
     "Mesh stability and conservation checks describe numerical execution only. Local current-density peaks remain mesh/contact dependent and are not certified conductor ratings."
   ],
