@@ -19,7 +19,7 @@
 .wv-docs-article li { margin-bottom:.35rem; }
 .wv-docs-article code { font-size:.86em; overflow-wrap:anywhere; }
 .wv-docs-article pre { max-width:100%; border:1px solid var(--rule); border-radius:5px; overflow:auto; white-space:pre; overscroll-behavior:contain; }
-.wv-docs-article pre code { overflow-wrap:normal; }
+.wv-docs-article pre code { font-size:1em; overflow-wrap:normal; }
 .wv-docs-article table { font-size:14px; }
 .wv-docs-code-tools { display:flex; justify-content:flex-end; margin-bottom:-1rem; }
 .wv-docs-code-tools button { padding:6px 12px; border:1px solid var(--rule); background:var(--code); color:var(--link); border-radius:4px; cursor:pointer; font:13px/1.5 system-ui,sans-serif; }
