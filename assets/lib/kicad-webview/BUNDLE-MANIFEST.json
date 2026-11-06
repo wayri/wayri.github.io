@@ -1,6 +1,6 @@
 {
   "sourceCommit": "7f081d21ebf5e9148cac4a3b3345c481eaa89800",
-  "description": "Curated self-hosted runtime and owner-authorized inverter; original illustrative fixture retained for provenance, with an executed normalized DC copper study added by the host site.",
+  "description": "Curated self-hosted runtime and retained owner-authorized reference fixtures. Active website demonstrations use derived IRCA review geometry, selectable assembly models and an executed normalized DC copper study.",
   "files": [
     {
       "path": "analysis/inverter-illustrative.json",
@@ -89,8 +89,8 @@
     },
     {
       "path": "kicad-webview.min.js",
-      "bytes": 1510992,
-      "sha256": "6069c1cb89ccb97ed41b858d702c3cec05b5e523e967c816811ee221b9745c4c"
+      "bytes": 1511087,
+      "sha256": "a309fc1111f8cf9f86a5a5f442d888b2af0977907cb9cfc017a17815e8ca8c0d"
     },
     {
       "path": "LICENSE",
@@ -145,8 +145,8 @@
   ],
   "runtimeSource": {
     "repository": "https://github.com/wayri/kicad-webview",
-    "revision": "d8310a1f62fa68f9a7614ac3156793c6b3c789c0",
+    "revision": "756de92db85eed7d43004803c5bd95dfcfd239c0",
     "workingTreeSnapshot": true,
-    "note": "Existing built runtime refreshed for saved-selection cross-probing and shareable view controls. Exact distribution bytes are hashed below."
+    "note": "Existing built runtime refreshed for hierarchy diagrams, source-bound virtual 3D controls and full-color display graphics. Exact distribution bytes are hashed in this manifest."
   }
 }
