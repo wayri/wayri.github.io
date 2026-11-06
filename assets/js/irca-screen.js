@@ -23,7 +23,7 @@
                 try {
                     demo = new KiCadWebView.DemoController(viewer);
                     demo.addDisplay('site-screen', {
-                        anchor: { reference: 'U2', face: 'top', faceSelection: 'outermost', minFaceAreaMm2: 300 }, mode: 'tft', width: 320, height: 240,
+                        anchor: { reference: 'U2', face: 'top', faceSelection: 'outermost', minFaceAreaMm2: 300 }, mode: 'tft', width: 1024, height: 768,
                         onPress: event => { onInteract(); pressed = event.uv ? { ...event.uv } : null; },
                         onRelease: event => {
                             const start = pressed; pressed = null;
