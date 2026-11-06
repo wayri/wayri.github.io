@@ -23,7 +23,7 @@
 .irca-carousel:empty { display:none; }
 .irca-demo-playback { display:flex; align-items:center; flex-wrap:wrap; gap:10px; padding:10px 16px; border-top:1px solid var(--irca-rule); }
 .irca-demo-playback span { color:var(--irca-muted); font:11px/1.5 system-ui,sans-serif; }
-.irca-demo .irca-rotate { color:var(--irca-accent); background:var(--irca-bg); border:1px solid var(--irca-accent); border-radius:4px; padding:7px 11px; font:12px/1.5 system-ui,sans-serif; cursor:pointer; }
+.irca-demo .irca-rotate,.irca-demo .irca-screen-focus,.irca-demo .irca-screen-camera { color:var(--irca-accent); background:var(--irca-bg); border:1px solid var(--irca-accent); border-radius:4px; padding:7px 11px; font:12px/1.5 system-ui,sans-serif; cursor:pointer; }
 .irca-carousel section { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
 .irca-carousel section > span { flex:1 1 200px; color:var(--irca-muted); font:12px/1.5 system-ui,sans-serif; }
 .irca-carousel button,.irca-demo .irca-start,.irca-demo .irca-inspect { border:1px solid var(--irca-rule); border-radius:4px; color:var(--irca-ink); background:var(--irca-bg); padding:8px 11px; font:12px/1.5 system-ui,sans-serif; cursor:pointer; }

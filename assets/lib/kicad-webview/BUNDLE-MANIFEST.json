@@ -89,8 +89,8 @@
     },
     {
       "path": "kicad-webview.min.js",
-      "bytes": 1514333,
-      "sha256": "ffea91e91b3e8fbb05399ac638fda415e0bb4b7e09a428b6b25f8c2eaad3e07d"
+      "bytes": 1521556,
+      "sha256": "ab1136f01870781317314ea9806413954b92fba24e9f209db5ee95c11c4883c2"
     },
     {
       "path": "LICENSE",
@@ -147,11 +147,17 @@
     "repository": "https://github.com/wayri/kicad-webview",
     "revision": "756de92db85eed7d43004803c5bd95dfcfd239c0",
     "workingTreeSnapshot": true,
-    "note": "Built runtime refreshed for source-bound continuous FEM triangle gradients with barycentric probing, plus existing hierarchy and virtual 3D controls. Exact distribution bytes and changed analysis sources are hashed here.",
+    "note": "Built runtime refreshed for dominant display-face selection and guarded model-readiness events, alongside continuous FEM gradients and existing virtual controls. Exact distribution bytes and changed display sources are hashed here.",
     "analysisSourceSha256": {
       "src/analysis-results.mjs": "da90f6daccf932f4efb8bc5d2fe928b934fb172a002a7ce5aa728205175a6ae7",
       "src/analysis-raster.mjs": "4c179fa70d1ce67c821c3c347a424ac12abe08fa3cb7f0e36e72ce929decbea0",
       "src/analysis-layer.mjs": "67aa5d2abd4bf10d781c61272569e155b465eaf8d0c50b0b694466cb04446a46"
+    },
+    "displaySourceSha256": {
+      "engine/spike/demoSurfaces.mjs": "ec2bce20f1ac5986fc14e84d49a09e74430f213885a5608939fa7b33e527a7c7",
+      "engine/spike/board3d.js": "7f549e7e2b528140c0290ae05b6c473b26fc9392b55a1b705cb1786b887f1527",
+      "src/demo-controller.mjs": "ac33c7f1d57bfc1112df559d1bc795f8f6c2c3a006154be562a566de17f14db6",
+      "src/kicad-viewer.mjs": "3cb94bc616a5da38daafb249cc34d94fb3ae9d461fba55bd1f043f8c1abebe52"
     }
   }
 }

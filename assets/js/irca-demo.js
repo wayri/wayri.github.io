@@ -6,11 +6,12 @@
     const stage = $('.irca-board'), preview = $('.irca-preview'), status = $('.irca-status');
     const start = $('.irca-start'), inspect = $('.irca-inspect');
     const rotate = $('.irca-rotate');
+    const useScreen = $('.irca-screen-focus'), cameraDemo = $('.irca-screen-camera');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const modes = [...host.querySelectorAll('[data-irca-mode]')];
     const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
     const views = { assembly: '3d', pcb: 'pcb', schematic: 'schematic' };
-    let viewer, carousel, loading = false, changing = false, disposed = false, runtime, study, metadata, mode = 'assembly';
+    let viewer, carousel, screen, loading = false, changing = false, disposed = false, runtime, study, metadata, mode = 'assembly';
     let rotating = false, rotationFrame = 0, lastRotation = 0, visible = false;
     function stopRotation() {
         rotating = false; cancelAnimationFrame(rotationFrame); rotationFrame = 0; lastRotation = 0;
@@ -66,6 +67,11 @@
             await loadRuntime(); metadata = await window.IRCAProject.ready(); if (disposed) return;
             stage.hidden = false; $('.irca-stage').classList.add('is-loading');
             viewer = window.IRCAProject.createViewer(stage, { theme: theme() });
+            screen = window.IRCAMiniScreen.attach(viewer, {
+                onInteract: () => { stopRotation(); carousel?.pause(); },
+                onReady: ready => { useScreen.disabled = cameraDemo.disabled = !ready; },
+                onStatus: text => { $('.irca-screen-status').textContent = text; }
+            });
             viewer.addEventListener('viewchange', event => {
                 if (event.detail.view !== '3d') stopRotation();
                 if (loading || changing || mode === 'pi') return;
@@ -101,7 +107,7 @@
             if (!reducedMotion.matches) startRotation();
         } catch (error) {
             if (!disposed) {
-                carousel?.dispose(); carousel = null; viewer?.dispose(); viewer = null;
+                carousel?.dispose(); carousel = null; screen?.dispose(); screen = null; viewer?.dispose(); viewer = null;
                 stage.hidden = true; preview.hidden = false; start.hidden = false; start.textContent = 'Retry interactive IRCA';
                 status.textContent = 'IRCA could not load: ' + error.message;
             }
@@ -136,6 +142,8 @@
         if (rotating) { stopRotation(); return; }
         await choose('assembly'); startRotation();
     });
+    useScreen.addEventListener('click', () => screen?.focus());
+    cameraDemo.addEventListener('click', () => screen?.showCamera());
     $('.irca-study-open').addEventListener('click', () => choose('pi'));
     loadStudy().catch(() => { /* The result view retains an explicit retry on selection. */ });
     start.addEventListener('click', () => choose(mode));
@@ -158,5 +166,5 @@
     });
     reducedMotion.addEventListener('change', event => { if (event.matches) stopRotation(); });
     window.addEventListener('themeChanged', () => viewer?.setTheme(theme()));
-    window.addEventListener('pagehide', () => { disposed = true; stopRotation(); observer.disconnect(); carousel?.dispose(); viewer?.dispose(); }, { once: true });
+    window.addEventListener('pagehide', () => { disposed = true; stopRotation(); observer.disconnect(); carousel?.dispose(); screen?.dispose(); viewer?.dispose(); }, { once: true });
 })();
