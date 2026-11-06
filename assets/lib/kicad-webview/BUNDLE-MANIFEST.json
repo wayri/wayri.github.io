@@ -89,8 +89,8 @@
     },
     {
       "path": "kicad-webview.min.js",
-      "bytes": 1521556,
-      "sha256": "ab1136f01870781317314ea9806413954b92fba24e9f209db5ee95c11c4883c2"
+      "bytes": 1525667,
+      "sha256": "ecad25e4a1f9dd7755163444e3dc3b13592075d0a6c9dd4f9b7229bae6d54976"
     },
     {
       "path": "LICENSE",
@@ -147,7 +147,7 @@
     "repository": "https://github.com/wayri/kicad-webview",
     "revision": "756de92db85eed7d43004803c5bd95dfcfd239c0",
     "workingTreeSnapshot": true,
-    "note": "Built runtime refreshed for dominant display-face selection and guarded model-readiness events, alongside continuous FEM gradients and existing virtual controls. Exact distribution bytes and changed display sources are hashed here.",
+    "note": "Built runtime refreshed for reversible demo-only interaction, display-face selection and guarded model-readiness events, alongside continuous FEM gradients and existing virtual controls. Exact distribution bytes and changed display sources are hashed here.",
     "analysisSourceSha256": {
       "src/analysis-results.mjs": "da90f6daccf932f4efb8bc5d2fe928b934fb172a002a7ce5aa728205175a6ae7",
       "src/analysis-raster.mjs": "4c179fa70d1ce67c821c3c347a424ac12abe08fa3cb7f0e36e72ce929decbea0",
@@ -155,9 +155,13 @@
     },
     "displaySourceSha256": {
       "engine/spike/demoSurfaces.mjs": "ec2bce20f1ac5986fc14e84d49a09e74430f213885a5608939fa7b33e527a7c7",
-      "engine/spike/board3d.js": "7f549e7e2b528140c0290ae05b6c473b26fc9392b55a1b705cb1786b887f1527",
+      "engine/spike/board3d.js": "1b1d9ab142cc32eaa7c86ed8722968e17530b93b51ade747dc395ffa6764514c",
+      "engine/spike/demoInteraction.mjs": "bf3275bd7ee1ac9799c8a76a87936e473b3efcde297469c05b307af665b25a83",
+      "engine/spike/viewPresets.mjs": "0110579cd861e91fc0fabda79a795c9ae033d60c08a31596f265c7df82dfacdc",
       "src/demo-controller.mjs": "ac33c7f1d57bfc1112df559d1bc795f8f6c2c3a006154be562a566de17f14db6",
-      "src/kicad-viewer.mjs": "3cb94bc616a5da38daafb249cc34d94fb3ae9d461fba55bd1f043f8c1abebe52"
+      "src/kicad-viewer.mjs": "bb1a2fd218e6c4ee9727ed1bd75da7c8104d3b2bbd5b179a5124e5bbeb0091dc",
+      "src/viewer-navigation.mjs": "14f410f6137dd499adb506f7513b3e6a13da05fa7b479e3dcb7f2e64bbd60435",
+      "src/viewer-chrome.mjs": "9905ffb1d259ec2a367ad29a9b89daabcae5a9ec56263ed5c48bb26b22ba6128"
     }
   }
 }

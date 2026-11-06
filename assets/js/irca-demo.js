@@ -7,6 +7,21 @@
     const start = $('.irca-start'), inspect = $('.irca-inspect');
     const rotate = $('.irca-rotate');
     const useScreen = $('.irca-screen-focus'), cameraDemo = $('.irca-screen-camera');
+    const assembly = $('.irca-assembly'), screenToolbar = $('.irca-screen-toolbar'), exitScreen = $('.irca-screen-exit');
+    let previousFocus, previousOverflow;
+    function screenFocusChanged(active) {
+        host.classList.toggle('is-screen-active', active); screenToolbar.hidden = !active;
+        if (active) {
+            previousFocus = document.activeElement; previousOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+            assembly.setAttribute('role', 'dialog'); assembly.setAttribute('aria-modal', 'true'); assembly.setAttribute('aria-label', 'IRCA interactive display');
+            exitScreen.focus({ preventScroll: true });
+        } else {
+            document.body.style.overflow = previousOverflow || '';
+            assembly.removeAttribute('role'); assembly.removeAttribute('aria-modal'); assembly.removeAttribute('aria-label');
+            previousFocus?.focus({ preventScroll: true }); previousFocus = null;
+        }
+    }
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const modes = [...host.querySelectorAll('[data-irca-mode]')];
     const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
@@ -70,7 +85,9 @@
             screen = window.IRCAMiniScreen.attach(viewer, {
                 onInteract: () => { stopRotation(); carousel?.pause(); },
                 onReady: ready => { useScreen.disabled = cameraDemo.disabled = !ready; },
-                onStatus: text => { $('.irca-screen-status').textContent = text; }
+                onStatus: text => { $('.irca-screen-status').textContent = text; },
+                onFocusChange: screenFocusChanged,
+                getViewport: () => stage.getBoundingClientRect()
             });
             viewer.addEventListener('viewchange', event => {
                 if (event.detail.view !== '3d') stopRotation();
@@ -144,6 +161,13 @@
     });
     useScreen.addEventListener('click', () => screen?.focus());
     cameraDemo.addEventListener('click', () => screen?.showCamera());
+    exitScreen.addEventListener('click', () => screen?.exit());
+    window.addEventListener('resize', () => screen?.reframe());
+    document.addEventListener('keydown', event => {
+        if (!host.classList.contains('is-screen-active')) return;
+        if (event.key === 'Escape') { event.preventDefault(); event.stopImmediatePropagation(); screen?.exit(); }
+        else if (event.key === 'Tab') { event.preventDefault(); exitScreen.focus(); }
+    }, true);
     $('.irca-study-open').addEventListener('click', () => choose('pi'));
     loadStudy().catch(() => { /* The result view retains an explicit retry on selection. */ });
     start.addEventListener('click', () => choose(mode));

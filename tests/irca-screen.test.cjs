@@ -5,7 +5,7 @@ const vm = require('node:vm');
 const path = require('node:path');
 
 function setup() {
-    const navigations = [], readiness = [], demos = [];
+    const navigations = [], readiness = [], demos = [], focusChanges = [];
     class Demo {
         constructor() { this.active = true; demos.push(this); }
         addDisplay(id, options) { this.options = options; }
@@ -18,9 +18,9 @@ function setup() {
     context.window = context; context.location = { assign: url => navigations.push(String(url)) };
     vm.createContext(context);
     for (const file of ['irca-mini-ui.js', 'irca-screen.js']) vm.runInContext(fs.readFileSync(path.join(__dirname, '../assets/js', file), 'utf8'), context);
-    const viewer = Object.assign(new EventTarget(), { view: '3d', path: 'IRCA.kicad_pcb', clearSelection() {}, setInspectorOpen() {}, setCamera3D(camera) { this.camera = camera; } });
-    const screen = context.IRCAMiniScreen.attach(viewer, { onReady: value => readiness.push(value) });
-    return { viewer, screen, demos, readiness, navigations };
+    const viewer = Object.assign(new EventTarget(), { view: '3d', path: 'IRCA.kicad_pcb', clearSelection() {}, setInspectorOpen() {}, setCamera3D(camera) { this.camera = camera; }, getCamera3D() { return this.camera; }, setDemoInteraction(enabled) { this.demoInteraction = enabled; } });
+    const screen = context.IRCAMiniScreen.attach(viewer, { onReady: value => readiness.push(value), onFocusChange: value => focusChanges.push(value), getViewport: () => ({ width: 1000, height: 600 }) });
+    return { viewer, screen, demos, readiness, navigations, focusChanges };
 }
 
 test('mini screen waits for model readiness and disposes bindings when leaving the scene', () => {
@@ -35,8 +35,30 @@ test('mini screen waits for model readiness and disposes bindings when leaving t
     assert.ok(viewer.camera.position[2] > viewer.camera.target[2]);
     viewer.view = 'pcb'; viewer.dispatchEvent(new Event('viewchange'));
     assert.equal(demos[0].active, false); assert.equal(readiness.at(-1), false);
+    assert.equal(viewer.demoInteraction, false);
     screen.dispose(); viewer.view = '3d'; viewer.dispatchEvent(new Event('modelsready'));
     assert.equal(demos.length, 1);
+});
+
+test('focused display locks interaction, fits its screen and restores the original camera on exit', () => {
+    const { viewer, screen, focusChanges } = setup();
+    const original = { position: [10, 20, 30], target: [0, 0, 0], up: [0, 1, 0] };
+    viewer.camera = original; viewer.dispatchEvent(new Event('modelsready'));
+    screen.focus();
+    assert.equal(viewer.demoInteraction, true);
+    assert.deepEqual(focusChanges, [true]);
+    assert.equal(viewer.camera.position[2], 2 + 24 * 1.4);
+    screen.showCamera();
+    assert.deepEqual(focusChanges, [true]);
+    screen.exit();
+    assert.equal(viewer.demoInteraction, false);
+    assert.equal(viewer.camera, original);
+    assert.deepEqual(focusChanges, [true, false]);
+    screen.exit(); assert.equal(focusChanges.length, 2);
+    screen.focus(); viewer.disposed = true;
+    viewer.setDemoInteraction = () => { throw new Error('Disposed API must not be called'); };
+    viewer.setCamera3D = viewer.setDemoInteraction;
+    screen.dispose(); assert.equal(focusChanges.at(-1), false);
 });
 
 test('cancelled and dragged display gestures cannot activate site links', () => {

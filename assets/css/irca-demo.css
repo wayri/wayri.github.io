@@ -47,4 +47,10 @@
 .wv-irca-showcase { margin:1rem 0 4rem; }
 .wv-irca-showcase .irca-board { height:620px; }
 .wv-irca-showcase .irca-preview { height:560px; }
+.irca-screen-toolbar { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:12px 20px; flex-shrink:0; border-bottom:1px solid var(--irca-rule); font:13px/1.5 system-ui,sans-serif; }
+.irca-screen-toolbar button { color:var(--irca-accent); background:var(--irca-bg); border:1px solid var(--irca-accent); border-radius:4px; padding:8px 14px; cursor:pointer; font:inherit; }
+.irca-demo.is-screen-active .irca-assembly { position:fixed; inset:0; z-index:10000; display:flex; flex-direction:column; background:var(--irca-bg); isolation:isolate; }
+.irca-demo.is-screen-active .irca-stage { flex:1; min-height:0; }
+.irca-demo.is-screen-active .irca-stage .irca-board { height:100%; }
+.irca-demo.is-screen-active .irca-demo-playback,.irca-demo.is-screen-active .irca-carousel { display:none; }
 @media(max-width:600px) { .irca-heading { padding:16px; } .irca-demo .irca-heading h2 { font-size:21px; } .irca-stage { min-height:350px; } .irca-board,.wv-irca-showcase .irca-board { height:420px; } .irca-preview,.wv-irca-showcase .irca-preview { height:350px; } .irca-carousel section > span { flex-basis:100%; order:3; } }
