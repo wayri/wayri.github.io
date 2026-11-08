@@ -375,6 +375,7 @@ async function loadTool(toolId, fileName, btnElement) {
     mainArea.classList.remove('hidden');
     mainArea.classList.add('flex');
     mainArea.setAttribute('aria-busy', 'true');
+    mainArea.inert = true;
     
     mainArea.innerHTML = `<div class="flex justify-center p-12 text-themeMuted"><i class="fa-solid fa-spinner fa-spin text-2xl"></i><span class="ml-2 font-mono">Loading tool...</span></div>`;
 
@@ -432,7 +433,10 @@ async function loadTool(toolId, fileName, btnElement) {
         if (request !== toolRequest || error.name === 'AbortError') return;
         mainArea.innerHTML = `<div class="p-6 border border-red-500/50 bg-red-500/10 text-red-400 font-mono"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Error loading tool: ${error.message}<br><br>Tool File: ${fileName}</div>`;
     } finally {
-        if (request === toolRequest) mainArea.setAttribute('aria-busy', 'false');
+        if (request === toolRequest) {
+            mainArea.inert = false;
+            mainArea.setAttribute('aria-busy', 'false');
+        }
     }
 }
 
