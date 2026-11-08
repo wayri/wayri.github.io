@@ -84,19 +84,19 @@
                         <div class="text-3xl font-bold text-themeText flex items-baseline gap-1">
                             <span id="led-r-val">150</span> <span class="text-sm text-themeAccent">ohms</span>
                         </div>
-                        <span class="text-[9px] text-themeMuted mt-1">Nearest E12: <span id="led-r-e12" class="font-bold text-themeText">150 ohms</span></span>
+                        <span class="text-[9px] text-themeMuted mt-1">Next E12 at or above target: <span id="led-r-e12" class="font-bold text-themeText">150 ohms</span></span>
                     </div>
                     <div class="bg-themeBorder/10 border border-themeBorder p-3 flex flex-col justify-center items-center text-center">
                         <span class="text-[10px] text-themeMuted uppercase tracking-wider mb-2">Power Dissipation</span>
                         <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
                             <span id="led-p-val">0.05</span> <span class="text-xs text-themeAccent">W</span>
                         </div>
-                        <span class="text-[9px] text-themeMuted mt-1">Min Rating: <span id="led-p-rating" class="font-bold text-themeText">1/8 W</span></span>
+                        <span class="text-[9px] text-themeMuted mt-1">Example rating (2×): <span id="led-p-rating" class="font-bold text-themeText">1/8 W</span></span>
                     </div>
                 </div>
                 
                 <div id="led-error" class="hidden text-red-500 text-xs text-center p-2 bg-red-500/10 border border-red-500/30">
-                    Supply voltage must be greater than total forward voltage.
+                    Use positive finite voltages/current and a positive integer LED count. Supply must exceed the total forward voltage.
                 </div>
 
             </div>
@@ -115,13 +115,15 @@
             <p>Where $V_s$ is supply voltage, $V_f$ is forward voltage, $n$ is number of LEDs in series, and $I_f$ is desired current.</p>
             <p><strong>Power Dissipated by Resistor:</strong></p>
             <p>$$ P_R = I_f^2 \times R \quad \text{or} \quad P_R = (V_s - n \times V_f) \times I_f $$</p>
-            <p>Always choose a resistor power rating at least double the calculated dissipation for safety margins.</p>
+            <p>The example rating applies a 2× arithmetic margin. Actual power rating must account for the resistor’s derating curve and operating conditions.</p>
         </div>
     </div>
 </div>
 
-<script>
-    const e12_series = [10, 12, 15, 18, 22, 27, 33, 39, 47, 56, 68, 82];
+<p class="p-4 text-xs text-themeMuted">Constant forward-voltage DC estimate: R = (Vs − nVf)/I, P = I²R. The E12 choice is rounded upward. The displayed rating uses a 2× arithmetic margin; verify the actual resistor derating curve, LED current limits and forward-voltage spread. It is not a thermal qualification.</p><script>
+(function(){
+
+    var e12_series = [10, 12, 15, 18, 22, 27, 33, 39, 47, 56, 68, 82];
     
     function getNearestE12(val) {
         if(val <= 0) return 0;
@@ -140,7 +142,7 @@
                 closest = searchSeries[i];
             }
         }
-        return closest * multiplier;
+        return searchSeries.find(x => x * multiplier >= val) * multiplier;
     }
 
     function getPowerRating(p_watts) {
@@ -163,7 +165,7 @@
         const Vs = parseFloat(document.getElementById('led-vs').value);
         const Vf = parseFloat(document.getElementById('led-vf').value);
         const If_ma = parseFloat(document.getElementById('led-if').value);
-        const n = parseInt(document.getElementById('led-n').value);
+        const n = Number(document.getElementById('led-n').value);
 
         const err = document.getElementById('led-error');
         err.classList.add('hidden');
@@ -172,7 +174,7 @@
 
         let vDrop = Vs - (n * Vf);
         
-        if(vDrop <= 0) {
+        if (![Vs,Vf,If_ma,n].every(Number.isFinite) || Vs <= 0 || Vf <= 0 || If_ma <= 0 || !Number.isInteger(n) || n < 1 || vDrop <= 0) {
             err.classList.remove('hidden');
             document.getElementById('led-r-val').innerText = "-";
             document.getElementById('led-p-val').innerText = "-";
@@ -222,5 +224,8 @@
         }
     }
     
-    setTimeout(updateLED, 100);
+    updateLED();
+
+Object.assign(window,{setVf,updateLED});
+})();
 </script>

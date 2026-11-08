@@ -1,0 +1,20 @@
+<article class="reference-sheet" id="skin-depth-tool">
+<header><p class="reference-kicker">Conductors · analytical estimate</p><h2>Skin depth &amp; round-wire DC resistance</h2><p>Homogeneous good conductor with constant conductivity and permeability. Skin depth is a field-penetration estimate, not an AC-resistance or ampacity calculation.</p></header>
+<div class="reference-fields"><label>Frequency (Hz)<input id="skin-frequency" type="number" min="0" step="any" value="1000000"></label><label>Conductivity (MS/m)<input id="skin-conductivity" type="number" min="0" step="any" value="58"></label><label>Relative permeability<input id="skin-mu" type="number" min="1" step="any" value="1"></label><label>Wire diameter (mm)<input id="skin-diameter" type="number" min="0" step="any" value="1"></label><label>Conductor length (m)<input id="skin-length" type="number" min="0" step="any" value="1"></label></div>
+<div class="reference-note" id="skin-result" aria-live="polite"></div><h3>Equations &amp; interpretation</h3><p><code>δ = √[1/(π f μ0 μr σ)]</code>; <code>Rdc = length / (σ π radius²)</code>, in SI units, μ0 = 4π × 10⁻⁷ H/m. Conductivity is an input, not a temperature-corrected material lookup.</p><p>The classical good-conductor skin-depth expression describes exponential decay into a conductor. If the penetration depth is comparable to or larger than the wire radius, it does not justify replacing the wire cross-section with a thin annulus. Proximity effect, plating, roughness, magnetic dispersion and return-path geometry are excluded. No AC resistance, wire current rating or thermal result is inferred.</p>
+<p class="reference-source">Equation background: <a href="https://fab.cba.mit.edu/classes/862.16/notes/circuits.pdf">MIT circuit notes, skin depth</a>.</p></article>
+<script>
+(function () {
+    const root = document.getElementById('skin-depth-tool');
+    const read = id => { const s=root.querySelector('#skin-'+id).value; return s.trim() === '' ? NaN : Number(s); };
+    function update() {
+        const f=read('frequency'), sigma=read('conductivity')*1e6, mu=read('mu'), radius=read('diameter')/2000, length=read('length');
+        const out=root.querySelector('#skin-result');
+        if (![f,sigma,mu,radius,length].every(Number.isFinite) || f<0 || sigma<=0 || mu<1 || radius<=0 || length<0) { out.textContent='Enter finite non-negative frequency/length and positive material/diameter values (μr ≥ 1).'; return; }
+        const dc=length/(sigma*Math.PI*radius*radius), delta=f===0 ? Infinity : Math.sqrt(1/(Math.PI*f*4*Math.PI*1e-7*mu*sigma));
+        if (!Number.isFinite(dc) || (f>0 && !Number.isFinite(delta))) { out.textContent='Inputs exceed the numerical range.'; return; }
+        out.textContent=(f===0 ? 'DC: no finite skin-depth scale.' : `Skin depth: ${(delta*1e6).toFixed(3)} μm · Radius / depth: ${(radius/delta).toFixed(3)}`)+` · DC resistance: ${(dc*1000).toFixed(4)} mΩ`;
+    }
+    root.addEventListener('input',update); update();
+})();
+</script>

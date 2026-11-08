@@ -53,14 +53,16 @@
         </div>
         <div id="uc-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
             <p><strong>Temperature:</strong> $C = \frac{5}{9}(F - 32)$, $K = C + 273.15$</p>
-            <p><strong>RF Voltage (dBm to Vrms):</strong> $V_{rms} = \sqrt{P_{watts} \times Z}$ where $P_{watts} = 10^{\frac{dBm - 30}{10}}$</p>
+            <p><strong>Logarithmic references:</strong> dBm = 10 log10(P / 1 mW); dBmV = 20 log10(V / 1 mV); dBµV = 20 log10(V / 1 µV).</p>
             <p>All other conversions use standard linear scale factors relative to a base SI unit.</p>
         </div>
     </div>
 </div>
 
-<script>
-const UnitConverterApp = {
+<p class="p-4 text-xs text-themeMuted">Linear SI conversion factors; dBm refers to 1 mW, dBmV to 1 mV and dBµV to 1 µV. Logarithmic conversion requires a positive linear quantity. No impedance-dependent power/voltage conversion. Temperature values below absolute zero are rejected. BTU uses the International Table convention; hp is mechanical horsepower. <a class="underline text-themeAccent" href="https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b8">NIST conversion reference</a>.</p><script>
+(function(){
+
+var UnitConverterApp = {
     units: {
         length: { base: 'm', factors: { 'm': 1, 'cm': 0.01, 'mm': 0.001, 'km': 1000, 'in': 0.0254, 'ft': 0.3048, 'yd': 0.9144, 'mi': 1609.344, 'mil': 0.0000254 } },
         mass: { base: 'kg', factors: { 'kg': 1, 'g': 0.001, 'mg': 0.000001, 'lb': 0.45359237, 'oz': 0.02834952 } },
@@ -110,7 +112,9 @@ const UnitConverterApp = {
         const cat = document.getElementById('uc-category').value;
         const from = document.getElementById('uc-unit-from').value;
         const to = document.getElementById('uc-unit-to').value;
-        const val = parseFloat(document.getElementById('uc-val-from').value) || 0;
+        const raw = document.getElementById('uc-val-from').value;
+        const val = Number(raw);
+        if(raw.trim()===''||!Number.isFinite(val)){document.getElementById('uc-val-to').value='';return;}
         
         let result = 0;
         
@@ -119,6 +123,7 @@ const UnitConverterApp = {
             if (from === 'C') k = val + 273.15;
             else if (from === 'F') k = (val - 32) * 5/9 + 273.15;
             
+            if(k<0){document.getElementById('uc-val-to').value='';return;}
             if (to === 'K') result = k;
             else if (to === 'C') result = k - 273.15;
             else if (to === 'F') result = (k - 273.15) * 9/5 + 32;
@@ -147,9 +152,12 @@ const UnitConverterApp = {
             result = (val * f1) / f2;
         }
         
-        document.getElementById('uc-val-to').value = result.toPrecision(7).replace(/\.0+$/, '');
+        document.getElementById('uc-val-to').value = Number.isFinite(result) ? result.toPrecision(7).replace(/\.0+$/, '') : '';
     }
 };
 
-setTimeout(() => { UnitConverterApp.init(); }, 50);
+UnitConverterApp.init();
+
+Object.assign(window,{UnitConverterApp});
+})();
 </script>

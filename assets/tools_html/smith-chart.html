@@ -1,123 +1,41 @@
-<div id="tool-smith-chart" class="doc-container flex flex-col w-full h-full">
-    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Smith Chart & RF Analysis">
-        <div class="flex items-center gap-2"><i class="fa-solid fa-satellite-dish"></i><h3 class="font-bold font-mono">Smith Chart & RF Analysis</h3></div>
-        <div class="flex gap-2 items-center">
-            <button class="px-2 py-1 bg-themeBg text-themeText border border-themeBorder text-xs font-bold hover:bg-themeBorder rounded" onclick="exportSmithSVG()"><i class="fa-solid fa-download mr-1"></i>Export SVG</button>
-            <select id="smith-comp-type" class="bg-themeBg text-themeText border border-themeBorder text-xs p-1">
-                <option value="ser_l">Series Inductor</option>
-                <option value="ser_c">Series Capacitor</option>
-                <option value="ser_r">Series Resistor</option>
-                <option value="sh_l">Shunt Inductor</option>
-                <option value="sh_c">Shunt Capacitor</option>
-                <option value="sh_r">Shunt Resistor</option>
-                <option value="tline">Transmission Line</option>
-            </select>
-            <button class="px-2 py-1 bg-themeBg text-themeText border border-themeBorder text-xs font-bold hover:bg-themeBorder rounded" onclick="addSmithComponent()">Add Component</button>
+<section class="doc-container smith-tool" aria-labelledby="smith-title">
+    <style>
+        .smith-tool{font-family:system-ui,sans-serif;line-height:1.55;padding:1rem;color:var(--text-color)}.smith-tool h3{font-size:1.65rem;margin:0 0 .4rem}.smith-tool h4{font-size:1.05rem;margin:.8rem 0}.smith-tool p{font-size:.9rem;color:var(--muted-text);margin:.5rem 0 1rem}
+        .smith-workspace{display:grid;grid-template-columns:minmax(220px,1fr) minmax(300px,1.65fr);gap:1.25rem}.smith-tool label{display:block;font-size:.85rem;margin:.65rem 0 .2rem}
+        .smith-tool input,.smith-tool select,.smith-tool button{background:var(--bg-color);color:var(--text-color);border:1px solid var(--border-color);padding:.6rem;min-height:44px;border-radius:3px;font:inherit;max-width:100%}.smith-tool input,.smith-tool select{width:100%}.smith-tool button{cursor:pointer}.smith-tool button:hover{border-color:var(--accent-color)}
+        .smith-row{display:flex;gap:.5rem;flex-wrap:wrap}.smith-row button{font-size:.85rem}.smith-plot{min-width:0}#smith-chart{display:block;width:100%;max-width:700px;aspect-ratio:1;margin:auto;touch-action:pan-y;border:1px solid var(--border-color)}
+        .smith-metrics{display:grid;grid-template-columns:minmax(100px,1fr) 2fr;gap:.4rem;font-size:.9rem;margin:1rem 0}.smith-metrics dt{color:var(--muted-text)}.smith-metrics dd{margin:0;overflow-wrap:anywhere}
+        .smith-scroll{overflow-x:auto}.smith-tool table{border-collapse:collapse;width:100%;font-size:.85rem}.smith-tool th,.smith-tool td{text-align:left;padding:.5rem;border-bottom:1px solid var(--border-color);white-space:nowrap}#smith-error{padding:.65rem;border:1px solid var(--accent-color);font-size:.9rem}.smith-tool details{margin-top:1rem}.smith-tool summary{cursor:pointer;color:var(--accent-color)}
+        @media(max-width:700px){.smith-workspace{grid-template-columns:1fr}.smith-tool{padding:.6rem}.smith-tool h3{font-size:1.4rem}}
+    </style>
+    <h3 id="smith-title"><i class="fa-solid fa-bullseye" aria-hidden="true"></i> Smith chart &amp; matching network</h3>
+    <p>Explore a passive load, its reflection coefficient and an ideal lumped matching network. Click inside the chart to select a new load; each matching element is added toward the source.</p>
+    <div class="smith-workspace">
+        <div>
+            <label for="smith-z0">Real reference resistance, Z₀ (Ω)</label><input id="smith-z0" type="number" value="50" min="0.01" step="any" oninput="SmithTools.ui.update()">
+            <label for="smith-freq">Frequency (MHz)</label><input id="smith-freq" type="number" value="100" min="0.000001" step="any" oninput="SmithTools.ui.update()">
+            <label for="smith-r">Load resistance, R (Ω)</label><input id="smith-r" type="number" value="25" min="0" step="any" oninput="SmithTools.ui.update()">
+            <label for="smith-x">Load reactance, X (Ω)</label><input id="smith-x" type="number" value="25" step="any" oninput="SmithTools.ui.update()">
+            <p>Z = R + jX. Positive X is inductive; negative X is capacitive.</p>
+            <div class="smith-row"><button type="button" onclick="SmithTools.ui.preset(50,0)">50 Ω</button><button type="button" onclick="SmithTools.ui.preset(25,25)">25 + j25 Ω</button><button type="button" onclick="SmithTools.ui.preset(0,0)">Short</button></div>
+            <h4>Add matching element</h4>
+            <label for="smith-connection">Connection</label><select id="smith-connection"><option value="series">Series impedance</option><option value="shunt">Shunt branch to ground</option></select>
+            <label for="smith-kind">Component</label><select id="smith-kind" onchange="SmithTools.ui.units()"><option value="L">Inductor</option><option value="C">Capacitor</option><option value="R">Resistor</option></select>
+            <label for="smith-value">Value (<span id="smith-units">nH</span>)</label><input id="smith-value" type="number" min="0" value="10" step="any">
+            <div class="smith-row" style="margin-top:.75rem"><button type="button" onclick="SmithTools.ui.add()">+ Add element</button><button type="button" onclick="SmithTools.ui.reset()">Clear network</button></div>
+            <p>Changing frequency recalculates every L/C element. The load impedance itself stays fixed; enter measured Z at the new frequency when needed.</p>
+        </div>
+        <div class="smith-plot">
+            <label for="smith-mode">Chart grid</label><select id="smith-mode" onchange="SmithTools.ui.update()"><option value="z">Normalized impedance (r + jx)</option><option value="y">Normalized admittance (g + jb)</option></select>
+            <canvas id="smith-chart" width="600" height="600" aria-label="Smith chart with passive reflection unit circle, selected load and matching trajectory"></canvas>
+            <p>Labels 0, 1, 2… follow load → input. In admittance mode the grid is mirrored; the physical reflection coefficient and load remain unchanged.</p>
+            <dl class="smith-metrics"><dt>Input impedance</dt><dd id="smith-result-z">—</dd><dt>Input admittance</dt><dd id="smith-admittance">—</dd><dt>Γ (complex / polar)</dt><dd id="smith-gamma">—</dd><dt>VSWR</dt><dd id="smith-swr">—</dd><dt>Return loss</dt><dd id="smith-rl">—</dd><dt>Reflected power</dt><dd id="smith-power">—</dd></dl>
         </div>
     </div>
-    
-    <div class="flex flex-grow relative bg-themeBg font-mono min-h-[500px]">
-        <div id="smith-canvas-container" class="flex-grow flex flex-col p-4 bg-themeBg relative h-[800px] max-h-[80vh] min-h-[500px]">
-            <div class="absolute top-4 left-4 z-10 bg-themeContainer border border-themeBorder/50 p-2 text-xs font-mono pointer-events-none text-themeText shadow-md hidden" id="smith-hover-info">
-                <div>Z: <span id="smith-hover-z" class="text-themeAccent">50 + j0</span> &Omega;</div>
-                <div>Y: <span id="smith-hover-y">20 - j0</span> mS</div>
-                <div>&Gamma;: <span id="smith-hover-gamma">0.00 &ang; 0&deg;</span></div>
-                <div>VSWR: <span id="smith-hover-vswr">1.00</span></div>
-            </div>
-            <div class="flex-grow relative flex items-center justify-center">
-                <canvas id="smith-canvas" class="w-full h-full max-w-[800px] max-h-[800px] cursor-crosshair"></canvas>
-            </div>
-            <!-- Z/Y Chart Mode Toggle Bar -->
-            <div class="flex items-center justify-center gap-3 py-2 border-t border-themeBorder/20 bg-themeContainer">
-                <span class="text-[10px] text-themeMuted font-mono font-bold">CHART MODE:</span>
-                <button id="smith-btn-z" onclick="smithSetMode('Z')" class="px-3 py-1 text-[10px] font-bold rounded border border-themeAccent bg-themeAccent text-themeBg transition-all">Z (Impedance)</button>
-                <button id="smith-btn-y" onclick="smithSetMode('Y')" class="px-3 py-1 text-[10px] font-bold rounded border border-themeBorder text-themeMuted transition-all hover:border-blue-500 hover:text-blue-400">Y (Admittance)</button>
-                <span class="text-[9px] text-themeMuted ml-2" id="smith-mode-hint">Impedance chart (Z=R+jX)</span>
-            </div>
-        </div>
-        
-        <div class="w-80 border-l border-themeBorder bg-themeContainer flex flex-col flex-shrink-0">
-            <div class="p-2 border-b border-themeBorder font-bold text-xs bg-themeBorder/10 flex justify-between items-center">
-                <span>Matching Network</span>
-            </div>
-            <div class="flex-grow overflow-y-auto p-4 space-y-4 text-xs">
-                <div class="space-y-2">
-                    <label class="font-bold text-themeAccent block">System Frequency (MHz)</label>
-                    <input type="number" id="smith-freq" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="1000" oninput="runSmithChart()">
-                </div>
-                <div class="space-y-2">
-                    <label class="font-bold text-themeAccent block">Source Impedance (Z_S)</label>
-                    <div class="flex gap-2">
-                        <input type="number" id="smith-zs-re" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="50" placeholder="Re" oninput="runSmithChart()">
-                        <input type="number" id="smith-zs-im" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="0" placeholder="Im" oninput="runSmithChart()">
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <label class="font-bold text-themeAccent block">Load Impedance (Z_L)</label>
-                    <div class="flex gap-2">
-                        <input type="number" id="smith-zl-re" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="10" placeholder="Re" oninput="runSmithChart()">
-                        <input type="number" id="smith-zl-im" class="w-full bg-themeBg border border-themeBorder p-1 text-right" value="-20" placeholder="Im" oninput="runSmithChart()">
-                    </div>
-                </div>
-                
-                <div class="border-t border-themeBorder/30 my-4 pt-2">
-                    <div class="flex justify-between items-center text-themeMuted mb-2">
-                        <span class="font-bold">Cascade</span>
-                        <span>(Load &rarr; Source)</span>
-                    </div>
-                    <div id="smith-components" class="space-y-2">
-                        <!-- Added components go here -->
-                    </div>
-                </div>
-                
-                <button class="w-full px-2 py-1 bg-themeAccent text-themeBg font-bold hover:opacity-80 rounded mt-4" onclick="runSmithChart()">Calculate Match</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Tutorial & Theory Section -->
-    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2">
-        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('smith-theory').classList.toggle('hidden')">
-            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-book-open mr-2"></i>How to Use & Theory</h4>
-            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
-        </div>
-        <div id="smith-theory" class="hidden text-themeMuted mt-2 space-y-4 text-xs">
-            <div>
-                <strong class="text-themeText">1. Basic Setup:</strong> Enter the <strong>System Frequency</strong> and the <strong>Source/Load Impedances</strong>. The center of the chart represents the Source Impedance ($Z_0$). The green point represents your target match (Source conjugate). The red point is the starting Load Impedance.
-            </div>
-            <div>
-                <strong class="text-themeText">2. Adding Components:</strong> Use the dropdown at the top to add Series or Shunt components (L, C, R) or Transmission Lines. These will appear in the "Matching Network" pane. 
-            </div>
-            <div>
-                <strong class="text-themeText">3. Tuning the Match:</strong> Adjust the component values in the Cascade list. The chart draws the impedance trajectory (amber line) from Load towards Source. The goal is to move the final point (amber) onto the green target point to achieve a perfect match (VSWR = 1.0).
-            </div>
-            <div>
-                <strong class="text-themeText">4. Interactivity:</strong> Hover your mouse over the chart to read the absolute Impedance ($Z$), Admittance ($Y$), Reflection Coefficient ($\Gamma$), and VSWR at any point on the grid.
-            </div>
-            <div>
-                <strong class="text-themeText">Smith Chart Math:</strong> The reflection coefficient is $\Gamma = \frac{Z_L - Z_0}{Z_L + Z_0}$. The outer rim represents $|\Gamma| = 1$ (pure reactance).
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-window.smithYMode = false;
-
-window.smithSetMode = function(mode) {
-    window.smithYMode = (mode === 'Y');
-    const btnZ = document.getElementById('smith-btn-z');
-    const btnY = document.getElementById('smith-btn-y');
-    const hint = document.getElementById('smith-mode-hint');
-    if(window.smithYMode) {
-        if(btnZ) { btnZ.className = 'px-3 py-1 text-[10px] font-bold rounded border border-themeBorder text-themeMuted transition-all hover:border-themeAccent hover:text-themeAccent'; }
-        if(btnY) { btnY.className = 'px-3 py-1 text-[10px] font-bold rounded border border-blue-500 bg-blue-500/20 text-blue-400 transition-all'; }
-        if(hint) hint.textContent = 'Admittance chart (Y=G+jB) — conductance circles mirrored';
-    } else {
-        if(btnZ) { btnZ.className = 'px-3 py-1 text-[10px] font-bold rounded border border-themeAccent bg-themeAccent text-themeBg transition-all'; }
-        if(btnY) { btnY.className = 'px-3 py-1 text-[10px] font-bold rounded border border-themeBorder text-themeMuted transition-all hover:border-blue-500 hover:text-blue-400'; }
-        if(hint) hint.textContent = 'Impedance chart (Z=R+jX)';
-    }
-    if(typeof drawSmithChart === 'function') drawSmithChart();
-};
-</script>
+    <div id="smith-error" role="status" hidden></div>
+    <h4>Network, from load toward source</h4>
+    <div class="smith-scroll"><table><thead><tr><th>Step</th><th>Impedance</th><th>|Γ|</th><th>Return loss</th><th></th></tr></thead><tbody id="smith-steps"></tbody></table></div>
+    <details><summary>Equations, assumptions and references</summary><p>Γ = (Z − Z₀)/(Z + Z₀); z = Z/Z₀; y = Z₀/Z; VSWR = (1 + |Γ|)/(1 − |Γ|); RL = −20 log₁₀|Γ|. Series elements add impedance; shunt branches add admittance. Z<sub>L</sub> = j2πfL; Z<sub>C</sub> = 1/(j2πfC).</p><p>Passive finite R ≥ 0, positive real Z₀ and frequency. Components are ideal and lumped. No parasitic models, transmission lines, frequency-dependent load data, stability, losses in L/C or power ratings are inferred. A good input match with resistors may dissipate power: low reflection alone does not establish efficient transfer to the load.</p><p>Reference: <a href="https://www.analog.com/en/resources/technical-articles/impedance-matching-and-smith-chart-impedance-maxim-integrated.html" target="_blank" rel="noopener">Analog Devices — impedance matching and Smith chart impedance</a>. Chart values are normalized; use the exact interface and component requirements for a design.</p></details>
+</section>
+<script src="/assets/js/smith-tools.js?v=1"></script>
+<script>SmithTools.ui.init();</script>

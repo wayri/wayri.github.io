@@ -1,0 +1,36 @@
+<article class="reference-sheet" id="reluctance-tool">
+<header><p class="reference-kicker">Magnetics · linear model</p><h2>Magnetic reluctance &amp; inductance</h2><p>Uniform core and air gap, constant relative permeability, negligible leakage and no fringing. Enter effective geometry and material data; the defaults are an arithmetic example, not a core recommendation.</p></header>
+<div class="reference-fields">
+<label>Core path length (mm)<input id="rel-length" type="number" min="0" step="any" value="50"></label>
+<label>Effective area (mm²)<input id="rel-area" type="number" min="0" step="any" value="25"></label>
+<label>Relative permeability<input id="rel-mu" type="number" min="1" step="any" value="2000"></label>
+<label>Total air gap (mm)<input id="rel-gap" type="number" min="0" step="any" value="0.5"></label>
+<label>Turns<input id="rel-turns" type="number" min="1" step="1" value="10"></label>
+<label>Current (A)<input id="rel-current" type="number" min="0" step="any" value="2"></label>
+</div><div id="rel-results" class="reference-note" aria-live="polite"></div>
+<h3>Equations &amp; limits</h3><p><code>ℜ = le/(μ0 μr Ae) + lg/(μ0 Ae)</code>; <code>L = N²/ℜ</code>; <code>B = LI/(N Ae)</code>; <code>E = ½LI²</code>, with μ0 = 4π × 10⁻⁷ H/m. Geometry is converted to SI before calculation.</p><p>Flux density is the linear-model value. It is not a nonlinear saturation simulation. Compare it with the actual material’s B–H curve at temperature; this tool gives no core-loss, winding-loss, temperature-rise or current-rating result.</p>
+<p class="reference-source">Material definitions and effective geometry: <a href="https://www.tdk-electronics.tdk.com/download/187036/dbcde584d155cc270f5d5dbf1efec233/pdf-generaldefinitions.pdf">TDK ferrite definitions</a>.</p></article>
+<script>
+(function () {
+    const root = document.getElementById('reluctance-tool');
+    function update() {
+        const read = id => Number(root.querySelector('#rel-' + id).value || NaN);
+        const le = read('length') / 1000, ae = read('area') / 1e6, mu = read('mu');
+        const gapText = root.querySelector('#rel-gap').value, currentText = root.querySelector('#rel-current').value;
+        const gap = gapText.trim() === '' ? NaN : Number(gapText) / 1000;
+        const current = currentText.trim() === '' ? NaN : Number(currentText);
+        const turns = read('turns'), out = root.querySelector('#rel-results');
+        if (![le, ae, mu, gap, current, turns].every(Number.isFinite) || le <= 0 || ae <= 0 || mu < 1 || gap < 0 || current < 0 || turns < 1 || !Number.isInteger(turns)) {
+            out.textContent = 'Enter finite geometry, μr ≥ 1, whole turns ≥ 1, and non-negative gap/current.';
+            return;
+        }
+        const reluctance = (le / mu + gap) / (4 * Math.PI * 1e-7 * ae);
+        const inductance = turns * turns / reluctance;
+        const b = inductance * current / (turns * ae), energy = 0.5 * inductance * current * current;
+        if (![reluctance, inductance, b, energy].every(Number.isFinite)) { out.textContent = 'Inputs exceed the numerical range.'; return; }
+        out.textContent = `Reluctance: ${reluctance.toExponential(4)} At/Wb · Inductance: ${(inductance * 1e6).toFixed(3)} μH · Flux density: ${b.toFixed(4)} T · Stored energy: ${(energy * 1e3).toFixed(4)} mJ`;
+    }
+    root.addEventListener('input', update);
+    update();
+})();
+</script>

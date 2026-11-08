@@ -117,7 +117,9 @@
     </div>
 </div>
 
-<script>
+<p class="p-4 text-xs text-themeMuted">Steady-flow energy balance P = ρgQHηtηg, with water density 1000 kg/m³ and g = 9.81 m/s². Enter net head after hydraulic losses and independently established efficiencies. No turbine selection, penstock loss, seasonal yield or plant qualification is performed.</p><script>
+(function(){
+
     function formatPower(watts) {
         if (watts >= 1e9) return { v: (watts/1e9).toFixed(2), u: "GW" };
         if (watts >= 1e6) return { v: (watts/1e6).toFixed(2), u: "MW" };
@@ -131,6 +133,9 @@
         const eta_t = parseFloat(document.getElementById('hydro-eta-t').value) / 100;
         const eta_g = parseFloat(document.getElementById('hydro-eta-g').value) / 100;
 
+        if(![H,Q,eta_t,eta_g].every(Number.isFinite)||H<=0||Q<=0||eta_t<=0||eta_t>1||eta_g<=0||eta_g>1) {
+            ['hydro-pe-val','hydro-pe-unit','hydro-pth','hydro-pm'].forEach(id=>document.getElementById(id).innerText='—');return;
+        }
         const rho = 1000;
         const g = 9.81;
 
@@ -155,5 +160,8 @@
         document.getElementById('hydro-pm').innerText = fPm.v + " " + fPm.u;
     }
     
-    setTimeout(updateHydro, 100);
+    updateHydro();
+
+Object.assign(window,{updateHydro});
+})();
 </script>

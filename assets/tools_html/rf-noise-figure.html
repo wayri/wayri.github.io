@@ -7,7 +7,7 @@
     <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
         
         <div class="text-[10px] text-themeMuted mb-4 border-b border-themeBorder/20 pb-2 text-center bg-themeContainer/50 p-2">
-            Calculate total Noise Figure (NF) and Gain for a cascade of up to 3 RF stages.
+            Matched, linear, same-frequency stages at the 290 K noise reference. Passive loss assumes 290 K physical temperature. No mixers, compression, mismatch or reverse coupling.
         </div>
 
         <div class="flex flex-col md:flex-row gap-4 h-full">
@@ -25,7 +25,7 @@
                             <option value="loss">Lossy Element (e.g. Cable/Filter)</option>
                         </select>
                     </div>
-                    <div class="grid grid-cols-2 gap-4 ml-4">
+                    <div class="grid grid-cols-2 gap-4 ml-4" id="nf-s1-inputs">
                         <div>
                             <div class="flex justify-between text-[10px] mb-1 text-themeMuted"><span>Gain / Loss</span><span>dB</span></div>
                             <input type="number" id="nf-s1-g" class="w-full bg-themeBg border border-themeBorder p-1 text-themeText" value="15" step="0.5" oninput="updateNF()">
@@ -127,100 +127,39 @@
             <p>$F_{total} = F_1 + \frac{F_2 - 1}{G_1} + \frac{F_3 - 1}{G_1 \cdot G_2} + \dots$</p>
             <p><strong>Note on Lossy Elements:</strong> For a passive lossy component at room temperature, its Noise Figure equals its Insertion Loss in dB ($NF_{dB} = L_{dB}$).</p>
         </div>
-    </div>
+    <p class="p-4 text-xs text-themeMuted">Reference: <a href="https://www.analog.com/en/resources/technical-articles/system-noisefigure-analysis-for-modern-radio-receivers.html" target="_blank" rel="noopener">Analog Devices — linear cascade and mixer limitations</a>.</p>
+</div>
 </div>
 
 <script>
-    function updateStageInputs(num) {
-        const type = document.getElementById(`nf-s${num}-type`).value;
-        const inputs = document.getElementById(`nf-s${num}-inputs`);
-        const gInp = document.getElementById(`nf-s${num}-g`);
-        const nfInp = document.getElementById(`nf-s${num}-nf`);
-
-        if (type === 'none') {
-            inputs.classList.add('hidden');
-        } else {
-            inputs.classList.remove('hidden');
-            if (type === 'loss') {
-                // If it's a lossy element, NF = IL (which is -Gain). So if Gain is -3dB, NF is 3dB.
-                nfInp.disabled = true;
-                nfInp.classList.add('opacity-50');
-                
-                // Force gain to be negative if user entered positive
-                let val = parseFloat(gInp.value);
-                if (val > 0) {
-                    gInp.value = -val;
-                    val = -val;
-                }
-                nfInp.value = Math.abs(val);
-            } else {
-                nfInp.disabled = false;
-                nfInp.classList.remove('opacity-50');
-            }
+function updateNF() {
+    let factor = 1, precedingGain = 1, totalGain = 0;
+    const clear = () => ['nf-total-val', 'gain-total-val'].forEach(id => document.getElementById(id).innerText = '—');
+    for (let stage = 1; stage <= 3; stage++) {
+        const type = document.getElementById(`nf-s${stage}-type`).value;
+        const inputs = document.getElementById(`nf-s${stage}-inputs`);
+        const gainInput = document.getElementById(`nf-s${stage}-g`);
+        const noiseInput = document.getElementById(`nf-s${stage}-nf`);
+        inputs.classList.toggle('hidden', type === 'none');
+        noiseInput.disabled = type === 'loss';
+        if (type === 'none') continue;
+        let gainDb = Number.parseFloat(gainInput.value);
+        if (type === 'loss') {
+            gainDb = -Math.abs(gainDb);
+            gainInput.value = Number.isFinite(gainDb) ? gainDb : '';
+            noiseInput.value = Number.isFinite(gainDb) ? -gainDb : '';
         }
+        const noiseDb = Number.parseFloat(noiseInput.value);
+        const gain = 10 ** (gainDb / 10), noise = 10 ** (noiseDb / 10);
+        if (![gainDb, noiseDb, gain, noise].every(Number.isFinite) || noiseDb < 0 || gain <= 0) { clear(); return; }
+        factor += (noise - 1) / precedingGain;
+        precedingGain *= gain;
+        totalGain += gainDb;
     }
-
-    function updateNF() {
-        // Sync inputs first
-        updateStageInputs(1);
-        updateStageInputs(2);
-        updateStageInputs(3);
-
-        const s1Type = document.getElementById('nf-s1-type').value;
-        const s2Type = document.getElementById('nf-s2-type').value;
-        const s3Type = document.getElementById('nf-s3-type').value;
-
-        // Stage 1
-        let F1 = 1, G1 = 1, G1_db = 0;
-        if (s1Type !== 'none') {
-            G1_db = parseFloat(document.getElementById('nf-s1-g').value);
-            const NF1_db = parseFloat(document.getElementById('nf-s1-nf').value);
-            G1 = Math.pow(10, G1_db / 10);
-            F1 = Math.pow(10, NF1_db / 10);
-        }
-
-        // Stage 2
-        let F2 = 1, G2 = 1, G2_db = 0;
-        if (s2Type !== 'none') {
-            G2_db = parseFloat(document.getElementById('nf-s2-g').value);
-            const NF2_db = parseFloat(document.getElementById('nf-s2-nf').value);
-            G2 = Math.pow(10, G2_db / 10);
-            F2 = Math.pow(10, NF2_db / 10);
-        }
-
-        // Stage 3
-        let F3 = 1, G3 = 1, G3_db = 0;
-        if (s3Type !== 'none') {
-            G3_db = parseFloat(document.getElementById('nf-s3-g').value);
-            const NF3_db = parseFloat(document.getElementById('nf-s3-nf').value);
-            G3 = Math.pow(10, G3_db / 10);
-            F3 = Math.pow(10, NF3_db / 10);
-        }
-
-        // Friis Cascade
-        let F_total = 1;
-        let G_total_db = 0;
-
-        if (s1Type !== 'none') {
-            F_total = F1;
-            G_total_db += G1_db;
-            
-            if (s2Type !== 'none') {
-                F_total += (F2 - 1) / G1;
-                G_total_db += G2_db;
-                
-                if (s3Type !== 'none') {
-                    F_total += (F3 - 1) / (G1 * G2);
-                    G_total_db += G3_db;
-                }
-            }
-        }
-
-        let NF_total = 10 * Math.log10(F_total);
-
-        document.getElementById('nf-total-val').innerText = isNaN(NF_total) || NF_total <= 0 ? "0.00" : NF_total.toFixed(2);
-        document.getElementById('gain-total-val').innerText = isNaN(G_total_db) ? "0.00" : G_total_db.toFixed(2);
-    }
-    
-    setTimeout(updateNF, 100);
+    const noiseDb = 10 * Math.log10(factor);
+    if (![factor, noiseDb, totalGain, precedingGain].every(Number.isFinite) || precedingGain <= 0) { clear(); return; }
+    document.getElementById('nf-total-val').innerText = noiseDb.toFixed(2);
+    document.getElementById('gain-total-val').innerText = totalGain.toFixed(2);
+}
+setTimeout(updateNF, 100);
 </script>

@@ -1,37 +1,14 @@
-<div id="tool-e-series-finder" class="doc-container flex flex-col">
-        <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
-            <i class="fa-solid fa-list-ol"></i>
-            <h3 class="font-bold font-mono">E-Series Finder</h3>
-        </div>
-        <div class="p-4 space-y-3 font-mono text-sm flex-grow">
-            <div class="flex justify-between items-center">
-                <label class="w-24">Target R/C</label>
-                <input type="number" id="eseries-in" value="4850" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runESeries()">
-            </div>
-            <div class="pt-3 mt-3 border-t border-themeBorder/20 space-y-2 text-xs">
-                <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                    <span class="whitespace-nowrap text-themeMuted">Nearest E12 (10%)</span>
-                    <span id="eseries-e12" class="font-bold text-themeText">4700 ohms</span>
-                </div>
-                <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                    <span class="whitespace-nowrap text-themeMuted">Nearest E24 (5%)</span>
-                    <span id="eseries-e24" class="font-bold text-themeAccent">4700 ohms</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="whitespace-nowrap text-themeMuted">Nearest E96 (1%)</span>
-                    <span id="eseries-e96" class="font-bold text-themeAccent">4870 ohms</span>
-                </div>
-            </div>
-        </div>
-    
-    <!-- Theory & Math Section -->
-    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
-        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('eseriesfinder-theory').classList.toggle('hidden')">
-            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
-            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
-        </div>
-        <div id="eseriesfinder-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Theory:</strong> The E-series (E12, E24, E96) is a system of preferred numbers derived for electronic components. The code calculates the logarithmic steps to find the closest standard value to your target. <a href='https://en.wikipedia.org/wiki/E_series_of_preferred_numbers' target='_blank' class='text-themeAccent underline'>Read more on Wikipedia</a></p>
-        </div>
-    </div>
-</div>
+<div id="tool-e-series-finder" class="doc-container flex flex-col"><div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg"><h3 class="font-bold font-mono">E-Series Finder</h3></div><div class="p-4 space-y-4"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><label class="flex flex-col gap-1 text-sm">Target nominal value (any consistent unit)<input id="eseries-in" type="number" value="4850" step="any" class="border border-themeBorder p-2 bg-themeBg text-themeText" oninput="runESeries()"></label></div><p id="basic-error" role="status" class="text-sm text-themeMuted"></p><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><div class="border border-themeBorder/30 p-3"><span class="text-themeMuted text-xs">Nearest E12</span><div id="eseries-e12" class="text-lg text-themeAccent font-bold">—</div></div><div class="border border-themeBorder/30 p-3"><span class="text-themeMuted text-xs">Nearest E24</span><div id="eseries-e24" class="text-lg text-themeAccent font-bold">—</div></div><div class="border border-themeBorder/30 p-3"><span class="text-themeMuted text-xs">Nearest E96</span><div id="eseries-e96" class="text-lg text-themeAccent font-bold">—</div></div></div><div class="border-t border-themeBorder/30 pt-4 text-sm text-themeMuted leading-relaxed"><p>Uses published E12/E24/E96 preferred-value tables and compares adjacent decades by absolute difference. The result uses the same unit as your input. Series membership does not establish the actual tolerance or availability of a component. <a class="underline text-themeAccent" href="https://www.vishay.com/docs/31001/dectable.pdf">Vishay preferred-value tables</a>.</p></div></div></div><script>
+(function(){
+
+function runESeries(){
+ const raw=document.getElementById('eseries-in').value; const value=Number(raw);
+ const tables=[[10,12,15,18,22,27,33,39,47,56,68,82],[10,11,12,13,15,16,18,20,22,24,27,30,33,36,39,43,47,51,56,62,68,75,82,91],[100, 102, 105, 107, 110, 113, 115, 118, 121, 124, 127, 130, 133, 137, 140, 143, 147, 150, 154, 158, 162, 165, 169, 174, 178, 182, 187, 191, 196, 200, 205, 210, 215, 221, 226, 232, 237, 243, 249, 255, 261, 267, 274, 280, 287, 294, 301, 309, 316, 324, 332, 340, 348, 357, 365, 374, 383, 392, 402, 412, 422, 432, 442, 453, 464, 475, 487, 499, 511, 523, 536, 549, 562, 576, 590, 604, 619, 634, 649, 665, 681, 698, 715, 732, 750, 768, 787, 806, 825, 845, 866, 887, 909, 931, 953, 976]];
+ tables.forEach((table,n)=>{let text='—';if(raw.trim()!==''&&Number.isFinite(value)&&value>0){ const base=10**(Math.floor(Math.log10(value))-Math.floor(Math.log10(table[0]))); const candidates=[0.1,1,10].flatMap(k=>table.map(x=>x*base*k)); const nearest=candidates.reduce((a,b)=>Math.abs(a-value)<=Math.abs(b-value)?a:b);text=nearest.toPrecision(6)+' ('+((nearest/value-1)*100).toFixed(2)+'%)';}document.getElementById(['eseries-e12','eseries-e24','eseries-e96'][n]).innerText=text;});
+ document.getElementById('basic-error').innerText=raw.trim()!==''&&Number.isFinite(value)&&value>0?'':'Enter a positive finite target.';
+}
+runESeries();
+
+Object.assign(window,{runESeries});
+})();
+</script>

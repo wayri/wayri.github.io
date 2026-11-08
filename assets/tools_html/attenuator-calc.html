@@ -1,7 +1,7 @@
 <div class="doc-container flex flex-col w-full h-full">
     <div class="p-3 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="RF Attenuator Calculator">
         <div class="flex items-center gap-2"><i class="fa-solid fa-compress-alt"></i><h3 class="font-bold font-mono">Attenuator Calculator</h3></div>
-        <span class="font-mono text-[10px] opacity-70">Pi, Tee, Bridged-T & L-Pad</span>
+        <span class="font-mono text-[10px] opacity-70">Equal-impedance Pi & Tee</span>
     </div>
     
     <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
@@ -16,8 +16,6 @@
                     <select id="att-type" class="bg-themeBg border border-themeBorder text-themeText text-xs p-1 outline-none focus:border-themeAccent" onchange="updateAttenuator()">
                         <option value="pi">Pi Network (π)</option>
                         <option value="tee">Tee Network (T)</option>
-                        <option value="bridged-t">Bridged-T</option>
-                        <option value="l-pad">L-Pad (Impedance Match)</option>
                     </select>
                 </div>
                 
@@ -60,7 +58,7 @@
                 </div>
                 
                 <div class="mt-2 pt-3 border-t border-themeBorder/20 text-[10px] text-themeMuted leading-relaxed">
-                    Matched attenuators drop signal power while maintaining characteristic impedance. Note: Pi, Tee, and Bridged-T are typically used for equal impedances (Z_in = Z_out). For unequal impedances, minimum attenuation rules apply.
+                    Ideal resistor networks with equal, real source and load impedances. Input power is power delivered into the matched pad. Resistor dissipation is calculated, not a component power rating; tolerances, parasitics, frequency response and derating are excluded.
                 </div>
             </div>
 
@@ -96,10 +94,6 @@
             <p>R_shunt = Z0 * (K+1)/(K-1) ; R_series = Z0 * (K^2-1)/(2K)</p>
             <p><strong>Tee Network (Zin = Zout = Z0):</strong></p>
             <p>R_series = Z0 * (K-1)/(K+1) ; R_shunt = Z0 * (2K)/(K^2-1)</p>
-            <p><strong>Bridged-T (Zin = Zout = Z0):</strong></p>
-            <p>R1 = R2 = Z0 (series) ; R_bridge = Z0*(K-1) ; R_shunt = Z0/(K-1)</p>
-            <p><strong>L-Pad (Minimum Loss Match):</strong></p>
-            <p>If Z1 > Z2: R_series = sqrt(Z1*(Z1-Z2)), R_shunt = sqrt((Z1*Z2^2)/(Z1-Z2))</p>
         </div>
     </div>
 </div>
@@ -164,209 +158,42 @@
         </svg>`;
     }
 
-    function attDiagramBridgedT() {
-        return `<svg viewBox="0 0 200 100" width="100%" height="120" xmlns="http://www.w3.org/2000/svg" style="font-family:monospace">
-            <style>.bl{stroke:var(--theme-text,#ccc);fill:none;stroke-width:1.5}.bt{fill:var(--theme-text,#ccc);font-size:10px;text-anchor:middle}.bc{fill:var(--theme-accent,#D4AF37)}</style>
-            <!-- Tee part -->
-            <line x1="10" y1="40" x2="35" y2="40" class="bl"/>
-            <line x1="165" y1="40" x2="190" y2="40" class="bl"/>
-            <line x1="10" y1="85" x2="190" y2="85" class="bl"/>
-            <g transform="translate(35,35)" class="bl">${getResistorSVG()}</g>
-            <line x1="65" y1="40" x2="100" y2="40" class="bl"/>
-            <text x="50" y="55" class="bt">R1 = Z0</text>
-            <line x1="100" y1="40" x2="135" y2="40" class="bl"/>
-            <g transform="translate(135,35)" class="bl">${getResistorSVG()}</g>
-            <text x="150" y="55" class="bt">R2 = Z0</text>
-            <!-- Shunt (R4) -->
-            <line x1="100" y1="40" x2="100" y2="50" class="bl"/>
-            <g transform="translate(95,50) rotate(90 5 15)" class="bl">${getResistorSVG()}</g>
-            <line x1="100" y1="80" x2="100" y2="85" class="bl"/>
-            <text x="115" y="70" class="bt">R4</text>
-            <!-- Bridged (R3) -->
-            <line x1="25" y1="40" x2="25" y2="10" class="bl"/>
-            <line x1="25" y1="10" x2="85" y2="10" class="bl"/>
-            <g transform="translate(85,5)" class="bl text-themeAccent">${getResistorSVG()}</g>
-            <line x1="115" y1="10" x2="175" y2="10" class="bl"/>
-            <line x1="175" y1="10" x2="175" y2="40" class="bl"/>
-            <text x="100" y="25" class="bt bc font-bold">R3 (Bridge)</text>
-            <circle cx="25" cy="40" r="2" class="bc"/><circle cx="175" cy="40" r="2" class="bc"/>
-            <circle cx="100" cy="40" r="2" class="bc"/><circle cx="100" cy="85" r="2" class="bc"/>
-        </svg>`;
+    function calculateMatchedPad(type, z0, dB, inputPower) {
+        if (!['pi', 'tee'].includes(type) || ![z0, dB, inputPower].every(Number.isFinite) || z0 <= 0 || dB <= 0 || dB > 100 || inputPower < 0) return null;
+        const k = 10 ** (dB / 20);
+        const outputPower = inputPower / (k * k);
+        let resistors;
+        if (type === 'pi') {
+            const shunt = z0 * (k + 1) / (k - 1), series = z0 * (k * k - 1) / (2 * k);
+            const vin = Math.sqrt(inputPower * z0), vout = vin / k;
+            resistors = [{lbl: 'R1 (Shunt In)', val: shunt, pwr: vin * vin / shunt}, {lbl: 'R2 (Shunt Out)', val: shunt, pwr: vout * vout / shunt}, {lbl: 'R3 (Series)', val: series, pwr: (vin - vout) ** 2 / series, hl: true}];
+        } else {
+            const series = z0 * (k - 1) / (k + 1), shunt = z0 * 2 * k / (k * k - 1);
+            const inputCurrent = Math.sqrt(inputPower / z0), outputCurrent = Math.sqrt(outputPower / z0);
+            const center = Math.sqrt(outputPower * z0) + outputCurrent * series;
+            resistors = [{lbl: 'R1 (Series In)', val: series, pwr: inputCurrent ** 2 * series}, {lbl: 'R2 (Series Out)', val: series, pwr: outputCurrent ** 2 * series}, {lbl: 'R3 (Shunt)', val: shunt, pwr: center ** 2 / shunt, hl: true}];
+        }
+        if (!resistors.every(r => Number.isFinite(r.val) && Number.isFinite(r.pwr))) return null;
+        return {resistors, outputPower, dissipated: inputPower - outputPower};
     }
-
-    function attDiagramLpad() {
-        return `<svg viewBox="0 0 200 100" width="100%" height="120" xmlns="http://www.w3.org/2000/svg" style="font-family:monospace">
-            <style>.bl{stroke:var(--theme-text,#ccc);fill:none;stroke-width:1.5}.bt{fill:var(--theme-text,#ccc);font-size:10px;text-anchor:middle}.bc{fill:var(--theme-accent,#D4AF37)}</style>
-            <!-- L-Pad (Series R1, Shunt R2) -->
-            <line x1="10" y1="20" x2="50" y2="20" class="bl"/>
-            <line x1="10" y1="80" x2="190" y2="80" class="bl"/>
-            <g transform="translate(50,15)" class="bl">${getResistorSVG()}</g>
-            <line x1="80" y1="20" x2="190" y2="20" class="bl"/>
-            <text x="65" y="10" class="bt">R1 (Series)</text>
-            <line x1="120" y1="20" x2="120" y2="35" class="bl"/>
-            <g transform="translate(115,35) rotate(90 5 15)" class="bl text-themeAccent">${getResistorSVG()}</g>
-            <line x1="120" y1="65" x2="120" y2="80" class="bl"/>
-            <text x="140" y="55" class="bt bc font-bold">R2 (Shunt)</text>
-            <circle cx="120" cy="20" r="2" class="bc"/><circle cx="120" cy="80" r="2" class="bc"/>
-            <text x="10" y="15" class="bt" text-anchor="start" fill="var(--theme-muted)">Z_IN</text>
-            <text x="190" y="15" class="bt" text-anchor="end" fill="var(--theme-muted)">Z_OUT</text>
-        </svg>`;
-    }
-
     function updateAttenuator() {
         const type = document.getElementById('att-type').value;
-        const Z1 = parseFloat(document.getElementById('att-z1').value) || 50;
-        let Z2 = parseFloat(document.getElementById('att-z2').value) || 50;
-        const dB = parseFloat(document.getElementById('att-db').value) || 3;
-        const Pin = parseFloat(document.getElementById('att-pin').value) || 1;
-
+        const z0 = parseFloat(document.getElementById('att-z1').value);
+        document.getElementById('att-z2').value = Number.isFinite(z0) ? z0 : '';
+        document.getElementById('att-z2').disabled = true;
+        const result = calculateMatchedPad(type, z0, parseFloat(document.getElementById('att-db').value), parseFloat(document.getElementById('att-pin').value));
         const warn = document.getElementById('att-warn');
-        warn.classList.add('hidden');
-        document.getElementById('att-z2').disabled = (type === 'bridged-t'); // Bridged T only symmetric
-        if(type === 'bridged-t') Z2 = Z1;
-
-        let K = Math.pow(10, dB / 20); // Voltage ratio K
-        let K_p = Math.pow(10, dB / 10); // Power ratio
-        const Pout = Pin / K_p;
-        const Pdiss_total = Pin - Pout;
-
-        // Minimum attenuation check for unequal impedances
-        let min_dB = 0;
-        if (Z1 !== Z2) {
-            const zmax = Math.max(Z1, Z2);
-            const zmin = Math.min(Z1, Z2);
-            // Minimum loss for match: 10 * log10( ( 2*Zmax / Zmin ) - 1 + 2*sqrt(Zmax/Zmin*(Zmax/Zmin - 1)) )
-            // Or simpler: minimum K for L-pad
-            const min_K = Math.sqrt(zmax/zmin) + Math.sqrt(zmax/zmin - 1);
-            min_dB = 20 * Math.log10(min_K);
-            
-            if (dB < min_dB) {
-                warn.classList.remove('hidden');
-                document.getElementById('att-min-db').innerText = min_dB.toFixed(2);
-                document.getElementById('att-resistor-results').innerHTML = `<div class="col-span-2 text-center text-orange-400 p-4 border border-orange-400/30 bg-orange-400/10">Attenuation is too low to match these impedances. Must be &ge; ${min_dB.toFixed(2)} dB.</div>`;
-                document.getElementById('att-pout').innerText = '--';
-                document.getElementById('att-pdiss').innerText = '--';
-                return;
-            }
+        warn.classList.toggle('hidden', !!result);
+        warn.innerText = 'Enter a positive real impedance, attenuation greater than 0 and at most 100 dB, and non-negative delivered input power.';
+        if (!result) {
+            document.getElementById('att-resistor-results').innerHTML = '';
+            ['att-pout', 'att-pdiss'].forEach(id => document.getElementById(id).innerText = '—');
+            return;
         }
-
-        let res = [];
-        let r1=0, r2=0, r3=0, p1=0, p2=0, p3=0;
-
-        if (type === 'pi') {
-            // General asymmetric Pi
-            // R3 (series) = (1/2) * ( (K^2-1)/K ) * sqrt(Z1*Z2)
-            // R1 (shunt in) = Z1 * ( (K^2-1) / (K^2 - 2K*sqrt(Z1/Z2) + 1) )
-            // R2 (shunt out) = Z2 * ( (K^2-1) / (K^2 - 2K*sqrt(Z2/Z1) + 1) )
-            r3 = (K*K - 1) / (2*K) * Math.sqrt(Z1*Z2);
-            r1 = Z1 * (K*K - 1) / (K*K - 2*K*Math.sqrt(Z1/Z2) + 1);
-            r2 = Z2 * (K*K - 1) / (K*K - 2*K*Math.sqrt(Z2/Z1) + 1);
-            
-            // Power (approximate for symmetric, full calc requires nodal)
-            // Vin^2 / Zin = Pin
-            const Vin = Math.sqrt(Pin * Z1);
-            const Vout = Vin / K;
-            p1 = (Vin*Vin)/r1;
-            p2 = (Vout*Vout)/r2;
-            p3 = Pdiss_total - p1 - p2; // The rest in series resistor
-
-            res.push({lbl:'R1 (Shunt In)', val:r1, pwr:p1});
-            res.push({lbl:'R2 (Shunt Out)', val:r2, pwr:p2});
-            res.push({lbl:'R3 (Series)', val:r3, pwr:p3, hl:true});
-            document.getElementById('att-diagram-container').innerHTML = attDiagramPi();
-
-        } else if (type === 'tee') {
-            // General asymmetric Tee
-            // R3 (shunt) = (2K / (K^2-1)) * sqrt(Z1*Z2)
-            // R1 (series in) = Z1 * ( (K^2 + 1 - 2K*sqrt(Z2/Z1)) / (K^2 - 1) )
-            // R2 (series out) = Z2 * ( (K^2 + 1 - 2K*sqrt(Z1/Z2)) / (K^2 - 1) )
-            r3 = (2*K / (K*K - 1)) * Math.sqrt(Z1*Z2);
-            r1 = Z1 * (K*K + 1 - 2*K*Math.sqrt(Z2/Z1)) / (K*K - 1);
-            r2 = Z2 * (K*K + 1 - 2*K*Math.sqrt(Z1/Z2)) / (K*K - 1);
-
-            const Iin = Math.sqrt(Pin / Z1);
-            const Iout = Math.sqrt(Pout / Z2);
-            p1 = Iin*Iin*r1;
-            p2 = Iout*Iout*r2;
-            p3 = Pdiss_total - p1 - p2; // Shunt power
-
-            res.push({lbl:'R1 (Series In)', val:r1, pwr:p1});
-            res.push({lbl:'R2 (Series Out)', val:r2, pwr:p2});
-            res.push({lbl:'R3 (Shunt)', val:r3, pwr:p3, hl:true});
-            document.getElementById('att-diagram-container').innerHTML = attDiagramTee();
-
-        } else if (type === 'bridged-t') {
-            // Bridged-T is symmetric only (Z1=Z2=Z0)
-            const Z0 = Z1;
-            r1 = Z0; // R1 = R2 = Z0
-            r3 = Z0 * (K - 1); // Bridge R
-            let r4 = Z0 / (K - 1); // Shunt R
-
-            // Power (Vin = 1V for normalized)
-            const Vin = Math.sqrt(Pin * Z0);
-            const Vout = Vin / K;
-            // Shunt sees Vout (roughly, no wait, shunt is midpoint)
-            // Actually exact power for bridged T:
-            const Iin = Math.sqrt(Pin/Z0);
-            const p_bridge = Pin * (K-1)*(K-1)/(K*K); // Wait, this needs nodal analysis. Let's use simple proportionality
-            const I_bridge = (Vin - Vout) / r3;
-            const p_br = I_bridge*I_bridge*r3;
-            // Shunt voltage = Vin - Iin*Z0? No. Let's just estimate or leave PDiss total.
-            // P = V^2/R for shunt, V_shunt = (Vin+Vout)/2 (roughly)
-            const V_shunt = (Vin+Vout)/(K+1); // exact for bridged T center node
-            const p_sh = (V_shunt*V_shunt)/r4;
-            const p_ser = (Pdiss_total - p_br - p_sh)/2;
-
-            res.push({lbl:'R1 = R2 (Series)', val:r1, pwr:p_ser});
-            res.push({lbl:'R3 (Bridge)', val:r3, pwr:p_br, hl:true});
-            res.push({lbl:'R4 (Shunt)', val:r4, pwr:p_sh});
-            document.getElementById('att-diagram-container').innerHTML = attDiagramBridgedT();
-
-        } else if (type === 'l-pad') {
-            // L-Pad for impedance matching
-            let isStepDown = Z1 > Z2;
-            let zs = isStepDown ? Z1 : Z2;
-            let zl = isStepDown ? Z2 : Z1;
-
-            if (dB > min_dB + 0.01) {
-                // Not minimum loss, need a 3-resistor pad or it's a fixed L-pad with mismatch.
-                // We will calculate exact L-pad, which only supports EXACT minimum loss attenuation.
-                // If user specifies higher attenuation, we force minimum loss L-pad and warn.
-                warn.classList.remove('hidden');
-                warn.innerHTML = `L-Pad provides fixed minimum attenuation of <strong>${min_dB.toFixed(2)} dB</strong> for these impedances. Use Pi/Tee for higher attenuation.`;
-            }
-
-            r1 = Math.sqrt(zs * (zs - zl)); // Series
-            r2 = Math.sqrt( (zs * zl * zl) / (zs - zl) ); // Shunt
-            
-            // Power for step down: Pin enters Series(R1), then splits to Shunt(R2) and Load(Z2).
-            const I_in = Math.sqrt(Pin / zs); // assuming matched
-            const p_ser = I_in*I_in*r1;
-            const p_sh = Pdiss_total - p_ser;
-
-            if (isStepDown) {
-                res.push({lbl:'R1 (Series)', val:r1, pwr:p_ser});
-                res.push({lbl:'R2 (Shunt Load)', val:r2, pwr:p_sh, hl:true});
-            } else {
-                res.push({lbl:'R1 (Shunt Source)', val:r2, pwr:p_sh, hl:true});
-                res.push({lbl:'R2 (Series)', val:r1, pwr:p_ser});
-            }
-            document.getElementById('att-diagram-container').innerHTML = attDiagramLpad();
-        }
-
-        document.getElementById('att-pout').innerText = Pout.toFixed(3);
-        document.getElementById('att-pdiss').innerText = Pdiss_total.toFixed(3);
-
-        document.getElementById('att-resistor-results').innerHTML = res.map(r => `
-            <div class="bg-themeBorder/10 border ${r.hl ? 'border-themeAccent' : 'border-themeBorder'} p-3 flex flex-col justify-center items-center text-center">
-                <span class="whitespace-nowrap text-[9px] ${r.hl ? 'text-themeAccent' : 'text-themeMuted'} uppercase tracking-wider mb-1 font-bold">${r.lbl}</span>
-                <div class="text-2xl font-bold text-themeText flex items-baseline gap-1">
-                    ${r.val.toFixed(1)} <span class="text-xs ${r.hl ? 'text-themeAccent' : 'text-themeMuted'}">&Omega;</span>
-                </div>
-                <div class="text-[9px] text-orange-400 mt-1"><i class="fa-solid fa-fire mr-1"></i>${r.pwr.toFixed(3)} W</div>
-            </div>
-        `).join('');
+        document.getElementById('att-diagram-container').innerHTML = type === 'pi' ? attDiagramPi() : attDiagramTee();
+        document.getElementById('att-pout').innerText = result.outputPower.toFixed(3);
+        document.getElementById('att-pdiss').innerText = result.dissipated.toFixed(3);
+        document.getElementById('att-resistor-results').innerHTML = result.resistors.map(r => `<div class="bg-themeBorder/10 border border-themeBorder p-3 text-center"><span class="text-xs text-themeMuted">${r.lbl}</span><div class="text-xl font-bold text-themeText">${r.val.toFixed(2)} Ω</div><div class="text-xs text-themeMuted">${r.pwr.toFixed(4)} W dissipated</div></div>`).join('');
     }
-    
     setTimeout(updateAttenuator, 100);
 </script>

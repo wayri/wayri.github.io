@@ -70,10 +70,71 @@ test('RC: 10 kohm, 100 nF; 50% and 90% analytic step response', () => {
 test('Published catalog and Jekyll exclusions agree; thermal calculators are retired', () => {
     const ui = fs.readFileSync(path.join(root, 'assets/js/tools_ui.js'), 'utf8');
     const config = fs.readFileSync(path.join(root, '_config.yml'), 'utf8').replace(/\r\n/g, '\n');
-    const files = [...ui.matchAll(/file: "([^"]+)"/g)].map(m => m[1]);
-    assert.deepEqual(files, ['ohms-law-wheel.html', 'reactance-calc.html', 'rc-time-calc.html']);
+    const files = [...ui.matchAll(/"file": "([^"]+)"/g)].map(m => m[1]);
+    assert.equal(files.length, 28);
+    assert.equal(new Set(files).size, files.length);
+    for (const removed of ['heatsink-simulator.html', 'thermal-network-calc.html', 'cable-thermal.html', 'multipoint-harness.html', 'can-bus.html']) assert.ok(!files.includes(removed));
+    for (const kept of ['smps-loop-tuner.html', 'smith-chart.html', 'ddr-reference.html', 'ethernet-reference.html', 'serdes-reference.html', 'lvds-reference.html']) assert.ok(files.includes(kept));
     for (const file of fs.readdirSync(path.join(root, 'assets/tools_html')).filter(f => f.endsWith('.html'))) {
         assert.equal(config.includes('  - assets/tools_html/' + file + '\n'), !files.includes(file), file);
     }
     assert.ok(ui.includes('if (!allowed) return;'));
+});
+
+test('EV cruise: independent flat-road hand calculation and invalid efficiency', () => {
+    const f = fixture('ev-powertrain-calc');
+    f.set({ 'ev-v': 72, 'ev-m': 1000, 'ev-crr': .01, 'ev-cd': .3, 'ev-a': 2, 'ev-bat': 50, 'ev-eta': 90 });
+    f.context.updateEV();
+    // 20 m/s: drag 147 N, rolling 98.1 N, P = 245.1 * 20 / .9 W.
+    assert.equal(f.elements.get('ev-fdrag').innerText, '147 N');
+    assert.equal(f.elements.get('ev-froll').innerText, '98 N');
+    assert.equal(f.elements.get('ev-p-val').innerText, '5.4');
+    assert.equal(f.elements.get('ev-eff-val').innerText, 76);
+    assert.equal(f.elements.get('ev-range-val').innerText, 661);
+    for (const efficiency of [0, 101, '', 'Infinity']) {
+        f.set({ 'ev-eta': efficiency }); f.context.updateEV();
+        assert.equal(f.elements.get('ev-p-val').innerText, '—');
+    }
+});
+
+test('Linear core: gapped and ungapped reference values, zero current and invalid geometry', () => {
+    const html = fs.readFileSync(path.join(root, 'assets/tools_html/magnetic-reluctance.html'), 'utf8');
+    const elements = Object.fromEntries(['length','area','mu','gap','turns','current','results'].map(id => ['#rel-' + id, { value: '', textContent: '' }]));
+    const panel = { querySelector: selector => elements[selector], addEventListener() {} };
+    const context = vm.createContext({ document: { getElementById: () => panel } });
+    const script = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+    const update = values => { for (const [key, value] of Object.entries(values)) elements['#rel-' + key].value = String(value); vm.runInContext(script, context); return elements['#rel-results'].textContent; };
+    let result = update({ length:50, area:25, mu:2000, gap:0, turns:10, current:2 });
+    assert.match(result, /125\.664 μH/);
+    assert.match(result, /1\.0053 T/);
+    result = update({ gap:.5 });
+    assert.match(result, /5\.984 μH/);
+    assert.match(result, /0\.0479 T/);
+    assert.match(update({ current:0 }), /0\.0000 mJ/);
+    assert.match(update({ area:0 }), /Enter finite/);
+});
+
+test('Reference sheets have unique anchors, source links, no scripts and no unsupported numeric routing rule', () => {
+    for (const name of ['ddr','ethernet','serdes','lvds']) {
+        const html = fs.readFileSync(path.join(root, 'assets/tools_html/' + name + '-reference.html'), 'utf8');
+        const ids = [...html.matchAll(/id="([^"]+)"/g)].map(m => m[1]);
+        assert.equal(ids.length, new Set(ids).size);
+        for (const [, anchor] of html.matchAll(/href="#([^"]+)"/g)) assert.ok(ids.includes(anchor), anchor);
+        assert.ok(html.includes('reference-source'));
+        assert.ok(html.includes('href="https://'));
+        assert.ok(!html.includes('<script'));
+    }
+});
+
+test('Skin depth: copper at 1 MHz, DC limit and invalid inputs', () => {
+    const html = fs.readFileSync(path.join(root, 'assets/tools_html/skin-depth.html'), 'utf8');
+    const nodes = Object.fromEntries(['frequency','conductivity','mu','diameter','length','result'].map(id => ['#skin-'+id,{value:'',textContent:''}]));
+    const panel={querySelector:s=>nodes[s],addEventListener(){}};
+    const ctx=vm.createContext({document:{getElementById:()=>panel}});
+    const script=html.match(/<script>([\s\S]*?)<\/script>/)[1];
+    const run=values=>{for(const [key,value] of Object.entries(values)) nodes['#skin-'+key].value=String(value); vm.runInContext(script,ctx); return nodes['#skin-result'].textContent;};
+    assert.match(run({frequency:1e6,conductivity:58,mu:1,diameter:1,length:1}), /66\.085 μm/);
+    assert.match(nodes['#skin-result'].textContent, /21\.9524 mΩ/);
+    assert.match(run({frequency:0}), /DC: no finite skin-depth/);
+    assert.match(run({conductivity:0}), /Enter finite/);
 });

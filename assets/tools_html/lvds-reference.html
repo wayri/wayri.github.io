@@ -1,0 +1,18 @@
+<article class="reference-sheet">
+<header><p class="reference-kicker">Interface reference · reviewed November 2026</p><h2>LVDS connections &amp; termination</h2><p>LVDS specifies an electrical interface. Data framing, bit order, pixel mapping and clocking still depend on the devices and protocol.</p></header>
+<nav class="reference-nav" aria-label="LVDS sheet sections"><a href="#lvds-wiring">Wiring</a><a href="#lvds-checks">Checks</a></nav>
+<section id="lvds-wiring"><h3>The usual point-to-point connection</h3><pre>Driver OUT+ ───────────────┬── Receiver IN+
+                          │
+                       Rterm  (typically 100 Ω)
+                          │
+Driver OUT− ───────────────┴── Receiver IN−
+                 Termination at the receiver; omit if integrated.</pre><p>Classic LVDS has a small differential swing, typically around 350 mV with a common-mode voltage around 1.2 V. Those are orientation values; check output swing and receiver common-mode/input limits at the actual supply and temperature. A 3.3 V supply does not mean a 3.3 V signal swing.</p><p>Choose a termination matching the line and receiver requirements. Do not automatically add two 100 Ω resistors. AC coupling requires a compatible data pattern and explicit receiver bias; DC coupling requires compatible common-mode ranges and ground offset.</p><p class="reference-source">Levels: <a href="https://www.ti.com/lit/ds/symlink/ds90lv011ah.pdf">TI DS90LV011AH datasheet</a>; coupling and layout: <a href="https://www.ti.com/lit/ug/snla187/snla187.pdf">TI LVDS Owner’s Manual</a>. Termination: <a href="https://www.analog.com/en/resources/faqs/FAQ_What_is_proper_termination_value_and_location.html">Analog Devices termination guidance</a>.</p></section>
+<section id="lvds-checks"><h3>What to verify</h3><div class="reference-table"><table><thead><tr><th>Item</th><th>Check</th></tr></thead><tbody>
+<tr><td>Topology</td><td>Point-to-point LVDS and multipoint M-LVDS are different electrical cases. Do not create a multidrop bus by copying a point-to-point circuit.</td></tr>
+<tr><td>Polarity &amp; mapping</td><td>Track +/− through both connector drawings. Check serializer lane mapping and display data mapping separately.</td></tr>
+<tr><td>Clock / data</td><td>Determine whether the clock is forwarded or recovered. Check sampling edge, channel-to-channel skew and setup/hold limits.</td></tr>
+<tr><td>Layout</td><td>Use controlled differential impedance, symmetric breakout and continuous return paths. Avoid stubs and unnecessary probing pads.</td></tr>
+<tr><td>Idle state</td><td>Review open/short/undriven receiver behavior. “Failsafe” is a device feature, not a guarantee implied by LVDS.</td></tr>
+<tr><td>Measurement</td><td>Use appropriate differential probing and bandwidth. Inspect differential and common-mode behavior without adding an accidental heavy load.</td></tr>
+</tbody></table></div><p class="reference-source">Topology, timing and idle behavior: <a href="https://www.analog.com/en/resources/app-notes/an-1177.html">Analog Devices AN-1177: LVDS and M-LVDS implementation</a>.</p><aside class="reference-note">LVDS, CML, LVPECL and CMOS are not plug-compatible just because they use two pins or a similar connector. Compare the complete driver/receiver electrical specifications.</aside></section>
+</article>

@@ -1,9 +1,10 @@
 <div class="doc-container flex flex-col w-full h-full">
     <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Friis Transmission Equation">
         <div class="flex items-center gap-2"><i class="fa-solid fa-wifi"></i><h3 class="font-bold font-mono">Friis Transmission Equation</h3></div>
-        <span class="font-mono text-[10px] opacity-70">Wireless Link Budget</span>
+        <span class="font-mono text-[10px] opacity-70">Ideal free-space link budget</span>
     </div>
     
+    <p class="p-4 text-xs text-themeMuted">Far-field, unobstructed free space with gains in the link direction and matched polarization. Antenna mismatch and additional attenuation must be included in system loss. This does not predict indoor, terrain or multipath coverage. <a href="https://www.itu.int/rec/R-REC-P.525/en" target="_blank" rel="noopener">ITU-R P.525</a>.</p>
     <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
             
@@ -123,13 +124,17 @@
         const f_mhz = parseFloat(document.getElementById('friis-f').value);
         const R_m = parseFloat(document.getElementById('friis-r').value);
 
+        if (![Pt, Gt, Gr, L, f_mhz, R_m].every(Number.isFinite) || L < 0 || f_mhz <= 0 || R_m <= 0) {
+            ['friis-fspl-val', 'friis-pr-val'].forEach(id => document.getElementById(id).innerText = '—');
+            return;
+        }
         let fspl_db = 0;
         let Pr = 0;
 
         if (f_mhz > 0 && R_m > 0) {
             const R_km = R_m / 1000;
             // FSPL = 20*log10(d) + 20*log10(f) + 32.44  (where d is in km, f is in MHz)
-            fspl_db = 20 * Math.log10(R_km) + 20 * Math.log10(f_mhz) + 32.44;
+            fspl_db = 20 * Math.log10(4 * Math.PI * R_m * f_mhz * 1e6 / 299792458);
             
             Pr = Pt + Gt + Gr - fspl_db - L;
         }

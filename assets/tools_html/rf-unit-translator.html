@@ -2,9 +2,10 @@
     <!-- Header -->
     <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="dB & RF Unit Translator">
         <div class="flex items-center gap-2"><i class="fa-solid fa-tower-cell"></i><h3 class="font-bold font-mono">dB & RF Unit Translator</h3></div>
-        <span class="font-mono text-[10px] opacity-70">Power, Voltage & Field Strength Conversions</span>
+        <span class="font-mono text-[10px] opacity-70">Power & loaded voltage conversions</span>
     </div>
     
+    <p class="p-4 text-xs text-themeMuted">Voltage is measured across the entered real resistance: P = V<sub>rms</sub>²/R. Peak and peak-to-peak values assume a sine wave. These are loaded-voltage conversions, not open-circuit source voltage or radiated field strength. dBu uses a fixed 0.7746 V reference regardless of load.</p>
     <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
             
@@ -48,7 +49,7 @@
                         <button class="bg-themeBg border border-themeBorder hover:bg-themeAccent hover:text-themeBg text-[10px] font-bold py-1 rounded transition-colors" onclick="document.getElementById('db-z0').value=50; updateDbCalc()">50 &Omega;</button>
                         <button class="bg-themeBg border border-themeBorder hover:bg-themeAccent hover:text-themeBg text-[10px] font-bold py-1 rounded transition-colors" onclick="document.getElementById('db-z0').value=75; updateDbCalc()">75 &Omega;</button>
                         <button class="bg-themeBg border border-themeBorder hover:bg-themeAccent hover:text-themeBg text-[10px] font-bold py-1 rounded transition-colors" onclick="document.getElementById('db-z0').value=600; updateDbCalc()">600 &Omega;</button>
-                        <button class="bg-themeBg border border-themeBorder hover:bg-themeAccent hover:text-themeBg text-[10px] font-bold py-1 rounded transition-colors" onclick="document.getElementById('db-z0').value=377; updateDbCalc()">377 &Omega; (Air)</button>
+                        <button class="bg-themeBg border border-themeBorder hover:bg-themeAccent hover:text-themeBg text-[10px] font-bold py-1 rounded transition-colors" onclick="document.getElementById('db-z0').value=377; updateDbCalc()">377 &Omega; load</button>
                     </div>
                 </div>
             </div>
@@ -108,22 +109,25 @@
     <!-- Theory & Mathematical Formulations -->
     <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
         <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('rf-translator-theory').classList.toggle('hidden')">
-            <h4 class="font-bold text-themeAccent flex items-center gap-2"><i class="fa-solid fa-calculator"></i>dB, dBm, dBµV & Field Strength Formulas</h4>
+            <h4 class="font-bold text-themeAccent flex items-center gap-2"><i class="fa-solid fa-calculator"></i>Power and voltage definitions</h4>
             <i class="fa-solid fa-chevron-down text-themeMuted"></i>
         </div>
         <div id="rf-translator-theory" class="hidden text-themeMuted mt-3 space-y-2 text-xs leading-relaxed">
             <p><strong>1. Power Conversions:</strong> $P_{\text{dBm}} = 10 \log_{10}\left(\frac{P}{1\text{ mW}}\right), \quad P_{\text{dBW}} = 10 \log_{10}\left(\frac{P}{1\text{ W}}\right) = P_{\text{dBm}} - 30$</p>
             <p><strong>2. Voltage & Impedance Relationships:</strong> $V_{\text{rms}} = \sqrt{P \cdot Z_0}, \quad V_{\text{dBV}} = 20 \log_{10}\left(\frac{V_{\text{rms}}}{1\text{ V}}\right), \quad V_{\text{dB}\mu\text{V}} = 20 \log_{10}\left(\frac{V_{\text{rms}}}{1\ \mu\text{V}}\right) = V_{\text{dBV}} + 120$</p>
-            <p><strong>3. Audio dBu (600 &Omega; Reference):</strong> $V_{\text{dBu}} = 20 \log_{10}\left(\frac{V_{\text{rms}}}{0.7746\text{ V}}\right)$, where $0.7746\text{ V} = \sqrt{1\text{ mW} \times 600\ \Omega}$.</p>
+            <p><strong>3. Audio dBu (fixed voltage reference):</strong> $V_{\text{dBu}} = 20 \log_{10}\left(\frac{V_{\text{rms}}}{0.7746\text{ V}}\right)$, where $0.7746\text{ V} = \sqrt{1\text{ mW} \times 600\ \Omega}$.</p>
         </div>
     </div>
 </div>
 
 <script>
 function updateDbCalc() {
-    const val = parseFloat(document.getElementById('db-val').value) || 0;
+    const val = parseFloat(document.getElementById('db-val').value);
     const unit = document.getElementById('db-unit').value;
-    const z0 = parseFloat(document.getElementById('db-z0').value) || 50;
+    const z0 = parseFloat(document.getElementById('db-z0').value);
+    const outputs = ['dbm', 'dbw', 'dbuv', 'dbv', 'dbu', 'w', 'mw', 'vrms', 'vpk', 'irms'];
+    const clear = () => outputs.forEach(id => document.getElementById('db-out-' + id).innerText = '—');
+    if (![val, z0].every(Number.isFinite) || z0 <= 0 || (!unit.startsWith('dB') && val < 0)) { clear(); return; }
 
     let p_w = 0; // Convert all to Watts base
 
@@ -156,6 +160,7 @@ function updateDbCalc() {
         p_w = (vrms * vrms) / z0;
     }
 
+    if (!Number.isFinite(p_w)) { clear(); return; }
     let dbm = -Infinity, dbw = -Infinity, dbuv = -Infinity, dbv = -Infinity, dbu = -Infinity;
     let p_mw = 0, vrms = 0, vpk = 0, vpp = 0, irms = 0;
 

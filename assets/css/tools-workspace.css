@@ -194,6 +194,10 @@ html:not([data-theme="dark"]) #tools-workspace #tools-content .diagram-img {
     #tools-workspace #tools-content :is(.grid-cols-2,.grid-cols-3) { grid-template-columns:minmax(0,1fr); }
     #tools-workspace #tools-content { padding:.75rem; }
     #tools-workspace #tools-content .tool-card { padding:1rem; }
+    #tools-workspace #tools-content .whitespace-nowrap { white-space:normal; }
+    #tools-workspace #tools-content .doc-container > div:first-child { flex-wrap:wrap; gap:.5rem; }
+    #tools-workspace #tools-content .flex > input { min-width:0; }
+    #tools-workspace #tools-content .flex > select { flex-shrink:0; min-width:4.5rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -204,3 +208,29 @@ html:not([data-theme="dark"]) #tools-workspace #tools-content .diagram-img {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* Reference sheets share the calculator palette, with readable long-form text. */
+.reference-sheet { color:var(--text-color); line-height:1.7; font-family:Arial,sans-serif; max-width:1100px; width:100%; margin:0 auto; overflow-wrap:anywhere; }
+.reference-sheet header { padding-bottom:1rem; border-bottom:1px solid var(--border-color); }
+.reference-sheet h2 { font-size:clamp(1.7rem,3vw,2.5rem); line-height:1.2; font-weight:700; margin:.3rem 0 1rem; }
+.reference-sheet h3 { font-size:1.4rem; font-weight:700; margin:1.7rem 0 .65rem; color:var(--accent-color); }
+.reference-sheet h4 { font-size:1.12rem; font-weight:700; margin:1.3rem 0 .5rem; }
+.reference-sheet p { margin:.65rem 0; }
+.reference-sheet .reference-kicker { color:var(--muted-text); font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; }
+.reference-sheet a { color:var(--accent-color); text-decoration:underline; text-underline-offset:3px; }
+.reference-nav { display:flex; flex-wrap:wrap; gap:.5rem 1.25rem; padding:.8rem 0; }
+.reference-nav a { display:inline-flex; align-items:center; min-height:44px; }
+.reference-table { max-width:100%; overflow-x:auto; }
+.reference-sheet table { width:100%; border-collapse:collapse; font-size:.94rem; }
+.reference-sheet :is(th,td) { text-align:left; vertical-align:top; padding:.75rem; border:1px solid var(--border-color); }
+.reference-sheet th { color:var(--accent-color); background:var(--input-bg); }
+.reference-sheet code { font-size:.9em; }
+.reference-sheet pre { white-space:pre; overflow:auto; background:var(--input-bg); padding:1rem; border:1px solid var(--border-color); font-size:.85rem; }
+.reference-note { border-left:3px solid var(--accent-color); padding:.8rem 1rem; background:var(--input-bg); margin:1rem 0; }
+.reference-sheet .reference-source { font-size:.83rem; color:var(--muted-text); }
+.reference-sheet ul { list-style:disc; padding-left:1.4rem; }
+.reference-sheet li { margin:.4rem 0; }
+.reference-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:1rem; padding:1.2rem 0; }
+.reference-fields label { display:flex; flex-direction:column; gap:.4rem; }
+.reference-fields input { padding:.5rem; border:1px solid var(--border-color); background:var(--input-bg); color:var(--text-color); min-width:0; }
+@media(max-width:767px) { .reference-sheet :is(th,td) { padding:.5rem; } .reference-sheet table { min-width:520px; } .reference-sheet h2 { font-size:1.75rem; } }

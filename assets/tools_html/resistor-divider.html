@@ -1,62 +1,16 @@
-<div id="tool-resistor-divider" class="doc-container flex flex-col">
-        <div class="h-48 bg-themeBg border-b border-themeBorder overflow-hidden flex justify-center items-center"><img src="/assets/images/divider.png" class="h-full opacity-80 diagram-img" alt="Divider Circuit"></div>
-        <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" onclick="window.toggleMaximize(this.parentElement)" title="Click to Maximize/Minimize">
-            <i class="fa-solid fa-bolt"></i>
-            <h3 class="font-bold font-mono">Resistor Divider</h3>
-        </div>
-        <div class="p-4 space-y-3 font-mono text-sm flex-grow">
-            <div class="flex gap-3 mb-2 pb-3 border-b border-themeBorder/20 text-xs text-themeMuted font-bold">
-                <span>SOLVE:</span>
-                <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="vin" onchange="setupDividerMode()"> Vin</label>
-                <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="r1" onchange="setupDividerMode()"> R1</label>
-                <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="r2" onchange="setupDividerMode()"> R2</label>
-                <label class="cursor-pointer hover:text-themeAccent"><input type="radio" name="solve_target" value="vout" checked onchange="setupDividerMode()"> Vout</label>
-            </div>
+<div id="tool-resistor-divider" class="doc-container flex flex-col"><div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg"><h3 class="font-bold font-mono">Resistor Divider</h3></div><div class="p-4 space-y-4"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><label class="flex flex-col gap-1 text-sm">Input voltage (V)<input id="div-vin" type="number" value="12" step="any" class="border border-themeBorder p-2 bg-themeBg text-themeText" oninput="updateDivider()"></label><label class="flex flex-col gap-1 text-sm">Upper resistor R1 (ohm)<input id="div-r1" type="number" value="10000" step="any" class="border border-themeBorder p-2 bg-themeBg text-themeText" oninput="updateDivider()"></label><label class="flex flex-col gap-1 text-sm">Lower resistor R2 (ohm)<input id="div-r2" type="number" value="4700" step="any" class="border border-themeBorder p-2 bg-themeBg text-themeText" oninput="updateDivider()"></label><label class="flex flex-col gap-1 text-sm">Load resistance (ohm; 0 = open circuit)<input id="div-load" type="number" value="0" step="any" class="border border-themeBorder p-2 bg-themeBg text-themeText" oninput="updateDivider()"></label></div><p id="basic-error" role="status" class="text-sm text-themeMuted"></p><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><div class="border border-themeBorder/30 p-3"><span class="text-themeMuted text-xs">Output voltage</span><div id="div-vout" class="text-lg text-themeAccent font-bold">—</div></div><div class="border border-themeBorder/30 p-3"><span class="text-themeMuted text-xs">Source current</span><div id="div-current" class="text-lg text-themeAccent font-bold">—</div></div><div class="border border-themeBorder/30 p-3"><span class="text-themeMuted text-xs">Upper resistor dissipation</span><div id="div-p1" class="text-lg text-themeAccent font-bold">—</div></div><div class="border border-themeBorder/30 p-3"><span class="text-themeMuted text-xs">Lower resistor dissipation</span><div id="div-p2" class="text-lg text-themeAccent font-bold">—</div></div></div><div class="border-t border-themeBorder/30 pt-4 text-sm text-themeMuted leading-relaxed"><p>Rlow = R2 in parallel with the load; Vout = Vin × Rlow/(R1 + Rlow). With no load, Rlow = R2. Dissipation is I²R. This is a linear DC model; resistor tolerances, voltage ratings and temperature effects are not included. Choose component ratings from their datasheets.</p></div></div></div><script>
+(function(){
 
-            <div class="flex justify-between items-center">
-                <label class="w-20">Vin (V)</label>
-                <input type="number" id="calc-vin" value="12" step="0.1" class="w-32 border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
-            </div>
-            <div class="flex justify-between items-center">
-                <label class="w-20">R1 (ohms)</label>
-                <div class="flex flex-col items-end w-32">
-                    <input type="number" id="calc-r1" value="10000" class="w-full border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
-                    <span id="sug-r1" class="text-[9px] text-themeAccent cursor-pointer hover:underline mt-0.5 opacity-0 h-0 transition-opacity whitespace-nowrap" onclick="applyVal('calc-r1', this.dataset.val); runSmartDivider();"></span>
-                </div>
-            </div>
-            <div class="flex justify-between items-center">
-                <label class="w-20">R2 (ohms)</label>
-                <div class="flex flex-col items-end w-32">
-                    <input type="number" id="calc-r2" value="4700" class="w-full border border-themeBorder px-2 py-1 text-right" oninput="runSmartDivider()">
-                    <span id="sug-r2" class="text-[9px] text-themeAccent cursor-pointer hover:underline mt-0.5 opacity-0 h-0 transition-opacity whitespace-nowrap" onclick="applyVal('calc-r2', this.dataset.val); runSmartDivider();"></span>
-                </div>
-            </div>
-            <div class="flex justify-between items-center">
-                <label class="w-20 text-themeAccent font-bold">Vout (V)</label>
-                <input type="number" id="calc-vout" class="w-32 border-2 border-themeAccent px-2 py-1 text-right font-bold text-themeAccent bg-opacity-10 bg-themeAccent" readonly oninput="runSmartDivider()">
-            </div>
-            <div class="pt-3 mt-3 border-t border-themeBorder/20 text-xs">
-                <div class="grid grid-cols-2 gap-2 text-themeMuted">
-                    <div class="bg-themeBorder/5 p-2 border border-themeBorder/10">
-                        <span class="whitespace-nowrap">P(R1): <span id="pow-r1" class="font-bold text-themeText">0.00 mW</span></span>
-                        <div id="pkg-r1" class="text-themeAccent mt-1">0402</div>
-                    </div>
-                    <div class="bg-themeBorder/5 p-2 border border-themeBorder/10">
-                        <span class="whitespace-nowrap">P(R2): <span id="pow-r2" class="font-bold text-themeText">0.00 mW</span></span>
-                        <div id="pkg-r2" class="text-themeAccent mt-1">0402</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-    <!-- Theory & Math Section -->
-    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
-        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('resistordivider-theory').classList.toggle('hidden')">
-            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
-            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
-        </div>
-        <div id="resistordivider-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Theory:</strong> A voltage divider uses two resistors in series to step down a voltage. \(V_{out} = V_{in} \times \frac{R_2}{R_1 + R_2}\). The code solves this standard equation. <a href='https://en.wikipedia.org/wiki/Voltage_divider' target='_blank' class='text-themeAccent underline'>Read more on Wikipedia</a></p>
-        </div>
-    </div>
-</div>
+function updateDivider(){
+ const get=id=>Number(document.getElementById(id).value);
+ const ids=['div-vin','div-r1','div-r2','div-load']; const raw=ids.map(id=>document.getElementById(id).value); const [v,r1,r2,load]=ids.map(get);
+ const out=['div-vout','div-current','div-p1','div-p2'];
+ if(raw.some(x=>x.trim()==='')||![v,r1,r2,load].every(Number.isFinite)||v<0||r1<=0||r2<=0||load<0){out.forEach(id=>document.getElementById(id).innerText='—');document.getElementById('basic-error').innerText='Use finite values: Vin ≥ 0, R1/R2 > 0, load ≥ 0.';return;}
+ document.getElementById('basic-error').innerText=''; const low=load===0?r2:1/(1/r2+1/load); const i=v/(r1+low); const vo=i*low;
+ [vo+'',i+'',i*i*r1+'',vo*vo/r2+''].forEach((x,n)=>document.getElementById(out[n]).innerText=Number(x).toPrecision(6)+[' V',' A',' W',' W'][n]);
+}
+updateDivider();
+
+Object.assign(window,{updateDivider});
+})();
+</script>

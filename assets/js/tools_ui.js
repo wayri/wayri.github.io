@@ -1,12 +1,226 @@
 const toolsAssetVersion = new URL(document.currentScript.src).searchParams.get('v') || '1';
-const TOOL_REGISTRY = [{
-    category: "Circuit fundamentals", icon: "fa-bolt",
-    tools: [
-        { id: "tool-ohms-law-wheel", name: "Ohm's Law Wheel", file: "ohms-law-wheel.html" },
-        { id: "tool-reactance-calc", name: "Reactance Calculator", file: "reactance-calc.html" },
-        { id: "tool-rc-time-calc", name: "RC Time Constant", file: "rc-time-calc.html" },
-    ]
-}];
+const TOOL_REGISTRY = [
+    {
+        "category": "Circuit fundamentals",
+        "icon": "fa-bolt",
+        "tools": [
+            {
+                "id": "tool-ohms-law-wheel",
+                "name": "Ohm’s law",
+                "file": "ohms-law-wheel.html",
+                "desc": "Positive DC resistive voltage, current, resistance and power.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-resistor-divider",
+                "name": "Loaded resistor divider",
+                "file": "resistor-divider.html",
+                "desc": "DC division with an optional load and resistor dissipation.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-e-series-finder",
+                "name": "E-series finder",
+                "file": "e-series-finder.html",
+                "desc": "Nearest nominal E12, E24 and E96 values, including decade boundaries.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-smd-resistor",
+                "name": "SMD resistor decoder",
+                "file": "smd-resistor.html",
+                "desc": "Common nominal codes; tolerance still comes from the part.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-led-resistor",
+                "name": "LED series resistor",
+                "file": "led-resistor.html",
+                "desc": "Constant-forward-voltage estimate and upward E12 rounding.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-reactance-calc",
+                "name": "Reactance",
+                "file": "reactance-calc.html",
+                "desc": "Ideal inductive/capacitive reactance and LC resonance.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-rc-time-calc",
+                "name": "RC timing",
+                "file": "rc-time-calc.html",
+                "desc": "Ideal first-order step response and cutoff frequency.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-555-timer-calc",
+                "name": "555 timing",
+                "file": "555-timer-calc.html",
+                "desc": "Ideal astable and monostable threshold timing.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-current-sense-amp",
+                "name": "Current-sense scaling",
+                "file": "current-sense-amp.html",
+                "desc": "Shunt resistance, ideal gain, dissipation and ADC scaling.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-unit-converter",
+                "name": "Engineering units",
+                "file": "unit-converter.html",
+                "desc": "Explicit unit conventions and logarithmic references.",
+                "type": "Analytical calculator"
+            }
+        ]
+    },
+    {
+        "category": "Power & energy",
+        "icon": "fa-plug-circle-bolt",
+        "tools": [
+            {
+                "id": "tool-smps-loop-tuner",
+                "name": "SMPS output-network & loop tuner",
+                "file": "smps-loop-tuner.html",
+                "desc": "Capacitor resonance, output sizing, loaded filters and measured-loop adjustment.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-pdn-impedance",
+                "name": "PDN target impedance",
+                "file": "pdn-impedance.html",
+                "desc": "Allowed voltage change divided by a stated current step.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-magnetic-reluctance",
+                "name": "Magnetic reluctance",
+                "file": "magnetic-reluctance.html",
+                "desc": "Uniform linear core/gap model with user-supplied material data.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-battery-life-estimator",
+                "name": "Battery runtime arithmetic",
+                "file": "battery-life-estimator.html",
+                "desc": "Usable capacity and active/sleep current averaging.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-battery-pack-s-p-config",
+                "name": "Battery pack arithmetic",
+                "file": "battery-pack-s-p-config.html",
+                "desc": "Identical-cell series/parallel nominal values and resistive loss.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-grid-power-calc",
+                "name": "AC power & PFC",
+                "file": "grid-power-calc.html",
+                "desc": "Sinusoidal single-phase and balanced three-phase equations.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-hydro-power-calc",
+                "name": "Hydro power balance",
+                "file": "hydro-power-calc.html",
+                "desc": "Steady flow, net head and supplied efficiencies.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-ev-powertrain-calc",
+                "name": "EV steady-speed estimate",
+                "file": "ev-powertrain-calc.html",
+                "desc": "Flat-road rolling and aerodynamic power; no drive-cycle prediction.",
+                "type": "Analytical calculator"
+            }
+        ]
+    },
+    {
+        "category": "RF & matching",
+        "icon": "fa-satellite-dish",
+        "tools": [
+            {
+                "id": "tool-smith-chart",
+                "name": "Smith chart & matching",
+                "file": "smith-chart.html",
+                "desc": "Complex impedance, reflection and ideal matching networks.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-skin-depth",
+                "name": "Skin depth & DC resistance",
+                "file": "skin-depth.html",
+                "desc": "Good-conductor penetration depth; no AC resistance or thermal rating.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-rf-unit-translator",
+                "name": "RF unit translator",
+                "file": "rf-unit-translator.html",
+                "desc": "Power/voltage references and specified resistive impedance.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-attenuator-calc",
+                "name": "Matched resistive attenuator",
+                "file": "attenuator-calc.html",
+                "desc": "Equal-impedance Pi/T pads with resistor power calculation.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-rf-noise-figure",
+                "name": "Cascade noise figure",
+                "file": "rf-noise-figure.html",
+                "desc": "Friis noise cascade with linear gains and stage order.",
+                "type": "Analytical calculator"
+            },
+            {
+                "id": "tool-friis-transmission",
+                "name": "Free-space link budget",
+                "file": "friis-transmission.html",
+                "desc": "Ideal far-field free-space path, antenna gains and stated losses.",
+                "type": "Analytical calculator"
+            }
+        ]
+    },
+    {
+        "category": "Interface cheat sheets",
+        "icon": "fa-book-open",
+        "tools": [
+            {
+                "id": "tool-ddr-reference",
+                "name": "DDR timing & routing",
+                "file": "ddr-reference.html",
+                "desc": "Timing terms, signal groups, delay budgets and bring-up.",
+                "type": "Reference sheet"
+            },
+            {
+                "id": "tool-ethernet-reference",
+                "name": "Ethernet types & connections",
+                "file": "ethernet-reference.html",
+                "desc": "BASE-T and single-pair types, MAC–PHY interfaces, contacts and layout.",
+                "type": "Reference sheet"
+            },
+            {
+                "id": "tool-serdes-reference",
+                "name": "SerDes channel design",
+                "file": "serdes-reference.html",
+                "desc": "Clocking, UI, coupling, equalization and channel checks.",
+                "type": "Reference sheet"
+            },
+            {
+                "id": "tool-lvds-reference",
+                "name": "LVDS connections",
+                "file": "lvds-reference.html",
+                "desc": "Termination, common mode, topology, polarity and clock/data checks.",
+                "type": "Reference sheet"
+            }
+        ]
+    }
+];
 
 let loadedScripts = new Set();
 let loadedStyles = new Set();
@@ -26,7 +240,7 @@ function initSidebar() {
         <div class="p-2 border-b border-themeBorder/40 bg-themeBg/80 sticky top-0 z-20">
             <div class="relative flex items-center">
                 <i class="fa-solid fa-search absolute left-2.5 text-themeMuted text-xs"></i>
-                <input type="text" id="tools-search-input" aria-label="Search engineering tools" placeholder="Search circuit calculators..."
+                <input type="text" id="tools-search-input" aria-label="Search engineering tools" placeholder="Search calculators & references..."
                     class="w-full bg-themeContainer border border-themeBorder text-xs text-themeText pl-8 pr-2 py-1.5 rounded outline-none focus:border-themeAccent transition-colors font-mono"
                     oninput="filterTools(this.value)">
             </div>
@@ -229,10 +443,10 @@ function renderWelcomeGrid() {
     let gridHtml = `<div class="w-full max-w-6xl mx-auto p-6 flex flex-col gap-8">
         <div class="text-center mb-4">
             <h2 class="text-3xl font-bold font-mono text-themeText"><i class="fa-solid fa-toolbox text-themeAccent mr-3"></i>Engineering Toolkit</h2>
-            <p class="text-themeMuted mt-2 text-sm max-w-2xl mx-auto">Three calculators for ideal, linear circuit relationships.</p>
+            <p class="text-themeMuted mt-2 text-sm max-w-2xl mx-auto">Circuit, power and RF calculators, plus practical interface cheat sheets.</p>
             <div class="max-w-3xl mx-auto mt-6 bg-themeBorder/10 border-l-4 border-themeAccent p-4 text-left">
                 <p class="text-sm text-themeMuted leading-relaxed">
-                    These tools cover Ohm’s law and resistive power, ideal component reactance, and first-order RC timing. Their equations and representative input cases are checked in the repository. They do not model component tolerances, parasitics, temperature effects or hardware operating limits. Use component data and measurements for a design decision.
+                    Each calculator states its equations and model limits, with representative numerical checks recorded in the repository. Reference sheets link to device-vendor guidance. Use the actual component data, stackup and operating conditions for a design; these analytical checks do not establish hardware validation.
                 </p>
             </div>
         </div>
@@ -248,7 +462,7 @@ function renderWelcomeGrid() {
         category.tools.forEach(tool => {
             gridHtml += `
                 <button type="button" class="tool-card text-left group border border-themeBorder bg-themeContainer hover:border-themeAccent hover:shadow-[0_0_15px_rgba(var(--theme-accent-rgb),0.15)] rounded p-4 cursor-pointer transition-all flex flex-col gap-2" onclick="loadTool('${tool.id}', '${tool.file}')">
-                    <h4 class="font-bold font-mono text-themeAccent group-hover:text-themeText transition-colors">${tool.name}</h4>
+                    <span class="text-xs text-themeMuted">${tool.type}</span><h4 class="font-bold font-mono text-themeAccent group-hover:text-themeText transition-colors">${tool.name}</h4>
                     <p class="text-xs text-themeMuted leading-relaxed">${tool.desc || 'Interactive engineering design utility.'}</p>
                 </button>
             `;

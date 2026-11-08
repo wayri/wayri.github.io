@@ -1,9 +1,21 @@
 # Published circuit calculator scope
 
-The tools catalog intentionally contains only three ideal-circuit calculators.
-Other calculator fragments are retained as source but excluded from GitHub Pages
-in `_config.yml`. They have no catalog entry or supported loading route.
-This review does not qualify those retired implementations.
+The tools catalog contains 24 bounded analytical calculators and four source-linked
+interface cheat sheets. Restoring a tool means its stated model and representative
+calculations have been reviewed; it does not mean the tool is measurement-correlated.
+The prior three-tool-only catalog was too restrictive and has been superseded.
+Unreviewed fragments remain in source and are excluded from GitHub Pages in
+`_config.yml`; the loader accepts only registered tool IDs and files.
+
+Review records:
+
+- [Basic circuit and power tools](basic-tool-review.md): 13 reviewed, 11 restored.
+- [RF and high-speed tools](rf-tool-review.md): 17 reviewed; five repaired calculators
+  and the rebuilt Smith chart restored. Skin-depth replacement is covered below.
+- [SMPS output-network and loop tuner](smps-tool-review.md): explicit models,
+  equations, source links and numerical verification.
+- [Remaining catalog review](remaining-tool-review.md): every other legacy entry,
+  retained exclusions, narrowed replacements and new reference sheets.
 
 | Tool | Equation basis | Checked cases | Limits |
 | --- | --- | --- | --- |
@@ -16,7 +28,10 @@ inline calculator scripts with a small DOM fixture and compare displayed values
 with analytic examples at the UI’s displayed precision. They check calculation
 behavior, not browser rendering or correlation with hardware measurements.
 
-Retired tools include all thermal calculators, magnetics/converter designers,
-RF suites, PCB screening tools, motor/grid/battery simulations and the harness
-designer. Reintroducing a tool requires a separately reviewed model scope,
-traceable equations or data, representative numerical checks and UI checks.
+All thermal simulators and harness builders remain out. Other excluded suites are
+listed individually in the review records. Reintroducing another tool requires a
+bounded model, traceable equations/data, numerical examples and lifecycle/UI checks.
+The retired shared engines remain excluded; restored pages are self-contained or
+use a dedicated reviewed engine. Tests for the changed catalog are:
+
+`node --test tests/circuit-tools.test.cjs tests/basic-tools.test.cjs tests/rf-tools.test.cjs tests/smith-tools.test.cjs tests/smps-design-tools.test.cjs`

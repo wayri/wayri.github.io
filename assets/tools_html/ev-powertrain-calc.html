@@ -1,9 +1,10 @@
 <div class="doc-container flex flex-col w-full h-full">
-    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="EV Powertrain & Range Calculator">
-        <div class="flex items-center gap-2"><i class="fa-solid fa-car-side"></i><h3 class="font-bold font-mono">EV Powertrain & Range</h3></div>
+    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="EV Steady-Speed Estimate Calculator">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-car-side"></i><h3 class="font-bold font-mono">EV Steady-Speed Estimate</h3></div>
         <span class="font-mono text-[10px] opacity-70">Tractive Effort & Energy</span>
     </div>
     
+    <p class="p-4 text-sm text-themeMuted">Steady cruise on a flat road, still air at 1.225 kg/m³ and constant drivetrain efficiency. Battery input is usable energy. Excludes acceleration, hills, HVAC/auxiliary loads, wind, temperature and battery aging. This is a road-load estimate, not a drive-cycle range prediction.</p>
     <div class="p-4 font-mono text-sm flex flex-col flex-grow overflow-y-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
             
@@ -139,6 +140,11 @@
         const bat_kwh = parseFloat(document.getElementById('ev-bat').value);
         const eta = parseFloat(document.getElementById('ev-eta').value) / 100;
 
+        if (![v_kmh, m, Crr, Cd, A, bat_kwh, eta].every(Number.isFinite) ||
+            v_kmh <= 0 || m <= 0 || Crr < 0 || Cd < 0 || A <= 0 || bat_kwh <= 0 || eta <= 0 || eta > 1 || (Crr === 0 && Cd === 0)) {
+            ['ev-fdrag', 'ev-froll', 'ev-p-val', 'ev-eff-val', 'ev-range-val'].forEach(id => document.getElementById(id).innerText = '—');
+            return;
+        }
         const g = 9.81;
         const rho_air = 1.225;
         const v_ms = v_kmh / 3.6;
@@ -174,5 +180,5 @@
         document.getElementById('ev-range-val').innerText = Math.round(range_km);
     }
     
-    setTimeout(updateEV, 100);
+    updateEV();
 </script>

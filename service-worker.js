@@ -1,5 +1,5 @@
 // Service Worker for Full Offline Engineering Suite Hosting
-const CACHE_NAME = 'eng-tools-suite-v3';
+const CACHE_NAME = 'eng-tools-suite-v4';
 
 const PRECACHE_URLS = [
     '/',

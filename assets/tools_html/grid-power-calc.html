@@ -100,7 +100,7 @@
                             <div class="font-bold text-red-400"><span id="grid-qc">0</span> kVAR</div>
                         </div>
                         <div class="text-right">
-                            <div class="text-[10px] text-themeMuted">Required Capacitor Bank:</div>
+                            <div class="text-[10px] text-themeMuted">Capacitance (each delta branch for 3φ):</div>
                             <div class="text-2xl font-bold text-themeText"><span id="grid-c">0</span> <span class="text-sm text-themeAccent">μF</span></div>
                         </div>
                     </div>
@@ -120,12 +120,14 @@
             <p><strong>Apparent Power (S):</strong> Single phase: $S = V \cdot I$. Three phase: $S = \sqrt{3} \cdot V_{LL} \cdot I_L$</p>
             <p><strong>Real Power (P):</strong> $P = S \cdot \cos(\theta) = S \cdot PF$</p>
             <p><strong>Reactive Power (Q):</strong> $Q = S \cdot \sin(\theta) = \sqrt{S^2 - P^2}$</p>
-            <p><strong>PFC Capacitor:</strong> Required compensation $Q_c = P \cdot (\tan(\theta_{old}) - \tan(\theta_{new}))$. <br>$C = \frac{Q_c}{V^2 \cdot 2 \pi f}$</p>
+            <p><strong>PFC Capacitor:</strong> Required compensation $Q_c = P \cdot (\tan(\theta_{old}) - \tan(\theta_{new}))$. <br>$C = Q_c/(2\pi f V^2)$ for single phase; $C_\Delta = Q_c/(3 \cdot 2\pi f V_{LL}^2)$ per branch for three-phase delta.</p>
         </div>
     </div>
 </div>
 
-<script>
+<p class="p-4 text-xs text-themeMuted">Sinusoidal steady-state, lagging displacement power factor only; three-phase assumes a balanced load and line-to-line RMS voltage. S = VI (single phase) or √3 VLL IL; P = S·PF, Q = S√(1−PF²). Correction Qc = P[tan(acos(PF))−tan(acos(target))]. Capacitance is per delta branch for three phase, or the single capacitor for one phase. Harmonics, resonances, switching and capacitor ratings require separate analysis.</p><script>
+(function(){
+
     function updateGrid() {
         const phases = parseInt(document.getElementById('grid-phase').value);
         const V = parseFloat(document.getElementById('grid-v').value);
@@ -134,8 +136,9 @@
         let pf_target = parseFloat(document.getElementById('grid-pf-target').value);
         const f = parseFloat(document.getElementById('grid-f').value);
 
-        if(pf > 1) pf = 1;
-        if(pf_target > 1) pf_target = 1;
+        if(![V,I,pf,pf_target,f].every(Number.isFinite)||V<=0||I<0||pf<=0||pf>1||pf_target<=0||pf_target>1||f<=0||![1,3].includes(phases)) {
+            ['grid-p','grid-q','grid-s','grid-qc','grid-c'].forEach(id=>document.getElementById(id).innerText='—');return;
+        }
 
         if (phases === 3) {
             document.getElementById('hint-v').classList.remove('hidden');
@@ -179,7 +182,7 @@
         document.getElementById('grid-q').innerText = (Q/1000).toFixed(2);
         document.getElementById('grid-s').innerText = (S/1000).toFixed(2);
         document.getElementById('grid-qc').innerText = (Qc/1000).toFixed(2);
-        document.getElementById('grid-c').innerText = isNaN(C_uf) ? "0.0" : C_uf.toFixed(1);
+        document.getElementById('grid-c').innerText = isNaN(C_uf) ? "0.0" : (phases===3?C_uf/3:C_uf).toFixed(1);
 
         // Update Triangle Visuals
         const svgW = 140;
@@ -211,5 +214,8 @@
         document.getElementById('line-s').setAttribute('y2', ptY);
     }
     
-    setTimeout(updateGrid, 100);
+    updateGrid();
+
+Object.assign(window,{updateGrid});
+})();
 </script>

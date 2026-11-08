@@ -114,19 +114,24 @@
         <div id="csa-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
             <p><strong>Ideal Shunt Value:</strong> $R_{shunt} = \frac{V_{shunt\_max}}{I_{max}}$</p>
             <p><strong>Required Gain:</strong> $A_v = \frac{V_{ADC\_max}}{V_{shunt\_max}} = \frac{V_{ADC\_max}}{I_{max} \cdot R_{shunt}}$</p>
-            <p><strong>Power Dissipation:</strong> $P = I_{max}^2 \cdot R_{shunt}$ (Select a resistor rated for at least $2 \times P$)</p>
+            <p><strong>Power Dissipation:</strong> $P = I_{max}^2 \cdot R_{shunt}$ (Verify the resistor’s ratings and derating curve separately)</p>
             <p><strong>Resolution:</strong> $I_{LSB} = \frac{V_{ADC\_max}}{2^N \cdot A_v \cdot R_{shunt}}$ (where $N$ is the ADC bit depth).</p>
         </div>
     </div>
 </div>
 
-<script>
+<p class="p-4 text-xs text-themeMuted">Ideal unipolar shunt/amplifier scaling: Rshunt = Vshunt/Imax, gain = Vadc/Vshunt, shunt loss = Imax²R. ADC step size is full-scale/2ⁿ. Uses the ADC full-scale voltage as the target output; actual designs need output headroom. Offset, common-mode range, bandwidth, noise, tolerances and overload ratings are not modeled.</p><script>
+(function(){
+
     function updateCSA() {
         // Master recalculate from Vshunt max
         const Imax = parseFloat(document.getElementById('csa-imax').value);
         const Vadc = parseFloat(document.getElementById('csa-vadc').value);
         const Vshunt_max_mV = parseFloat(document.getElementById('csa-vshunt-max').value);
 
+        if (![Imax,Vadc,Vshunt_max_mV].every(x=>Number.isFinite(x)&&x>0)) {
+            ['csa-pd-val','csa-res10-val','csa-res12-val'].forEach(id=>document.getElementById(id).innerText='—'); return;
+        }
         if (Imax > 0 && Vadc > 0 && Vshunt_max_mV > 0) {
             const Vshunt_V = Vshunt_max_mV / 1000;
             const Rshunt_ohm = Vshunt_V / Imax;
@@ -145,6 +150,9 @@
         const Vadc = parseFloat(document.getElementById('csa-vadc').value);
         const Rshunt_mOhm = parseFloat(document.getElementById('csa-rshunt').value);
 
+        if (![Imax,Vadc,Rshunt_mOhm].every(x=>Number.isFinite(x)&&x>0)) {
+            ['csa-pd-val','csa-res10-val','csa-res12-val'].forEach(id=>document.getElementById(id).innerText='—'); return;
+        }
         if (Imax > 0 && Vadc > 0 && Rshunt_mOhm > 0) {
             const Rshunt_ohm = Rshunt_mOhm / 1000;
             const Vshunt_V = Imax * Rshunt_ohm;
@@ -162,6 +170,9 @@
         const Vadc = parseFloat(document.getElementById('csa-vadc').value);
         const Gain = parseFloat(document.getElementById('csa-gain').value);
 
+        if (![Imax,Vadc,Gain].every(x=>Number.isFinite(x)&&x>0)) {
+            ['csa-pd-val','csa-res10-val','csa-res12-val'].forEach(id=>document.getElementById(id).innerText='—'); return;
+        }
         if (Imax > 0 && Vadc > 0 && Gain > 0) {
             const Vshunt_V = Vadc / Gain;
             document.getElementById('csa-vshunt-max').value = (Vshunt_V * 1000).toFixed(1);
@@ -190,5 +201,8 @@
         document.getElementById('csa-res12-val').innerText = res_12_ma.toFixed(2);
     }
     
-    setTimeout(updateCSA, 100);
+    updateCSA();
+
+Object.assign(window,{updateCSA,updateCSA_FromGain,updateCSA_FromShunt});
+})();
 </script>
