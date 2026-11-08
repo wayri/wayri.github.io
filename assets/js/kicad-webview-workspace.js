@@ -25,7 +25,7 @@
             project = window.IRCAProject.createWorkspace(host, { theme: theme(), layout: 'split', linkedSelection: true });
             project.addEventListener('error', () => { status.textContent = 'A drawing could not open. Choose another listed file or close and reopen the workspace.'; });
             await window.IRCAProject.load(project);
-            const saved = window.KiCadWebView.parseViewLink(location.href);
+            const saved = new URLSearchParams(location.search).get('demo-panel') === 'linked' ? null : window.KiCadWebView.parseViewLink(location.href);
             if (saved) await project.restoreViewState(saved);
             probe.hidden = false;
             button.textContent = 'Close Advanced viewer'; button.setAttribute('aria-expanded', 'true');
@@ -63,6 +63,7 @@
         finally { probe.disabled = false; }
     });
     async function restoreLink() {
+        if (new URLSearchParams(location.search).get('demo-panel') === 'linked') return;
         try {
             const saved = window.KiCadWebView?.parseViewLink(location.href);
             if (!saved) return;

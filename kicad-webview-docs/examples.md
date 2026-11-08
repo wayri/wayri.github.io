@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/examples/
 doc_section: examples
 ---
 
-These independent examples use the **0.1.0-beta.2** ES module directly from the versioned release. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The public inverter fixture lacks external component models, so 3D may show labelled stand-ins.
+These independent examples use the **0.1.0-beta.2** ES module directly from the versioned release. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The public OLIMEX project references pinned original upstream PCB and schematic sources; external models are not bundled, so 3D may show labelled stand-ins.
 
 For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/kicad-webview/docs/quick-start/). The release uses [MPL-2.0](/kicad-webview/docs/license/); input designs and model files have separate terms.
 
@@ -16,7 +16,7 @@ The [product page’s public examples](/kicad-webview/#public-examples) add two 
 - [OLIMEX source README, pinned revision `26705d3`](https://github.com/OLIMEX/ESP32-P4-DevKit/blob/26705d36407a07324348927dfd30fbf4ffc1d94c/README.md): Rev D1 PCB and schematic. The hardware’s CERN-OHL-S-2.0 terms are separate from the upstream software and documentation licenses.
 - [Marble source README, pinned revision `a426777`](https://github.com/BerkeleyLab/Marble/blob/a426777d92c0f22a546d4740b419a3937e0c1f90/README.md): selected root and PMOD schematic sheets, not a complete-hierarchy or full-board demo. Hardware copyright and contributor credits remain with their upstream authors under CERN-OHL-1.2.
 
-For a complete face-picking example with virtual LEDs, displays, buttons and knobs, use [Interactive models & displays](/kicad-webview/docs/model-interaction/).
+Explore the [capability demos](/kicad-webview/#capability-demos) and use [Interactive models & displays](/kicad-webview/docs/model-interaction/) for a complete face-picking example with virtual LEDs, displays, buttons and knobs.
 
 ## Link a layout and assembly
 
@@ -28,10 +28,10 @@ Both viewers load the same exact saved PCB. Selecting a supported part or object
   #views > div { height:480px; min-width:0; }
 </style>
 <div id="views"><div id="layout"></div><div id="assembly"></div></div>
-<p id="status" role="status">Loading the public inverter…</p>
+<p id="status" role="status">Loading the public OLIMEX board…</p>
 <script type="module">
 import { Viewer, linkViewers } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
-const project = 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json';
+const project = 'https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json';
 const layout = new Viewer('#layout', { theme:'dark' });
 const assembly = new Viewer('#assembly', { theme:'dark' });
 const abort = new AbortController();
@@ -41,8 +41,8 @@ window.addEventListener('pagehide', () => {
 }, { once:true });
 try {
   const loaded = await Promise.all([
-    layout.load(project, { file:'3PD+IB.kicad_pcb', view:'pcb', signal:abort.signal }),
-    assembly.load(project, { file:'3PD+IB.kicad_pcb', view:'3d', signal:abort.signal })
+    layout.load(project, { file:'ESP32-P4-DevKit_Rev_D1.kicad_pcb', view:'pcb', signal:abort.signal }),
+    assembly.load(project, { file:'ESP32-P4-DevKit_Rev_D1.kicad_pcb', view:'3d', signal:abort.signal })
   ]);
   if (loaded.every(Boolean)) {
     links = linkViewers([layout, assembly]);
@@ -72,7 +72,7 @@ const button = document.querySelector('#quality'); button.disabled = true;
 let tour;
 window.addEventListener('pagehide', () => { tour?.dispose(); viewer.dispose(); }, { once:true });
 try {
-  if (await viewer.load('https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json', { view:'3d' })) {
+  if (await viewer.load('https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json', { view:'3d' })) {
     tour = new ViewerCarousel('#tour', { viewer, interval:6500, slides:[
       { label:'Assembly overview', view:'3d', camera3D:'isometric', clearSelection:true },
       { label:'Top assembly', view:'3d', camera3D:'top' },
@@ -105,14 +105,14 @@ const tree = new ProjectTree('#tree', { theme:'dark' });
 const expand = document.querySelector('#expand'), save = document.querySelector('#save');
 window.addEventListener('pagehide', () => tree.dispose(), { once:true });
 try {
-  if (await tree.load('https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json')) {
+  if (await tree.load('https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json')) {
     expand.disabled = save.disabled = false;
   }
 } catch (error) { document.querySelector('#status').textContent = error.message; }
 expand.addEventListener('click', () => tree.expandAll());
 save.addEventListener('click', () => {
   const url = URL.createObjectURL(new Blob([tree.toSVG()], { type:'image/svg+xml' }));
-  const link = document.createElement('a'); link.href = url; link.download = 'inverter-hierarchy.svg';
+  const link = document.createElement('a'); link.href = url; link.download = 'olimex-hierarchy.svg';
   document.body.append(link); link.click(); link.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
@@ -148,7 +148,7 @@ function paint() {
   });
 }
 try {
-  if (await viewer.load('https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json', { view:'3d' })) {
+  if (await viewer.load('https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json', { view:'3d' })) {
     choose.disabled = false; status.textContent = 'Choose a face on the loaded 3D geometry.';
   }
 } catch (error) { status.textContent = error.message; }
@@ -187,7 +187,7 @@ const viewer = new Viewer('#board');
 const input = document.querySelector('#results'), status = document.querySelector('#status');
 window.addEventListener('pagehide', () => viewer.dispose(), { once:true });
 try {
-  if (await viewer.load('https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json', { view:'pcb' })) input.disabled = false;
+  if (await viewer.load('https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json', { view:'pcb' })) input.disabled = false;
 } catch (error) { status.textContent = error.message; }
 input.addEventListener('change', async () => {
   const file = input.files[0]; if (!file) return;

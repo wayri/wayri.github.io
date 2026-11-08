@@ -13,7 +13,7 @@ The compact viewer shows one drawing at a time. It accepts a supported hosted dr
 
 Local KiCad and manufacturing files are read in browser memory without uploading them. A hosted input makes requests to its authorized URLs; remote servers must permit CORS. A private GitHub repository does not become readable through a public embed. See [Hosting and integrations](/kicad-webview/docs/hosting/) for source formats and permissions, and [Troubleshooting](/kicad-webview/docs/troubleshooting/) for file and archive limits.
 
-The [bundled inverter](/assets/lib/kicad-webview/releases/0.1.0-beta.2/inverter-project.html) is a portable example with a PCB and schematic sheets. Its missing external 3D models remain labelled stand-ins. It does not contain the private IRCA design.
+Explore the [IRCA demonstration](/kicad-webview/) and [public hardware examples](/kicad-webview/#public-examples). The OLIMEX manifest uses pinned original upstream PCB and schematic sources under CERN-OHL-S-2.0. External models are not bundled, so missing models appear as labelled stand-ins.
 
 ## Navigate the drawing
 

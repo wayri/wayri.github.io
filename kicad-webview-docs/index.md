@@ -33,7 +33,7 @@ The API includes independent viewers, an advanced project workspace, saved-ident
 
 The display represents saved source data within the renderer’s supported scope. It does **not** run native KiCad, edit the design, execute firmware, perform ERC/DRC, certify manufacturing readiness or solve electrical, thermal or electromagnetic models. Missing models can become labelled stand-ins. A calculated overlay must retain its own assumptions, source identity and validation evidence.
 
-The current [IRCA product demonstrations](/kicad-webview/) use a separately maintained site bundle. They include later features such as continuous FEM triangle overlays and the focused display interaction mode. Their presence on the site does not add those APIs to this immutable release. Follow the release-specific signatures here.
+The current [IRCA product demonstrations](/kicad-webview/) and [capability demos](/kicad-webview/#capability-demos) use a separately maintained site bundle. They include later features such as continuous FEM triangle overlays and the focused display interaction mode. Their presence on the site does not add those APIs to this immutable release. Follow the release-specific signatures here.
 
 ## Availability and permission
 

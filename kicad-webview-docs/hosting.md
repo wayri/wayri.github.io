@@ -45,7 +45,7 @@ The source files must actually exist at those URLs, and the board’s saved mode
 
 ## Iframe parameters
 
-The versioned [embed page](/assets/lib/kicad-webview/releases/0.1.0-beta.2/embed.html?src=demo%2Fproject.json&view=3d&theme=dark) supports:
+The versioned [embed page](/assets/lib/kicad-webview/releases/0.1.0-beta.2/embed.html?src=https%3A%2F%2Fwayri.github.io%2Fassets%2Fdemos%2Fpublic-hardware%2Folimex-p4-project.json&view=3d&theme=dark) supports:
 
 | Parameter | Meaning |
 | --- | --- |

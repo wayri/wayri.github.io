@@ -1,0 +1,27 @@
+<section id="capability-demos" class="wv-gallery" aria-labelledby="gallery-title">
+  <div class="wv-section-heading"><div><p class="wv-eyebrow">Try the library</p><h2 id="gallery-title">A panel for every capability.</h2></div><p>Choose a panel to open its controls. IRCA uses the same approved review integration as the rest of this page. Heavy viewers open only on request.</p></div>
+  <div class="wv-gallery-cards" role="group" aria-label="Choose a capability demo">
+    <button type="button" data-demo-panel="compact"><strong>Compact embed</strong><span>Drawing, fit, theme and read-only inspection.</span></button>
+    <button type="button" data-demo-panel="project"><strong>Advanced project</strong><span>Files, sheets, split panes and active-pane navigation.</span></button>
+    <button type="button" data-demo-panel="inspection"><strong>Parts, pads &amp; nets</strong><span>Search saved identities, highlight copper and control Properties.</span></button>
+    <button type="button" data-demo-panel="layers"><strong>Layers</strong><span>Choose visible copper, silk and other saved layers.</span></button>
+    <button type="button" data-demo-panel="assembly"><strong>3D &amp; part focus</strong><span>Orbit, pan, side views, focus a part and highlight nets.</span></button>
+    <button type="button" data-demo-panel="linked"><strong>Linked views &amp; URLs</strong><span>Cross-select two views and copy a source-bound view link.</span></button>
+    <button type="button" data-demo-panel="hierarchy"><strong>Sheet hierarchy</strong><span>Explore a source-derived tree and export SVG.</span></button>
+    <button type="button" data-demo-panel="presentation"><strong>Carousel &amp; rendering</strong><span>Step through live views and opt into studio rendering.</span></button>
+    <button type="button" data-demo-panel="models"><strong>Interactive models</strong><span>Place virtual displays, LEDs, buttons and knobs.</span></button>
+    <button type="button" data-demo-panel="analysis"><strong>Supplied PI results</strong><span>Inspect the computed IRCA field, units and assumptions.</span></button>
+    <button type="button" data-demo-panel="fabrication"><strong>Gerber &amp; Excellon</strong><span>Overlay IRCA fabrication review layers and measure.</span></button>
+    <button type="button" data-demo-panel="inputs"><strong>Files, URLs &amp; ZIPs</strong><span>Load local files or a public source into a native viewer.</span></button>
+    <button type="button" data-demo-panel="export"><strong>Self-contained HTML</strong><span>Export your own files locally, without uploading them.</span></button>
+    <button type="button" data-demo-panel="integrations"><strong>Apps &amp; providers</strong><span>HTML attachment routes, Forge status and Altium beta.</span></button>
+  </div>
+  <section id="capability-panel" class="wv-gallery-panel" aria-labelledby="capability-panel-title" hidden>
+    <header><div><h3 id="capability-panel-title"></h3><p id="capability-panel-help"></p></div><button id="capability-close" type="button">Close panel</button></header>
+    <div id="capability-controls" class="wv-gallery-controls" aria-label="Demo controls"></div>
+    <p id="capability-status" role="status" aria-live="polite"></p>
+    <div id="capability-stage" class="wv-gallery-stage"></div>
+    <p class="wv-caption">IRCA panels show approved public review geometry and display models, not original editable CAD. Virtual controls are caller-scripted presentation behavior. External sources keep their own licenses. <a id="capability-docs" href="{{ '/kicad-webview/docs/' | relative_url }}">Read the guide ↗</a></p>
+  </section>
+  <noscript><p>The panels need JavaScript. Read the <a href="{{ '/kicad-webview/docs/' | relative_url }}">guides and examples</a> for supported browser integration.</p></noscript>
+</section>

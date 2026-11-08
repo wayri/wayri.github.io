@@ -31,7 +31,7 @@ The [public source repository](https://github.com/wayri/kicad-webview) contains 
 
 Three.js and fzstd retain their own MIT notices. Other dependencies retain their stated terms. This release’s owner-authored extracted subset is covered by MPL-2.0; that does not relicense the rest of SPIKE, Pocket KiView or another parent project. Historical extraction records remain for provenance.
 
-The software license does not license your PCB designs, third-party models, documents or analysis results. The bundled inverter is separately authorized demonstration data, not an open-hardware grant. The [public hardware examples](/kicad-webview/#public-examples) have their own sources and CERN hardware licenses: OLIMEX ESP32-P4-DevKit Rev D1 uses CERN-OHL-S-2.0; Marble uses CERN-OHL-1.2. Preserve the applicable hardware notices and check each example’s README before redistribution.
+The software license does not license your PCB designs, third-party models, documents or analysis results. The immutable beta.1 and beta.2 archives contain a legacy inverter regression fixture, separately authorized as demonstration data and not an open-hardware grant. These archives do not contain the OLIMEX project. The [public hardware examples](/kicad-webview/#public-examples) have their own sources and CERN hardware licenses: OLIMEX ESP32-P4-DevKit Rev D1 uses CERN-OHL-S-2.0; Marble uses CERN-OHL-1.2. Preserve the applicable hardware notices and check each example’s README before redistribution.
 
 ## Notices supplied with this release
 
@@ -43,7 +43,7 @@ The software license does not license your PCB designs, third-party models, docu
 - [Three.js license](/assets/lib/kicad-webview/releases/0.1.0-beta.2/THREE-LICENSE)
 - [fzstd license](/assets/lib/kicad-webview/releases/0.1.0-beta.2/FZSTD-LICENSE)
 - [Historical Pocket KiView license record](/assets/lib/kicad-webview/releases/0.1.0-beta.2/licenses/Pocket-KiView-Source-Available-1.0.txt)
-- [Bundled inverter design provenance](/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/PROVENANCE.json)
+- [Legacy beta.2 inverter fixture provenance](/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/PROVENANCE.json)
 
 ## Immutable versioned files
 

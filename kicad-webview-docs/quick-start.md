@@ -6,7 +6,7 @@ permalink: /kicad-webview/docs/quick-start/
 doc_section: quick-start
 ---
 
-Choose one route below. Each uses the immutable `0.1.0-beta.2` files, without a package install. The examples load the bundled public inverter project. Unresolved component models use labelled stand-ins.
+Choose one route below. Each uses the immutable `0.1.0-beta.2` files, without a package install. The examples load the OLIMEX public project manifest, which references pinned original upstream sources under CERN-OHL-S-2.0. Models are not bundled; unresolved components use labelled stand-ins.
 
 ## Classic script
 
@@ -27,7 +27,7 @@ viewer.addEventListener('error', event => {
   document.querySelector('#status').textContent = event.detail.message;
 });
 viewer.load(
-  'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json',
+  'https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json',
   { view: '3d' }
 ).then(loaded => {
   if (loaded) document.querySelector('#status').textContent = 'Read-only project';
@@ -39,7 +39,7 @@ window.addEventListener('pagehide', () => viewer.dispose(), { once: true });
 </html>
 ```
 
-[Open the supplied classic-script example](/assets/lib/kicad-webview/releases/0.1.0-beta.2/direct.html). Replace the sample URL with your supported hosted drawing, project manifest or ZIP. Attach event listeners before calling `load`.
+Replace the sample URL with your supported hosted drawing, project manifest or ZIP. Attach event listeners before calling `load`.
 
 ## ES module
 
@@ -53,7 +53,7 @@ const viewer = new Viewer('#board', { theme: 'dark' });
 window.addEventListener('pagehide', () => viewer.dispose(), { once: true });
 try {
   await viewer.load(
-    'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json',
+    'https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json',
     { view: '3d' }
   );
 } catch (error) {
@@ -70,21 +70,21 @@ Use this route when the host accepts HTML iframes but does not permit your own p
 
 ```html
 <iframe
-  title="Interactive inverter design"
-  src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/embed.html?src=demo%2Fproject.json&amp;view=3d&amp;theme=dark"
+  title="Interactive OLIMEX design"
+  src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/embed.html?src=https%3A%2F%2Fwayri.github.io%2Fassets%2Fdemos%2Fpublic-hardware%2Folimex-p4-project.json&amp;view=3d&amp;theme=dark"
   style="width:100%;height:70dvh;min-height:360px;border:0"
   loading="lazy">
 </iframe>
 ```
 
-The relative `src` design URL resolves against `embed.html`, not the parent webpage. For another host’s design, encode an absolute source URL. The [iframe parameter reference](/kicad-webview/docs/hosting/#iframe-parameters) describes the supported options; this release does not provide a general cross-origin iframe command bridge.
+The example encodes an absolute source URL. A relative `src` resolves against `embed.html`, not the parent webpage. The [iframe parameter reference](/kicad-webview/docs/hosting/#iframe-parameters) describes the supported options; this release does not provide a general cross-origin iframe command bridge.
 
 ## Self-host the ZIP
 
 1. [Download the complete release ZIP](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.2.zip).
 2. Unpack it and keep the release files, `LICENSE`, notices and `licenses/` together. Preserve relative paths.
 3. Serve the directory through your approved static HTTP(S) host. No runtime Node service is required.
-4. Open `direct.html`, `embed.html` with a source parameter, or `export.html`.
+4. Open `embed.html` with an approved source parameter, or `export.html`.
 5. Point your application’s script/import URLs at your versioned copy. Do not change bytes under an already published release version.
 
 The [release manifest](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) supplies SHA-256 file checksums and a classic-script SRI value. Keep the entire release when you need all entry points. A smaller integration still needs the dependencies and notices required by the files it uses.
@@ -95,7 +95,7 @@ Open the [browser-only exporter](/assets/lib/kicad-webview/releases/0.1.0-beta.2
 
 The output contains your design, viewer and notices. Review it before sharing. Its content policy blocks external network connections, so missing models cannot be fetched later. A recipient’s browser or host application must allow interactive HTML and WebGL for 3D.
 
-[Open the bundled inverter HTML](/assets/lib/kicad-webview/releases/0.1.0-beta.2/inverter-project.html) for a ready-made example. The [export API](/kicad-webview/docs/api-utilities/) is a separate module; it is not a method on the `KiCadWebView` global.
+For a ready interactive design, visit the [IRCA product demonstration](/kicad-webview/). The [export API](/kicad-webview/docs/api-utilities/) is a separate module; it is not a method on the `KiCadWebView` global.
 
 ## Next steps
 

@@ -16,6 +16,8 @@ depend on the later site-specific interaction-locking API. For exact signatures,
 see [DemoController](/kicad-webview/docs/api-utilities/#democontroller) and
 [face selection](/kicad-webview/docs/api-viewer/#cameras).
 
+[Open the approved IRCA interaction demo](/assets/demos/model-interaction.html) to try the website’s existing review integration. It uses the site-demo bundle and approved IRCA display models; the portable beta.2 API example below uses the credited public OLIMEX files.
+
 ## Choose actual geometry
 
 First load a supported project with `{view:'3d'}`, then create one controller for
@@ -38,12 +40,9 @@ part name. A whole-component LED frame can have `shape:'component'` and
 
 ## A complete browser example
 
-[Open the interactive example](/assets/demos/model-interaction.html). The runnable file below uses the same code.
+Explore the [capability demos](/kicad-webview/#capability-demos), then try the release-specific example below.
 
-Save this HTML on an HTTP(S) host. It opens the public inverter fixture and lets
-you select the faces for each virtual control. The fixture has unresolved external
-models, so some selected geometry can be labelled stand-ins. Choose appropriate
-faces explicitly; use your own model-complete project for a product demonstration.
+Save this HTML on an HTTP(S) host. It opens the public OLIMEX project using pinned original upstream sources under CERN-OHL-S-2.0 and lets you select the faces for each virtual control. Models are not bundled, so some geometry can be labelled stand-ins. Choose appropriate faces explicitly; use your own model-complete project for a product demonstration.
 
 ```html
 <!doctype html>
@@ -157,7 +156,7 @@ document.querySelector('#brightness').oninput = event => {
 document.querySelector('#focus').onclick = () => demo?.focus();
 try {
   const loaded = await viewer.load(
-    'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json',
+    'https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json',
     {view:'3d', signal:abort.signal}
   );
   if (loaded) {
