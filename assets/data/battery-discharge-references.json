@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "reviewedDate": "2026-11-09",
+  "references": [
+    {
+      "id": "energizer-aa-lr6-100ma-21c-2018-fig12",
+      "name": "Energizer AA/LR6 alkaline · 100 mA · 21 °C · coarse graph read",
+      "sourceUrl": "https://data.energizer.com/pdfs/alkaline_appman.pdf#page=11",
+      "page": 11,
+      "figure": "Figure 12 — AA/LR6 Alkaline Batteries, 100mA Constant Current Discharge at 21C",
+      "brand": "Energizer",
+      "model": "Generic AA/LR6 alkaline family; no exact SKU identified in the figure",
+      "chemistry": "alkaline manganese dioxide",
+      "evidenceType": "Manufacturer-published loaded-voltage discharge graph, manually read at coarse resolution",
+      "sourceYear": 2018,
+      "conditions": {
+        "loadType": "constant_current",
+        "currentA": 0.1,
+        "tempC": 21,
+        "cutoffV": 0.8,
+        "discharge": "continuous",
+        "capacityAxisConversion": "Discharged Ah = 0.100 A × plotted elapsed hours"
+      },
+      "points": [
+        { "dischargedAh": 0.0, "voltage": 1.6 },
+        { "dischargedAh": 0.1, "voltage": 1.45 },
+        { "dischargedAh": 0.25, "voltage": 1.37 },
+        { "dischargedAh": 0.5, "voltage": 1.32 },
+        { "dischargedAh": 0.75, "voltage": 1.27 },
+        { "dischargedAh": 1.0, "voltage": 1.25 },
+        { "dischargedAh": 1.25, "voltage": 1.22 },
+        { "dischargedAh": 1.5, "voltage": 1.19 },
+        { "dischargedAh": 1.75, "voltage": 1.16 },
+        { "dischargedAh": 2.0, "voltage": 1.1 },
+        { "dischargedAh": 2.15, "voltage": 1.04 },
+        { "dischargedAh": 2.25, "voltage": 0.98 },
+        { "dischargedAh": 2.35, "voltage": 0.87 },
+        { "dischargedAh": 2.4, "voltage": 0.8 }
+      ],
+      "uncertainty": {
+        "voltageV": 0.03,
+        "dischargedAh": 0.05,
+        "basis": "Conservative visual-reading bounds only, not statistical confidence limits or cell-to-cell performance bounds. The t≈0 point does not resolve the initial load-step transient. Coarse interpolation between knots adds unquantified curve-shape error."
+      },
+      "sourceDiscrepancy": "The plotted curve reaches 0.8 V at approximately 24 h (2.4 Ah); the paragraph below uses a rounded 25 h / 2.5 Ah capacity example. These knots follow the visible plotted curve rather than stretching it to the rounded prose example.",
+      "scope": "Loaded terminal voltage under this single continuous 100 mA, 21 °C test. Not an open-circuit-voltage or rested-SOC curve, guaranteed capacity, current rating, complete chemistry model, or arbitrary-load/temperature prediction. Interpolate only within the supplied discharged-Ah span; do not extrapolate below the plotted cutoff. A user-supplied effective resistance can support an explicitly approximate Voc ≈ Vloaded + Itest × R demonstration, but this does not qualify other currents, pulse recovery, aging or temperature effects."
+    }
+  ]
+}

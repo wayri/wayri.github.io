@@ -35,7 +35,6 @@ exclude:
   - assets/tools_html/ac-motor-dynamics.html
   - assets/tools_html/awg-wire-ampacity.html
   - assets/tools_html/balun-calculator.html
-  - assets/tools_html/battery-suite.html
   - assets/tools_html/bldc-winding-helper.html
   - assets/tools_html/busbar-capacity.html
   - assets/tools_html/cable-thermal.html
@@ -62,7 +61,6 @@ exclude:
   - assets/tools_html/planar-inductor.html
   - assets/tools_html/plot-extractor.html
   - assets/tools_html/power-electronics-calc.html
-  - assets/tools_html/pv-yield-simulator.html
   - assets/tools_html/rf-signal-suite.html
   - assets/tools_html/skin-effect.html
   - assets/tools_html/smps-topology-ratio.html

@@ -81,6 +81,20 @@ const TOOL_REGISTRY = [
         "icon": "fa-plug-circle-bolt",
         "tools": [
             {
+                "id": "tool-pv-yield-simulator",
+                "name": "Solar PV generation",
+                "file": "pv-yield-simulator.html",
+                "desc": "Local map, solar power and monthly/yearly energy; panel-angle search and optional supplied data.",
+                "type": "Generation estimate"
+            },
+            {
+                "id": "tool-battery-suite",
+                "name": "Battery life & voltage profiles",
+                "file": "battery-suite.html",
+                "desc": "Manufacturer references, current/power/resistance schedules and explicit temperature scenarios.",
+                "type": "Discharge scenario model"
+            },
+            {
                 "id": "tool-smps-loop-tuner",
                 "name": "SMPS output-network & loop tuner",
                 "file": "smps-loop-tuner.html",

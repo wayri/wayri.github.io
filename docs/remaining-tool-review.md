@@ -19,7 +19,7 @@ published catalog at the user's request.
 | planar-inductor | Exclude | Geometry/field display uses simplified effective-permeability weighting. Applicability, construction and current/loss claims lack the required reference comparison. |
 | emi-filter-calc | Exclude | Resonant-frequency calculations assume specific common/differential-mode L and C definitions not established by the input labels; an LC corner alone is not insertion loss. The rebuilt SMPS filter offers an explicit loaded circuit instead. |
 | power-electronics-calc | Exclude | Rectifier code explicitly mixes approximate resistive-load and continuous inductive-load equations; waveforms include a rough controlled-three-phase envelope. The combined suite is not restored on the strength of its sound buck subset. |
-| battery-suite | Exclude | Generic chemistry voltage/aging/cycle curves are not tied to cells or measured conditions. Nominal pack and runtime arithmetic are restored separately. |
+| battery-suite | Rebuilt/restored | Replaced generic chemistry/aging curves with a source-conditioned reference catalog and explicit OCV/R/temperature/load model. See battery-analysis-review.md. |
 | bldc-winding-helper | Exclude | Code labels phase-belt winding assignment as simplified; no winding-factor/harmonic/connection validation supports practical winding recommendations. |
 | ac-motor-dynamics | Exclude | Approximate Thevenin parameters are combined with a separate exact input-current branch and an operating-region “stable” verdict. Needs consistent model and reference cases. |
 | motor-controller | Exclude | dq capability sweep uses coarse Id search and shared rendering/extraction assumptions; voltage/current conventions, field-weakening accuracy and model comparisons remain unverified. |
@@ -32,7 +32,7 @@ published catalog at the user's request.
 | smps-loop-tuner | Rebuilt/restored | The old shaped Bode/transient recommendations are replaced; see smps-tool-review.md for actual RLC and measured-loop scope. |
 | magnetics-suite | Exclude | Transformer area-product branch explicitly uses a “pseudo Ap” placeholder; generic window utilization/current density and turns/gap sizing cannot qualify a winding design. |
 | transformer-designer | Exclude | Fixed approximate mean turn length, generic core/thermal inputs and safe-power recommendations do not represent supplied core/winding construction. Thermal model remains out. |
-| pv-yield-simulator | Exclude | Clear-sky irradiance and simplified monthly/day/tilt assumptions do not provide weather-correlated annual energy. No location/weather dataset or yield comparison qualifies the displayed simulation. |
+| pv-yield-simulator | Rebuilt/restored | Replaced synthetic clear-sky yield with supplied POA interval integration and monthly irradiation estimates, explicit temperatures/losses/clipping and provenance. See pv-generation-review.md. |
 | thermistor-r-t-curve-ntc | Exclude | Shared Steinhart–Hart mode uses a placeholder beta-model plot. A valid beta equation alone does not defend the offered combined thermal/sensor tool. |
 | heatsink-simulator | Exclude | Unverified heat-transfer/fin/thermal model; explicitly excluded. |
 | thermal-network-calc | Exclude | Unverified thermal model; explicitly excluded. |

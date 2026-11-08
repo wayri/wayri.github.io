@@ -71,10 +71,10 @@ test('Published catalog and Jekyll exclusions agree; thermal calculators are ret
     const ui = fs.readFileSync(path.join(root, 'assets/js/tools_ui.js'), 'utf8');
     const config = fs.readFileSync(path.join(root, '_config.yml'), 'utf8').replace(/\r\n/g, '\n');
     const files = [...ui.matchAll(/"file": "([^"]+)"/g)].map(m => m[1]);
-    assert.equal(files.length, 28);
+    assert.equal(files.length, 30);
     assert.equal(new Set(files).size, files.length);
     for (const removed of ['heatsink-simulator.html', 'thermal-network-calc.html', 'cable-thermal.html', 'multipoint-harness.html', 'can-bus.html']) assert.ok(!files.includes(removed));
-    for (const kept of ['smps-loop-tuner.html', 'smith-chart.html', 'ddr-reference.html', 'ethernet-reference.html', 'serdes-reference.html', 'lvds-reference.html']) assert.ok(files.includes(kept));
+    for (const kept of ['pv-yield-simulator.html', 'battery-suite.html', 'smps-loop-tuner.html', 'smith-chart.html', 'ddr-reference.html', 'ethernet-reference.html', 'serdes-reference.html', 'lvds-reference.html']) assert.ok(files.includes(kept));
     for (const file of fs.readdirSync(path.join(root, 'assets/tools_html')).filter(f => f.endsWith('.html'))) {
         assert.equal(config.includes('  - assets/tools_html/' + file + '\n'), !files.includes(file), file);
     }

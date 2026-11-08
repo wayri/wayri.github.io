@@ -1,0 +1,2441 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-11-09",
+  "catalogScope": "Representative catalog of 57 manufacturer-listed models across multiple brands, chemistries and formats. It does not cover every global SKU, establish availability or recommend a cell. Conditioned ratings and missing model data remain explicit.",
+  "modelContract": "All OCV, DC resistance and temperature model fields are null unless separately qualified. Nominal voltage is not OCV. Loaded curves must not be relabelled as OCV. Temperature references require explicit adoption as scoped assumptions.",
+  "profiles": [
+    {
+      "id": "energizer-e91",
+      "name": "Energizer MAX E91 AA",
+      "brand": "Energizer",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "AA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.5,
+      "capacityAh": null,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": 0.8,
+        "tempC": 21,
+        "mode": "multiple continuous constant-current curves"
+      },
+      "referenceTempC": 21,
+      "cutoffV": 0.8,
+      "source": "https://energizer.com/wp-content/uploads/2025/01/e91_max_na.pdf",
+      "sources": [
+        {
+          "title": "Energizer E91 datasheet E91NA0323, current manufacturer host",
+          "url": "https://energizer.com/wp-content/uploads/2025/01/e91_max_na.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer specifies1.5V and capacity-vs-current curves at21°C to0.8V; no universal single Ah rating is selected. Fresh150–300mΩ method is not qualified as a continuous DC model. The generic alkaline temperature reference is separate, not an E91-specific fit.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "eveready-1215",
+      "name": "Eveready 1215 Super Heavy Duty AA",
+      "brand": "Eveready (Energizer)",
+      "chemistry": "zinc-carbon Zn/MnO2",
+      "format": "AA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.5,
+      "capacityAh": 1.1,
+      "capacityKind": "average",
+      "capacityTest": {
+        "currentA": 0.025,
+        "cutoffV": 0.8,
+        "tempC": 21,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 21,
+      "cutoffV": 0.8,
+      "source": "https://data.energizer.com/pdfs/1215.pdf",
+      "sources": [
+        {
+          "id": "1215",
+          "title": "Eveready 1215 datasheet, 1215NA0218",
+          "url": "https://data.energizer.com/pdfs/1215.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Datasheet reports 1.1 Ah average at 25 mA continuously. Its separate pulse-resistance table is not a DC/OCV model. This is distinct from Eveready Industries India products.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "energizer-l91",
+      "name": "Energizer Ultimate Lithium L91 AA",
+      "brand": "Energizer",
+      "chemistry": "primary Li/FeS2",
+      "format": "AA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.5,
+      "capacityAh": null,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://energizer.com/apac/wp-content/uploads/sites/18/2024/07/Energizer-OEM-Lithium-L91-Sell-Sheet-CN-EN%202024.01.pdf",
+      "sources": [
+        {
+          "id": "l91",
+          "title": "Energizer L91 OEM sheet, 2024.01",
+          "url": "https://energizer.com/apac/wp-content/uploads/sites/18/2024/07/Energizer-OEM-Lithium-L91-Sell-Sheet-CN-EN%202024.01.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "OEM sheet provides load/temperature performance graphs, not a universal nominal Ah rating or an OCV-SOC table. Capacity is left unset rather than reading an unspecified drain into a nominal value.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "panasonic-cr2032",
+      "name": "Panasonic CR2032",
+      "brand": "Panasonic",
+      "chemistry": "primary Li/MnO2",
+      "format": "CR2032",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 3,
+      "capacityAh": 0.225,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": 0.0002,
+        "cutoffV": 2,
+        "tempC": 20,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 20,
+      "cutoffV": 2,
+      "source": "https://energy.panasonic.com/na/business/products/lithium/coin-cr-standard/models/CR2032",
+      "sources": [
+        {
+          "id": "panasonic-coins",
+          "title": "Panasonic industrial battery catalog",
+          "url": "https://energy.panasonic.com/dam/common/content/business/pdf/en/catalog/Catalog_EN_241001.pdf"
+        },
+        {
+          "title": "Panasonic CR2032 model specifications",
+          "url": "https://energy.panasonic.com/na/business/products/lithium/coin-cr-standard/models/CR2032"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Catalog capacity is at standard drain to2.0V at20°C. Loaded discharge curves are not OCV. No pulse-load or cold-temperature runtime validation is implied.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "panasonic-bk3mcc",
+      "name": "Panasonic eneloop BK-3MCC AA",
+      "brand": "Panasonic",
+      "chemistry": "NiMH low-self-discharge",
+      "format": "AA",
+      "rechargeable": true,
+      "unitCells": 1,
+      "nominalV": 1.2,
+      "capacityAh": 1.9,
+      "capacityKind": "minimum",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://panasonic.jp/manualdl/p-db/p_/p_bk3mcc248_t_201304181131_0.pdf",
+      "sources": [
+        {
+          "id": "eneloop",
+          "title": "Panasonic BK-3MCC AA instructions",
+          "url": "https://panasonic.jp/manualdl/p-db/p_/p_bk3mcc248_t_201304181131_0.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official instructions specify minimum1900mAh under JIS C8708:2007(7.2.1); exact current/cutoff/temperature were not transcribed from that standard. No numerical temperature or DC-R curve is supplied.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "panasonic-ncr18650bf",
+      "name": "Panasonic NCR-18650BF",
+      "brand": "Panasonic",
+      "chemistry": "Li-ion nickel-system",
+      "format": "18650",
+      "rechargeable": true,
+      "unitCells": 1,
+      "nominalV": 3.6,
+      "capacityAh": 3.35,
+      "capacityKind": "typical",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://industry.panasonic.eu/pd-35779/batteries/secondary-batteries/lithium-ion-batteries-for-europe/cylindrical-type/ncr-18650bf",
+      "sources": [
+        {
+          "id": "ncr18650bf",
+          "title": "Panasonic NCR-18650BF manufacturer specifications",
+          "url": "https://industry.panasonic.eu/pd-35779/batteries/secondary-batteries/lithium-ion-batteries-for-europe/cylindrical-type/ncr-18650bf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer product table gives3350mAh typical,3250mAh minimum. Exact capacity test conditions, cutoff and DC-R are not supplied on this table; do not substitute NCR18650B curves.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "lithiumwerks-anr26650m1b",
+      "name": "Lithium Werks ANR26650M1B",
+      "brand": "Lithium Werks / A123",
+      "chemistry": "LiFePO4",
+      "format": "26650",
+      "rechargeable": true,
+      "unitCells": 1,
+      "nominalV": 3.3,
+      "capacityAh": 2.6,
+      "capacityKind": "typical",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": 23,
+        "mode": null
+      },
+      "referenceTempC": 23,
+      "cutoffV": null,
+      "source": "https://lithiumwerks.com/wp-content/uploads/2022/08/26650-Power-Cell-080322.pdf",
+      "sources": [
+        {
+          "id": "anr26650",
+          "title": "Lithium Werks ANR26650M1B datasheet, SF00008 rev2, Aug2022",
+          "url": "https://lithiumwerks.com/wp-content/uploads/2022/08/26650-Power-Cell-080322.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "2022datasheet:2.6Ah typical,2.5Ah minimum at23°C; capacity test current not specified here. Minimum discharge voltage2V is a separate limit, not a verified capacity-test cutoff. <10mΩ is1kHz AC impedance and is not used as DC resistance.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "yuasa-np7-12",
+      "name": "GS Yuasa NP7-12 (US 2025 sheet)",
+      "brand": "GS Yuasa",
+      "chemistry": "VRLA lead-acid AGM",
+      "format": "12V block",
+      "rechargeable": true,
+      "unitCells": 6,
+      "nominalV": 12,
+      "capacityAh": 7,
+      "capacityKind": "rated",
+      "capacityTest": {
+        "currentA": 0.35,
+        "cutoffV": 10.5,
+        "tempC": 25,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 25,
+      "cutoffV": 10.5,
+      "source": "https://gsyuasa-es.com/Downloads/NP7-12SPEC_SHEET.pdf",
+      "sources": [
+        {
+          "id": "np7",
+          "title": "GS Yuasa NP7-12, MKT-081 ver1.0 Aug2025",
+          "url": "https://gsyuasa-es.com/Downloads/NP7-12SPEC_SHEET.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Six-cell block;20-hour rating at25°C to1.75V/cell (10.5V/block). Current derived as7Ah/20h=0.35A and confirmed by the discharge table. ~22mΩ IR method is not specified in this sheet, so DC-R remains unset. Regional/older NP7-12 sheets use different reference temperatures.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "duracell-mn1500",
+      "name": "Duracell Coppertop MN1500 AA",
+      "brand": "Duracell",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "AA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.5,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899e006fd5a5101be9743f8_MN15USCT0122.pdf",
+      "sources": [
+        {
+          "title": "Duracell Coppertop MN1500 AA manufacturer source",
+          "url": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899e006fd5a5101be9743f8_MN15USCT0122.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "PDF linked by Duracell technical library and retrieved directly. Delivered capacity depends on load, temperature and cutoff; no universal Ah selected. AC impedance, where present, is not used as DC-R.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "duracell-mn2400",
+      "name": "Duracell Coppertop MN2400 AAA",
+      "brand": "Duracell",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "AAA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.5,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899e0ecf015a35407d1756d_MN24USCT0122.pdf",
+      "sources": [
+        {
+          "title": "Duracell Coppertop MN2400 AAA manufacturer source",
+          "url": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899e0ecf015a35407d1756d_MN24USCT0122.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "PDF linked by Duracell technical library and retrieved directly. Delivered capacity depends on load, temperature and cutoff; no universal Ah selected. AC impedance, where present, is not used as DC-R.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "duracell-mn1400",
+      "name": "Duracell Coppertop MN1400 C",
+      "brand": "Duracell",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "C",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.5,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899df648e6de2505c91dc6f_MN1400_US_CT1.pdf",
+      "sources": [
+        {
+          "title": "Duracell Coppertop MN1400 C manufacturer source",
+          "url": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899df648e6de2505c91dc6f_MN1400_US_CT1.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "PDF linked by Duracell technical library and retrieved directly. Delivered capacity depends on load, temperature and cutoff; no universal Ah selected. AC impedance, where present, is not used as DC-R.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "duracell-mn1300",
+      "name": "Duracell Coppertop MN1300 D",
+      "brand": "Duracell",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "D",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.5,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899ded817ba635584ca2c38_MN1300_US_CT1.pdf",
+      "sources": [
+        {
+          "title": "Duracell Coppertop MN1300 D manufacturer source",
+          "url": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899ded817ba635584ca2c38_MN1300_US_CT1.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "PDF linked by Duracell technical library and retrieved directly. Delivered capacity depends on load, temperature and cutoff; no universal Ah selected. AC impedance, where present, is not used as DC-R.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "duracell-mn1604",
+      "name": "Duracell Coppertop MN1604 9V block",
+      "brand": "Duracell",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "9V block",
+      "rechargeable": false,
+      "unitCells": 6,
+      "nominalV": 9,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899e0514f55483c85ab418c_MN1604_US_CT.pdf",
+      "sources": [
+        {
+          "title": "Duracell Coppertop MN1604 9V block manufacturer source",
+          "url": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899e0514f55483c85ab418c_MN1604_US_CT.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "PDF linked by Duracell technical library and retrieved directly. Delivered capacity depends on load, temperature and cutoff; no universal Ah selected. AC impedance, where present, is not used as DC-R.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "duracell-cr123",
+      "name": "Duracell CR123",
+      "brand": "Duracell",
+      "chemistry": "primary Li/MnO2",
+      "format": "CR123A",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 3,
+      "capacityAh": 1.55,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": 2,
+        "tempC": 20,
+        "mode": "constant-resistance 100 ohm"
+      },
+      "referenceTempC": 20,
+      "cutoffV": 2,
+      "source": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899cea93af0dc48fa1067fb_CR123_US.pdf",
+      "sources": [
+        {
+          "title": "Duracell CR123 manufacturer source",
+          "url": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899cea93af0dc48fa1067fb_CR123_US.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Nominal capacity is specified with a100ohm continuous resistive load to2V, not constant current. Typical fresh voltage is3.2–3.3V. 1kHz impedance is not DC-R.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "duracell-dlcr2",
+      "name": "Duracell DLCR2",
+      "brand": "Duracell",
+      "chemistry": "primary Li/MnO2",
+      "format": "CR2",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 3,
+      "capacityAh": 0.92,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": 2,
+        "tempC": 20,
+        "mode": "constant-resistance 100 ohm"
+      },
+      "referenceTempC": 20,
+      "cutoffV": 2,
+      "source": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899ddf6ded50c08dbe8f813_DLCR2_IN.pdf",
+      "sources": [
+        {
+          "title": "Duracell DLCR2 manufacturer source",
+          "url": "https://cdn.prod.website-files.com/6835fa821f0f20d8b0b5851c/6899ddf6ded50c08dbe8f813_DLCR2_IN.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Nominal capacity is specified with a100ohm continuous resistive load to2V, not constant current. Typical fresh voltage is3.2–3.3V. 1kHz impedance is not DC-R.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "nippo-3dg",
+      "name": "Nippo Gold AA-3DG",
+      "brand": "Nippo (Indo National, India)",
+      "chemistry": "zinc-carbon Zn/MnO2",
+      "format": "AA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.nippo.in/shop",
+      "sources": [
+        {
+          "title": "Nippo Gold AA-3DG manufacturer source",
+          "url": "https://www.nippo.in/shop"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official catalog product identity only. Ah and test conditions are not published here. Nominal voltage remains unset where not explicitly readable in the inspected catalog/label; enter a verified value from the exact pack. No other brand or chemistry curve is inherited.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "nippo-4dg",
+      "name": "Nippo Gold AAA-4DG",
+      "brand": "Nippo (Indo National, India)",
+      "chemistry": "zinc-carbon Zn/MnO2",
+      "format": "AAA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.nippo.in/shop",
+      "sources": [
+        {
+          "title": "Nippo Gold AAA-4DG manufacturer source",
+          "url": "https://www.nippo.in/shop"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official catalog product identity only. Ah and test conditions are not published here. Nominal voltage remains unset where not explicitly readable in the inspected catalog/label; enter a verified value from the exact pack. No other brand or chemistry curve is inherited.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "nippo-thor-aa",
+      "name": "Nippo Thor AA-THOR",
+      "brand": "Nippo (Indo National, India)",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "AA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.nippo.in/shop",
+      "sources": [
+        {
+          "title": "Nippo Thor AA-THOR manufacturer source",
+          "url": "https://www.nippo.in/shop"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official catalog product identity only. Ah and test conditions are not published here. Nominal voltage remains unset where not explicitly readable in the inspected catalog/label; enter a verified value from the exact pack. No other brand or chemistry curve is inherited.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "nippo-thor-aaa",
+      "name": "Nippo Thor AAA-THOR",
+      "brand": "Nippo (Indo National, India)",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "AAA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.nippo.in/shop",
+      "sources": [
+        {
+          "title": "Nippo Thor AAA-THOR manufacturer source",
+          "url": "https://www.nippo.in/shop"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official catalog product identity only. Ah and test conditions are not published here. Nominal voltage remains unset where not explicitly readable in the inspected catalog/label; enter a verified value from the exact pack. No other brand or chemistry curve is inherited.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "nippo-2u",
+      "name": "Nippo Hyper C-2U",
+      "brand": "Nippo (Indo National, India)",
+      "chemistry": "zinc-carbon Zn/MnO2",
+      "format": "C",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.nippo.in/shop",
+      "sources": [
+        {
+          "title": "Nippo Hyper C-2U manufacturer source",
+          "url": "https://www.nippo.in/shop"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official catalog product identity only. Ah and test conditions are not published here. Nominal voltage remains unset where not explicitly readable in the inspected catalog/label; enter a verified value from the exact pack. No other brand or chemistry curve is inherited.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "nippo-1uh",
+      "name": "Nippo Hyper D-1UH",
+      "brand": "Nippo (Indo National, India)",
+      "chemistry": "zinc-carbon Zn/MnO2",
+      "format": "D",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.nippo.in/shop",
+      "sources": [
+        {
+          "title": "Nippo Hyper D-1UH manufacturer source",
+          "url": "https://www.nippo.in/shop"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official catalog product identity only. Ah and test conditions are not published here. Nominal voltage remains unset where not explicitly readable in the inspected catalog/label; enter a verified value from the exact pack. No other brand or chemistry curve is inherited.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "nippo-9v",
+      "name": "Nippo 9V",
+      "brand": "Nippo (Indo National, India)",
+      "chemistry": "zinc-carbon Zn/MnO2",
+      "format": "9V block",
+      "rechargeable": false,
+      "unitCells": 6,
+      "nominalV": 9,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.nippo.in/shop",
+      "sources": [
+        {
+          "title": "Nippo 9V manufacturer source",
+          "url": "https://www.nippo.in/shop"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official catalog product identity only. Ah and test conditions are not published here. Nominal voltage remains unset where not explicitly readable in the inspected catalog/label; enter a verified value from the exact pack. No other brand or chemistry curve is inherited.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "eveready-india-1015",
+      "name": "Eveready India Carbon Zinc 1015 AA",
+      "brand": "Eveready Industries India",
+      "chemistry": "zinc-carbon Zn/MnO2",
+      "format": "AA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.eveready.in/products/batteries/eveready-carbon-zinc-1015-aa-battery/",
+      "sources": [
+        {
+          "title": "Eveready India Carbon Zinc 1015 AA manufacturer source",
+          "url": "https://www.eveready.in/products/batteries/eveready-carbon-zinc-1015-aa-battery/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer catalog confirms exact model/format/chemistry. No numerical Ah or voltage was transcribed from this page. This is distinct from Energizer/Eveready1215. Marketing service-life multipliers are not capacity ratings.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "eveready-india-1012",
+      "name": "Eveready India Carbon Zinc 1012 AAA",
+      "brand": "Eveready Industries India",
+      "chemistry": "zinc-carbon Zn/MnO2",
+      "format": "AAA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.eveready.in/products/batteries/eveready-carbon-zinc-1012-aaa-battery/",
+      "sources": [
+        {
+          "title": "Eveready India Carbon Zinc 1012 AAA manufacturer source",
+          "url": "https://www.eveready.in/products/batteries/eveready-carbon-zinc-1012-aaa-battery/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer catalog confirms exact model/format/chemistry. No numerical Ah or voltage was transcribed from this page. This is distinct from Energizer/Eveready1215. Marketing service-life multipliers are not capacity ratings.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "eveready-india-1005",
+      "name": "Eveready India Carbon Zinc 1005 AA",
+      "brand": "Eveready Industries India",
+      "chemistry": "zinc-carbon Zn/MnO2",
+      "format": "AA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.eveready.in/products/batteries/",
+      "sources": [
+        {
+          "title": "Eveready India Carbon Zinc 1005 AA manufacturer source",
+          "url": "https://www.eveready.in/products/batteries/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer catalog confirms exact model/format/chemistry. No numerical Ah or voltage was transcribed from this page. This is distinct from Energizer/Eveready1215. Marketing service-life multipliers are not capacity ratings.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "eveready-india-1002",
+      "name": "Eveready India Carbon Zinc 1002 AAA",
+      "brand": "Eveready Industries India",
+      "chemistry": "zinc-carbon Zn/MnO2",
+      "format": "AAA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.eveready.in/products/batteries/",
+      "sources": [
+        {
+          "title": "Eveready India Carbon Zinc 1002 AAA manufacturer source",
+          "url": "https://www.eveready.in/products/batteries/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer catalog confirms exact model/format/chemistry. No numerical Ah or voltage was transcribed from this page. This is distinct from Energizer/Eveready1215. Marketing service-life multipliers are not capacity ratings.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "panasonic-cr2016",
+      "name": "Panasonic CR2016",
+      "brand": "Panasonic",
+      "chemistry": "primary Li/MnO2",
+      "format": "CR2016",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 3,
+      "capacityAh": 0.09,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": 0.0001,
+        "cutoffV": 2,
+        "tempC": 20,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 20,
+      "cutoffV": 2,
+      "source": "https://energy.panasonic.com/na/business/products/lithium/coin-cr-standard/models/CR2016",
+      "sources": [
+        {
+          "title": "Panasonic CR2016 manufacturer source",
+          "url": "https://energy.panasonic.com/na/business/products/lithium/coin-cr-standard/models/CR2016"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer model table gives nominal capacity/standard drain. Catalog specifies standard-drain capacity to2V at20°C. No loaded voltage curve is relabelled as OCV.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "panasonic-cr2025",
+      "name": "Panasonic CR2025",
+      "brand": "Panasonic",
+      "chemistry": "primary Li/MnO2",
+      "format": "CR2025",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 3,
+      "capacityAh": 0.165,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": 0.0002,
+        "cutoffV": 2,
+        "tempC": 20,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 20,
+      "cutoffV": 2,
+      "source": "https://energy.panasonic.com/na/business/products/lithium/coin-cr-standard/models/CR2025",
+      "sources": [
+        {
+          "title": "Panasonic CR2025 manufacturer source",
+          "url": "https://energy.panasonic.com/na/business/products/lithium/coin-cr-standard/models/CR2025"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer model table gives nominal capacity/standard drain. Catalog specifies standard-drain capacity to2V at20°C. No loaded voltage curve is relabelled as OCV.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "panasonic-cr2450",
+      "name": "Panasonic CR2450",
+      "brand": "Panasonic",
+      "chemistry": "primary Li/MnO2",
+      "format": "CR2450",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 3,
+      "capacityAh": 0.62,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": 0.0002,
+        "cutoffV": 2,
+        "tempC": 20,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 20,
+      "cutoffV": 2,
+      "source": "https://energy.panasonic.com/na/business/products/lithium/coin-cr-standard/models/CR2450",
+      "sources": [
+        {
+          "title": "Panasonic CR2450 manufacturer source",
+          "url": "https://energy.panasonic.com/na/business/products/lithium/coin-cr-standard/models/CR2450"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer model table gives nominal capacity/standard drain. Catalog specifies standard-drain capacity to2V at20°C. No loaded voltage curve is relabelled as OCV.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "panasonic-cr123a",
+      "name": "Panasonic CR123A",
+      "brand": "Panasonic",
+      "chemistry": "primary Li/MnO2",
+      "format": "CR123A",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 3,
+      "capacityAh": 1.55,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": 0.02,
+        "cutoffV": 2,
+        "tempC": 20,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 20,
+      "cutoffV": 2,
+      "source": "https://energy.panasonic.com/na/business/products/lithium/cylindrical-cr-standard/models/CR123A",
+      "sources": [
+        {
+          "title": "Panasonic CR123A manufacturer source",
+          "url": "https://energy.panasonic.com/na/business/products/lithium/cylindrical-cr-standard/models/CR123A"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer standard-drain rating; cutoff and20°C conditions are stated in its Primary Lithium Batteries introduction sheet. No pulse or variable-temperature profile model is implied.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "panasonic-cr2",
+      "name": "Panasonic CR2",
+      "brand": "Panasonic",
+      "chemistry": "primary Li/MnO2",
+      "format": "CR2",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 3,
+      "capacityAh": 0.85,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": 0.02,
+        "cutoffV": 2,
+        "tempC": 20,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 20,
+      "cutoffV": 2,
+      "source": "https://energy.panasonic.com/na/business/products/lithium/cylindrical-cr-standard/models/CR2",
+      "sources": [
+        {
+          "title": "Panasonic CR2 manufacturer source",
+          "url": "https://energy.panasonic.com/na/business/products/lithium/cylindrical-cr-standard/models/CR2"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer standard-drain rating; cutoff and20°C conditions are stated in its Primary Lithium Batteries introduction sheet. No pulse or variable-temperature profile model is implied.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "gp-cr2016",
+      "name": "GP CR2016",
+      "brand": "GP",
+      "chemistry": "primary Li/MnO2",
+      "format": "CR2016",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 3,
+      "capacityAh": 0.09,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://ind.gpbatteries.com/products/primary-batteries/primary-lithium/lithium-button-batteries.html",
+      "sources": [
+        {
+          "title": "GP CR2016 manufacturer source",
+          "url": "https://ind.gpbatteries.com/products/primary-batteries/primary-lithium/lithium-button-batteries.html"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Nominal capacity from the manufacturer selection table. Exact current, cutoff and temperature are absent from that table and remain null. Do not substitute a Panasonic coin-cell curve.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "gp-cr2025",
+      "name": "GP CR2025",
+      "brand": "GP",
+      "chemistry": "primary Li/MnO2",
+      "format": "CR2025",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 3,
+      "capacityAh": 0.16,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://ind.gpbatteries.com/products/primary-batteries/primary-lithium/lithium-button-batteries.html",
+      "sources": [
+        {
+          "title": "GP CR2025 manufacturer source",
+          "url": "https://ind.gpbatteries.com/products/primary-batteries/primary-lithium/lithium-button-batteries.html"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Nominal capacity from the manufacturer selection table. Exact current, cutoff and temperature are absent from that table and remain null. Do not substitute a Panasonic coin-cell curve.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "gp-cr2032",
+      "name": "GP CR2032",
+      "brand": "GP",
+      "chemistry": "primary Li/MnO2",
+      "format": "CR2032",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 3,
+      "capacityAh": 0.22,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://ind.gpbatteries.com/products/primary-batteries/primary-lithium/lithium-button-batteries.html",
+      "sources": [
+        {
+          "title": "GP CR2032 manufacturer source",
+          "url": "https://ind.gpbatteries.com/products/primary-batteries/primary-lithium/lithium-button-batteries.html"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Nominal capacity from the manufacturer selection table. Exact current, cutoff and temperature are absent from that table and remain null. Do not substitute a Panasonic coin-cell curve.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "gp-15a",
+      "name": "GP Super 15A AA",
+      "brand": "GP",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "AA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.5,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://ind.gpbatteries.com/products/primary-batteries/alkaline-batteries/alkaline-cylindrical-batteries.html",
+      "sources": [
+        {
+          "title": "GP Super 15A AA manufacturer source",
+          "url": "https://ind.gpbatteries.com/products/primary-batteries/alkaline-batteries/alkaline-cylindrical-batteries.html"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer selection table identifies15A/LR6 AA1.5V. No universal Ah selected; it depends on load/cutoff.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "maxell-lr44",
+      "name": "Maxell LR44",
+      "brand": "Maxell",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "LR44",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.5,
+      "capacityAh": 0.11,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": 0.0001,
+        "cutoffV": 1.2,
+        "tempC": 20,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 20,
+      "cutoffV": 1.2,
+      "source": "https://biz.maxell.com/en/primary_batteries/SRLR_22e.pdf",
+      "sources": [
+        {
+          "title": "Maxell LR44 manufacturer source",
+          "url": "https://biz.maxell.com/en/primary_batteries/SRLR_22e.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer nominal discharge-current table; capacity endpoint1.2V at20°C. Button form factor is not a guarantee of interchangeability with silver oxide.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "maxell-sr44sw",
+      "name": "Maxell SR44SW",
+      "brand": "Maxell",
+      "chemistry": "silver oxide",
+      "format": "SR44SW",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.55,
+      "capacityAh": 0.165,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": 0.0002,
+        "cutoffV": 1.2,
+        "tempC": 20,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 20,
+      "cutoffV": 1.2,
+      "source": "https://biz.maxell.com/en/primary_batteries/SRLR_22e.pdf",
+      "sources": [
+        {
+          "title": "Maxell SR44SW manufacturer source",
+          "url": "https://biz.maxell.com/en/primary_batteries/SRLR_22e.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Low-drain silver-oxide variant; nominal capacity at stated200uA to1.2V20°C. No temperature or pulse calibration extracted.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "renata-za10",
+      "name": "Renata Zinc-Air 10",
+      "brand": "Renata",
+      "chemistry": "zinc-air",
+      "format": "PR70 / size10",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.45,
+      "capacityAh": 0.105,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.renata.com/en/products/zinc---air-batteries/",
+      "sources": [
+        {
+          "title": "Renata Zinc-Air 10 manufacturer source",
+          "url": "https://www.renata.com/en/products/zinc---air-batteries/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer capacity table and scope-of-supply list. Exact drain/cutoff/temperature are not supplied on this page. Activated cell life depends on air exposure and humidity as well as load; coulomb counting alone does not model that loss.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "renata-za312",
+      "name": "Renata Zinc-Air 312",
+      "brand": "Renata",
+      "chemistry": "zinc-air",
+      "format": "PR41 / size312",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.45,
+      "capacityAh": 0.165,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.renata.com/en/products/zinc---air-batteries/",
+      "sources": [
+        {
+          "title": "Renata Zinc-Air 312 manufacturer source",
+          "url": "https://www.renata.com/en/products/zinc---air-batteries/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer capacity table and scope-of-supply list. Exact drain/cutoff/temperature are not supplied on this page. Activated cell life depends on air exposure and humidity as well as load; coulomb counting alone does not model that loss.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "varta-4003",
+      "name": "VARTA Industrial Pro 4003 AAA",
+      "brand": "VARTA",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "AAA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.5,
+      "capacityAh": 1.27,
+      "capacityKind": "typical",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.varta-ag.com/fileadmin/varta/industry/images/products/Industrial_Pro/VM_Folder_Industrial_Pro_2022.pdf",
+      "sources": [
+        {
+          "title": "VARTA Industrial Pro 4003 AAA manufacturer source",
+          "url": "https://www.varta-ag.com/fileadmin/varta/industry/images/products/Industrial_Pro/VM_Folder_Industrial_Pro_2022.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "4006 rating has explicit20mA continuous/0.75V cutoff; other entries are brochure nominal capacity only, with test conditions not stated there. No generic alkaline curve is inherited.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "varta-4006",
+      "name": "VARTA Industrial Pro 4006 AA",
+      "brand": "VARTA",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "AA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.5,
+      "capacityAh": 2.97,
+      "capacityKind": "typical",
+      "capacityTest": {
+        "currentA": 0.02,
+        "cutoffV": 0.75,
+        "tempC": 20,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 20,
+      "cutoffV": 0.75,
+      "source": "https://www.varta-ag.com/en/industry/product-solutions/industrial-pro?cHash=4b9ba421bbc4f76afc3c20d9f2f79cc2&tx_vmbproductdata_typedata%5Baction%5D=streamFile&tx_vmbproductdata_typedata%5Bcontroller%5D=Type&tx_vmbproductdata_typedata%5Bdocument%5D=38",
+      "sources": [
+        {
+          "title": "VARTA Industrial Pro 4006 AA manufacturer source",
+          "url": "https://www.varta-ag.com/en/industry/product-solutions/industrial-pro?cHash=4b9ba421bbc4f76afc3c20d9f2f79cc2&tx_vmbproductdata_typedata%5Baction%5D=streamFile&tx_vmbproductdata_typedata%5Bcontroller%5D=Type&tx_vmbproductdata_typedata%5Bdocument%5D=38"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "4006 rating has explicit20mA continuous/0.75V cutoff; other entries are brochure nominal capacity only, with test conditions not stated there. No generic alkaline curve is inherited.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "varta-4014",
+      "name": "VARTA Industrial Pro 4014 C",
+      "brand": "VARTA",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "C",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.5,
+      "capacityAh": 7.8,
+      "capacityKind": "typical",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.varta-ag.com/fileadmin/varta/industry/images/products/Industrial_Pro/VM_Folder_Industrial_Pro_2022.pdf",
+      "sources": [
+        {
+          "title": "VARTA Industrial Pro 4014 C manufacturer source",
+          "url": "https://www.varta-ag.com/fileadmin/varta/industry/images/products/Industrial_Pro/VM_Folder_Industrial_Pro_2022.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "4006 rating has explicit20mA continuous/0.75V cutoff; other entries are brochure nominal capacity only, with test conditions not stated there. No generic alkaline curve is inherited.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "varta-4020",
+      "name": "VARTA Industrial Pro 4020 D",
+      "brand": "VARTA",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "D",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 1.5,
+      "capacityAh": 17,
+      "capacityKind": "typical",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.varta-ag.com/fileadmin/varta/industry/images/products/Industrial_Pro/VM_Folder_Industrial_Pro_2022.pdf",
+      "sources": [
+        {
+          "title": "VARTA Industrial Pro 4020 D manufacturer source",
+          "url": "https://www.varta-ag.com/fileadmin/varta/industry/images/products/Industrial_Pro/VM_Folder_Industrial_Pro_2022.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "4006 rating has explicit20mA continuous/0.75V cutoff; other entries are brochure nominal capacity only, with test conditions not stated there. No generic alkaline curve is inherited.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "varta-4022",
+      "name": "VARTA Industrial Pro 4022 9V block",
+      "brand": "VARTA",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "9V block",
+      "rechargeable": false,
+      "unitCells": 6,
+      "nominalV": 9,
+      "capacityAh": 0.64,
+      "capacityKind": "typical",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.varta-ag.com/fileadmin/varta/industry/images/products/Industrial_Pro/VM_Folder_Industrial_Pro_2022.pdf",
+      "sources": [
+        {
+          "title": "VARTA Industrial Pro 4022 9V block manufacturer source",
+          "url": "https://www.varta-ag.com/fileadmin/varta/industry/images/products/Industrial_Pro/VM_Folder_Industrial_Pro_2022.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "4006 rating has explicit20mA continuous/0.75V cutoff; other entries are brochure nominal capacity only, with test conditions not stated there. No generic alkaline curve is inherited.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "saft-ls14500",
+      "name": "Saft LS14500",
+      "brand": "Saft",
+      "chemistry": "primary Li/SOCl2",
+      "format": "AA / LS14500",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": 3.6,
+      "capacityAh": 2.6,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": 0.002,
+        "cutoffV": 2,
+        "tempC": 20,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 20,
+      "cutoffV": 2,
+      "source": "https://saft4u.saft.com/fr/download_file/738dfd7b-3131-4e31-8924-401cd9a36bbc/English",
+      "sources": [
+        {
+          "title": "Saft LS14500 manufacturer source",
+          "url": "https://saft4u.saft.com/fr/download_file/738dfd7b-3131-4e31-8924-401cd9a36bbc/English"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Nominal rating at2mA20°C to2V. Published fresh OCV3.67V at20°C is one point, not an OCV-SOC table. Passivation and pulse response are not captured by a fixed-R model.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "murata-us18650vtc6",
+      "name": "Murata US18650VTC6",
+      "brand": "Murata",
+      "chemistry": "Li-ion NCA",
+      "format": "18650",
+      "rechargeable": true,
+      "unitCells": 1,
+      "nominalV": 3.6,
+      "capacityAh": 3.12,
+      "capacityKind": "nominal",
+      "capacityTest": {
+        "currentA": 0.6,
+        "cutoffV": 2,
+        "tempC": 23,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 23,
+      "cutoffV": 2,
+      "source": "https://www.murata.com/-/media/webrenewal/products/batteries/cylindrical/datasheet/us18650vtc6-product-datasheet.ashx",
+      "sources": [
+        {
+          "title": "Murata US18650VTC6 manufacturer source",
+          "url": "https://www.murata.com/-/media/webrenewal/products/batteries/cylindrical/datasheet/us18650vtc6-product-datasheet.ashx"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer nominal3120mAh/minimum3000mAh capacity test:0.2ItA(600mA),2.0V cutoff23°C. Other high-current graphs use2.5V or thermal endpoints; do not mix their conditions into this rating.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "molicel-inr-21700-p42a",
+      "name": "Molicel INR-21700-P42A",
+      "brand": "Molicel",
+      "chemistry": "Li-ion",
+      "format": "21700",
+      "rechargeable": true,
+      "unitCells": 1,
+      "nominalV": 3.6,
+      "capacityAh": 4.2,
+      "capacityKind": "typical",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.molicel.com/product/inr-21700-p42a/",
+      "sources": [
+        {
+          "title": "Molicel INR-21700-P42A manufacturer source",
+          "url": "https://www.molicel.com/product/inr-21700-p42a/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer product table supplies nominal voltage and typical Ah only. Public page does not state the capacity-test current/cutoff/temperature; those remain null. No AC impedance or marketing current limit is treated as DC-R.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "molicel-inr-18650-p26a",
+      "name": "Molicel INR-18650-P26A",
+      "brand": "Molicel",
+      "chemistry": "Li-ion",
+      "format": "18650",
+      "rechargeable": true,
+      "unitCells": 1,
+      "nominalV": 3.6,
+      "capacityAh": 2.6,
+      "capacityKind": "typical",
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.molicel.com/product/inr-18650-p26a/",
+      "sources": [
+        {
+          "title": "Molicel INR-18650-P26A manufacturer source",
+          "url": "https://www.molicel.com/product/inr-18650-p26a/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer product table supplies nominal voltage and typical Ah only. Public page does not state the capacity-test current/cutoff/temperature; those remain null. No AC impedance or marketing current limit is treated as DC-R.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "csb-gp1272",
+      "name": "CSB GP1272",
+      "brand": "CSB",
+      "chemistry": "VRLA lead-acid AGM",
+      "format": "12V block",
+      "rechargeable": true,
+      "unitCells": 6,
+      "nominalV": 12,
+      "capacityAh": 7.2,
+      "capacityKind": "rated",
+      "capacityTest": {
+        "currentA": 0.36,
+        "cutoffV": 10.5,
+        "tempC": 25,
+        "mode": "constant-current"
+      },
+      "referenceTempC": 25,
+      "cutoffV": 10.5,
+      "source": "https://csb-battery.com/wp-content/uploads/2024/07/CSB-Datasheet-GP1272-%E2%80%93-053124.pdf",
+      "sources": [
+        {
+          "title": "CSB GP1272 manufacturer source",
+          "url": "https://csb-battery.com/wp-content/uploads/2024/07/CSB-Datasheet-GP1272-%E2%80%93-053124.pdf"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Nominal20-hour capacity to1.75V/cell25°C. 0.36A is7.2Ah/20h, not an OCV or rate-loss model. Other typical capacity tables can differ; nominal rating is used. ~23mΩ IR method is not qualified here, so DC-R remains null.",
+      "modelReady": false,
+      "ratingConditionsComplete": true
+    },
+    {
+      "id": "trojan-t105",
+      "name": "Trojan T-105",
+      "brand": "Trojan",
+      "chemistry": "flooded lead-acid",
+      "format": "6V block",
+      "rechargeable": true,
+      "unitCells": 3,
+      "nominalV": 6,
+      "capacityAh": 225,
+      "capacityKind": "20-hour rating",
+      "capacityTest": {
+        "currentA": 11.25,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": "constant-current"
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.trojanbattery.com/products/t-105-6v-flooded-battery",
+      "sources": [
+        {
+          "title": "Trojan T-105 manufacturer source",
+          "url": "https://www.trojanbattery.com/products/t-105-6v-flooded-battery"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-rating-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Manufacturer gives225Ah at20-hour rate,207Ah at10h,185Ah at5h and250Ah at100h. 11.25A is225Ah/20h. Cutoff/reference temperature are not specified on this product page and remain null. No Peukert exponent or OCV curve is inferred.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "eveready-india-2015",
+      "name": "Eveready India Ultima Alkaline 2015 AA",
+      "brand": "Eveready Industries India",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "AA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-alkaline-batteries/",
+      "sources": [
+        {
+          "title": "Eveready Industries India Ultima manufacturer model list",
+          "url": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-alkaline-batteries/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official manufacturer list confirms exact model, format and alkaline chemistry. No numerical Ah or test conditions are published here. Nominal voltage remains unset except the explicitly identified9V block. Marketing service-life multiples are not capacity ratings.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "eveready-india-2012",
+      "name": "Eveready India Ultima Alkaline 2012 AAA",
+      "brand": "Eveready Industries India",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "AAA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-alkaline-batteries/",
+      "sources": [
+        {
+          "title": "Eveready Industries India Ultima manufacturer model list",
+          "url": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-alkaline-batteries/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official manufacturer list confirms exact model, format and alkaline chemistry. No numerical Ah or test conditions are published here. Nominal voltage remains unset except the explicitly identified9V block. Marketing service-life multiples are not capacity ratings.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "eveready-india-2115",
+      "name": "Eveready India Ultima Pro Alkaline 2115 AA",
+      "brand": "Eveready Industries India",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "AA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-pro-alkaline-batteries/",
+      "sources": [
+        {
+          "title": "Eveready Industries India Ultima Pro manufacturer model list",
+          "url": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-pro-alkaline-batteries/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official manufacturer list confirms exact model, format and alkaline chemistry. No numerical Ah or test conditions are published here. Nominal voltage remains unset except the explicitly identified9V block. Marketing service-life multiples are not capacity ratings.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "eveready-india-2112",
+      "name": "Eveready India Ultima Pro Alkaline 2112 AAA",
+      "brand": "Eveready Industries India",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "AAA",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-pro-alkaline-batteries/",
+      "sources": [
+        {
+          "title": "Eveready Industries India Ultima Pro manufacturer model list",
+          "url": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-pro-alkaline-batteries/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official manufacturer list confirms exact model, format and alkaline chemistry. No numerical Ah or test conditions are published here. Nominal voltage remains unset except the explicitly identified9V block. Marketing service-life multiples are not capacity ratings.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "eveready-india-2135",
+      "name": "Eveready India Ultima Pro Alkaline 2135 C",
+      "brand": "Eveready Industries India",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "C",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-pro-alkaline-batteries/",
+      "sources": [
+        {
+          "title": "Eveready Industries India Ultima Pro manufacturer model list",
+          "url": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-pro-alkaline-batteries/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official manufacturer list confirms exact model, format and alkaline chemistry. No numerical Ah or test conditions are published here. Nominal voltage remains unset except the explicitly identified9V block. Marketing service-life multiples are not capacity ratings.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "eveready-india-2150",
+      "name": "Eveready India Ultima Pro Alkaline 2150 D",
+      "brand": "Eveready Industries India",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "D",
+      "rechargeable": false,
+      "unitCells": 1,
+      "nominalV": null,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-pro-alkaline-batteries/",
+      "sources": [
+        {
+          "title": "Eveready Industries India Ultima Pro manufacturer model list",
+          "url": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-pro-alkaline-batteries/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official manufacturer list confirms exact model, format and alkaline chemistry. No numerical Ah or test conditions are published here. Nominal voltage remains unset except the explicitly identified9V block. Marketing service-life multiples are not capacity ratings.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    },
+    {
+      "id": "eveready-india-2116",
+      "name": "Eveready India Ultima Pro Alkaline 2116 9V block",
+      "brand": "Eveready Industries India",
+      "chemistry": "alkaline Zn/MnO2",
+      "format": "9V block",
+      "rechargeable": false,
+      "unitCells": 6,
+      "nominalV": 9,
+      "capacityAh": null,
+      "capacityKind": null,
+      "capacityTest": {
+        "currentA": null,
+        "cutoffV": null,
+        "tempC": null,
+        "mode": null
+      },
+      "referenceTempC": null,
+      "cutoffV": null,
+      "source": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-pro-alkaline-batteries/",
+      "sources": [
+        {
+          "title": "Eveready Industries India Ultima Pro manufacturer model list",
+          "url": "https://www.eveready.in/products/batteries/ultima-alkaline-batteries/eveready-ultima-pro-alkaline-batteries/"
+        }
+      ],
+      "ocv": null,
+      "resistanceOhm": null,
+      "temperature": null,
+      "evidenceStatus": "manufacturer-identity-only",
+      "missingModelData": [
+        "relaxed OCV versus SOC",
+        "DC effective resistance versus SOC and temperature",
+        "qualified temperature/rate capacity model"
+      ],
+      "notes": "Official manufacturer list confirms exact model, format and alkaline chemistry. No numerical Ah or test conditions are published here. Nominal voltage remains unset except the explicitly identified9V block. Marketing service-life multiples are not capacity ratings.",
+      "modelReady": false,
+      "ratingConditionsComplete": false
+    }
+  ],
+  "temperatureReferences": [
+    {
+      "id": "energizer-alkaline-aa-25ma-temperature",
+      "name": "Generic Energizer AA alkaline: 25mA temperature scenario",
+      "sourceUrl": "https://data.energizer.com/pdfs/alkaline_appman.pdf",
+      "sourceTitle": "Energizer Alkaline Handbook, 2018",
+      "sourcePage": 5,
+      "figure": 6,
+      "kind": "graph-read-loaded-capacity-reference",
+      "applicability": "Generic AA/LR6 alkaline family, not a part-specific E91 fit; optional explicitly adopted scenario only. Not OCV data. Not a general variable-load model.",
+      "conditions": {
+        "currentA": 0.025,
+        "loadMode": "continuous constant current",
+        "cutoffV": 0.9,
+        "referenceTempC": 20,
+        "referenceCapacityAh": 2.6,
+        "minTempC": -20,
+        "maxTempC": 20,
+        "interpolation": "piecewise-linear within supplied range only; no extrapolation",
+        "socAndAge": "No lot/age/SOC-resolved calibration published for this graph"
+      },
+      "uncertainty": {
+        "method": "Approximate manual reading of manufacturer figure6, rendered at1600px page height; rounded to0.1Ah",
+        "capacityReadingAhPlusMinus": 0.15,
+        "temperatureReadingCPlusMinus": 2,
+        "scope": "Reading uncertainty only, not cell variation or predictive accuracy. Normalized ratios inherit uncertainty in both numerator and denominator."
+      },
+      "points": [
+        {
+          "tempC": -20,
+          "capacityAh": 0.5,
+          "capacityFactor": 0.1923
+        },
+        {
+          "tempC": 0,
+          "capacityAh": 2.5,
+          "capacityFactor": 0.9615
+        },
+        {
+          "tempC": 20,
+          "capacityAh": 2.6,
+          "capacityFactor": 1.0
+        }
+      ],
+      "resistanceReference": {
+        "kind": "generic-fresh-pulse-effective-resistance-ratio-not-DC",
+        "sourcePage": 10,
+        "figure": 11,
+        "referenceTempC": 20,
+        "referenceResistanceOhm": 0.15,
+        "method": "Approximate fig11 effective-resistance curve. The handbook discusses dual-pulse measurement, but does not separately restate the precise pulse schedule for fig11. Not a qualified continuous-DC resistance coefficient.",
+        "uncertaintyOhmPlusMinus": 0.03,
+        "points": [
+          {
+            "tempC": -20,
+            "effectivePulseResistanceOhm": 0.4,
+            "resistanceFactor": 2.6667
+          },
+          {
+            "tempC": 0,
+            "effectivePulseResistanceOhm": 0.23,
+            "resistanceFactor": 1.5333
+          },
+          {
+            "tempC": 20,
+            "effectivePulseResistanceOhm": 0.15,
+            "resistanceFactor": 1
+          }
+        ],
+        "autoFillDCResistance": false
+      }
+    },
+    {
+      "id": "energizer-alkaline-aa-250ma-temperature",
+      "name": "Generic Energizer AA alkaline: 250mA temperature scenario",
+      "sourceUrl": "https://data.energizer.com/pdfs/alkaline_appman.pdf",
+      "sourceTitle": "Energizer Alkaline Handbook, 2018",
+      "sourcePage": 5,
+      "figure": 6,
+      "kind": "graph-read-loaded-capacity-reference",
+      "applicability": "Generic AA/LR6 alkaline family, not a part-specific E91 fit; optional explicitly adopted scenario only. Not OCV data. Not a general variable-load model.",
+      "conditions": {
+        "currentA": 0.25,
+        "loadMode": "continuous constant current",
+        "cutoffV": 0.9,
+        "referenceTempC": 20,
+        "referenceCapacityAh": 1.8,
+        "minTempC": -20,
+        "maxTempC": 20,
+        "interpolation": "piecewise-linear within supplied range only; no extrapolation",
+        "socAndAge": "No lot/age/SOC-resolved calibration published for this graph"
+      },
+      "uncertainty": {
+        "method": "Approximate manual reading of manufacturer figure6, rendered at1600px page height; rounded to0.1Ah",
+        "capacityReadingAhPlusMinus": 0.15,
+        "temperatureReadingCPlusMinus": 2,
+        "scope": "Reading uncertainty only, not cell variation or predictive accuracy. Normalized ratios inherit uncertainty in both numerator and denominator."
+      },
+      "points": [
+        {
+          "tempC": -20,
+          "capacityAh": 0.2,
+          "capacityFactor": 0.1111
+        },
+        {
+          "tempC": 0,
+          "capacityAh": 0.8,
+          "capacityFactor": 0.4444
+        },
+        {
+          "tempC": 20,
+          "capacityAh": 1.8,
+          "capacityFactor": 1.0
+        }
+      ],
+      "resistanceReference": {
+        "kind": "generic-fresh-pulse-effective-resistance-ratio-not-DC",
+        "sourcePage": 10,
+        "figure": 11,
+        "referenceTempC": 20,
+        "referenceResistanceOhm": 0.15,
+        "method": "Approximate fig11 effective-resistance curve. The handbook discusses dual-pulse measurement, but does not separately restate the precise pulse schedule for fig11. Not a qualified continuous-DC resistance coefficient.",
+        "uncertaintyOhmPlusMinus": 0.03,
+        "points": [
+          {
+            "tempC": -20,
+            "effectivePulseResistanceOhm": 0.4,
+            "resistanceFactor": 2.6667
+          },
+          {
+            "tempC": 0,
+            "effectivePulseResistanceOhm": 0.23,
+            "resistanceFactor": 1.5333
+          },
+          {
+            "tempC": 20,
+            "effectivePulseResistanceOhm": 0.15,
+            "resistanceFactor": 1
+          }
+        ],
+        "autoFillDCResistance": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "alkaline-handbook",
+      "title": "Energizer Alkaline Handbook, 2018",
+      "url": "https://data.energizer.com/pdfs/alkaline_appman.pdf"
+    },
+    {
+      "id": "e91",
+      "title": "Energizer E91 datasheet, E91NA0323",
+      "url": "https://energizer.com/wp-content/uploads/2025/01/e91_max_na.pdf"
+    },
+    {
+      "id": "l91",
+      "title": "Energizer L91 OEM sheet, 2024.01",
+      "url": "https://energizer.com/apac/wp-content/uploads/sites/18/2024/07/Energizer-OEM-Lithium-L91-Sell-Sheet-CN-EN%202024.01.pdf"
+    },
+    {
+      "id": "1215",
+      "title": "Eveready 1215 datasheet, 1215NA0218",
+      "url": "https://data.energizer.com/pdfs/1215.pdf"
+    },
+    {
+      "id": "panasonic-coins",
+      "title": "Panasonic industrial battery catalog",
+      "url": "https://energy.panasonic.com/dam/common/content/business/pdf/en/catalog/Catalog_EN_241001.pdf"
+    },
+    {
+      "id": "eneloop",
+      "title": "Panasonic BK-3MCC AA instructions",
+      "url": "https://panasonic.jp/manualdl/p-db/p_/p_bk3mcc248_t_201304181131_0.pdf"
+    },
+    {
+      "id": "ncr18650bf",
+      "title": "Panasonic NCR-18650BF manufacturer specifications",
+      "url": "https://industry.panasonic.eu/pd-35779/batteries/secondary-batteries/lithium-ion-batteries-for-europe/cylindrical-type/ncr-18650bf"
+    },
+    {
+      "id": "anr26650",
+      "title": "Lithium Werks ANR26650M1B datasheet, SF00008 rev2, Aug2022",
+      "url": "https://lithiumwerks.com/wp-content/uploads/2022/08/26650-Power-Cell-080322.pdf"
+    },
+    {
+      "id": "np7",
+      "title": "GS Yuasa NP7-12, MKT-081 ver1.0 Aug2025",
+      "url": "https://gsyuasa-es.com/Downloads/NP7-12SPEC_SHEET.pdf"
+    }
+  ],
+  "selectionRules": [
+    "Selecting an identity must not silently provide synthetic OCV or DC resistance.",
+    "A null rating or condition means unknown, not zero.",
+    "Nominal voltage must never substitute for an OCV-SOC curve.",
+    "Changing brand or chemistry must clear previous model assumptions.",
+    "Temperature references require explicit adoption and a visible scope/uncertainty label.",
+    "Do not extrapolate temperature references or interpret capacity factors as irreversible charge loss."
+  ]
+}

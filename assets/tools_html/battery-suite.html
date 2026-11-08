@@ -1,340 +1,50 @@
-<div class="doc-container flex flex-col w-full h-full">
-    <div class="p-4 border-b border-themeBorder bg-themeBorder text-themeBg flex justify-between items-center" title="Full Battery Pack Designer Suite">
-        <div class="flex items-center gap-2"><i class="fa-solid fa-car-battery"></i><h3 class="font-bold font-mono">Full Battery Pack Designer Suite</h3></div>
+<article id="battery-analysis-tool" class="reference-sheet battery-analysis-tool">
+  <header><p class="reference-kicker">Primary cells &amp; rechargeable batteries · discharge analysis</p><h2>Battery life &amp; voltage profiles</h2><p>Build a load schedule, specify the battery model, and explore terminal voltage, remaining charge and temperature. Datasheet identities and ratings are kept separate from simulation assumptions.</p></header>
+  <section class="battery-card">
+    <h3>1. Choose a battery reference</h3>
+    <div class="reference-fields"><label>Brand<select id="ba-brand"><option value="">All brands</option></select></label><label>Chemistry<select id="ba-chemistry"><option value="">All chemistries</option></select></label><label>Cell / battery format<select id="ba-format"><option value="">All formats</option></select></label><label>Manufacturer reference<select id="ba-preset"><option value="">Custom / illustrative model</option></select></label></div>
+    <div id="ba-reference" class="reference-note" aria-live="polite">Loading the source catalog…</div>
+    <div class="battery-actions"><button id="ba-ideal" type="button">Use ideal-voltage starting point</button><button id="ba-example" type="button">Load illustrative Li-ion example</button></div>
+    <p class="reference-source">A product entry is not a complete validated model. A loaded discharge curve is not an open-circuit voltage curve; a 1 kHz impedance rating is not DC resistance. Unknown fields remain blank.</p>
+  </section>
+  <section class="battery-card">
+    <h3>2. Define the cell or battery unit</h3><p id="ba-model-status" class="reference-note">Illustrative model: editable assumptions, not a manufacturer fit.</p>
+    <div class="reference-fields">
+      <label>Reference capacity per unit (Ah)<input id="ba-capacity" type="number" min="0" step="any" value="3"></label>
+      <label>Effective DC resistance per unit (Ω)<input id="ba-resistance" type="number" min="0" step="any" value="0.06"></label>
+      <label>Cutoff per unit (V)<input id="ba-cutoff" type="number" min="0" step="any" value="3"></label>
+      <label>Units in series<input id="ba-series" type="number" min="1" step="1" value="1"></label>
+      <label>Parallel strings<input id="ba-parallel" type="number" min="1" step="1" value="1"></label>
+      <label>Initial reference SOC (%)<input id="ba-soc" type="number" min="0" max="100" step="any" value="100"></label>
+      <label>Accessible SOC reserve (%)<input id="ba-reserve" type="number" min="0" max="100" step="any" value="0"></label>
+      <label>Capacity state of health (%)<input id="ba-health" type="number" min="0" max="100" step="any" value="100"></label>
+      <label>Constant-power converter efficiency (%)<input id="ba-efficiency" type="number" min="0" max="100" step="any" value="90"></label>
+      <label>Self-discharge (% of remaining charge/day)<input id="ba-self" type="number" min="0" max="99" step="any" value="0"></label>
+      <label>Per-unit discharge-current limit (A, optional)<input id="ba-max-current" type="number" min="0" step="any" placeholder="Unknown / not applied"></label>
+      <label>Default battery temperature (°C)<input id="ba-temperature" type="number" step="any" value="25"></label>
     </div>
-    
-    <div class="flex flex-col md:flex-row flex-grow bg-themeBg font-mono text-sm overflow-hidden">
-        
-        <!-- Controls Panel -->
-        <div class="w-full md:w-80 border-r border-themeBorder bg-themeContainer flex flex-col overflow-y-auto">
-            <div class="p-4 space-y-4">
-                
-                <div>
-                    <label class="text-[10px] font-bold text-themeMuted mb-1 block">CELL CHEMISTRY</label>
-                    <select id="bat-chem" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText font-bold" onchange="onChemChange()">
-                        <option value="lfp">LFP (LiFePO4)</option>
-                        <option value="nmc">NMC (LiNiMnCoO2)</option>
-                        <option value="pb">Lead-Acid (Pb)</option>
-                        <option value="na">Na-ion (Sodium-ion)</option>
-                        <option value="nimh">NiMH</option>
-                        <option value="nicd">NiCd</option>
-                        <option value="agzn">Silver-Zinc (AgZn)</option>
-                    </select>
-                </div>
-                
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="whitespace-nowrap text-[10px] font-bold text-themeMuted mb-1 block">SERIES (S)</label>
-                        <input type="number" id="bat-s" value="14" min="1" step="1" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
-                    </div>
-                    <div>
-                        <label class="whitespace-nowrap text-[10px] font-bold text-themeMuted mb-1 block">PARALLEL (P)</label>
-                        <input type="number" id="bat-p" value="4" min="1" step="1" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="whitespace-nowrap text-[10px] font-bold text-themeMuted mb-1 block">CELL CAP (Ah)</label>
-                        <input type="number" id="bat-cap" value="3.2" min="0.01" step="0.1" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
-                    </div>
-                    <div>
-                        <label class="whitespace-nowrap text-[10px] font-bold text-themeMuted mb-1 block">TEMP (&deg;C)</label>
-                        <input type="number" id="bat-temp" value="25" min="-40" max="80" class="w-full border border-themeBorder px-2 py-1 bg-themeBg text-themeText" oninput="runBatterySuite()">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="text-[10px] font-bold text-themeMuted mb-1 block">C-RATE (Discharge)</label>
-                    <input type="range" id="bat-crate" min="0.1" max="5" step="0.1" value="0.5" class="w-full accent-themeAccent" oninput="document.getElementById('crate-val').innerText = this.value + 'C'; runBatterySuite()">
-                    <div class="text-right text-themeAccent text-xs font-bold" id="crate-val">0.5C</div>
-                </div>
-
-                <div class="pt-4 border-t border-themeBorder/20 space-y-2">
-                    <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                        <span class="text-themeMuted">Nominal Pack Voltage</span>
-                        <span id="pack-vnom" class="font-bold text-themeText">-- V</span>
-                    </div>
-                    <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                        <span class="text-themeMuted">Max Pack Voltage</span>
-                        <span id="pack-vmax" class="font-bold text-themeAccent">-- V</span>
-                    </div>
-                    <div class="flex justify-between border-b border-themeBorder/10 pb-1">
-                        <span class="text-themeMuted">Total Capacity</span>
-                        <span id="pack-ah" class="font-bold text-themeText">-- Ah</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-themeMuted">Total Energy</span>
-                        <span id="pack-kwh" class="font-bold text-themeAccent">-- Wh</span>
-                    </div>
-                </div>
-
-                <div id="bat-alerts" class="space-y-2 mt-4">
-                    <!-- Alerts injected here -->
-                </div>
-
-            </div>
-        </div>
-        
-        <!-- Charts Area -->
-        <div class="flex-grow p-4 flex flex-col gap-4 overflow-y-auto">
-            <!-- Discharge Curve -->
-            <div class="bg-themeContainer border border-themeBorder/30 flex-grow relative min-h-[250px] p-2 flex flex-col">
-                <h4 class="text-xs font-bold text-themeMuted absolute top-2 left-2">DISCHARGE CURVE (OCV vs SOC)</h4>
-                <div class="flex-grow relative mt-6">
-                    <canvas id="bat-curve-chart"></canvas>
-                </div>
-            </div>
-            
-            <!-- Cycle Life & DOD -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-64 flex-shrink-0">
-                <div class="bg-themeContainer border border-themeBorder/30 relative p-2 flex flex-col">
-                    <h4 class="text-xs font-bold text-themeMuted absolute top-2 left-2">CYCLE LIFE vs DOD</h4>
-                    <div class="flex-grow relative mt-6">
-                        <canvas id="bat-aging-chart"></canvas>
-                    </div>
-                </div>
-                
-                <div class="bg-themeContainer border border-themeBorder/30 relative p-4 flex flex-col text-xs space-y-2">
-                    <h4 class="font-bold text-themeAccent mb-2">Thermal & Aging Impacts</h4>
-                    <p class="text-themeMuted flex-grow">
-                        Operation at <span id="txt-temp" class="text-themeText font-bold">25°C</span> results in a cycle life multiplier of <span id="txt-temp-mult" class="text-themeAccent font-bold">1.0x</span>.
-                        <br><br>
-                        Higher C-rates (<span id="txt-crate" class="text-themeText">0.5C</span>) increase internal I&sup2;R heating and voltage sag, reducing usable capacity.
-                    </p>
-                    <div class="border-t border-themeBorder/20 pt-2 flex justify-between">
-                        <span class="whitespace-nowrap text-themeMuted">Est. Cycle Life (80% DOD):</span>
-                        <span id="txt-life" class="font-bold text-themeAccent">-- Cycles</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Capacity Fade Curve -->
-            <div class="bg-themeContainer border border-themeBorder/30 relative min-h-[250px] p-2 flex flex-col mt-2 flex-shrink-0">
-                <h4 class="text-xs font-bold text-themeMuted absolute top-2 left-2">CAPACITY FADE (RETENTION vs CYCLES)</h4>
-                <div class="flex-grow relative mt-6">
-                    <canvas id="bat-fade-chart"></canvas>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Theory & Math Section -->
-    <div class="border-t border-themeBorder bg-themeContainer p-4 text-sm font-mono flex flex-col gap-2 mt-auto">
-        <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('batterysuite-theory').classList.toggle('hidden')">
-            <h4 class="font-bold text-themeAccent"><i class="fa-solid fa-calculator mr-2"></i>Math & Theory</h4>
-            <i class="fa-solid fa-chevron-down text-themeMuted"></i>
-        </div>
-        <div id="batterysuite-theory" class="hidden text-themeMuted mt-2 space-y-2 text-xs">
-            <p><strong>Theory:</strong> Comprehensive battery pack design involves scaling single-cell capacity and voltage using Series (S) and Parallel (P) configurations. Total Energy is \(E = V_{nom} \times Ah\).</p>
-        </div>
-    </div>
-</div>
-
-<script>
-// Battery Chemistry Models (Simplified for visual accuracy)
-const BAT_MODELS = {
-    lfp: { v_nom: 3.2, v_max: 3.65, v_min: 2.5, curve: [3.65, 3.35, 3.3, 3.25, 3.2, 3.2, 3.2, 3.15, 3.0, 2.5], base_cycles: 3000 },
-    nmc: { v_nom: 3.7, v_max: 4.2, v_min: 2.8, curve: [4.2, 4.0, 3.9, 3.8, 3.7, 3.6, 3.5, 3.4, 3.2, 2.8], base_cycles: 1000 },
-    pb: { v_nom: 2.0, v_max: 2.4, v_min: 1.75, curve: [2.4, 2.1, 2.05, 2.0, 1.95, 1.9, 1.85, 1.8, 1.78, 1.75], base_cycles: 500 },
-    na: { v_nom: 3.1, v_max: 3.95, v_min: 1.5, curve: [3.95, 3.5, 3.3, 3.1, 2.9, 2.7, 2.5, 2.2, 1.8, 1.5], base_cycles: 2000 },
-    nimh: { v_nom: 1.2, v_max: 1.45, v_min: 1.0, curve: [1.45, 1.35, 1.25, 1.2, 1.2, 1.2, 1.15, 1.1, 1.05, 1.0], base_cycles: 800 },
-    nicd: { v_nom: 1.2, v_max: 1.4, v_min: 1.0, curve: [1.4, 1.3, 1.22, 1.2, 1.2, 1.2, 1.18, 1.15, 1.1, 1.0], base_cycles: 1500 },
-    agzn: { v_nom: 1.5, v_max: 1.86, v_min: 1.2, curve: [1.86, 1.6, 1.55, 1.5, 1.5, 1.5, 1.45, 1.3, 1.25, 1.2], base_cycles: 150 }
-};
-
-let batCurveChart = null;
-let batAgingChart = null;
-
-function onChemChange() {
-    const chem = document.getElementById('bat-chem').value;
-    if(chem === 'lfp') { document.getElementById('bat-cap').value = 3.2; document.getElementById('bat-crate').max = 5; }
-    else if(chem === 'nmc') { document.getElementById('bat-cap').value = 4.0; document.getElementById('bat-crate').max = 10; }
-    else if(chem === 'pb') { document.getElementById('bat-cap').value = 50.0; document.getElementById('bat-crate').max = 1; }
-    else if(chem === 'na') { document.getElementById('bat-cap').value = 3.0; document.getElementById('bat-crate').max = 3; }
-    else if(chem === 'nimh') { document.getElementById('bat-cap').value = 2.0; document.getElementById('bat-crate').max = 2; }
-    else if(chem === 'nicd') { document.getElementById('bat-cap').value = 1.5; document.getElementById('bat-crate').max = 10; }
-    else if(chem === 'agzn') { document.getElementById('bat-cap').value = 0.5; document.getElementById('bat-crate').max = 2; }
-    runBatterySuite();
-}
-
-function runBatterySuite() {
-    const chem = document.getElementById('bat-chem').value;
-    const s = parseInt(document.getElementById('bat-s').value) || 1;
-    const p = parseInt(document.getElementById('bat-p').value) || 1;
-    const cap = parseFloat(document.getElementById('bat-cap').value) || 1;
-    const temp = parseFloat(document.getElementById('bat-temp').value) || 25;
-    const crate = parseFloat(document.getElementById('bat-crate').value) || 0.5;
-
-    const model = BAT_MODELS[chem];
-    
-    const packVNom = model.v_nom * s;
-    const packVMax = model.v_max * s;
-    const packAh = cap * p;
-    const packWh = packVNom * packAh;
-
-    document.getElementById('pack-vnom').innerText = packVNom.toFixed(2) + ' V';
-    document.getElementById('pack-vmax').innerText = packVMax.toFixed(2) + ' V';
-    document.getElementById('pack-ah').innerText = packAh.toFixed(1) + ' Ah';
-    document.getElementById('pack-kwh').innerText = packWh >= 1000 ? (packWh/1000).toFixed(2) + ' kWh' : packWh.toFixed(0) + ' Wh';
-
-    // Thermal Impact (Arrhenius approx)
-    let tempMult = 1.0;
-    if (temp > 25) tempMult = Math.pow(0.5, (temp - 25) / 10); // Halves every 10C above 25C
-    else if (temp < 10) tempMult = 0.8; // Cold temp degradation
-    if (tempMult > 1.2) tempMult = 1.2;
-    
-    document.getElementById('txt-temp').innerText = temp + '°C';
-    document.getElementById('txt-temp-mult').innerText = tempMult.toFixed(2) + 'x';
-    document.getElementById('txt-crate').innerText = crate + 'C';
-
-    const estCycles = Math.round(model.base_cycles * tempMult * (1 / Math.max(1, crate*0.8)));
-    document.getElementById('txt-life').innerText = estCycles + ' Cycles';
-
-    // Alerts
-    const alertsBox = document.getElementById('bat-alerts');
-    alertsBox.innerHTML = '';
-    if (temp > 50) alertsBox.innerHTML += `<div class="p-2 border border-red-500/50 bg-red-500/10 text-red-500 text-[10px]"><i class="fa-solid fa-triangle-exclamation mr-1"></i> CRITICAL: Temperature > 50°C accelerates SEI layer degradation and thermal runaway risks.</div>`;
-    else if (temp < 0) alertsBox.innerHTML += `<div class="p-2 border border-blue-500/50 bg-blue-500/10 text-blue-500 text-[10px]"><i class="fa-solid fa-snowflake mr-1"></i> WARNING: Sub-zero operation may cause lithium plating during charge.</div>`;
-    if (crate > document.getElementById('bat-crate').max * 0.8) alertsBox.innerHTML += `<div class="p-2 border border-yellow-500/50 bg-yellow-500/10 text-yellow-500 text-[10px]"><i class="fa-solid fa-bolt mr-1"></i> HIGH C-RATE: Approaching max limits for this chemistry. Expect high thermal load.</div>`;
-
-    updateBatCharts(model, s, temp, crate, estCycles);
-}
-
-let batFadeChart = null;
-
-function updateBatCharts(model, series, temp, crate, estCycles) {
-    // Generate Curve Data (0% to 100% SOC)
-    const socLabels = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0];
-    const vDropCrate = crate * 0.05 * series; // Simple IR drop approx
-    
-    const voltages = model.curve.map(v => {
-        let sag = vDropCrate;
-        if(temp < 10) sag *= 1.5;
-        return Math.max((v * series) - sag, model.v_min * series);
-    });
-
-    const tc = window.getThemeColors ? window.getThemeColors() : {text: '#9ca3af', grid: 'rgba(255,255,255,0.05)'};
-
-    const ctxCurve = document.getElementById('bat-curve-chart').getContext('2d');
-    if(batCurveChart) batCurveChart.destroy();
-    
-    batCurveChart = new Chart(ctxCurve, {
-        type: 'line',
-        data: {
-            labels: socLabels,
-            datasets: [{
-                label: `Pack Voltage (${crate}C)`,
-                data: voltages,
-                borderColor: '#f59e0b',
-                backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                borderWidth: 2,
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { title: { display: true, text: 'State of Charge (%)', color: tc.text }, ticks: {color: tc.text}, reverse: true, grid: { color: tc.grid } },
-                y: { title: { display: true, text: 'Voltage (V)', color: tc.text }, ticks: {color: tc.text}, grid: { color: tc.grid } }
-            },
-            plugins: { legend: { display: false } }
-        }
-    });
-
-    // Aging Chart Data (Exponential relation to DOD)
-    const dodLabels = [100, 90, 80, 70, 60, 50, 40, 30, 20];
-    const cyclesData = dodLabels.map(dod => {
-        // Simple model: Life increases exponentially as DOD decreases
-        return Math.round(estCycles * Math.pow(100/dod, 1.5));
-    });
-
-    const ctxAging = document.getElementById('bat-aging-chart').getContext('2d');
-    if(batAgingChart) batAgingChart.destroy();
-
-    batAgingChart = new Chart(ctxAging, {
-        type: 'bar',
-        data: {
-            labels: dodLabels,
-            datasets: [{
-                label: 'Cycle Life',
-                data: cyclesData,
-                backgroundColor: '#3b82f6',
-                borderRadius: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { title: { display: true, text: 'Depth of Discharge (%)', color: tc.text }, ticks: {color: tc.text}, reverse: true, grid: { color: tc.grid } },
-                y: { title: { display: true, text: 'Estimated Cycles', color: tc.text }, ticks: {color: tc.text}, type: 'logarithmic', grid: { color: tc.grid } }
-            },
-            plugins: { legend: { display: false } }
-        }
-    });
-
-    // Fade Curve (Retention vs Cycles)
-    const fadeLabels = [];
-    const fadeData = [];
-    for(let i=0; i<=estCycles*1.2; i+= Math.max(10, Math.floor(estCycles/10))) {
-        fadeLabels.push(i);
-        // Typical exponential decay curve mapping to 80% at estCycles
-        // R(c) = 100 - 20 * (c / estCycles)^1.5
-        let retention = 100 - 20 * Math.pow(i / estCycles, 1.5);
-        if(retention < 0) retention = 0;
-        fadeData.push(retention.toFixed(1));
-    }
-    
-    const ctxFade = document.getElementById('bat-fade-chart').getContext('2d');
-    if(batFadeChart) batFadeChart.destroy();
-    
-    batFadeChart = new Chart(ctxFade, {
-        type: 'line',
-        data: {
-            labels: fadeLabels,
-            datasets: [{
-                label: 'Capacity Retention (%)',
-                data: fadeData,
-                borderColor: '#10b981', // emerald-500
-                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                borderWidth: 2,
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { title: { display: true, text: 'Cycles', color: tc.text }, ticks: {color: tc.text}, grid: { color: tc.grid } },
-                y: { min: 50, max: 105, title: { display: true, text: 'Retention (%)', color: tc.text }, ticks: {color: tc.text}, grid: { color: tc.grid } }
-            },
-            plugins: {
-                legend: { display: false },
-                annotation: {
-                    annotations: {
-                        line1: {
-                            type: 'line',
-                            yMin: 80,
-                            yMax: 80,
-                            borderColor: 'red',
-                            borderWidth: 1,
-                            borderDash: [5, 5],
-                            label: { content: 'EOL (80%)', enabled: true, position: 'start' }
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-// Initial Run
-setTimeout(() => {
-    runBatterySuite();
-}, 100);
-</script>
+    <p class="reference-source">One “unit” may be a cell or a documented monobloc. For a 12 V lead-acid block, use block-level voltage, capacity and resistance consistently. Units are identical; mismatch and BMS behavior are not modeled. SOH is supplied capacity scaling, not an aging forecast.</p>
+    <div class="battery-editor-grid"><label>Relaxed OCV curve: SOC %, voltage V<textarea id="ba-ocv" rows="8" spellcheck="false">0,3.0
+10,3.45
+25,3.6
+50,3.7
+75,3.9
+100,4.2</textarea><small>Sorted SOC from 0 to 100; nondecreasing voltage. Enter measured or documented relaxed OCV data.</small></label><label>Temperature curve: °C, capacity factor, R factor<textarea id="ba-temp-curve" rows="8" spellcheck="false">25,1,1</textarea><small>No extrapolation. Capacity factors are relative to the reference capacity and must be in (0,1]. Use a capacity reference that bounds the modeled temperatures.</small></label></div>
+    <div class="reference-fields"><label>Documented temperature scenario<select id="ba-temp-reference"><option value="">Select a scoped reference…</option></select></label></div><button id="ba-adopt-temperature" type="button">Adopt selected capacity-temperature reference</button><p id="ba-temp-evidence" class="reference-source">This action replaces capacity, cutoff and temperature points with the reference’s stated test conditions. Resistance factors remain a declared constant assumption unless you supply data.</p>
+    <div class="reference-fields"><label>Manufacturer discharge-curve reference<select id="ba-discharge-reference"><option value="">Loading reference curves…</option></select></label></div><button id="ba-adopt-discharge" type="button">Fit selected loaded curve using entered DC R</button><p id="ba-discharge-evidence" class="reference-source">This explicitly estimates OCV ≈ loaded test voltage + test current × your entered effective DC resistance. It is a reference-curve screening scenario at the reference conditions, not a measured relaxed-OCV curve or a qualified prediction at other loads.</p>
+    <label class="battery-source-label">Model / measurement provenance<textarea id="ba-provenance" rows="2" spellcheck="false">Illustrative Li-ion OCV and 0.06 Ω resistance, supplied as editable scenario assumptions. Constant 25 °C; no manufacturer temperature correction.</textarea></label>
+  </section>
+  <section class="battery-card">
+    <h3>3. Apply loads and temperatures</h3><p>The rows run in sequence and repeat until service ends or the calculation horizon is reached. Each row holds its load and optional battery temperature constant. Use multiple rows for pulses, duty cycles and temperature changes.</p>
+    <label class="battery-source-label">seconds, load type, value, optional battery °C<textarea id="ba-loads" rows="5" spellcheck="false">3600,power,0.25,25</textarea></label>
+    <div class="reference-table"><table><thead><tr><th>Type</th><th>Value</th><th>Connection / meaning</th></tr></thead><tbody><tr><td>current</td><td>A</td><td>Current at pack terminals; efficiency is not applied again.</td></tr><tr><td>power</td><td>W</td><td>Useful output power; the entered converter efficiency increases battery draw.</td></tr><tr><td>resistance</td><td>Ω</td><td>Resistor directly across the pack. Voltage and current are solved together.</td></tr></tbody></table></div>
+    <div class="battery-actions"><button id="ba-duty-example" type="button">Example: active / sleep load</button><button id="ba-cold-example" type="button">Example: cold-load scenario</button></div>
+    <div class="reference-fields"><label>Calculation horizon (hours)<input id="ba-horizon" type="number" min="0" step="any" value="168"></label><label>Maximum integration step (seconds)<input id="ba-step" type="number" min="0" step="any" value="30"></label></div>
+    <div class="battery-actions"><button id="ba-run" type="button">Calculate battery profile</button><button id="ba-export" type="button" disabled>Export model &amp; results JSON</button><button id="ba-csv" type="button" disabled>Export trace CSV</button></div><p id="ba-error" class="battery-error" role="status"></p>
+  </section>
+  <section class="battery-card" aria-labelledby="ba-result-title"><h3 id="ba-result-title">Runtime &amp; load service</h3><div id="ba-summary" class="reference-note" aria-live="polite">Calculate to see the model result.</div><div class="battery-actions"><label>Plot<select id="ba-channel"><option value="voltage">Pack terminal voltage / V</option><option value="current">Pack current / A</option><option value="soc">Accessible state of charge / %</option><option value="referenceSoc">Reference state of charge / %</option><option value="temperatureC">Battery temperature / °C</option><option value="outputPowerW">Useful load power / W</option><option value="lossPowerW">Internal I²R loss / W</option></select></label></div><div id="ba-plot" class="battery-plot"></div><p id="ba-cursor" class="reference-source">Hover or touch the plot to inspect a calculated point.</p><p class="reference-source">Points are an adaptively sampled numerical trace, not laboratory measurements. Load and temperature transitions can produce real model discontinuities.</p></section>
+  <details class="battery-card"><summary>Model equations, interpretation &amp; limits</summary><p>OCV is interpolated against accessible SOC. Pack resistance is Runit × series / parallel, and terminal voltage is Voc − I·R. Constant-power loads solve P/η = I(Voc − IR) on the low-current branch; an infeasible load ends service even if charge remains.</p><p>Reference charge is conserved across temperature changes. For a capacity factor f, the inaccessible lower charge window is Qref(1−f), and accessible SOC = (remaining reference charge − inaccessible window)/(Qref·f). Warming can make retained charge accessible; it does not create charge. This screening model needs a temperature curve appropriate to the actual cell, load and cutoff.</p><p>The model stops at the first cutoff, reserve, temperature-capacity, current or power constraint. Horizon/step-limited runs give a lower bound, not a predicted full lifetime. Very short pulses repeated over years may need a longer step budget or a separately justified averaged model.</p><p>Discharge only. No charge protocol, cycle-life prediction, Peukert/rate-capacity behavior, relaxation, hysteresis, transient polarization, self-heating, cell mismatch or protection dynamics. Fixed OCV/resistance and temperature factors do not establish accuracy across every current, chemistry or temperature. Primary cells must not be treated as rechargeable.</p><p>For a simple average-current calculation, use the separate Battery Runtime Arithmetic tool. Manufacturer operating limits and current limits remain separate from this model.</p></details>
+</article>
+<script src="/assets/js/battery-analysis.js?v=1"></script>
+<script src="/assets/js/battery-analysis-ui.js?v=1"></script>
+<script>BatteryAnalysisUI.mount(document.getElementById('battery-analysis-tool'));</script>

@@ -1,0 +1,22 @@
+.battery-analysis-tool { font:15px/1.65 system-ui,sans-serif; }
+.battery-analysis-tool .battery-card { padding:1.25rem; margin:1.2rem 0; border:1px solid var(--border-color); border-radius:4px; background:var(--container-bg); }
+.battery-analysis-tool .battery-card h3 { margin-top:0; }
+.battery-analysis-tool :is(select,textarea) { width:100%; min-width:0; padding:.6rem; color:var(--text-color); background:var(--input-bg); border:1px solid var(--border-color); font:inherit; }
+.battery-analysis-tool textarea { font:13px/1.55 ui-monospace,monospace; resize:vertical; display:block; }
+.battery-analysis-tool small { display:block; font-size:.8rem; color:var(--muted-text); line-height:1.5; }
+.battery-editor-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.2rem; }
+.battery-editor-grid label { min-width:0; }
+.battery-actions { display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; margin:1rem 0; }
+.battery-analysis-tool button { padding:.6rem .85rem; min-height:44px; border:1px solid var(--accent-color); color:var(--accent-color); background:var(--container-bg); cursor:pointer; }
+.battery-analysis-tool #ba-run { background:var(--accent-color); color:var(--bg-color); font-weight:700; }
+.battery-analysis-tool button:disabled { opacity:.5; cursor:default; }
+.battery-analysis-tool .battery-source-label { display:block; margin:1rem 0; }
+.battery-analysis-tool .battery-error { border-left:3px solid #b95435; padding-left:.8rem; overflow-wrap:anywhere; }
+.battery-analysis-tool .battery-error:empty { display:none; }
+.battery-analysis-tool .battery-plot { width:100%; min-height:180px; }
+.battery-analysis-tool .battery-plot svg { width:100%; height:auto; display:block; touch-action:pan-y; }
+.battery-analysis-tool summary { min-height:44px; cursor:pointer; color:var(--accent-color); font-weight:600; }
+.battery-analysis-tool .battery-metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.6rem 1rem; margin:1rem 0; }
+.battery-analysis-tool .battery-metrics strong { display:block; font-size:1.25rem; color:var(--accent-color); }
+.battery-analysis-tool .battery-metrics span { color:var(--muted-text); font-size:.8rem; }
+@media(max-width:650px) { .battery-editor-grid { grid-template-columns:minmax(0,1fr); } .battery-analysis-tool .battery-card { padding:.8rem; } .battery-analysis-tool .battery-actions > label { width:100%; } }

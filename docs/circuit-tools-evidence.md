@@ -1,6 +1,6 @@
 # Published circuit calculator scope
 
-The tools catalog contains 24 bounded analytical calculators and four source-linked
+The tools catalog contains 26 bounded analytical calculators and scenario models and four source-linked
 interface cheat sheets. Restoring a tool means its stated model and representative
 calculations have been reviewed; it does not mean the tool is measurement-correlated.
 The prior three-tool-only catalog was too restrictive and has been superseded.
@@ -8,6 +8,9 @@ Unreviewed fragments remain in source and are excluded from GitHub Pages in
 `_config.yml`; the loader accepts only registered tool IDs and files.
 
 Review records:
+
+- [Solar PV generation](pv-generation-review.md): supplied-data interval energy and monthly irradiation estimates.
+- [Battery discharge analysis](battery-analysis-review.md): model equations, source-conditioned catalog, temperature/load scope and numerical checks.
 
 - [Basic circuit and power tools](basic-tool-review.md): 13 reviewed, 11 restored.
 - [RF and high-speed tools](rf-tool-review.md): 17 reviewed; five repaired calculators
