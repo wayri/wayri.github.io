@@ -1,0 +1,7 @@
+{
+  "entry": "Marble.kicad_sch",
+  "files": [
+    { "path": "Marble.kicad_sch", "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/Marble.kicad_sch" },
+    { "path": "PMOD.kicad_sch", "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/PMOD.kicad_sch" }
+  ]
+}

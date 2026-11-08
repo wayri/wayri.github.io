@@ -5,9 +5,18 @@ permalink: /kicad-webview/docs/examples/
 doc_section: examples
 ---
 
-These independent examples use the **0.1.0-beta.1** ES module directly from the versioned release. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The public inverter fixture lacks external component models, so 3D may show labelled stand-ins.
+These independent examples use the **0.1.0-beta.2** ES module directly from the versioned release. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The public inverter fixture lacks external component models, so 3D may show labelled stand-ins.
 
-For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/kicad-webview/docs/quick-start/). All commercial use requires permission under the release's [license 1.0](/kicad-webview/docs/license/).
+For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/kicad-webview/docs/quick-start/). The release uses [MPL-2.0](/kicad-webview/docs/license/); input designs and model files have separate terms.
+
+## Public hardware examples
+
+The [product page’s public examples](/kicad-webview/#public-examples) add two independently licensed designs: **OLIMEX ESP32-P4-DevKit, Rev D1**, under **CERN-OHL-S-2.0**, and **Marble**, under **CERN-OHL-1.2**. Follow each example’s source README and retained license/provenance before reusing hardware files. Their hardware terms are separate from the viewer’s MPL-2.0 license. A successful render is not a hardware validation result.
+
+- [OLIMEX source README, pinned revision `26705d3`](https://github.com/OLIMEX/ESP32-P4-DevKit/blob/26705d36407a07324348927dfd30fbf4ffc1d94c/README.md): Rev D1 PCB and schematic. The hardware’s CERN-OHL-S-2.0 terms are separate from the upstream software and documentation licenses.
+- [Marble source README, pinned revision `a426777`](https://github.com/BerkeleyLab/Marble/blob/a426777d92c0f22a546d4740b419a3937e0c1f90/README.md): selected root and PMOD schematic sheets, not a complete-hierarchy or full-board demo. Hardware copyright and contributor credits remain with their upstream authors under CERN-OHL-1.2.
+
+For a complete face-picking example with virtual LEDs, displays, buttons and knobs, use [Interactive models & displays](/kicad-webview/docs/model-interaction/).
 
 ## Link a layout and assembly
 
@@ -21,8 +30,8 @@ Both viewers load the same exact saved PCB. Selecting a supported part or object
 <div id="views"><div id="layout"></div><div id="assembly"></div></div>
 <p id="status" role="status">Loading the public inverter…</p>
 <script type="module">
-import { Viewer, linkViewers } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.1/kivi-viewer.js';
-const project = 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.1/demo/project.json';
+import { Viewer, linkViewers } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
+const project = 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json';
 const layout = new Viewer('#layout', { theme:'dark' });
 const assembly = new Viewer('#assembly', { theme:'dark' });
 const abort = new AbortController();
@@ -57,13 +66,13 @@ This example shows the first slide explicitly. The carousel supplies its own Pre
 <button id="quality" type="button">Try presentation rendering</button>
 <p id="status" role="status"></p>
 <script type="module">
-import { Viewer, ViewerCarousel } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.1/kivi-viewer.js';
+import { Viewer, ViewerCarousel } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
 const viewer = new Viewer('#board', { theme:'dark' });
 const button = document.querySelector('#quality'); button.disabled = true;
 let tour;
 window.addEventListener('pagehide', () => { tour?.dispose(); viewer.dispose(); }, { once:true });
 try {
-  if (await viewer.load('https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.1/demo/project.json', { view:'3d' })) {
+  if (await viewer.load('https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json', { view:'3d' })) {
     tour = new ViewerCarousel('#tour', { viewer, interval:6500, slides:[
       { label:'Assembly overview', view:'3d', camera3D:'isometric', clearSelection:true },
       { label:'Top assembly', view:'3d', camera3D:'top' },
@@ -91,12 +100,12 @@ The tree loads listed schematic sources independently of a PCB/WebGL viewer. SVG
 <button id="save" type="button" disabled>Download diagram SVG</button>
 <p id="status" role="status"></p>
 <script type="module">
-import { ProjectTree } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.1/kivi-viewer.js';
+import { ProjectTree } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
 const tree = new ProjectTree('#tree', { theme:'dark' });
 const expand = document.querySelector('#expand'), save = document.querySelector('#save');
 window.addEventListener('pagehide', () => tree.dispose(), { once:true });
 try {
-  if (await tree.load('https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.1/demo/project.json')) {
+  if (await tree.load('https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json')) {
     expand.disabled = save.disabled = false;
   }
 } catch (error) { document.querySelector('#status').textContent = error.message; }
@@ -121,7 +130,7 @@ Choose an actual planar component face after the project loads. This creates a *
 <button id="choose" type="button" disabled>Choose a display face</button>
 <p id="status" role="status">Loading…</p>
 <script type="module">
-import { Viewer, DemoController } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.1/kivi-viewer.js';
+import { Viewer, DemoController } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
 const viewer = new Viewer('#board', { theme:'dark', inspectOnSelect:false });
 const choose = document.querySelector('#choose'), status = document.querySelector('#status');
 let demo, taps = 0, marker;
@@ -139,7 +148,7 @@ function paint() {
   });
 }
 try {
-  if (await viewer.load('https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.1/demo/project.json', { view:'3d' })) {
+  if (await viewer.load('https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json', { view:'3d' })) {
     choose.disabled = false; status.textContent = 'Choose a face on the loaded 3D geometry.';
   }
 } catch (error) { status.textContent = error.message; }
@@ -173,12 +182,12 @@ This example loads the public PCB in 2D and lets the reader choose an analysis J
 <label>Matching analysis JSON <input id="results" type="file" accept=".json" disabled></label>
 <p id="status" role="status"></p>
 <script type="module">
-import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.1/kivi-viewer.js';
+import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
 const viewer = new Viewer('#board');
 const input = document.querySelector('#results'), status = document.querySelector('#status');
 window.addEventListener('pagehide', () => viewer.dispose(), { once:true });
 try {
-  if (await viewer.load('https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.1/demo/project.json', { view:'pcb' })) input.disabled = false;
+  if (await viewer.load('https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json', { view:'pcb' })) input.disabled = false;
 } catch (error) { status.textContent = error.message; }
 input.addEventListener('change', async () => {
   const file = input.files[0]; if (!file) return;

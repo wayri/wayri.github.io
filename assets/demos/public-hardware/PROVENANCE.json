@@ -1,0 +1,33 @@
+{
+  "purpose": "Explicit-click, remote-source KiCad WebView examples. Hardware sources and models are not copied into this directory.",
+  "softwareRelease": "0.1.0-beta.2",
+  "softwareSource": "https://github.com/wayri/kicad-webview/tree/86b375e5f5c3f2f04df6d6c44119c25b0b2b14ee",
+  "examples": [
+    {
+      "name": "OLIMEX ESP32-P4-DevKit Rev.D1",
+      "revision": "26705d36407a07324348927dfd30fbf4ffc1d94c",
+      "credit": "OLIMEX Ltd and upstream contributors",
+      "readme": "https://github.com/OLIMEX/ESP32-P4-DevKit/blob/26705d36407a07324348927dfd30fbf4ffc1d94c/README.md",
+      "hardwareLicense": "CERN-OHL-S-2.0",
+      "otherUpstreamLicenses": "Software GPLv3; documentation CC BY-SA 4.0. These are not the hardware license.",
+      "files": [
+        { "path": "HARDWARE/ESP32-P4-DevKit-Rev.D1/ESP32-P4-DevKit_Rev_D1.kicad_pcb", "bytes": 3165330, "sha256": "f9c94ac394b475413bf41cf178d2ffb74632bc30449fb0b7bf0892c488cc8081", "diagnostics": ["custom worksheet fallback", "dimensions not exact", "unfilled zones not exact"] },
+        { "path": "HARDWARE/ESP32-P4-DevKit-Rev.D1/ESP32-P4-DevKit_Rev_D1.kicad_sch", "bytes": 942436, "sha256": "addf0e18dd913b36a47864832adcb413eeeab68ebec0bb0fbe3b5c8b60bd930e", "diagnostics": ["bus aliases omitted", "custom worksheet fallback", "schematic images not rendered"] }
+      ]
+    },
+    {
+      "name": "BerkeleyLab Marble selected schematic sheets",
+      "revision": "a426777d92c0f22a546d4740b419a3937e0c1f90",
+      "readme": "https://github.com/BerkeleyLab/Marble/blob/a426777d92c0f22a546d4740b419a3937e0c1f90/README.md",
+      "hardwareLicense": "CERN-OHL-1.2",
+      "copyright": "2019–2023 The Regents of the University of California, through Lawrence Berkeley National Laboratory",
+      "credits": ["Michal Gaska / Warsaw University of Technology", "Larry Doolittle / LBNL", "BACI / GARD support", "WUT / Creotech collaboration"],
+      "scope": "Only root and PMOD sheets. Other child sheets unavailable. The 44,059,775-byte PCB is upstream-link-only; no models fetched.",
+      "files": [
+        { "path": "design/Marble.kicad_sch", "bytes": 3004697, "sha256": "a77cfce283505f4e371f008014901aaffbe3599ebdfdba5e9b1b4cd485298ab3", "diagnostics": ["custom worksheet fallback", "schematic images not rendered"] },
+        { "path": "design/PMOD.kicad_sch", "bytes": 150577, "sha256": "982e319298439e98b6b12f5b65b3f5cb29c6d7746c6799431bfcf2acdabae09f", "diagnostics": ["custom worksheet fallback"] }
+      ]
+    }
+  ],
+  "notice": "No affiliation, endorsement, fabrication-fidelity or engineering-certification claim. MPL-2.0 covers the viewer software, not the upstream hardware or trademarks. Upstream hardware is not represented as AI-authored. Rendering diagnostics are scoped parser observations, not a hardware design review."
+}

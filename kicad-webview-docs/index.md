@@ -1,14 +1,14 @@
 ---
 layout: webview-docs
 title: KiCad WebView documentation
-description: Versioned setup, user guides and API reference for KiCad WebView 0.1.0-beta.1.
+description: Versioned setup, user guides and API reference for KiCad WebView 0.1.0-beta.2.
 permalink: /kicad-webview/docs/
 doc_section: overview
 ---
 
 KiCad WebView is a browser library for read-only inspection of saved electronics designs. Embed a drawing, open a project workspace, or export a design and viewer into one HTML file. A static HTTPS host is enough; visitors need no npm or Node.js runtime.
 
-These pages document **release 0.1.0-beta.1**, source revision `f2dd521388a29b0aea0be920e19f71edcce0f164`. The [release manifest](/assets/lib/kicad-webview/releases/0.1.0-beta.1/RELEASE.json) records file checksums and the classic script’s integrity hash. The source repository remains private.
+These pages document **release 0.1.0-beta.2**, source revision `86b375e5f5c3f2f04df6d6c44119c25b0b2b14ee`. The [release manifest](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) records file checksums and the classic script’s integrity hash. The [source repository](https://github.com/wayri/kicad-webview) and [matching release source](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.2) are public.
 
 ## Choose a starting point
 
@@ -18,9 +18,10 @@ These pages document **release 0.1.0-beta.1**, source revision `f2dd521388a29b0a
 | Inspect a PCB, schematic, 3D board or fabrication files | [User guide](/kicad-webview/docs/user-guide/) |
 | Integrate the library into an application | [API & exports](/kicad-webview/docs/api/) |
 | Link views, present a design or drive a virtual display | [Examples](/kicad-webview/docs/examples/) |
+| Attach a virtual screen, LED, button or knob to 3D geometry | [Interactive models & displays](/kicad-webview/docs/model-interaction/) |
 | Host files, configure an iframe or understand platform limits | [Hosting & integrations](/kicad-webview/docs/hosting/) |
 | Resolve a blank view, model warning or blocked source | [Troubleshooting](/kicad-webview/docs/troubleshooting/) |
-| Check permission and identify the supplied files | [License & release files](/kicad-webview/docs/license/) |
+| Check licensing and identify the supplied files | [License & release files](/kicad-webview/docs/license/) |
 
 ## What the viewer does
 
@@ -36,6 +37,6 @@ The current [IRCA product demonstrations](/kicad-webview/) use a separately main
 
 ## Availability and permission
 
-[Download the complete ZIP (2.81 MB)](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.1.zip), use a [classic script or ES module](/kicad-webview/docs/quick-start/), or open the [browser-only HTML exporter](/assets/lib/kicad-webview/releases/0.1.0-beta.1/export.html). npm publication is not available for this release.
+[Download the complete ZIP (2.82 MB)](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.2.zip), use a [classic script or ES module](/kicad-webview/docs/quick-start/), or open the [browser-only HTML exporter](/assets/lib/kicad-webview/releases/0.1.0-beta.2/export.html). npm publication is not available for this release.
 
-This is source-available software under **license 1.0**, not an open-source license. Non-commercial use is permitted under its terms; **all commercial use requires explicit prior written permission**, including internal business use and commercial website embeds. Read the [license](/kicad-webview/docs/license/) before integrating.
+The owner-authored software in this release is open source under **MPL-2.0**. Commercial use and integration do not need individual approval. Preserve license notices and provide the matching covered source as required when distributing builds. Design files and third-party components retain their separate terms. Read [License & release files](/kicad-webview/docs/license/) and [Acknowledgements](/kicad-webview/docs/acknowledgements/).

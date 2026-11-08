@@ -5,11 +5,11 @@ permalink: /kicad-webview/docs/api/
 doc_section: api
 ---
 
-This reference describes **0.1.0-beta.1**, source revision `f2dd521388a29b0aea0be920e19f71edcce0f164`. It covers the committed release contract rather than the newer viewer used by this website's IRCA demonstrations. Import from the versioned module or use the same names on the classic `KiCadWebView` global.
+This reference describes **0.1.0-beta.2**, source revision `86b375e5f5c3f2f04df6d6c44119c25b0b2b14ee`. It covers the committed release contract rather than the newer viewer used by this website's IRCA demonstrations. Import from the versioned module or use the same names on the classic `KiCadWebView` global.
 
 ```js
 import { Viewer, EMBED_API_VERSION } from
-  'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.1/kivi-viewer.js';
+  'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
 console.log(EMBED_API_VERSION); // '1.0-beta'
 ```
 
@@ -67,4 +67,4 @@ A string identifying the beta embedding contract. Reading it has no side effects
 
 This release does not expose the later `modelsready` event, `setDemoInteraction` method, or display anchor `faceSelection` / `minFaceAreaMm2` options used by newer site code. Use only the methods documented for your pinned copy.
 
-The downloadable release uses [source-available license 1.0](/kicad-webview/docs/license/). Commercial use, including internal business use and commercial embeds, requires explicit prior written permission. The public assets do not make the source repository public.
+The downloadable release uses [MPL-2.0](/kicad-webview/docs/license/); commercial use and integration need no individual approval. Keep its notices and matching-source link when distributing builds. The [source repository](https://github.com/wayri/kicad-webview) is public; input designs and third-party dependencies have separate terms.

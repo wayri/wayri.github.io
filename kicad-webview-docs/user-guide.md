@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/user-guide/
 doc_section: user-guide
 ---
 
-This guide describes **0.1.0-beta.1**, built from revision `f2dd521`. It covers the versioned library, which may differ from the newer IRCA demonstrations elsewhere on this website. Start with [Quick start](/kicad-webview/docs/quick-start/) to mount a viewer, or [Examples](/kicad-webview/docs/examples/) for complete browser integrations.
+This guide describes **0.1.0-beta.2**, built from revision `86b375e`. It covers the versioned library, which may differ from the newer IRCA demonstrations elsewhere on this website. Start with [Quick start](/kicad-webview/docs/quick-start/) to mount a viewer, or [Examples](/kicad-webview/docs/examples/) for complete browser integrations.
 
 ## Open a design
 
@@ -13,7 +13,7 @@ The compact viewer shows one drawing at a time. It accepts a supported hosted dr
 
 Local KiCad and manufacturing files are read in browser memory without uploading them. A hosted input makes requests to its authorized URLs; remote servers must permit CORS. A private GitHub repository does not become readable through a public embed. See [Hosting and integrations](/kicad-webview/docs/hosting/) for source formats and permissions, and [Troubleshooting](/kicad-webview/docs/troubleshooting/) for file and archive limits.
 
-The [bundled inverter](/assets/lib/kicad-webview/releases/0.1.0-beta.1/inverter-project.html) is a portable example with a PCB and schematic sheets. Its missing external 3D models remain labelled stand-ins. It does not contain the private IRCA design.
+The [bundled inverter](/assets/lib/kicad-webview/releases/0.1.0-beta.2/inverter-project.html) is a portable example with a PCB and schematic sheets. Its missing external 3D models remain labelled stand-ins. It does not contain the private IRCA design.
 
 ## Navigate the drawing
 
@@ -129,4 +129,4 @@ Live design fidelity and provider/sandbox/mobile compatibility are not establish
 
 Dispose temporary carousels, link groups, trees and demo controllers when their host unmounts, then dispose their viewers. Source loads can be cancelled or superseded; an earlier view change may already have occurred before a later operation fails. Show errors and warnings near the drawing rather than replacing missing data with a plausible illustration.
 
-The downloadable release uses [source-available license 1.0](/kicad-webview/docs/license/). All commercial use, including internal business work and commercial embeds, requires explicit prior written permission. Preserve its license and third-party notices when redistributing or self-hosting.
+The downloadable software uses [MPL-2.0](/kicad-webview/docs/license/), including commercial integrations. Preserve its license, matching-source link and third-party notices when redistributing or self-hosting. Design files and model assets need their own redistribution rights.

@@ -80,3 +80,4 @@ exclude:
 include:
   - assets/lib/kicad-webview/licenses/Pocket-KiView-Source-Available-1.0.txt
   - assets/lib/kicad-webview/releases/0.1.0-beta.1
+  - assets/lib/kicad-webview/releases/0.1.0-beta.2

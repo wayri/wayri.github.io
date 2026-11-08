@@ -5,9 +5,11 @@ permalink: /kicad-webview/docs/api-utilities/
 doc_section: api
 ---
 
-These are release **0.1.0-beta.1** APIs from revision `f2dd521`. They describe caller-scripted presentation, saved hierarchy and validated input processing, not circuit simulation.
+These are release **0.1.0-beta.2** APIs from revision `86b375e`. They describe caller-scripted presentation, saved hierarchy and validated input processing, not circuit simulation.
 
 ## DemoController
+
+For a complete browser page, face-picking workflow, display graphics and cleanup, see [Interactive models & displays](/kicad-webview/docs/model-interaction/).
 
 ```ts
 new DemoController(viewer: KiCadViewer): DemoController
@@ -176,7 +178,7 @@ This is a separate module, not an export on `KiCadWebView`:
 
 ```js
 import { createStandaloneHTML } from
-  'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.1/standalone-html.mjs';
+  'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/standalone-html.mjs';
 ```
 
 ```ts
@@ -190,4 +192,4 @@ createStandaloneHTML(options: {
 
 Returns a complete HTML document string. Defaults are title `'Interactive design'`, theme `'dark'` and automatic view selection. Supply the full classic script plus the complete viewer license and dependency notices. No upload occurs in this builder. The generated document bundles bytes and blocks external network connections through its CSP; include saved model assets inside a project ZIP or accept labelled unresolved-model proxies.
 
-Input checks throw `TypeError` / `RangeError`: script up to 8 MiB of characters, nonempty license/notices up to 1 MiB of characters, 1–256 nonempty `Uint8Array` files, safe unique relative paths and at most 64 MiB total input bytes. Supply a ZIP alone or individual files, never both. HTML export contains the design and is not an access-control mechanism. Review it before sharing. For an interface that obtains the script/notices and downloads the result, use the [browser exporter](/assets/lib/kicad-webview/releases/0.1.0-beta.1/export.html).
+Input checks throw `TypeError` / `RangeError`: script up to 8 MiB of characters, nonempty license/notices up to 1 MiB of characters, 1–256 nonempty `Uint8Array` files, safe unique relative paths and at most 64 MiB total input bytes. Supply a ZIP alone or individual files, never both. HTML export contains the design and is not an access-control mechanism. Review it before sharing. For an interface that obtains the script/notices and downloads the result, use the [browser exporter](/assets/lib/kicad-webview/releases/0.1.0-beta.2/export.html).

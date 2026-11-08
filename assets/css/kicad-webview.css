@@ -158,6 +158,15 @@
 .wv-pi-metric strong { color:var(--link); font:600 clamp(28px,4vw,40px)/1.1 system-ui,sans-serif; font-variant-numeric:tabular-nums; }
 .wv-pi-result .wv-control-row { flex:1 1 100%; margin:0; }
 .wv-pi-result .wv-control-row button:first-child { background:var(--link); color:var(--paper); }
+.wv-interaction-guide { margin:0 0 36px; }
+.wv-public-examples { display:block; }
+.wv-public-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:24px; }
+.wv-public-card { min-width:0; padding:24px; border:1px solid var(--rule); border-radius:6px; background:var(--paper); }
+.wv-public-card h3 { font:600 24px/1.25 system-ui,sans-serif; margin:0 0 12px; }
+.wv-public-card [data-example-host] { margin-top:20px; }
+.wv-public-card iframe { display:block; width:100%; height:560px; border:1px solid var(--rule); background:var(--paper); border-radius:4px; }
+.wv-public-card code { overflow-wrap:anywhere; }
+@media(max-width:600px) { .wv-public-card { padding:16px; } .wv-public-card iframe { height:480px; } .wv-public-card .wv-actions { align-items:stretch; } .wv-public-card button { width:100%; white-space:normal; } }
 
 /* Keep dense engineering examples inside their own panels on small screens. */
 .webview-product :is(.wv-analysis,.wv-license,.wv-workspace-guide) > * { min-width:0; }

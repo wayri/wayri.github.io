@@ -1,0 +1,7 @@
+{
+  "entry": "ESP32-P4-DevKit_Rev_D1.kicad_pcb",
+  "files": [
+    { "path": "ESP32-P4-DevKit_Rev_D1.kicad_pcb", "url": "https://raw.githubusercontent.com/OLIMEX/ESP32-P4-DevKit/26705d36407a07324348927dfd30fbf4ffc1d94c/HARDWARE/ESP32-P4-DevKit-Rev.D1/ESP32-P4-DevKit_Rev_D1.kicad_pcb" },
+    { "path": "ESP32-P4-DevKit_Rev_D1.kicad_sch", "url": "https://raw.githubusercontent.com/OLIMEX/ESP32-P4-DevKit/26705d36407a07324348927dfd30fbf4ffc1d94c/HARDWARE/ESP32-P4-DevKit-Rev.D1/ESP32-P4-DevKit_Rev_D1.kicad_sch" }
+  ]
+}

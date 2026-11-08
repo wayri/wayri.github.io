@@ -1,49 +1,54 @@
 ---
 layout: webview-docs
 title: License & release files
-description: Exact release identity, notices, downloads and commercial permission requirements.
+description: MPL-2.0 terms, matching source, release identity and separate design rights.
 permalink: /kicad-webview/docs/license/
 doc_section: license
 ---
 
-## Release identity
+## Current release
 
 | Item | Value |
 | --- | --- |
-| Release | `0.1.0-beta.1` |
-| Source revision | `f2dd521388a29b0aea0be920e19f71edcce0f164` |
+| Release | `0.1.0-beta.2` |
+| Source revision | `86b375e5f5c3f2f04df6d6c44119c25b0b2b14ee` |
 | API contract | `1.0-beta` |
-| Software license | `LicenseRef-Kicad-Web-View-Source-Available-1.0` |
-| Download size | 2,807,462 bytes (2.81 MB) |
-| ZIP SHA-256 | `e53c4987b2641a3e5b99bb23ce5fb80c96649115b2e2215432cc1078f58aedc9` |
+| Owner-authored software license | `MPL-2.0` |
+| Download size | 2,817,475 bytes (2.82 MB) |
+| ZIP SHA-256 | `de31ccbe99814c541d4758bd0c36f171c8ad19b0df143be37e9165360e139629` |
 
-[Download the ZIP](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.1.zip) · [Release file checksums](/assets/lib/kicad-webview/releases/0.1.0-beta.1/RELEASE.json) · [Distribution README](/assets/lib/kicad-webview/releases/0.1.0-beta.1/README.md)
+[Download the ZIP](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.2.zip) · [GitHub release](https://github.com/wayri/kicad-webview/releases/tag/v0.1.0-beta.2) · [File checksums](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) · [Distribution README](/assets/lib/kicad-webview/releases/0.1.0-beta.2/README.md)
 
-## Permission
+## Software license and matching source
 
-The [complete software license](/assets/lib/kicad-webview/releases/0.1.0-beta.1/LICENSE) is authoritative. This summary does not replace it.
+KiCad WebView’s owner-authored software is released under the [Mozilla Public License 2.0](/assets/lib/kicad-webview/releases/0.1.0-beta.2/LICENSE). Commercial use, self-hosting and integration into a proprietary application do not require individual approval. The complete license is authoritative; this summary does not replace it.
 
-This is **source-available software, not an open-source license**. License 1.0 permits the specified non-commercial personal, educational, research and community uses. **All commercial use needs explicit prior written permission**, including internal business use, paid engineering work, commercial websites/products, paid hosting and monetized access. A public download or a website embed does not grant those rights.
+MPL uses source-file-level copyleft. When distributing covered software, preserve its notices and make the covered source, including covered modifications, available as the license requires. Separate host-application files do not become MPL merely because they use this library. Distributing minified JavaScript or a bundled HTML viewer also needs a way for recipients to obtain the corresponding source. See the [release’s licensing guide](/assets/lib/kicad-webview/releases/0.1.0-beta.2/LICENSING.md) and [Mozilla’s FAQ](https://www.mozilla.org/en-US/MPL/2.0/FAQ/).
 
-Contact [support.kivi@sigharmonic.com](mailto:support.kivi@sigharmonic.com) before commercial use. Permission must identify its authorized scope. Your own designs and outputs remain yours, subject to their separate rights; software permission does not establish rights to redistribute an input design.
+The [public source repository](https://github.com/wayri/kicad-webview) contains the preferred source. Use the [matching `v0.1.0-beta.2` source](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.2) for these builds. If you modify the covered software, provide the matching modified source rather than pointing only to the unmodified upstream tag. Paid support is optional: [support.kivi@sigharmonic.com](mailto:support.kivi@sigharmonic.com).
 
-Keep the complete license and notices with copies and permitted modifications. Identify your changes and preserve attribution. This release includes the inherited Pocket KiView notice for provenance; its presence does not offer that older license for newly licensed material. Third-party components retain their own applicable terms.
+## Third-party components and hardware
+
+Three.js and fzstd retain their own MIT notices. Other dependencies retain their stated terms. This release’s owner-authored extracted subset is covered by MPL-2.0; that does not relicense the rest of SPIKE, Pocket KiView or another parent project. Historical extraction records remain for provenance.
+
+The software license does not license your PCB designs, third-party models, documents or analysis results. The bundled inverter is separately authorized demonstration data, not an open-hardware grant. The [public hardware examples](/kicad-webview/#public-examples) have their own sources and CERN hardware licenses: OLIMEX ESP32-P4-DevKit Rev D1 uses CERN-OHL-S-2.0; Marble uses CERN-OHL-1.2. Preserve the applicable hardware notices and check each example’s README before redistribution.
 
 ## Notices supplied with this release
 
-- [Software license 1.0](/assets/lib/kicad-webview/releases/0.1.0-beta.1/LICENSE)
-- [Third-party notices](/assets/lib/kicad-webview/releases/0.1.0-beta.1/THIRD-PARTY-NOTICES.md)
-- [Source provenance](/assets/lib/kicad-webview/releases/0.1.0-beta.1/SOURCE-PROVENANCE.json)
-- [SPIKE engine subset notice](/assets/lib/kicad-webview/releases/0.1.0-beta.1/SPIKE-ENGINE-NOTICE.md)
-- [Three.js license](/assets/lib/kicad-webview/releases/0.1.0-beta.1/THREE-LICENSE)
-- [fzstd license](/assets/lib/kicad-webview/releases/0.1.0-beta.1/FZSTD-LICENSE)
-- [Inherited Pocket KiView license record](/assets/lib/kicad-webview/releases/0.1.0-beta.1/licenses/Pocket-KiView-Source-Available-1.0.txt)
-- [Bundled public inverter design provenance](/assets/lib/kicad-webview/releases/0.1.0-beta.1/demo/PROVENANCE.json)
+- [MPL-2.0 text](/assets/lib/kicad-webview/releases/0.1.0-beta.2/LICENSE)
+- [Licensing guide and matching-source offer](/assets/lib/kicad-webview/releases/0.1.0-beta.2/LICENSING.md)
+- [Third-party notices](/assets/lib/kicad-webview/releases/0.1.0-beta.2/THIRD-PARTY-NOTICES.md)
+- [Source provenance](/assets/lib/kicad-webview/releases/0.1.0-beta.2/SOURCE-PROVENANCE.json)
+- [SPIKE engine subset notice](/assets/lib/kicad-webview/releases/0.1.0-beta.2/SPIKE-ENGINE-NOTICE.md)
+- [Three.js license](/assets/lib/kicad-webview/releases/0.1.0-beta.2/THREE-LICENSE)
+- [fzstd license](/assets/lib/kicad-webview/releases/0.1.0-beta.2/FZSTD-LICENSE)
+- [Historical Pocket KiView license record](/assets/lib/kicad-webview/releases/0.1.0-beta.2/licenses/Pocket-KiView-Source-Available-1.0.txt)
+- [Bundled inverter design provenance](/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/PROVENANCE.json)
 
-## Versioned files and current site demos
+## Immutable versioned files
 
-All URLs under `/assets/lib/kicad-webview/releases/0.1.0-beta.1/` identify this release. Preserve their bytes when mirroring; verify them with `RELEASE.json`. Use a new version path for later releases.
+URLs under `/assets/lib/kicad-webview/releases/0.1.0-beta.2/` identify this release. Preserve their bytes when mirroring and verify them against `RELEASE.json`. Publish changed files under a new version path. The product page’s independently maintained site demonstrations can contain later APIs; use documentation matching your copy.
 
-The existing product-page demonstrations use an independently maintained unversioned site bundle, whose [supplied license](/assets/lib/kicad-webview/LICENSE) may differ. That copy’s newer APIs or license do not change this download’s API or permission terms. These docs do not substitute working-tree license 1.1 for the committed release license 1.0.
+## Archived beta.1
 
-The source repository remains private. This publication provides the prepared browser files, examples and notices; it does not publish the Git repository, a package on npm, an authenticated platform integration or a general design license.
+The immutable [0.1.0-beta.1 download](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.1.zip) retains the [source-available license 1.0 supplied with that copy](/assets/lib/kicad-webview/releases/0.1.0-beta.1/LICENSE), including its commercial-permission requirement. Its source revision is `f2dd521388a29b0aea0be920e19f71edcce0f164`; [its original manifest](/assets/lib/kicad-webview/releases/0.1.0-beta.1/RELEASE.json) identifies its bytes. No archived asset or notice was rewritten. Choose the current MPL-2.0 release for new integrations.

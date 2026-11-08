@@ -10,10 +10,10 @@ doc_section: hosting
 
 The release runs on a static HTTP(S) host. Retain the versioned directory and its notices. Keep your original design permissions separate from software licensing. Public runtime files and design URLs remain retrievable by visitors; a read-only interface is not access control.
 
-Use the [complete ZIP](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.1.zip), or the immutable browser files under:
+Use the [complete ZIP](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.2.zip), or the immutable browser files under:
 
 ```text
-https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.1/
+https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/
 ```
 
 Serve JavaScript with a JavaScript MIME type and JSON manifests as JSON. Modules require an HTTP(S) context with permitted origins. A relative design URL is resolved against the supplied loading base; the iframe uses its own page as that base. For readable examples see [quick start](/kicad-webview/docs/quick-start/).
@@ -45,7 +45,7 @@ The source files must actually exist at those URLs, and the board’s saved mode
 
 ## Iframe parameters
 
-The versioned [embed page](/assets/lib/kicad-webview/releases/0.1.0-beta.1/embed.html?src=demo%2Fproject.json&view=3d&theme=dark) supports:
+The versioned [embed page](/assets/lib/kicad-webview/releases/0.1.0-beta.2/embed.html?src=demo%2Fproject.json&view=3d&theme=dark) supports:
 
 | Parameter | Meaning |
 | --- | --- |

@@ -50,6 +50,6 @@ try {
 
 ## Match the documentation to your copy
 
-This reference is pinned to `0.1.0-beta.1` / `f2dd521`. The product page’s IRCA demonstrations use a newer site-specific bundle. Later `modelsready`, focused interaction locking and continuous FEM triangle overlay behavior are not APIs of this release. Use the [export inventory](/kicad-webview/docs/api/) and [release hashes](/assets/lib/kicad-webview/releases/0.1.0-beta.1/RELEASE.json) to identify the copy in use.
+This reference is pinned to `0.1.0-beta.2` / `86b375e`. The product page’s IRCA demonstrations use a newer site-specific bundle. Later `modelsready`, focused interaction locking and continuous FEM triangle overlay behavior are not APIs of this release. Use the [export inventory](/kicad-webview/docs/api/) and [release hashes](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) to identify the copy in use.
 
-For commercial permission contact [support.kivi@sigharmonic.com](mailto:support.kivi@sigharmonic.com). Sharing a working example, downloading a file or contacting the owner does not itself grant commercial rights.
+For integration support contact [support.kivi@sigharmonic.com](mailto:support.kivi@sigharmonic.com). Paid support is optional; MPL-2.0 does not require individual approval for commercial software use. Check the [release license and separate design terms](/kicad-webview/docs/license/).

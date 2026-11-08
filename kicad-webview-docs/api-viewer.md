@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/api-viewer/
 doc_section: api
 ---
 
-Release **0.1.0-beta.1**, revision `f2dd521`. See the [export index](/kicad-webview/docs/api/) for the full library surface.
+Release **0.1.0-beta.2**, revision `86b375e`. See the [export index](/kicad-webview/docs/api/) for the full library surface.
 
 ## Viewer
 
@@ -81,6 +81,8 @@ Hidden layers remain hidden during net highlighting. Schematic connectivity uses
 | `setRenderQuality(quality: 'low' \| 'balanced' \| 'high' \| 'presentation')` | Returns the active quality, which can fall back. Requires loaded 3D and a supported quality. Presentation rendering is explicit and GPU-intensive; it does not improve source/model accuracy. |
 
 ## Cameras
+
+For `pickDemoFace()` with virtual displays and controls, see [Interactive models & displays](/kicad-webview/docs/model-interaction/).
 
 ```ts
 type Camera2D = { center: {x: number; y: number}; zoom: number; flipped: boolean };
