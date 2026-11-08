@@ -1,147 +1,12 @@
 const toolsAssetVersion = new URL(document.currentScript.src).searchParams.get('v') || '1';
-const TOOL_REGISTRY = [
-    {
-        category: "Basic EE",
-        icon: "fa-bolt",
-        tools: [
-            { id: "tool-resistor-divider", name: "Resistor Divider", file: "resistor-divider.html" },
-            { id: "tool-e-series-finder", name: "E-Series Finder", file: "e-series-finder.html" },
-            { id: "tool-awg-wire-ampacity", name: "AWG Wire Ampacity", file: "awg-wire-ampacity.html" },
-            { id: "tool-ipc-2221-trace-width", name: "IPC-2221 Trace Width", file: "ipc-2221-trace-width.html" },
-            { id: "tool-smd-resistor", name: "SMD Resistor Decoder", file: "smd-resistor.html" },
-            { id: "tool-led-resistor", name: "LED Resistor Calculator", file: "led-resistor.html" },
-            { id: "tool-reactance-calc", name: "Reactance Calculator", file: "reactance-calc.html" },
-            { id: "tool-rc-time-calc", name: "RC Time Constant", file: "rc-time-calc.html" },
-            { id: "tool-555-timer-calc", name: "555 Timer Calculator", file: "555-timer-calc.html" },
-            { id: "tool-ohms-law-wheel", name: "Ohm's Law Wheel", file: "ohms-law-wheel.html" }
-        ]
-    },
-    {
-        category: "Analog & Signal Chains",
-        icon: "fa-wave-square",
-        tools: [
-            { id: "tool-opamp-calc", name: "OpAmp Calculator", file: "opamp-calc.html" },
-            { id: "tool-current-sense-amp", name: "Current Sense Amplifier", file: "current-sense-amp.html" }
-        ]
-    },
-    {
-        category: "Power & SMPS",
-        icon: "fa-plug-circle-bolt",
-        tools: [
-            { id: "tool-smps-loop-tuner", name: "SMPS Loop & Transient Tuner", file: "smps-loop-tuner.html" },
-            { id: "tool-power-electronics", name: "Power Electronics Suite", file: "power-electronics-calc.html" },
-            { id: "tool-loop-compensator-p-z", name: "Loop Compensator (P/Z)", file: "loop-compensator-p-z.html" },
-            { id: "tool-smps-topology-ratio", name: "SMPS Topology & Ratio", file: "smps-topology-ratio.html" }
-        ]
-
-    },
-    {
-        category: "Grid & Generation",
-        icon: "fa-tower-observation",
-        tools: [
-            { id: "tool-grid-power", name: "Grid Power Equations", file: "grid-power-calc.html" },
-            { id: "tool-hydro-power", name: "Hydroelectric Dam", file: "hydro-power-calc.html" },
-            { id: "tool-pv-yield-simulator", name: "PV Yield Simulator", file: "pv-yield-simulator.html" }
-        ]
-    },
-    {
-        category: "Batteries & EV",
-        icon: "fa-car-battery",
-        tools: [
-            { id: "tool-battery-pack-s-p-config", name: "Battery Pack Config", file: "battery-pack-s-p-config.html" },
-            { id: "tool-battery-suite", name: "Full Battery Suite", file: "battery-suite.html" },
-            { id: "tool-battery-life", name: "Battery Life Estimator", file: "battery-life-estimator.html" },
-            { id: "tool-ev-powertrain", name: "EV Powertrain & Range", file: "ev-powertrain-calc.html" }
-        ]
-    },
-    {
-        category: "RF & Wireless",
-        icon: "fa-satellite-dish",
-        tools: [
-            { id: "tool-rf-suite", name: "RF Signal Analysis Suite", file: "rf-signal-suite.html" },
-            { id: "tool-smith-chart", name: "Smith Chart & RF Analysis", file: "smith-chart.html" },
-            { id: "tool-balun-calculator", name: "Balun & Unun Calculator", file: "balun-calculator.html" },
-            { id: "tool-rf-unit-translator", name: "dB & RF Unit Translator", file: "rf-unit-translator.html" },
-            { id: "tool-attenuator", name: "Attenuator Calculator", file: "attenuator-calc.html" },
-            { id: "tool-rf-noise-figure", name: "Cascade Noise Figure", file: "rf-noise-figure.html" },
-            { id: "tool-friis-transmission", name: "Friis Transmission", file: "friis-transmission.html" }
-        ]
-    },
-    {
-        category: "Magnetics & Filters",
-        icon: "fa-magnet",
-        tools: [
-            { id: "tool-transformer-designer", name: "Transformer Designer", file: "transformer-designer.html" },
-            { id: "tool-magnetic-core", name: "Magnetic Core & Inductor", file: "magnetic-core-calc.html" },
-            { id: "tool-emi-filter", name: "EMI Filter Calculator", file: "emi-filter-calc.html" },
-            { id: "tool-magnetics-suite", name: "Magnetics Design Suite", file: "magnetics-suite.html" },
-            { id: "tool-filter-designer", name: "Analog Filter Designer", file: "filter-designer.html" }
-        ]
-    },
-    {
-        category: "Harness & Interconnect",
-        icon: "fa-network-wired",
-        tools: [
-            { id: "tool-multipoint-harness", name: "Multipoint Harness", file: "multipoint-harness.html" },
-            { id: "tool-can-bus", name: "CAN Bus Harness", file: "can-bus.html" }
-        ]
-    },
-    {
-        category: "PCB & High Speed",
-        icon: "fa-microchip",
-        tools: [
-            { id: "tool-stackup-solver", name: "Stackup Impedance Solver", file: "stackup-impedance-solver.html" },
-            { id: "tool-via-comprehensive", name: "Comprehensive Via Calc", file: "via-comprehensive.html" },
-            { id: "tool-fusing-current", name: "Trace Fusing Current", file: "fusing-current.html" },
-            { id: "tool-planar-inductor", name: "Planar Spiral Inductor", file: "planar-inductor.html" },
-            { id: "tool-pcb-clearance", name: "IPC-2221 Clearance", file: "pcb-clearance-calc.html" },
-            { id: "tool-impedance-calc", name: "Basic Impedance Calculation", file: "impedance-calc.html" },
-            { id: "tool-high-speed-design", name: "High Speed Design", file: "high-speed-design.html" },
-            { id: "tool-pcb-impedance-diff", name: "Diff Pair Impedance", file: "pcb-impedance-diff.html" },
-            { id: "tool-crosstalk-estimator", name: "Crosstalk Estimator", file: "crosstalk-estimator.html" },
-            { id: "tool-pdn-impedance", name: "PDN Target Impedance", file: "pdn-impedance.html" },
-            { id: "tool-skin-effect", name: "Skin Effect & AC Resistance", file: "skin-effect.html" },
-            { id: "tool-insertion-loss", name: "S-Parameter / Insertion Loss", file: "insertion-loss.html" }
-        ]
-    },
-    {
-        category: "Motor & Drives",
-        icon: "fa-gear",
-        tools: [
-            { id: "tool-bldc-winding-helper", name: "BLDC Motor Winding Helper", file: "bldc-winding-helper.html" },
-            { id: "tool-ac-motor-dynamics", name: "AC Motor Dynamics", file: "ac-motor-dynamics.html" },
-            { id: "tool-motor-controller", name: "Motor Dynamics Suite", file: "motor-controller.html" }
-        ]
-    },
-    {
-        category: "Embedded & Sensors",
-        icon: "fa-temperature-half",
-        tools: [
-            { id: "tool-voltage-margining-dac", name: "Voltage/Current Margining", file: "voltage-margining-dac.html" },
-            { id: "tool-thermistor-r-t-curve-ntc", name: "Thermistor R-T Curve", file: "thermistor-r-t-curve-ntc.html" },
-            { id: "tool-web-serial-interface", name: "Web Serial Interface", file: "web-serial-interface.html" }
-        ]
-    },
-    {
-        category: "Thermal Management",
-        icon: "fa-temperature-arrow-up",
-        tools: [
-            { id: "tool-heatsink-simulator", name: "Heatsink Simulator", file: "heatsink-simulator.html" },
-            { id: "tool-thermal-network-calc", name: "Thermal Network Calculator", file: "thermal-network-calc.html" }
-        ]
-    },
-    {
-        category: "Advanced Toolkit",
-        icon: "fa-layer-group",
-        tools: [
-            { id: "tool-unit-converter", name: "Engineering Unit Converter", file: "unit-converter.html" },
-            { id: "tool-busbar-capacity", name: "Busbar Capacity", file: "busbar-capacity.html" },
-            { id: "tool-cable-thermal", name: "Dynamic Cable Thermal", file: "cable-thermal.html" },
-            { id: "tool-fishbone", name: "Ishikawa Fishbone Diagram", file: "fishbone.html" },
-            { id: "tool-plot-extractor", name: "Plot Data Extractor", file: "plot-extractor.html" }
-        ]
-    }
-];
+const TOOL_REGISTRY = [{
+    category: "Circuit fundamentals", icon: "fa-bolt",
+    tools: [
+        { id: "tool-ohms-law-wheel", name: "Ohm's Law Wheel", file: "ohms-law-wheel.html" },
+        { id: "tool-reactance-calc", name: "Reactance Calculator", file: "reactance-calc.html" },
+        { id: "tool-rc-time-calc", name: "RC Time Constant", file: "rc-time-calc.html" },
+    ]
+}];
 
 let loadedScripts = new Set();
 let loadedStyles = new Set();
@@ -161,7 +26,7 @@ function initSidebar() {
         <div class="p-2 border-b border-themeBorder/40 bg-themeBg/80 sticky top-0 z-20">
             <div class="relative flex items-center">
                 <i class="fa-solid fa-search absolute left-2.5 text-themeMuted text-xs"></i>
-                <input type="text" id="tools-search-input" aria-label="Search engineering tools" placeholder="Search 60+ tools..."
+                <input type="text" id="tools-search-input" aria-label="Search engineering tools" placeholder="Search circuit calculators..."
                     class="w-full bg-themeContainer border border-themeBorder text-xs text-themeText pl-8 pr-2 py-1.5 rounded outline-none focus:border-themeAccent transition-colors font-mono"
                     oninput="filterTools(this.value)">
             </div>
@@ -261,6 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setToolBrowserCollapsed(window.matchMedia('(max-width: 767px)').matches);
 });
 async function loadTool(toolId, fileName, btnElement) {
+    const allowed = TOOL_REGISTRY.flatMap(category => category.tools).find(item => item.id === toolId && item.file === fileName);
+    if (!allowed) return;
     const request = ++toolRequest;
     if (toolFetchController) toolFetchController.abort();
     const controller = toolFetchController = new AbortController();
@@ -344,33 +211,7 @@ async function loadTool(toolId, fileName, btnElement) {
             // Dispatch universal toolLoaded event
             document.dispatchEvent(new CustomEvent('toolLoaded', { detail: { toolId } }));
             
-            // Universal Lifecycle initializers & fallbacks
-            if(toolId === 'tool-smps-loop-tuner' && typeof runSMPSTuner === 'function') runSMPSTuner();
-            if(toolId === 'tool-ac-motor-dynamics' && typeof setupMotorMode === 'function') setupMotorMode();
-            if(toolId === 'tool-smps-topology-ratio' && typeof setupSMPSMode === 'function') setupSMPSMode();
-            if(toolId === 'tool-voltage-margining-dac' && typeof setupMarginMode === 'function') setupMarginMode();
-            if(toolId === 'tool-thermistor-r-t-curve-ntc' && typeof setupNTCMode === 'function') setupNTCMode();
-            if(toolId === 'tool-heatsink-simulator') {
-                if(typeof initHeatsink3D === 'function') initHeatsink3D();
-                if(typeof updateHeatsink === 'function') updateHeatsink();
-            }
-            if(toolId === 'tool-planar-inductor' && typeof initPlanarInductor3D === 'function') initPlanarInductor3D();
-            if(toolId === 'tool-transformer-designer' && typeof initXfmr3D === 'function') initXfmr3D();
-            if(toolId === 'tool-pv-yield-simulator' && typeof initSolarWidget === 'function') initSolarWidget();
-            if(toolId === 'tool-resistor-divider' && typeof setupDividerMode === 'function') setupDividerMode();
-            if(toolId === 'tool-loop-compensator-p-z' && typeof runCompensator === 'function') runCompensator();
-            if(toolId === 'tool-filter-designer') {
-                if(typeof setupFilterMode === 'function') setupFilterMode();
-                if(typeof initRemediationCharts === 'function') initRemediationCharts();
-                if(typeof initFilterBodeChart === 'function') initFilterBodeChart();
-            }
-            if(toolId === 'tool-web-serial-interface' && typeof initSerialChart === 'function') initSerialChart();
-            if(toolId === 'tool-e-series-finder' && typeof runESeries === 'function') runESeries();
-            if(toolId === 'tool-awg-wire-ampacity' && typeof runAWG === 'function') runAWG();
-            if(toolId === 'tool-ipc-2221-trace-width' && typeof runPcBTrace === 'function') runPcBTrace();
-            if(toolId === 'tool-battery-pack-s-p-config' && typeof runBattery === 'function') runBattery();
-            if(toolId === 'tool-magnetic-core' && typeof runInductor === 'function') runInductor();
-            if(toolId === 'tool-via-comprehensive' && typeof updateVia === 'function') updateVia();
+
         });
 
     } catch (error) {
@@ -388,10 +229,10 @@ function renderWelcomeGrid() {
     let gridHtml = `<div class="w-full max-w-6xl mx-auto p-6 flex flex-col gap-8">
         <div class="text-center mb-4">
             <h2 class="text-3xl font-bold font-mono text-themeText"><i class="fa-solid fa-toolbox text-themeAccent mr-3"></i>Engineering Toolkit</h2>
-            <p class="text-themeMuted mt-2 text-sm max-w-2xl mx-auto">A curated, unified suite of high-performance interactive design calculators, simulation solvers, and engineering utilities.</p>
+            <p class="text-themeMuted mt-2 text-sm max-w-2xl mx-auto">Three calculators for ideal, linear circuit relationships.</p>
             <div class="max-w-3xl mx-auto mt-6 bg-themeBorder/10 border-l-4 border-themeAccent p-4 text-left">
                 <p class="text-sm text-themeMuted leading-relaxed">
-                    Over my career, I've manually developed dozens of Python, C++, and C# desktop applications to automate tedious engineering math, calculate tolerances, and design magnetics. To make these tools universally accessible for my own rapid prototyping, I used modern AI coding assistants to port my existing tools to this browser-based suite. These aren't meant to replace heavy enterprise software—they are built for speed, allowing me to iterate on complex hardware. I have used AI to add a few more tools that can come in handy. I use these, now you can too. Please note that many of these tools are fully experimental and may not behave as intended, so use at your own risk.
+                    These tools cover Ohm’s law and resistive power, ideal component reactance, and first-order RC timing. Their equations and representative input cases are checked in the repository. They do not model component tolerances, parasitics, temperature effects or hardware operating limits. Use component data and measurements for a design decision.
                 </p>
             </div>
         </div>

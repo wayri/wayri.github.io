@@ -1,5 +1,5 @@
 // Service Worker for Full Offline Engineering Suite Hosting
-const CACHE_NAME = 'eng-tools-suite-v2';
+const CACHE_NAME = 'eng-tools-suite-v3';
 
 const PRECACHE_URLS = [
     '/',
@@ -9,12 +9,8 @@ const PRECACHE_URLS = [
     '/assets/css/style.css',
     '/assets/css/tools-workspace.css',
     '/assets/js/main.js',
-    '/assets/js/tools.js',
     '/assets/js/tools_ui.js',
-    '/assets/js/tools_expansion.js',
     '/assets/js/diagrams.js',
-    '/assets/js/motor_dynamics.js',
-    '/assets/js/harness_designer.js',
     '/manifest.json'
 ];
 

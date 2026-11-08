@@ -31,6 +31,71 @@ exclude:
   - vendor
   - tests
 
+  # Retired calculators remain in source, but are not published.
+  - assets/tools_html/555-timer-calc.html
+  - assets/tools_html/ac-motor-dynamics.html
+  - assets/tools_html/attenuator-calc.html
+  - assets/tools_html/awg-wire-ampacity.html
+  - assets/tools_html/balun-calculator.html
+  - assets/tools_html/battery-life-estimator.html
+  - assets/tools_html/battery-pack-s-p-config.html
+  - assets/tools_html/battery-suite.html
+  - assets/tools_html/bldc-winding-helper.html
+  - assets/tools_html/busbar-capacity.html
+  - assets/tools_html/cable-thermal.html
+  - assets/tools_html/can-bus.html
+  - assets/tools_html/crosstalk-estimator.html
+  - assets/tools_html/current-sense-amp.html
+  - assets/tools_html/e-series-finder.html
+  - assets/tools_html/emi-filter-calc.html
+  - assets/tools_html/ev-powertrain-calc.html
+  - assets/tools_html/filter-designer.html
+  - assets/tools_html/fishbone.html
+  - assets/tools_html/friis-transmission.html
+  - assets/tools_html/fusing-current.html
+  - assets/tools_html/grid-power-calc.html
+  - assets/tools_html/heatsink-simulator.html
+  - assets/tools_html/high-speed-design.html
+  - assets/tools_html/hydro-power-calc.html
+  - assets/tools_html/impedance-calc.html
+  - assets/tools_html/insertion-loss.html
+  - assets/tools_html/ipc-2221-trace-width.html
+  - assets/tools_html/led-resistor.html
+  - assets/tools_html/loop-compensator-p-z.html
+  - assets/tools_html/magnetic-core-calc.html
+  - assets/tools_html/magnetics-harness.html
+  - assets/tools_html/magnetics-suite.html
+  - assets/tools_html/motor-controller.html
+  - assets/tools_html/multipoint-harness.html
+  - assets/tools_html/opamp-calc.html
+  - assets/tools_html/pcb-clearance-calc.html
+  - assets/tools_html/pcb-impedance-diff.html
+  - assets/tools_html/pdn-impedance.html
+  - assets/tools_html/planar-inductor.html
+  - assets/tools_html/plot-extractor.html
+  - assets/tools_html/power-electronics-calc.html
+  - assets/tools_html/pv-yield-simulator.html
+  - assets/tools_html/resistor-divider.html
+  - assets/tools_html/rf-noise-figure.html
+  - assets/tools_html/rf-signal-suite.html
+  - assets/tools_html/rf-unit-translator.html
+  - assets/tools_html/skin-effect.html
+  - assets/tools_html/smd-resistor.html
+  - assets/tools_html/smith-chart.html
+  - assets/tools_html/smps-loop-tuner.html
+  - assets/tools_html/smps-topology-ratio.html
+  - assets/tools_html/stackup-impedance-solver.html
+  - assets/tools_html/thermal-network-calc.html
+  - assets/tools_html/thermistor-r-t-curve-ntc.html
+  - assets/tools_html/transformer-designer.html
+  - assets/tools_html/unit-converter.html
+  - assets/tools_html/via-comprehensive.html
+  - assets/tools_html/via-impedance.html
+  - assets/tools_html/voltage-margining-dac.html
+  - assets/tools_html/web-serial-interface.html
+  - assets/js/tools.js
+  - assets/js/tools_expansion.js
+
 include:
   - assets/lib/kicad-webview/licenses/Pocket-KiView-Source-Available-1.0.txt
   - assets/lib/kicad-webview/releases/0.1.0-beta.1

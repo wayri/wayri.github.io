@@ -139,6 +139,10 @@
         const l_mult = parseFloat(document.getElementById('react-l-unit').value);
         const L = l_val * l_mult;
 
+        if (!([f, C, L].every(x => Number.isFinite(x) && x > 0))) {
+            ['react-xc-val', 'react-xc-unit', 'react-xl-val', 'react-xl-unit', 'react-fr'].forEach(id => document.getElementById(id).innerText = '—');
+            return;
+        }
         let Xc = 0;
         if(f > 0 && C > 0) {
             Xc = 1 / (2 * Math.PI * f * C);

@@ -9,7 +9,7 @@
             
             <!-- Parameters -->
             <div class="space-y-4 bg-themeContainer border border-themeBorder/30 p-4 shadow-inner flex flex-col justify-center">
-                <div class="text-xs text-themeMuted mb-4 border-b border-themeBorder/20 pb-2 text-center">Enter any TWO known values to calculate the rest.</div>
+                <div class="text-xs text-themeMuted mb-4 border-b border-themeBorder/20 pb-2 text-center">Enter any TWO positive known values to calculate the rest.</div>
                 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -85,7 +85,7 @@
 </div>
 
 <script>
-    let activeInputs = [];
+    var activeInputs = [];
 
     function resetOhms() {
         document.querySelectorAll('.ohm-input').forEach(el => {
@@ -127,10 +127,10 @@
 
         // Calculate if exactly 2 inputs
         if (activeInputs.length === 2) {
-            let v = parseFloat(document.getElementById('ohm-v').value);
-            let i = parseFloat(document.getElementById('ohm-i').value);
-            let r = parseFloat(document.getElementById('ohm-r').value);
-            let p = parseFloat(document.getElementById('ohm-p').value);
+            let v = activeInputs.includes('ohm-v') ? parseFloat(document.getElementById('ohm-v').value) : NaN;
+            let i = activeInputs.includes('ohm-i') ? parseFloat(document.getElementById('ohm-i').value) : NaN;
+            let r = activeInputs.includes('ohm-r') ? parseFloat(document.getElementById('ohm-r').value) : NaN;
+            let p = activeInputs.includes('ohm-p') ? parseFloat(document.getElementById('ohm-p').value) : NaN;
 
             let v_calc = isNaN(v) ? null : v;
             let i_calc = isNaN(i) ? null : i;
@@ -138,6 +138,7 @@
             let p_calc = isNaN(p) ? null : p;
 
             try {
+                if ([v, i, r, p].filter(x => !Number.isNaN(x)).some(x => !Number.isFinite(x) || x <= 0)) throw new Error('Use positive finite values');
                 if (v_calc !== null && i_calc !== null) {
                     r_calc = v_calc / i_calc;
                     p_calc = v_calc * i_calc;
@@ -167,15 +168,16 @@
                 updateDisplay(v_calc, i_calc, r_calc, p_calc);
 
             } catch (e) {
+                document.querySelectorAll('.ohm-input').forEach(el => { if (!activeInputs.includes(el.id)) el.value = ''; });
                 err.classList.remove('hidden');
                 updateDisplay(null, null, null, null);
             }
         } else {
             // Not enough inputs to calculate all, but still update display for what we have
-            let v = parseFloat(document.getElementById('ohm-v').value);
-            let i = parseFloat(document.getElementById('ohm-i').value);
-            let r = parseFloat(document.getElementById('ohm-r').value);
-            let p = parseFloat(document.getElementById('ohm-p').value);
+            let v = activeInputs.includes('ohm-v') ? parseFloat(document.getElementById('ohm-v').value) : NaN;
+            let i = activeInputs.includes('ohm-i') ? parseFloat(document.getElementById('ohm-i').value) : NaN;
+            let r = activeInputs.includes('ohm-r') ? parseFloat(document.getElementById('ohm-r').value) : NaN;
+            let p = activeInputs.includes('ohm-p') ? parseFloat(document.getElementById('ohm-p').value) : NaN;
             updateDisplay(isNaN(v)?null:v, isNaN(i)?null:i, isNaN(r)?null:r, isNaN(p)?null:p);
         }
     }
@@ -192,4 +194,5 @@
         document.getElementById('disp-r').innerText = formatNum(r) + " ohms";
         document.getElementById('disp-p').innerText = formatNum(p) + " W";
     }
+    resetOhms();
 </script>

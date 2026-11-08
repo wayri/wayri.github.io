@@ -128,6 +128,10 @@
         document.getElementById('rc-pct-val').innerText = pct + "%";
         document.querySelectorAll('.rc-pct-disp').forEach(e => e.innerText = pct + "%");
 
+        if (!([R, C, pct].every(Number.isFinite) && R > 0 && C > 0 && pct > 0 && pct < 100)) {
+            ['rc-tau-val', 'rc-tau-unit', 'rc-tc-val', 'rc-tc-unit', 'rc-td-val', 'rc-td-unit', 'rc-fc'].forEach(id => document.getElementById(id).innerText = '—');
+            return;
+        }
         const tau = R * C;
         
         // Time to charge to X% of supply
