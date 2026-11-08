@@ -1,17 +1,16 @@
-<!doctype html>
-<html lang="en">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Virtual board controls</title>
+---
+layout: product
+title: IRCA interactive model controls
+description: Add virtual displays, LEDs, buttons and knobs to the approved IRCA review model.
+permalink: /assets/demos/model-interaction.html
+---
 <style>
-  body { margin:16px; font:16px system-ui,sans-serif; }
-  #board { height:65dvh; min-height:360px; }
-  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-block:12px; }
-  button, select, input { min-height:44px; font:inherit; }
-  label { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.wv-model-page{padding-bottom:3rem}.wv-model-page h1{font:650 clamp(2rem,5vw,3.8rem)/1.1 system-ui,sans-serif;letter-spacing:-.04em;margin:1rem 0}.wv-model-page header p{max-width:80ch}.wv-model-page #board{height:65dvh;min-height:420px;border:1px solid var(--rule);border-radius:6px;overflow:hidden}.wv-model-page .controls{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.wv-model-page :is(button,select,input){min-height:44px;font:15px system-ui,sans-serif;max-width:100%}.wv-model-page button{padding:10px 14px;background:var(--paper);color:var(--body-ink);border:1px solid var(--rule);border-radius:4px;cursor:pointer}.wv-model-page button:disabled{opacity:.55;cursor:default}.wv-model-page label{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.wv-model-page #status{font-size:14px;min-height:1.6em}.wv-model-page button:focus-visible{outline:2px solid var(--link);outline-offset:3px}@media(max-width:600px){.wv-model-page .controls button{flex:1 1 150px}.wv-model-page #board{height:60dvh;min-height:380px}}
 </style>
-<div id="board"></div>
-<p id="status" role="status">Opening the public design…</p>
+<main class="webview-product wv-model-page">
+<header><p class="wv-eyebrow">Approved IRCA review / virtual controls</p><h1>Interactive model controls.</h1><p>Use the same IRCA review integration and display models as the product page. Choose a planar model face, then attach a virtual TFT, LED, button or knob. Your JavaScript supplies the behavior; this is not firmware or circuit simulation.</p><nav class="wv-actions" aria-label="Model demo navigation"><a href="{{ '/kicad-webview/' | relative_url }}">KiCad WebView ↗</a><a href="{{ '/kicad-webview/docs/model-interaction/' | relative_url }}">Interaction guide ↗</a><a href="{{ '/kicad-webview/#capabilities' | relative_url }}">All demo panels ↗</a></nav></header>
+<div id="board" aria-label="Approved IRCA interactive model"></div>
+<p id="status" role="status">Opening the approved IRCA review…</p>
 <div class="controls">
   <button id="screen" disabled>Choose screen face</button>
   <button id="led" disabled>Choose LED face</button>
@@ -24,12 +23,17 @@
 </label>
 <p>After placing controls: focus the board; Space holds the button,
   and Up/Down change the knob. Page controls remain usable with a keyboard.</p>
+<p class="wv-caption">This page uses the existing approved IRCA review projection and public display models. Original editable IRCA CAD/model sources are not offered as downloads. Face tokens belong to this scene; changing the drawing suspends its virtual controls.</p>
+</main>
+<script src="{{ '/assets/lib/kicad-webview/kicad-webview.min.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/irca-project.js' | relative_url }}"></script>
 <script type="module">
-import { Viewer, DemoController } from
-  'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
+const {DemoController} = window.KiCadWebView;
+const project = window.IRCAProject;
+const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
 
 const status = document.querySelector('#status');
-const viewer = new Viewer('#board', {theme:'dark'});
+const viewer = project.createViewer('#board', {theme:theme(), inspectOnSelect:false});
 const abort = new AbortController();
 let demo, hasScreen = false, hasLED = false, dial = 25, choosing = false;
 const installed = new Set();
@@ -108,10 +112,7 @@ document.querySelector('#brightness').oninput = event => {
 };
 document.querySelector('#focus').onclick = () => demo?.focus();
 try {
-  const loaded = await viewer.load(
-    'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/demo/project.json',
-    {view:'3d', signal:abort.signal}
-  );
+  const loaded = await project.load(viewer, {view:'3d', signal:abort.signal});
   if (loaded) {
     demo = new DemoController(viewer);
     demo.addEventListener('error', event => {
@@ -123,11 +124,11 @@ try {
       status.textContent = 'The scene changed. Recreate the controller and choose new faces.';
     });
     controls.forEach(button => button.disabled = false);
-    status.textContent = 'Choose faces to add virtual controls.';
+    status.textContent = 'IRCA loaded. Choose actual model faces to add virtual controls.';
   }
 } catch (error) { status.textContent = error.message; }
+window.addEventListener('themeChanged', () => viewer.setTheme(theme()));
 window.addEventListener('pagehide', () => {
   abort.abort(); demo?.dispose(); viewer.dispose();
 }, {once:true});
 </script>
-</html>
