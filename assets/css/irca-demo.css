@@ -5,6 +5,26 @@
 .irca-demo .irca-heading h2 { margin:0; font:550 23px/1.2 system-ui,sans-serif; letter-spacing:-.025em; }
 .irca-badge { color:var(--irca-muted); font:11px/1.5 system-ui,sans-serif; }
 .irca-badge > span { color:var(--irca-accent); margin-right:5px; }
+.irca-promo { display:grid; gap:4px; }
+.irca-promo a { color:var(--irca-muted); text-decoration:none; }
+.irca-promo a span,.irca-promo-guide { color:var(--irca-accent)!important; }
+.irca-promo a:hover { text-decoration:underline; }
+.irca-promo a:focus-visible { outline:2px solid var(--irca-accent); outline-offset:3px; }
+.lab-hero-personal .irca-promo { position:relative; width:29ch; max-width:100%; height:3.4em; perspective:400px; }
+.lab-hero-personal .irca-promo a { position:absolute; inset-inline:0; top:.85em; line-height:1.6; white-space:nowrap; transform-origin:center; animation:irca-promo-flip 10s infinite; }
+.lab-hero-personal .irca-promo-guide { animation-delay:-5s!important; }
+@keyframes irca-promo-flip {
+    0%,42% { opacity:1; visibility:visible; transform:rotateX(0); }
+    48%,92% { opacity:0; visibility:hidden; transform:rotateX(-90deg); }
+    98%,100% { opacity:1; visibility:visible; transform:rotateX(0); }
+}
+.lab-hero-personal .irca-promo:hover a { animation-play-state:paused; }
+.lab-hero-personal .irca-promo:has(a:focus-visible) a { animation:none; opacity:1; visibility:visible; transform:none; top:0; }
+.lab-hero-personal .irca-promo:has(a:focus-visible) .irca-promo-guide { top:1.8em; }
+@media(prefers-reduced-motion:reduce) {
+    .lab-hero-personal .irca-promo a { animation:none; opacity:1; visibility:visible; transform:none; top:0; }
+    .lab-hero-personal .irca-promo .irca-promo-guide { top:1.8em; }
+}
 .irca-modes { display:flex; flex-wrap:wrap; gap:6px; padding:10px 14px; border-block:1px solid var(--irca-rule); }
 .irca-demo .irca-modes button { border:1px solid transparent; border-radius:4px; padding:9px 13px; color:var(--irca-muted); background:transparent; font:13px/1.4 system-ui,sans-serif; cursor:pointer; }
 .irca-modes button i { margin-right:6px; }
