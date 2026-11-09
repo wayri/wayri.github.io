@@ -8,7 +8,7 @@
     const ground = x => 24 * Math.sin(x / 180) + 12 * Math.sin(x / 65);
     const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
     function create(seed = 17) {
-        return { phase: 'road', roadStage: 'chase', loop: 0, boosterUsed: false, status: 'ready', x: 0, y: ground(0), vy: 0, grounded: true, charge: 100, gap: 420, time: 0, speed: 120, drain: 0, mode: 'Cruise', hurt: 0, invulnerable: 0, emptyTime: 0, packs: 0, leaks: 0, escaped: 0, combo: 0, notice: '', noticeTime: 0, entities: [], nextPack: 460, nextLeak: 900, seed, reason: '',
+        return { lane: 0, launchAuthorized: false, groundWorld: createGroundWorld(), phase: 'road', roadStage: 'chase', loop: 0, boosterUsed: false, status: 'ready', x: 0, y: ground(0), vy: 0, grounded: true, charge: 100, gap: 420, time: 0, speed: 120, drain: 0, mode: 'Cruise', hurt: 0, invulnerable: 0, emptyTime: 0, packs: 0, leaks: 0, escaped: 0, combo: 0, notice: '', noticeTime: 0, entities: [], nextPack: 460, nextLeak: 900, seed, reason: '',
             chasers: [
                 { id: 'bugs', name: 'BUGS', type: 'sprinter', x: -520, speed: 120, state: 'pursuing', escaped: false, stun: 0 },
                 { id: 'review', name: 'REVIEW', type: 'tracker', x: -420, speed: 148, state: 'pursuing', escaped: false, stun: 0 },
@@ -29,6 +29,8 @@
         s.hurt = Math.max(0, s.hurt - dt);
         s.invulnerable = Math.max(0, s.invulnerable - dt);
         s.noticeTime = Math.max(0, s.noticeTime - dt);
+        // The road is a single 2D plane: every visible pickup and hazard is reachable.
+        s.lane = 0;
         const brake = !!controls.brake;
         const boost = !!controls.boost && !brake && s.charge > 0;
         const eco = !!controls.eco && !boost && !brake;
@@ -47,24 +49,29 @@
         const previousX = s.x;
         s.x += travelled;
         // Pursuers occupy world positions: accelerating really opens a gap.
-        // Their different tactics are readable and all can be permanently escaped.
+        // Bursts close on cruise, while boost can genuinely break contact.
         for (const chaser of s.chasers) {
-            if (chaser.escaped) continue;
+            if (chaser.escaped) {
+                chaser.lostFor = Math.max(0, (chaser.lostFor || 0) - dt);
+                if (chaser.lostFor > 0) continue;
+                chaser.escaped = false; chaser.x = s.x - 850;
+                s.notice = `${chaser.name} found your trail again`; s.noticeTime = 2;
+            }
             chaser.stun = Math.max(0, chaser.stun - dt);
-            const burst = chaser.type === 'sprinter' && s.time % 14 > 9;
+            const burst = chaser.type === 'sprinter' && s.time % 10 > 6;
             chaser.state = chaser.stun > 0 ? 'stunned' : burst ? 'sprint' : 'pursuing';
-            chaser.speed = chaser.stun > 0 ? 35 : chaser.type === 'sprinter' ? (burst ? 270 : 124) : chaser.type === 'tracker' ? 151 : 141;
+            chaser.speed = chaser.stun > 0 ? 35 : chaser.type === 'sprinter' ? (burst ? 290 : 158) : chaser.type === 'tracker' ? 184 : 169;
             // The launch perimeter has a security fence; arrive with a real lead.
             chaser.x = Math.min(GOAL - 640, chaser.x + chaser.speed * dt);
             const separation = s.x - chaser.x;
             if (separation > 1150) {
-                chaser.escaped = true; chaser.state = 'escaped'; s.escaped++;
+                chaser.escaped = true; chaser.state = 'escaped'; chaser.lostFor = 5; s.escaped++;
                 s.notice = `${chaser.name} lost your trail!`; s.noticeTime = 2;
             }
             if (chaser.type === 'jammer') {
                 chaser.pulse = Math.max(0, chaser.pulse - dt);
-                if (separation < 270 && chaser.pulse === 0) {
-                    s.charge = Math.max(0, s.charge - 5); chaser.pulse = 7;
+                if (separation < 370 && chaser.pulse === 0) {
+                    s.charge = Math.max(0, s.charge - 5); chaser.pulse = 5;
                     s.notice = 'MAIL jam: −5% · pull away'; s.noticeTime = 1.6;
                 }
             }
@@ -74,12 +81,12 @@
         if (s.grounded) s.y = ground(s.x);
         else { s.vy += 1000 * dt; s.y += s.vy * dt; if (s.y >= ground(s.x)) { s.y = ground(s.x); s.vy = 0; s.grounded = true; } }
         while (s.nextPack < s.x + 1400) {
-            s.entities.push({ type: 'pack', x: s.nextPack, lift: random(s) > .65 ? 85 : 28, used: false });
+            s.entities.push({ type: 'pack', x: s.nextPack, lane: 0, lift: random(s) > .65 ? 85 : 28, used: false });
             s.nextPack += 660 + random(s) * 260;
         }
         while (s.nextLeak < s.x + 1400) {
             const types = ['leak', 'crate', 'slick', 'gate', 'solar', 'drone'];
-            if (s.nextLeak < GOAL - 1100) s.entities.push({ type: types[Math.floor(random(s) * types.length)], x: s.nextLeak, lift: 0, used: false });
+            if (s.nextLeak < GOAL - 1100) s.entities.push({ type: types[Math.floor(random(s) * types.length)], x: s.nextLeak, lane: 0, lift: 0, used: false });
             s.nextLeak += 410 + random(s) * 300;
         }
         for (const item of s.entities) {
@@ -103,7 +110,8 @@
             // Clear an obstacle cleanly and it slows any pursuer on the same road.
             if (!item.used && item.type !== 'pack' && item.type !== 'solar' && s.x > item.x + 26) {
                 item.used = true; s.combo++;
-                for (const chaser of s.chasers) if (!chaser.escaped && chaser.x < item.x) chaser.stun = Math.max(chaser.stun, item.type === 'gate' ? 1 : 2);
+                const nearest = s.chasers.filter(chaser => !chaser.escaped && chaser.x < item.x).sort((a,b)=>b.x-a.x)[0];
+                if (nearest) nearest.stun = Math.max(nearest.stun, item.type === 'gate' ? .4 : .8);
                 s.notice = `Clean pass ×${s.combo} · pursuers delayed`; s.noticeTime = 1.1;
             }
         }
@@ -118,7 +126,7 @@
     }
 
     // Arcade orbital mechanics, using km, km/s and a compressed mission clock.
-    const MU = 398600, RADIUS = 6371, THRUST = .075, BURN = 210, FLIGHT_TIME_SCALE = 2.5;
+    const MU = 398600, RADIUS = 6371, THRUST = .055, BURN = 260, FLIGHT_TIME_SCALE = 2.5;
     const TARGETS = Object.freeze([
         { id: 'solar', name: 'Sunflower Solar Fields', kind: 'infra', x: .23, y: .42 },
         { id: 'wind', name: 'Crescent Wind Coast', kind: 'infra', x: .72, y: .31 },
@@ -133,12 +141,36 @@
         { id: 'forest', name: 'Emerald Rainforest', kind: 'forest', x: .31, y: .24 },
         { id: 'crater', name: 'Ancient Impact Basin', kind: 'crater', x: .66, y: .83 }
     ].map(Object.freeze));
+    function authorizeLaunch(s, password) {
+        if (s.phase !== 'launch' || s.status !== 'briefing' || s.x !== GOAL) return false;
+        s.launchAuthorized = typeof password === 'string' && password.trim() === 'wayri';
+        return s.launchAuthorized;
+    }
+    function createGroundWorld() {
+        return { time:0, eaten:0, batteries:TARGETS.map((t,i)=>({x:t.x,y:t.y,charge:4,id:t.id})),
+            minions:TARGETS.flatMap((t,i)=>Array.from({length:5},(_,j)=>({x:clamp(t.x-.025+j*.012,0,1),y:clamp(t.y+.028,0,1),target:i,kind:j%3,boss:i===0&&j<3,eating:false}))) };
+    }
+    function groundWorldStep(s,dt) {
+        const world=s.groundWorld; if(!world)return; world.time+=dt;
+        for(const battery of world.batteries) {
+            if(!battery.charge){battery.restock=(battery.restock||0)+dt;if(battery.restock>=12){battery.charge=4;battery.restock=0;}}
+        }
+        for (const minion of world.minions) {
+            let battery=world.batteries[minion.target];
+            if(!battery.charge) { minion.eating=false;minion.x=battery.x+Math.sin(world.time*.8+minion.kind*2)*.018;minion.y=battery.y+Math.cos(world.time*.7+minion.kind*2)*.018;continue; }
+            const dx=battery.x-minion.x,dy=battery.y-minion.y,d=Math.hypot(dx,dy);
+            minion.eating=d<.006&&battery.charge>0;
+            if(minion.eating) { battery.chewed=(battery.chewed||0)+dt; if(battery.chewed>3){battery.chewed=0;battery.charge--;world.eaten++;} }
+            else if(d>.001) { const step=Math.min(d,.004*dt);minion.x+=dx/d*step;minion.y+=dy/d*step; }
+        }
+    }
     function launch(s) {
-        if (s.phase !== 'launch' || s.status !== 'briefing' || s.boosterUsed) return false;
+        if (s.phase !== 'launch' || s.status !== 'briefing' || s.x !== GOAL || s.boosterUsed || !s.launchAuthorized) return false;
         s.boosterUsed = true; s.phase = 'ascent'; s.status = 'running'; s.reason = '';
         s.flight = { altitude: 0, vertical: 0, horizontal: 0, pitch: 90, targetPitch: 90,
             q: 0, maxQ: 0, mach: 0, incidence: 0, heat: 0, stress: 0, fuel: 100, throttle: .75, targetThrottle: 1,
-            countdown: 3, downrange: 0, orbitalAngle: 0, elapsed: 0, burnLeft: BURN, apoapsis: 0, periapsis: -RADIUS };
+            onPad: true, directorOverride: 0, stage: 'Pad', pursuit: { revealed: false, range: 22, decoyCooldown: 0, hits: 0, hull:100,
+                contacts:[{name:'BUGS',range:22,tactic:'LUNGE',hits:0},{name:'REVIEW',range:26,tactic:'TRACK',hits:0},{name:'MAIL',range:30,tactic:'JAM',hits:0,pulse:0}] }, countdown: 3, downrange: 0, orbitalAngle: 0, elapsed: 0, burnLeft: BURN, apoapsis: 0, periapsis: -RADIUS };
         return true;
     }
     function retryLaunch(s) {
@@ -155,26 +187,65 @@
         return energy;
     }
     function flightTargets(f) {
-        f.targetThrottle = 1;
-        if (f.altitude < 24) { f.targetPitch = 90; f.targetThrottle = f.q > 32 ? .35 : 1; return; }
-        if (f.altitude < 65) { f.targetPitch = 60; return; }
-        if (f.altitude < 110) { f.targetPitch = 35; return; }
-        const r = RADIUS + f.altitude;
-        const desiredVertical = clamp((190 - f.altitude) * .035, -.2, .7);
-        const acceleration = MU / (r * r) - f.horizontal ** 2 / r + (desiredVertical - f.vertical) * .10;
-        f.targetPitch = clamp(Math.asin(clamp(acceleration / THRUST, -.95, .95)) * 180 / Math.PI, -45, 75);
+        const r = RADIUS + Math.max(0,f.altitude), gravity = MU / (r*r);
+        if (f.altitude < 8) {
+            const desired = .15 + f.altitude * .045;
+            f.targetPitch = 90;
+            f.targetThrottle = clamp((gravity + (desired-f.vertical)*.08)/THRUST,.2,.9);
+            f.stage = f.onPad ? 'Liftoff' : 'Vertical climb';
+        } else {
+            const desired = f.altitude < 65 ? .65 : clamp((180-f.altitude)*.025,-.35,.9);
+            f.targetThrottle = clamp(38/Math.max(38,f.q),.2,1);
+            const acceleration = gravity - f.horizontal*f.horizontal/r + (desired-f.vertical)*.09;
+            f.targetPitch = clamp(Math.asin(clamp(acceleration/(THRUST*f.targetThrottle),-.9,.95))*180/Math.PI,-35,75);
+            if (f.q > 10) {
+                const prograde = Math.atan2(f.vertical,Math.max(.00001,f.horizontal))*180/Math.PI;
+                f.targetPitch = clamp(f.targetPitch,prograde-8,prograde+8);
+            }
+            f.stage = f.altitude < 80 ? 'Gravity turn' : 'Build orbital speed';
+        }
+        if (f.altitude > 100) {
+            const desiredVertical = clamp((180-f.altitude)*.04,-.6,.6);
+            const desiredHorizontal = Math.sqrt(MU/r);
+            const radial = gravity-f.horizontal*f.horizontal/r + (desiredVertical-f.vertical)*.12;
+            const sideways = f.horizontal*f.vertical/r + (desiredHorizontal-f.horizontal)*.12;
+            f.targetPitch = Math.atan2(radial,sideways)*180/Math.PI;
+            f.targetThrottle = clamp(Math.hypot(radial,sideways)/THRUST,0,1);
+            f.stage = 'Circularization';
+        }
+        if (f.periapsis >= 100 && f.apoapsis < 1800) { f.targetThrottle = 0; f.stage = 'Engine cutoff'; }
+        else if(f.burnLeft<=0){f.targetThrottle=0;f.targetPitch=Math.atan2(f.vertical,f.horizontal)*180/Math.PI;f.stage='Booster empty / coast';}
+    }
+    function flightAdvice(s) {
+        const f=s.flight||{},altitude=Math.max(0,f.altitude||0);
+        const circularSpeed=Math.sqrt(MU/(RADIUS+altitude)),sidewaysDelta=circularSpeed-(f.horizontal||0);
+        const orbitSecure=(f.periapsis??-RADIUS)>=100&&Number.isFinite(f.apoapsis)&&f.apoapsis<1800;
+        let instruction;
+        if(orbitSecure)instruction='Cut off / orbit secure';
+        else if(s.phase==='launch'||f.onPad||f.countdown>0)instruction='Hold 90° / wait for release';
+        else if(f.burnLeft<=0)instruction='Booster empty / coast only / retry if periapsis stays below 100 km';
+        else if((f.heat||0)>65)instruction='Heating critical / climb and reduce throttle';
+        else if((f.stress||0)>45)instruction='Structure critical / align with velocity';
+        else if(altitude<8)instruction='Climb vertical / follow director';
+        else if(altitude<80)instruction='Turn gradually / watch max Q';
+        else if(Math.abs(sidewaysDelta)<.08&&Math.abs(f.vertical||0)>.08)instruction='Arrest vertical speed / follow director';
+        else if((f.periapsis??-RADIUS)<100)instruction='Build sideways speed / raise periapsis';
+        else instruction='Check apoapsis / reduce throttle';
+        return {circularSpeed,sidewaysDelta,orbitSecure,instruction};
     }
     function guidance(s) {
         if (s.phase === 'boarding') return 'Docking clamps engaged. Rover boarding the launch vehicle.';
-        if (s.phase === 'launch') return 'Launch the one-time booster. Hold a vertical climb through thick air.';
+        if (s.phase === 'launch') return 'Enter the launch password to unlock ignition. The vehicle is clamped to the pad.';
         if (s.phase === 'ascent') {
             const f = s.flight;
             if (f.countdown > 0) return `Ignition in ${Math.ceil(f.countdown)}. Set throttle above 20%; hold 90° for liftoff.`;
             if (f.heat > 65) return 'Heating critical: climb out of dense air and reduce throttle.';
             if (f.stress > 45) return 'Structure bending: point along your velocity and ease throttle.';
             if (!f.burnLeft) return 'Booster spent. Coast and watch your lowest orbital altitude.';
-            if (f.altitude < 24) return 'Hold 90 degrees through thick air; ease throttle toward the indicated setting.';
-            return `Turn toward ${Math.round(f.targetPitch)} degrees; build sideways speed. Aim for a lowest altitude above 100 km.`;
+            if (f.onPad) return 'On the pad: raise throttle above 20% to release the clamps.';
+            if (f.pursuit.revealed && f.pursuit.range < 9) return 'Unexpected rocket pursuers closing! Press X for a decoy or increase throttle while following the flight director.';
+            if (f.altitude < 8) return 'Vertical climb: keep the flight-director marker centred. The pad and ground should fall away below.';
+            return `${flightAdvice(s).instruction}. Follow pitch ${Math.round(f.targetPitch)}° and throttle ${Math.round(f.targetThrottle*100)}%. Aim for periapsis above 100 km.`;
         }
         if (s.phase === 'orbit') return 'A bound orbit is established. Track altitude and velocity; pan to a landmark, zoom to 3x and steady the camera for a photograph.';
         if (s.phase === 'grid') return s.grid.message;
@@ -185,6 +256,7 @@
     }
     function ascentStep(s, c, dt) {
         s.time += dt;
+        const realDt = dt;
         dt *= FLIGHT_TIME_SCALE;
         const f = s.flight;
         if (f.countdown > 0) {
@@ -192,8 +264,42 @@
             f.throttle = clamp(f.throttle + clamp(Number(c.throttle) || 0, -1, 1) * .65 * dt, 0, 1);
             return;
         }
+        flightTargets(f);
+        if (f.onPad) {
+            f.throttle = clamp(f.throttle + clamp(Number(c.throttle)||0,-1,1)*.65*dt,0,1);
+            if (f.throttle <= .2) return;
+            f.onPad = false;
+        }
+        if (c.assist === true) {
+            if (c.pitch || c.throttle) f.directorOverride = 2.5;
+            f.directorOverride = Math.max(0,f.directorOverride-realDt);
+            if (!f.directorOverride) {
+                f.pitch += clamp(f.targetPitch-f.pitch,-18*dt,18*dt);
+                f.throttle += clamp(f.targetThrottle-f.throttle,-.8*dt,.8*dt);
+            }
+        }
         f.elapsed += dt;
-        f.pitch = clamp(f.pitch + clamp(Number(c.pitch) || 0, -1, 1) * 24 * dt, -60, 100);
+        const pursuit = f.pursuit;
+        pursuit.flash=Math.max(0,(pursuit.flash||0)-realDt);
+        pursuit.decoyCooldown = Math.max(0,pursuit.decoyCooldown-realDt);
+        if (f.altitude > 18) pursuit.revealed = true;
+        if (pursuit.revealed) {
+            if (c.decoy && pursuit.decoyCooldown===0 && s.charge>=8) {
+                s.charge-=8;for(const contact of pursuit.contacts)contact.range=Math.min(45,contact.range+16);pursuit.decoyCooldown=6;
+            }
+            for(const [i,contact] of pursuit.contacts.entries()) {
+                const lunge=i===0&&s.time%9>6;
+                const closure=lunge?4.2:i===0?.9:i===1?1.8:1.3;
+                const escape=(f.burnLeft>0?f.throttle:0)*2.2;
+                contact.range=clamp(contact.range+(escape-closure)*realDt,1,45);
+                contact.state=lunge?'LUNGING':escape>closure?'FALLING BACK':contact.range<8?'ATTACKING':'CLOSING';
+                if(i===2){contact.pulse=Math.max(0,(contact.pulse||0)-realDt);if(contact.range<10&&contact.pulse===0){s.charge=Math.max(0,s.charge-4);contact.pulse=8;s.notice='MAIL uplink jam −4%';s.noticeTime=2;}}
+                if(contact.range<=1){contact.hits++;pursuit.hits++;pursuit.hull=Math.max(0,pursuit.hull-18);pursuit.flash=.7;s.charge=Math.max(0,s.charge-6);contact.range=18;s.notice=`${contact.name} impact! Release a decoy (X)`;s.noticeTime=2;}
+            }
+            pursuit.range=Math.min(...pursuit.contacts.map(contact=>contact.range));
+            if(pursuit.hull<=0){finish(s,'intercept');return;}
+        }
+        f.pitch = clamp(f.pitch + clamp(Number(c.pitch) || 0, -1, 1) * 24 * dt, -180, 180);
         f.throttle = clamp(f.throttle + clamp(Number(c.throttle) || 0, -1, 1) * .65 * dt, 0, 1);
         const firing = f.burnLeft > 0 ? Math.min(f.throttle, f.burnLeft / dt) : 0;
         f.burnLeft = Math.max(0, f.burnLeft - firing * dt); f.fuel = f.burnLeft / BURN * 100;
@@ -207,7 +313,7 @@
         f.altitude += f.vertical * dt;
         f.downrange += f.horizontal * dt; f.orbitalAngle += f.horizontal / r * dt;
         const flowAngle = Math.atan2(f.vertical, Math.max(.00001, f.horizontal)) * 180 / Math.PI;
-        const incidence = Math.abs(f.pitch - flowAngle);
+        const incidence = Math.abs((f.pitch-flowAngle+540)%360-180);
         f.incidence = incidence;
         f.stress = clamp(f.stress + (Math.max(0, f.q - 10) * Math.max(0, incidence - 12) * .025 - 2) * dt, 0, 100);
         f.heat = clamp(f.heat + (f.q * speed ** 3 * .012 - 1.4) * dt, 0, 100);
@@ -218,7 +324,8 @@
         else if (energy >= 0 || f.altitude > 3000) finish(s, 'escape');
         else if (f.altitude < -.01 || (f.elapsed > 15 && f.altitude < 75 && f.vertical < -.4) || f.elapsed > 600) finish(s, 'ballistic');
         else if (f.periapsis >= 100 && f.apoapsis < 1800) {
-            s.phase = 'orbit'; f.throttle = 0;
+            s.phase = 'orbit'; f.throttle = 0; f.targetThrottle = 0; f.stage = 'Orbit / engine cutoff';
+            f.pursuit.evaded=true;
             s.orbit = { time: 0, cameraX: .5, cameraY: .5, zoom: 1, photos: [], lastPhoto: null,
                 gridOffered: false, steady: 0, motion: 0,
                 craft: { x: RADIUS + f.altitude, y: 0, vx: f.vertical, vy: f.horizontal },
@@ -229,6 +336,11 @@
         const o = s.orbit, px = clamp(Number(c.panX) || 0, -1, 1), py = clamp(Number(c.panY) || 0, -1, 1);
         const zoom = clamp(Number(c.zoom) || 0, -1, 1);
         o.time += dt;
+        if(s.flight?.pursuit.evaded){
+            const pursuit=s.flight.pursuit;
+            for(const contact of pursuit.contacts){contact.range=Math.min(200,contact.range+dt*2);contact.state='FALLING BEHIND';}
+            pursuit.range=Math.min(...pursuit.contacts.map(contact=>contact.range));
+        }
         // Velocity-Verlet propagation under central gravity, in km and km/s.
         // The mission clock is accelerated; photography controls remain real-time.
         const craft = o.craft, orbitalDt = dt * 45;
@@ -271,7 +383,8 @@
         const detail = clamp(1 - Math.abs(o.zoom - 3) / 3, 0, 1);
         const stability = clamp(o.steady / 1.2, 0, 1);
         const score = Math.round(100 * framing * (.45 * detail + .55 * stability));
-        const shot = { name: target.name, score, targetId: target.id, infra: target.kind === 'infra', time: o.time };
+        const raiders = (s.groundWorld?.minions||[]).filter(m=>Math.abs(m.x-o.cameraX)<.5/o.zoom&&Math.abs(m.y-o.cameraY)<.5/o.zoom).length;
+        const shot = { name: target.name, score, targetId: target.id, infra: target.kind === 'infra', time: o.time, raiders };
         o.lastPhoto = shot; o.photos.push(shot);
         if (o.photos.length > 100) o.photos.shift();
         if (shot.infra && score >= 75) o.gridOffered = true;
@@ -327,6 +440,7 @@
     function step(s, controls = {}, dt) {
         if (s.status !== 'running' || !Number.isFinite(dt) || dt <= 0) return;
         dt = Math.min(dt, 1 / 30);
+        groundWorldStep(s,dt);
         if (s.phase === 'road') roadStep(s, controls, dt);
         else if (s.phase === 'boarding') {
             s.time += dt; s.boarding.elapsed += dt; s.boarding.progress = clamp(s.boarding.elapsed / 2.8, 0, 1);
@@ -336,6 +450,6 @@
         else if (s.phase === 'orbit') orbitStep(s, controls, dt);
         else if (s.phase === 'grid') gridStep(s, controls, dt);
     }
-    return { create, step, jump, ground, GOAL, launch, retryLaunch, guidance, TARGETS, photo, enterGrid, setGrid, nextLoop, FLIGHT_TIME_SCALE };
+    return { create, step, jump, ground, GOAL, authorizeLaunch, launch, retryLaunch, guidance, flightAdvice, TARGETS, photo, enterGrid, setGrid, nextLoop, FLIGHT_TIME_SCALE };
 
 });

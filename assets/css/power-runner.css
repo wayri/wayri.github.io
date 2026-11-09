@@ -1,5 +1,12 @@
 .power-runner { border: 1px solid var(--border-color); background: var(--container-bg); box-shadow: 2px 2px 0 var(--border-color); scroll-margin-top: 80px; }
 .power-runner [hidden] { display: none !important; }
+#runner-launch-access { margin:16px 0; padding:14px; border:1px solid var(--border-color); text-align:left; }
+#runner-launch-access label { display:block; font:12px monospace; margin-bottom:8px; }
+#runner-launch-code { display:block; width:100%; padding:10px; color:var(--text-color); background:var(--input-bg); border:1px solid var(--border-color); margin-bottom:10px; }
+#runner-unlock-status { margin:8px 0 0; font-size:12px; }
+#runner-director[aria-pressed="true"] { border-color:var(--accent-color); color:var(--accent-color); }
+#runner-road-controls { grid-template-columns:repeat(4,minmax(0,1fr)); }
+@media(max-width:600px) { #runner-road-controls { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 .runner-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 24px; }
 .runner-eyebrow { color: var(--accent-color); font: 10px/1.5 'JetBrains Mono', monospace; letter-spacing: .12em; text-transform: uppercase; }
 .runner-heading h2 { margin: 6px 0 8px; }
@@ -84,6 +91,12 @@
 
 /* Room for the course, with a voluntary distraction-free view. */
 .runner-view-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; flex-shrink:0; }
+.runner-display-modes { display:flex; flex-wrap:wrap; gap:8px; padding:12px 18px; border-top:1px solid var(--accent-color); }
+.runner-display-modes button[aria-pressed="true"] { background:var(--accent-color); color:var(--bg-color,#111); }
+.runner-display-modes button:disabled { opacity:.5; cursor:not-allowed; }
+.runner-flight-command { display:grid; gap:8px; padding:16px 20px; border-block:1px solid var(--accent-color); background:var(--container-bg); }
+.runner-flight-command strong { font:700 clamp(16px,2vw,24px)/1.4 'Courier New',monospace; color:var(--accent-color); }
+.runner-flight-command span { font:14px/1.6 sans-serif; color:var(--text-color); }
 .runner-road-readings { display:flex; align-items:center; flex-wrap:wrap; gap:10px 24px; padding:10px 24px; font:11px/1.6 'JetBrains Mono',monospace; border-bottom:1px solid var(--border-color); }
 .runner-road-readings > strong { color:var(--accent-color); font-size:16px; }
 .runner-road-readings > span { color:var(--muted-text); }

@@ -67,6 +67,7 @@ permalink: /pong/
                 class="w-full border border-themeBorder px-4 py-2 text-center font-mono tracking-widest bg-[#0a0a0a] text-themeAccent focus:outline-none focus:border-themeAccent"
                 placeholder="ENTER KEY"
                 onkeypress="if(event.key==='Enter') decryptEngine()">
+            <label class="text-sm text-themeMuted font-mono"><input type="checkbox" id="timed-game-mode"> Three-minute match</label>
             <button onclick="decryptEngine()" class="bg-themeBorder text-themeBg px-8 py-2 font-bold font-mono hover:bg-themeAccent transition-colors w-full uppercase tracking-widest">
                 Decrypt
             </button>
@@ -126,10 +127,10 @@ const payload = "f2d5ASYgKikrbBE2KzV/QlZMKjMtd3MMLSI+Jjw1eTE6NkIZXzE8LXk6JzcubC8
 
 function decryptEngine() {
     const key = document.getElementById('decryption-key').value;
-    const timedMatch = key === 'rocketpong';
-    const engineKey = timedMatch ? 'PHYSICAL_LAYER_199X' : key;
+    const timedMatch = document.getElementById('timed-game-mode').checked;
+    const engineKey = 'PHYSICAL_LAYER_199X';
     const err = document.getElementById('auth-error');
-    if(key.length < 5) { err.classList.remove('opacity-0'); setTimeout(()=>err.classList.add('opacity-0'),2000); return; }
+    if(key !== 'waYri') { err.classList.remove('opacity-0'); setTimeout(()=>err.classList.add('opacity-0'),2000); return; }
     try {
         const decoded = atob(payload);
         let s = '';

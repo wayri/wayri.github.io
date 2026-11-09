@@ -47,7 +47,8 @@ test('a road pilot can clear mixed hazards and brake into the launch ship across
         for (let frame = 0; frame < 120 * 60 && s.status === 'running'; frame++) {
             if (s.grounded && s.entities.some(e => ['leak', 'crate', 'slick'].includes(e.type) && !e.used && e.x > s.x && e.x - s.x < 65)) E.jump(s);
             const scanner = s.entities.find(e => !e.used && e.type === 'drone' && e.x > s.x && e.x - s.x < 180);
-            E.step(s, { brake: s.x > E.GOAL - 150 || !!(scanner && scanner.active), boost: !!(scanner && !scanner.active) }, 1 / 60);
+            // Preserve a lead before waiting for a scanner; boost through if the chase is too close to stop.
+            E.step(s, { brake: s.x > E.GOAL - 150 || !!(scanner && scanner.active && s.gap>300), boost: s.x<E.GOAL-250 && ((s.gap<500&&s.charge>25)||!!(scanner&&!scanner.active)) }, 1 / 60);
         }
         assert.equal(s.status, 'briefing', `seed ${seed}`); assert.equal(s.phase, 'launch'); assert.equal(s.x, E.GOAL); assert.ok(s.charge > 0);
     }
@@ -61,12 +62,13 @@ test('scanner timing matters and an airborne rover cannot bypass an active beam'
     assert.equal(active.leaks, 1); assert.equal(dark.leaks, 0);
 });
 
-test('boost opens actual pursuit separation, distinct tactics activate, and escaped pursuers stay gone', () => {
+test('boost opens actual pursuit separation, distinct tactics activate, and escaped pursuers can find the trail again', () => {
     const s = running(); advance(s, 8, { boost: true });
     assert.ok(s.escaped >= 1); assert.ok(s.chasers.some(c => c.escaped));
     const escaped = s.chasers.find(c => c.escaped), position = escaped.x;
-    advance(s, 4); assert.equal(escaped.x, position);
-    const t = running(); t.time = 10; E.step(t, {}, 1 / 60);
+    advance(s, 1); assert.equal(escaped.x, position);
+    advance(s, 5); assert.equal(escaped.escaped,false); assert.ok(escaped.x>position);
+    const t = running(); t.time = 7; E.step(t, {}, 1 / 60);
     assert.equal(t.chasers[0].state, 'sprint'); assert.ok(t.chasers[0].speed > t.chasers[1].speed);
     t.chasers[2].x = t.x - 100; const charge = t.charge; E.step(t, {}, 1 / 60);
     assert.ok(t.charge < charge - 4);

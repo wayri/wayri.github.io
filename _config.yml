@@ -31,6 +31,14 @@ exclude:
   - vendor
   - tests
 
+  # Retired chase/space mission; Play now uses the endless lab runner.
+  - _includes/power-runner.html
+  - assets/css/power-runner.css
+  - assets/js/power-runner-engine.js
+  - assets/js/power-runner.js
+  - assets/js/power-mission-scenes.js
+  - assets/js/power-cockpit-scenes.js
+
   # Unreviewed tools stay in source, outside the published catalog.
   - assets/tools_html/ac-motor-dynamics.html
   - assets/tools_html/awg-wire-ampacity.html

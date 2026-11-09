@@ -5,8 +5,9 @@ const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
 function launched() {
     const s = E.create();
     Object.assign(s, { x: E.GOAL, phase: 'launch', status: 'briefing' });
+    assert.equal(E.authorizeLaunch(s,'wayri'),true);
     assert.equal(E.launch(s), true);
-    s.flight.countdown = 0;
+    s.flight.countdown = 0; s.flight.onPad = false;
     return s;
 }
 function advance(s, seconds, controls = {}, dt = 1 / 60) {
@@ -15,14 +16,14 @@ function advance(s, seconds, controls = {}, dt = 1 / 60) {
 function guided(dt = 1 / 60) {
     const s = launched();
     let seconds = 0;
-    for (; seconds < 110 && s.phase === 'ascent' && s.status === 'running'; seconds += dt) {
+    for (; seconds < 160 && s.phase === 'ascent' && s.status === 'running'; seconds += dt) {
         const f = s.flight;
         E.step(s, { pitch: clamp((Math.round(f.targetPitch) - f.pitch) * .7, -1, 1),
             throttle: clamp((f.targetThrottle - f.throttle) * 3, -1, 1) }, dt);
     }
     assert.equal(s.status, 'running', s.reason);
     assert.equal(s.phase, 'orbit');
-    assert.ok(seconds > 60 && seconds < 100, `Flight took ${seconds}s`);
+    assert.ok(seconds > 80 && seconds < 150, `Flight took ${seconds}s`);
     return s;
 }
 function photograph(s, id) {
@@ -61,7 +62,7 @@ test('manually tracking guidance establishes a bounded orbit at multiple frame r
 
 test('earned launch has a real ignition countdown without spending fuel on the pad', () => {
     const s = E.create(); Object.assign(s, { x: E.GOAL, phase: 'launch', status: 'briefing' });
-    E.launch(s); advance(s, 2);
+    E.authorizeLaunch(s,'wayri'); E.launch(s); advance(s, 2);
     assert.ok(s.flight.countdown > 0); assert.equal(s.flight.altitude, 0); assert.equal(s.flight.fuel, 100);
     advance(s, 2); assert.ok(s.flight.altitude > 0);
 });

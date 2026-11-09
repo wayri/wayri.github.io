@@ -2,7 +2,7 @@
 <section id="power-runner" class="power-runner mb-12" aria-labelledby="power-runner-title">
     <header class="runner-heading">
         <div><span class="runner-eyebrow">Road → spacecraft → orbit → grid</span><h2 id="power-runner-title">Where does my power go?</h2><p>Outrun the backlog. Reach orbit. Bring the grid back into balance.</p></div>
-        <div class="runner-view-actions"><button type="button" id="runner-expand" aria-pressed="false">Expand game</button><button type="button" id="runner-pause" disabled><i class="fa-solid fa-pause" aria-hidden="true"></i> Pause</button></div>
+        <div class="runner-view-actions"><button type="button" id="runner-recenter" hidden>Recenter view · R</button><button type="button" id="runner-expand" aria-pressed="false">Expand game</button><button type="button" id="runner-pause" disabled><i class="fa-solid fa-pause" aria-hidden="true"></i> Pause</button></div>
     </header>
     <ol class="runner-stages" aria-label="Mission stages"><li data-phase="road" aria-current="step">01 · Road</li><li data-phase="ascent">02 · Launch</li><li data-phase="orbit">03 · Photograph</li><li data-phase="grid">04 · Balance</li></ol>
     <div class="runner-hud" aria-label="Mission dashboard">
@@ -17,11 +17,13 @@
         <div><span>Sideways speed</span><strong id="runner-horizontal">0 km/s</strong></div><div><span>Vertical speed</span><strong id="runner-vertical">0 km/s</strong></div><div><span>Lowest altitude</span><strong id="runner-periapsis">—</strong></div><div><span>Highest altitude</span><strong id="runner-apoapsis">—</strong></div><div><span>Booster remaining</span><strong id="runner-burn">—</strong></div><div><span>Heat / bending</span><strong id="runner-structure">0% / 0%</strong></div>
     </div>
     <div class="runner-stage">
-        <canvas id="runner-canvas" tabindex="0" aria-label="Engineering adventure game. Road: Space jumps, Right boosts, Down saves charge, Left brakes. Flight: Up and Down steer pitch, Right and Left adjust throttle. Orbit: arrows pan, plus and minus zoom, Space photographs. Grid: arrows adjust supply and storage. P pauses. On-screen controls are available below.">Run to a launchpad, guide a rocket to orbit, photograph a fictional planet and balance a fictional electricity grid.</canvas>
+        <canvas id="runner-canvas" tabindex="0" aria-label="Engineering adventure game. Road: Space jumps, Right boosts, Down saves charge, Left brakes. Flight: Up and Down steer pitch, Right and Left adjust throttle. Spacecraft: drag to look around; R recentres. 1 cockpit, 2 orbit map, 3 imaging (in orbit). Imaging: drag or arrows pan, wheel or plus and minus zoom, Space photographs. Grid: arrows adjust supply and storage. P pauses. On-screen controls are available below.">Run to a launchpad, guide a rocket to orbit, photograph a fictional planet and balance a fictional electricity grid.</canvas>
         <div id="runner-overlay" class="runner-overlay">
-            <div class="runner-overlay-card"><span class="runner-eyebrow" id="runner-overline">One battery. A much longer day.</span><h3 id="runner-overlay-title">The backlog is gaining.</h3><p id="runner-overlay-copy">Three pursuers, different tricks. Pick up charge, dodge barriers and drones, and use boost to break contact. At 1,000 m, brake into the spacecraft — then fly it to orbit and bring home photographs.</p><button type="button" id="runner-start"><i class="fa-solid fa-play" aria-hidden="true"></i> Start run</button><button type="button" id="runner-reset" class="runner-secondary" hidden>Start from the road</button><p class="runner-best">Best road run: <span id="runner-best">0 m</span> · Loops: <span id="runner-loops">0</span></p></div>
+            <div class="runner-overlay-card"><span class="runner-eyebrow" id="runner-overline">One battery. A much longer day.</span><h3 id="runner-overlay-title">The backlog is gaining.</h3><p id="runner-overlay-copy">Jump hazards, collect charge, and use boost to break contact. The pursuers can find your trail again. At 1,000 m, brake into the spacecraft below 9 m/s. Road driving stays in 2D; launch takes you into the rocket cockpit.</p><div id="runner-launch-access" hidden><label for="runner-launch-code">Launch password</label><input id="runner-launch-code" type="password" autocomplete="off" spellcheck="false"><button id="runner-unlock" type="button">Unlock ignition</button><p id="runner-unlock-status" role="status"></p></div><button type="button" id="runner-start"><i class="fa-solid fa-play" aria-hidden="true"></i> Start run</button><button type="button" id="runner-reset" class="runner-secondary" hidden>Start from the road</button><p class="runner-best">Best road run: <span id="runner-best">0 m</span> · Loops: <span id="runner-loops">0</span></p></div>
         </div>
     </div>
+    <nav id="runner-display-modes" class="runner-display-modes" aria-label="Spacecraft displays" hidden><button id="runner-mode-flight" type="button" aria-pressed="true">Cockpit · 1</button><button id="runner-mode-map" type="button" aria-pressed="false">Orbit map · 2</button><button id="runner-mode-imaging" type="button" aria-pressed="false" disabled>Imaging · 3 <small>unlocks in orbit</small></button></nav>
+    <div id="runner-flight-command" class="runner-flight-command" hidden><strong id="runner-command">Hold vertical</strong><span id="runner-command-detail"></span></div>
     <div class="runner-controls runner-four-controls" id="runner-road-controls" aria-label="Road controls">
         <button type="button" id="runner-brake"><i class="fa-solid fa-hand" aria-hidden="true"></i> Brake <small>hold ←</small></button>
         <button type="button" id="runner-eco"><i class="fa-solid fa-leaf" aria-hidden="true"></i> Eco <small>hold ↓</small></button>
@@ -29,6 +31,7 @@
         <button type="button" id="runner-boost"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Boost <small>hold →</small></button>
     </div>
     <div class="runner-controls runner-four-controls" id="runner-flight-controls" aria-label="Rocket controls" hidden>
+        <button type="button" id="runner-director" aria-pressed="true">Flight director: ON <small>automatic guidance; manual controls override</small></button><button type="button" id="runner-decoy" hidden>Release decoy <small>X · costs 8% charge</small></button>
         <button type="button" id="runner-pitch-down">Pitch down <small>hold ↓</small></button><button type="button" id="runner-pitch-up">Pitch up <small>hold ↑</small></button><button type="button" id="runner-throttle-down">Throttle − <small>hold ←</small></button><button type="button" id="runner-throttle-up">Throttle + <small>hold →</small></button>
     </div>
     <div id="runner-orbit-controls" class="runner-orbit-controls" hidden>
@@ -53,4 +56,5 @@
 </section>
 <script src="{{ '/assets/js/power-runner-engine.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 <script src="{{ '/assets/js/power-mission-scenes.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+<script src="{{ '/assets/js/power-cockpit-scenes.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 <script src="{{ '/assets/js/power-runner.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>

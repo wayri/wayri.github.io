@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="{{ '/assets/css/endless-lab-runner.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+<section class="lab-runner" id="power-runner" aria-labelledby="lab-runner-title">
+    <header class="lab-runner-heading"><div><p class="lab-runner-kicker">Circuits · sketches · a little momentum</p><h2 id="lab-runner-title">Keep the ideas moving.</h2></div><button id="lab-runner-pause" type="button" disabled>Pause</button></header>
+    <div class="lab-runner-hud"><span>Distance <strong id="lab-runner-distance">0 m</strong></span><span>Charge <strong id="lab-runner-charge">100%</strong></span><span>Ideas <strong id="lab-runner-ideas">0 / 3</strong></span><span id="lab-runner-chase">Chase: 18 m behind</span></div>
+    <div class="lab-runner-stage"><canvas id="lab-runner-canvas" width="960" height="420" tabindex="0" aria-label="Endless side-scrolling game. Focus here: Space or Up jumps, Down slides, E pulses away electrical noise, P pauses."></canvas>
+        <div class="lab-runner-overlay" id="lab-runner-overlay"><div><p class="lab-runner-kicker">An endless run through the lab</p><h3 id="lab-runner-overlay-title">One more idea.</h3><p id="lab-runner-overlay-copy">Jump the components, slide under sketch banners, and pulse away electrical noise. Collect batteries for charge and three ideas to complete a new sketch. Build a lead and the chase drops away for a while.</p><label class="lab-runner-relaxed"><input type="checkbox" id="lab-runner-relaxed"> Relaxed pace</label><button id="lab-runner-start" type="button">Start run</button><p>Best score: <strong id="lab-runner-best">0</strong></p></div></div>
+    </div>
+    <p id="lab-runner-status" class="lab-runner-status" role="status">No finish line. See how far you can carry the next idea.</p>
+    <div class="lab-runner-controls" aria-label="Game controls"><button type="button" id="lab-runner-jump">↑ Jump <small>Space / ↑</small></button><button type="button" id="lab-runner-slide">↓ Slide <small>Hold ↓ / S</small></button><button type="button" id="lab-runner-pulse">⚡ Pulse <small>E · costs 16% charge</small></button></div>
+    <p class="lab-runner-help">Tap Jump for a short hop; hold for a higher arc. Slide in the air to come down sooner. A pulse clears nearby noise, not solid objects. Keyboard controls work only while the game is focused; leaving the game pauses it.</p>
+</section>
+<script src="{{ '/assets/js/endless-lab-engine.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+<script src="{{ '/assets/js/endless-lab-runner.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>

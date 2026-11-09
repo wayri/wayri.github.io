@@ -65,7 +65,7 @@
     }
     function drawRoad(c, w, h, s, p, options = {}) {
         const engine = window.PowerRunner, ground = engine.ground, goal = engine.GOAL;
-        const scale = clamp(w / 1000, .68, 1.25), anchor = w * .34;
+        const scale = clamp(w / 1400, .45, .9), anchor = w * .42;
         const progress = s.phase === 'boarding' ? clamp((s.boarding || {}).progress || 0, 0, 1) : 0;
         const cam = s.x - anchor / scale, base = h * .76, t = Number(s.time) || 0;
         const sx = x => (x - cam) * scale, sy = x => base + ground(x) * scale;
@@ -193,9 +193,10 @@
     }
     function space(c, w, h, p, altitude, time) {
         const blend = clamp(altitude / 100, 0, 1), sky = c.createLinearGradient(0, 0, 0, h);
-        sky.addColorStop(0, blend > .45 ? '#071324' : '#294760'); sky.addColorStop(1, '#437f9b');
+        sky.addColorStop(0, `rgb(${Math.round(41*(1-blend)+3*blend)},${Math.round(71*(1-blend)+10*blend)},${Math.round(96*(1-blend)+22*blend)})`);
+        sky.addColorStop(1, `rgb(${Math.round(67*(1-blend)+10*blend)},${Math.round(127*(1-blend)+25*blend)},${Math.round(155*(1-blend)+43*blend)})`);
         c.fillStyle = sky; c.fillRect(0, 0, w, h);
-        c.globalAlpha = .2 + .7 * blend;
+        c.globalAlpha = clamp((altitude - 45) / 50, 0, 1);
         for (let i = 0; i < 70; i++) circle(c, (i * 137.51) % w, (i * 73.81) % (h * .8), i % 7 === 0 ? 1.3 : .65, '#deeced');
         c.globalAlpha = 1;
         const cy = h * 2.9, radius = h * 2.15 - clamp(altitude, 0, 500) * .11;
@@ -212,7 +213,8 @@
         const f = Object.assign({ altitude: 0, pitch: 90, targetPitch: 90, vertical: 0, horizontal: 0, throttle: 0, burnLeft: 0, elapsed: 0 }, s.flight);
         const t = Number(s.time) || 0, failed = s.status === 'lost', ft = Math.max(0, options.failureTime || 0), reason = s.reason;
         space(c, w, h, p, f.altitude, t);
-        const x = w * .47, y = h * .45, scale = clamp(w / 700, .75, 1.3);
+        const scale = clamp(w / 700, .75, 1.3), rise = clamp(f.altitude / 2, 0, 1);
+        const x = w * .47, y = (h * .81 - 62 * scale) * (1 - rise) + h * .45 * rise;
         const atmospheric = clamp(1 - f.altitude / 95, 0, 1), q = Math.max(0, f.q || 0);
         // Clouds, contrails and airflow accelerate past the craft instead of becoming a static sky.
         c.save(); c.globalAlpha = atmospheric * .38;
@@ -280,6 +282,8 @@
         if (w > 520) orbitalInset(c, w - 103, h - 100, 65, f, p, false);
         const caption = failed ? ({ maxq: 'STRUCTURAL FAILURE · MAX Q', burnup: 'THERMAL BREAKUP', escape: 'SIGNAL LOST · ESCAPE TRAJECTORY', ballistic: 'BALLISTIC REENTRY' }[reason] || 'MISSION LOST') : s.phase === 'launch' ? 'BOOSTER ARMED · READY FOR ASCENT' : f.burnLeft > 0 ? 'POWERED ASCENT' : 'COASTING · BOOSTER SPENT';
         label(c, caption, w / 2, h - 19, failed ? '#ffc08a' : '#dbe9e8', w < 430 ? 10 : 12, 'center');
+        window.PowerCockpitScenes?.guidanceHUD(c,w,h,s);
+        if(f.pursuit?.revealed)window.PowerCockpitScenes?.rearView(c,w,h,s,true);
     }
     function orbitalInset(c, x, y, radius, f, p, inOrbit) {
         c.save(); box(c, x - radius - 17, y - radius - 17, radius * 2 + 34, radius * 2 + 40, '#0c2230', 5);
@@ -390,6 +394,7 @@
                 label(c, t.name, tx, ty, '#f1f0d9', w < 430 ? 9 : 10, 'center');
             }
         }
+        window.PowerCockpitScenes?.groundActivity(c,w,h,s);
         const selected = targets.find(t => t.id === options.selectedTarget);
         if (selected) {
             const dx = sx(selected.x) - w / 2, dy = sy(selected.y) - h / 2, distance = Math.hypot(dx, dy);
@@ -479,6 +484,17 @@
     window.PowerMissionScenes = { draw(ctx, width, height, state, palette, options = {}) {
         if (!ctx || !state || !palette || width <= 0 || height <= 0) return;
         ctx.save(); ctx.beginPath(); ctx.rect(0, 0, width, height); ctx.clip();
+        if(window.PowerCockpitScenes && !options.cameraActive && options.displayMode!=='map' && ['launch','ascent','orbit'].includes(state.phase)) {
+            window.PowerCockpitScenes.draw(ctx,width,height,state,palette,options);ctx.restore();return;
+        }
+        if(['launch','ascent'].includes(state.phase)&&options.displayMode==='map'){
+            const f=Object.assign({altitude:0,vertical:0,horizontal:0,periapsis:-6371,apoapsis:0},state.flight);
+            ctx.fillStyle='#07141f';ctx.fillRect(0,0,width,height);
+            orbitalInset(ctx,width*.35,height*.49,Math.min(width*.24,height*.31),f,palette,false);
+            label(ctx,'TRAJECTORY / LIVE OSCULATING ORBIT',18,27,'#e3d6a2',width<500?10:14);
+            label(ctx,'Blue: planet · dashed: predicted path · minimum safe altitude: 100 km',18,height-25,'#b4ccd4',width<700?8:11);
+            window.PowerCockpitScenes?.guidanceHUD(ctx,width,height,state);ctx.restore();return;
+        }
         if (state.phase === 'road' || state.phase === 'boarding') drawRoad(ctx, width, height, state, palette, options);
         else if (state.phase === 'orbit') orbit(ctx, width, height, state, palette, options);
         else if (state.phase === 'grid') grid(ctx, width, height, state, palette);
