@@ -27,6 +27,33 @@
     const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
     const views = { assembly: '3d', pcb: 'pcb', schematic: 'schematic' };
     let viewer, carousel, screen, loading = false, changing = false, disposed = false, runtime, study, metadata, mode = 'assembly';
+    const productPreview = Boolean(host.closest('.lab-hero'));
+    const more = $('.irca-more');
+    let expanded = !productPreview;
+    function syncPresentation() {
+        host.classList.toggle('is-advanced', expanded);
+        more.hidden = !productPreview;
+        more.setAttribute('aria-expanded', String(expanded));
+        more.textContent = expanded ? 'Less · product view ↑' : 'More · design & analysis ↓';
+        if (!viewer) return;
+        viewer.setInspectOnSelect(expanded);
+        if (!expanded) viewer.setInspectorOpen(false);
+        // Host-only presentation for the pinned site bundle; camera input and
+        // virtual-screen interactions remain active. No renderer files change.
+        const surface = stage.firstElementChild;
+        if (!surface?.shadowRoot) return;
+        const surfaces = [surface, ...[...surface.shadowRoot.querySelectorAll('*')].filter(node => node.shadowRoot)];
+        for (const node of surfaces) {
+            if (!node.shadowRoot.querySelector('style[data-irca-product-chrome]')) {
+                const style = document.createElement('style');
+                style.dataset.ircaProductChrome = '';
+                style.textContent = ':host([data-irca-product-preview]) :is(.viewer-toolbar,.viewer-navigation,.viewer-notes,.viewer-inspector,.bar,.inspector,.menu,.visibility-options,.measurement-panel,.measurement-label,.hint,.notice){display:none!important}';
+                node.shadowRoot.append(style);
+            }
+            node.toggleAttribute('data-irca-product-preview', !expanded);
+        }
+    }
+    syncPresentation();
     let rotating = false, rotationFrame = 0, lastRotation = 0, visible = false;
     function stopRotation() {
         rotating = false; cancelAnimationFrame(rotationFrame); rotationFrame = 0; lastRotation = 0;
@@ -76,12 +103,13 @@
     }
     async function mount() {
         if (loading || viewer || disposed) return;
-        loading = true; start.disabled = true; modes.forEach(button => button.disabled = true);
+        loading = true; host.classList.remove('irca-load-error'); start.disabled = true; modes.forEach(button => button.disabled = true);
         status.textContent = 'Loading IRCA layout, schematic and component models…';
         try {
             await loadRuntime(); metadata = await window.IRCAProject.ready(); if (disposed) return;
             stage.hidden = false; $('.irca-stage').classList.add('is-loading');
             viewer = window.IRCAProject.createViewer(stage, { theme: theme() });
+            viewer.addEventListener('ready', syncPresentation);
             screen = window.IRCAMiniScreen.attach(viewer, {
                 onInteract: () => { stopRotation(); carousel?.pause(); },
                 onReady: ready => { useScreen.disabled = cameraDemo.disabled = !ready; },
@@ -116,6 +144,7 @@
             $('.irca-carousel').addEventListener('pointerdown', stopRotation);
             $('.irca-carousel').addEventListener('keydown', stopRotation);
             await carousel.show(0); if (disposed) return;
+            syncPresentation();
             const camera = viewer.getCamera3D();
             if (camera) viewer.setCamera3D({ ...camera, position: camera.position.map((value, index) => camera.target[index] + (value - camera.target[index]) * .48) });
             preview.hidden = true; start.hidden = true; inspect.textContent = 'Inspect ' + metadata.defaultPart;
@@ -124,6 +153,7 @@
             if (!reducedMotion.matches) startRotation();
         } catch (error) {
             if (!disposed) {
+                host.classList.add('irca-load-error');
                 carousel?.dispose(); carousel = null; screen?.dispose(); screen = null; viewer?.dispose(); viewer = null;
                 stage.hidden = true; preview.hidden = false; start.hidden = false; start.textContent = 'Retry interactive IRCA';
                 status.textContent = 'IRCA could not load: ' + error.message;
@@ -155,6 +185,16 @@
         finally { changing = false; }
     }
     modes.forEach(button => button.addEventListener('click', () => choose(button.dataset.ircaMode)));
+    more.addEventListener('click', async () => {
+        expanded = !expanded;
+        syncPresentation();
+        if (!expanded) {
+            screen?.exit();
+            await choose('assembly');
+            syncPresentation();
+            if (!reducedMotion.matches) startRotation();
+        }
+    });
     rotate.addEventListener('click', async () => {
         if (rotating) { stopRotation(); return; }
         await choose('assembly'); startRotation();

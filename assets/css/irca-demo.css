@@ -5,6 +5,18 @@
 .irca-demo .irca-heading h2 { margin:0; font:550 23px/1.2 system-ui,sans-serif; letter-spacing:-.025em; }
 .irca-badge { color:var(--irca-muted); font:11px/1.5 system-ui,sans-serif; }
 .irca-badge > span { color:var(--irca-accent); margin-right:5px; }
+.irca-product-copy,.irca-product-note { display:none; }
+.lab-hero .irca-product-copy { display:block; padding:0 16px 16px; }
+.lab-hero .irca-product-copy > p { margin:0 0 12px; color:var(--irca-ink); font:14px/1.65 system-ui,sans-serif; }
+.irca-product-features { display:flex; flex-wrap:wrap; gap:8px 16px; list-style:none; margin:0 0 14px; padding:0; color:var(--irca-muted); font:12px/1.5 system-ui,sans-serif; }
+.irca-product-features li { display:inline-flex; align-items:center; gap:6px; }
+.irca-product-features i { color:var(--irca-accent); }
+.irca-more { padding:8px 12px; min-height:44px; border:1px solid var(--irca-accent); border-radius:4px; background:transparent; color:var(--irca-accent); font:12px/1.5 system-ui,sans-serif; cursor:pointer; }
+.irca-more:focus-visible { outline:2px solid var(--irca-accent); outline-offset:3px; }
+.lab-hero .irca-product-note { display:block; margin:0; padding:9px 16px; font:11px/1.5 system-ui,sans-serif; color:var(--irca-muted); }
+.lab-hero .irca-demo:not(.is-advanced) :is(.irca-modes,.irca-result-teaser,.irca-carousel,.irca-rotate,.irca-screen-status,.irca-footer p,.irca-inspect) { display:none; }
+.lab-hero .irca-demo:not(.is-advanced) .irca-footer { padding:0 16px; border:0; }
+.lab-hero .irca-demo.irca-load-error .irca-status { display:block!important; }
 .irca-promo { display:grid; gap:4px; }
 .irca-promo a { color:var(--irca-muted); text-decoration:none; }
 .irca-promo a span,.irca-promo-guide { color:var(--irca-accent)!important; }
