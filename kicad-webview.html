@@ -115,16 +115,7 @@ await IRCAProject.load(project);
         <p class="wv-disclosure">These are virtual presentation effects. They do not execute firmware, emulate an electrical bus, connect to hardware or run a solver. Choosing a face does not establish that the part is a physical display. Source or view replacement suspends the controls.</p>
     </section>
 
-    <section id="hierarchy" class="wv-section" aria-labelledby="hierarchy-title">
-        <div class="wv-section-heading"><div><p class="wv-eyebrow">Independent project tree</p><h2 id="hierarchy-title">See how the sheets fit together.</h2></div><p>A source-derived hierarchy without mounting a 3D viewer.</p></div>
-        <p class="wv-section-intro">Explore saved root and subsheet instances, expand branches and export a portable SVG diagram. IRCA is a single-sheet example; choose your own multi-sheet schematics or ZIP to explore a larger hierarchy locally.</p>
-        <div class="wv-hierarchy-frame">
-            <div class="wv-hierarchy-controls"><button id="hierarchy-start" type="button">Load IRCA hierarchy</button><label class="wv-file">Open local schematics<input id="hierarchy-files" type="file" multiple accept=".kicad_sch,.zip" aria-label="Open local schematics or ZIP"></label><button id="hierarchy-expand" type="button" disabled>Expand all</button><button id="hierarchy-collapse" type="button" disabled>Collapse all</button><button id="hierarchy-export" type="button" disabled>Export diagram SVG</button></div>
-            <div id="hierarchy-board" class="wv-hierarchy-board" aria-label="Schematic project hierarchy"><p class="wv-demo-placeholder">Load the single-sheet IRCA example or open your local project.</p></div>
-            <p id="hierarchy-status" class="wv-readout" role="status">Local files are read in your browser without uploading them.</p>
-        </div>
-        <p class="wv-disclosure">The diagram represents saved sheet relationships, not a complete electrical netlist. Missing, ambiguous, cyclic or truncated links remain labelled. SVG export contains the diagram only; it does not export the original native design files.</p>
-    </section>
+    {% include webview-hierarchy-demo.html %}
 
     <section id="embed" class="wv-section" aria-labelledby="embed-title">
         <div class="wv-section-heading"><div><p class="wv-eyebrow">02 / Simple</p><h2 id="embed-title">A board in a blog post.</h2></div><p>Keep the article simple. Let the drawing do the explaining.</p></div>
@@ -204,6 +195,7 @@ await viewer.load('https://wayri.github.io/assets/demos/public-hardware/olimex-p
 <script src="{{ '/assets/js/kicad-webview-product.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 <script src="{{ '/assets/js/kicad-webview-workspace.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 <script src="{{ '/assets/js/kicad-webview-capabilities.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+<script src="{{ '/assets/js/webview-hierarchy-demo.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 
 <script src="{{ '/assets/js/webview-public-examples.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 

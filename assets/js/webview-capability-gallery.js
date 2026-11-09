@@ -158,9 +158,11 @@
       }
       else if (key === 'hierarchy') {
         const host = pane(); host.className = 'wv-gallery-pane'; const tree = own(ctx, new api.ProjectTree(host, { theme: theme() })); ctx.themed = tree;
-        await tree.loadFiles((await project.files()).filter(f => f.path.endsWith('.kicad_sch')));
+        const response = await fetch('/assets/demos/public-hardware/marble-hierarchy.json', { signal: ctx.abort.signal, credentials: 'omit' }); if (!response.ok) throw Error('Marble hierarchy could not load.'); const snapshot = await response.json(); if (current !== ctx) return; tree.setHierarchy(snapshot.hierarchy);
         button(ctx, 'IRCA single sheet', async () => tree.loadFiles((await project.files()).filter(f => f.path.endsWith('.kicad_sch'))));
-        button(ctx, 'Marble full schematic hierarchy', async () => { await tree.load(marble, { signal: ctx.abort.signal }); message(ctx, 'Full saved Marble schematic hierarchy. Drawings load on request; CERN-OHL-1.2 applies to the upstream hardware.'); });
+        button(ctx, 'Marble full schematic hierarchy', () => tree.setHierarchy(snapshot.hierarchy));
+        const navigation = element('a', 'Open hierarchy and sheet navigation ↗'); navigation.href = '/assets/demos/hierarchy.html';
+        listen(ctx, tree, 'select', event => message(ctx, 'Selected ' + event.detail.node.path + '. Open the hierarchy navigation demo to view the actual sheet.'));
         button(ctx, 'Expand', () => tree.expandAll()); button(ctx, 'Collapse', () => tree.collapseAll());
         button(ctx, 'Export SVG', () => { const url = URL.createObjectURL(new Blob([tree.toSVG()], { type: 'image/svg+xml' })); const a = document.createElement('a'); a.href = url; a.download = 'project-hierarchy.svg'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); });
       }

@@ -92,32 +92,42 @@ Avoid concurrent direct loads while a slide transition is in progress. Dispose t
 
 ## Show a sheet hierarchy
 
+[Try the complete Marble sheet tree](/assets/demos/hierarchy.html): expand nested branches, select any available root or subsheet to open its actual schematic, switch to IRCA or local files, and export SVG. The initial tree is an 18 KB snapshot generated from all 25 pinned schematic sources. A selected schematic is fetched only when opened. [Snapshot and source hashes](/assets/demos/public-hardware/marble-hierarchy.json) are public.
+
+
 The tree loads listed schematic sources independently of a PCB/WebGL viewer. SVG export contains the bounded diagram, not the native schematic source or an electrical netlist.
 
 ```html
 <div id="tree" style="height:60dvh;min-height:360px"></div>
+<div id="sheet" style="height:500px"></div>
 <button id="expand" type="button" disabled>Expand all</button>
 <button id="save" type="button" disabled>Download diagram SVG</button>
 <p id="status" role="status"></p>
 <script type="module">
-import { ProjectTree } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
-const tree = new ProjectTree('#tree', { theme:'dark' });
+import { ProjectTree, Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
+const project = 'https://wayri.github.io/assets/demos/public-hardware/marble-project.json';
+const viewer = new Viewer('#sheet', { theme:'dark' });
+const tree = new ProjectTree('#tree', { theme:'dark',
+  onSelect: node => viewer.load(project, { file:node.path, view:'schematic' })
+});
 const expand = document.querySelector('#expand'), save = document.querySelector('#save');
-window.addEventListener('pagehide', () => tree.dispose(), { once:true });
+window.addEventListener('pagehide', () => { tree.dispose(); viewer.dispose(); }, { once:true });
 try {
-  if (await tree.load('https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json')) {
+  if (await tree.load(project, { root:'Marble.kicad_sch' })) {
     expand.disabled = save.disabled = false;
   }
 } catch (error) { document.querySelector('#status').textContent = error.message; }
 expand.addEventListener('click', () => tree.expandAll());
 save.addEventListener('click', () => {
   const url = URL.createObjectURL(new Blob([tree.toSVG()], { type:'image/svg+xml' }));
-  const link = document.createElement('a'); link.href = url; link.download = 'olimex-hierarchy.svg';
+  const link = document.createElement('a'); link.href = url; link.download = 'marble-hierarchy.svg';
   document.body.append(link); link.click(); link.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 </script>
 ```
+
+The `onSelect` callback opens the selected saved sheet in the independent viewer. Omit the sheet viewer and callback for a diagram alone. `load` reads the listed schematic sources; the website’s fast initial preview instead uses `setHierarchy` with its disclosed source-derived snapshot.
 
 Use a complete manifest or file bundle to resolve child sheets. A direct root schematic URL can show its child references as missing. See [hierarchy reference](/kicad-webview/docs/api-utilities/).
 
@@ -219,6 +229,7 @@ The [drawing provenance](/assets/demos/public-hardware/PROVENANCE.json) and [mod
 
 ## Current website demo pages
 
+- [Root and subsheet hierarchy with sheet navigation](/assets/demos/hierarchy.html)
 - [IRCA, OLIMEX and Marble viewer](/assets/demos/direct.html)
 - [Responsive iframe viewer](/assets/demos/embed.html)
 - [Virtual controls on IRCA models](/assets/demos/model-interaction.html)

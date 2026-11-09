@@ -1,0 +1,18 @@
+.wv-hierarchy-layout{display:grid;grid-template-columns:minmax(0,1fr);min-width:0}
+.wv-hierarchy-layout[data-preview=true]{grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr)}
+.wv-hierarchy-layout .wv-hierarchy-board{height:500px;min-width:0;overflow:auto}
+.wv-hierarchy-preview{min-width:0;border-left:1px solid var(--rule)}
+.wv-hierarchy-preview[hidden]{display:none}
+.wv-hierarchy-preview>header{padding:12px;border-bottom:1px solid var(--rule);overflow-wrap:anywhere}
+.wv-hierarchy-preview h3{margin:0;font-size:18px}.wv-hierarchy-preview header p{font-size:12px;color:var(--muted);margin:6px 0}
+.wv-hierarchy-preview header a{display:inline-flex;align-items:center;min-height:44px;font-size:13px;margin-left:12px}
+#hierarchy-sheet-viewer{height:390px;min-width:0;overflow:hidden}
+.wv-hierarchy-preview [role=status],#hierarchy-status{padding:8px 12px;margin:0;font-size:13px;overflow-wrap:anywhere}
+.wv-hierarchy-picker{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:12px;border-bottom:1px solid var(--rule);font-size:13px}
+.wv-hierarchy-picker select{max-width:100%;min-width:0;min-height:44px;font:16px system-ui;padding:8px;background:var(--paper);color:var(--body-ink);border:1px solid var(--rule);border-radius:4px}
+.wv-hierarchy-controls button[aria-pressed=true]{border-color:var(--link);box-shadow:inset 3px 0 var(--link)}
+.wv-hierarchy-controls :is(button,.wv-file),.wv-hierarchy-preview button{min-height:44px}
+@media(max-width:800px){.wv-hierarchy-layout[data-preview=true]{grid-template-columns:minmax(0,1fr)}.wv-hierarchy-preview{border-left:0;border-top:1px solid var(--rule)}.wv-hierarchy-layout .wv-hierarchy-board{height:420px}}
+@media(max-width:480px){.wv-hierarchy-picker select{width:100%}.wv-hierarchy-preview header a{margin-left:0}#hierarchy-sheet-viewer{height:380px}}
+
+.wv-hierarchy-page #hierarchy>.wv-section-heading,.wv-hierarchy-page #hierarchy>.wv-section-intro{display:none}.wv-hierarchy-page #hierarchy{padding-top:1.2rem}.wv-hierarchy-page .wv-actions{margin-bottom:0}

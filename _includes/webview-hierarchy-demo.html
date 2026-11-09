@@ -1,0 +1,15 @@
+<section id="hierarchy" class="wv-section" aria-labelledby="hierarchy-title">
+  <div class="wv-section-heading"><div><p class="wv-eyebrow">Independent project tree</p><h2 id="hierarchy-title">Follow every sheet.</h2></div><p>Root, nested subsheets and repeated sheet instances.</p></div>
+  <p class="wv-section-intro">Explore Marble’s complete saved hierarchy, or compare IRCA’s single sheet. Expand a branch or select a sheet to open its actual schematic. The diagram works independently of the PCB and 3D viewers.</p>
+  <div class="wv-hierarchy-frame">
+    <div class="wv-hierarchy-controls"><button id="hierarchy-marble" type="button" aria-pressed="false">Marble multi-sheet project</button><button id="hierarchy-start" type="button" aria-pressed="false">IRCA single sheet</button><label class="wv-file">Open local schematics<input id="hierarchy-files" type="file" multiple accept=".kicad_sch,.zip" aria-label="Open local schematics or ZIP"></label><button id="hierarchy-expand" type="button" disabled>Expand all</button><button id="hierarchy-collapse" type="button" disabled>Collapse all</button><button id="hierarchy-export" type="button" disabled>Export diagram SVG</button></div>
+    <p id="hierarchy-status" class="wv-readout" role="status">Opening the source-derived Marble sheet tree…</p>
+    <label class="wv-hierarchy-picker">Open a saved sheet<select id="hierarchy-sheet" disabled><option>Loading hierarchy…</option></select></label>
+    <div id="hierarchy-layout" class="wv-hierarchy-layout" data-preview="false">
+      <div id="hierarchy-board" class="wv-hierarchy-board" aria-label="Schematic project hierarchy"></div>
+      <section id="hierarchy-preview" class="wv-hierarchy-preview" aria-labelledby="hierarchy-sheet-title" hidden><header><h3 id="hierarchy-sheet-title">Selected sheet</h3><p id="hierarchy-trail"></p><button id="hierarchy-fit" type="button">Fit selected sheet</button><a id="hierarchy-open" href="{{ '/assets/demos/direct.html' | relative_url }}" hidden>Open sheet in full viewer ↗</a></header><div id="hierarchy-sheet-viewer" aria-label="Selected schematic sheet"></div><p id="hierarchy-sheet-status" role="status"></p></section>
+    </div>
+  </div>
+  <p class="wv-disclosure">Marble: 25 schematic files, 26 saved sheet instances at revision <code>a426777</code> · CERN-OHL-1.2 · The Regents of the University of California through LBNL and upstream contributors. <a href="https://github.com/BerkeleyLab/Marble/blob/a426777d92c0f22a546d4740b419a3937e0c1f90/README.md">Full credits and source ↗</a> · <a href="{{ '/assets/demos/public-hardware/marble-hierarchy.json' | relative_url }}">Hierarchy provenance</a> · <a href="{{ '/assets/demos/hierarchy.html' | relative_url }}">Open dedicated hierarchy demo ↗</a></p>
+  <p class="wv-disclosure">The lightweight diagram contains saved sheet relationships, not an electrical netlist. A selected Marble schematic is fetched from its pinned public source. Local files stay in your browser. Missing, cyclic and ambiguous links remain labelled. SVG export contains the diagram only.</p>
+</section>

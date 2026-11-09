@@ -1,0 +1,515 @@
+{
+  "schema": "wayri.hierarchy-demo/v1",
+  "sourceRevision": "a426777d92c0f22a546d4740b419a3937e0c1f90",
+  "source": "https://github.com/BerkeleyLab/Marble/tree/a426777d92c0f22a546d4740b419a3937e0c1f90/design",
+  "license": "CERN-OHL-1.2",
+  "credit": "The Regents of the University of California through LBNL and upstream contributors; see the pinned repository README for full credits.",
+  "generatorSource": "https://github.com/wayri/kicad-webview/tree/ede2f0433248b3fd337049ccb529731acc658462",
+  "sources": [
+    {
+      "path": "ETH_PHY.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/ETH_PHY.kicad_sch",
+      "bytes": 571658,
+      "sha256": "cf249ad7faddd4b25b0b0f22825dccdc1d073cd9fe273deff95743b2e958d2da"
+    },
+    {
+      "path": "FMC_1.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FMC_1.kicad_sch",
+      "bytes": 4143249,
+      "sha256": "27d2d6334eee8acd1eca8065c74b8aca38d723ec54355076790be565bac07d3d"
+    },
+    {
+      "path": "FMC_2.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FMC_2.kicad_sch",
+      "bytes": 4170074,
+      "sha256": "efe36b4a987c3331fa2c4a96c0a0fb2936afeb63ebc37d603a1f007d1ee3686b"
+    },
+    {
+      "path": "FPGA_12_13.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA_12_13.kicad_sch",
+      "bytes": 306003,
+      "sha256": "f6e35ebb10b4de323aa7704af9c147d2be628a642de52b9f211aa3d5c4e10643"
+    },
+    {
+      "path": "FPGA_14_15.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA_14_15.kicad_sch",
+      "bytes": 515571,
+      "sha256": "eba6656053af1a44e338a46722650ce297189e336b5fa87cb283cbbbde8c27fb"
+    },
+    {
+      "path": "FPGA_32_16.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA_32_16.kicad_sch",
+      "bytes": 286256,
+      "sha256": "06e86453a80fb810567b529f45428f63dfe0ade8881576338bd109617a055a91"
+    },
+    {
+      "path": "FPGA_33_34.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA_33_34.kicad_sch",
+      "bytes": 538873,
+      "sha256": "1b8d9691a00a21cf8a94ff032ffc3dabde18f1a9022cbae749650ee15d2029f9"
+    },
+    {
+      "path": "FPGA_MGT.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA_MGT.kicad_sch",
+      "bytes": 268115,
+      "sha256": "d297e08f22977b8f1f2ef4b75d88417351f82b6d6c35ab345c908b851df4e45d"
+    },
+    {
+      "path": "FPGA_PWR&MISC.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA_PWR%26MISC.kicad_sch",
+      "bytes": 1305063,
+      "sha256": "58f72e5fa99ddf562ec1daedeac42c0c0cbe91e8279893047f0e6cca1ded1092"
+    },
+    {
+      "path": "FPGA.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA.kicad_sch",
+      "bytes": 282581,
+      "sha256": "9a036a7c909705ad6758b97f6374fa74d0d21f33e06da7aa691fc92cf1b0da52"
+    },
+    {
+      "path": "GBX_MUX.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/GBX_MUX.kicad_sch",
+      "bytes": 296141,
+      "sha256": "9407bfc6d9e390178edde3b7be9961557ae04ab3a8cf6e6ce3078f4881560844"
+    },
+    {
+      "path": "I2C_MUX.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/I2C_MUX.kicad_sch",
+      "bytes": 353375,
+      "sha256": "c217ffc9be452cd244afe7ced055c0fb39081710b45a8e31cd3d1865be7c40eb"
+    },
+    {
+      "path": "JTAG.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/JTAG.kicad_sch",
+      "bytes": 506348,
+      "sha256": "5595f465df90f5e9833a1b71ec82d0bb6335bb13261a8e6bc5e5b0e5a605daf1"
+    },
+    {
+      "path": "LTM4673.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/LTM4673.kicad_sch",
+      "bytes": 1166913,
+      "sha256": "57a38d551fb41c4356c5a9956d519bbb0c93704ee63e9f6349a823240b288b82"
+    },
+    {
+      "path": "Marble.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/Marble.kicad_sch",
+      "bytes": 3004697,
+      "sha256": "a77cfce283505f4e371f008014901aaffbe3599ebdfdba5e9b1b4cd485298ab3"
+    },
+    {
+      "path": "MGT_CLK_Crosspoint.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/MGT_CLK_Crosspoint.kicad_sch",
+      "bytes": 513104,
+      "sha256": "9b108220419e3be3f1b6f2c85c7fca1dda2227da3dc9b7dc87fa434530b67a08"
+    },
+    {
+      "path": "MMC.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/MMC.kicad_sch",
+      "bytes": 607402,
+      "sha256": "a81c928188af24bfb15bf33c5cacefdb870736368af5d30a2232c497efec6a00"
+    },
+    {
+      "path": "PMOD.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/PMOD.kicad_sch",
+      "bytes": 150577,
+      "sha256": "982e319298439e98b6b12f5b65b3f5cb29c6d7746c6799431bfcf2acdabae09f"
+    },
+    {
+      "path": "Power_SW.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/Power_SW.kicad_sch",
+      "bytes": 810729,
+      "sha256": "a04b5d1a0c651bdaece8bbb67fce016130a0962d487e9d20750b7771a4abb76e"
+    },
+    {
+      "path": "Power.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/Power.kicad_sch",
+      "bytes": 743717,
+      "sha256": "47d6893581049e57da91a42701974b17764e46c870b54828bd57ba3a5632baf7"
+    },
+    {
+      "path": "QSFP.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/QSFP.kicad_sch",
+      "bytes": 231472,
+      "sha256": "1af0d5da5bdba59139c361b1230f43ec8f270388cd435da047331730c23a45fb"
+    },
+    {
+      "path": "SDRAM.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/SDRAM.kicad_sch",
+      "bytes": 397046,
+      "sha256": "2e6103a0fde60e973785375758fe89cca0c5c6d46a4353e7557bce7b07ee3d57"
+    },
+    {
+      "path": "Thermometers.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/Thermometers.kicad_sch",
+      "bytes": 215689,
+      "sha256": "4e7e6fc3ffb94bf36dde6c8dbd029236c9a029fd1e6b008826cdb48ac32816ef"
+    },
+    {
+      "path": "USB.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/USB.kicad_sch",
+      "bytes": 834194,
+      "sha256": "f29a9bd2498c910812ab124a9772a0cfddc726a7906590d5929d4aef9f3377d7"
+    },
+    {
+      "path": "WhiteRabbit.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/WhiteRabbit.kicad_sch",
+      "bytes": 567211,
+      "sha256": "757fc60140876cd17140be570fa044ea15714f94e63628815fa11e4ff916df0b"
+    }
+  ],
+  "hierarchy": {
+    "schema": "kicad-webview.hierarchy/v1",
+    "rootPath": "Marble.kicad_sch",
+    "rootReason": "explicit",
+    "roots": [
+      {
+        "id": "r0",
+        "path": "Marble.kicad_sch",
+        "file": "Marble.kicad_sch",
+        "name": "Marble",
+        "uuid": "4fbc3477-4c44-4feb-9182-76b9b00bd5e9",
+        "status": "ok",
+        "children": [
+          {
+            "id": "r0/s0",
+            "path": "PMOD.kicad_sch",
+            "file": "PMOD.kicad_sch",
+            "name": "PMOD",
+            "uuid": "00000000-0000-0000-0000-00005bceda2c",
+            "status": "ok",
+            "children": []
+          },
+          {
+            "id": "r0/s1",
+            "path": "MMC.kicad_sch",
+            "file": "MMC.kicad_sch",
+            "name": "MMC",
+            "uuid": "00000000-0000-0000-0000-00005bceda39",
+            "status": "ok",
+            "children": []
+          },
+          {
+            "id": "r0/s2",
+            "path": "I2C_MUX.kicad_sch",
+            "file": "I2C_MUX.kicad_sch",
+            "name": "I2C_MUX",
+            "uuid": "00000000-0000-0000-0000-00005bceda3d",
+            "status": "ok",
+            "children": []
+          },
+          {
+            "id": "r0/s3",
+            "path": "ETH_PHY.kicad_sch",
+            "file": "ETH_PHY.kicad_sch",
+            "name": "ETH_PHY",
+            "uuid": "00000000-0000-0000-0000-00005bceda59",
+            "status": "ok",
+            "children": []
+          },
+          {
+            "id": "r0/s4",
+            "path": "FMC_1.kicad_sch",
+            "file": "FMC_1.kicad_sch",
+            "name": "FMC_1",
+            "uuid": "00000000-0000-0000-0000-00005bd31f9a",
+            "status": "ok",
+            "children": []
+          },
+          {
+            "id": "r0/s5",
+            "path": "FMC_2.kicad_sch",
+            "file": "FMC_2.kicad_sch",
+            "name": "FMC_2",
+            "uuid": "00000000-0000-0000-0000-00005bd31f9f",
+            "status": "ok",
+            "children": []
+          },
+          {
+            "id": "r0/s6",
+            "path": "SDRAM.kicad_sch",
+            "file": "SDRAM.kicad_sch",
+            "name": "SDRAM",
+            "uuid": "00000000-0000-0000-0000-00005bd32060",
+            "status": "ok",
+            "children": []
+          },
+          {
+            "id": "r0/s7",
+            "path": "WhiteRabbit.kicad_sch",
+            "file": "WhiteRabbit.kicad_sch",
+            "name": "WhiteRabbit",
+            "uuid": "00000000-0000-0000-0000-00005c16bf13",
+            "status": "ok",
+            "children": []
+          },
+          {
+            "id": "r0/s8",
+            "path": "Power.kicad_sch",
+            "file": "Power.kicad_sch",
+            "name": "Power",
+            "uuid": "00000000-0000-0000-0000-00005c16bf8e",
+            "status": "ok",
+            "children": [
+              {
+                "id": "r0/s8/s0",
+                "path": "Power_SW.kicad_sch",
+                "file": "Power_SW.kicad_sch",
+                "name": "Power_SW",
+                "uuid": "00000000-0000-0000-0000-00005db9b7e6",
+                "status": "ok",
+                "children": [
+                  {
+                    "id": "r0/s8/s0/s0",
+                    "path": "LTM4673.kicad_sch",
+                    "file": "LTM4673.kicad_sch",
+                    "name": "LTM4673",
+                    "uuid": "e8444021-e619-4011-b5ed-da4f16c8710a",
+                    "status": "ok",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "r0/s9",
+            "path": "USB.kicad_sch",
+            "file": "USB.kicad_sch",
+            "name": "USB",
+            "uuid": "00000000-0000-0000-0000-00005c16c03c",
+            "status": "ok",
+            "children": []
+          },
+          {
+            "id": "r0/s10",
+            "path": "FPGA.kicad_sch",
+            "file": "FPGA.kicad_sch",
+            "name": "FPGA",
+            "uuid": "00000000-0000-0000-0000-00005c907554",
+            "status": "ok",
+            "children": [
+              {
+                "id": "r0/s10/s0",
+                "path": "FPGA_PWR&MISC.kicad_sch",
+                "file": "FPGA_PWR&MISC.kicad_sch",
+                "name": "FPGA_PWR&MISC",
+                "uuid": "00000000-0000-0000-0000-00005c417bcb",
+                "status": "ok",
+                "children": []
+              },
+              {
+                "id": "r0/s10/s1",
+                "path": "FPGA_33_34.kicad_sch",
+                "file": "FPGA_33_34.kicad_sch",
+                "name": "FPGA_33_34",
+                "uuid": "00000000-0000-0000-0000-00005c721515",
+                "status": "ok",
+                "children": []
+              },
+              {
+                "id": "r0/s10/s2",
+                "path": "FPGA_32_16.kicad_sch",
+                "file": "FPGA_32_16.kicad_sch",
+                "name": "FPGA_32_16",
+                "uuid": "00000000-0000-0000-0000-00005caac367",
+                "status": "ok",
+                "children": []
+              },
+              {
+                "id": "r0/s10/s3",
+                "path": "FPGA_14_15.kicad_sch",
+                "file": "FPGA_14_15.kicad_sch",
+                "name": "FPGA_14_15",
+                "uuid": "00000000-0000-0000-0000-00005cc8cb69",
+                "status": "ok",
+                "children": []
+              },
+              {
+                "id": "r0/s10/s4",
+                "path": "FPGA_MGT.kicad_sch",
+                "file": "FPGA_MGT.kicad_sch",
+                "name": "FPGA_MGT",
+                "uuid": "00000000-0000-0000-0000-00005dca928c",
+                "status": "ok",
+                "children": [
+                  {
+                    "id": "r0/s10/s4/s0",
+                    "path": "GBX_MUX.kicad_sch",
+                    "file": "GBX_MUX.kicad_sch",
+                    "name": "GBX_MUX",
+                    "uuid": "00000000-0000-0000-0000-00005e003981",
+                    "status": "ok",
+                    "children": []
+                  },
+                  {
+                    "id": "r0/s10/s4/s1",
+                    "path": "MGT_CLK_Crosspoint.kicad_sch",
+                    "file": "MGT_CLK_Crosspoint.kicad_sch",
+                    "name": "MGT_CLK_Crosspoint",
+                    "uuid": "00000000-0000-0000-0000-00005ea81fb7",
+                    "status": "ok",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "r0/s10/s5",
+                "path": "FPGA_12_13.kicad_sch",
+                "file": "FPGA_12_13.kicad_sch",
+                "name": "FPGA_12_13",
+                "uuid": "00000000-0000-0000-0000-00005f569040",
+                "status": "ok",
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "r0/s11",
+            "path": "JTAG.kicad_sch",
+            "file": "JTAG.kicad_sch",
+            "name": "JTAG",
+            "uuid": "00000000-0000-0000-0000-00005ca40231",
+            "status": "ok",
+            "children": []
+          },
+          {
+            "id": "r0/s12",
+            "path": "Thermometers.kicad_sch",
+            "file": "Thermometers.kicad_sch",
+            "name": "Thermometers",
+            "uuid": "00000000-0000-0000-0000-00005d05a99e",
+            "status": "ok",
+            "children": []
+          },
+          {
+            "id": "r0/s13",
+            "path": "QSFP.kicad_sch",
+            "file": "QSFP.kicad_sch",
+            "name": "QSFP1",
+            "uuid": "00000000-0000-0000-0000-00005e7fbe93",
+            "status": "ok",
+            "children": []
+          },
+          {
+            "id": "r0/s14",
+            "path": "QSFP.kicad_sch",
+            "file": "QSFP.kicad_sch",
+            "name": "QSFP2",
+            "uuid": "00000000-0000-0000-0000-000060326218",
+            "status": "ok",
+            "children": []
+          }
+        ],
+        "role": "root"
+      }
+    ],
+    "files": [
+      {
+        "path": "ETH_PHY.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "FMC_1.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "Marble.kicad_sch",
+        "sheetCount": 15
+      },
+      {
+        "path": "FPGA_12_13.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "FPGA.kicad_sch",
+        "sheetCount": 6
+      },
+      {
+        "path": "FMC_2.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "FPGA_32_16.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "FPGA_14_15.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "FPGA_33_34.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "FPGA_MGT.kicad_sch",
+        "sheetCount": 2
+      },
+      {
+        "path": "GBX_MUX.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "FPGA_PWR&MISC.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "JTAG.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "I2C_MUX.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "LTM4673.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "PMOD.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "MGT_CLK_Crosspoint.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "MMC.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "QSFP.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "Power.kicad_sch",
+        "sheetCount": 1
+      },
+      {
+        "path": "Power_SW.kicad_sch",
+        "sheetCount": 1
+      },
+      {
+        "path": "USB.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "Thermometers.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "SDRAM.kicad_sch",
+        "sheetCount": 0
+      },
+      {
+        "path": "WhiteRabbit.kicad_sch",
+        "sheetCount": 0
+      }
+    ],
+    "warnings": [],
+    "stats": {
+      "files": 25,
+      "instances": 26,
+      "truncated": false
+    }
+  }
+}
