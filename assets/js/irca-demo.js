@@ -63,14 +63,14 @@
         }
     }
     syncPresentation();
-    let rotating = false, rotationFrame = 0, lastRotation = 0, visible = false;
+    let rotating = false, rotationFrame = 0, lastRotation = 0, visible = false, pageSuspended = false;
     function stopRotation() {
         rotating = false; cancelAnimationFrame(rotationFrame); rotationFrame = 0; lastRotation = 0;
         rotate.textContent = 'Rotate board'; rotate.setAttribute('aria-pressed', 'false');
     }
     function rotationTick(now) {
         rotationFrame = 0;
-        if (!rotating || disposed || document.hidden || !visible || viewer?.view !== '3d' || mode !== 'assembly') { lastRotation = 0; return; }
+        if (!rotating || disposed || pageSuspended || document.hidden || !visible || viewer?.view !== '3d' || mode !== 'assembly') { lastRotation = 0; return; }
         if (productPreview && !expanded) setProductPose(6 * Math.sin(now * .00025));
         else if (lastRotation) viewer.rotate3D('left', Math.min(now - lastRotation, 80) * .008);
         lastRotation = now; rotationFrame = requestAnimationFrame(rotationTick);
@@ -234,16 +234,36 @@
     for (const event of ['pointerdown', 'wheel', 'keydown']) stage.addEventListener(event, () => { carousel?.pause(); stopRotation(); }, { passive: true });
     const observer = new IntersectionObserver(entries => {
         visible = entries.some(entry => entry.isIntersecting);
-        if (visible) {
+        if (visible && !pageSuspended) {
             if (!viewer && !loading && !navigator.connection?.saveData) choose(mode);
             else if (rotating && !rotationFrame && !document.hidden) rotationFrame = requestAnimationFrame(rotationTick);
         } else { cancelAnimationFrame(rotationFrame); rotationFrame = 0; lastRotation = 0; }
     }, { threshold: .2 }); observer.observe(host);
     document.addEventListener('visibilitychange', () => {
-        if (document.hidden) { cancelAnimationFrame(rotationFrame); rotationFrame = 0; lastRotation = 0; }
+        if (document.hidden || pageSuspended) { cancelAnimationFrame(rotationFrame); rotationFrame = 0; lastRotation = 0; }
         else if (rotating && visible && !rotationFrame) rotationFrame = requestAnimationFrame(rotationTick);
     });
     reducedMotion.addEventListener('change', event => { if (event.matches) stopRotation(); });
     window.addEventListener('themeChanged', () => viewer?.setTheme(theme()));
-    window.addEventListener('pagehide', () => { disposed = true; stopRotation(); observer.disconnect(); carousel?.dispose(); screen?.dispose(); viewer?.dispose(); }, { once: true });
+    window.addEventListener('pagehide', event => {
+        // Back/Forward cache keeps this document and its event handlers alive.
+        // Destroying the viewer here would restore an empty, permanently disposed stage.
+        if (event.persisted) {
+            pageSuspended = true;
+            cancelAnimationFrame(rotationFrame); rotationFrame = 0; lastRotation = 0;
+            carousel?.pause(); screen?.exit();
+            return;
+        }
+        disposed = true; stopRotation(); observer.disconnect(); carousel?.dispose(); screen?.dispose(); viewer?.dispose();
+    });
+    window.addEventListener('pageshow', event => {
+        if (!event.persisted || disposed) return;
+        pageSuspended = false;
+        if (viewer) {
+            viewer.setTheme(theme());
+            const camera = viewer.getCamera3D();
+            if (camera) viewer.setCamera3D(camera);
+        } else if (!loading && !navigator.connection?.saveData) choose(mode);
+        if (rotating && visible && !document.hidden && !rotationFrame) rotationFrame = requestAnimationFrame(rotationTick);
+    });
 })();
