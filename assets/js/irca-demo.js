@@ -30,6 +30,15 @@
     const productPreview = Boolean(host.closest('.lab-hero'));
     const more = $('.irca-more');
     let expanded = !productPreview;
+    let productCamera, productAspect = 1;
+    function setProductPose(yaw = 0) {
+        if (!productPreview || expanded || !productCamera || viewer?.view !== '3d' || host.classList.contains('is-screen-active')) return;
+        const frame = screen?.getPresentationFrame();
+        if (!frame) return;
+        const viewport = stage.getBoundingClientRect();
+        const aspect = Math.max(.1, viewport.width / Math.max(1, viewport.height));
+        viewer.setCamera3D(IRCAProductCamera.pose(frame, productCamera, yaw, 18, Math.max(1, productAspect / aspect)));
+    }
     function syncPresentation() {
         host.classList.toggle('is-advanced', expanded);
         more.hidden = !productPreview;
@@ -62,12 +71,14 @@
     function rotationTick(now) {
         rotationFrame = 0;
         if (!rotating || disposed || document.hidden || !visible || viewer?.view !== '3d' || mode !== 'assembly') { lastRotation = 0; return; }
-        if (lastRotation) viewer.rotate3D('left', Math.min(now - lastRotation, 80) * .008);
+        if (productPreview && !expanded) setProductPose(6 * Math.sin(now * .00025));
+        else if (lastRotation) viewer.rotate3D('left', Math.min(now - lastRotation, 80) * .008);
         lastRotation = now; rotationFrame = requestAnimationFrame(rotationTick);
     }
     function startRotation() {
         if (!viewer || disposed || viewer.view !== '3d') return;
         viewer.setInspectorOpen(false); viewer.clearSelection();
+        setProductPose();
         carousel?.pause(); rotating = true; rotate.textContent = 'Pause rotation'; rotate.setAttribute('aria-pressed', 'true');
         if (!rotationFrame && visible && !document.hidden) rotationFrame = requestAnimationFrame(rotationTick);
     }
@@ -112,7 +123,7 @@
             viewer.addEventListener('ready', syncPresentation);
             screen = window.IRCAMiniScreen.attach(viewer, {
                 onInteract: () => { stopRotation(); carousel?.pause(); },
-                onReady: ready => { useScreen.disabled = cameraDemo.disabled = !ready; },
+                onReady: ready => { useScreen.disabled = cameraDemo.disabled = !ready; if (ready && !loading) setProductPose(); },
                 onStatus: text => { $('.irca-screen-status').textContent = text; },
                 onFocusChange: screenFocusChanged,
                 getViewport: () => stage.getBoundingClientRect()
@@ -147,6 +158,9 @@
             syncPresentation();
             const camera = viewer.getCamera3D();
             if (camera) viewer.setCamera3D({ ...camera, position: camera.position.map((value, index) => camera.target[index] + (value - camera.target[index]) * .48) });
+            productCamera = viewer.getCamera3D();
+            const viewport = stage.getBoundingClientRect(); productAspect = Math.max(.1, viewport.width / Math.max(1, viewport.height));
+            setProductPose();
             preview.hidden = true; start.hidden = true; inspect.textContent = 'Inspect ' + metadata.defaultPart;
             rotate.disabled = false;
             status.textContent = 'IRCA · 59 PCB parts. Slow rotation uses the viewer API; drag, zoom or inspect a component to pause.';
@@ -187,6 +201,7 @@
     modes.forEach(button => button.addEventListener('click', () => choose(button.dataset.ircaMode)));
     more.addEventListener('click', async () => {
         expanded = !expanded;
+        if (expanded) stopRotation();
         syncPresentation();
         if (!expanded) {
             screen?.exit();
@@ -202,7 +217,7 @@
     useScreen.addEventListener('click', () => screen?.focus());
     cameraDemo.addEventListener('click', () => screen?.showCamera());
     exitScreen.addEventListener('click', () => screen?.exit());
-    window.addEventListener('resize', () => screen?.reframe());
+    window.addEventListener('resize', () => { screen?.reframe(); setProductPose(); });
     document.addEventListener('keydown', event => {
         if (!host.classList.contains('is-screen-active')) return;
         if (event.key === 'Escape') { event.preventDefault(); event.stopImmediatePropagation(); screen?.exit(); }

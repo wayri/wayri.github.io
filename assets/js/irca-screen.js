@@ -66,7 +66,13 @@
                 viewer.removeEventListener('dispose', dispose);
             }
             viewer.addEventListener('dispose', dispose);
-            return { focus, exit, reframe, showCamera() { if (focus()) ui.show('camera'); }, dispose };
+            return { focus, exit, reframe,
+                getPresentationFrame() {
+                    if (!demo?.active || disposed) return null;
+                    const face = demo.getFace('site-screen');
+                    return face.normal ? {normal: [...face.normal], up: [...(face.up || [0, 1, 0])]} : null;
+                },
+                showCamera() { if (focus()) ui.show('camera'); }, dispose };
         }
     };
 })();
