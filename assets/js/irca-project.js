@@ -78,7 +78,7 @@
     window.IRCAProject = Object.freeze({
         ready, load, fabrication,
         files: async () => { await ready(); return reviewFiles.map(file => ({ ...file })); },
-        createViewer: (target, input = {}) => new KiCadWebView.Viewer(target, options(input)),
+        createViewer: (target, input = {}, Viewer = KiCadWebView.Viewer) => new Viewer(target, options(input)),
         createWorkspace: (target, input = {}) => new KiCadWebView.AdvancedKiCadViewer(target, options(input)),
         study: () => json('study-summary.json', 256 * 1024),
         analysis: () => json('analysis.json', 2 * 1024 * 1024)

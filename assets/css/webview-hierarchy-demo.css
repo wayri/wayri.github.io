@@ -16,3 +16,16 @@
 @media(max-width:480px){.wv-hierarchy-picker select{width:100%}.wv-hierarchy-preview header a{margin-left:0}#hierarchy-sheet-viewer{height:380px}}
 
 .wv-hierarchy-page #hierarchy>.wv-section-heading,.wv-hierarchy-page #hierarchy>.wv-section-intro{display:none}.wv-hierarchy-page #hierarchy{padding-top:1.2rem}.wv-hierarchy-page .wv-actions{margin-bottom:0}
+
+.wv-hierarchy-link-controls,.wv-hierarchy-part-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:12px;border-bottom:1px solid var(--rule)}
+.wv-hierarchy-link-controls label,.wv-hierarchy-part-controls label{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:13px;min-width:0}.wv-hierarchy-link-controls input[type=checkbox]{width:20px;height:20px;accent-color:var(--link)}
+.wv-hierarchy-link-status{padding:8px 12px;margin:0;font-size:13px;overflow-wrap:anywhere}.wv-hierarchy-part-controls[hidden],.wv-hierarchy-linked-grid[hidden]{display:none}
+.wv-hierarchy-link-controls :is(button,select),.wv-hierarchy-part-controls :is(button,input){min-height:44px;font:14px system-ui;max-width:100%;padding:8px;background:var(--paper);color:var(--body-ink);border:1px solid var(--rule);border-radius:4px}.wv-hierarchy-part-controls input{font-size:16px;min-width:0}
+.wv-hierarchy-part-controls>p,.wv-hierarchy-part-controls>div{flex-basis:100%}.wv-hierarchy-part-controls>p{margin:0;font-size:12px}.wv-hierarchy-part-controls>div{display:flex;gap:6px;max-height:160px;overflow:auto;flex-wrap:wrap}.wv-hierarchy-part-controls>div>button{text-align:left;font-size:12px;overflow-wrap:anywhere}
+.wv-hierarchy-linked-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--rule);border-top:1px solid var(--rule);min-width:0}.wv-hierarchy-linked-grid>article{min-width:0;background:var(--paper)}.wv-hierarchy-linked-grid h3{margin:0;padding:12px;font-size:16px}
+#hierarchy-pcb-viewer,#hierarchy-3d-viewer{height:440px;min-width:0;overflow:hidden}
+@media(max-width:800px){.wv-hierarchy-linked-grid{grid-template-columns:minmax(0,1fr)}#hierarchy-pcb-viewer,#hierarchy-3d-viewer{height:390px}.wv-hierarchy-link-controls>button,.wv-hierarchy-part-controls>button{flex:1 1 140px}.wv-hierarchy-part-controls label{flex-basis:100%;flex-direction:column;align-items:stretch}.wv-hierarchy-part-controls input{width:100%}}
+
+.wv-hierarchy-link-controls [hidden]{display:none}
+
+.wv-hierarchy-frame .wv-hierarchy-link-controls label{flex-direction:row}

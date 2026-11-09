@@ -131,6 +131,18 @@ The `onSelect` callback opens the selected saved sheet in the independent viewer
 
 Use a complete manifest or file bundle to resolve child sheets. A direct root schematic URL can show its child references as missing. See [hierarchy reference](/kicad-webview/docs/api-utilities/).
 
+## Link the hierarchy, PCB and 3D assembly
+
+In the [hierarchy demo](/assets/demos/hierarchy.html), choose **Link PCB and 3D**. The tree remains lightweight until you request the board; Marble’s PCB is approximately 44 MB. IRCA provides a smaller single-sheet example. Local files can include matching schematics and a PCB, or a ZIP containing both.
+
+- Select or search a component in the schematic, PCB or 3D inspector. Its counterparts highlight, the tree opens the correct saved sheet instance, and 3D centers the component while turning to its front or back mounting side.
+- Use the shared component search and **Try a front-mounted part** / **Try a back-mounted part** to compare the two sides. **Fit PCB and 3D** restores an overview.
+- Pause **Cross-selection** to explore each pane independently, clear the linked selection, or unload both board views. Properties stay closed on selection unless you enable them in an inspector. On narrow screens the panes stack vertically.
+
+This website integration uses the library’s published beta.2 <code>Viewer</code>, <code>linkViewers</code>, <code>selectPart(part, { locate:true })</code> and view-state APIs, plus a host-side [sheet/selection coordinator](/assets/js/webview-hierarchy-links.mjs) and [saved identity matcher](/assets/js/webview-project-selection.mjs). The schematic host resolves the selected sheet before forwarding selection; the library does not infer cross-file relationships from a component label alone. These small modules are available under MPL-2.0.
+
+Links require saved PCB footprint paths, symbol UUIDs and an exact sheet-instance context. Separate units of a physical component can link through verified native project annotations. Repeated sheet instances remain distinct. Objects with missing or ambiguous identities, power symbols and non-board items stay unlinked. The public Marble index is [bound to source revisions and SHA-256 hashes](/assets/demos/public-hardware/marble-part-links.json); its display PCB is checked before enabling links. Missing custom 3D models remain disclosed stand-ins, so selection does not imply complete model coverage.
+
 ## Paint an interactive virtual display
 
 Choose an actual planar component face after the project loads. This creates a **virtual graphic**, not firmware or an electrical display. Tap it to update a touch marker. The display does not navigate to arbitrary URLs supplied by the design.
