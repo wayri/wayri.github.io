@@ -40,6 +40,12 @@
 .lab-project-media { display:block; border-bottom:1px solid var(--border-color); background:#e8ecf0; }
 .lab-project-media img { display:block; width:100%; height:auto; aspect-ratio:16 / 10; object-fit:contain; }
 .lab-project-body { padding:24px; display:flex; flex-direction:column; flex:1; }
+.lab-project-heading { padding:20px 24px 16px; border-bottom:1px solid var(--border-color); }
+.lab-project .lab-project-heading h3 { margin:4px 0 0; }
+.lab-home :is(h2,h3) a { color:inherit; text-decoration:none; }
+.lab-home :is(h2,h3) a:hover { color:var(--accent-color); text-decoration:underline; text-underline-offset:4px; }
+.lab-home :is(h2,h3) a:focus-visible { outline:2px solid var(--accent-color); outline-offset:4px; }
+@media(max-width:760px) { .lab-project-heading { padding:18px 20px 14px; } }
 .lab-project h3 { font-size:26px; font-weight:600; line-height:1.2; letter-spacing:-.03em; margin:4px 0 12px; }
 .lab-project h3 small { display:inline-block; font-size:12px; font-weight:400; color:var(--muted-text); letter-spacing:0; }
 .lab-project-body>p:not(.lab-eyebrow):not(.lab-caption) { color:var(--muted-text); font-size:14px; line-height:1.75; margin:0 0 12px; }
