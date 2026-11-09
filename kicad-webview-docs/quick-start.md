@@ -6,9 +6,9 @@ permalink: /kicad-webview/docs/quick-start/
 doc_section: quick-start
 ---
 
-Choose the public npm package for a browser application, or use the no-build routes below. The npm option is pinned to `0.1.0-beta.3`; the existing website-hosted examples retain their immutable `0.1.0-beta.2` URLs. The no-build examples load the OLIMEX public project manifest, which references pinned original upstream sources under CERN-OHL-S-2.0. Models are not bundled; unresolved components use labelled stand-ins.
+Add KiCad WebView to a plain HTML page with a script tag or browser ES module. **No Node.js, npm installation or build step is needed.** You only need an HTTP(S) host, such as GitHub Pages. The npm and CDN examples use the published `0.1.0-beta.3` package; the archived website SDK retains its immutable `0.1.0-beta.2` URLs. The examples below load the credited OLIMEX public project, including its PCB, schematic and 28 supplied model assets. Unresolved models remain labelled stand-ins.
 
-## npm installation (0.1.0-beta.3)
+## npm installation
 
 Install the public [@wayrisignals/kicad-webview package](https://www.npmjs.com/package/@wayrisignals/kicad-webview):
 
@@ -37,7 +37,7 @@ Replace `/designs/project.zip` with your own supported design URL. Cross-origin 
 
 ## Classic script
 
-Save this as a webpage on an HTTP(S) host. Give the mount a real height; an empty container with no height cannot show the drawing.
+[Try the live classic-script example](/assets/demos/cdn-classic.html). Copy this complete page onto a static HTTP(S) host. The viewer is loaded directly from jsDelivr; the browser does all rendering. Give the mount a real height.
 
 ```html
 <!doctype html>
@@ -47,7 +47,7 @@ Save this as a webpage on an HTTP(S) host. Give the mount a real height; an empt
 <title>Interactive board</title>
 <div id="board" style="width:100%;height:70dvh;min-height:360px"></div>
 <p id="status" role="status">Opening design…</p>
-<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kicad-webview.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.1.0-beta.3/dist/kicad-webview.min.js"></script>
 <script>
 const viewer = new KiCadWebView.Viewer('#board', { theme: 'dark' });
 viewer.addEventListener('error', event => {
@@ -70,19 +70,20 @@ Replace the sample URL with your supported hosted drawing, project manifest or Z
 
 ## ES module
 
-Use the same container, then replace the classic scripts with this module. The filename `kivi-viewer.js` is the supplied full ES-module entry.
+[Try the live browser-module example](/assets/demos/cdn-module.html). Use the same container and status paragraph as above, then replace both classic script tags with this module. This imports directly from UNPKG; no package manager or bundler is involved.
 
 ```html
 <script type="module">
-import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
+import { Viewer } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.1.0-beta.3/dist/kivi-viewer.js';
 
 const viewer = new Viewer('#board', { theme: 'dark' });
 window.addEventListener('pagehide', () => viewer.dispose(), { once: true });
 try {
-  await viewer.load(
+  const loaded = await viewer.load(
     'https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json',
     { view: '3d' }
   );
+  if (loaded) document.querySelector('#status').textContent = 'Read-only project';
 } catch (error) {
   document.querySelector('#status').textContent = error.message;
 }
@@ -90,6 +91,23 @@ try {
 ```
 
 Use an HTTP(S) page rather than opening a module page directly with `file://`. Cross-origin modules and design files need appropriate CORS responses. See [hosting](/kicad-webview/docs/hosting/).
+
+## CDN links and self-hosting
+
+The following version-pinned files return JavaScript with cross-origin access enabled. Both CDN copies have been checked byte for byte against the published npm package.
+
+| Entry | jsDelivr | UNPKG |
+| --- | --- | --- |
+| Classic script | [kicad-webview.min.js](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.1.0-beta.3/dist/kicad-webview.min.js) | [kicad-webview.min.js](https://unpkg.com/@wayrisignals/kicad-webview@0.1.0-beta.3/dist/kicad-webview.min.js) |
+| Browser ES module | [kivi-viewer.js](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.1.0-beta.3/dist/kivi-viewer.js) | [kivi-viewer.js](https://unpkg.com/@wayrisignals/kicad-webview@0.1.0-beta.3/dist/kivi-viewer.js) |
+
+A script URL loads the library; the design URL supplied to viewer.load loads your PCB, schematic, project manifest or ZIP. Replace the OLIMEX URL with your own same-domain file, for example `/designs/project.zip`. A local webpage opened with file:// can have browser restrictions: serve it with your normal static website. Cross-origin designs need CORS.
+
+You can download and host the script yourself without installing Node.js. Keep the matching [license](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.1.0-beta.3/LICENSE), [third-party notices](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.1.0-beta.3/THIRD-PARTY-NOTICES.md) and [covered source](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.3) available as required by MPL-2.0. Pin the exact version rather than an unversioned latest URL.
+
+### Public hardware acknowledgement
+
+The OLIMEX ESP32-P4-DevKit Rev.D1 example is pinned to [revision 26705d3](https://github.com/OLIMEX/ESP32-P4-DevKit/tree/26705d36407a07324348927dfd30fbf4ffc1d94c), hardware licensed CERN-OHL-S-2.0. Credit belongs to OLIMEX Ltd and upstream contributors; no affiliation or endorsement is implied. The display PCB adapts model paths and equivalent legacy identity fields. See [source and conversion provenance](/assets/demos/public-hardware/PROVENANCE.json) and [model coverage](/assets/demos/public-hardware/MODEL-PROVENANCE.json).
 
 ## iframe
 

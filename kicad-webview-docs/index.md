@@ -1,14 +1,14 @@
 ---
 layout: webview-docs
 title: KiCad WebView documentation
-description: Versioned setup, user guides and API reference for KiCad WebView 0.1.0-beta.2.
+description: KiCad WebView setup, npm installation, direct browser scripts and versioned API reference.
 permalink: /kicad-webview/docs/
 doc_section: overview
 ---
 
 KiCad WebView is a browser library for read-only inspection of saved electronics designs. Embed a drawing, open a project workspace, or export a design and viewer into one HTML file. A static HTTPS host is enough; visitors need no npm or Node.js runtime.
 
-These pages document **release 0.1.0-beta.2**, source revision `86b375e5f5c3f2f04df6d6c44119c25b0b2b14ee`. The [release manifest](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) records file checksums and the classic script’s integrity hash. The [source repository](https://github.com/wayri/kicad-webview) and [matching release source](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.2) are public.
+The current npm and CDN release is **0.1.0-beta.3**, with the legacy footprint identity fix and matching [public source](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.3). [Use a direct script, browser module or npm package](/kicad-webview/docs/quick-start/). The API reference also covers the immutable hosted **0.1.0-beta.2 SDK**, source revision `86b375e5f5c3f2f04df6d6c44119c25b0b2b14ee`. The [release manifest](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) records file checksums and the classic script’s integrity hash. The [source repository](https://github.com/wayri/kicad-webview) and [matching release source](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.2) are public.
 
 ## Choose a starting point
 
@@ -37,6 +37,6 @@ The current [IRCA product demonstrations](/kicad-webview/) and [capability demos
 
 ## Availability and permission
 
-[Download the complete ZIP (2.82 MB)](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.2.zip), use a [classic script or ES module](/kicad-webview/docs/quick-start/), or open the [browser-only HTML exporter](/assets/demos/export.html). npm publication is not available for this release.
+[Download the complete ZIP (2.82 MB)](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.2.zip), use a [classic script or ES module](/kicad-webview/docs/quick-start/), or open the [browser-only HTML exporter](/assets/demos/export.html). The public [npm package](https://www.npmjs.com/package/@wayrisignals/kicad-webview) is available as `0.1.0-beta.3`. [Direct CDN examples](/kicad-webview/docs/quick-start/#classic-script) need no Node.js or npm installation. The npm package excludes legacy board fixtures and fixture-backed demo pages.
 
 The owner-authored software in this release is open source under **MPL-2.0**. Commercial use and integration do not need individual approval. Preserve license notices and provide the matching covered source as required when distributing builds. Design files and third-party components retain their separate terms. Read [License & release files](/kicad-webview/docs/license/) and [Acknowledgements](/kicad-webview/docs/acknowledgements/).
