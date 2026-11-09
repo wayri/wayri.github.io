@@ -37,7 +37,7 @@
         if (!frame) return;
         const viewport = stage.getBoundingClientRect();
         const aspect = Math.max(.1, viewport.width / Math.max(1, viewport.height));
-        viewer.setCamera3D(IRCAProductCamera.pose(frame, productCamera, yaw, 18, Math.max(1, productAspect / aspect)));
+        viewer.setCamera3D(IRCAProductCamera.pose(frame, productCamera, yaw, 18, .74 * Math.max(1, productAspect / aspect)));
     }
     function syncPresentation() {
         host.classList.toggle('is-advanced', expanded);
