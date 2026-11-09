@@ -1,0 +1,6 @@
+<nav class="wv-local-nav" aria-label="KiCad WebView breadcrumbs">
+  <a href="{{ '/kicad-webview/' | relative_url }}">KiCad WebView</a>
+  <span aria-hidden="true">/</span>
+  <a href="{{ '/kicad-webview/docs/' | relative_url }}">Documentation</a>
+  {% if include.section_url %}<span aria-hidden="true">/</span><a href="{{ include.section_url | relative_url }}">{{ include.section_label }}</a>{% endif %}
+</nav>

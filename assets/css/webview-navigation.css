@@ -1,0 +1,7 @@
+.wv-local-nav { display:flex; flex-wrap:wrap; align-items:center; gap:.25rem .65rem; margin:0; min-width:0; color:var(--link); font:12px/1.5 'Courier New',monospace; letter-spacing:.06em; text-transform:uppercase; overflow-wrap:anywhere; }
+.wv-local-nav a { display:inline-flex; align-items:center; min-height:36px; max-width:100%; color:var(--link); text-decoration:none; }
+.wv-local-nav a:hover { text-decoration:underline; text-underline-offset:.2em; }
+.wv-local-nav a:focus-visible { outline:2px solid var(--link); outline-offset:3px; }
+.wv-local-nav > span { color:var(--muted); }
+.wv-embed-page > .wv-local-nav { flex:none; padding:4px 12px; border-bottom:1px solid var(--rule); }
+@media(max-width:600px) { .wv-local-nav a { min-height:44px; } }
