@@ -48,8 +48,19 @@ geometry and arithmetic, not its predictive accuracy for a real site.
 
 Daily power uses 15-minute midpoint integration. Monthly and annual energy sum
 **every calendar day**, including leap day, with the same declared atmosphere.
-The visible selected-month daily curve uses its 15th day. Changing time/month
-redraws the relevant curve without recomputing the unchanged annual scenario.
+The comparison plot shows a midnight-to-midnight power curve for the 15th of
+every month, with the selected month emphasized. Individual month plots are
+available below it. Monthly bars sum all days in each month; the cumulative
+plot starts at zero and adds each actual calendar day's energy. Its final value
+equals the annual total. All use the same fixed panel orientation; applying a
+monthly suggested angle does not imply automatic seasonal panel adjustment.
+
+Annual and selected-month angle suggestions are calculated automatically and
+shown with explicit apply buttons. They remain scoped to the declared local
+model. Time-slider changes do not rerun the unchanged annual model or search.
+The layout uses the available tool-panel width for stacking controls and plots;
+wrapping labels share aligned input baselines. Charts have explicit visible
+heights and redraw after resizing or opening their optional panels.
 
 The angle study evaluates tilt 0–90° in 5° steps and north-clockwise azimuth
 0–345° in 15° steps, then refines ±5° tilt and ±15° azimuth at 1° around the best

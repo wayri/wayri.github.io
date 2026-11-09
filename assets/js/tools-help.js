@@ -155,7 +155,7 @@
         "steps": [
             "Set DC nameplate, inverter AC limit, temperature coefficient, losses, efficiency and year.",
             "Select a location on the map or enter latitude and longitude; choose month, tilt, azimuth and cell temperature.",
-            "Inspect the solar-time power and energy results; optionally search and apply model angles.",
+            "Read the automatic annual and selected-month panel-angle suggestions; use an angle button to apply one. Compare the 12 full-day curves, monthly energy and cumulative yearly energy below.",
             "For other evidence, import PVGIS JSON or supply interval CSV or monthly plane-of-array data in the advanced sections."
         ],
         "readout": "Local charts show a geometric clear-sky scenario; imported provider results and supplied-data calculations are separate.",

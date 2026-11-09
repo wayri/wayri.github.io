@@ -128,21 +128,24 @@
         const kwh = n => n === null ? 'Unknown' : n.toLocaleString(undefined, {maximumFractionDigits: 3}) + ' kWh';
         function settings() {return config({dcKw: num('dc'), acKw: num('ac'), dcLossPct: num('loss'), inverterEfficiencyPct: num('eff'), tempCoeffPct: num('gamma'), tempModel: el('temp-model').value, noctC: num('noct')});}
         function draw(canvas, bars, label, xLabels) {
-            const rect = canvas.getBoundingClientRect(), width = Math.max(280, rect.width), height = 250, dpr = Math.min(window.devicePixelRatio || 1, 3);
+            const rect = canvas.getBoundingClientRect();
+            if (!(rect.width > 0)) return;
+            const width = rect.width, height = 250, dpr = Math.min(window.devicePixelRatio || 1, 3);
             canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
             const ctx = canvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, width, height);
             const style = getComputedStyle(document.documentElement), accent = style.getPropertyValue('--accent-color').trim() || '#d4af37', ink = style.getPropertyValue('--muted-text').trim() || '#888';
-            const left = 52, right = width - 16, top = 24, bottom = height - 44;
+            const left = Math.min(52, width * .22), right = width - Math.min(16, width * .05), top = 24, bottom = height - 44;
             const maxX = Math.max(1, ...bars.map(b => b.end)), maxY = Math.max(.001, ...bars.map(b => b.value || 0));
             const px = x => left + x / maxX * (right - left), py = y => bottom - y / maxY * (bottom - top);
-            ctx.font = '11px system-ui'; ctx.fillStyle = ink; ctx.textAlign = 'right'; ctx.strokeStyle = ink; ctx.globalAlpha = .35;
+            ctx.font = '12px system-ui'; ctx.fillStyle = ink; ctx.textAlign = 'right'; ctx.strokeStyle = ink; ctx.globalAlpha = .35;
             for (let i = 0; i <= 4; i++) {const y = maxY * i / 4; ctx.beginPath(); ctx.moveTo(left, py(y)); ctx.lineTo(right, py(y)); ctx.stroke();}
             ctx.globalAlpha = 1;
-            for (let i = 0; i <= 4; i++) ctx.fillText((maxY * i / 4).toFixed(2), left - 5, py(maxY * i / 4) + 4);
-            ctx.textAlign = 'left'; ctx.fillText(label, left, 13);
+            for (let i = 0; i <= 4; i++) ctx.fillText((maxY * i / 4).toFixed(width < 320 && maxY * i / 4 >= 100 ? 0 : 2), left - 5, py(maxY * i / 4) + 4);
+            ctx.textAlign = 'left'; ctx.fillText(label, left, 13, Math.max(1, right - left));
             for (const bar of bars) if (bar.value !== null) {ctx.fillStyle = accent; ctx.globalAlpha = .65; ctx.fillRect(px(bar.start) + .5, py(bar.value), Math.max(.5, px(bar.end) - px(bar.start) - 1), bottom - py(bar.value));}
             ctx.globalAlpha = 1; ctx.fillStyle = ink; ctx.textAlign = 'center';
-            for (const item of xLabels) ctx.fillText(item.text, px(item.x), bottom + 18);
+            const ticks = width < 360 && xLabels.length > 6 ? xLabels.filter((_, i) => i % 2 === 0) : xLabels;
+            for (const item of ticks) ctx.fillText(item.text, px(item.x), bottom + 18);
         }
         function redraw() {
             if (!el('power-chart')) return;
@@ -232,7 +235,7 @@
                     body.appendChild(row);
                 });
                 api.ui.example(); const canvas = el('power-chart');
-                observer = new ResizeObserver(() => {if (canvas.isConnected) redraw(); else observer.disconnect();}); observer.observe(canvas);
+                observer = new ResizeObserver(() => {if (canvas.isConnected) redraw(); else observer.disconnect();}); observer.observe(canvas); observer.observe(el('month-chart'));
             }
         };
         window.addEventListener('themeChanged', () => {if (el('power-chart')) redraw();});

@@ -67,13 +67,21 @@
         return {rows, energyKWh, poaKWhM2};
     }
     function annual(p, system, stepHours = .25) {
-        parameters(p); const months = []; let annualKWh = 0;
+        parameters(p); const months = [], dailyLedger = [], dailyProfiles = [], cumulative = [{day: 0, energyKWh: 0}]; let annualKWh = 0;
         for (let month = 1; month <= 12; month++) {
             const days = PV.daysInMonth(p.year, month); let energyKWh = 0;
-            for (let date = 1; date <= days; date++) energyKWh += daily(p, system, dayOfYear(p.year, month, date), stepHours).energyKWh;
-            months.push({month, energyKWh, days}); annualKWh += energyKWh;
+            for (let date = 1; date <= days; date++) {
+                const day = dayOfYear(p.year, month, date), d = daily(p, system, day, stepHours);
+                energyKWh += d.energyKWh; annualKWh += d.energyKWh;
+                const isoDate = `${p.year}-${String(month).padStart(2,'0')}-${String(date).padStart(2,'0')}`;
+                dailyLedger.push({day, date: isoDate, month, dayOfMonth: date, energyKWh: d.energyKWh, cumulativeKWh: annualKWh});
+                cumulative.push({day, energyKWh: annualKWh});
+                if (date === 15) dailyProfiles.push({month, day, date: isoDate, ...d,
+                    curve: [{solarHour: 0, acKw: instant(p,system,day,0).acKw}, ...d.rows.map(row=>({solarHour:(row.startHour+row.endHour)/2,acKw:row.acKw})), {solarHour:24,acKw:instant(p,system,day,24).acKw}]});
+            }
+            months.push({month, energyKWh, days, cumulativeKWh: annualKWh});
         }
-        return {months, annualKWh, year: p.year, stepHours, model: 'Constant-atmosphere clear-sky scenario; not expected weather-adjusted yield'};
+        return {months, dailyLedger, cumulative, dailyProfiles, annualKWh, year: p.year, stepHours, model: 'Constant-atmosphere clear-sky scenario; not expected weather-adjusted yield'};
     }
     function optimum(p, system, scope = 'annual', month = 6) {
         parameters(p); if (!['annual', 'month'].includes(scope)) throw new RangeError('Choose annual or selected-month search.');
@@ -123,58 +131,122 @@
         const el = id => document.getElementById('pvl-' + id), num = id => Number.parseFloat(el(id).value), text = (id, value) => {if (el(id)) el(id).textContent = value;};
         const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         let lastAnnual = null, lastKey = '', current = null, lastSearch = null, imported = null, observer = null;
+        let recommendedAnnual = null, recommendedMonths = new Map();
         const setting = id => Number.parseFloat(document.getElementById('pvg-' + id).value);
         function read() {
-            const p = parameters({latitude: num('lat'), longitude: num('lon'), tilt: num('tilt'), azimuth: num('azimuth'), year: setting('year'), transmittance: num('tau'), diffuseRatio: num('diffuse'), albedo: num('albedo'), cellC: num('cell')});
-            const system = PV.config({dcKw: setting('dc'), acKw: setting('ac'), dcLossPct: setting('loss'), inverterEfficiencyPct: setting('eff'), tempCoeffPct: setting('gamma'), tempModel: 'provided'});
-            return {p, system};
+            const p = parameters({latitude:num('lat'),longitude:num('lon'),tilt:num('tilt'),azimuth:num('azimuth'),year:setting('year'),transmittance:num('tau'),diffuseRatio:num('diffuse'),albedo:num('albedo'),cellC:num('cell')});
+            const system = PV.config({dcKw:setting('dc'),acKw:setting('ac'),dcLossPct:setting('loss'),inverterEfficiencyPct:setting('eff'),tempCoeffPct:setting('gamma'),tempModel:'provided'});
+            return {p,system};
         }
-        function chart(canvas, values, maxX, label, labels) {
-            const width = Math.max(280, canvas.getBoundingClientRect().width), height = 230, dpr = Math.min(3, window.devicePixelRatio || 1);
-            canvas.width = Math.round(width * dpr); canvas.height = height * dpr;
-            const ctx = canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,width,height);
-            const style = getComputedStyle(document.documentElement), accent = style.getPropertyValue('--accent-color').trim() || '#d4af37', ink = style.getPropertyValue('--muted-text').trim() || '#888';
-            const left = 48, bottom = height - 32, top = 24, right = width - 12, maxY = Math.max(.001,...values.map(row => row.y));
-            const x = v => left + v / maxX * (right-left), y = v => bottom - v / maxY * (bottom-top);
-            ctx.font='11px system-ui';ctx.fillStyle=ink;ctx.fillText(label,left,13);
-            for(let i=0;i<5;i++){const value=maxY*i/4;ctx.fillText(value.toFixed(2),2,y(value)+4);ctx.strokeStyle=ink;ctx.globalAlpha=.2;ctx.beginPath();ctx.moveTo(left,y(value));ctx.lineTo(right,y(value));ctx.stroke();}
-            ctx.globalAlpha=.8;ctx.fillStyle=accent;
-            for(const row of values)ctx.fillRect(x(row.x),y(row.y),Math.max(.6,x(row.end)-x(row.x)-.5),bottom-y(row.y));
-            ctx.globalAlpha=1;ctx.fillStyle=ink;ctx.textAlign='center';for(const row of labels)ctx.fillText(row.text,x(row.x),bottom+20);
+        function canvasIds() {return ['map','daily-chart','annual-chart','cumulative-chart','import-chart',...months.map((_,i)=>'month-chart-'+(i+1))];}
+        function axes(canvas,maxX,maxY,label,labels) {
+            if (!canvas) return null;
+            const rect=canvas.getBoundingClientRect();
+            // A closed details element has no drawable area. ResizeObserver/toggle
+            // redraws it when visible, using its real size rather than a fake minimum.
+            if (!(rect.width>0)) return null;
+            const width=rect.width,height=rect.height>0?rect.height:250,dpr=Math.min(3,window.devicePixelRatio||1);
+            const backingWidth=Math.max(1,Math.round(width*dpr)),backingHeight=Math.max(1,Math.round(height*dpr));
+            if(canvas.width!==backingWidth)canvas.width=backingWidth;if(canvas.height!==backingHeight)canvas.height=backingHeight;
+            const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);
+            const style=getComputedStyle(document.documentElement),accent=style.getPropertyValue('--accent-color').trim()||'#d4af37',ink=style.getPropertyValue('--muted-text').trim()||'#888';
+            const left=Math.min(48,width*.2),right=width-Math.min(12,width*.05),top=25,bottom=Math.max(top+10,height-32),ceiling=maxY>0?maxY:1;
+            const x=v=>left+v/maxX*(right-left),y=v=>bottom-v/ceiling*(bottom-top);
+            ctx.globalAlpha=1;ctx.font='12px system-ui';ctx.fillStyle=ink;ctx.textAlign='left';ctx.fillText(label,left,14,Math.max(1,right-left));
+            for(let i=0;i<=4;i++){const value=ceiling*i/4;ctx.globalAlpha=1;ctx.fillText(value.toFixed(width<320&&value>=100?0:2),1,y(value)+4);ctx.strokeStyle=ink;ctx.globalAlpha=.2;ctx.beginPath();ctx.moveTo(left,y(value));ctx.lineTo(right,y(value));ctx.stroke();}
+            const ticks=width<360&&labels.length>6?labels.filter((_,i)=>i%2===0):labels;
+            ctx.globalAlpha=1;ctx.fillStyle=ink;ctx.textAlign='center';for(const row of ticks)ctx.fillText(row.text,x(row.x),bottom+20);
+            return {ctx,width,height,left,right,top,bottom,accent,ink,x,y};
+        }
+        function chart(canvas,values,maxX,label,labels) {
+            const a=axes(canvas,maxX,Math.max(0,...values.map(row=>row.y)),label,labels);if(!a)return;
+            a.ctx.globalAlpha=.8;a.ctx.fillStyle=a.accent;
+            for(const row of values)a.ctx.fillRect(a.x(row.x),a.y(row.y),Math.max(.5,a.x(row.end)-a.x(row.x)-.5),a.bottom-a.y(row.y));
+            a.ctx.globalAlpha=1;
+        }
+        function line(canvas,points,maxX,label,labels,color) {
+            const a=axes(canvas,maxX,Math.max(0,...points.map(row=>row.y)),label,labels);if(!a)return;
+            a.ctx.strokeStyle=color||a.accent;a.ctx.lineWidth=2;a.ctx.beginPath();
+            points.forEach((row,i)=>{if(i)a.ctx.lineTo(a.x(row.x),a.y(row.y));else a.ctx.moveTo(a.x(row.x),a.y(row.y));});a.ctx.stroke();
         }
         function map() {
-            const canvas=el('map');if(!canvas)return;const width=Math.max(280,canvas.getBoundingClientRect().width),height=width/2,dpr=Math.min(3,window.devicePixelRatio||1);canvas.width=width*dpr;canvas.height=height*dpr;
+            const canvas=el('map');if(!canvas)return;const rect=canvas.getBoundingClientRect();if(!(rect.width>0))return;
+            const width=rect.width,height=rect.height>0?rect.height:width/2,dpr=Math.min(3,window.devicePixelRatio||1);
+            const bw=Math.max(1,Math.round(width*dpr)),bh=Math.max(1,Math.round(height*dpr));if(canvas.width!==bw)canvas.width=bw;if(canvas.height!==bh)canvas.height=bh;
             const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);const style=getComputedStyle(document.documentElement),accent=style.getPropertyValue('--accent-color').trim()||'#d4af37',ink=style.getPropertyValue('--muted-text').trim()||'#888';
             const x=lon=>(lon+180)/360*width,y=lat=>(90-lat)/180*height;ctx.strokeStyle=ink;ctx.globalAlpha=.25;ctx.lineWidth=.5;
             for(let lon=-180;lon<=180;lon+=30){ctx.beginPath();ctx.moveTo(x(lon),0);ctx.lineTo(x(lon),height);ctx.stroke();}for(let lat=-60;lat<=60;lat+=30){ctx.beginPath();ctx.moveTo(0,y(lat));ctx.lineTo(width,y(lat));ctx.stroke();}
             ctx.fillStyle=accent;ctx.globalAlpha=.45;for(const polygon of WORLD){ctx.beginPath();polygon.forEach(([lon,lat],i)=>{if(i)ctx.lineTo(x(lon),y(lat));else ctx.moveTo(x(lon),y(lat));});ctx.closePath();ctx.fill();}
             if(current){ctx.globalAlpha=1;ctx.strokeStyle=accent;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x(current.p.longitude),y(current.p.latitude),6,0,2*Math.PI);ctx.stroke();ctx.fillStyle=accent;ctx.beginPath();ctx.arc(x(current.p.longitude),y(current.p.latitude),2,0,2*Math.PI);ctx.fill();}ctx.globalAlpha=1;
         }
+        function recommendations() {
+            if(!current)return;const month=num('month');
+            check(month,'Selected month',1,12);if(!Number.isInteger(month))throw new RangeError('Choose a whole month.');
+            if(!recommendedAnnual)recommendedAnnual=optimum(current.p,current.system,'annual');
+            if(!recommendedMonths.has(month))recommendedMonths.set(month,optimum(current.p,current.system,'month',month));
+            const m=recommendedMonths.get(month);
+            text('recommended-annual',recommendedAnnual.energyKWh<=1e-10?'Annual model: no generation; no energy-preferred angle in this scenario.':`Annual model: tilt ${recommendedAnnual.tilt}°, azimuth ${recommendedAnnual.azimuth}° clockwise from north.`);
+            text('recommended-month',m.energyKWh<=1e-10?`${months[month-1]} model: no generation; no energy-preferred angle in this scenario.`:`${months[month-1]} model: tilt ${m.tilt}°, azimuth ${m.azimuth}° clockwise from north.`);
+        }
+        function overview(month,hour,point) {
+            const profiles=lastAnnual.dailyProfiles,maxY=Math.max(0,...profiles.flatMap(profile=>profile.curve.map(row=>row.acKw)));
+            const a=axes(el('daily-chart'),24,maxY,'AC power · kW · all 12 monthly days',[0,6,12,18,24].map(x=>({x,text:String(x)})));if(!a)return;
+            const ordered=[...profiles.filter(profile=>profile.month!==month),profiles[month-1]];
+            for(const profile of ordered){a.ctx.strokeStyle=profile.month===month?a.accent:`hsl(${(profile.month-1)*30},55%,52%)`;a.ctx.lineWidth=profile.month===month?3:1.3;a.ctx.globalAlpha=profile.month===month?1:.48;a.ctx.beginPath();profile.curve.forEach((row,i)=>{if(i)a.ctx.lineTo(a.x(row.solarHour),a.y(row.acKw));else a.ctx.moveTo(a.x(row.solarHour),a.y(row.acKw));});a.ctx.stroke();}
+            a.ctx.globalAlpha=1;a.ctx.strokeStyle=a.accent;a.ctx.lineWidth=1;a.ctx.setLineDash([3,3]);a.ctx.beginPath();a.ctx.moveTo(a.x(hour),a.top);a.ctx.lineTo(a.x(hour),a.bottom);a.ctx.stroke();a.ctx.setLineDash([]);a.ctx.fillStyle=a.accent;a.ctx.beginPath();a.ctx.arc(a.x(hour),a.y(point.acKw),4,0,2*Math.PI);a.ctx.fill();
+        }
+        function legend(month) {
+            const target=el('month-legend');if(!target)return;
+            target.innerHTML=months.map((name,i)=>`<button type="button" aria-pressed="${i+1===month}" onclick="PVLocation.ui.selectMonth(${i+1})" style="border-color:var(--border-color);border-bottom:3px solid ${i+1===month?'var(--accent-color)':`hsl(${i*30},55%,52%)`};color:${i+1===month?'var(--accent-color)':'var(--muted-text)'};font-weight:${i+1===month?'700':'400'}">${name}${i+1===month?' · selected':''}</button>`).join('');
+        }
+        function importedChart() {if(imported)chart(el('import-chart'),imported.months.map((row,i)=>({x:i+.1,end:i+.9,y:row.energyKWh})),12,'Imported provider energy · kWh',months.map((text,i)=>({x:i+.5,text})));}
         function redraw() {
-            map(); if(!current||!lastAnnual)return;
-            const month=num('month'),day=dayOfYear(current.p.year,month),d=daily(current.p,current.system,day),hour=num('time'),point=instant(current.p,current.system,day,hour);
-            text('power', (point.acKw*1000).toFixed(0)+' W');text('sun',`${point.elevation.toFixed(1)}° elevation · ${point.azimuth.toFixed(1)}° solar azimuth`);text('poa',point.poa.toFixed(0)+' W/m² POA');
+            map();importedChart();if(!current||!lastAnnual)return;
+            const month=num('month'),profile=lastAnnual.dailyProfiles[month-1];if(!profile)return;
+            const hour=num('time'),point=instant(current.p,current.system,profile.day,hour);
+            text('power',(point.acKw*1000).toFixed(0)+' W');text('sun',`${point.elevation.toFixed(1)}° elevation · ${point.azimuth.toFixed(1)}° solar azimuth`);text('poa',point.poa.toFixed(0)+' W/m² POA');
             const h=Math.floor(hour),m=Math.round((hour-h)*60);text('time-label',`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} solar time · ${months[month-1]} 15`);
-            text('day-energy',d.energyKWh.toFixed(3)+' kWh / model day');text('month-energy',lastAnnual.months[month-1].energyKWh.toFixed(1)+' kWh / model month');text('year-energy',lastAnnual.annualKWh.toFixed(1)+' kWh / model year');
-            chart(el('daily-chart'),d.rows.map(row=>({x:row.startHour,end:row.endHour,y:row.acKw})),24,'Model AC power · kW',[0,6,12,18,24].map(x=>({x,text:String(x)})));
-            chart(el('annual-chart'),lastAnnual.months.map((row,i)=>({x:i+.1,end:i+.9,y:row.energyKWh})),12,'Clear-sky scenario monthly energy · kWh',months.map((text,i)=>({x:i+.5,text})));
+            text('day-energy',profile.energyKWh.toFixed(3)+' kWh / model day');text('month-energy',lastAnnual.months[month-1].energyKWh.toFixed(1)+' kWh / model month');text('year-energy',lastAnnual.annualKWh.toFixed(1)+' kWh / model year');
+            overview(month,hour,point);legend(month);
+            chart(el('annual-chart'),lastAnnual.months.map((row,i)=>({x:i+.1,end:i+.9,y:row.energyKWh})),12,'Monthly scenario energy · kWh',months.map((text,i)=>({x:i+.5,text})));
+            const dayCount=lastAnnual.dailyLedger.length;
+            line(el('cumulative-chart'),lastAnnual.cumulative.map(row=>({x:row.day,y:row.energyKWh})),dayCount,'Cumulative year energy · kWh',[0,Math.round(dayCount/4),Math.round(dayCount/2),Math.round(dayCount*3/4),dayCount].map(x=>({x,text:String(x)})));
+            for(const q of lastAnnual.dailyProfiles)line(el('month-chart-'+q.month),q.curve.map(row=>({x:row.solarHour,y:row.acKw})),24,`${months[q.month-1]} 15 · AC kW`,[0,6,12,18,24].map(x=>({x,text:String(x)})));
+            const values=el('monthly-values');if(values)values.innerHTML=lastAnnual.months.map(row=>`<tr><th scope="row">${months[row.month-1]}</th><td>${row.energyKWh.toFixed(2)} kWh</td><td>${row.cumulativeKWh.toFixed(2)} kWh</td></tr>`).join('');
+        }
+        function clear() {
+            current=null;lastAnnual=null;lastKey='';lastSearch=null;recommendedAnnual=null;recommendedMonths=new Map();
+            for(const id of ['power','sun','poa','day-energy','month-energy','year-energy','recommended-annual','recommended-month'])text(id,'—');
+            text('search-result','Correct the invalid inputs before searching.');
+            for(const id of ['daily-chart','annual-chart','cumulative-chart',...months.map((_,i)=>'month-chart-'+(i+1))])chart(el(id),[],24,'No valid scenario',[]);
+            if(el('monthly-values'))el('monthly-values').innerHTML='';if(el('month-legend'))el('month-legend').innerHTML='';map();
         }
         function update() {
             if(!el('lat'))return;
             try {
                 const next=read(),key=JSON.stringify(next);current=next;
-                el('pvgis-download').href=pvgisURL(next.p,next.system,num('pvgis-loss'),el('pvgis-optimize').checked);
-                if(key!==lastKey){lastAnnual=annual(next.p,next.system);lastKey=key;lastSearch=null;text('search-result','Search evaluates only this explicitly assumed scenario.');}
-                text('error','');redraw();
-            }catch(e){text('error',e.message);current=null;lastAnnual=null;lastKey='';lastSearch=null;for(const id of ['power','sun','poa','day-energy','month-energy','year-energy'])text(id,'—');text('search-result','Correct the invalid inputs before searching.');map();chart(el('daily-chart'),[],24,'No valid scenario',[]);chart(el('annual-chart'),[],12,'No valid scenario',[]);}
+                if(el('pvgis-download'))el('pvgis-download').href=pvgisURL(next.p,next.system,num('pvgis-loss'),el('pvgis-optimize').checked);
+                if(key!==lastKey){lastAnnual=annual(next.p,next.system);lastKey=key;lastSearch=null;recommendedAnnual=null;recommendedMonths=new Map();text('search-result','Search evaluates only this explicitly assumed scenario.');}
+                recommendations();text('error','');redraw();
+            }catch(e){text('error',e.message);clear();}
         }
+        function recommendation(scope) {return scope==='annual'?recommendedAnnual:scope==='month'?recommendedMonths.get(num('month')):null;}
         api.ui={update,redraw,
-            selection(){lastSearch=null;text('search-result','Selection changed. Search again for this objective.');redraw();},
-            search(){try{const next=read();lastSearch=optimum(next.p,next.system,el('scope').value,num('month'));text('search-result',`Best searched ${lastSearch.scope} scenario: tilt ${lastSearch.tilt}°, azimuth ${lastSearch.azimuth}° clockwise from north. Search objective ${lastSearch.energyKWh.toFixed(1)} kWh. ${lastSearch.method}`);}catch(e){lastSearch=null;text('search-result',e.message);}},
+            selection(){lastSearch=null;text('search-result','Selection changed. Search again for this objective.');try{recommendations();redraw();}catch(e){text('error',e.message);clear();}},
+            selectMonth(month){el('month').value=month;api.ui.selection();},
+            applyRecommendation(scope){const found=recommendation(scope);if(!found||!current)return;el('tilt').value=found.tilt;el('azimuth').value=found.azimuth;update();},
+            search(){try{const next=read(),scope=el('scope').value;lastSearch=recommendation(scope)||optimum(next.p,next.system,scope,num('month'));text('search-result',`Best searched ${lastSearch.scope} scenario: tilt ${lastSearch.tilt}°, azimuth ${lastSearch.azimuth}° clockwise from north. Search objective ${lastSearch.energyKWh.toFixed(1)} kWh. ${lastSearch.method}`);}catch(e){lastSearch=null;text('search-result',e.message);}},
             apply(){if(!lastSearch)return;el('tilt').value=lastSearch.tilt;el('azimuth').value=lastSearch.azimuth;update();},
-            async importJSON(input){try{const file=input.files&&input.files[0];if(!file)return;if(file.size>3000000)throw new RangeError('Use a PVGIS JSON file smaller than 3 MB.');const raw=await file.text();if(!el('import-result'))return;imported=parsePVGIS(raw);text('import-result',`Imported PVGIS-format result: ${imported.annualKWh.toFixed(1)} kWh/year; ${imported.dcKw} kWp at ${imported.latitude}°, ${imported.longitude}°; tilt ${imported.tilt}°${imported.optimizedTilt?' (provider optimized)':''}; azimuth ${imported.azimuth}° north-clockwise${imported.optimizedAzimuth?' (provider optimized)':''}; ${imported.database}, weather ${imported.weatherYears.join('–')}. Independent of current scenario controls. ${imported.scope}`);chart(el('import-chart'),imported.months.map((row,i)=>({x:i+.1,end:i+.9,y:row.energyKWh})),12,'Imported provider monthly energy · kWh',months.map((text,i)=>({x:i+.5,text})));}catch(e){imported=null;text('import-result',e.message);chart(el('import-chart'),[],12,'No valid provider result',[]);}},
-            exportJSON(){if(!current||!lastAnnual){text('error','Calculate a valid location scenario first.');return;}const evidence={schema:'pv-location-evidence-v1',scenario:current,annualScenario:lastAnnual,searchedOptimum:lastSearch,importedPVGIS:imported,assumptions:'Constant-atmosphere geometric clear-sky scenario, not weather-adjusted expected yield. Imported PVGIS results retain their separate provider inputs and source metadata.'};const url=URL.createObjectURL(new Blob([JSON.stringify(evidence,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='pv-location-evidence.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);},
-            init(){if(observer)observer.disconnect();const canvas=el('map');canvas.onclick=event=>{const rect=canvas.getBoundingClientRect();el('lon').value=((event.clientX-rect.left)/rect.width*360-180).toFixed(2);el('lat').value=(90-(event.clientY-rect.top)/rect.height*180).toFixed(2);update();};canvas.onkeydown=event=>{const d={ArrowUp:[1,0],ArrowDown:[-1,0],ArrowLeft:[0,-1],ArrowRight:[0,1]}[event.key];if(!d)return;event.preventDefault();el('lat').value=Math.max(-90,Math.min(90,num('lat')+d[0]));el('lon').value=Math.max(-180,Math.min(180,num('lon')+d[1]));update();};update();observer=new ResizeObserver(()=>{if(canvas.isConnected)redraw();else observer.disconnect();});observer.observe(canvas);}
+            async importJSON(input){try{const file=input.files&&input.files[0];if(!file)return;if(file.size>3000000)throw new RangeError('Use a PVGIS JSON file smaller than 3 MB.');const raw=await file.text();if(!el('import-result'))return;imported=parsePVGIS(raw);text('import-result',`Imported PVGIS-format result: ${imported.annualKWh.toFixed(1)} kWh/year; ${imported.dcKw} kWp at ${imported.latitude}°, ${imported.longitude}°; tilt ${imported.tilt}°${imported.optimizedTilt?' (provider optimized)':''}; azimuth ${imported.azimuth}° north-clockwise${imported.optimizedAzimuth?' (provider optimized)':''}; ${imported.database}, weather ${imported.weatherYears.join('–')}. Independent of current scenario controls. ${imported.scope}`);importedChart();}catch(e){imported=null;text('import-result',e.message);chart(el('import-chart'),[],12,'No valid provider result',[]);}},
+            exportJSON(){if(!current||!lastAnnual){text('error','Calculate a valid location scenario first.');return;}const evidence={schema:'pv-location-evidence-v2',scenario:current,annualScenario:lastAnnual,recommendations:{annual:recommendedAnnual,selectedMonth:recommendedMonths.get(num('month'))},searchedOptimum:lastSearch,importedPVGIS:imported,assumptions:'Constant-atmosphere geometric clear-sky scenario, not weather-adjusted expected yield. Imported PVGIS results retain their separate provider inputs and source metadata.'};const url=URL.createObjectURL(new Blob([JSON.stringify(evidence,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='pv-location-evidence.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);},
+            init(){
+                if(observer)observer.disconnect();lastAnnual=null;lastKey='';current=null;lastSearch=null;imported=null;recommendedAnnual=null;recommendedMonths=new Map();const canvas=el('map');
+                text('import-result','No weather-based provider result imported. It will remain separate from the geometric scenario.');chart(el('import-chart'),[],12,'No provider result',[]);
+                canvas.onclick=event=>{const rect=canvas.getBoundingClientRect();if(!(rect.width>0&&rect.height>0))return;el('lon').value=((event.clientX-rect.left)/rect.width*360-180).toFixed(2);el('lat').value=(90-(event.clientY-rect.top)/rect.height*180).toFixed(2);update();};
+                canvas.onkeydown=event=>{const d={ArrowUp:[1,0],ArrowDown:[-1,0],ArrowLeft:[0,-1],ArrowRight:[0,1]}[event.key];if(!d)return;event.preventDefault();el('lat').value=Math.max(-90,Math.min(90,num('lat')+d[0]));el('lon').value=Math.max(-180,Math.min(180,num('lon')+d[1]));update();};
+                update();const nextObserver=new ResizeObserver(()=>{if(canvas.isConnected)redraw();else nextObserver.disconnect();});observer=nextObserver;
+                for(const id of canvasIds())if(el(id))nextObserver.observe(el(id));
+            }
         };
         window.addEventListener('themeChanged',()=>{if(el('map'))redraw();});
     }
