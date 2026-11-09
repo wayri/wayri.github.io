@@ -6,7 +6,7 @@ permalink: /kicad-webview/docs/
 doc_section: overview
 ---
 
-KiCad WebView is a browser library for read-only inspection of saved electronics designs. Embed a drawing, open a project workspace, or export a design and viewer into one HTML file. A static HTTPS host is enough; visitors need no npm or Node.js runtime.
+KiCad WebView is a browser library for read-only inspection of saved electronics designs. Embed a drawing, open a project workspace, or export a design and viewer into one HTML file. A static HTTPS host is enough; visitors need no npm or Node.js runtime. KiCad WebView is **free to use, including commercially, under MPL-2.0**. Paid help with embedding, customization, maintenance, or support is optional; you do not need to buy services to use the library. See [licensing and optional support](/kicad-webview/docs/license/).
 
 The current npm and CDN release is **0.1.0**, with translucent 3D appearance and matching [public source](https://github.com/wayri/kicad-webview/tree/v0.1.0). [Use a direct script, browser module or npm package](/kicad-webview/docs/quick-start/). The API reference also covers the immutable hosted **0.1.0-beta.2 SDK**, source revision `86b375e5f5c3f2f04df6d6c44119c25b0b2b14ee`. The [release manifest](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) records file checksums and the classic script’s integrity hash. The [source repository](https://github.com/wayri/kicad-webview) and [matching release source](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.2) are public.
 
