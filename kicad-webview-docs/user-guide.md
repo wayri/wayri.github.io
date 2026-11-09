@@ -13,7 +13,7 @@ The compact viewer shows one drawing at a time. It accepts a supported hosted dr
 
 Local KiCad and manufacturing files are read in browser memory without uploading them. A hosted input makes requests to its authorized URLs; remote servers must permit CORS. A private GitHub repository does not become readable through a public embed. See [Hosting and integrations](/kicad-webview/docs/hosting/) for source formats and permissions, and [Troubleshooting](/kicad-webview/docs/troubleshooting/) for file and archive limits.
 
-Explore the [IRCA demonstration](/kicad-webview/) and [public hardware examples](/kicad-webview/#public-examples). The OLIMEX manifest uses pinned original upstream PCB and schematic sources under CERN-OHL-S-2.0. External models are not bundled, so missing models appear as labelled stand-ins.
+Explore the [IRCA demonstration](/kicad-webview/) and [public hardware examples](/kicad-webview/#public-examples). The OLIMEX manifest supplies its PCB, schematic and converted component models under the upstream terms. Marble now includes its PCB and all 25 schematic sheets, but many custom 3D models are unavailable publicly. Missing models remain labelled stand-ins. The display PCB copies change model paths and normalize equivalent legacy footprint identity fields; they do not change physical or electrical geometry.
 
 ## Navigate the drawing
 

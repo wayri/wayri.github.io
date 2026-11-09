@@ -1,0 +1,14 @@
+<main class="webview-product wv-demo-page"><p class="wv-eyebrow">KiCad WebView / current demo</p><h1>This demo has moved.</h1><p>Continue to the current website demo, using approved IRCA or credited public hardware.</p><p><a id="current-demo" href="{{ page.demo_target | relative_url }}">Open the current demo ↗</a></p></main>
+<script>
+(() => {
+  const link = document.querySelector('#current-demo'), target = new URL(link.href);
+  const query = new URLSearchParams(location.search);
+  const source = query.get('src');
+  if (source) {
+    const resolved = new URL(source, location.href);
+    if (resolved.origin === location.origin && /\/assets\/lib\/kicad-webview\/(?:releases\/[^/]+\/)?demo\/(?:project\.json|3PD\+IB\.kicad_(?:pcb|sch))$/.test(decodeURIComponent(resolved.pathname))) { query.delete('src'); query.delete('file'); }
+    else query.set('src', resolved.href);
+  }
+  target.search = query.toString(); link.href = target.href; location.replace(target.href);
+})();
+</script>

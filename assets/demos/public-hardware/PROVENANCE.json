@@ -1,5 +1,5 @@
 {
-  "purpose": "Explicit-click, remote-source KiCad WebView examples. Hardware sources and models are not copied into this directory.",
+  "purpose": "Explicit-click browser examples with complete drawing manifests, derived model-path-only PCBs and separately attributed public model assets.",
   "softwareRelease": "0.1.0-beta.2",
   "softwareSource": "https://github.com/wayri/kicad-webview/tree/86b375e5f5c3f2f04df6d6c44119c25b0b2b14ee",
   "examples": [
@@ -11,23 +11,196 @@
       "hardwareLicense": "CERN-OHL-S-2.0",
       "otherUpstreamLicenses": "Software GPLv3; documentation CC BY-SA 4.0. These are not the hardware license.",
       "files": [
-        { "path": "HARDWARE/ESP32-P4-DevKit-Rev.D1/ESP32-P4-DevKit_Rev_D1.kicad_pcb", "bytes": 3165330, "sha256": "f9c94ac394b475413bf41cf178d2ffb74632bc30449fb0b7bf0892c488cc8081", "diagnostics": ["custom worksheet fallback", "dimensions not exact", "unfilled zones not exact"] },
-        { "path": "HARDWARE/ESP32-P4-DevKit-Rev.D1/ESP32-P4-DevKit_Rev_D1.kicad_sch", "bytes": 942436, "sha256": "addf0e18dd913b36a47864832adcb413eeeab68ebec0bb0fbe3b5c8b60bd930e", "diagnostics": ["bus aliases omitted", "custom worksheet fallback", "schematic images not rendered"] }
+        {
+          "path": "HARDWARE/ESP32-P4-DevKit-Rev.D1/ESP32-P4-DevKit_Rev_D1.kicad_pcb",
+          "bytes": 3165330,
+          "sha256": "f9c94ac394b475413bf41cf178d2ffb74632bc30449fb0b7bf0892c488cc8081",
+          "diagnostics": [
+            "custom worksheet fallback",
+            "dimensions not exact",
+            "unfilled zones not exact"
+          ]
+        },
+        {
+          "path": "HARDWARE/ESP32-P4-DevKit-Rev.D1/ESP32-P4-DevKit_Rev_D1.kicad_sch",
+          "bytes": 942436,
+          "sha256": "addf0e18dd913b36a47864832adcb413eeeab68ebec0bb0fbe3b5c8b60bd930e",
+          "diagnostics": [
+            "bus aliases omitted",
+            "custom worksheet fallback",
+            "schematic images not rendered"
+          ]
+        }
+      ],
+      "upstreamDrawings": [
+        {
+          "path": "HARDWARE/ESP32-P4-DevKit-Rev.D1/ESP32-P4-DevKit_Rev_D1.kicad_sch",
+          "bytes": 942436,
+          "gitBlobSHA1": "0615f8d7780769f9b996413213dd52f9d39a2e3b"
+        }
       ]
     },
     {
-      "name": "BerkeleyLab Marble selected schematic sheets",
+      "name": "BerkeleyLab Marble full project",
       "revision": "a426777d92c0f22a546d4740b419a3937e0c1f90",
       "readme": "https://github.com/BerkeleyLab/Marble/blob/a426777d92c0f22a546d4740b419a3937e0c1f90/README.md",
       "hardwareLicense": "CERN-OHL-1.2",
       "copyright": "2019–2023 The Regents of the University of California, through Lawrence Berkeley National Laboratory",
-      "credits": ["Michal Gaska / Warsaw University of Technology", "Larry Doolittle / LBNL", "BACI / GARD support", "WUT / Creotech collaboration"],
-      "scope": "Only root and PMOD sheets. Other child sheets unavailable. The 44,059,775-byte PCB is upstream-link-only; no models fetched.",
+      "credits": [
+        "Michal Gaska / Warsaw University of Technology",
+        "Larry Doolittle / LBNL",
+        "BACI / GARD support",
+        "WUT / Creotech collaboration"
+      ],
+      "scope": "PCB and every saved schematic sheet; model-path-only display PCB derivative with exact available models and explicit unresolved custom references.",
       "files": [
-        { "path": "design/Marble.kicad_sch", "bytes": 3004697, "sha256": "a77cfce283505f4e371f008014901aaffbe3599ebdfdba5e9b1b4cd485298ab3", "diagnostics": ["custom worksheet fallback", "schematic images not rendered"] },
-        { "path": "design/PMOD.kicad_sch", "bytes": 150577, "sha256": "982e319298439e98b6b12f5b65b3f5cb29c6d7746c6799431bfcf2acdabae09f", "diagnostics": ["custom worksheet fallback"] }
+        {
+          "path": "design/Marble.kicad_sch",
+          "bytes": 3004697,
+          "sha256": "a77cfce283505f4e371f008014901aaffbe3599ebdfdba5e9b1b4cd485298ab3",
+          "diagnostics": [
+            "custom worksheet fallback",
+            "schematic images not rendered"
+          ]
+        },
+        {
+          "path": "design/PMOD.kicad_sch",
+          "bytes": 150577,
+          "sha256": "982e319298439e98b6b12f5b65b3f5cb29c6d7746c6799431bfcf2acdabae09f",
+          "diagnostics": [
+            "custom worksheet fallback"
+          ]
+        }
+      ],
+      "upstreamDrawings": [
+        {
+          "path": "design/ETH_PHY.kicad_sch",
+          "bytes": 571658,
+          "gitBlobSHA1": "db2a6f8304faee4ea705c7bd4749cd19f438a456"
+        },
+        {
+          "path": "design/FMC_1.kicad_sch",
+          "bytes": 4143249,
+          "gitBlobSHA1": "6f69732932008c1e0d59594ab7e963b87bd9452e"
+        },
+        {
+          "path": "design/FMC_2.kicad_sch",
+          "bytes": 4170074,
+          "gitBlobSHA1": "71335809fe8848dd0965c2d77d4b03bd0e2fd065"
+        },
+        {
+          "path": "design/FPGA.kicad_sch",
+          "bytes": 282581,
+          "gitBlobSHA1": "6e9f38f646a979585ef496a5b4bc653121231598"
+        },
+        {
+          "path": "design/FPGA_12_13.kicad_sch",
+          "bytes": 306003,
+          "gitBlobSHA1": "f4cc5117d65d95abd4a2cd96fa0a6674508de155"
+        },
+        {
+          "path": "design/FPGA_14_15.kicad_sch",
+          "bytes": 515571,
+          "gitBlobSHA1": "f633aa18715aa15e13532a72e6232dca9511b010"
+        },
+        {
+          "path": "design/FPGA_32_16.kicad_sch",
+          "bytes": 286256,
+          "gitBlobSHA1": "3d5a7fddeb553e4c8ad47e79e678903a930fbd80"
+        },
+        {
+          "path": "design/FPGA_33_34.kicad_sch",
+          "bytes": 538873,
+          "gitBlobSHA1": "5c178a67ef2b482bc4215e0c4797317aa492ae43"
+        },
+        {
+          "path": "design/FPGA_MGT.kicad_sch",
+          "bytes": 268115,
+          "gitBlobSHA1": "64e3893347bf0a2ab405b3be13d3563dd17afec9"
+        },
+        {
+          "path": "design/FPGA_PWR&MISC.kicad_sch",
+          "bytes": 1305063,
+          "gitBlobSHA1": "d565caeb4b83d35663c77abe1340259909bd0fc2"
+        },
+        {
+          "path": "design/GBX_MUX.kicad_sch",
+          "bytes": 296141,
+          "gitBlobSHA1": "da079e4eeebdcdf5841e84c25bf39096846d62ce"
+        },
+        {
+          "path": "design/I2C_MUX.kicad_sch",
+          "bytes": 353375,
+          "gitBlobSHA1": "97f747c754c3dd47595a5baa71fb9c08e54977d6"
+        },
+        {
+          "path": "design/JTAG.kicad_sch",
+          "bytes": 506348,
+          "gitBlobSHA1": "13356e02405f330e8e768b61373144836989fd71"
+        },
+        {
+          "path": "design/LTM4673.kicad_sch",
+          "bytes": 1166913,
+          "gitBlobSHA1": "08991ec28a98af4805299d40acc0fc54eb18a5e9"
+        },
+        {
+          "path": "design/MGT_CLK_Crosspoint.kicad_sch",
+          "bytes": 513104,
+          "gitBlobSHA1": "3cacaf9ab2085fa57f6d17ba80b05077b53f9fab"
+        },
+        {
+          "path": "design/MMC.kicad_sch",
+          "bytes": 607402,
+          "gitBlobSHA1": "4d439934067fa725d4f23c05bd99926c08e3bf15"
+        },
+        {
+          "path": "design/Marble.kicad_sch",
+          "bytes": 3004697,
+          "gitBlobSHA1": "cc4f7cf2a21118c254d35d0d0ee5dc22fa3e95a3"
+        },
+        {
+          "path": "design/PMOD.kicad_sch",
+          "bytes": 150577,
+          "gitBlobSHA1": "2e0a5bc557392eee6be02e5a451e7efa4f93cd94"
+        },
+        {
+          "path": "design/Power.kicad_sch",
+          "bytes": 743717,
+          "gitBlobSHA1": "94c938508905929a5a4a3ddfff6618893142911e"
+        },
+        {
+          "path": "design/Power_SW.kicad_sch",
+          "bytes": 810729,
+          "gitBlobSHA1": "5e124205fe612d3160266be844691bf78b3e2b80"
+        },
+        {
+          "path": "design/QSFP.kicad_sch",
+          "bytes": 231472,
+          "gitBlobSHA1": "dc39ec42f8178b403ff97641d2b79b17c6b39d5c"
+        },
+        {
+          "path": "design/SDRAM.kicad_sch",
+          "bytes": 397046,
+          "gitBlobSHA1": "3de358f7f7ca39f6139a50e93857f0c84763a247"
+        },
+        {
+          "path": "design/Thermometers.kicad_sch",
+          "bytes": 215689,
+          "gitBlobSHA1": "1d5cac1fefd1be21c0423488275381819e68e335"
+        },
+        {
+          "path": "design/USB.kicad_sch",
+          "bytes": 834194,
+          "gitBlobSHA1": "9bc3c30b7810ad9509436566bdf04385f37c6cdf"
+        },
+        {
+          "path": "design/WhiteRabbit.kicad_sch",
+          "bytes": 567211,
+          "gitBlobSHA1": "a1bcf551e0dcb1aca825f758effbfbf43d678ddf"
+        }
       ]
     }
   ],
-  "notice": "No affiliation, endorsement, fabrication-fidelity or engineering-certification claim. MPL-2.0 covers the viewer software, not the upstream hardware or trademarks. Upstream hardware is not represented as AI-authored. Rendering diagnostics are scoped parser observations, not a hardware design review."
+  "notice": "No affiliation, endorsement, fabrication-fidelity or engineering-certification claim. MPL-2.0 covers the viewer software, not the upstream hardware or trademarks. Upstream hardware is not represented as AI-authored. Rendering diagnostics are scoped parser observations, not a hardware design review.",
+  "modelEvidence": "/assets/demos/public-hardware/MODEL-PROVENANCE.json"
 }

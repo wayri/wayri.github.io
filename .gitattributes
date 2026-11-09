@@ -2,3 +2,9 @@
 assets/lib/kicad-webview/** -text
 # Keep display-only assembly and study asset hashes stable across checkouts.
 assets/demos/irca/** -text
+
+# Preserve exact public PCB/model bytes and their provenance hashes.
+assets/demos/public-hardware/** -text
+
+# Preserve the exact upstream WRL, including its existing trailing whitespace.
+assets/demos/public-hardware/models/R_Array_Convex_4x0402-037ac34fd14d.wrl -whitespace

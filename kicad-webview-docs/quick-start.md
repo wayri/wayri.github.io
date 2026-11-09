@@ -71,7 +71,7 @@ Use this route when the host accepts HTML iframes but does not permit your own p
 ```html
 <iframe
   title="Interactive OLIMEX design"
-  src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/embed.html?src=https%3A%2F%2Fwayri.github.io%2Fassets%2Fdemos%2Fpublic-hardware%2Folimex-p4-project.json&amp;view=3d&amp;theme=dark"
+  src="https://wayri.github.io/assets/demos/embed.html?src=https%3A%2F%2Fwayri.github.io%2Fassets%2Fdemos%2Fpublic-hardware%2Folimex-p4-project.json&amp;view=3d&amp;theme=dark"
   style="width:100%;height:70dvh;min-height:360px;border:0"
   loading="lazy">
 </iframe>
@@ -91,7 +91,7 @@ The [release manifest](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.j
 
 ## Export a self-contained HTML viewer
 
-Open the [browser-only exporter](/assets/lib/kicad-webview/releases/0.1.0-beta.2/export.html), choose local design files or one project ZIP, select an initial view and create the HTML download. Include saved model assets in a project ZIP with their expected paths. The exporter reads your chosen files locally; it does not upload the design.
+Open the [browser-only exporter](/assets/demos/export.html), choose local design files or one project ZIP, select an initial view and create the HTML download. Include saved model assets in a project ZIP with their expected paths. The exporter reads your chosen files locally; it does not upload the design.
 
 The output contains your design, viewer and notices. Review it before sharing. Its content policy blocks external network connections, so missing models cannot be fetched later. A recipient’s browser or host application must allow interactive HTML and WebGL for 3D.
 

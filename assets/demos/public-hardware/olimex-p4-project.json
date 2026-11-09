@@ -1,7 +1,125 @@
 {
   "entry": "ESP32-P4-DevKit_Rev_D1.kicad_pcb",
   "files": [
-    { "path": "ESP32-P4-DevKit_Rev_D1.kicad_pcb", "url": "https://raw.githubusercontent.com/OLIMEX/ESP32-P4-DevKit/26705d36407a07324348927dfd30fbf4ffc1d94c/HARDWARE/ESP32-P4-DevKit-Rev.D1/ESP32-P4-DevKit_Rev_D1.kicad_pcb" },
-    { "path": "ESP32-P4-DevKit_Rev_D1.kicad_sch", "url": "https://raw.githubusercontent.com/OLIMEX/ESP32-P4-DevKit/26705d36407a07324348927dfd30fbf4ffc1d94c/HARDWARE/ESP32-P4-DevKit-Rev.D1/ESP32-P4-DevKit_Rev_D1.kicad_sch" }
+    {
+      "path": "ESP32-P4-DevKit_Rev_D1.kicad_pcb",
+      "url": "/assets/demos/public-hardware/olimex-models.kicad_pcb"
+    },
+    {
+      "path": "ESP32-P4-DevKit_Rev_D1.kicad_sch",
+      "url": "https://raw.githubusercontent.com/OLIMEX/ESP32-P4-DevKit/26705d36407a07324348927dfd30fbf4ffc1d94c/HARDWARE/ESP32-P4-DevKit-Rev.D1/ESP32-P4-DevKit_Rev_D1.kicad_sch"
+    },
+    {
+      "path": "models/BM10B-SRSS-TB-LF-126b120ce82a.glb",
+      "url": "/assets/demos/public-hardware/models/BM10B-SRSS-TB-LF-126b120ce82a.glb"
+    },
+    {
+      "path": "models/C_0402_1005Metric-03e44c4b2b72.glb",
+      "url": "/assets/demos/public-hardware/models/C_0402_1005Metric-03e44c4b2b72.glb"
+    },
+    {
+      "path": "models/C_0603_1608Metric-4857b3dc7176.glb",
+      "url": "/assets/demos/public-hardware/models/C_0603_1608Metric-4857b3dc7176.glb"
+    },
+    {
+      "path": "models/C_0805_2012Metric-9a669c1a2f1e.glb",
+      "url": "/assets/demos/public-hardware/models/C_0805_2012Metric-9a669c1a2f1e.glb"
+    },
+    {
+      "path": "models/C_1206_3216Metric-11e948c72c90.glb",
+      "url": "/assets/demos/public-hardware/models/C_1206_3216Metric-11e948c72c90.glb"
+    },
+    {
+      "path": "models/Connector_1Port_RJ45_Magjack_10-100Base-T_AutoMDIX_PoE_Wurth_Electronics-7499211002A_DigiKey-732-c0345a2c6a01.glb",
+      "url": "/assets/demos/public-hardware/models/Connector_1Port_RJ45_Magjack_10-100Base-T_AutoMDIX_PoE_Wurth_Electronics-7499211002A_DigiKey-732-c0345a2c6a01.glb"
+    },
+    {
+      "path": "models/Crystal_3225-SX3225--bc2aff5d8a89.glb",
+      "url": "/assets/demos/public-hardware/models/Crystal_3225-SX3225--bc2aff5d8a89.glb"
+    },
+    {
+      "path": "models/DO-214AC_SMA-64ce1d894969.glb",
+      "url": "/assets/demos/public-hardware/models/DO-214AC_SMA-64ce1d894969.glb"
+    },
+    {
+      "path": "models/HN1x20-PinHeader_1x20_P2.54mm_Vertical-dd12a9414030.glb",
+      "url": "/assets/demos/public-hardware/models/HN1x20-PinHeader_1x20_P2.54mm_Vertical-dd12a9414030.glb"
+    },
+    {
+      "path": "models/LED_0603_G-a4247ae7ee8c.glb",
+      "url": "/assets/demos/public-hardware/models/LED_0603_G-a4247ae7ee8c.glb"
+    },
+    {
+      "path": "models/LED_0603_R-09b6f04da8f5.glb",
+      "url": "/assets/demos/public-hardware/models/LED_0603_R-09b6f04da8f5.glb"
+    },
+    {
+      "path": "models/LED_0603_Y-c1a8de6833a7.glb",
+      "url": "/assets/demos/public-hardware/models/LED_0603_Y-c1a8de6833a7.glb"
+    },
+    {
+      "path": "models/L_0805_2012Metric-751a8ae26d20.glb",
+      "url": "/assets/demos/public-hardware/models/L_0805_2012Metric-751a8ae26d20.glb"
+    },
+    {
+      "path": "models/L_2016-HM223-201610--67f885e34672.glb",
+      "url": "/assets/demos/public-hardware/models/L_2016-HM223-201610--67f885e34672.glb"
+    },
+    {
+      "path": "models/PH2.0-4PLB---WURTH_620304124022-28ea3436b404.glb",
+      "url": "/assets/demos/public-hardware/models/PH2.0-4PLB---WURTH_620304124022-28ea3436b404.glb"
+    },
+    {
+      "path": "models/Q32.768kHz_12.5pF_2P_SMD1206-15af6506982d.glb",
+      "url": "/assets/demos/public-hardware/models/Q32.768kHz_12.5pF_2P_SMD1206-15af6506982d.glb"
+    },
+    {
+      "path": "models/QFN100_04-1c18edf7728b.glb",
+      "url": "/assets/demos/public-hardware/models/QFN100_04-1c18edf7728b.glb"
+    },
+    {
+      "path": "models/QFN32_4x4-bfbcb7246931.glb",
+      "url": "/assets/demos/public-hardware/models/QFN32_4x4-bfbcb7246931.glb"
+    },
+    {
+      "path": "models/R_0402_1005Metric-91507e5af425.glb",
+      "url": "/assets/demos/public-hardware/models/R_0402_1005Metric-91507e5af425.glb"
+    },
+    {
+      "path": "models/R_Array_Convex_4x0402-037ac34fd14d.wrl",
+      "url": "/assets/demos/public-hardware/models/R_Array_Convex_4x0402-037ac34fd14d.wrl"
+    },
+    {
+      "path": "models/RaspberryPiLCD-MiPi_Connector-TE_1-1734248-5-86d5dea72792.glb",
+      "url": "/assets/demos/public-hardware/models/RaspberryPiLCD-MiPi_Connector-TE_1-1734248-5-86d5dea72792.glb"
+    },
+    {
+      "path": "models/SO-8_208mil---SOIC8_Wide_5mmx5mm-77de16ff1d10.glb",
+      "url": "/assets/demos/public-hardware/models/SO-8_208mil---SOIC8_Wide_5mmx5mm-77de16ff1d10.glb"
+    },
+    {
+      "path": "models/SOT-23-5-fb4d5778c162.glb",
+      "url": "/assets/demos/public-hardware/models/SOT-23-5-fb4d5778c162.glb"
+    },
+    {
+      "path": "models/SOT-23-fc58593c1101.glb",
+      "url": "/assets/demos/public-hardware/models/SOT-23-fc58593c1101.glb"
+    },
+    {
+      "path": "models/SOT-563-76c34aa49057.glb",
+      "url": "/assets/demos/public-hardware/models/SOT-563-76c34aa49057.glb"
+    },
+    {
+      "path": "models/USB4105-GF-A-ed5b798d6198.glb",
+      "url": "/assets/demos/public-hardware/models/USB4105-GF-A-ed5b798d6198.glb"
+    },
+    {
+      "path": "models/YTS-A016-X-SKRPABE010--a22be2ec250f.glb",
+      "url": "/assets/demos/public-hardware/models/YTS-A016-X-SKRPABE010--a22be2ec250f.glb"
+    },
+    {
+      "path": "models/microSD-192110a37242.glb",
+      "url": "/assets/demos/public-hardware/models/microSD-192110a37242.glb"
+    }
   ]
 }

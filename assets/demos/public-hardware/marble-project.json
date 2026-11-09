@@ -1,0 +1,149 @@
+{
+  "entry": "Marble.kicad_pcb",
+  "files": [
+    {
+      "path": "Marble.kicad_pcb",
+      "url": "/assets/demos/public-hardware/marble-models.kicad_pcb"
+    },
+    {
+      "path": "Marble.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/Marble.kicad_sch"
+    },
+    {
+      "path": "ETH_PHY.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/ETH_PHY.kicad_sch"
+    },
+    {
+      "path": "FMC_1.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FMC_1.kicad_sch"
+    },
+    {
+      "path": "FMC_2.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FMC_2.kicad_sch"
+    },
+    {
+      "path": "FPGA.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA.kicad_sch"
+    },
+    {
+      "path": "FPGA_12_13.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA_12_13.kicad_sch"
+    },
+    {
+      "path": "FPGA_14_15.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA_14_15.kicad_sch"
+    },
+    {
+      "path": "FPGA_32_16.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA_32_16.kicad_sch"
+    },
+    {
+      "path": "FPGA_33_34.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA_33_34.kicad_sch"
+    },
+    {
+      "path": "FPGA_MGT.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA_MGT.kicad_sch"
+    },
+    {
+      "path": "FPGA_PWR&MISC.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/FPGA_PWR%26MISC.kicad_sch"
+    },
+    {
+      "path": "GBX_MUX.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/GBX_MUX.kicad_sch"
+    },
+    {
+      "path": "I2C_MUX.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/I2C_MUX.kicad_sch"
+    },
+    {
+      "path": "JTAG.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/JTAG.kicad_sch"
+    },
+    {
+      "path": "LTM4673.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/LTM4673.kicad_sch"
+    },
+    {
+      "path": "MGT_CLK_Crosspoint.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/MGT_CLK_Crosspoint.kicad_sch"
+    },
+    {
+      "path": "MMC.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/MMC.kicad_sch"
+    },
+    {
+      "path": "PMOD.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/PMOD.kicad_sch"
+    },
+    {
+      "path": "Power.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/Power.kicad_sch"
+    },
+    {
+      "path": "Power_SW.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/Power_SW.kicad_sch"
+    },
+    {
+      "path": "QSFP.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/QSFP.kicad_sch"
+    },
+    {
+      "path": "SDRAM.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/SDRAM.kicad_sch"
+    },
+    {
+      "path": "Thermometers.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/Thermometers.kicad_sch"
+    },
+    {
+      "path": "USB.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/USB.kicad_sch"
+    },
+    {
+      "path": "WhiteRabbit.kicad_sch",
+      "url": "https://raw.githubusercontent.com/BerkeleyLab/Marble/a426777d92c0f22a546d4740b419a3937e0c1f90/design/WhiteRabbit.kicad_sch"
+    },
+    {
+      "path": "models/CP_EIA-7343-30_AVX-N-e4a240c1d57e.glb",
+      "url": "/assets/demos/public-hardware/models/CP_EIA-7343-30_AVX-N-e4a240c1d57e.glb"
+    },
+    {
+      "path": "models/FanPinHeader_1x03_P2.54mm_Vertical-962f287fa454.glb",
+      "url": "/assets/demos/public-hardware/models/FanPinHeader_1x03_P2.54mm_Vertical-962f287fa454.glb"
+    },
+    {
+      "path": "models/U.FL_Hirose_U.FL-R-SMT-1_Vertical-bb861ac13b1f.glb",
+      "url": "/assets/demos/public-hardware/models/U.FL_Hirose_U.FL-R-SMT-1_Vertical-bb861ac13b1f.glb"
+    },
+    {
+      "path": "models/PinHeader_2x06_P2.00mm_Vertical_SMD-d60d6a07da30.glb",
+      "url": "/assets/demos/public-hardware/models/PinHeader_2x06_P2.00mm_Vertical_SMD-d60d6a07da30.glb"
+    },
+    {
+      "path": "models/PinHeader_1x14_P2.54mm_Vertical-39dfd3637dd6.glb",
+      "url": "/assets/demos/public-hardware/models/PinHeader_1x14_P2.54mm_Vertical-39dfd3637dd6.glb"
+    },
+    {
+      "path": "models/D_SMC-30dab4c2e222.glb",
+      "url": "/assets/demos/public-hardware/models/D_SMC-30dab4c2e222.glb"
+    },
+    {
+      "path": "models/LQFP-100_14x14mm_P0.5mm-51720097260f.glb",
+      "url": "/assets/demos/public-hardware/models/LQFP-100_14x14mm_P0.5mm-51720097260f.glb"
+    },
+    {
+      "path": "models/SOT-563-76c34aa49057.glb",
+      "url": "/assets/demos/public-hardware/models/SOT-563-76c34aa49057.glb"
+    },
+    {
+      "path": "models/USB_Micro-B_Molex_47346-0001-34a2947897a9.glb",
+      "url": "/assets/demos/public-hardware/models/USB_Micro-B_Molex_47346-0001-34a2947897a9.glb"
+    },
+    {
+      "path": "models/SOIC-8_3.9x4.9mm_P1.27mm-07f46cff378d.glb",
+      "url": "/assets/demos/public-hardware/models/SOIC-8_3.9x4.9mm_P1.27mm-07f46cff378d.glb"
+    }
+  ]
+}

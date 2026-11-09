@@ -6,7 +6,7 @@
   const controls = root.querySelector('#capability-controls'), status = root.querySelector('#capability-status');
   const api = window.KiCadWebView, project = window.IRCAProject;
   const olimex = '/assets/demos/public-hardware/olimex-p4-project.json';
-  const marble = '/assets/demos/public-hardware/marble-selected-sheets.json';
+  const marble = '/assets/demos/public-hardware/marble-project.json';
   const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
   const definitions = {
     compact: ['Compact embed', 'IRCA in a single read-only viewer. Switch drawings in its toolbar, fit, inspect and change theme.', 'quick-start/'],
@@ -15,7 +15,7 @@
     layers: ['Saved layers', 'Toggle a layer set or use the native Layers controls. This changes the display, not the saved source.', 'api-viewer/#views-layers-and-measurement'],
     assembly: ['3D inspection and part focus', 'Try Bottom, then select a front-mounted part to see framing from its saved mounting side. Net selection accents saved copper.', 'user-guide/#navigate-the-drawing'],
     linked: ['Linked views and view URLs', 'Cross-select exact saved identities between two independent cameras. View links contain source hashes and state, not CAD or credentials.', 'api-project/#linkviewers'],
-    hierarchy: ['Independent hierarchy', 'IRCA has one schematic sheet. The selected Marble root and PMOD sheets demonstrate a partial branch; other sheets stay labelled missing.', 'api-utilities/'],
+    hierarchy: ['Independent hierarchy', 'IRCA has one schematic sheet. Marble supplies its full saved schematic hierarchy; drawings load on request.', 'api-utilities/'],
     presentation: ['Carousel and rendering', 'Step through live IRCA views. Playback is opt-in; close the panel to release it. Presentation rendering may fall back on constrained GPUs.', 'api-project/#viewercarousel'],
     models: ['Virtual model controls', 'Choose actual planar faces to place a display, LED, button and knob. These are script-driven overlays, not firmware or circuit simulation.', 'model-interaction/'],
     analysis: ['Supplied PI analysis', 'The existing IRCA result is a computed normalized-load copper study. This panel displays supplied results; it does not run a solver.', 'user-guide/#display-supplied-analysis-results'],
@@ -133,7 +133,7 @@
     message(ctx, 'Opening panel…');
     try {
       if (!api || !project) throw Error('The viewer runtime is unavailable. Reload the page to retry.');
-      if (key === 'export') { const frame = element('iframe', '', stage); frame.title = 'Export your own interactive HTML locally'; frame.src = '/assets/lib/kicad-webview/releases/0.1.0-beta.2/export.html'; }
+      if (key === 'export') { const frame = element('iframe', '', stage); frame.title = 'Export your own interactive HTML locally'; frame.src = '/assets/demos/export.html'; }
       else if (key === 'integrations') {
         stage.classList.add('is-info');
         const list = element('ul', '', stage);
@@ -160,7 +160,7 @@
         const host = pane(); host.className = 'wv-gallery-pane'; const tree = own(ctx, new api.ProjectTree(host, { theme: theme() })); ctx.themed = tree;
         await tree.loadFiles((await project.files()).filter(f => f.path.endsWith('.kicad_sch')));
         button(ctx, 'IRCA single sheet', async () => tree.loadFiles((await project.files()).filter(f => f.path.endsWith('.kicad_sch'))));
-        button(ctx, 'Marble selected branch · 3.16 MB', async () => { await tree.load(marble, { signal: ctx.abort.signal }); message(ctx, 'Selected Marble root and PMOD branch. Other children remain missing. CERN-OHL-1.2 applies to the upstream hardware.'); });
+        button(ctx, 'Marble full schematic hierarchy', async () => { await tree.load(marble, { signal: ctx.abort.signal }); message(ctx, 'Full saved Marble schematic hierarchy. Drawings load on request; CERN-OHL-1.2 applies to the upstream hardware.'); });
         button(ctx, 'Expand', () => tree.expandAll()); button(ctx, 'Collapse', () => tree.collapseAll());
         button(ctx, 'Export SVG', () => { const url = URL.createObjectURL(new Blob([tree.toSVG()], { type: 'image/svg+xml' })); const a = document.createElement('a'); a.href = url; a.download = 'project-hierarchy.svg'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); });
       }

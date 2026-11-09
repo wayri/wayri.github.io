@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/examples/
 doc_section: examples
 ---
 
-These independent examples use the **0.1.0-beta.2** ES module directly from the versioned release. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The public OLIMEX project references pinned original upstream PCB and schematic sources; external models are not bundled, so 3D may show labelled stand-ins.
+These independent examples use the **0.1.0-beta.2** ES module directly from the versioned release. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The OLIMEX manifest includes its PCB, schematic and 28 component assets. Its display PCB remaps model paths and normalizes equivalent legacy footprint identity fields; electrical and physical geometry is unchanged. Original upstream sources, model coverage, conversions and licensing are linked below.
 
 For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/kicad-webview/docs/quick-start/). The release uses [MPL-2.0](/kicad-webview/docs/license/); input designs and model files have separate terms.
 
@@ -14,7 +14,7 @@ For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/ki
 The [product page’s public examples](/kicad-webview/#public-examples) add two independently licensed designs: **OLIMEX ESP32-P4-DevKit, Rev D1**, under **CERN-OHL-S-2.0**, and **Marble**, under **CERN-OHL-1.2**. Follow each example’s source README and retained license/provenance before reusing hardware files. Their hardware terms are separate from the viewer’s MPL-2.0 license. A successful render is not a hardware validation result.
 
 - [OLIMEX source README, pinned revision `26705d3`](https://github.com/OLIMEX/ESP32-P4-DevKit/blob/26705d36407a07324348927dfd30fbf4ffc1d94c/README.md): Rev D1 PCB and schematic. The hardware’s CERN-OHL-S-2.0 terms are separate from the upstream software and documentation licenses.
-- [Marble source README, pinned revision `a426777`](https://github.com/BerkeleyLab/Marble/blob/a426777d92c0f22a546d4740b419a3937e0c1f90/README.md): selected root and PMOD schematic sheets, not a complete-hierarchy or full-board demo. Hardware copyright and contributor credits remain with their upstream authors under CERN-OHL-1.2.
+- [Marble source README, pinned revision `a426777`](https://github.com/BerkeleyLab/Marble/blob/a426777d92c0f22a546d4740b419a3937e0c1f90/README.md): the PCB and all 25 saved schematic sheets. Exact available model assets are included; most custom CERN/vendor models are absent from the public project, so its 3D assembly still uses labelled stand-ins. Hardware copyright and contributor credits remain with their upstream authors under CERN-OHL-1.2.
 
 Explore the [capability demos](/kicad-webview/#capability-demos) and use [Interactive models & displays](/kicad-webview/docs/model-interaction/) for a complete face-picking example with virtual LEDs, displays, buttons and knobs.
 
@@ -208,3 +208,20 @@ The library rejects a wrong source hash rather than fitting the data to a simila
 Construct a viewer after the mount element exists. Cancel pending work on unmount, dispose helper objects before their viewer, and ignore completions after the component is no longer current. Do not create a new renderer on every reactive value update. Use the viewer's setters for theme, layers and selection; source replacement has its own cancellation and disposal semantics.
 
 For share-link replay, first load the allowed project, then validate/restore the state while linked propagation is suspended. A restore is not transactional, and it never grants permission to fetch an arbitrary fragment-derived URL. See the [viewer lifecycle](/kicad-webview/docs/api-viewer/), [view-state API](/kicad-webview/docs/api-project/#view-state) and [hosting/security guidance](/kicad-webview/docs/hosting/).
+
+## Public project completeness and model coverage
+
+Drawings and model files load on demand. Marble’s board is approximately 44 MB; allow time and memory on a phone. Its full project manifest exposes every saved sheet through the file menu and advanced project navigator. Public example viewers can be closed to release their renderer.
+
+OLIMEX has models for 141 of its 168 saved footprints (all footprints with a resolvable saved model); an extra removable microSD card model is unavailable. Marble has exact model assets for 19 of 1006 footprints. Its missing custom CERN/vendor assets cannot be reconstructed from a schematic or footprint and are not represented as complete mechanical geometry.
+
+The [drawing provenance](/assets/demos/public-hardware/PROVENANCE.json) and [model provenance, coverage and conversion evidence](/assets/demos/public-hardware/MODEL-PROVENANCE.json) retain upstream revisions, credits, licenses, hashes and geometry-preservation checks. Converted models remain separate selectable components. Compatible mesh batching reduces draw calls without merging the board into one object.
+
+## Current website demo pages
+
+- [IRCA, OLIMEX and Marble viewer](/assets/demos/direct.html)
+- [Responsive iframe viewer](/assets/demos/embed.html)
+- [Virtual controls on IRCA models](/assets/demos/model-interaction.html)
+- [Export your own design as HTML](/assets/demos/export.html)
+
+Older hosted demonstration URLs forward to these current pages. The original versioned SDK files and downloadable ZIP archives retain their release contents and notices; they are not the current website showcases.

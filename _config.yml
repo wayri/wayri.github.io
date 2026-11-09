@@ -75,7 +75,14 @@ exclude:
   - assets/js/tools.js
   - assets/js/tools_expansion.js
 
+  - assets/lib/kicad-webview/releases/0.1.0-beta.1/direct.html
+  - assets/lib/kicad-webview/releases/0.1.0-beta.1/embed.html
+  - assets/lib/kicad-webview/releases/0.1.0-beta.1/export.html
+  - assets/lib/kicad-webview/releases/0.1.0-beta.1/inverter-project.html
+  - assets/lib/kicad-webview/releases/0.1.0-beta.2/direct.html
+  - assets/lib/kicad-webview/releases/0.1.0-beta.2/embed.html
+  - assets/lib/kicad-webview/releases/0.1.0-beta.2/export.html
+  - assets/lib/kicad-webview/releases/0.1.0-beta.2/inverter-project.html
+
 include:
   - assets/lib/kicad-webview/licenses/Pocket-KiView-Source-Available-1.0.txt
-  - assets/lib/kicad-webview/releases/0.1.0-beta.1
-  - assets/lib/kicad-webview/releases/0.1.0-beta.2

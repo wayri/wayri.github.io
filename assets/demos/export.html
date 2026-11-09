@@ -1,0 +1,10 @@
+---
+layout: product
+title: Export an interactive HTML viewer
+description: Create a self-contained design viewer locally in your browser.
+permalink: /assets/demos/export.html
+---
+<link rel="stylesheet" href="{{ '/assets/css/webview-demo-pages.css' | relative_url }}">
+<main class="webview-product wv-demo-page"><header><p class="wv-eyebrow">Portable / browser-only export</p><h1>Share an interactive design.</h1><p>Choose your design files and download a self-contained HTML viewer. No npm or Node.js runtime is needed. The exporter reads your files locally and does not upload them.</p><nav class="wv-actions" aria-label="Demo navigation"><a href="{{ '/kicad-webview/' | relative_url }}">KiCad WebView ↗</a><a href="{{ '/kicad-webview/#capability-demos' | relative_url }}">All demo panels ↗</a><a href="{{ '/kicad-webview/docs/' | relative_url }}">Documentation ↗</a></nav></header>
+<form><label>Design title <input id="title" type="text" value="Interactive electronics design" maxlength="200"></label><label>Files <input id="files" type="file" multiple required accept=".kicad_pcb,.kicad_sch,.zip,.wrl,.glb,.gbr,.ger,.gtl,.gbl,.gto,.gbo,.gm1,.drl,.xln"></label><p>Choose PCB/schematic files together, or one ZIP containing your project. Include models in a ZIP with their saved project paths. Maximum 64 MiB total. Review the resulting file before sharing: it contains your design.</p><label>Initial view <select id="view"><option value="">Automatic</option><option value="3d">3D board</option><option value="pcb">PCB layout</option><option value="schematic">Schematic</option></select></label><button>Create HTML download</button></form><output id="status" role="status" aria-live="polite"></output><p class="wv-caption">The generated file contains your selected design. Review it before sharing. Host application support for HTML attachments varies. <a href="{{ '/kicad-webview/docs/license/' | relative_url }}">Software licensing and notices</a> remain separate from your design permissions.</p></main>
+<script type="module" src="{{ '/assets/lib/kicad-webview/releases/0.1.0-beta.2/export.mjs' | relative_url }}"></script>

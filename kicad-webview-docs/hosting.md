@@ -45,17 +45,20 @@ The source files must actually exist at those URLs, and the board’s saved mode
 
 ## Iframe parameters
 
-The versioned [embed page](/assets/lib/kicad-webview/releases/0.1.0-beta.2/embed.html?src=https%3A%2F%2Fwayri.github.io%2Fassets%2Fdemos%2Fpublic-hardware%2Folimex-p4-project.json&view=3d&theme=dark) supports:
+The website [embed page](/assets/demos/embed.html?src=https%3A%2F%2Fwayri.github.io%2Fassets%2Fdemos%2Fpublic-hardware%2Folimex-p4-project.json&view=3d&theme=dark) supports:
 
 | Parameter | Meaning |
 | --- | --- |
-| `src` | Required HTTP(S) design URL; a relative value resolves against `embed.html`. URL-encode it. |
+| `src` | Optional HTTP(S) design URL; omit to show the approved IRCA review. A relative value resolves against `embed.html`. URL-encode it. |
 | `provider` | `kicad` by default; `altium` selects the separate beta provider. |
 | `view` | Initial supported view, such as `pcb`, `schematic`, `3d` or `manufacturing`; omit for automatic choice. It must suit the loaded source/provider. |
-| `theme` | `light` by default or `dark` for the KiCad viewer. |
+| `theme` | Follows the website theme by default; `light` or `dark` overrides it for the KiCad viewer. |
 | `file` | A listed KiCad project drawing to open. |
 | `ref` | KiCad repository revision option. |
-| `inspectOnSelect` | `false` disables automatic opening of the KiCad inspector on selection. |
+| `workspace` | `true` enables the project navigator and linked panes in the website demo; starts with a single pane. |
+| `inspectOnSelect` | `true` enables automatic opening of the KiCad inspector on selection; suppressed by default in the website demo. |
+
+The website page follows the defaults above; the original SDK archive’s `embed.html` requires `src`, defaults to light theme and opens Properties on selection. Older hosted demo URLs forward to the current website pages.
 
 `file`, `ref`, theme and inspection behavior are applied by the KiCad branch of this embed controller. Do not assume the Altium adapter implements the same options. This is a URL-configured viewer, not a cross-origin `postMessage` control API.
 

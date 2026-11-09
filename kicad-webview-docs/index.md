@@ -37,6 +37,6 @@ The current [IRCA product demonstrations](/kicad-webview/) and [capability demos
 
 ## Availability and permission
 
-[Download the complete ZIP (2.82 MB)](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.2.zip), use a [classic script or ES module](/kicad-webview/docs/quick-start/), or open the [browser-only HTML exporter](/assets/lib/kicad-webview/releases/0.1.0-beta.2/export.html). npm publication is not available for this release.
+[Download the complete ZIP (2.82 MB)](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.2.zip), use a [classic script or ES module](/kicad-webview/docs/quick-start/), or open the [browser-only HTML exporter](/assets/demos/export.html). npm publication is not available for this release.
 
 The owner-authored software in this release is open source under **MPL-2.0**. Commercial use and integration do not need individual approval. Preserve license notices and provide the matching covered source as required when distributing builds. Design files and third-party components retain their separate terms. Read [License & release files](/kicad-webview/docs/license/) and [Acknowledgements](/kicad-webview/docs/acknowledgements/).
