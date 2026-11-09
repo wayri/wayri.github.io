@@ -8,7 +8,7 @@ permalink: /assets/demos/cdn-module.html
 <script src="{{ '/assets/js/webview-cdn-example.js' | relative_url }}"></script>
 <script type="module">
 try {
-  const { Viewer } = await import('https://unpkg.com/@wayrisignals/kicad-webview@0.1.0-beta.3/dist/kivi-viewer.js');
+  const { Viewer } = await import('https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js');
   await startWebViewCDNExample(Viewer);
 } catch (error) { document.querySelector('#demo-status').textContent='The browser module could not load: '+error.message; }
 </script>

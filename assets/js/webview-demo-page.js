@@ -38,7 +38,7 @@
         viewer.addEventListener('ready',()=>layers?.replaceChildren());
         await project.load(viewer,{view:query.get('view') || '3d',file:query.get('file') || undefined});
       } else {
-        const api = await import('/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js');
+        const api = await import('https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js');
         if (provider === 'altium' && !source) throw Error('Supply an approved public Altium source URL. This beta uses an external online provider.');
         viewer = provider === 'altium' ? new api.AltiumViewer(host) : workspace ? new api.AdvancedKiCadViewer(host,{...options,layout:'single'}) : new api.KiCadViewer(host,options);
         viewer.addEventListener('ready',()=>layers?.replaceChildren());

@@ -66,7 +66,7 @@
     const session={abort:new AbortController()};linkSession=session;
     linkedStart.disabled=false;linkedStart.textContent='Cancel linked load';
     try {
-      const [{HierarchyViewLinks},selection,linkedAPI]=await Promise.all([import('./webview-hierarchy-links.mjs'),import('./webview-project-selection.mjs'),import('/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js')]);
+      const [{HierarchyViewLinks},selection,linkedAPI]=await Promise.all([import('./webview-hierarchy-links.mjs'),import('./webview-project-selection.mjs'),import('https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js')]);
       if(linkSession!==session||state!==active||disposed)return;
       const create=mount=>active.kind==='irca'?project.createViewer(mount,{theme:theme(),inspectOnSelect:false},linkedAPI.Viewer):new linkedAPI.Viewer(mount,{theme:theme(),inspectOnSelect:false});
       session.pcb=create('#hierarchy-pcb-viewer');session.assembly=create('#hierarchy-3d-viewer');

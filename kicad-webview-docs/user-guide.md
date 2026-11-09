@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/user-guide/
 doc_section: user-guide
 ---
 
-This guide describes **0.1.0-beta.2**, built from revision `86b375e`. It covers the versioned library, which may differ from the newer IRCA demonstrations elsewhere on this website. Start with [Quick start](/kicad-webview/docs/quick-start/) to mount a viewer, or [Examples](/kicad-webview/docs/examples/) for complete browser integrations.
+This guide describes **0.1.0**. It covers the versioned library, which may differ from the newer IRCA demonstrations elsewhere on this website. Start with [Quick start](/kicad-webview/docs/quick-start/) to mount a viewer, or [Examples](/kicad-webview/docs/examples/) for complete browser integrations.
 
 ## Open a design
 
@@ -14,6 +14,8 @@ The compact viewer shows one drawing at a time. It accepts a supported hosted dr
 Local KiCad and manufacturing files are read in browser memory without uploading them. A hosted input makes requests to its authorized URLs; remote servers must permit CORS. A private GitHub repository does not become readable through a public embed. See [Hosting and integrations](/kicad-webview/docs/hosting/) for source formats and permissions, and [Troubleshooting](/kicad-webview/docs/troubleshooting/) for file and archive limits.
 
 Explore the [IRCA demonstration](/kicad-webview/) and [public hardware examples](/kicad-webview/#public-examples). The OLIMEX manifest supplies its PCB, schematic and converted component models under the upstream terms. Marble now includes its PCB and all 25 schematic sheets, but many custom 3D models are unavailable publicly. Missing models remain labelled stand-ins. The display PCB copies change model paths and normalize equivalent legacy footprint identity fields; they do not change physical or electrical geometry.
+
+In 3D, choose **Display → Appearance → Translucent** to see layer-colored copper through the board and models. Fills are faint; layers remain independently hideable. Saved XY positions remain exact, while internal elevations are illustrative when stackup information is missing and a diagnostic explains this. Transparent surfaces can show raster sorting artifacts. Model refreshes are batched as models load, and internal copper is constructed on demand. See the [performance notes](https://github.com/wayri/kicad-webview/blob/v0.1.0/docs/PERFORMANCE.md) for measurement scope and limitations.
 
 ## Navigate the drawing
 

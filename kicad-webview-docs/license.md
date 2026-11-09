@@ -8,7 +8,7 @@ doc_section: license
 
 ## Published npm and CDN release
 
-KiCad WebView `0.1.0-beta.3` is public on [npm](https://www.npmjs.com/package/@wayrisignals/kicad-webview), [jsDelivr](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.1.0-beta.3/) and [UNPKG](https://unpkg.com/@wayrisignals/kicad-webview@0.1.0-beta.3/), under MPL-2.0. Matching source: [v0.1.0-beta.3](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.3), revision `cf3b59f461b4448cdd99a9f11aaebfb036794fd4`. The npm artifact is 2,026,514 bytes and excludes legacy board fixtures and fixture-backed examples. [Installation and no-Node examples](/kicad-webview/docs/quick-start/).
+KiCad WebView `0.1.0` is public on [npm](https://www.npmjs.com/package/@wayrisignals/kicad-webview), [jsDelivr](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.1.0/) and [UNPKG](https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/), under MPL-2.0. Matching source: [v0.1.0](https://github.com/wayri/kicad-webview/tree/v0.1.0). Source revision `3d41a26885da56b964ea6f7a75f9a23da8f73fa3`; npm artifact size 2,039,369 bytes. The npm package excludes legacy board fixtures and fixture-backed examples. [Installation and no-Node examples](/kicad-webview/docs/quick-start/).
 
 ## Immutable hosted SDK
 

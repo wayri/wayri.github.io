@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/examples/
 doc_section: examples
 ---
 
-These independent examples use the **0.1.0-beta.2** ES module directly from the versioned release. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The OLIMEX manifest includes its PCB, schematic and 28 component assets. Its display PCB remaps model paths and normalizes equivalent legacy footprint identity fields; electrical and physical geometry is unchanged. Original upstream sources, model coverage, conversions and licensing are linked below.
+These independent examples use the **0.1.0** ES module directly from the pinned npm CDN release. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The OLIMEX manifest includes its PCB, schematic and 28 component assets. Its display PCB remaps model paths and normalizes equivalent legacy footprint identity fields; electrical and physical geometry is unchanged. Original upstream sources, model coverage, conversions and licensing are linked below.
 
 For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/kicad-webview/docs/quick-start/). The release uses [MPL-2.0](/kicad-webview/docs/license/); input designs and model files have separate terms.
 
@@ -30,7 +30,7 @@ Both viewers load the same exact saved PCB. Selecting a supported part or object
 <div id="views"><div id="layout"></div><div id="assembly"></div></div>
 <p id="status" role="status">Loading the public OLIMEX board…</p>
 <script type="module">
-import { Viewer, linkViewers } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
+import { Viewer, linkViewers } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js';
 const project = 'https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json';
 const layout = new Viewer('#layout', { theme:'dark' });
 const assembly = new Viewer('#assembly', { theme:'dark' });
@@ -66,7 +66,7 @@ This example shows the first slide explicitly. The carousel supplies its own Pre
 <button id="quality" type="button">Try presentation rendering</button>
 <p id="status" role="status"></p>
 <script type="module">
-import { Viewer, ViewerCarousel } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
+import { Viewer, ViewerCarousel } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js';
 const viewer = new Viewer('#board', { theme:'dark' });
 const button = document.querySelector('#quality'); button.disabled = true;
 let tour;
@@ -104,7 +104,7 @@ The tree loads listed schematic sources independently of a PCB/WebGL viewer. SVG
 <button id="save" type="button" disabled>Download diagram SVG</button>
 <p id="status" role="status"></p>
 <script type="module">
-import { ProjectTree, Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
+import { ProjectTree, Viewer } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js';
 const project = 'https://wayri.github.io/assets/demos/public-hardware/marble-project.json';
 const viewer = new Viewer('#sheet', { theme:'dark' });
 const tree = new ProjectTree('#tree', { theme:'dark',
@@ -152,7 +152,7 @@ Choose an actual planar component face after the project loads. This creates a *
 <button id="choose" type="button" disabled>Choose a display face</button>
 <p id="status" role="status">Loading…</p>
 <script type="module">
-import { Viewer, DemoController } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
+import { Viewer, DemoController } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js';
 const viewer = new Viewer('#board', { theme:'dark', inspectOnSelect:false });
 const choose = document.querySelector('#choose'), status = document.querySelector('#status');
 let demo, taps = 0, marker;
@@ -204,7 +204,7 @@ This example loads the public PCB in 2D and lets the reader choose an analysis J
 <label>Matching analysis JSON <input id="results" type="file" accept=".json" disabled></label>
 <p id="status" role="status"></p>
 <script type="module">
-import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
+import { Viewer } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js';
 const viewer = new Viewer('#board');
 const input = document.querySelector('#results'), status = document.querySelector('#status');
 window.addEventListener('pagehide', () => viewer.dispose(), { once:true });

@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/api-viewer/
 doc_section: api
 ---
 
-Release **0.1.0-beta.2**, revision `86b375e`. See the [export index](/kicad-webview/docs/api/) for the full library surface.
+Current npm/CDN release **0.1.0**. The separately archived hosted SDK remains at beta.2. See the [export index](/kicad-webview/docs/api/) for the full library surface.
 
 ## Viewer
 
@@ -19,6 +19,7 @@ new KiCadViewer(target: string | HTMLElement, options?: ViewerOptions): KiCadVie
 | `ViewerOptions` | Default / meaning |
 | --- | --- |
 | `theme?: 'light' \| 'dark'` | `'light'`. |
+| `appearance?: 'realistic' \| 'layers' \| 'translucent'` | `'realistic'`; initial 3D appearance. |
 | `inspectOnSelect?: boolean` | `true`; whether selecting an object opens Inspect. |
 | `assetPaths?: string[]` | Known model asset paths for the 3D resolver. |
 | `loadAsset?: (path: string) => unknown \| Promise<unknown>` | Host-supplied model loader. Use only assets the host is authorized to supply. This overrides the project model loader where provided. |
@@ -150,3 +151,9 @@ registerKiCadViewer(tag = 'kicad-viewer'): void
 Registers a custom element if that tag is not already registered. It requires browser Custom Elements support; invalid custom-element names can throw through the platform API. The classic script registers its default element automatically; importing ESM alone does not.
 
 Supported attributes are `src`, `theme`, `view`, `file`, `ref` and `inspect-on-select` (`'false'` disables auto-inspection). Give the element a height. Connection creates a viewer and optionally loads `src`; disconnection disposes it. Events are forwarded as `kicad:ready`, `kicad:select`, `kicad:measure`, `kicad:analysis`, `kicad:error`, `kicad:viewchange` and `kicad:camerachange`. Attribute mutation is not a reactive reload contract in this release; use the viewer API for later changes.
+
+## 3D appearance and statistics
+
+`setAppearance(mode)` requires a loaded 3D view and returns the active mode. `getAppearance()` returns that mode or `null` outside 3D. `getRenderStats()` returns a copied snapshot or `null` outside 3D, including appearance, draw calls, render count, loaded model and component counts, and model update counts and CPU milliseconds.
+
+Translucent mode shows the board and models transparently, copper in layer colors, and faint fills. Saved XY positions are exact; internal elevations are illustrative when stackup data is unavailable, with a diagnostic. Transparent raster sorting can produce visual ordering artifacts. Layers remain independently hideable and clearing a selection restores translucency.

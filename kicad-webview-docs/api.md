@@ -9,7 +9,7 @@ This reference describes **0.1.0-beta.2**, source revision `86b375e5f5c3f2f04df6
 
 ```js
 import { Viewer, EMBED_API_VERSION } from
-  'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/kivi-viewer.js';
+  'https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js';
 console.log(EMBED_API_VERSION); // '1.0-beta'
 ```
 
