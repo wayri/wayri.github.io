@@ -234,3 +234,11 @@ html:not([data-theme="dark"]) #tools-workspace #tools-content .diagram-img {
 .reference-fields label { display:flex; flex-direction:column; gap:.4rem; }
 .reference-fields input { padding:.5rem; border:1px solid var(--border-color); background:var(--input-bg); color:var(--text-color); min-width:0; }
 @media(max-width:767px) { .reference-sheet :is(th,td) { padding:.5rem; } .reference-sheet table { min-width:520px; } .reference-sheet h2 { font-size:1.75rem; } }
+.tool-usage { margin:0 0 1rem; padding:.75rem 1rem; border:1px solid var(--border-color); border-left:3px solid var(--accent-color); background:var(--container-bg); color:var(--text-color); font:14px/1.6 system-ui,sans-serif; overflow-wrap:anywhere; }
+.tool-usage summary { min-height:44px; display:list-item; align-content:center; color:var(--accent-color); font-weight:600; cursor:pointer; }
+.tool-usage summary:focus-visible { outline:2px solid var(--accent-color); outline-offset:3px; }
+.tool-usage ol { list-style:decimal; padding-left:1.4rem; margin:.75rem 0; }
+.tool-usage li { margin:.5rem 0; }
+.tool-usage p { margin:.75rem 0; color:var(--muted-text); }
+.tool-usage strong { color:var(--text-color); }
+@media(max-width:480px) { .tool-usage { padding:.5rem .75rem; } }

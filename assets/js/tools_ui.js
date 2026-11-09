@@ -402,6 +402,7 @@ async function loadTool(toolId, fileName, btnElement) {
         
         mainArea.innerHTML = html;
         mainArea.dataset.toolId = toolId;
+        ToolsHelp.mount(mainArea, toolId);
 
         // Execute scripts found in the fetched HTML
         const scripts = mainArea.querySelectorAll('script');
