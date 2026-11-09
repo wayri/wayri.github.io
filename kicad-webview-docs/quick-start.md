@@ -1,12 +1,39 @@
 ---
 layout: webview-docs
 title: Quick start
-description: No-build classic script, ES module, iframe and HTML-export setup.
+description: npm installation and no-build classic script, ES module, iframe and HTML-export setup.
 permalink: /kicad-webview/docs/quick-start/
 doc_section: quick-start
 ---
 
-Choose one route below. Each uses the immutable `0.1.0-beta.2` files, without a package install. The examples load the OLIMEX public project manifest, which references pinned original upstream sources under CERN-OHL-S-2.0. Models are not bundled; unresolved components use labelled stand-ins.
+Choose the public npm package for a browser application, or use the no-build routes below. The npm option is pinned to `0.1.0-beta.3`; the existing website-hosted examples retain their immutable `0.1.0-beta.2` URLs. The no-build examples load the OLIMEX public project manifest, which references pinned original upstream sources under CERN-OHL-S-2.0. Models are not bundled; unresolved components use labelled stand-ins.
+
+## npm installation (0.1.0-beta.3)
+
+Install the public [@wayrisignals/kicad-webview package](https://www.npmjs.com/package/@wayrisignals/kicad-webview):
+
+```sh
+npm install @wayrisignals/kicad-webview@0.1.0-beta.3
+```
+
+Add a sized mount to your page:
+
+```html
+<div id="board" style="height:70dvh;min-height:360px"></div>
+```
+
+Use the package from your application's browser entry point with an ES-module-capable bundler:
+
+```js
+import { Viewer } from '@wayrisignals/kicad-webview';
+
+const viewer = new Viewer('#board', { theme: 'dark', inspectOnSelect: false });
+await viewer.load('/designs/project.zip', { view: '3d' });
+```
+
+Replace `/designs/project.zip` with your own supported design URL. Cross-origin sources must permit CORS. Dispose the viewer when its host is permanently unmounted. The package also exports `/lite`, `/hierarchy` and `/slack` entry points; see the [package README](https://github.com/wayri/kicad-webview/blob/v0.1.0-beta.3/README.md) for their scope.
+
+`@beta` follows the current prerelease; the exact version above is reproducible. The package includes the viewer, matching source, types and notices, but excludes legacy board fixtures and fixture-backed demo pages. Existing IRCA and public-board demonstrations remain on this website. Both this npm release and the hosted beta.2 SDK use MPL-2.0; preserve the notices supplied with the copy you use.
 
 ## Classic script
 
