@@ -1,0 +1,165 @@
+{
+  "schema": "kicad-online.site-gallery/v1",
+  "capturedOn": "2026-11-09",
+  "viewer": {
+    "name": "KiCad Online",
+    "version": "0.12.91 development source",
+    "host": "Codex in-app browser",
+    "source": "Latest local development viewer; not an installed-store acceptance test."
+  },
+  "project": {
+    "repository": "wayri/KERO",
+    "pullRequest": "https://github.com/wayri/KERO/pull/16",
+    "mergedCommit": "45acf0a327c1f387e9fb1024638c3fbd06870ddc",
+    "originalEncoderHead": "4e9509e343413bbee974bd9a47c5afe45c4bedbb",
+    "sourceTree": "5db4ea6bca6cfa97ee9a79e1287685d5c9d5142c",
+    "note": "The final PR merge and original encoder source have identical Git trees; root KERO blinker captures are excluded from this new set."
+  },
+  "limits": {
+    "history": "Retained public Git metadata replay; not live provider transport verification.",
+    "comments": "Saved local demonstration review; no external comment was posted.",
+    "fastPI": "Illustrative experimental electrical screen, not board qualification or measured hardware performance."
+  },
+  "fastPI": {
+    "net": "ST05_OUT",
+    "source": "U2.1",
+    "load": "R19.2",
+    "layer": "F.Cu",
+    "sourceVoltageV": 3,
+    "loadCurrentA": 0.0003,
+    "copperThicknessUm": 35,
+    "layerSeparationMm": 1.6,
+    "viaPlatingUm": 25,
+    "conductivitySPerM": 58000000,
+    "gridMm": 0.1,
+    "result": {
+      "voltageDropV": 0.0000053559,
+      "resistanceOhm": 0.017853,
+      "conductorLossW": 1.6068e-9,
+      "iterations": 489,
+      "residualA": 2.74e-12
+    }
+  },
+  "images": [
+    {
+      "filename": "encoder-history.jpg",
+      "label": "Encoder history",
+      "caption": "KERO hello-world encoder: branch lanes and parent-linked commits from retained public Git metadata. Recorded replay, not live-provider transport.",
+      "alt": "Development viewer History tab showing the KERO encoder merge and parent-linked public commits",
+      "width": 857,
+      "height": 884,
+      "bytes": 81323,
+      "sha256": "6ae9f77496682fc4f93c5c6477bf86814111c7886e2c7f900c1cece5562e4b74",
+      "repository": "wayri/KERO",
+      "sourceRevision": "45acf0a327c1f387e9fb1024638c3fbd06870ddc",
+      "sourceTree": "5db4ea6bca6cfa97ee9a79e1287685d5c9d5142c",
+      "boardPath": "encoder/Encoder.kicad_pcb"
+    },
+    {
+      "filename": "encoder-cross-probe.jpg",
+      "label": "Cross-view probes",
+      "caption": "R19 across the encoder layout, bank2 schematic and 3D: linked probe windows opened from one another, with guide lines to the selected part.",
+      "alt": "KERO encoder layout highlighting R19 with linked schematic and 3D probe windows",
+      "width": 857,
+      "height": 884,
+      "bytes": 84829,
+      "sha256": "355503f765a9162fcb82cc32a10799b93bb15175011a3e6fcb70ecb3e968c829",
+      "repository": "wayri/KERO",
+      "sourceRevision": "45acf0a327c1f387e9fb1024638c3fbd06870ddc",
+      "sourceTree": "5db4ea6bca6cfa97ee9a79e1287685d5c9d5142c",
+      "boardPath": "encoder/Encoder.kicad_pcb",
+      "schematicPath": "encoder/bank2.kicad_sch",
+      "selection": "R19",
+      "probeChain": [
+        "main layout",
+        "bank2 schematic popup",
+        "3D popup opened from schematic popup"
+      ]
+    },
+    {
+      "filename": "encoder-comments.jpg",
+      "label": "Encoder comments",
+      "caption": "A saved local review beside the KERO encoder. No comment was posted.",
+      "alt": "KERO encoder drawing beside a saved local demonstration review",
+      "width": 857,
+      "height": 884,
+      "bytes": 124474,
+      "sha256": "f419f0db41d6de7d266d1b5f280d113423e20d077ab27911674659ce29bf93f9",
+      "repository": "wayri/KERO",
+      "sourceRevision": "4e9509e343413bbee974bd9a47c5afe45c4bedbb",
+      "sourceTree": "5db4ea6bca6cfa97ee9a79e1287685d5c9d5142c",
+      "boardPath": "encoder/Encoder.kicad_pcb"
+    },
+    {
+      "filename": "olimex-net-highlight.jpg",
+      "label": "OLIMEX net probe",
+      "caption": "OLIMEX ESP32-PoE M2 /GPIO0: front copper highlighted red and back copper blue, with the surrounding board retained for context.",
+      "alt": "OLIMEX ESP32-PoE M2 net GPIO0 highlighted in front and back copper colors with a linked layout probe",
+      "width": 857,
+      "height": 884,
+      "bytes": 133099,
+      "sha256": "918abbf81fd56e625291b765bc1a2476aaf92fd5b12a1bba5c779834ad763869",
+      "repository": "OLIMEX/ESP32-POE",
+      "sourceRevision": "deb38a377d50eadb04ddc7118a17a5ae58b1ee53",
+      "boardPath": "HARDWARE/ESP32-PoE-hardware-revision-M2/ESP32-PoE_Rev_M2.kicad_pcb",
+      "localAlias": "board.kicad_pcb",
+      "geometryEdited": false
+    },
+    {
+      "filename": "encoder-fast-pi-setup.jpg",
+      "label": "Fast PI setup",
+      "caption": "Experimental Fast PI: select ST05_OUT source and load contacts on the encoder board. Illustrative settings, not hardware qualification.",
+      "alt": "Fast PI source and load contact setup on KERO encoder net ST05_OUT",
+      "width": 857,
+      "height": 884,
+      "bytes": 145026,
+      "sha256": "8ddbd9f4d0530089ce5e55778819cf2a6510925268fa2ff70d3ce780700baba8",
+      "repository": "wayri/KERO",
+      "sourceRevision": "4e9509e343413bbee974bd9a47c5afe45c4bedbb",
+      "sourceTree": "5db4ea6bca6cfa97ee9a79e1287685d5c9d5142c",
+      "boardPath": "encoder/Encoder.kicad_pcb"
+    },
+    {
+      "filename": "encoder-fast-pi-result.jpg",
+      "label": "Fast PI result",
+      "caption": "Experimental ST05_OUT overlay: 5.36 µV drop and 17.85 mΩ under the illustrative load and material settings.",
+      "alt": "Computed experimental Fast PI potential overlay on KERO encoder net ST05_OUT",
+      "width": 857,
+      "height": 884,
+      "bytes": 145490,
+      "sha256": "a5a7131540c5f1b59140bf87ed30ef6247968ddc369df4544085debef4d7c302",
+      "repository": "wayri/KERO",
+      "sourceRevision": "4e9509e343413bbee974bd9a47c5afe45c4bedbb",
+      "sourceTree": "5db4ea6bca6cfa97ee9a79e1287685d5c9d5142c",
+      "boardPath": "encoder/Encoder.kicad_pcb"
+    },
+    {
+      "filename": "encoder-3d.jpg",
+      "label": "Encoder 3D",
+      "caption": "KERO encoder assembly preview: all 79 fitted component models resolved, with library colors and materials.",
+      "alt": "KERO hello-world encoder three-dimensional assembly preview with 79 component models",
+      "width": 857,
+      "height": 884,
+      "bytes": 64686,
+      "sha256": "2bce9041b524cd73265f432ac5ae978949dc6b6ef3537443f3258d2bf1b20958",
+      "repository": "wayri/KERO",
+      "sourceRevision": "4e9509e343413bbee974bd9a47c5afe45c4bedbb",
+      "sourceTree": "5db4ea6bca6cfa97ee9a79e1287685d5c9d5142c",
+      "boardPath": "encoder/Encoder.kicad_pcb"
+    },
+    {
+      "filename": "encoder-sheet-tree.jpg",
+      "label": "Encoder sheet tree",
+      "caption": "Six-sheet encoder hierarchy: a compact parent-and-child navigator beside the drawing.",
+      "alt": "KERO encoder schematic with an interactive parent-and-child sheet tree",
+      "width": 857,
+      "height": 884,
+      "bytes": 62943,
+      "sha256": "7d01f989f6c9cae2200ad57cbe2386b2e74299648a5e91e875356c211b9fbee8",
+      "repository": "wayri/KERO",
+      "sourceRevision": "4e9509e343413bbee974bd9a47c5afe45c4bedbb",
+      "sourceTree": "5db4ea6bca6cfa97ee9a79e1287685d5c9d5142c",
+      "boardPath": "encoder/Encoder.kicad_pcb"
+    }
+  ]
+}
