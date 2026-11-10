@@ -6,7 +6,17 @@ permalink: /kicad-webview/docs/quick-start/
 doc_section: quick-start
 ---
 
-Add KiCad WebView to a plain HTML page with a script tag or browser ES module. **No Node.js, npm installation or build step is needed.** You only need an HTTP(S) host, such as GitHub Pages. The npm and CDN examples use the published `0.3.0` package; the archived website SDK retains its immutable `0.1.0-beta.2` URLs. The examples below load the credited OLIMEX public project, including its PCB, schematic and 28 supplied model assets. Unresolved models remain labelled stand-ins.
+Add KiCad WebView to a plain HTML page with a script tag or browser ES module. **No Node.js, npm installation or build step is needed.** You only need an HTTP(S) host, such as GitHub Pages. The npm and CDN examples use the published `0.3.0` package. For native 3D WayriCAD field registration and linked probes, use the [self-hosted 0.4.0 SDK](#self-hosted-040-sdk); the archived website SDK retains its immutable `0.1.0-beta.2` URLs. The examples below load the credited OLIMEX public project, including its PCB, schematic and 28 supplied model assets. Unresolved models remain labelled stand-ins.
+
+## Self-hosted 0.4.0 SDK
+
+Use a version-pinned browser script without Node.js:
+
+```html
+<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.4.0/kicad-webview.min.js"></script>
+```
+
+The same release provides an [ES module](/assets/lib/kicad-webview/releases/0.4.0/kivi-viewer.js), [checksums](/assets/lib/kicad-webview/releases/0.4.0/RELEASE.json) and [source/download](https://github.com/wayri/kicad-webview/releases/tag/v0.4.0). Use the [WayriCAD integration example](/kicad-webview/docs/wayricad-results/#embed-both-views-without-nodejs) for result layers, native 3D registration and linked probes. Keep the complete matching release directory and notices when self-hosting.
 
 ## npm installation
 

@@ -5,7 +5,16 @@ permalink: /kicad-webview/docs/api-viewer/
 doc_section: api
 ---
 
-The hosted and npm/CDN SDK is **0.3.0**. See the [export index](/kicad-webview/docs/api/) for the full library surface.
+The base API below applies to npm/CDN **0.3.0** and self-hosted **0.4.0**. Native 3D result registration uses 0.4.0. See the [export index](/kicad-webview/docs/api/) for the full library surface.
+
+## Self-hosted 0.4.0 additions
+
+```js
+const position = viewer.getSelectionPosition();
+// { x, y, layer } in saved PCB millimetres, or null.
+```
+
+Returns a saved object anchor or segment midpoint in PCB millimetres, or null when no supported position is available. The registered 3D field emits an `analysisprobe` event with `{probe,path,view:'3d'}`; the probe retains its exact saved XYZ, value, unit and triangle identity. See [WayriCAD result methods and constraints](/kicad-webview/docs/wayricad-results/#layers-and-linked-views) for `setBoardOverlay`, `getBoardOverlayState`, `getResultLayers` and `setLayer`.
 
 ## Viewer
 

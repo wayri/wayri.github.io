@@ -1,0 +1,5 @@
+{% assign webview_release = site.data.webview_release %}
+<div class="wv-release-status" role="note" aria-label="KiCad WebView release availability">
+<p class="wv-docs-version wv-caption"><strong>Self-hosted SDK <a href="{{ '/assets/lib/kicad-webview/releases/' | append: webview_release.self_hosted | append: '/RELEASE.json' | relative_url }}">{{ webview_release.self_hosted }}</a></strong> · <strong>npm / CDN <a href="https://www.npmjs.com/package/@wayrisignals/kicad-webview/v/{{ webview_release.npm }}">{{ webview_release.npm }}</a></strong> · <a href="{{ '/kicad-webview/docs/license/' | relative_url }}">MPL-2.0</a></p>
+<p class="wv-docs-version wv-caption">Native 3D WayriCAD field overlays, saved-layer controls and linked probes use the self-hosted {{ webview_release.self_hosted }} SDK. npm/CDN {{ webview_release.npm }} supports the prior result APIs. <a href="{{ '/kicad-webview/docs/releases/' | relative_url }}">Release details and downloads ↗</a></p>
+</div>

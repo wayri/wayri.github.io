@@ -5,7 +5,13 @@ permalink: /kicad-webview/docs/user-guide/
 doc_section: user-guide
 ---
 
-This guide describes the **0.3.0** release. It covers the versioned library, which may differ from the newer IRCA demonstrations elsewhere on this website. Start with [Quick start](/kicad-webview/docs/quick-start/) to mount a viewer, or [Examples](/kicad-webview/docs/examples/) for complete browser integrations.
+This guide covers the common 0.3.0 viewer APIs and the self-hosted **0.4.0** WayriCAD additions. npm/CDN remains at 0.3.0. It covers the versioned library, which may differ from the newer IRCA demonstrations elsewhere on this website. Start with [Quick start](/kicad-webview/docs/quick-start/) to mount a viewer, or [Examples](/kicad-webview/docs/examples/) for complete browser integrations.
+
+## WayriCAD fields on the native 3D board
+
+Use the self-hosted **0.4.0 SDK** to open the [WayriCAD demo](/assets/demos/wayricad-results.html), select a result and enable **Show on matching PCB**. The example enables supported fields automatically. Choose **Saved result layer** to change the layer; use the PCB Layers panel to control its visibility. Switch Layout/3D without losing the enabled overlay on the same source. Click a result or board field to link probe markers; selecting a saved part probes its source anchor, and a saved segment uses its midpoint. Native selection remains available. The chosen result layer stays pinned while its overlay is active.
+
+Fields show through the board and components, with that presentation labelled. Stale sources, missing values and unsupported placement remain explicit. SI uses exported net/segment identities for electrical links; a spatial marker does not infer connectivity. [Import guide, API and limits](/kicad-webview/docs/wayricad-results/).
 
 ## Open a design
 

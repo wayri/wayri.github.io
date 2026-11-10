@@ -6,6 +6,19 @@ doc_section: releases
 description: KiCad WebView release notes, WayriCAD saved results, layer inspection and mobile integrations.
 ---
 
+## 0.4.0 — results directly on the 3D PCB
+
+Available as the **self-hosted SDK and GitHub download**. npm and CDN remain at **0.3.0**; use the versioned 0.4.0 script or module for the additions below.
+
+- Register supported WayriCAD PI and thermal fields on the matching native **2D/3D PCB**. The through-board presentation is labelled; hidden PCB layers hide their field.
+- Choose **Saved result layer** while retaining the quantity where available. Link spatial probe markers between result plots and the board; native saved-part and trace selection remains usable.
+- Preserve exact 3D hit values, triangle identity and elevation. Change saved thermal frames without changing the field range; source changes disable registration.
+- Use a refined two-pane demo, grouped controls and a taller mobile board viewport.
+
+[Try the demo](/assets/demos/wayricad-results.html) · [Guide and API additions](/kicad-webview/docs/wayricad-results/) · [Download and source](https://github.com/wayri/kicad-webview/releases/tag/v0.4.0) · [Self-hosted manifest](/assets/lib/kicad-webview/releases/0.4.0/RELEASE.json)
+
+The release passed **455 automated tests**. Browser checks covered registered fields, saved-layer visibility, exact linked probes, native part selection, thermal frames and 2D/3D mode retention. A desktop-browser embed had equal 340 px content and viewport widths. Physical-phone performance is unmeasured. The viewer displays saved results; it does not run or qualify a solver. Registration needs exact source identity and a supported saved elevation/basis or explicitly named outer copper surface. Unknown values remain missing; grid preview cells are not clipped to copper or cutouts.
+
 ## 0.3.0 — saved WayriCAD results
 
 Read retained PI fields, SI waveforms and eye traces, and steady or transient thermal grids using WayriCADResultsViewer. Probe saved values, select recorded time frames, graph a thermal cell history and browse or download complete numerical data. Independent 3D fields require explicit saved elevation and share their color range with the 2D plot.

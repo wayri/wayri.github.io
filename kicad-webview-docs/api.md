@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/api/
 doc_section: api
 ---
 
-This reference describes the **0.3.0** release contract. The separately maintained IRCA demonstrations may have additional site-specific capabilities. Import from the versioned module or use the same names on the classic `KiCadWebView` global.
+This reference describes the **0.3.0** base API, also available in self-hosted **0.4.0**. The [0.4.0 additions](/kicad-webview/docs/wayricad-results/#layers-and-linked-views) add native 3D result registration, saved result layers and linked spatial probes. npm/CDN remains at 0.3.0. The separately maintained IRCA demonstrations may have additional site-specific capabilities. Import from the versioned module or use the same names on the classic `KiCadWebView` global.
 
 ```js
 import { Viewer, EMBED_API_VERSION } from
@@ -60,7 +60,7 @@ Every name exported by the release's main entry is listed here. Types and interf
 const EMBED_API_VERSION: '1.0-beta'
 ```
 
-A string identifying the beta embedding contract. Reading it has no side effects and does not test browser capabilities, source compatibility or solver validity. Pin the complete release directory when integrating; this identifier alone does not freeze every future beta implementation.
+The legacy embedding-contract identifier retained for compatibility. It is separate from the SDK/package release version. Reading it has no side effects and does not test browser capabilities, source compatibility or solver validity. Pin the complete release directory when integrating; this identifier alone does not freeze every future beta implementation.
 
 ## Shared conventions
 
