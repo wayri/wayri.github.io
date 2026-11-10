@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/api-viewer/
 doc_section: api
 ---
 
-Current npm/CDN release **0.1.0**. The separately archived hosted SDK remains at beta.2. See the [export index](/kicad-webview/docs/api/) for the full library surface.
+The hosted and npm/CDN SDK is **0.2.1**. See the [export index](/kicad-webview/docs/api/) for the full library surface.
 
 ## Viewer
 
@@ -76,10 +76,26 @@ Hidden layers remain hidden during net highlighting. Schematic connectivity uses
 | `setView(view: DrawingView, options?: {signal?: AbortSignal})` | `Promise<boolean>`; schematic files allow `schematic`, boards allow `pcb` / `3d`, CAM allows `manufacturing`. Rejects before a design is loaded or for an incompatible view. |
 | `fit()` | `void`; fits the current drawing/board using that renderer's controls. |
 | `getLayers()` | Copied `string[]` of saved layer names. |
-| `setLayers(layers: string[])` | `void`; PCB or manufacturing only. Unknown layer names or incompatible views throw. |
+| `setLayers(layers: string[])` | `void`; PCB, 3D, or manufacturing. Unknown layer names or incompatible views throw. |
 | `setTheme(theme: 'light' \| 'dark')` | `void`; invalid themes throw. |
 | `setMeasuring(enabled: boolean)` | `void`; enables the **manufacturing** ruler. Other views throw. Native 3D surface measurement is a viewer control, not a programmable measurement API in this release. |
 | `setRenderQuality(quality: 'low' \| 'balanced' \| 'high' \| 'presentation')` | Returns the active quality, which can fall back. Requires loaded 3D and a supported quality. Presentation rendering is explicit and GPU-intensive; it does not improve source/model accuracy. |
+
+### Inspection controls
+
+These controls are available in the [hosted 0.2.1 module](/assets/lib/kicad-webview/releases/0.2.1/kivi-viewer.js) and npm/CDN 0.2.1. Each viewer keeps its own highlight and layer state.
+
+| Method | Return and behavior |
+| --- | --- |
+| `setHighlightStyle(mode, {color}?)` | Returns copied settings; mode is `dim`, `bright` or `isolate`, color is `accent` or `source`. |
+| `getHighlightStyle()` | Copied `{mode, color}`. Constructor options `highlightStyle` and `highlightColor` set initial values. |
+| `getLayerState()` | Copied `{layers, visible, focused, focusMode, canFocus, canRestore}`. |
+| `setLayerPreset(preset)` | Returns layer state; preset is `all`, `none`, `front`, `back` or `copper`. |
+| `focusLayer(layer, {mode, fit}?)` | Focuses a saved PCB layer, with `dim` or `isolate` mode and optional fit. |
+| `fitFocusedLayer()` | Fits focused PCB geometry; returns a boolean. |
+| `clearLayerFocus()` / `restoreLayerView()` | Clear focus or restore the saved pre-focus/preset visibility; each returns layer state. |
+
+Invalid styles or layers are rejected before state changes. Highlight settings persist for the viewer instance; reopening a drawing resets renderer-local layer state. `highlightstylechange` and `layerschange` report host-API updates. In 3D, layers control saved copper; internal layers are shown in Translucent appearance. Focus and fit are 2D PCB operations.
 
 ## Cameras
 

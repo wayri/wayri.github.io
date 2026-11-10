@@ -5,11 +5,11 @@ permalink: /kicad-webview/docs/api/
 doc_section: api
 ---
 
-This reference describes **0.1.0-beta.2**, source revision `86b375e5f5c3f2f04df6d6c44119c25b0b2b14ee`. It covers the committed release contract rather than the newer viewer used by this website's IRCA demonstrations. Import from the versioned module or use the same names on the classic `KiCadWebView` global.
+This reference describes the **0.2.1** release contract. The separately maintained IRCA demonstrations may have additional site-specific capabilities. Import from the versioned module or use the same names on the classic `KiCadWebView` global.
 
 ```js
 import { Viewer, EMBED_API_VERSION } from
-  'https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js';
+  'https://unpkg.com/@wayrisignals/kicad-webview@0.2.1/dist/kivi-viewer.js';
 console.log(EMBED_API_VERSION); // '1.0-beta'
 ```
 
@@ -41,9 +41,10 @@ Every name exported by the release's main entry is listed here. Types and interf
 | `readZip` | [Validated in-memory archive reader](/kicad-webview/docs/api-utilities/#archives-cam-and-analysis). |
 | `parseManufacturing` | [Gerber/Excellon parser dispatch](/kicad-webview/docs/api-utilities/#archives-cam-and-analysis). |
 | `parseAnalysis` | [Validate imported scalar fields](/kicad-webview/docs/api-utilities/#archives-cam-and-analysis). |
+| `createStandaloneHTML` | [Generate a self-contained viewer document](/kicad-webview/docs/api-utilities/#standalone-html-module). |
 | `analysisSourceHash` | [Hash the exact saved PCB text](/kicad-webview/docs/api-utilities/#archives-cam-and-analysis). |
 
-The separate [`standalone-html.mjs` module](/kicad-webview/docs/api-utilities/#standalone-html-module) exports `createStandaloneHTML`. It is **not** a member of the main `KiCadWebView` global.
+`createStandaloneHTML` is exported by the main entry and the separate [`/html` module](/kicad-webview/docs/api-utilities/#standalone-html-module).
 
 ## Embed API version
 

@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/api-utilities/
 doc_section: api
 ---
 
-These are release **0.1.0-beta.2** APIs from revision `86b375e`. They describe caller-scripted presentation, saved hierarchy and validated input processing, not circuit simulation.
+These are release **0.2.1** APIs. They describe caller-scripted presentation, saved hierarchy and validated input processing, not circuit simulation.
 
 ## DemoController
 
@@ -174,11 +174,11 @@ The actual committed implementation exposes `load(url, {view?, views?} = {}): th
 
 ## Standalone HTML module
 
-This is a separate module, not an export on `KiCadWebView`:
+Use the main module or the `/html` package entry:
 
 ```js
 import { createStandaloneHTML } from
-  'https://wayri.github.io/assets/lib/kicad-webview/releases/0.1.0-beta.2/standalone-html.mjs';
+  'https://unpkg.com/@wayrisignals/kicad-webview@0.2.1/dist/kivi-viewer.js';
 ```
 
 ```ts
@@ -186,7 +186,8 @@ createStandaloneHTML(options: {
   viewerScript: string; licenseText: string;
   files: {path: string; bytes: Uint8Array}[];
   title?: string; view?: 'pcb' | 'schematic' | '3d' | 'manufacturing';
-  theme?: 'dark' | 'light';
+  theme?: 'dark' | 'light'; appearance?: 'realistic' | 'layers' | 'translucent';
+  highlightStyle?: 'dim' | 'bright' | 'isolate'; highlightColor?: 'accent' | 'source';
 }): string
 ```
 

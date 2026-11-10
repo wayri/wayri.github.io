@@ -38,7 +38,7 @@
         viewer.addEventListener('ready',()=>layers?.replaceChildren());
         await project.load(viewer,{view:query.get('view') || '3d',file:query.get('file') || undefined});
       } else {
-        const api = await import('https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js');
+        const api = await import('https://wayri.github.io/assets/lib/kicad-webview/releases/0.2.1/kivi-viewer.js');
         if (provider === 'altium' && !source) throw Error('Supply an approved public Altium source URL. This beta uses an external online provider.');
         viewer = provider === 'altium' ? new api.AltiumViewer(host) : workspace ? new api.AdvancedKiCadViewer(host,{...options,layout:'single'}) : new api.KiCadViewer(host,options);
         viewer.addEventListener('ready',()=>layers?.replaceChildren());
@@ -80,11 +80,25 @@
     finally { button.disabled = false; }
   });
   choose?.addEventListener('change',()=>{const link=document.querySelector('#project-mode');if(link){const url=new URL(location.href);url.searchParams.set('workspace','true');url.searchParams.set('example',choose.value);link.href=url.href;}});
-  launch?.addEventListener('click',load);
+  let initialObserver=null, initialPending=true;
+  function startInitialLoad() {
+    if (!initialPending) return;
+    initialPending=false; initialObserver?.disconnect(); initialObserver=null;
+    load();
+  }
+  launch?.addEventListener('click',()=>{
+    if (initialPending) startInitialLoad(); else load();
+  });
   if (choose && examples[query.get('example')]) choose.value = query.get('example');
   const projectMode = document.querySelector('#project-mode');
   if (projectMode) { const url = new URL(location.href); url.searchParams.set('workspace','true'); projectMode.href = url.href; }
   window.addEventListener('themeChanged',()=>{ if (!query.has('theme')) viewer?.setTheme?.(theme()); });
-  window.addEventListener('pagehide',()=>viewer?.dispose(),{once:true});
-  load();
+  window.addEventListener('pagehide',()=>{initialPending=false;initialObserver?.disconnect();initialObserver=null;viewer?.dispose();},{once:true});
+  if (typeof IntersectionObserver === 'function') {
+    status.textContent = 'The design will load when the viewer is near the screen.';
+    try {
+      initialObserver = new IntersectionObserver(entries=>{if(entries.some(entry=>entry.target===host && entry.isIntersecting)) startInitialLoad();},{rootMargin:'200px'});
+      initialObserver.observe(host);
+    } catch { initialObserver?.disconnect(); initialObserver=null; startInitialLoad(); }
+  } else startInitialLoad();
 })();

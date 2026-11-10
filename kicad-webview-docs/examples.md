@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/examples/
 doc_section: examples
 ---
 
-These independent examples use the **0.1.0** ES module directly from the pinned npm CDN release. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The OLIMEX manifest includes its PCB, schematic and 28 component assets. Its display PCB remaps model paths and normalizes equivalent legacy footprint identity fields; electrical and physical geometry is unchanged. Original upstream sources, model coverage, conversions and licensing are linked below.
+These independent examples use the **0.2.1** ES module directly from the pinned npm CDN release. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The OLIMEX manifest includes its PCB, schematic and 28 component assets. Its display PCB remaps model paths and normalizes equivalent legacy footprint identity fields; electrical and physical geometry is unchanged. Original upstream sources, model coverage, conversions and licensing are linked below.
 
 For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/kicad-webview/docs/quick-start/). The release uses [MPL-2.0](/kicad-webview/docs/license/); input designs and model files have separate terms.
 
@@ -17,6 +17,22 @@ The [product page’s public examples](/kicad-webview/#public-examples) add two 
 - [Marble source README, pinned revision `a426777`](https://github.com/BerkeleyLab/Marble/blob/a426777d92c0f22a546d4740b419a3937e0c1f90/README.md): the PCB and all 25 saved schematic sheets. Exact available model assets are included; most custom CERN/vendor models are absent from the public project, so its 3D assembly still uses labelled stand-ins. Hardware copyright and contributor credits remain with their upstream authors under CERN-OHL-1.2.
 
 Explore the [capability demos](/kicad-webview/#capability-demos) and use [Interactive models & displays](/kicad-webview/docs/model-interaction/) for a complete face-picking example with virtual LEDs, displays, buttons and knobs.
+
+## Hosted 0.2.1 inspection
+
+The following uses the site-hosted 0.2.1 module. The npm/CDN examples below use the same version.
+
+```js
+import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.2.1/kivi-viewer.js';
+const viewer = new Viewer('#board', {highlightStyle: 'dim', highlightColor: 'accent'});
+await viewer.load('/designs/project.zip', {view: 'pcb'});
+viewer.setHighlightStyle('isolate', {color: 'source'});
+viewer.focusLayer('F.Cu', {mode: 'isolate', fit: true});
+viewer.restoreLayerView();
+await viewer.setView('3d');
+viewer.setAppearance('translucent');
+viewer.setLayers(['F.Cu', 'B.Cu']); // Choose saved names from getLayerState().layers.
+```
 
 ## Link a layout and assembly
 
@@ -30,7 +46,7 @@ Both viewers load the same exact saved PCB. Selecting a supported part or object
 <div id="views"><div id="layout"></div><div id="assembly"></div></div>
 <p id="status" role="status">Loading the public OLIMEX board…</p>
 <script type="module">
-import { Viewer, linkViewers } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js';
+import { Viewer, linkViewers } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.2.1/dist/kivi-viewer.js';
 const project = 'https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json';
 const layout = new Viewer('#layout', { theme:'dark' });
 const assembly = new Viewer('#assembly', { theme:'dark' });
@@ -66,7 +82,7 @@ This example shows the first slide explicitly. The carousel supplies its own Pre
 <button id="quality" type="button">Try presentation rendering</button>
 <p id="status" role="status"></p>
 <script type="module">
-import { Viewer, ViewerCarousel } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js';
+import { Viewer, ViewerCarousel } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.2.1/dist/kivi-viewer.js';
 const viewer = new Viewer('#board', { theme:'dark' });
 const button = document.querySelector('#quality'); button.disabled = true;
 let tour;
@@ -104,7 +120,7 @@ The tree loads listed schematic sources independently of a PCB/WebGL viewer. SVG
 <button id="save" type="button" disabled>Download diagram SVG</button>
 <p id="status" role="status"></p>
 <script type="module">
-import { ProjectTree, Viewer } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js';
+import { ProjectTree, Viewer } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.2.1/dist/kivi-viewer.js';
 const project = 'https://wayri.github.io/assets/demos/public-hardware/marble-project.json';
 const viewer = new Viewer('#sheet', { theme:'dark' });
 const tree = new ProjectTree('#tree', { theme:'dark',
@@ -139,7 +155,7 @@ In the [hierarchy demo](/assets/demos/hierarchy.html), choose **Link PCB and 3D*
 - Use the shared component search and **Try a front-mounted part** / **Try a back-mounted part** to compare the two sides. **Fit PCB and 3D** restores an overview.
 - Pause **Cross-selection** to explore each pane independently, clear the linked selection, or unload both board views. Properties stay closed on selection unless you enable them in an inspector. On narrow screens the panes stack vertically.
 
-This website integration uses the library’s published beta.2 <code>Viewer</code>, <code>linkViewers</code>, <code>selectPart(part, { locate:true })</code> and view-state APIs, plus a host-side [sheet/selection coordinator](/assets/js/webview-hierarchy-links.mjs) and [saved identity matcher](/assets/js/webview-project-selection.mjs). The schematic host resolves the selected sheet before forwarding selection; the library does not infer cross-file relationships from a component label alone. These small modules are available under MPL-2.0.
+This website integration uses the library’s 0.2.1 <code>Viewer</code>, <code>linkViewers</code>, <code>selectPart(part, { locate:true })</code> and view-state APIs, plus a host-side [sheet/selection coordinator](/assets/js/webview-hierarchy-links.mjs) and [saved identity matcher](/assets/js/webview-project-selection.mjs). The schematic host resolves the selected sheet before forwarding selection; the library does not infer cross-file relationships from a component label alone. These small modules are available under MPL-2.0.
 
 Links require saved PCB footprint paths, symbol UUIDs and an exact sheet-instance context. Separate units of a physical component can link through verified native project annotations. Repeated sheet instances remain distinct. Objects with missing or ambiguous identities, power symbols and non-board items stay unlinked. The public Marble index is [bound to source revisions and SHA-256 hashes](/assets/demos/public-hardware/marble-part-links.json); its display PCB is checked before enabling links. Missing custom 3D models remain disclosed stand-ins, so selection does not imply complete model coverage.
 
@@ -152,7 +168,7 @@ Choose an actual planar component face after the project loads. This creates a *
 <button id="choose" type="button" disabled>Choose a display face</button>
 <p id="status" role="status">Loading…</p>
 <script type="module">
-import { Viewer, DemoController } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js';
+import { Viewer, DemoController } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.2.1/dist/kivi-viewer.js';
 const viewer = new Viewer('#board', { theme:'dark', inspectOnSelect:false });
 const choose = document.querySelector('#choose'), status = document.querySelector('#status');
 let demo, taps = 0, marker;
@@ -204,7 +220,7 @@ This example loads the public PCB in 2D and lets the reader choose an analysis J
 <label>Matching analysis JSON <input id="results" type="file" accept=".json" disabled></label>
 <p id="status" role="status"></p>
 <script type="module">
-import { Viewer } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.1.0/dist/kivi-viewer.js';
+import { Viewer } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.2.1/dist/kivi-viewer.js';
 const viewer = new Viewer('#board');
 const input = document.querySelector('#results'), status = document.querySelector('#status');
 window.addEventListener('pagehide', () => viewer.dispose(), { once:true });

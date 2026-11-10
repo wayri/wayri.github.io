@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/user-guide/
 doc_section: user-guide
 ---
 
-This guide describes **0.1.0**. It covers the versioned library, which may differ from the newer IRCA demonstrations elsewhere on this website. Start with [Quick start](/kicad-webview/docs/quick-start/) to mount a viewer, or [Examples](/kicad-webview/docs/examples/) for complete browser integrations.
+This guide describes the **0.2.1** release. It covers the versioned library, which may differ from the newer IRCA demonstrations elsewhere on this website. Start with [Quick start](/kicad-webview/docs/quick-start/) to mount a viewer, or [Examples](/kicad-webview/docs/examples/) for complete browser integrations.
 
 ## Open a design
 
@@ -15,7 +15,7 @@ Local KiCad and manufacturing files are read in browser memory without uploading
 
 Explore the [IRCA demonstration](/kicad-webview/) and [public hardware examples](/kicad-webview/#public-examples). The OLIMEX manifest supplies its PCB, schematic and converted component models under the upstream terms. Marble now includes its PCB and all 25 schematic sheets, but many custom 3D models are unavailable publicly. Missing models remain labelled stand-ins. The display PCB copies change model paths and normalize equivalent legacy footprint identity fields; they do not change physical or electrical geometry.
 
-In 3D, choose **Display → Appearance → Translucent** to see layer-colored copper through the board and models. Fills are faint; layers remain independently hideable. Saved XY positions remain exact, while internal elevations are illustrative when stackup information is missing and a diagnostic explains this. Transparent surfaces can show raster sorting artifacts. Model refreshes are batched as models load, and internal copper is constructed on demand. See the [performance notes](https://github.com/wayri/kicad-webview/blob/v0.1.0/docs/PERFORMANCE.md) for measurement scope and limitations.
+In 3D, choose **Display → Appearance → Translucent** to see layer-colored copper through the board and models. Fills are faint; layers remain independently hideable. Saved XY positions remain exact, while internal elevations are illustrative when stackup information is missing and a diagnostic explains this. Transparent surfaces can show raster sorting artifacts. Model refreshes are batched as models load, and internal copper is constructed on demand. See the [performance notes](https://github.com/wayri/kicad-webview/blob/v0.2.1/docs/PERFORMANCE.md) for measurement scope and limitations.
 
 ## Navigate the drawing
 
@@ -56,6 +56,12 @@ Parts and Nets searches use saved drawing metadata. A component's pad/pin select
 Selecting a uniquely identified part in 3D frames its rendered bounds from the saved mounting side. If a model is missing, the labelled footprint proxy may be framed instead. Unknown or ambiguous identities and unsupported board sides do not produce a guessed camera focus. A net-only selection keeps the camera in place. Programmatic callers can use `{ locate: false }` when highlighting should not reframe the part.
 
 Reference text and matching short net names are not proof that objects in different drawings are identical. Cross-probing follows the saved identities described below.
+
+### Inspection controls
+
+In the 0.2.1 viewer, **Highlight settings** offers Dim context, Bright only and Isolate selection, with Accent color or Source colors. Clearing a selection restores source appearance; hidden layers stay hidden. Settings are independent per embed.
+
+**Layers** lists searchable saved layers with colors and primitive counts. All, None, Front, Back and Copper presets control visibility. In PCB view, focus can dim or isolate a layer; fit frames its saved geometry, clear focus retains visibility, and restore returns to the visibility saved before focus or presets. With the drawing focused, `[` and `]` cycle layers and `Shift+F` fits the focused layer; text fields retain normal keyboard behavior. In 3D, the panel controls saved copper layers; internal copper requires Translucent appearance. Manufacturing supports visibility and presets. Schematic references show saved multi-unit letters and field rotation. See the [inspection API](/kicad-webview/docs/api-viewer/#inspection-controls).
 
 ## Work with a project
 
@@ -132,3 +138,8 @@ Live design fidelity and provider/sandbox/mobile compatibility are not establish
 Dispose temporary carousels, link groups, trees and demo controllers when their host unmounts, then dispose their viewers. Source loads can be cancelled or superseded; an earlier view change may already have occurred before a later operation fails. Show errors and warnings near the drawing rather than replacing missing data with a plausible illustration.
 
 The downloadable software uses [MPL-2.0](/kicad-webview/docs/license/), including commercial integrations. Preserve its license, matching-source link and third-party notices when redistributing or self-hosting. Design files and model assets need their own redistribution rights.
+
+
+## Mobile performance
+
+Version 0.2.1 reuses named-source parsing, suspends off-screen 3D drawing and reduces net-selection and toolbar work. The website demo loads as its viewer approaches the screen; Load starts it immediately. In three bounded desktop Chromium samples at 340 px using the supplied OLIMEX proxy fixture, median source-to-PCB load and 3D mount times were approximately 42% lower; source download was excluded. This is not a physical-phone benchmark; physical phone performance remains unverified. For integrations use lazy-loading iframes with a stable responsive height, mount once per container, dispose on unmount, and choose Low or Balanced rendering on constrained devices. Keep large board/model downloads behind a Load button when appropriate.
