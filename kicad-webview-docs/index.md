@@ -10,10 +10,15 @@ KiCad WebView is a browser library for read-only inspection of saved electronics
 
 The current npm and CDN release is **0.2.1**, with translucent 3D appearance and matching [public source](https://github.com/wayri/kicad-webview/tree/v0.2.1). [Use a direct script, browser module or npm package](/kicad-webview/docs/quick-start/). The historical hosted **0.1.0-beta.2 SDK** remains archived separately. The historical beta.2 [release manifest](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) records its file checksums and classic script integrity hash; its [matching source](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.2) remains public.
 
+## New in 0.2.1
+
+Choose dim, bright or isolated highlights with source or accent colors; search saved layers and use PCB focus/fit/restore; select 3D copper layers and navigate layers per project pane. Mobile integrations reuse parsing, avoid unchanged toolbar rebuilding and suspend off-screen 3D drawing. Initial settings also carry into custom elements, viewer URLs and self-contained HTML exports. [Read the release notes and measurement limits](/kicad-webview/docs/releases/), or [try the released controls](/assets/demos/embed.html?example=olimex&view=pcb&theme=dark).
+
 ## Choose a starting point
 
 | Your goal | Start here |
 | --- | --- |
+| See the latest improvements | [What’s new & releases](/kicad-webview/docs/releases/) |
 | Put a working viewer on a webpage | [Quick start](/kicad-webview/docs/quick-start/) |
 | Inspect a PCB, schematic, 3D board or fabrication files | [User guide](/kicad-webview/docs/user-guide/) |
 | Integrate the library into an application | [API & exports](/kicad-webview/docs/api/) |

@@ -9,6 +9,12 @@ These independent examples use the **0.2.1** ES module directly from the pinned 
 
 For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/kicad-webview/docs/quick-start/). The release uses [MPL-2.0](/kicad-webview/docs/license/); input designs and model files have separate terms.
 
+## Try the new inspection controls
+
+Open the [released PCB viewer](/assets/demos/embed.html?example=olimex&view=pcb&theme=dark), then use **Highlight settings** and **Layers**. Select a trace or part to compare highlighting modes; search for a copper layer and try Focus, Fit and Restore. In the [released 3D viewer](/assets/demos/embed.html?example=olimex&view=3d&theme=dark), open Layers and choose Reveal internal copper to enter Translucent appearance. The [project workspace](/assets/demos/embed.html?example=olimex&workspace=true&view=pcb&theme=dark) adds a Layers navigator tab for the active pane.
+
+The [0.2.1 release guide](/kicad-webview/docs/releases/) explains the new options, mobile lifecycle behavior and bounded performance measurements. These links use the released SDK; the approved IRCA demonstrations keep their separately maintained site runtime.
+
 ## Public hardware examples
 
 The [product page’s public examples](/kicad-webview/#public-examples) add two independently licensed designs: **OLIMEX ESP32-P4-DevKit, Rev D1**, under **CERN-OHL-S-2.0**, and **Marble**, under **CERN-OHL-1.2**. Follow each example’s source README and retained license/provenance before reusing hardware files. Their hardware terms are separate from the viewer’s MPL-2.0 license. A successful render is not a hardware validation result.

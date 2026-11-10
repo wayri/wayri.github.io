@@ -1,7 +1,7 @@
 ---
 layout: product
 title: KiCad WebView
-description: Embed KiCad schematics, PCB layouts, selectable 3D assemblies, scripted displays and project hierarchy diagrams. Explore the read-only IRCA demonstrations.
+description: Embed KiCad schematics, PCB layouts and interactive 3D boards. Explore configurable highlights, searchable layers, linked views and optimized mobile embeds.
 permalink: /kicad-webview/
 ---
 
@@ -12,11 +12,23 @@ permalink: /kicad-webview/
         <h1>KiCad WebView</h1>
         <p class="wv-hero-tagline">Explore the board.</p>
         <p class="wv-lead">Schematics, PCB layouts and selectable 3D assemblies in your browser. Link design views, present interactive displays, and bring the saved design into your documentation.</p>
-        <nav class="wv-actions" aria-label="KiCad WebView actions"><a class="wv-action" href="#capability-demos">Demo panels ↓</a><a class="wv-action" href="https://github.com/wayri/kicad-webview"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub source ↗</a><a class="wv-action wv-action-primary" href="#workspace"><i class="fa-solid fa-table-columns" aria-hidden="true"></i> Advanced workspace <span aria-hidden="true">↓</span></a><a class="wv-action" href="#embed"><i class="fa-solid fa-code" aria-hidden="true"></i> Embed it yourself <span aria-hidden="true">↓</span></a><a class="wv-action" href="{{ '/kicad-webview/docs/' | relative_url }}"><i class="fa-solid fa-book-open" aria-hidden="true"></i> Documentation</a><a class="wv-action" href="#distribution"><i class="fa-solid fa-download" aria-hidden="true"></i> Downloads &amp; integration <span aria-hidden="true">↓</span></a><a class="wv-action" href="#licensing"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> Licensing <span aria-hidden="true">↓</span></a></nav>
+        <nav class="wv-actions" aria-label="KiCad WebView actions"><a class="wv-action" href="#release-021">New in 0.2.1 ↓</a><a class="wv-action" href="#capability-demos">Demo panels ↓</a><a class="wv-action" href="https://github.com/wayri/kicad-webview"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub source ↗</a><a class="wv-action wv-action-primary" href="#workspace"><i class="fa-solid fa-table-columns" aria-hidden="true"></i> Advanced workspace <span aria-hidden="true">↓</span></a><a class="wv-action" href="#embed"><i class="fa-solid fa-code" aria-hidden="true"></i> Embed it yourself <span aria-hidden="true">↓</span></a><a class="wv-action" href="{{ '/kicad-webview/docs/' | relative_url }}"><i class="fa-solid fa-book-open" aria-hidden="true"></i> Documentation</a><a class="wv-action" href="#distribution"><i class="fa-solid fa-download" aria-hidden="true"></i> Downloads &amp; integration <span aria-hidden="true">↓</span></a><a class="wv-action" href="#licensing"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> Licensing <span aria-hidden="true">↓</span></a></nav>
         <ul class="wv-facts"><li>Read-only</li><li>Self-hosted</li><li>No rendering server</li><li>KiCad · Gerber · Excellon</li></ul>
         </div>
         <section class="wv-irca-showcase" aria-label="IRCA assembly and Fast PI demonstration">{% include irca-demo.html %}</section>
     </header>
+
+    <section id="release-021" class="wv-capabilities" aria-labelledby="release-021-title">
+        <div class="wv-section-heading"><div><p class="wv-eyebrow">Available now / 0.2.1</p><h2 id="release-021-title">More control. Less work per view.</h2></div><p>New inspection controls and mobile embedding improvements in the published npm, CDN and self-hosted SDK.</p></div>
+        <div class="wv-feature-grid">
+            <a href="{{ '/kicad-webview/docs/releases/#highlight-the-design-your-way' | relative_url }}"><i class="fa-solid fa-highlighter" aria-hidden="true"></i><span><strong>Choose your highlight</strong><small>Dim context, brighten a selection or isolate it. Keep source colors or use an accent across parts, pads and nets.</small></span><span aria-hidden="true">↗</span></a>
+            <a href="{{ '/kicad-webview/docs/releases/#find-and-focus-layers' | relative_url }}"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span><strong>Find and focus layers</strong><small>Search saved layers, apply presets and restore visibility. Focus and fit a PCB layer; choose copper layers in 3D.</small></span><span aria-hidden="true">↗</span></a>
+            <a href="{{ '/kicad-webview/docs/releases/#lighter-mobile-integrations' | relative_url }}"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i><span><strong>Do less off-screen</strong><small>Reuse parsing, retain unchanged controls and pause 3D drawing outside the viewport. Website demos load near the screen.</small></span><span aria-hidden="true">↗</span></a>
+            <a href="{{ '/kicad-webview/docs/releases/#carry-settings-into-your-embed' | relative_url }}"><i class="fa-solid fa-code" aria-hidden="true"></i><span><strong>Configure every embed</strong><small>Set initial highlights and appearance in JavaScript, custom elements, viewer URLs and self-contained HTML exports.</small></span><span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="wv-actions"><a class="wv-action wv-action-primary" href="{{ '/assets/demos/embed.html?example=olimex&amp;view=pcb&amp;theme=dark' | relative_url }}">Try the released PCB controls ↗</a><a class="wv-action" href="{{ '/assets/demos/embed.html?example=olimex&amp;view=3d&amp;theme=dark' | relative_url }}">Explore 3D copper ↗</a><a href="{{ '/kicad-webview/docs/releases/' | relative_url }}">Release notes &amp; integration examples ↗</a></div>
+        <p class="wv-caption">In a bounded 340-pixel desktop-browser sample, median PCB loading and 3D mounting were about 42% lower. This is not a physical-phone benchmark. The release notes explain the fixture, measurements and limits. Internal copper appears in Translucent mode; layer focus and fit are 2D PCB controls.</p>
+    </section>
 
     <div class="wv-actions wv-interaction-guide"><a class="wv-action" href="{{ '/kicad-webview/docs/model-interaction/' | relative_url }}"><i class="fa-solid fa-hand-pointer" aria-hidden="true"></i> Add interactive displays &amp; controls to a model ↗</a><a href="#public-examples">Try public hardware examples ↓</a></div>
     <nav id="capabilities" class="wv-capabilities" aria-labelledby="capabilities-title">
