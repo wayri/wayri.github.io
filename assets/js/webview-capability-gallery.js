@@ -21,6 +21,7 @@
     analysis: ['Supplied PI analysis', 'The existing IRCA result is a computed normalized-load copper study. This panel displays supplied results; it does not run a solver.', 'user-guide/#display-supplied-analysis-results'],
     fabrication: ['Gerber and Excellon review', 'Approved IRCA fabrication review layers, source/tool inspection and the two-point millimetre ruler. Not a manufacturing qualification.', 'user-guide/#review-fabrication-files'],
     inputs: ['Native files, URLs and ZIPs', 'Choose your own local files or a public source. Local imports stay in the browser. Remote sources require CORS and normal authorization.', 'hosting/'],
+    wayricad: ['Saved WayriCAD results', 'Open retained PI, SI and thermal data beside its matching saved PCB. No solver runs here; source and geometry limits remain visible.', 'wayricad-results/'],
     export: ['Export your own HTML', 'The browser-only exporter packages files you select. It does not upload them. This does not provide an IRCA CAD/model download.', 'quick-start/#export-a-self-contained-html-viewer'],
     integrations: ['Application and provider routes', 'HTML attachment support depends on the host client. Confluence needs Forge setup; Altium uses an external online provider.', 'hosting/']
   };
@@ -133,7 +134,8 @@
     message(ctx, 'Opening panel…');
     try {
       if (!api || !project) throw Error('The viewer runtime is unavailable. Reload the page to retry.');
-      if (key === 'export') { const frame = element('iframe', '', stage); frame.title = 'Export your own interactive HTML locally'; frame.src = '/assets/demos/export.html'; }
+      if (key === 'wayricad') { const frame=element('iframe','',stage);frame.title='WayriCAD saved PI, SI and thermal results';frame.src='/assets/demos/wayricad-results.html'; }
+      else if (key === 'export') { const frame = element('iframe', '', stage); frame.title = 'Export your own interactive HTML locally'; frame.src = '/assets/demos/export.html'; }
       else if (key === 'integrations') {
         stage.classList.add('is-info');
         const list = element('ul', '', stage);

@@ -3,8 +3,18 @@ layout: webview-docs
 title: What’s new in KiCad WebView
 permalink: /kicad-webview/docs/releases/
 doc_section: releases
-description: KiCad WebView 0.2.1 highlights, layer inspection, mobile performance improvements and integration examples.
+description: KiCad WebView release notes, WayriCAD saved results, layer inspection and mobile integrations.
 ---
+
+## 0.3.0 — saved WayriCAD results
+
+Read retained PI fields, SI waveforms and eye traces, and steady or transient thermal grids using WayriCADResultsViewer. Probe saved values, select recorded time frames, graph a thermal cell history and browse or download complete numerical data. Independent 3D fields require explicit saved elevation and share their color range with the 2D plot.
+
+Exact saved PCB bytes are checked before enabling supported 2D field registration and saved net/segment links. Stale, unverified or unsupported coordinate data remains independently inspectable. Unknown values stay missing; no solver runs in the viewer. Project-library identity integrity and registration onto the native PCB 3D scene are not supported in this release.
+
+[Open the public example](/assets/demos/wayricad-results.html) · [Import and API guide](/kicad-webview/docs/wayricad-results/) · [Source and download](https://github.com/wayri/kicad-webview/releases/tag/v0.3.0)
+
+The library remains free to use commercially under MPL-2.0. Optional implementation, maintenance and support help is paid. The generated example runs are credited to the pinned WayriCAD source and are not measured hardware or production boards.
 
 ## 0.2.1 — inspection controls and mobile embedding
 

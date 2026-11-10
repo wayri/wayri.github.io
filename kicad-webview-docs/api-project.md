@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/api-project/
 doc_section: api
 ---
 
-These APIs use the same saved drawing identity and renderer contract as the [compact viewer](/kicad-webview/docs/api-viewer/). This page documents release **0.2.1**.
+These APIs use the same saved drawing identity and renderer contract as the [compact viewer](/kicad-webview/docs/api-viewer/). This page documents release **0.3.0**.
 
 ## ProjectViewer
 

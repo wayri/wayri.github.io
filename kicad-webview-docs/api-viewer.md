@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/api-viewer/
 doc_section: api
 ---
 
-The hosted and npm/CDN SDK is **0.2.1**. See the [export index](/kicad-webview/docs/api/) for the full library surface.
+The hosted and npm/CDN SDK is **0.3.0**. See the [export index](/kicad-webview/docs/api/) for the full library surface.
 
 ## Viewer
 
@@ -83,7 +83,7 @@ Hidden layers remain hidden during net highlighting. Schematic connectivity uses
 
 ### Inspection controls
 
-These controls are available in the [hosted 0.2.1 module](/assets/lib/kicad-webview/releases/0.2.1/kivi-viewer.js) and npm/CDN 0.2.1. Each viewer keeps its own highlight and layer state.
+These controls are available in the [hosted 0.3.0 module](/assets/lib/kicad-webview/releases/0.3.0/kivi-viewer.js) and npm/CDN 0.3.0. Each viewer keeps its own highlight and layer state.
 
 | Method | Return and behavior |
 | --- | --- |

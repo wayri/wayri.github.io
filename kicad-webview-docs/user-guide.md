@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/user-guide/
 doc_section: user-guide
 ---
 
-This guide describes the **0.2.1** release. It covers the versioned library, which may differ from the newer IRCA demonstrations elsewhere on this website. Start with [Quick start](/kicad-webview/docs/quick-start/) to mount a viewer, or [Examples](/kicad-webview/docs/examples/) for complete browser integrations.
+This guide describes the **0.3.0** release. It covers the versioned library, which may differ from the newer IRCA demonstrations elsewhere on this website. Start with [Quick start](/kicad-webview/docs/quick-start/) to mount a viewer, or [Examples](/kicad-webview/docs/examples/) for complete browser integrations.
 
 ## Open a design
 
@@ -15,7 +15,7 @@ Local KiCad and manufacturing files are read in browser memory without uploading
 
 Explore the [IRCA demonstration](/kicad-webview/) and [public hardware examples](/kicad-webview/#public-examples). The OLIMEX manifest supplies its PCB, schematic and converted component models under the upstream terms. Marble now includes its PCB and all 25 schematic sheets, but many custom 3D models are unavailable publicly. Missing models remain labelled stand-ins. The display PCB copies change model paths and normalize equivalent legacy footprint identity fields; they do not change physical or electrical geometry.
 
-In 3D, choose **Display → Appearance → Translucent** to see layer-colored copper through the board and models. Fills are faint; layers remain independently hideable. Saved XY positions remain exact, while internal elevations are illustrative when stackup information is missing and a diagnostic explains this. Transparent surfaces can show raster sorting artifacts. Model refreshes are batched as models load, and internal copper is constructed on demand. See the [performance notes](https://github.com/wayri/kicad-webview/blob/v0.2.1/docs/PERFORMANCE.md) for measurement scope and limitations.
+In 3D, choose **Display → Appearance → Translucent** to see layer-colored copper through the board and models. Fills are faint; layers remain independently hideable. Saved XY positions remain exact, while internal elevations are illustrative when stackup information is missing and a diagnostic explains this. Transparent surfaces can show raster sorting artifacts. Model refreshes are batched as models load, and internal copper is constructed on demand. See the [performance notes](https://github.com/wayri/kicad-webview/blob/v0.3.0/docs/PERFORMANCE.md) for measurement scope and limitations.
 
 ## Navigate the drawing
 
@@ -59,7 +59,7 @@ Reference text and matching short net names are not proof that objects in differ
 
 ### Inspection controls
 
-In the 0.2.1 viewer, **Highlight settings** offers Dim context, Bright only and Isolate selection, with Accent color or Source colors. Clearing a selection restores source appearance; hidden layers stay hidden. Settings are independent per embed.
+In the 0.3.0 viewer, **Highlight settings** offers Dim context, Bright only and Isolate selection, with Accent color or Source colors. Clearing a selection restores source appearance; hidden layers stay hidden. Settings are independent per embed.
 
 **Layers** lists searchable saved layers with colors and primitive counts. All, None, Front, Back and Copper presets control visibility. In PCB view, focus can dim or isolate a layer; fit frames its saved geometry, clear focus retains visibility, and restore returns to the visibility saved before focus or presets. With the drawing focused, `[` and `]` cycle layers and `Shift+F` fits the focused layer; text fields retain normal keyboard behavior. In 3D, the panel controls saved copper layers; internal copper requires Translucent appearance. Manufacturing supports visibility and presets. Schematic references show saved multi-unit letters and field rotation. See the [inspection API](/kicad-webview/docs/api-viewer/#inspection-controls).
 
@@ -142,4 +142,4 @@ The downloadable software uses [MPL-2.0](/kicad-webview/docs/license/), includin
 
 ## Mobile performance
 
-Version 0.2.1 reuses named-source parsing, suspends off-screen 3D drawing and reduces net-selection and toolbar work. The website demo loads as its viewer approaches the screen; Load starts it immediately. In three bounded desktop Chromium samples at 340 px using the supplied OLIMEX proxy fixture, median source-to-PCB load and 3D mount times were approximately 42% lower; source download was excluded. This is not a physical-phone benchmark; physical phone performance remains unverified. For integrations use lazy-loading iframes with a stable responsive height, mount once per container, dispose on unmount, and choose Low or Balanced rendering on constrained devices. Keep large board/model downloads behind a Load button when appropriate.
+The optimization work introduced in 0.2.1 reuses named-source parsing, suspends off-screen 3D drawing and reduces net-selection and toolbar work. The website demo loads as its viewer approaches the screen; Load starts it immediately. In three bounded desktop Chromium samples at 340 px using the supplied OLIMEX proxy fixture, median source-to-PCB load and 3D mount times were approximately 42% lower; source download was excluded. This is not a physical-phone benchmark; physical phone performance remains unverified. For integrations use lazy-loading iframes with a stable responsive height, mount once per container, dispose on unmount, and choose Low or Balanced rendering on constrained devices. Keep large board/model downloads behind a Load button when appropriate.

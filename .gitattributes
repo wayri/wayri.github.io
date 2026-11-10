@@ -8,3 +8,4 @@ assets/demos/public-hardware/** -text
 
 # Preserve the exact upstream WRL, including its existing trailing whitespace.
 assets/demos/public-hardware/models/R_Array_Convex_4x0402-037ac34fd14d.wrl -whitespace
+assets/demos/wayricad-results/** -text

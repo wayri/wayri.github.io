@@ -5,11 +5,11 @@ permalink: /kicad-webview/docs/api/
 doc_section: api
 ---
 
-This reference describes the **0.2.1** release contract. The separately maintained IRCA demonstrations may have additional site-specific capabilities. Import from the versioned module or use the same names on the classic `KiCadWebView` global.
+This reference describes the **0.3.0** release contract. The separately maintained IRCA demonstrations may have additional site-specific capabilities. Import from the versioned module or use the same names on the classic `KiCadWebView` global.
 
 ```js
 import { Viewer, EMBED_API_VERSION } from
-  'https://unpkg.com/@wayrisignals/kicad-webview@0.2.1/dist/kivi-viewer.js';
+  'https://unpkg.com/@wayrisignals/kicad-webview@0.3.0/dist/kivi-viewer.js';
 console.log(EMBED_API_VERSION); // '1.0-beta'
 ```
 
@@ -43,6 +43,14 @@ Every name exported by the release's main entry is listed here. Types and interf
 | `parseAnalysis` | [Validate imported scalar fields](/kicad-webview/docs/api-utilities/#archives-cam-and-analysis). |
 | `createStandaloneHTML` | [Generate a self-contained viewer document](/kicad-webview/docs/api-utilities/#standalone-html-module). |
 | `analysisSourceHash` | [Hash the exact saved PCB text](/kicad-webview/docs/api-utilities/#archives-cam-and-analysis). |
+| `WayriCADResultsViewer` | [Saved WayriCAD results: contract, source identity and display limits](/kicad-webview/docs/wayricad-results/). |
+| `parseWayriCADResults` | [Saved WayriCAD results: contract, source identity and display limits](/kicad-webview/docs/wayricad-results/). |
+| `classifyWayriCADSource` | [Saved WayriCAD results: contract, source identity and display limits](/kicad-webview/docs/wayricad-results/). |
+| `getWayriCADSourceLinks` | [Saved WayriCAD results: contract, source identity and display limits](/kicad-webview/docs/wayricad-results/). |
+| `createWayriCADSurface` | [Saved WayriCAD results: contract, source identity and display limits](/kicad-webview/docs/wayricad-results/). |
+| `getWayriCADFrame` | [Saved WayriCAD results: contract, source identity and display limits](/kicad-webview/docs/wayricad-results/). |
+| `probeWayriCADPlot` | [Saved WayriCAD results: contract, source identity and display limits](/kicad-webview/docs/wayricad-results/). |
+| `getWayriCADPointHistory` | [Saved WayriCAD results: contract, source identity and display limits](/kicad-webview/docs/wayricad-results/). |
 
 `createStandaloneHTML` is exported by the main entry and the separate [`/html` module](/kicad-webview/docs/api-utilities/#standalone-html-module).
 

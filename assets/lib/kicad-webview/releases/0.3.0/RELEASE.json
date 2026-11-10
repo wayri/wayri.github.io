@@ -1,0 +1,261 @@
+{
+  "name": "@wayrisignals/kicad-webview",
+  "version": "0.3.0",
+  "source": "https://github.com/wayri/kicad-webview/tree/2b040724031c7648afb99b5ed6b92c89b1267145",
+  "sourceTag": "v0.3.0",
+  "license": "MPL-2.0",
+  "npmIntegrity": "sha512-tyWoLkfRm45pZAABde8hXMDhsYXWKG9kt2NvLQmlsA7XDjOcN5fo1ZQkStiUX6P+tsFCFcMBvPePb+di8NkKAQ==",
+  "files": [
+    {
+      "path": "ADVANCED-VIEWER.md",
+      "bytes": 3477,
+      "sha256": "56e143a2088bd217d8cb94fd2aee1fd2214960449b8150b4f089923c81dd0a95"
+    },
+    {
+      "path": "ALTIUM-BETA.md",
+      "bytes": 5568,
+      "sha256": "e09dfdba87648779be58db2a01b1d489bb4c4674d8bd139de68aabe4216905ed"
+    },
+    {
+      "path": "ANALYSIS.md",
+      "bytes": 3692,
+      "sha256": "d62012a7df01a80f517d8a9f9e9b9447fd65a3056e8da13f598cafa17936829f"
+    },
+    {
+      "path": "APP-INTEGRATIONS-BETA.md",
+      "bytes": 11065,
+      "sha256": "181bd12a41aaee8cad42383298d9ddf26f41fbef61a2a84ca1a389084ca1c4b8"
+    },
+    {
+      "path": "BROWSER-CHECKS.md",
+      "bytes": 1211,
+      "sha256": "a90f260dfd483e2aeadb774c92f2c0a3f0dd3bd0cd224cbebcb2c61ce9c73ae5"
+    },
+    {
+      "path": "CAROUSEL.md",
+      "bytes": 5523,
+      "sha256": "bad45a678a7213b8f128efecaf5a5a1a7ff5067fc21bf49b9194cb0c492c4c03"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 1428,
+      "sha256": "c87e062f2eb780f726df3b813f8e7d3190d6b6f6f9eb1c48c91f7fc30e28d3ab"
+    },
+    {
+      "path": "embed.html",
+      "bytes": 514,
+      "sha256": "7b80b0187ec0767946f4b2b86fa07c860f5c68bb4363c3b1d67b59bacbf41b10"
+    },
+    {
+      "path": "embed.mjs",
+      "bytes": 1280,
+      "sha256": "f8afb897c6ff9d5dcbf140abc58e1190b5418c54dc067597a502ae04b0799af0"
+    },
+    {
+      "path": "FZSTD-LICENSE",
+      "bytes": 1089,
+      "sha256": "1d72133b15f05101411c4f53e34af38adce3ecf7a78959d3d28b1e4d41a4fc92"
+    },
+    {
+      "path": "HOSTING.md",
+      "bytes": 6030,
+      "sha256": "d3cea8613b830c44322b2242ad74552e9d51ca878d7f44fb4125c7fd6f804ead"
+    },
+    {
+      "path": "INSPECTION-CONTROLS.md",
+      "bytes": 4034,
+      "sha256": "26e222a7690c9bdb663597cba7c92fdb4db5272f40341677df7f3b2e1e3dc77f"
+    },
+    {
+      "path": "INTERACTIVE-DEMO.md",
+      "bytes": 9593,
+      "sha256": "be9d727c9e613d5be0785009781b528d82f5e54303d9472c8178d32a622f5cb0"
+    },
+    {
+      "path": "KICAD-COMPATIBILITY.md",
+      "bytes": 3280,
+      "sha256": "3afa26a9f6bc9c90742d58d69fcc34b8932aaacc010a387a3084467b3f321cd4"
+    },
+    {
+      "path": "kicad-webview.min.js",
+      "bytes": 1632402,
+      "sha256": "61d8acf05212bd03ddda4cf863801cc75ef21ecde258184c42e5d921d9c2eb51"
+    },
+    {
+      "path": "kivi-viewer.js",
+      "bytes": 1632269,
+      "sha256": "dd7b02ce67d7b88fd7734a7201aa3996a46144439daf659693b3d12a927435e0"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 16726,
+      "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04"
+    },
+    {
+      "path": "licenses/Pocket-KiView-Source-Available-1.0.txt",
+      "bytes": 5836,
+      "sha256": "6e0b3232c49c4aee1afd5b97e39c45d0eecc4071a2f69fc23f733b8aa12e6fc8"
+    },
+    {
+      "path": "LICENSING.md",
+      "bytes": 3336,
+      "sha256": "98dc1c39eaa49058e04b5891a6d4d0e3d0d89cc6a8e74e2128a749359cfc5b89"
+    },
+    {
+      "path": "LIGHTWEIGHT.md",
+      "bytes": 4688,
+      "sha256": "51593352f38b4e09af327c26197d278153f517367d3f44272d830f09b31dd24a"
+    },
+    {
+      "path": "LINKED-VIEWS.md",
+      "bytes": 4088,
+      "sha256": "2ade2517cb11f91fd74d84a34e82e8eae7abef07f4da097ef635ad92380b0460"
+    },
+    {
+      "path": "lite/chunks/analysis-layer-ARUKPXDV.js",
+      "bytes": 5030,
+      "sha256": "25eb8ca961809759b4b84a5cbd9e6c09317976d277b348e815e9c86bf9281fc7"
+    },
+    {
+      "path": "lite/chunks/analysis-results-7R4JX2PO.js",
+      "bytes": 452,
+      "sha256": "b5941127f62f52d5b1c68e37fca196c28691c37dc1f0f29c4e060aa50a4cb528"
+    },
+    {
+      "path": "lite/chunks/board3d-AR4QLKGA.js",
+      "bytes": 1219067,
+      "sha256": "86548c4fc0edb9161dff94cd8c26d4afcf852846018472daa1ea13ed6c4f5e01"
+    },
+    {
+      "path": "lite/chunks/chunk-5GYOPBRK.js",
+      "bytes": 13927,
+      "sha256": "00e82e7e002a939b8801b30a878cb8f9a09df234acbc4fc768f6e62752013c4a"
+    },
+    {
+      "path": "lite/chunks/chunk-KJIMYJ3B.js",
+      "bytes": 3605,
+      "sha256": "10f30e21468236cf99c1cd361dc7a27de2f69c35bbd3635be571f7feb9103aa0"
+    },
+    {
+      "path": "lite/chunks/chunk-NJMVN5ZQ.js",
+      "bytes": 874,
+      "sha256": "845144b5bd6003e9535d2906047e4f2d63c6e7385698c4877fab9c8ab1461d2b"
+    },
+    {
+      "path": "lite/chunks/chunk-SGZPENOS.js",
+      "bytes": 1098,
+      "sha256": "be5b48a0717471b55cdff115f5bd2be39806e71eb07c4d133a2a082118acc951"
+    },
+    {
+      "path": "lite/chunks/three-runtime-WL3L6GPJ.js",
+      "bytes": 341,
+      "sha256": "b82ac93eeafec925c3fb09b782314426150392537ba585700564a8688d2c912d"
+    },
+    {
+      "path": "lite/kicad-webview-lite.js",
+      "bytes": 263474,
+      "sha256": "6b95ea01088e92a344103fda284f974ce5f3b3e721c6fe1b64270e2acaaabfac"
+    },
+    {
+      "path": "lite/manifest.json",
+      "bytes": 4617,
+      "sha256": "2b1bfeea1a53bf4e72d38e82ce718af37b78ccc8f226b118c423ce2b33e7c6d5"
+    },
+    {
+      "path": "MANUFACTURING-BETA.md",
+      "bytes": 7618,
+      "sha256": "ffe914494d9e84440aefaffedc1e5dd4eff32932dc4e8b5c1bf5d70feda46596"
+    },
+    {
+      "path": "MOBILE-PERFORMANCE.md",
+      "bytes": 3828,
+      "sha256": "f529f6050d0fa05ff909d923dbf8cc8733d300958ba849e948fee19ba8c59acd"
+    },
+    {
+      "path": "NET-MODEL-PROVENANCE.md",
+      "bytes": 917,
+      "sha256": "6c0fb30f61196a676853e0ba4832765f00bf656935f0c9dbbad1897c8c5c61d6"
+    },
+    {
+      "path": "PRESENTATION.md",
+      "bytes": 2791,
+      "sha256": "0c452b4a02d9625ef39fae6e1ae160e76300044b7ca499f8ae3bbbc5fb6ca0e8"
+    },
+    {
+      "path": "PROJECT-TREE.md",
+      "bytes": 5874,
+      "sha256": "4d75c869a225d6bb59ef2ceee7ed919e8e3c53111610840b797ddff8d92aa069"
+    },
+    {
+      "path": "PUBLIC-API.md",
+      "bytes": 10030,
+      "sha256": "484ba36c2d38535d7ce87161e74ebfd8840ef4e75b45368a3235161392161e5d"
+    },
+    {
+      "path": "README.md",
+      "bytes": 10873,
+      "sha256": "5201b6421e9a8507058801e7e8807606c56e057037e967ffedd5ca5c3d4aa2bc"
+    },
+    {
+      "path": "RELEASING.md",
+      "bytes": 766,
+      "sha256": "9cb003de4f83b94206226bcce6363ad90815614e0f712dc785f9889962e918a1"
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 671,
+      "sha256": "d3ada3e887e24964101d86966a86dc051fc865db80f535b958dd0d77e185f373"
+    },
+    {
+      "path": "SOURCE-PROVENANCE.json",
+      "bytes": 20727,
+      "sha256": "c2e02753ee5cf76f6af1da673094725e0ad60c36a649239d7e7710dacb331542"
+    },
+    {
+      "path": "SPIKE-ENGINE-NOTICE.md",
+      "bytes": 956,
+      "sha256": "5103d6eb30c3a645db2bacad71dd2ddeb4946f4a67fd4c2c8a7c2c328ab5614d"
+    },
+    {
+      "path": "standalone-html.mjs",
+      "bytes": 5005,
+      "sha256": "10596fd03294a2a5adb6f42fbe1435c075888a47b55ce7ed38f682c532842ddc"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "bytes": 2001,
+      "sha256": "637797c6f1c4f515ab5275807f60aa421763362cc3edbac588d3ce7595efadee"
+    },
+    {
+      "path": "THREE-LICENSE",
+      "bytes": 1102,
+      "sha256": "f57eb9202058667d12aebd854fe8a86d6feaeab51078180df5615bfdbd5cff05"
+    },
+    {
+      "path": "TRADEMARKS.md",
+      "bytes": 642,
+      "sha256": "d13122983ee2ef88d3bc5240dc51b711c12d783c3daf43ba66cfdbdb24969821"
+    },
+    {
+      "path": "VIEW-LINKS.md",
+      "bytes": 4415,
+      "sha256": "adecce06425f986eea2a6da07e2d5731bf0ced53391ae75358e8da058031088e"
+    },
+    {
+      "path": "VIEW-NAVIGATION.md",
+      "bytes": 3254,
+      "sha256": "a4ecea14023f5b54a128985a7a331a13577c04bfc2ed38965bdbf3bee986b1ed"
+    },
+    {
+      "path": "wayricad-results.js",
+      "bytes": 1305074,
+      "sha256": "45ab19b15ad6fd9ae3ee9a6ee28ce4bf9b40d2f57514ca180a6b2417167a76ca"
+    },
+    {
+      "path": "WAYRICAD-RESULTS.md",
+      "bytes": 8506,
+      "sha256": "19a4faa8c17f7fffeda88097c1a2a9039ad187bfd6bb6f506b7a2e1590f51c82"
+    }
+  ],
+  "classicSRI": "sha384-2cXc2lF51NBt4zq3Me35cIpPbQ+cK/8BJ7tTJr1IXERmyOcv5RZhr3HylOSMqOSi"
+}

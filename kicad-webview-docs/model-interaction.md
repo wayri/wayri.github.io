@@ -11,12 +11,12 @@ press a button or turn a knob. **These are virtual presentation controls.** They
 do not run firmware, emulate a peripheral bus, predict electrical behavior,
 connect to hardware or edit the KiCad design. Your page supplies the behavior.
 
-This guide uses **0.2.1** and its public `DemoController` API. It does not
+This guide uses **0.3.0** and its public `DemoController` API. It does not
 depend on the later site-specific interaction-locking API. For exact signatures,
 see [DemoController](/kicad-webview/docs/api-utilities/#democontroller) and
 [face selection](/kicad-webview/docs/api-viewer/#cameras).
 
-[Open the approved IRCA interaction demo](/assets/demos/model-interaction.html) to try the website’s existing review integration. It uses the site-demo bundle and approved IRCA display models; the portable 0.2.1 API example below uses the credited public OLIMEX files.
+[Open the approved IRCA interaction demo](/assets/demos/model-interaction.html) to try the website’s existing review integration. It uses the site-demo bundle and approved IRCA display models; the portable 0.3.0 API example below uses the credited public OLIMEX files.
 
 ## Choose actual geometry
 
@@ -73,7 +73,7 @@ Save this HTML on an HTTP(S) host. It opens the public OLIMEX project using pinn
   and Up/Down change the knob. Page controls remain usable with a keyboard.</p>
 <script type="module">
 import { Viewer, DemoController } from
-  'https://unpkg.com/@wayrisignals/kicad-webview@0.2.1/dist/kivi-viewer.js';
+  'https://unpkg.com/@wayrisignals/kicad-webview@0.3.0/dist/kivi-viewer.js';
 
 const status = document.querySelector('#status');
 const viewer = new Viewer('#board', {theme:'dark'});
@@ -312,8 +312,8 @@ viewer you supplied. Dispose that viewer separately. Cancel pending face picks
 with an `AbortSignal`. Listen for `error` and `suspend`, and handle asynchronous
 host work so a late completion cannot repaint a replaced scene. This release has
 no public `modelsready` event or focused interaction-locking method; do not copy
-newer site-only calls into a 0.2.1 integration.
+newer site-only calls into a 0.3.0 integration.
 
 See [other runnable examples](/kicad-webview/docs/examples/), the
 [full controller API](/kicad-webview/docs/api-utilities/#democontroller) and
-[versioned source](https://github.com/wayri/kicad-webview/blob/v0.2.1/docs/INTERACTIVE-DEMO.md).
+[versioned source](https://github.com/wayri/kicad-webview/blob/v0.3.0/docs/INTERACTIVE-DEMO.md).

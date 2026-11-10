@@ -8,7 +8,7 @@ doc_section: license
 
 ## Published npm and CDN release
 
-KiCad WebView `0.2.1` is public on [npm](https://www.npmjs.com/package/@wayrisignals/kicad-webview), [jsDelivr](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.2.1/) and [UNPKG](https://unpkg.com/@wayrisignals/kicad-webview@0.2.1/), under MPL-2.0. Matching source: [v0.2.1](https://github.com/wayri/kicad-webview/tree/v0.2.1). The npm package excludes legacy board fixtures and fixture-backed examples. [Installation and no-Node examples](/kicad-webview/docs/quick-start/).
+KiCad WebView `0.3.0` is public on [npm](https://www.npmjs.com/package/@wayrisignals/kicad-webview), [jsDelivr](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.3.0/) and [UNPKG](https://unpkg.com/@wayrisignals/kicad-webview@0.3.0/), under MPL-2.0. Matching source: [v0.3.0](https://github.com/wayri/kicad-webview/tree/v0.3.0). The npm package excludes legacy board fixtures and fixture-backed examples. [Installation and no-Node examples](/kicad-webview/docs/quick-start/).
 
 ## Historical immutable hosted SDK (beta.2)
 

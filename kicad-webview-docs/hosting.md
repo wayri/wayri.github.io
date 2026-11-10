@@ -10,10 +10,10 @@ doc_section: hosting
 
 The release runs on a static HTTP(S) host. Retain the versioned directory and its notices. Keep your original design permissions separate from software licensing. Public runtime files and design URLs remain retrievable by visitors; a read-only interface is not access control.
 
-Use the immutable hosted 0.2.1 browser files under:
+Use the immutable hosted 0.3.0 browser files under:
 
 ```text
-https://wayri.github.io/assets/lib/kicad-webview/releases/0.2.1/
+https://wayri.github.io/assets/lib/kicad-webview/releases/0.3.0/
 ```
 
 The [beta.2 ZIP](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.2.zip) and its [hosted files](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) remain available as a historical archive.
