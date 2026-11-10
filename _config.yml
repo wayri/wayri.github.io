@@ -16,6 +16,9 @@ plugins:
 permalink: /blog/:year/:month/:day/:title/
 
 exclude:
+  - AGENTS.md
+  - docs/WAYRICAD_PUBLISHING.md
+  - tools/preview-wayricad.cjs
   - Gemfile
   - Gemfile.lock
   - Dockerfile

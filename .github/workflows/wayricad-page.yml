@@ -1,0 +1,37 @@
+name: WayriCAD page checks
+
+on:
+  pull_request:
+    paths:
+      - wayricad.html
+      - _data/wayricad.json
+      - _layouts/product.html
+      - assets/css/wayricad.css
+      - assets/js/wayricad.js
+      - tests/wayricad-page.test.cjs
+      - tools/preview-wayricad.cjs
+      - .github/workflows/wayricad-page.yml
+  push:
+    branches: [master]
+    paths:
+      - wayricad.html
+      - _data/wayricad.json
+      - _layouts/product.html
+      - assets/css/wayricad.css
+      - assets/js/wayricad.js
+      - tests/wayricad-page.test.cjs
+      - tools/preview-wayricad.cjs
+      - .github/workflows/wayricad-page.yml
+
+permissions:
+  contents: read
+
+jobs:
+  source-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/wayricad-page.test.cjs

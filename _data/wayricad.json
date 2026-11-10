@@ -1,0 +1,51 @@
+{
+  "reviewed": "2026-11-11",
+  "source": "https://github.com/wayri/WayriCAD/tree/develop",
+  "groups": [
+    {"id":"analysis", "title":"Electrical, thermal and electromagnetic analysis", "tools":[
+      {"name":"Quick PI", "guide":"quick_pi_plugin/README.md", "description":"Inspect power integrity: DC paths, voltage drop, current density, copper losses and supported PDN studies with explicit sources and loads."},
+      {"name":"Quick SI", "guide":"signal_integrity_advisor_plugin/ReadMe.md", "description":"Screen signal integrity, routed paths, reflections, return paths and pair timing using declared driver, load and stackup assumptions."},
+      {"name":"QuickTherm", "guide":"quick_therm_plugin/README.md", "description":"Study declared component dissipation, cooling, steady-state and supported transient PCB temperature models."},
+      {"name":"Trace RLC / Impedance", "guide":"trace_impedance_plugin/ReadMe.md", "description":"Extract trace, via and supported plane geometry; inspect resistance, inductance, capacitance and section impedance with model coverage."},
+      {"name":"Quick EMerge (beta)", "guide":"quick_emerge_plugin/README.md", "description":"Set up supported electromagnetic and antenna studies, inspect fields and reports, and follow documented solver and research-example limitations."},
+      {"name":"Planar Magnetics", "guide":"planar_magnetics_plugin/ReadMe.md", "description":"Explore PCB coils, windings, magnetic equivalents and supported motor/actuator estimates with declared materials and drive conditions."},
+      {"name":"Heater Designer", "guide":"heater_designer_plugin/ReadMe.md", "description":"Generate reviewed PCB heater patterns and explore resistance and thermal behavior under explicit geometry and boundary assumptions."}
+    ]},
+    {"id":"layout", "title":"PCB layout and copper preparation", "tools":[
+      {"name":"Fanout Generator", "guide":"fanout_generator_plugin/ReadMe.md", "description":"Review pad escape patterns, proposed tracks and vias before committing a footprint or selected-pad fanout."},
+      {"name":"Via Stitching", "guide":"via_stitching_plugin/ReadMe.md", "description":"Plan net-specific stitching vias in reviewed board regions with spacing, layer-span and exclusion settings."},
+      {"name":"Trace Refiner", "guide":"trace_refiner_plugin/README.md", "description":"Inspect supported routing refinements as old/new geometry and validate the candidate rather than silently replacing copper."},
+      {"name":"Copper Balancer", "guide":"copper_balancer_plugin/README.md", "description":"Review copper-density regions, candidate fill sites, rejection reasons and remaining per-tile density deficits."},
+      {"name":"Component Arranger", "guide":"component_arranger_plugin/README.md", "description":"Arrange supported selected components through a reviewed placement workflow; verify board context and clearance after changes."},
+      {"name":"Silkscreen Label Placer", "guide":"silkscreen_label_plugin/README.md", "description":"Prepare readable PCB silkscreen labels with a placement preview and checks appropriate to the selected board objects."},
+      {"name":"Layer Counter", "guide":"layer_counter_plugin/README.md", "description":"Add reviewed layer-identification features for fabrication and stackup communication."}
+    ]},
+    {"id":"documentation", "title":"Connectivity, harnesses and engineering documentation", "tools":[
+      {"name":"Pin Extractor", "guide":"extract_pins_plugin/ReadMe.md", "description":"Extract connector and component pins, net maps and supported endpoint paths for interface, firmware and test documentation."},
+      {"name":"Harness Workbench", "guide":"harness_workbench_plugin/ReadMe.md", "description":"Review cross-board connector/pin mappings, external wire links and harness documentation with explicit connection rules."},
+      {"name":"Portable Web Export", "guide":"portable_web_export_plugin/README.md", "description":"Package reviewed schematic, PCB and supported model views into self-contained offline HTML for sharing and review."},
+      {"name":"Review Comments", "guide":"review_comments_plugin/README.md", "description":"Keep structured engineering review comments alongside supported project and review workflows."}
+    ]},
+    {"id":"project", "title":"Project preparation and assembly data", "tools":[
+      {"name":"Project Fusion", "guide":"project_fusion_plugin/README.md", "description":"Stage guided schematic and PCB imports/merges while reviewing project identity, hierarchy and native-file safeguards."},
+      {"name":"BOM Studio", "guide":"bom_studio_plugin/README.md", "description":"Edit bill of materials fields, templates and grouped tables; export reviewed cost, mass and engineering data with explicit coverage."},
+      {"name":"Design Variant Workbench", "guide":"variant_manager_plugin/README.md", "description":"Manage supported native assembly variant states and review changes before applying them to project files."},
+      {"name":"Embed3D", "guide":"embed_3d_plugin/README.md", "description":"Prepare portable library/model assets and embedding workflows while preserving relinking, backup and dependency boundaries."},
+      {"name":"Bulk Label Editor", "guide":"bulk_label_editor_plugin/ReadMe.md", "description":"Preview wildcard/regex edits to supported labels, references, values and fields before applying a reviewed rename."}
+    ]},
+    {"id":"release", "title":"Constraints, manufacturing and review", "tools":[
+      {"name":"Constraint Studio", "guide":"protocol_constraint_composer_plugin/ReadMe.md", "description":"Stage custom DRC rules, clearance matrices, netclass and routing profiles; condition matches are not native DRC acceptance."},
+      {"name":"Manufacturing Readiness / DFM-DFA", "guide":"manufacturing_readiness_plugin/ReadMe.md", "description":"Review fabricator/process profiles, manufacturing and assembly checklists, native DRC evidence and release inputs."},
+      {"name":"Mechanical Check", "guide":"mechanical_check_plugin/README.md", "description":"Check supported component/enclosure geometry using available exact solids or explicitly approximate 2D envelopes."},
+      {"name":"WayriCAD Assistant", "guide":"suite_assistant_plugin/README.md", "description":"Find installed tools and coordinate supported local engineering workflows with explicit project context and action boundaries."}
+    ]}
+  ],
+  "questions": [
+    {"title":"Is WayriCAD the same project as KiWay?", "answer":"Yes. WayriCAD is the current project name; KiWay is its former name. The maintained source is github.com/wayri/WayriCAD. Use the current PCM repository URL and installation guide rather than an old feed copied from a screenshot."},
+    {"title":"Do I need to install the entire plugin suite?", "answer":"No. Plugins are independently installable through KiCad PCM. Install the tool for your immediate task and follow its runtime requirements. The shared suite CLI is a separate installation from a single PCM plugin."},
+    {"title":"Can WayriCAD work offline?", "answer":"Project processing and reports run locally after the necessary runtimes are prepared. Initial dependency setup may require internet access or a prepared wheel cache. External service features, where used, have their own requirements."},
+    {"title":"Does WayriCAD replace KiCad DRC, a field solver, or measurement?", "answer":"No. Different plugins use different numerical models and geometry assumptions. Review per-tool limitations, missing terms and convergence. Keep native DRC/ERC, fabricator review, independent simulation and physical measurements where the engineering decision requires them."},
+    {"title":"Which release and KiCad version should I use?", "answer":"Choose a published release and read its compatibility notes. KiCad 10 is the documented baseline; KiCad 11 integration is in progress and support varies by tool and runtime. Development-branch guides can describe capabilities not yet included in release assets."},
+    {"title":"Can I automate the tools in scripts or CI?", "answer":"Supported CLI commands and KiCad jobsets provide local analysis and report workflows. Install the suite CLI and native dependencies separately, choose explicit inputs and retain exit codes, logs and JSON evidence. Not every interactive editor operation is a headless command."}
+  ]
+}

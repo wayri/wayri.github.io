@@ -1,24 +1,107 @@
 ---
 layout: product
-title: "WayriCAD — KiCad design and analysis tools"
-description: "PCB design and review tools, including Quick PI, Quick SI and QuickTherm."
+title: "WayriCAD: KiCad PCB plugins"
+description: "Explore WayriCAD KiCad plugins for PCB layout, BOMs, power and signal integrity, thermal analysis, impedance, harnesses and local CLI automation."
 permalink: /wayricad/
+image: /assets/images/projects/wayricad-quick-pi.png
+lang: en
 ---
 <link rel="stylesheet" href="{{ '/assets/css/software-project.css' | relative_url }}?v={{ site.time | date: '%s' }}">
-<main class="software-project">
+<link rel="stylesheet" href="{{ '/assets/css/wayricad.css' | relative_url }}">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://wayri.github.io/wayricad/#application",
+      "name": "WayriCAD",
+      "alternateName": "KiWay",
+      "url": "https://wayri.github.io/wayricad/",
+      "description": "Open-source KiCad plugins and local command-line tools for PCB design, analysis, documentation and manufacturing review.",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Windows, Linux; plugin-specific native dependencies apply",
+      "softwareRequirements": "KiCad 10; consult each plugin's compatibility and runtime requirements",
+      "license": "https://github.com/wayri/WayriCAD/blob/develop/LICENSE",
+      "downloadUrl": "https://github.com/wayri/WayriCAD/releases",
+      "image": "https://wayri.github.io/assets/images/projects/wayricad-quick-pi.png",
+      "author": {"@type": "Person", "name": "Yawar Badri", "url": "https://wayri.github.io/"},
+      "isAccessibleForFree": true
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://wayri.github.io/wayricad/#source",
+      "name": "WayriCAD source code",
+      "codeRepository": "https://github.com/wayri/WayriCAD",
+      "programmingLanguage": "Python",
+      "license": "https://github.com/wayri/WayriCAD/blob/develop/LICENSE",
+      "targetProduct": {"@id": "https://wayri.github.io/wayricad/#application"}
+    }
+  ]
+}
+</script>
+<main class="software-project wayricad-project" id="main-content">
     <header>
         <p class="software-kicker"><i class="fa-solid fa-microchip" aria-hidden="true"></i> KiCad plugins · Active development</p>
         <h1>WayriCAD<small>Formerly KiWay</small></h1>
-        <p class="software-lead">Design, inspect, and check a PCB without losing the context of the board. Independently installable tools bring power, signal, and thermal studies alongside everyday layout and manufacturing work.</p>
-        <nav class="software-actions" aria-label="WayriCAD resources"><a href="https://github.com/wayri/WayriCAD/releases"><i class="fa-solid fa-download" aria-hidden="true"></i> Downloads</a><a href="https://github.com/wayri/WayriCAD#install-and-open">Install through KiCad</a><a href="https://github.com/wayri/WayriCAD"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub repository ↗</a><a href="{{ '/blog/2026/10/25/wayricad-quick-pi-si-thermal/' | relative_url }}">PI / SI / thermal notes</a></nav>
-        <figure><a href="{{ '/assets/images/projects/wayricad-quick-pi.png' | relative_url }}"><img src="{{ '/assets/images/projects/wayricad-quick-pi.png' | relative_url }}" width="1344" height="821" alt="Quick PI geometry and source/load controls on the public Marble PCB"></a><figcaption>Quick PI on Berkeley Lab’s public Marble board. This screenshot shows extracted geometry and inputs, not a solved field.</figcaption></figure>
+        <p class="software-lead">Open-source KiCad plugins for PCB layout, power, signal and thermal analysis, documentation, and manufacturing review. Independent tools with local GUI and CLI workflows.</p>
+        <nav class="software-actions" aria-label="WayriCAD resources"><a href="https://github.com/wayri/WayriCAD/releases"><i class="fa-solid fa-download" aria-hidden="true"></i> Downloads</a><a href="#install">Install through KiCad</a></nav>
+        <p class="wayricad-facts">KiCad PCM installation <span aria-hidden="true">/</span> Python CLI and jobsets <span aria-hidden="true">/</span> GPL-3.0</p>
+        <nav class="wayricad-sections" aria-label="On this page"><a href="#tool-directory">Find a plugin</a><a href="#automation">CLI and jobsets</a><a href="#model-limits">Model limits</a><a href="#questions">Questions</a><a href="https://github.com/wayri/WayriCAD">Source code</a></nav>
     </header>
+    <section class="wayricad-overview" aria-label="Quick PI application preview">
+        <figure><a href="{{ '/assets/images/projects/wayricad-quick-pi.png' | relative_url }}"><img src="{{ '/assets/images/projects/wayricad-quick-pi.png' | relative_url }}" width="1344" height="821" fetchpriority="high" alt="WayriCAD Quick PI: extracted PCB copper geometry with source and load terminal controls"></a><figcaption>Actual Quick PI interface on Berkeley Lab’s public Marble board. Geometry and inputs are shown here, not a solved field. Open any screenshot at its original size.</figcaption></figure>
+    </section>
     <section aria-labelledby="wayricad-analysis"><p class="software-kicker">Three questions, three tools</p><h2 id="wayricad-analysis">Follow the current, the signal, and the heat.</h2>
         <div class="software-grid"><article><i class="fa-solid fa-bolt" aria-hidden="true"></i><h3>Quick PI</h3><p>Inspect DC voltage drop, current density, and copper losses using saved copper geometry, source/load terminals, and explicit current assumptions.</p><a href="https://github.com/wayri/WayriCAD/blob/develop/quick_pi_plugin/README.md">Quick PI guide ↗</a></article><article><i class="fa-solid fa-wave-square" aria-hidden="true"></i><h3>Quick SI</h3><p>Screen a routed signal for delay, reflections, termination, and return-path information alongside its stackup and driver/load assumptions.</p><a href="https://github.com/wayri/WayriCAD/blob/develop/signal_integrity_advisor_plugin/ReadMe.md">Quick SI guide ↗</a></article><article><i class="fa-solid fa-temperature-half" aria-hidden="true"></i><h3>QuickTherm</h3><p>Explore declared dissipation and thermal paths, from lumped component estimates to supported steady-state and transient board models.</p><a href="https://github.com/wayri/WayriCAD/blob/develop/quick_therm_plugin/QUICK_THERM_USER_GUIDE.md">QuickTherm guide ↗</a></article></div>
         <p class="software-note">These are model-based engineering checks. Review materials, operating inputs, boundaries, omitted geometry, and convergence before relying on a result.</p>
+        <p><a href="{{ '/blog/2026/10/25/wayricad-quick-pi-si-thermal/' | relative_url }}">Read the PI / SI / thermal workflow notes</a>.</p>
     </section>
     <section aria-labelledby="wayricad-signals"><h2 id="wayricad-signals">Keep the route beside the result.</h2><figure><a href="{{ '/assets/images/projects/wayricad-quick-si.png' | relative_url }}"><img src="{{ '/assets/images/projects/wayricad-quick-si.png' | relative_url }}" width="1300" height="900" loading="lazy" alt="Quick SI route inspection with driver inputs and delay and reflection results"></a><figcaption>Quick SI screening with entered line and driver assumptions; not a measured channel or protocol sign-off.</figcaption></figure><figure><a href="{{ '/assets/images/projects/wayricad-quick-therm.png' | relative_url }}"><img src="{{ '/assets/images/projects/wayricad-quick-therm.png' | relative_url }}" width="1460" height="810" loading="lazy" alt="QuickTherm three-dimensional inspection of a generated thermal demonstration board"></a><figcaption>Computed thermal demonstration under assumed loads and cooling. Component markers are illustrative; temperatures are not measurements.</figcaption></figure><p><a href="{{ '/kicad-webview/#project-irca' | relative_url }}">See an executed Quick PI study on IRCA →</a></p></section>
+    <section aria-labelledby="tool-directory">
+        <p class="software-kicker">Choose by the engineering task</p><h2 id="tool-directory">KiCad plugin directory</h2>
+        <p>Start with one workflow. Each guide explains required inputs, outputs, dependencies, write boundaries, and limitations. The <a href="https://github.com/wayri/WayriCAD/releases/latest">latest release assets</a> determine what is installable; development documentation may describe newer work.</p>
+        <label class="wayricad-search" for="plugin-search">Filter tools <input type="search" id="plugin-search" placeholder="Try impedance, BOM, harness or fanout" autocomplete="off" aria-controls="wayricad-tools"></label>
+        <p id="plugin-count" role="status" aria-live="polite">All tools shown.</p>
+        <div id="wayricad-tools">
+        {% for group in site.data.wayricad.groups %}
+            <section class="wayricad-tool-group" aria-labelledby="group-{{ group.id }}">
+                <h3 id="group-{{ group.id }}">{{ group.title | escape }}</h3>
+                <dl>{% for tool in group.tools %}<div class="wayricad-tool" data-search="{{ group.title | append: ' ' | append: tool.name | append: ' ' | append: tool.description | escape }}"><dt><a href="https://github.com/wayri/WayriCAD/blob/develop/{{ tool.guide }}">{{ tool.name | escape }}</a></dt><dd>{{ tool.description | escape }}</dd></div>{% endfor %}</dl>
+            </section>
+        {% endfor %}
+        </div>
+        <p id="plugin-empty" hidden>No matching tools. Try a broader task, or <a href="https://github.com/wayri/WayriCAD/issues">describe your workflow on GitHub</a>.</p>
+        <noscript><p>The complete directory is visible without JavaScript. Use your browser’s Find command to search it.</p></noscript>
+    </section>
+    <section aria-labelledby="install">
+        <p class="software-kicker">Start with a saved project</p><h2 id="install">Install WayriCAD in KiCad</h2>
+        <ol class="wayricad-steps"><li>Open <strong>Plugin and Content Manager</strong> from KiCad Manager. Open <strong>Manage Repositories</strong> and add the feed below.</li><li>Select the WayriCAD repository and install an individual plugin. Alternatively, download a matching <code>-PCM.zip</code> release asset and choose <strong>Install from File</strong>; do not unpack it manually.</li><li>Follow the plugin’s runtime setup instructions. For IPC tools, enable KiCad’s API and configure Python as described in the installation guide. Scientific tools can require additional native dependencies.</li><li>Restart the editor, open and save your project, and launch the installed action. Review inputs and previews before any apply/export step.</li></ol>
+        <label class="wayricad-feed-label" for="pcm-feed">WayriCAD PCM repository URL</label>
+        <div class="wayricad-feed"><input id="pcm-feed" value="https://raw.githubusercontent.com/wayri/WayriCAD/develop/pcm/repo.json" readonly spellcheck="false"><button type="button" id="copy-pcm" title="Copy repository URL" aria-label="Copy repository URL"><i class="fa-regular fa-copy" aria-hidden="true"></i></button></div>
+        <p id="copy-status" role="status" aria-live="polite"></p>
+        <p><a href="https://github.com/wayri/WayriCAD/blob/develop/docs/INSTALLATION.md">Illustrated installation guide</a> · <a href="https://github.com/wayri/WayriCAD/blob/develop/wayricad_runtime/RUNTIME_SETUP.md">Python and offline runtime setup</a> · <a href="https://github.com/wayri/WayriCAD/blob/develop/docs/TROUBLESHOOTING.md">Troubleshooting</a></p>
+        <p class="software-note">KiCad 10 is the documented baseline. KiCad 11 integration is in progress; check the <a href="https://github.com/wayri/WayriCAD/blob/develop/docs/COMPATIBILITY.md">compatibility matrix</a> rather than assuming every engine or OS is supported. Initial dependency preparation may need internet access. No single install command supplies every scientific/native runtime.</p>
+    </section>
+    <section aria-labelledby="automation">
+        <p class="software-kicker">Repeatable engineering review</p><h2 id="automation">CLI automation and KiCad jobsets</h2>
+        <p>The source/CLI installation exposes tool entry points independently of the desktop windows. A PCM plugin install is not a complete suite CLI installation. Use the maintained guide to prepare the required interpreter, then inspect the available commands:</p>
+        <pre><code>wayricad --help
+wayricad-rlc --help
+wayricad jobs --help</code></pre>
+        <p>Jobsets combine declared analysis and export steps into a reviewed sequence with a linked local report, logs and JSON evidence. Preserve source hashes, units, assumptions and nonzero exit codes when integrating with CI or external engineering assistants. Successful execution is not engineering approval.</p>
+        <div class="software-actions"><a href="https://github.com/wayri/WayriCAD/blob/develop/docs/CLI_USER_GUIDE.md">CLI user guide</a><a href="https://github.com/wayri/WayriCAD/blob/develop/wayricad_runtime/JOBSETS.md">Jobsets and workflow examples</a></div>
+    </section>
     <section aria-labelledby="wayricad-web-results"><h2 id="wayricad-web-results">Take saved results into your website.</h2><p>KiCad WebView can read retained Quick PI, Quick SI and QuickTherm JSON beside the matching saved PCB. Explore fields, waveforms, saved thermal frames and point histories; cross-highlight supported exported net/object identities. Exact source hashes gate 2D/3D PCB registration, with saved layer selection and linked probe markers. Independent 3D fields require declared elevation, and full numerical arrays remain available.</p><p>Export the portable companion with the original solve-time PCB fingerprint. The browser displays supplied results; it does not rerun or qualify a solver. Missing values and unsupported geometry remain explicit.</p><p><a href="{{ '/assets/demos/wayricad-results.html' | relative_url }}">Try the saved-result demo ↗</a> · <a href="{{ '/kicad-webview/docs/wayricad-results/' | relative_url }}">Import and integration guide ↗</a></p></section>
-    <section aria-labelledby="wayricad-layout"><h2 id="wayricad-layout">Part of the wider board workflow.</h2><p>The suite also covers fanout, via stitching, trace refinement, BOMs, assembly variants, silkscreen placement, constraints, and manufacturing review. Install the tools you need and refer to each plugin’s guide for its supported inputs and model scope.</p><p><a href="https://github.com/wayri/WayriCAD#all-24-plugins">Browse the tool catalogue ↗</a></p></section>
+    <section aria-labelledby="model-limits">
+        <h2 id="model-limits">What the results do, and do not, establish</h2>
+        <div class="wayricad-limits"><article><h3>Geometry is evidence, not a guarantee</h3><p>Inputs can include saved copper, stackup, terminals, declared power and material values. A matching net name is not a verified return path, and a screenshot is not a measurement. Missing or unsupported terms must remain visible.</p></article><article><h3>Different tools answer different questions</h3><p>DC voltage drop, thermal screening, transmission-line estimates and full-wave electromagnetic studies have different assumptions. Do not substitute one model for another or treat nominal protocol targets as certification.</p></article><article><h3>Preview and validate changes</h3><p>Use the affected plugin’s preview, backup and apply workflow. Re-run native KiCad DRC/ERC where relevant and review manufacturing requirements independently. Offline edits and live editor transactions have different safeguards.</p></article></div>
+        <p><a href="https://github.com/wayri/WayriCAD/blob/develop/docs/METHODS_AND_RESEARCH.md">Methods, research references and verification</a> · <a href="https://github.com/wayri/WayriCAD/blob/develop/docs/COMPATIBILITY.md">Compatibility and known limits</a></p>
+    </section>
+    <section aria-labelledby="questions"><h2 id="questions">Common questions</h2>
+        {% for question in site.data.wayricad.questions %}<details class="wayricad-question"><summary>{{ question.title | escape }}</summary><p>{{ question.answer | escape }}</p></details>{% endfor %}
+    </section>
+    <section aria-labelledby="contribute"><h2 id="contribute">Contribute, report a bug, or follow development</h2><p>WayriCAD is GPL-3.0 open-source software maintained by Yawar / Wayri. A useful bug report includes the plugin and release, OS, KiCad/Python versions, exact steps, logs, and a minimal non-private fixture. Remove private board names, paths and credentials before sharing screenshots or reports.</p><p><a href="https://github.com/wayri/WayriCAD/issues">Report an issue</a> · <a href="https://github.com/wayri/WayriCAD/blob/develop/CONTRIBUTING.md">Contributing guide</a> · <a href="https://github.com/wayri/WayriCAD/blob/develop/ACKNOWLEDGEMENTS.md">Acknowledgements</a> · <a href="https://github.com/wayri/WayriCAD/blob/develop/LICENSE">License</a></p></section>
     {% include software-project-links.html %}
 </main>
+<script src="{{ '/assets/js/wayricad.js' | relative_url }}" defer></script>
