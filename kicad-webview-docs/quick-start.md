@@ -140,7 +140,7 @@ Open the [browser-only exporter](/assets/demos/export.html), choose local design
 
 The output contains your design, viewer and notices. Review it before sharing. Its content policy blocks external network connections, so missing models cannot be fetched later. A recipient’s browser or host application must allow interactive HTML and WebGL for 3D.
 
-For a ready interactive design, visit the [IRCA product demonstration](/kicad-webview/). The [export API](/kicad-webview/docs/api-utilities/) is a separate module; it is not a method on the `KiCadWebView` global.
+For a ready interactive design, visit the [IRCA product demonstration](/kicad-webview/). The [export API](/kicad-webview/docs/api-utilities/) is available as `createStandaloneHTML` from the main module and the `KiCadWebView` global; the smaller `/html` entry exports it independently.
 
 ## Next steps
 
