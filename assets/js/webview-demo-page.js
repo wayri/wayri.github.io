@@ -2,13 +2,25 @@
   'use strict';
   const host = document.querySelector('#drawing');
   if (!host) return;
-  const query = new URLSearchParams(location.search), project = window.IRCAProject;
+  const query = new URLSearchParams(location.search);
   const status = document.querySelector('#demo-status'), choose = document.querySelector('#demo-example');
   const launch = document.querySelector('#demo-load'), details = document.querySelector('#demo-credit');
   const theme = () => query.get('theme') || (document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
   const tools = document.querySelector('#demo-view-controls'), layers = document.querySelector('#demo-layers');
   const toolButtons = tools ? [...tools.querySelectorAll('button')] : [];
-  let viewer;
+  let viewer, currentRuntime;
+  async function ircaProject() {
+    if (window.IRCAProject) return window.IRCAProject;
+    for (const src of ['/assets/lib/kicad-webview/kicad-webview.min.js','/assets/js/irca-project.js']) {
+      await new Promise((resolve,reject)=>{
+        const script=document.createElement('script');script.src=src;
+        script.onload=()=>{script.remove();resolve();};
+        script.onerror=()=>{script.remove();reject(Error('Could not load the approved IRCA viewer.'));};
+        document.head.append(script);
+      });
+    }
+    return window.IRCAProject;
+  }
   const examples = {
     irca: {name:'IRCA', credit:'Approved IRCA review geometry and display models by Yawar Badri. Original editable CAD and model sources are not offered as downloads.'},
     olimex: {name:'OLIMEX ESP32-P4-DevKit Rev.D1', url:'/assets/demos/public-hardware/olimex-p4-project.json', credit:'OLIMEX Ltd and upstream contributors · hardware CERN-OHL-S-2.0; software GPLv3; documentation CC BY-SA 4.0. Pinned 26705d3. Missing models and unsupported drawing features remain labelled.', source:'https://github.com/OLIMEX/ESP32-P4-DevKit/blob/26705d36407a07324348927dfd30fbf4ffc1d94c/README.md'},
@@ -29,11 +41,18 @@
       const example = examples[name];
       if (!source && !example) throw Error('Choose IRCA, OLIMEX or Marble.');
       const knownSource = source && Object.values(examples).find(item => item.url && new URL(source,location.href).href === new URL(item.url,location.href).href);
+      const runtime = !source && name === 'irca' ? 'irca' : 'library';
+      if (currentRuntime && currentRuntime !== runtime) {
+        const next=new URL(location.href);next.searchParams.set('example',name);
+        location.href=next.href;return;
+      }
+      currentRuntime=runtime;
       credit(knownSource || (source ? {credit:'Visitor-supplied design URL. Check its source license and access permissions. Cross-origin sources must permit CORS. The viewer does not upload this design.'} : example));
       status.textContent = 'Loading ' + (source ? 'the supplied design' : example.name) + '…';
       const workspace = query.get('workspace') === 'true';
       const options = {theme:theme(),inspectOnSelect:query.get('inspectOnSelect') === 'true'};
       if (!source && name === 'irca') {
+        const project=await ircaProject();
         viewer = workspace ? project.createWorkspace(host,{...options,layout:'single'}) : project.createViewer(host,options);
         viewer.addEventListener('ready',()=>layers?.replaceChildren());
         await project.load(viewer,{view:query.get('view') || '3d',file:query.get('file') || undefined});
