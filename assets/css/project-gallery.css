@@ -33,3 +33,16 @@
 .project-gallery-sources summary { cursor:pointer; color:var(--accent-color); }
 .project-gallery-sources p { margin:8px 0 0; }
 .project-gallery-sources a { color:var(--accent-color); text-underline-offset:3px; }
+
+/* Announcement captures: keep labels readable over both light and dark UI. */
+.project-gallery-announcement { margin:24px 0; border:1px solid var(--border-color,#ccd3da); border-radius:10px; overflow:hidden; }
+.project-gallery-announcement .project-gallery-stage figure { position:relative; background:#141d27; }
+.project-gallery-announcement .project-gallery-stage img { aspect-ratio:16 / 9; max-height:none; background:#141d27; }
+.project-gallery-announcement .project-gallery-stage figcaption { position:absolute; inset:auto 0 0; min-height:0; padding:40px 24px 20px; color:#fff; background:linear-gradient(transparent,rgba(9,16,26,.94) 42%); font:14px/1.5 system-ui,sans-serif; pointer-events:none; text-shadow:0 1px 2px #000; }
+.project-gallery-announcement figcaption strong { display:block; margin-bottom:4px; color:#fff; font-size:clamp(17px,2.2vw,27px); line-height:1.2; }
+.project-gallery-announcement figcaption span { display:block; max-width:85ch; color:#fff; }
+@media(max-width:600px) {
+ .project-gallery-announcement .project-gallery-stage figure { padding-bottom:142px; }
+ .project-gallery-announcement .project-gallery-stage figcaption { padding:24px 14px 14px; font-size:12px; }
+ .project-gallery-announcement .project-gallery-stage a:focus-visible { outline:3px solid #76c9ff; outline-offset:-3px; }
+}
