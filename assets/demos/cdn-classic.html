@@ -5,9 +5,9 @@ description: Load an interactive OLIMEX PCB and 3D view directly from a CDN scri
 permalink: /assets/demos/cdn-classic.html
 ---
 {% include webview-cdn-example.html %}
-<script src="https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.2.1/dist/kicad-webview.min.js"></script>
-<script src="{{ '/assets/js/webview-cdn-example.js' | relative_url }}?v=0.2.1-r2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kicad-webview.min.js"></script>
+<script src="{{ '/assets/js/webview-cdn-example.js' | relative_url }}?v={{ site.data.webview_release.npm }}"></script>
 <script>
-if (window.KiCadWebView) startWebViewCDNExample(KiCadWebView.Viewer);
+if (window.KiCadWebView) startWebViewCDNExample(KiCadWebView.Viewer,'{{ site.data.webview_release.npm }}');
 else document.querySelector('#demo-status').textContent='The CDN script could not load. Check your connection or self-host the versioned script.';
 </script>

@@ -5,10 +5,10 @@ description: Import the interactive viewer directly from UNPKG in a browser modu
 permalink: /assets/demos/cdn-module.html
 ---
 {% include webview-cdn-example.html %}
-<script src="{{ '/assets/js/webview-cdn-example.js' | relative_url }}?v=0.2.1-r2"></script>
+<script src="{{ '/assets/js/webview-cdn-example.js' | relative_url }}?v={{ site.data.webview_release.npm }}"></script>
 <script type="module">
 try {
-  const { Viewer } = await import('https://unpkg.com/@wayrisignals/kicad-webview@0.2.1/dist/kivi-viewer.js');
-  await startWebViewCDNExample(Viewer);
+  const { Viewer } = await import('https://unpkg.com/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kivi-viewer.js');
+  await startWebViewCDNExample(Viewer,'{{ site.data.webview_release.npm }}');
 } catch (error) { document.querySelector('#demo-status').textContent='The browser module could not load: '+error.message; }
 </script>

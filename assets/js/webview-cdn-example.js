@@ -1,5 +1,5 @@
 /* Copyright (c) 2026 wayri. SPDX-License-Identifier: MPL-2.0 */
-window.startWebViewCDNExample = async function(Viewer) {
+window.startWebViewCDNExample = async function(Viewer,version='') {
   'use strict';
   const project='https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json';
   const status=document.querySelector('#demo-status'),buttons=[...document.querySelectorAll('[data-cdn-view]')],fit=document.querySelector('#cdn-fit'),appearance=document.querySelector('#cdn-appearance');
@@ -9,7 +9,7 @@ window.startWebViewCDNExample = async function(Viewer) {
     buttons.forEach(button=>button.disabled=true);fit.disabled=true;appearance.disabled=true;status.textContent='Opening OLIMEX '+view+'…';
     try {
       const file='ESP32-P4-DevKit_Rev_D1.'+(view==='schematic'?'kicad_sch':'kicad_pcb');
-      if(await viewer.load(project,{view,file}))status.textContent='OLIMEX '+view+' loaded · KiCad WebView 0.2.1 · read only.';
+      if(await viewer.load(project,{view,file}))status.textContent='OLIMEX '+view+' loaded'+(version?' · KiCad WebView '+version:'')+' · read only.';
     } catch(error) {if(!disposed)status.textContent='Could not open design: '+error.message;}
     finally{if(!disposed){buttons.forEach(button=>button.disabled=false);fit.disabled=false;appearance.disabled=viewer.view!=='3d';if(!appearance.disabled)appearance.value=viewer.getAppearance();}}
   }
