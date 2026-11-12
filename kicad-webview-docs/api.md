@@ -5,11 +5,11 @@ permalink: /kicad-webview/docs/api/
 doc_section: api
 ---
 
-This reference describes the **0.3.0** base API, also available in self-hosted **0.4.0**. The [0.4.0 additions](/kicad-webview/docs/wayricad-results/#layers-and-linked-views) add native 3D result registration, saved result layers and linked spatial probes. npm/CDN remains at 0.3.0. The separately maintained IRCA demonstrations may have additional site-specific capabilities. Import from the versioned module or use the same names on the classic `KiCadWebView` global.
+This reference describes the **0.3.0** base API and later self-hosted additions. The [0.4.0 additions](/kicad-webview/docs/wayricad-results/#layers-and-linked-views) include native 3D result registration, saved layers and linked probes; [0.5.0](/kicad-webview/docs/bom-analytics/) adds saved BoM and board data. The current npm/CDN package is **{{ site.data.webview_release.npm }}**. The separately maintained IRCA demonstrations may have additional site-specific capabilities. Import from the versioned module or use the same names on the classic `KiCadWebView` global.
 
 ```js
 import { Viewer, EMBED_API_VERSION } from
-  'https://unpkg.com/@wayrisignals/kicad-webview@0.3.0/dist/kivi-viewer.js';
+  'https://unpkg.com/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kivi-viewer.js';
 console.log(EMBED_API_VERSION); // '1.0-beta'
 ```
 
@@ -17,10 +17,11 @@ No package manager is required. Types in this reference use TypeScript notation 
 
 ## Public exports
 
-Every name exported by the release's main entry is listed here. Types and interfaces describe data, not additional runtime exports.
+The table includes the base exports and identifies later additions by version. Types and interfaces describe data, not additional runtime exports.
 
 | Export | Purpose and detailed contract |
 | --- | --- |
+| `BOMViewer`, `buildBOM`, `analyzeBoard`, `bomToCSV` | 0.5.0 saved BoM, board statistics and linked selection. [BoM and board data guide](/kicad-webview/docs/bom-analytics/). |
 | `Viewer`, `KiCadViewer` | The same compact viewer class. [Construction, loading, inspection, cameras, layers, analysis and events](/kicad-webview/docs/api-viewer/#viewer). |
 | `registerKiCadViewer` | Register the optional HTML custom element. [Signature and attributes](/kicad-webview/docs/api-viewer/#registerkicadviewer). |
 | `ProjectViewer`, `AdvancedKiCadViewer` | The same two-pane project wrapper. [Methods, options and events](/kicad-webview/docs/api-project/#projectviewer). |

@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/api-utilities/
 doc_section: api
 ---
 
-These are release **0.3.0** APIs. They describe caller-scripted presentation, saved hierarchy and validated input processing, not circuit simulation.
+These APIs are available from release **0.3.0** onward. They describe caller-scripted presentation, saved hierarchy and validated input processing, not circuit simulation.
 
 ## DemoController
 
@@ -178,7 +178,7 @@ Use the main module or the `/html` package entry:
 
 ```js
 import { createStandaloneHTML } from
-  'https://unpkg.com/@wayrisignals/kicad-webview@0.3.0/dist/kivi-viewer.js';
+  'https://unpkg.com/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kivi-viewer.js';
 ```
 
 ```ts

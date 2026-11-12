@@ -22,6 +22,7 @@ Choose dim, bright or isolated highlights with source or accent colors; search s
 
 | Your goal | Start here |
 | --- | --- |
+| Explore saved parts and board statistics | [BoM and board data](/kicad-webview/docs/bom-analytics/) |
 | Bring WayriCAD results into a webpage | [WayriCAD results](/kicad-webview/docs/wayricad-results/) |
 | See the latest improvements | [What’s new & releases](/kicad-webview/docs/releases/) |
 | Put a working viewer on a webpage | [Quick start](/kicad-webview/docs/quick-start/) |

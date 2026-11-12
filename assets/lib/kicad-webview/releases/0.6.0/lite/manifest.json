@@ -1,0 +1,178 @@
+{
+  "schema": "kicad-webview.lite/v1",
+  "entry": "kicad-webview-lite.js",
+  "initial": {
+    "files": [
+      "chunks/chunk-6HDKLEGI.js",
+      "chunks/chunk-MMW2M635.js",
+      "kicad-webview-lite.js"
+    ],
+    "rawBytes": 295314,
+    "gzipBytes": 101992
+  },
+  "optional": {
+    "three": {
+      "files": [
+        "chunks/board3d-YEHAE7SQ.js",
+        "chunks/chunk-HUBRM3VV.js",
+        "chunks/three-runtime-TAG5GLGM.js"
+      ],
+      "rawBytes": 1228964,
+      "gzipBytes": 359457
+    },
+    "analysis": {
+      "files": [
+        "chunks/analysis-layer-E3SNHLTE.js",
+        "chunks/analysis-results-CAZBN2YT.js",
+        "chunks/chunk-7SPLFUUM.js",
+        "chunks/chunk-HUBRM3VV.js"
+      ],
+      "rawBytes": 9961,
+      "gzipBytes": 4989
+    }
+  },
+  "files": [
+    {
+      "path": "kicad-webview-lite.js",
+      "rawBytes": 280289,
+      "gzipBytes": 95541,
+      "sha256": "52ada9fd677e9796fc4b395c272170bede61706d9a6f37c310afc37cab82914f",
+      "imports": [
+        {
+          "path": "chunks/chunk-6HDKLEGI.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-MMW2M635.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/three-runtime-TAG5GLGM.js",
+          "kind": "dynamic-import"
+        },
+        {
+          "path": "chunks/analysis-results-CAZBN2YT.js",
+          "kind": "dynamic-import"
+        },
+        {
+          "path": "chunks/analysis-layer-E3SNHLTE.js",
+          "kind": "dynamic-import"
+        }
+      ]
+    },
+    {
+      "path": "chunks/board3d-YEHAE7SQ.js",
+      "rawBytes": 1227749,
+      "gzipBytes": 358609,
+      "sha256": "ab90133f0d67d743f19649b4322eafdf03273aa0b879da62585127e866b864c8",
+      "imports": [
+        {
+          "path": "chunks/chunk-6HDKLEGI.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-HUBRM3VV.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-MMW2M635.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    {
+      "path": "chunks/chunk-6HDKLEGI.js",
+      "rawBytes": 13927,
+      "gzipBytes": 5785,
+      "sha256": "1eba778fe6ac38db44d01b58575deab32d8ac12ebdd7523c3aebbf5a78d1d61d",
+      "imports": [
+        {
+          "path": "chunks/chunk-MMW2M635.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    {
+      "path": "chunks/three-runtime-TAG5GLGM.js",
+      "rawBytes": 341,
+      "gzipBytes": 289,
+      "sha256": "01aeba0cfec33d01f7de9f08ffd5a3938170b0614bf0e5f9e5c8e333be78fa47",
+      "imports": [
+        {
+          "path": "chunks/chunk-MMW2M635.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/board3d-YEHAE7SQ.js",
+          "kind": "dynamic-import"
+        }
+      ]
+    },
+    {
+      "path": "chunks/analysis-results-CAZBN2YT.js",
+      "rawBytes": 452,
+      "gzipBytes": 332,
+      "sha256": "4dd7b637f7674b2dc37d0cfebc00c97b42f5c65b95a46b47249b22698e73999b",
+      "imports": [
+        {
+          "path": "chunks/chunk-7SPLFUUM.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-HUBRM3VV.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-MMW2M635.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    {
+      "path": "chunks/analysis-layer-E3SNHLTE.js",
+      "rawBytes": 5030,
+      "gzipBytes": 2401,
+      "sha256": "2036b606af84ffe173f76d00bf94029e474b8574b188e51dc9cab5234722ccda",
+      "imports": [
+        {
+          "path": "chunks/chunk-7SPLFUUM.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-HUBRM3VV.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-MMW2M635.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    {
+      "path": "chunks/chunk-7SPLFUUM.js",
+      "rawBytes": 3605,
+      "gzipBytes": 1697,
+      "sha256": "4729fd5d2f372bdb460f0e7cc7c1131fc8c3add99b6a694aef07b5cb492e7685",
+      "imports": [
+        {
+          "path": "chunks/chunk-HUBRM3VV.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    {
+      "path": "chunks/chunk-HUBRM3VV.js",
+      "rawBytes": 874,
+      "gzipBytes": 559,
+      "sha256": "66f84e6616d591d8c137189ec4c96628cfb3deb6a42f6cb2d7bc0d8773530f38",
+      "imports": []
+    },
+    {
+      "path": "chunks/chunk-MMW2M635.js",
+      "rawBytes": 1098,
+      "gzipBytes": 666,
+      "sha256": "8f549028d4c965eb4a1afa4305cbdccee2e5c34b845e48d886c26f40efdd930d",
+      "imports": []
+    }
+  ]
+}

@@ -6,13 +6,13 @@ permalink: /kicad-webview/docs/license/
 doc_section: license
 ---
 
-## Self-hosted SDK 0.4.0
+## Self-hosted SDK 0.5.0
 
-[Versioned files and checksums](/assets/lib/kicad-webview/releases/0.4.0/RELEASE.json) · [Download and matching source](https://github.com/wayri/kicad-webview/releases/tag/v0.4.0) · [Third-party notices](/assets/lib/kicad-webview/releases/0.4.0/THIRD-PARTY-NOTICES.md). This release adds native 3D WayriCAD registration, saved result layers and linked probes. It is distributed through the website and GitHub download; npm/CDN remains at 0.3.0.
+[Versioned files and checksums](/assets/lib/kicad-webview/releases/0.5.0/RELEASE.json) · [Download and matching source](https://github.com/wayri/kicad-webview/releases/tag/v0.5.0) · [Third-party notices](/assets/lib/kicad-webview/releases/0.5.0/THIRD-PARTY-NOTICES.md). This release includes saved BoM and board data alongside native 3D WayriCAD registration, saved result layers and linked probes. The npm/CDN package version is {{ site.data.webview_release.npm }}.
 
 ## Published npm and CDN release
 
-KiCad WebView `0.3.0` is public on [npm](https://www.npmjs.com/package/@wayrisignals/kicad-webview), [jsDelivr](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.3.0/) and [UNPKG](https://unpkg.com/@wayrisignals/kicad-webview@0.3.0/), under MPL-2.0. Matching source: [v0.3.0](https://github.com/wayri/kicad-webview/tree/v0.3.0). The npm package excludes legacy board fixtures and fixture-backed examples. [Installation and no-Node examples](/kicad-webview/docs/quick-start/).
+KiCad WebView `{{ site.data.webview_release.npm }}` is public on [npm](https://www.npmjs.com/package/@wayrisignals/kicad-webview), [jsDelivr](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/) and [UNPKG](https://unpkg.com/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/), under MPL-2.0. Matching source: [v{{ site.data.webview_release.npm }}](https://github.com/wayri/kicad-webview/tree/v{{ site.data.webview_release.npm }}). The npm package excludes legacy board fixtures and fixture-backed examples. [Installation and no-Node examples](/kicad-webview/docs/quick-start/).
 
 ## Historical immutable hosted SDK (beta.2)
 
@@ -29,11 +29,11 @@ KiCad WebView `0.3.0` is public on [npm](https://www.npmjs.com/package/@wayrisig
 
 ## Software license and matching source
 
-KiCad WebView’s owner-authored software is released under the [Mozilla Public License 2.0](/assets/lib/kicad-webview/releases/0.4.0/LICENSE). Commercial use, self-hosting and integration into a proprietary application do not require individual approval. The complete license is authoritative; this summary does not replace it.
+KiCad WebView’s owner-authored software is released under the [Mozilla Public License 2.0](/assets/lib/kicad-webview/releases/0.5.0/LICENSE). Commercial use, self-hosting and integration into a proprietary application do not require individual approval. The complete license is authoritative; this summary does not replace it.
 
-MPL uses source-file-level copyleft. When distributing covered software, preserve its notices and make the covered source, including covered modifications, available as the license requires. Separate host-application files do not become MPL merely because they use this library. Distributing minified JavaScript or a bundled HTML viewer also needs a way for recipients to obtain the corresponding source. See the [release’s licensing guide](/assets/lib/kicad-webview/releases/0.4.0/LICENSING.md) and [Mozilla’s FAQ](https://www.mozilla.org/en-US/MPL/2.0/FAQ/).
+MPL uses source-file-level copyleft. When distributing covered software, preserve its notices and make the covered source, including covered modifications, available as the license requires. Separate host-application files do not become MPL merely because they use this library. Distributing minified JavaScript or a bundled HTML viewer also needs a way for recipients to obtain the corresponding source. See the [release’s licensing guide](/assets/lib/kicad-webview/releases/0.5.0/LICENSING.md) and [Mozilla’s FAQ](https://www.mozilla.org/en-US/MPL/2.0/FAQ/).
 
-The [public source repository](https://github.com/wayri/kicad-webview) contains the preferred source. Use [v0.4.0](https://github.com/wayri/kicad-webview/tree/v0.4.0) for the self-hosted 0.4.0 SDK, [v0.3.0](https://github.com/wayri/kicad-webview/tree/v0.3.0) for npm/CDN 0.3.0, and [v0.1.0-beta.2](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.2) only for the archived beta.2 files. If you modify the covered software, provide the matching modified source rather than pointing only to the unmodified upstream tag. The library is **free to use, including commercially, under MPL-2.0**. No payment or individual commercial-use approval is required. Need help embedding or customizing KiCad WebView? Optional paid implementation, maintenance, and support are available at [support.kivi@sigharmonic.com](mailto:support.kivi@sigharmonic.com). You do not need to buy these services to use or integrate the library.
+The [public source repository](https://github.com/wayri/kicad-webview) contains the preferred source. Use [v0.5.0](https://github.com/wayri/kicad-webview/tree/v0.5.0) for the self-hosted 0.5.0 SDK, [v{{ site.data.webview_release.npm }}](https://github.com/wayri/kicad-webview/tree/v{{ site.data.webview_release.npm }}) for npm/CDN {{ site.data.webview_release.npm }}, and [v0.1.0-beta.2](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.2) only for the archived beta.2 files. If you modify the covered software, provide the matching modified source rather than pointing only to the unmodified upstream tag. The library is **free to use, including commercially, under MPL-2.0**. No payment or individual commercial-use approval is required. Need help embedding or customizing KiCad WebView? Optional paid implementation, maintenance, and support are available at [support.kivi@sigharmonic.com](mailto:support.kivi@sigharmonic.com). You do not need to buy these services to use or integrate the library.
 
 ## Third-party components and hardware
 

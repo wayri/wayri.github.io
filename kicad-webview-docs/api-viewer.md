@@ -5,7 +5,18 @@ permalink: /kicad-webview/docs/api-viewer/
 doc_section: api
 ---
 
-The base API below applies to npm/CDN **0.3.0** and self-hosted **0.4.0**. Native 3D result registration uses 0.4.0. See the [export index](/kicad-webview/docs/api/) for the full library surface.
+The base API below applies from 0.3.0 onward. Native 3D result registration was added in 0.4.0; the current self-hosted SDK is {{ site.data.webview_release.self_hosted }} and npm/CDN is {{ site.data.webview_release.npm }}. See the [export index](/kicad-webview/docs/api/) for the full library surface.
+
+## Exploded 3D inspection
+
+The [0.6.0 refresh](/kicad-webview/docs/extension-refresh/) adds these methods to a matching self-hosted build. npm/CDN availability is tracked separately above.
+
+| Method | Return and constraints |
+| --- | --- |
+| `setExplode(value: number)` | Returns the active numeric explode amount. Requires a loaded 3D board and a finite value from 0 to 100; invalid values or incompatible views throw. Zero restores assembly. |
+| `getExplode()` | Current numeric value, or zero outside 3D. Throws after disposal. |
+
+Spacing is display-only. Registered result overlays and their probes are hidden while exploded and restored at zero; measurement is disabled during exploded display. Unsupported blind/buried-via geometry is not inferred. Four in-memory camera/explode snapshots may be restored only for matching exact source bytes, path and view; this does not extend the shareable view-state schema.
 
 ## Self-hosted 0.4.0 additions
 

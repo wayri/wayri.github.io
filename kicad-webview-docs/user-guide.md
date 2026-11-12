@@ -5,7 +5,17 @@ permalink: /kicad-webview/docs/user-guide/
 doc_section: user-guide
 ---
 
-This guide covers the common 0.3.0 viewer APIs and the self-hosted **0.4.0** WayriCAD additions. npm/CDN remains at 0.3.0. It covers the versioned library, which may differ from the newer IRCA demonstrations elsewhere on this website. Start with [Quick start](/kicad-webview/docs/quick-start/) to mount a viewer, or [Examples](/kicad-webview/docs/examples/) for complete browser integrations.
+This guide covers the common 0.3.0 viewer APIs and the self-hosted WayriCAD additions introduced in 0.4.0. The current self-hosted SDK is {{ site.data.webview_release.self_hosted }}; npm/CDN is {{ site.data.webview_release.npm }}. See the [BoM guide](/kicad-webview/docs/bom-analytics/) for 0.5.0 saved design data. It covers the versioned library, which may differ from the newer IRCA demonstrations elsewhere on this website. Start with [Quick start](/kicad-webview/docs/quick-start/) to mount a viewer, or [Examples](/kicad-webview/docs/examples/) for complete browser integrations.
+
+## 0.6 inspection and navigation
+
+The [0.6 viewer refresh](/kicad-webview/docs/extension-refresh/) adds **Explode** to the 3D tools and **Show sheet browser** to the advanced project workspace. Use a matching 0.6 build for these controls; release availability is shown above. Explode spacing is display-only. Registered result overlays and probes are hidden while exploded, and measurement is disabled; return the slider to zero to restore the assembled display and overlay visibility.
+
+The floating sheet browser retains its tree view when closed and reopened. Drag its heading or use its zoom/fit controls. Searching the navigator for “sheet tree”, “sheet browser”, “sheet navigator” or “minimap” reveals the reopen command. It reads only the loaded project's listed schematic files.
+
+Saved schematic colors, fills and dashes are retained. Bounded text-box wrapping uses approximate preview font metrics; embedded PNG previews reject malformed, animated and external image data. Read rendering warnings when interpreting unsupported constructs.
+
+View switching restores a bounded cache of four snapshots for matching exact source bytes, path and view, while inactive renderer resources are released. Hierarchy loading uses at most three concurrent listed-schematic fetches; this is not a physical-phone speedup measurement.
 
 ## WayriCAD fields on the native 3D board
 
@@ -91,7 +101,7 @@ Hosts should suspend selection propagation while replaying independent saved sel
 
 `ProjectTree` is an independent sheet diagram; it does not need a PCB viewer or WebGL. It retains saved sheet names, file paths and parent/child instance relationships. Reusing one subsheet under two parents creates separate instances in the diagram.
 
-Expand or collapse branches, select an available node, or export the diagram as SVG. Missing, invalid, cyclic, truncated and unreadable nodes remain labelled. A hierarchy is not a full electrical netlist. Selecting a node does not navigate another viewer unless the host explicitly connects that event.
+Expand or collapse branches, select an available node, or export the diagram as SVG. In 0.6, Zoom in/out, Fit and Reset view control the tree independently; background/Alt-drag pans and native touch scrolling remains available. Hosts can save `{zoom,x,y}` with `getCamera()` / `setCamera()`, use `zoomBy()`, `fit()` or `resetView()`, and clear data with `clear()`. [Camera reference](/kicad-webview/docs/api-project/#independent-projecttree-camera). Missing, invalid, cyclic, truncated and unreadable nodes remain labelled. A hierarchy is not a full electrical netlist. Selecting a node does not navigate another viewer unless the host explicitly connects that event.
 
 When no unique root can be established, the result is a forest rather than an arbitrary chosen root. The interactive tree is bounded to 4,096 instances and 32 sheet edges per branch; SVG export includes at most 512 instances and labels that limit. See [hierarchy example](/kicad-webview/docs/examples/#show-a-sheet-hierarchy) and [API limits](/kicad-webview/docs/api-utilities/).
 

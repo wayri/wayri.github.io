@@ -6,9 +6,31 @@ doc_section: releases
 description: KiCad WebView release notes, WayriCAD saved results, layer inspection and mobile integrations.
 ---
 
+## 0.6.0 — viewer refresh
+
+{% if site.data.webview_release.self_hosted == '0.6.0' %}
+The self-hosted **0.6.0 SDK** includes these additions. {% if site.data.webview_release.npm == '0.6.0' %}The same release is available from npm and CDN.{% else %}npm/CDN remains at **{{ site.data.webview_release.npm }}** while its next publication propagates; use the matching self-hosted files for the APIs below.{% endif %}
+{% else %}
+This guide describes the **0.6.0 source refresh**. The currently listed self-hosted SDK is **{{ site.data.webview_release.self_hosted }}**, and npm/CDN is **{{ site.data.webview_release.npm }}**. Use a matching 0.6.0 build for these additions; this page does not announce an npm/CDN publication.
+{% endif %}
+
+- Explode a supported 3D assembly with `setExplode(0–100)` and restore it at zero. Spacing is display-only; registered result overlays/probes are hidden and measurement is disabled while exploded.
+- Retain saved RGBA colors, fills and dashes. Preview bounded schematic text boxes and validated embedded PNGs, with explicit approximation and omission warnings.
+- Reopen the advanced workspace's floating sheet browser, or control an independent `ProjectTree` camera with zoom, fit and reset.
+- Restore up to four exact-source/path/view camera snapshots while releasing inactive renderers. Fetch up to three listed schematics concurrently without changing deterministic ordering or loading limits.
+
+[0.6 guide, examples and limits](/kicad-webview/docs/extension-refresh/) · [No-Node self-hosting](/kicad-webview/docs/quick-start/#self-hosted-060-sdk) · [Open the OLIMEX workspace](/assets/demos/embed.html?example=olimex&workspace=true&view=3d&theme=dark)
+
+Hierarchy concurrency is not a physical-phone performance benchmark. These are read-only inspection features; extension comments, authentication, editing and the Fast PI solver/setup UI are not included. Existing BoM analytics and WayriCAD retained-result APIs remain available.
+
+## 0.5.0 — saved BoM and board data
+
+The 0.5.0 SDK adds a read-only BoM panel linked to a native KiCad drawing, grouping and searching saved parts, exporting CSV, and locating uniquely identified components in PCB, schematic and 3D views. A board-data view summarizes saved pad and object counts, track centreline lengths and zone polygon sums. [Try the OLIMEX demo](/assets/demos/bom.html) · [Integration and limits](/kicad-webview/docs/bom-analytics/).
+
+Reports describe saved source data; overlapping fill polygons are counted repeatedly, holes are not subtracted and placement candidates do not prove containment. No copper refill, clearance check or solver is performed. See the guide for source limits and interpretation.
 ## 0.4.0 — results directly on the 3D PCB
 
-Available as the **self-hosted SDK and GitHub download**. npm and CDN remain at **0.3.0**; use the versioned 0.4.0 script or module for the additions below.
+At its publication, 0.4.0 was available as the **self-hosted SDK and GitHub download**, while npm/CDN remained at 0.3.0. The current release status is shown above; immutable0.4.0 files retain these additions.
 
 - Register supported WayriCAD PI and thermal fields on the matching native **2D/3D PCB**. The through-board presentation is labelled; hidden PCB layers hide their field.
 - Choose **Saved result layer** while retaining the quantity where available. Link spatial probe markers between result plots and the board; native saved-part and trace selection remains usable.

@@ -1,0 +1,20 @@
+---
+layout: webview-embed
+title: Saved BoM and board data
+description: Explore a saved KiCad bill of materials alongside its board.
+permalink: /assets/demos/bom.html
+---
+<style>
+.wv-bom-page{max-width:1500px;margin:auto;padding:1rem clamp(1rem,3vw,2.5rem) 3rem}.wv-bom-page h1{font:650 clamp(2rem,5vw,3.6rem)/1.08 system-ui,sans-serif;letter-spacing:-.04em}.wv-bom-page .intro{max-width:78ch}.wv-bom-page .layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:1rem;align-items:start}.wv-bom-page .panel{min-width:0}.wv-bom-page h2{font-size:1.1rem}.wv-bom-page #bom-board{height:65dvh;min-height:440px;border:1px solid var(--rule);border-radius:8px;overflow:hidden}.wv-bom-page #bom{min-width:0}.wv-bom-page #bom-load{font:inherit;min-height:44px;padding:.65rem 1rem;border:1px solid var(--rule);border-radius:6px;background:var(--paper);color:var(--body-ink);cursor:pointer}.wv-bom-page #bom-load:focus-visible{outline:2px solid var(--link);outline-offset:3px}.wv-bom-page #bom-status{min-height:1.5em}.wv-bom-page .wv-caption{max-width:100ch}@media(max-width:800px){.wv-bom-page .layout{grid-template-columns:minmax(0,1fr)}.wv-bom-page #bom-board{height:55dvh;min-height:340px}}
+</style>
+<main class="wv-demo-page wv-bom-page">
+{% include webview-breadcrumbs.html section_url='/kicad-webview/docs/bom-analytics/' section_label='BoM and board data guide' %}
+<header><p class="wv-eyebrow">KiCad WebView · saved design data</p><h1>Explore the parts.<br>See them on the board.</h1><p class="intro">Search the saved bill of materials, select a part on the drawing, and inspect saved board counts and track lengths. Switch the viewer to 3D and select again to locate the same uniquely identified part.</p><nav class="wv-actions" aria-label="BoM demo links"><a href="{{ '/kicad-webview/docs/bom-analytics/' | relative_url }}">Integration guide ↗</a><a href="{{ '/kicad-webview/' | relative_url }}">All WebView demos ↗</a></nav></header>
+<button id="bom-load" type="button">Load OLIMEX example</button>
+<p id="bom-status" role="status">The board and viewer load when you choose Load.</p>
+<div class="layout"><section class="panel" aria-labelledby="bom-board-title"><h2 id="bom-board-title">Drawing</h2><div id="bom-board" aria-label="OLIMEX PCB viewer"></div></section><section class="panel" aria-labelledby="bom-title"><h2 id="bom-title">Saved BoM &amp; board data</h2><div id="bom"></div></section></div>
+<p class="wv-caption">OLIMEX ESP32-P4-DevKit Rev.D1, pinned source revision 26705d3; hardware CERN-OHL-S-2.0, © OLIMEX Ltd and contributors. The displayed PCB adapts model paths and equivalent legacy identities; component models load on demand and the optional microSD model is unavailable. <a href="{{ '/assets/demos/public-hardware/PROVENANCE.json' | relative_url }}">Drawing sources and notices</a> · <a href="{{ '/assets/demos/public-hardware/MODEL-PROVENANCE.json' | relative_url }}">Model coverage</a> · <a href="https://github.com/OLIMEX/ESP32-P4-DevKit/blob/26705d36407a07324348927dfd30fbf4ffc1d94c/README.md">Upstream credits</a>.</p>
+<p class="wv-caption">Results summarize the saved file. Track lengths are centreline sums; zone polygon sums can overlap and do not subtract holes. Placement candidates are review hints, not proof of containment or intent. No refill, clearance check, solver or fabrication qualification runs here.</p>
+<noscript><p>Enable JavaScript to load the drawing and interactive BoM. The guide explains the data and its limits.</p></noscript>
+</main>
+<script type="module" src="{{ '/assets/js/webview-bom-demo.mjs' | relative_url }}"></script>

@@ -1,0 +1,280 @@
+{
+  "version": "0.6.0",
+  "license": "MPL-2.0",
+  "source": "https://github.com/wayri/kicad-webview/tree/v0.6.0",
+  "sourceCommit": "1523a2ad2e5c2556e0ceacf871f424c1412dd043",
+  "packageIntegrity": "sha512-N9OQv6OpJ59m2wwojWOn67iTG66t9WHBaCg0RCsloOOMj4IPKH7HGvRSMNLG3qw9qA94MdaDHNQO74RVHTo+9g==",
+  "classicIntegrity": "sha384-nmAm9T4W8zix2SUsHpWoqqtu61eCsCpl3yGWMGuOGqZoghUxM5qe63SAZ1ssWrer",
+  "files": [
+    {
+      "path": "ADVANCED-VIEWER.md",
+      "bytes": 3983,
+      "sha256": "bef53847e559ae28aa47728d05b7f44d0ec8f4df1d0927c92a1a3ff925a949d0"
+    },
+    {
+      "path": "ALTIUM-BETA.md",
+      "bytes": 5568,
+      "sha256": "e09dfdba87648779be58db2a01b1d489bb4c4674d8bd139de68aabe4216905ed"
+    },
+    {
+      "path": "ANALYSIS.md",
+      "bytes": 3692,
+      "sha256": "d62012a7df01a80f517d8a9f9e9b9447fd65a3056e8da13f598cafa17936829f"
+    },
+    {
+      "path": "APP-INTEGRATIONS-BETA.md",
+      "bytes": 11065,
+      "sha256": "181bd12a41aaee8cad42383298d9ddf26f41fbef61a2a84ca1a389084ca1c4b8"
+    },
+    {
+      "path": "BOM-ANALYTICS.md",
+      "bytes": 4357,
+      "sha256": "1ba16bce0c619d09252694369fcaa709d5e4130adfc6055596659c59596ee8ca"
+    },
+    {
+      "path": "bom-viewer.js",
+      "bytes": 35693,
+      "sha256": "311f6b76e9fac83f18ec7beecc4801f81daa4c75b5a896ef3fe32b701b56e311"
+    },
+    {
+      "path": "BROWSER-CHECKS.md",
+      "bytes": 1211,
+      "sha256": "a90f260dfd483e2aeadb774c92f2c0a3f0dd3bd0cd224cbebcb2c61ce9c73ae5"
+    },
+    {
+      "path": "CAROUSEL.md",
+      "bytes": 5523,
+      "sha256": "bad45a678a7213b8f128efecaf5a5a1a7ff5067fc21bf49b9194cb0c492c4c03"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 1428,
+      "sha256": "c87e062f2eb780f726df3b813f8e7d3190d6b6f6f9eb1c48c91f7fc30e28d3ab"
+    },
+    {
+      "path": "embed.html",
+      "bytes": 514,
+      "sha256": "7b80b0187ec0767946f4b2b86fa07c860f5c68bb4363c3b1d67b59bacbf41b10"
+    },
+    {
+      "path": "embed.mjs",
+      "bytes": 1280,
+      "sha256": "f8afb897c6ff9d5dcbf140abc58e1190b5418c54dc067597a502ae04b0799af0"
+    },
+    {
+      "path": "EXTENSION-REFRESH.md",
+      "bytes": 3632,
+      "sha256": "00865687032e62f038de804a903f31964ea9dcd311fb18f2ab2fcd7a459ce9a7"
+    },
+    {
+      "path": "FZSTD-LICENSE",
+      "bytes": 1089,
+      "sha256": "1d72133b15f05101411c4f53e34af38adce3ecf7a78959d3d28b1e4d41a4fc92"
+    },
+    {
+      "path": "HOSTING.md",
+      "bytes": 6030,
+      "sha256": "d3cea8613b830c44322b2242ad74552e9d51ca878d7f44fb4125c7fd6f804ead"
+    },
+    {
+      "path": "INSPECTION-CONTROLS.md",
+      "bytes": 4034,
+      "sha256": "26e222a7690c9bdb663597cba7c92fdb4db5272f40341677df7f3b2e1e3dc77f"
+    },
+    {
+      "path": "INTERACTIVE-DEMO.md",
+      "bytes": 9593,
+      "sha256": "be9d727c9e613d5be0785009781b528d82f5e54303d9472c8178d32a622f5cb0"
+    },
+    {
+      "path": "KICAD-COMPATIBILITY.md",
+      "bytes": 3280,
+      "sha256": "3afa26a9f6bc9c90742d58d69fcc34b8932aaacc010a387a3084467b3f321cd4"
+    },
+    {
+      "path": "kicad-webview.min.js",
+      "bytes": 1695295,
+      "sha256": "d708010f9d8ccd56266f3594600f9537de9df2c20675c5e983ecc0c05ff8be66"
+    },
+    {
+      "path": "kivi-viewer.js",
+      "bytes": 1695158,
+      "sha256": "97623fe3f3ba20addf8bab7076a922898e3ddd792ee7f50e2e5f2f9cd1f900a0"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 16726,
+      "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04"
+    },
+    {
+      "path": "licenses/Pocket-KiView-Source-Available-1.0.txt",
+      "bytes": 5836,
+      "sha256": "6e0b3232c49c4aee1afd5b97e39c45d0eecc4071a2f69fc23f733b8aa12e6fc8"
+    },
+    {
+      "path": "LICENSING.md",
+      "bytes": 3336,
+      "sha256": "98dc1c39eaa49058e04b5891a6d4d0e3d0d89cc6a8e74e2128a749359cfc5b89"
+    },
+    {
+      "path": "LIGHTWEIGHT.md",
+      "bytes": 4688,
+      "sha256": "51593352f38b4e09af327c26197d278153f517367d3f44272d830f09b31dd24a"
+    },
+    {
+      "path": "LINKED-VIEWS.md",
+      "bytes": 4088,
+      "sha256": "2ade2517cb11f91fd74d84a34e82e8eae7abef07f4da097ef635ad92380b0460"
+    },
+    {
+      "path": "lite/chunks/analysis-layer-E3SNHLTE.js",
+      "bytes": 5030,
+      "sha256": "2036b606af84ffe173f76d00bf94029e474b8574b188e51dc9cab5234722ccda"
+    },
+    {
+      "path": "lite/chunks/analysis-results-CAZBN2YT.js",
+      "bytes": 452,
+      "sha256": "4dd7b637f7674b2dc37d0cfebc00c97b42f5c65b95a46b47249b22698e73999b"
+    },
+    {
+      "path": "lite/chunks/board3d-YEHAE7SQ.js",
+      "bytes": 1227749,
+      "sha256": "ab90133f0d67d743f19649b4322eafdf03273aa0b879da62585127e866b864c8"
+    },
+    {
+      "path": "lite/chunks/chunk-6HDKLEGI.js",
+      "bytes": 13927,
+      "sha256": "1eba778fe6ac38db44d01b58575deab32d8ac12ebdd7523c3aebbf5a78d1d61d"
+    },
+    {
+      "path": "lite/chunks/chunk-7SPLFUUM.js",
+      "bytes": 3605,
+      "sha256": "4729fd5d2f372bdb460f0e7cc7c1131fc8c3add99b6a694aef07b5cb492e7685"
+    },
+    {
+      "path": "lite/chunks/chunk-HUBRM3VV.js",
+      "bytes": 874,
+      "sha256": "66f84e6616d591d8c137189ec4c96628cfb3deb6a42f6cb2d7bc0d8773530f38"
+    },
+    {
+      "path": "lite/chunks/chunk-MMW2M635.js",
+      "bytes": 1098,
+      "sha256": "8f549028d4c965eb4a1afa4305cbdccee2e5c34b845e48d886c26f40efdd930d"
+    },
+    {
+      "path": "lite/chunks/three-runtime-TAG5GLGM.js",
+      "bytes": 341,
+      "sha256": "01aeba0cfec33d01f7de9f08ffd5a3938170b0614bf0e5f9e5c8e333be78fa47"
+    },
+    {
+      "path": "lite/kicad-webview-lite.js",
+      "bytes": 280289,
+      "sha256": "52ada9fd677e9796fc4b395c272170bede61706d9a6f37c310afc37cab82914f"
+    },
+    {
+      "path": "lite/manifest.json",
+      "bytes": 4618,
+      "sha256": "71383efdc93737d639cef215dcf462a487ce81596a8d0fd81136f4a1275f2c07"
+    },
+    {
+      "path": "MANUFACTURING-BETA.md",
+      "bytes": 7618,
+      "sha256": "ffe914494d9e84440aefaffedc1e5dd4eff32932dc4e8b5c1bf5d70feda46596"
+    },
+    {
+      "path": "MOBILE-PERFORMANCE.md",
+      "bytes": 3828,
+      "sha256": "f529f6050d0fa05ff909d923dbf8cc8733d300958ba849e948fee19ba8c59acd"
+    },
+    {
+      "path": "NET-MODEL-PROVENANCE.md",
+      "bytes": 917,
+      "sha256": "6c0fb30f61196a676853e0ba4832765f00bf656935f0c9dbbad1897c8c5c61d6"
+    },
+    {
+      "path": "PRESENTATION.md",
+      "bytes": 2791,
+      "sha256": "0c452b4a02d9625ef39fae6e1ae160e76300044b7ca499f8ae3bbbc5fb6ca0e8"
+    },
+    {
+      "path": "PROJECT-TREE.md",
+      "bytes": 6547,
+      "sha256": "3ba7b2fd3f479cbc88c072bb5eda314c4c40b37dd071e15c02b378fef46acc30"
+    },
+    {
+      "path": "PUBLIC-API.md",
+      "bytes": 10617,
+      "sha256": "755386656976939382643a0f1744e30c79c1d76e82be9883bc337dc285bbffbe"
+    },
+    {
+      "path": "README.md",
+      "bytes": 11265,
+      "sha256": "ed9fea38a8e0cd33837625103541d21b2312fca7e13d8b1a60614b6497a7b009"
+    },
+    {
+      "path": "RELEASING.md",
+      "bytes": 766,
+      "sha256": "9cb003de4f83b94206226bcce6363ad90815614e0f712dc785f9889962e918a1"
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 671,
+      "sha256": "d3ada3e887e24964101d86966a86dc051fc865db80f535b958dd0d77e185f373"
+    },
+    {
+      "path": "SOURCE-PROVENANCE.json",
+      "bytes": 22668,
+      "sha256": "40aeb9fd11ada5bec672306253463b1b2e06dac40b145c900856361a2adf8205"
+    },
+    {
+      "path": "SPIKE-ENGINE-NOTICE.md",
+      "bytes": 956,
+      "sha256": "946009e7d19ae2954c0271d632257dc9e86d5ef5fe426eaa399aced449736374"
+    },
+    {
+      "path": "standalone-html.mjs",
+      "bytes": 5005,
+      "sha256": "594b573acbb7a6bd991ca3efc0562f77415e6a3ccea894c96153767b3032c6bf"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "bytes": 2001,
+      "sha256": "637797c6f1c4f515ab5275807f60aa421763362cc3edbac588d3ce7595efadee"
+    },
+    {
+      "path": "THREE-LICENSE",
+      "bytes": 1102,
+      "sha256": "f57eb9202058667d12aebd854fe8a86d6feaeab51078180df5615bfdbd5cff05"
+    },
+    {
+      "path": "TRADEMARKS.md",
+      "bytes": 642,
+      "sha256": "d13122983ee2ef88d3bc5240dc51b711c12d783c3daf43ba66cfdbdb24969821"
+    },
+    {
+      "path": "UPSTREAM-SYNC.md",
+      "bytes": 2590,
+      "sha256": "2ac756e4587114731f433920ed425a8b4c5e947a25b5ddea0b1ed1a41cf6010c"
+    },
+    {
+      "path": "VIEW-LINKS.md",
+      "bytes": 4415,
+      "sha256": "adecce06425f986eea2a6da07e2d5731bf0ced53391ae75358e8da058031088e"
+    },
+    {
+      "path": "VIEW-NAVIGATION.md",
+      "bytes": 3254,
+      "sha256": "a4ecea14023f5b54a128985a7a331a13577c04bfc2ed38965bdbf3bee986b1ed"
+    },
+    {
+      "path": "wayricad-results.js",
+      "bytes": 1320020,
+      "sha256": "ee21d8b4ef6245ef582936c5754efb3e4aa954c2f21298a64f244d96f53c1a1c"
+    },
+    {
+      "path": "WAYRICAD-RESULTS.md",
+      "bytes": 9895,
+      "sha256": "a5722ec4a1402997549d71f1d591bcebe9c6c82313befbfd6533d87fa2c1f9d6"
+    }
+  ]
+}

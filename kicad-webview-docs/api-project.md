@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/api-project/
 doc_section: api
 ---
 
-These APIs use the same saved drawing identity and renderer contract as the [compact viewer](/kicad-webview/docs/api-viewer/). This page documents release **0.3.0**.
+These APIs use the same saved drawing identity and renderer contract as the [compact viewer](/kicad-webview/docs/api-viewer/). The base methods apply from **0.3.0**; the sheet-browser and tree-camera additions below require a matching **0.6.0** build. Current self-hosted and npm/CDN availability is shown above.
 
 ## ProjectViewer
 
@@ -30,6 +30,8 @@ The two names are aliases for one `EventTarget` wrapper with project navigation 
 | `getActiveViewer()` | The active owned `KiCadViewer`; use its public selection/view methods. |
 | `setActivePane(pane: 0 \| 1)` | `void`; selects pane zero or one; other values throw. |
 | `setLayout(layout: 'split' \| 'single')` | `void`; invalid layouts throw. Single layout keeps one visible pane. |
+| `openSheetBrowser()` | In 0.6, `Promise<boolean>`; opens the floating hierarchy for listed schematic files. Requires a loaded project with schematics; missing project/files reject. Superseded or cancelled work returns `false`. |
+| `closeSheetBrowser()` | In 0.6, `void`; hides the panel, cancels pending panel loading and keeps the existing tree view for reopening. |
 | `setNavigatorOpen(open: boolean)` | `void`; shows/hides project navigation. |
 | `setTheme(theme: 'light' \| 'dark')` | `void`; updates owned viewers and controls. |
 | `getViewState()` | `Promise<ViewState>`; snapshots the current supported native panes. |
@@ -48,6 +50,23 @@ Load errors/cancellation follow the compact viewer's contract: `true` on complet
 | `panechange` | `{pane: 0 \| 1}`. |
 
 Component cross-probing uses saved schematic/PCB identities. Matching references such as `U1`, or matching short net names on different sheets, do not establish connectivity. A selected PCB trace does not automatically select an unrelated schematic net. [Hierarchy](/kicad-webview/docs/api-utilities/#hierarchy) is also available independently of this wrapper.
+
+## Independent ProjectTree camera
+
+`ProjectTree` remains an independent component; it does not need a PCB renderer or WebGL. In 0.6 its camera controls the sheet diagram, independently of drawing cameras. See [hierarchy inputs and limits](/kicad-webview/docs/api-utilities/#hierarchy).
+
+| Method | Return and constraints |
+| --- | --- |
+| `getCamera()` | Copied `{zoom, x, y}`; `x`/`y` are scroll offsets. |
+| `setCamera({zoom, x, y})` | Returns the applied camera. Requires finite zoom 0.35–2 and offsets 0–1,000,000; invalid values throw. |
+| `zoomBy(factor)` | Returns the applied camera. Requires a finite positive factor; clamps resulting zoom to 0.35–2. |
+| `fit()` | `boolean`; fits an available hierarchy to a usable viewport. Returns `false` before usable dimensions/data exist. |
+| `resetView()` | Returns the reset camera: zoom 1, offsets zero. |
+| `clear()` | Returns the tree; cancels pending work and clears data/selection while retaining the mount. |
+
+The toolbar provides Zoom in/out, Fit and Reset view. Background/Alt-drag pans; node activation and native touch scrolling remain available. The floating browser in `ProjectViewer` can be reopened with **Show sheet browser** or navigator search for “sheet tree”, “sheet browser”, “sheet navigator” or “minimap”. Closing and reopening preserves its view. It does not discover unlisted sources or grant repository access.
+
+Hierarchy requests use at most three concurrent listed-schematic fetches with deterministic file order and existing byte/file/cancellation bounds. This is not a measured physical-phone speedup. [0.6 guide](/kicad-webview/docs/extension-refresh/).
 
 ## linkViewers
 

@@ -1,4 +1,4 @@
-import {Viewer,WayriCADResultsViewer} from '/assets/lib/kicad-webview/releases/0.4.0/kivi-viewer.js';
+import {Viewer,WayriCADResultsViewer} from '/assets/lib/kicad-webview/releases/0.6.0/kivi-viewer.js';
 const host=document.querySelector('#wayricad-layout'),status=document.querySelector('#wayricad-status'),choose=document.querySelector('#wayricad-case'),load=document.querySelector('#wayricad-load');
 const theme=()=>document.documentElement.dataset.theme==='dark'?'dark':'light';
 const board=new Viewer('#wayricad-board',{theme:theme(),inspectOnSelect:false}),results=new WayriCADResultsViewer('#wayricad-results',{theme:theme(),boardViewer:board});

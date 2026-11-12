@@ -6,24 +6,53 @@ permalink: /kicad-webview/docs/quick-start/
 doc_section: quick-start
 ---
 
-Add KiCad WebView to a plain HTML page with a script tag or browser ES module. **No Node.js, npm installation or build step is needed.** You only need an HTTP(S) host, such as GitHub Pages. The npm and CDN examples use the published `0.3.0` package. For native 3D WayriCAD field registration and linked probes, use the [self-hosted 0.4.0 SDK](#self-hosted-040-sdk); the archived website SDK retains its immutable `0.1.0-beta.2` URLs. The examples below load the credited OLIMEX public project, including its PCB, schematic and 28 supplied model assets. Unresolved models remain labelled stand-ins.
+Add KiCad WebView to a plain HTML page with a script tag or browser ES module. **No Node.js, npm installation or build step is needed.** You only need an HTTP(S) host, such as GitHub Pages. The npm and CDN examples use the published `{{ site.data.webview_release.npm }}` package. The current self-hosted SDK is **{{ site.data.webview_release.self_hosted }}**. For exploded 3D inspection and the sheet browser, see the [0.6.0 self-hosting example](#self-hosted-060-sdk); saved BoM and board data were introduced in [0.5.0](#self-hosted-050-sdk). the archived website SDK retains its immutable `0.1.0-beta.2` URLs. The examples below load the credited OLIMEX public project, including its PCB, schematic and 28 supplied model assets. Unresolved models remain labelled stand-ins.
 
-## Self-hosted 0.4.0 SDK
+## Self-hosted 0.6.0 SDK
+
+{% if site.data.webview_release.self_hosted == '0.6.0' %}
+The self-hosted **0.6.0 SDK** includes these additions. npm/CDN remains at **{{ site.data.webview_release.npm }}**; use the matching self-hosted files for the APIs below.
+{% else %}
+This guide describes the **0.6.0 source refresh**. The currently listed self-hosted SDK is **{{ site.data.webview_release.self_hosted }}**, and npm/CDN is **{{ site.data.webview_release.npm }}**. Use a matching 0.6.0 build for these additions; this page does not announce an npm/CDN publication.
+{% endif %}
+
+Host the complete matching 0.6.0 release directory, including its dependencies and license notices. A direct script needs no npm installation, Node.js runtime or build step:
+
+```html
+<div id="board" style="height:70dvh;min-height:360px"></div>
+<p id="status" role="status">Opening board…</p>
+<script src="/assets/lib/kicad-webview/releases/0.6.0/kicad-webview.min.js"></script>
+<script>
+const viewer = new KiCadWebView.Viewer('#board', {theme:'dark'});
+window.addEventListener('pagehide', () => viewer.dispose(), {once:true});
+viewer.load('/assets/demos/public-hardware/olimex-p4-project.json', {view:'3d'})
+  .then(loaded => {
+    if (!loaded) return;
+    viewer.setExplode(35);
+    document.querySelector('#status').textContent = 'Read-only exploded inspection';
+  })
+  .catch(error => { document.querySelector('#status').textContent = error.message; });
+</script>
+```
+
+These paths assume that you host the SDK and sample manifest at the shown locations. Replace the manifest with your own supported project URL; remote sources must permit CORS. Return explode to zero before inspecting registered result overlays or taking measurements. [Full 0.6 guide and limits](/kicad-webview/docs/extension-refresh/).
+
+## Self-hosted 0.5.0 SDK
 
 Use a version-pinned browser script without Node.js:
 
 ```html
-<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.4.0/kicad-webview.min.js"></script>
+<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.5.0/kicad-webview.min.js"></script>
 ```
 
-The same release provides an [ES module](/assets/lib/kicad-webview/releases/0.4.0/kivi-viewer.js), [checksums](/assets/lib/kicad-webview/releases/0.4.0/RELEASE.json) and [source/download](https://github.com/wayri/kicad-webview/releases/tag/v0.4.0). Use the [WayriCAD integration example](/kicad-webview/docs/wayricad-results/#embed-both-views-without-nodejs) for result layers, native 3D registration and linked probes. Keep the complete matching release directory and notices when self-hosting.
+The same release provides an [ES module](/assets/lib/kicad-webview/releases/0.5.0/kivi-viewer.js), [checksums](/assets/lib/kicad-webview/releases/0.5.0/RELEASE.json) and [source/download](https://github.com/wayri/kicad-webview/releases/tag/v0.5.0). Use the [WayriCAD integration example](/kicad-webview/docs/wayricad-results/#embed-both-views-without-nodejs) for result layers, native 3D registration and linked probes. Keep the complete matching release directory and notices when self-hosting.
 
 ## npm installation
 
 Install the public [@wayrisignals/kicad-webview package](https://www.npmjs.com/package/@wayrisignals/kicad-webview):
 
 ```sh
-npm install @wayrisignals/kicad-webview@0.3.0
+npm install @wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}
 ```
 
 Add a sized mount to your page:
@@ -41,7 +70,7 @@ const viewer = new Viewer('#board', { theme: 'dark', inspectOnSelect: false });
 await viewer.load('/designs/project.zip', { view: '3d' });
 ```
 
-Replace `/designs/project.zip` with your own supported design URL. Cross-origin sources must permit CORS. Dispose the viewer when its host is permanently unmounted. The package also exports `/lite`, `/hierarchy` and `/slack` entry points; see the [package README](https://github.com/wayri/kicad-webview/blob/v0.3.0/README.md) for their scope.
+Replace `/designs/project.zip` with your own supported design URL. Cross-origin sources must permit CORS. Dispose the viewer when its host is permanently unmounted. The package also exports `/lite`, `/hierarchy` and `/slack` entry points; see the [package README](https://github.com/wayri/kicad-webview/blob/v{{ site.data.webview_release.npm }}/README.md) for their scope.
 
 `@latest` follows the current stable release; pin the exact version above for reproducible installs. The package includes the viewer, matching source, types and notices, but excludes legacy board fixtures and fixture-backed demo pages. Existing IRCA and public-board demonstrations remain on this website. Both this npm release and the hosted beta.2 SDK use MPL-2.0; preserve the notices supplied with the copy you use.
 
@@ -57,7 +86,7 @@ Replace `/designs/project.zip` with your own supported design URL. Cross-origin 
 <title>Interactive board</title>
 <div id="board" style="width:100%;height:70dvh;min-height:360px"></div>
 <p id="status" role="status">Opening design…</p>
-<script src="https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.3.0/dist/kicad-webview.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kicad-webview.min.js"></script>
 <script>
 const viewer = new KiCadWebView.Viewer('#board', { theme: 'dark' });
 viewer.addEventListener('error', event => {
@@ -84,7 +113,7 @@ Replace the sample URL with your supported hosted drawing, project manifest or Z
 
 ```html
 <script type="module">
-import { Viewer } from 'https://unpkg.com/@wayrisignals/kicad-webview@0.3.0/dist/kivi-viewer.js';
+import { Viewer } from 'https://unpkg.com/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kivi-viewer.js';
 
 const viewer = new Viewer('#board', { theme: 'dark' });
 window.addEventListener('pagehide', () => viewer.dispose(), { once: true });
@@ -104,16 +133,16 @@ Use an HTTP(S) page rather than opening a module page directly with `file://`. C
 
 ## CDN links and self-hosting
 
-The following version-pinned files return JavaScript with cross-origin access enabled. Both CDN copies have been checked byte for byte against the published npm package.
+The following version-pinned files return JavaScript with cross-origin access enabled. Check the versioned package and CDN files before deploying them in your own integration.
 
 | Entry | jsDelivr | UNPKG |
 | --- | --- | --- |
-| Classic script | [kicad-webview.min.js](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.3.0/dist/kicad-webview.min.js) | [kicad-webview.min.js](https://unpkg.com/@wayrisignals/kicad-webview@0.3.0/dist/kicad-webview.min.js) |
-| Browser ES module | [kivi-viewer.js](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.3.0/dist/kivi-viewer.js) | [kivi-viewer.js](https://unpkg.com/@wayrisignals/kicad-webview@0.3.0/dist/kivi-viewer.js) |
+| Classic script | [kicad-webview.min.js](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kicad-webview.min.js) | [kicad-webview.min.js](https://unpkg.com/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kicad-webview.min.js) |
+| Browser ES module | [kivi-viewer.js](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kivi-viewer.js) | [kivi-viewer.js](https://unpkg.com/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kivi-viewer.js) |
 
 A script URL loads the library; the design URL supplied to viewer.load loads your PCB, schematic, project manifest or ZIP. Replace the OLIMEX URL with your own same-domain file, for example `/designs/project.zip`. A local webpage opened with file:// can have browser restrictions: serve it with your normal static website. Cross-origin designs need CORS.
 
-You can download and host the script yourself without installing Node.js. Keep the matching [license](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.3.0/LICENSE), [third-party notices](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.3.0/THIRD-PARTY-NOTICES.md) and [covered source](https://github.com/wayri/kicad-webview/tree/v0.3.0) available as required by MPL-2.0. Pin the exact version rather than an unversioned latest URL.
+You can download and host the script yourself without installing Node.js. Keep the matching [license](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/LICENSE), [third-party notices](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/THIRD-PARTY-NOTICES.md) and [covered source](https://github.com/wayri/kicad-webview/tree/v{{ site.data.webview_release.npm }}) available as required by MPL-2.0. Pin the exact version rather than an unversioned latest URL.
 
 ### Public hardware acknowledgement
 

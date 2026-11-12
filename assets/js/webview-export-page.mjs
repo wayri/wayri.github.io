@@ -1,7 +1,7 @@
 /* Copyright (c) 2026 wayri. SPDX-License-Identifier: MPL-2.0 */
-import {createStandaloneHTML} from '../lib/kicad-webview/releases/0.2.1/standalone-html.mjs';
+import {createStandaloneHTML} from '../lib/kicad-webview/releases/0.6.0/standalone-html.mjs';
 const form=document.querySelector('form'),status=document.querySelector('#status');let assetPromise;
-const get=async path=>{const response=await fetch(new URL('../lib/kicad-webview/releases/0.2.1/'+path,import.meta.url),{credentials:'omit'});if(!response.ok)throw Error('Cannot load distribution asset: '+path);return response.text();};
+const get=async path=>{const response=await fetch(new URL('../lib/kicad-webview/releases/0.6.0/'+path,import.meta.url),{credentials:'omit'});if(!response.ok)throw Error('Cannot load distribution asset: '+path);return response.text();};
 form.addEventListener('submit',async event=>{event.preventDefault();const button=form.querySelector('button');button.disabled=true;
  try{const selected=[...document.querySelector('#files').files];if(!selected.length)throw Error('Choose a design.');if(selected.reduce((n,f)=>n+f.size,0)>64*1024*1024)throw Error('Choose files totalling at most 64 MiB.');status.textContent='Preparing the local HTML download…';
   assetPromise||=Promise.all(['kicad-webview.min.js','LICENSE','LICENSING.md','THIRD-PARTY-NOTICES.md','THREE-LICENSE','FZSTD-LICENSE','SPIKE-ENGINE-NOTICE.md','licenses/Pocket-KiView-Source-Available-1.0.txt'].map(get)).catch(error=>{assetPromise=null;throw error;});
