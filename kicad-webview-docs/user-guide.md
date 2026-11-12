@@ -11,7 +11,7 @@ This guide covers the common 0.3.0 viewer APIs and the self-hosted WayriCAD addi
 
 The [0.6 viewer refresh](/kicad-webview/docs/extension-refresh/) adds **Explode** to the 3D tools and **Show sheet browser** to the advanced project workspace. Use a matching 0.6 build for these controls; release availability is shown above. Explode spacing is display-only. Registered result overlays and probes are hidden while exploded, and measurement is disabled; return the slider to zero to restore the assembled display and overlay visibility.
 
-The floating sheet browser retains its tree view when closed and reopened. Drag its heading or use its zoom/fit controls. Searching the navigator for “sheet tree”, “sheet browser”, “sheet navigator” or “minimap” reveals the reopen command. It reads only the loaded project's listed schematic files.
+The floating sheet browser retains its tree view when closed and reopened. Drag its heading or use its zoom/fit controls. Searching the navigator for “sheet tree”, “sheet browser”, “sheet navigator” or “minimap” reveals the reopen command. The browser reads only the loaded project's listed schematic files.
 
 Saved schematic colors, fills and dashes are retained. Bounded text-box wrapping uses approximate preview font metrics; embedded PNG previews reject malformed, animated and external image data. Read rendering warnings when interpreting unsupported constructs.
 

@@ -38,7 +38,7 @@
             "Read the nominal resistance and code format; if the code is rejected, check the original marking and manufacturer’s coding system."
         ],
         "example": "103 means 10000 ohms; 4R7 means 4.7 ohms.",
-        "readout": "The resistance is decoded from the marking. The tolerance field deliberately refers you to the datasheet.",
+        "readout": "The resistance is decoded from the marking. The tolerance field points to the datasheet.",
         "limit": "Vendor-specific or ambiguous markings cannot reliably identify a component from this decoder alone."
     },
     "tool-led-resistor": {
@@ -93,7 +93,7 @@
     },
     "tool-unit-converter": {
         "steps": [
-            "Choose a physical quantity category first.",
+            "Choose a physical quantity first.",
             "Select the From and To units within that category.",
             "Enter the source value and read the converted value; recheck unit selections when changing category."
         ],

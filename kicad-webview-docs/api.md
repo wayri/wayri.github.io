@@ -61,7 +61,7 @@ The table includes the base exports and identifies later additions by version. T
 const EMBED_API_VERSION: '1.0-beta'
 ```
 
-The legacy embedding-contract identifier retained for compatibility. It is separate from the SDK/package release version. Reading it has no side effects and does not test browser capabilities, source compatibility or solver validity. Pin the complete release directory when integrating; this identifier alone does not freeze every future beta implementation.
+This legacy embedding-contract identifier is retained for compatibility. It is separate from the SDK/package release version. Reading it has no side effects and does not test browser capabilities, source compatibility or solver validity. Pin the complete release directory when integrating; this identifier alone does not freeze every future beta implementation.
 
 ## Shared conventions
 

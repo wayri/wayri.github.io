@@ -6,7 +6,7 @@ permalink: /kicad-webview/docs/quick-start/
 doc_section: quick-start
 ---
 
-Add KiCad WebView to a plain HTML page with a script tag or browser ES module. **No Node.js, npm installation or build step is needed.** You only need an HTTP(S) host, such as GitHub Pages. The npm and CDN examples use the published `{{ site.data.webview_release.npm }}` package. The current self-hosted SDK is **{{ site.data.webview_release.self_hosted }}**. For exploded 3D inspection and the sheet browser, see the [0.6.0 self-hosting example](#self-hosted-060-sdk); saved BoM and board data were introduced in [0.5.0](#self-hosted-050-sdk). the archived website SDK retains its immutable `0.1.0-beta.2` URLs. The examples below load the credited OLIMEX public project, including its PCB, schematic and 28 supplied model assets. Unresolved models remain labelled stand-ins.
+Add KiCad WebView to a plain HTML page with a script tag or browser ES module. **No Node.js, npm installation or build step is needed.** You only need an HTTP(S) host, such as GitHub Pages. The npm and CDN examples use the published `{{ site.data.webview_release.npm }}` package. The current self-hosted SDK is **{{ site.data.webview_release.self_hosted }}**. For exploded 3D inspection and the sheet browser, see the [0.6.0 self-hosting example](#self-hosted-060-sdk); saved BoM and board data were introduced in [0.5.0](#self-hosted-050-sdk). The archived website SDK retains its immutable `0.1.0-beta.2` URLs. The examples below load the credited OLIMEX public project, including its PCB, schematic and 28 supplied model assets. Unresolved models remain labelled stand-ins.
 
 ## Self-hosted 0.6.0 SDK
 

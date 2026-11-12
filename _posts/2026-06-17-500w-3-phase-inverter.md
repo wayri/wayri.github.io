@@ -34,7 +34,7 @@ graph TD
 #### The DC-Link and Decoupling
 The DC-link capacitor bank supplies switching current near the bridge. Excess series resistance (ESR) raises capacitor heating, while loop inductance (including capacitor ESL) contributes to voltage overshoot during switching.
 
-To mitigate this, the board supports multiple capacitor footprint options, allowing for a mix of bulk electrolytic capacitors (for low-frequency energy storage) and high-frequency ceramic/film capacitors placed immediately adjacent to the switching nodes.
+The board supports multiple capacitor footprints, allowing a mix of bulk electrolytic capacitors for low-frequency energy storage and high-frequency ceramic/film capacitors placed immediately adjacent to the switching nodes.
 
 ---
 
@@ -79,8 +79,8 @@ PCB layout affects voltage spikes, thermal behavior, and reliability, even when 
 
 **Key Layout Principles Applied:**
 1. **Minimizing Commutation Loops**: The loop from the DC-link capacitor, through the high-side switch, through the low-side switch, and back to the capacitor must be physically as small as possible to minimize parasitic inductance ($L_{loop}$). High $L_{loop}$ combined with high $di/dt$ causes destructive voltage spikes ($V = L \cdot di/dt$).
-2. **Thermal Planes**: The copper pours carrying phase currents are sized not just for electrical resistance, but as thermal radiators. 
-3. **Trace Clearance**: Ensuring adequate creepage and clearance distances between the high-voltage DC bus and the low-voltage control circuitry to prevent arcing.
+2. **Thermal Planes**: The copper pours carrying phase currents are sized for electrical resistance and as thermal radiators.
+3. **Trace Clearance**: Adequate creepage and clearance distances between the high-voltage DC bus and the low-voltage control circuitry help prevent arcing.
 
 ### Conclusion
 

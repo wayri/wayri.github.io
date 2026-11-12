@@ -42,7 +42,7 @@ viewer.setLayers(['F.Cu', 'B.Cu']); // Choose saved names from getLayerState().l
 
 ## Link a layout and assembly
 
-Both viewers load the same exact saved PCB. Selecting a supported part or object in one view forwards its saved identity to the other; cameras remain independently navigable. The host owns both viewers and the link group.
+Both viewers load the exact same saved PCB. Selecting a supported part or object in one view forwards its saved identity to the other; cameras remain independently navigable. The host owns both viewers and the link group.
 
 ```html
 <style>

@@ -46,7 +46,7 @@ This reuses a fixed-temperature linear solution: voltage drop and current densit
 
 Quick SI takes a routed signal from a source pad to a receiver pad, with the saved physical stackup and explicit driver/load assumptions. Rise time matters here: a route can be electrically significant for a fast edge even when its clock frequency seems modest.
 
-The checks cover path delay, reflections, termination, and return-path information. The interface keeps the selected route beside the input assumptions and result evidence, so it is possible to see which path was screened and which values were supplied.
+The checks cover path delay, reflections, termination, and return-path information. The interface shows the selected route beside the assumptions and results, so you can see which path was screened and which values were supplied.
 
 <figure>
   <a href="{{ '/assets/images/projects/wayricad-quick-si.png' | relative_url }}"><img src="{{ '/assets/images/projects/wayricad-quick-si.png' | relative_url }}" alt="Quick SI displaying a selected routed signal, driver inputs, and a delay/reflection result table" width="1300" height="900" loading="lazy"></a>

@@ -47,7 +47,7 @@ Independent 3D field views use only supplied XYZ or an explicit saved layer elev
 
 Host the script, source and result yourself, or use the versioned self-hosted script above. Normal CORS and authorization apply. No rendering server or runtime Node installation is required. The ES module exports the same names; the `/results` npm entry and `dist/wayricad-results.js` offer the result component separately.
 
-`results.load(jsonOrObject,{path})` accepts already supplied data without fetching. The demo’s local file pickers keep your files in the browser. Review full result JSON, including any filesystem/model metadata, before sharing it. [Quick start](/kicad-webview/docs/quick-start/) · [Hosting](/kicad-webview/docs/hosting/).
+`results.load(jsonOrObject,{path})` accepts already supplied data without fetching. The demo’s local file pickers keep your files in the browser. Review the full result JSON, including any filesystem/model metadata, before sharing it. [Quick start](/kicad-webview/docs/quick-start/) · [Hosting](/kicad-webview/docs/hosting/).
 
 ## Layers and linked views
 

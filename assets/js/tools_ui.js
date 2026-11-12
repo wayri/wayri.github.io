@@ -279,11 +279,14 @@ function initSidebar() {
         });
         html += `</div></div>`;
     });
+    html += `<div id="tools-sidebar-empty" class="tools-sidebar-empty" role="status" hidden><p>No matching tools.</p><button type="button" onclick="clearToolSearch()">Clear search</button></div>`;
     sidebar.innerHTML = html;
 }
 
 function filterTools(query) {
     const q = (query || '').toLowerCase().trim();
+    const words = q.split(/\s+/).filter(Boolean);
+    const matches = new Set(TOOL_REGISTRY.flatMap(category => category.tools).filter(tool => words.every(word => `${tool.name} ${tool.desc || ''} ${tool.type}`.toLowerCase().includes(word))).map(tool => tool.id));
     TOOL_REGISTRY.forEach((category, catIdx) => {
         const group = document.getElementById(`cat-group-${catIdx}`);
         const content = document.getElementById(`cat-content-${catIdx}`);
@@ -294,8 +297,7 @@ function filterTools(query) {
         let visibleCount = 0;
         const toolBtns = group.querySelectorAll('.tool-item-btn');
         toolBtns.forEach(btn => {
-            const name = btn.getAttribute('data-tool-name') || '';
-            if (!q || name.includes(q)) {
+            if (matches.has(btn.getAttribute('data-tool-id'))) {
                 btn.style.display = 'block';
                 visibleCount++;
             } else {
@@ -318,6 +320,24 @@ function filterTools(query) {
         }
         if (categoryButton) categoryButton.setAttribute('aria-expanded', String(!!q && visibleCount > 0));
     });
+    document.querySelectorAll('[data-tool-card]').forEach(card => {
+        card.hidden = !matches.has(card.getAttribute('data-tool-card'));
+    });
+    document.querySelectorAll('.tools-directory-category').forEach(category => {
+        category.hidden = !category.querySelector('[data-tool-card]:not([hidden])');
+    });
+    const summary = document.getElementById('tools-search-summary');
+    if (summary) summary.textContent = q ? `${matches.size} matching ${matches.size === 1 ? 'tool' : 'tools'}.` : `${matches.size} calculators and references. Browse below or search by name or topic.`;
+    const empty = document.getElementById('tools-empty-results');
+    if (empty) empty.hidden = matches.size !== 0;
+    const sidebarEmpty = document.getElementById('tools-sidebar-empty');
+    if (sidebarEmpty) sidebarEmpty.hidden = matches.size !== 0;
+}
+
+function clearToolSearch() {
+    const input = document.getElementById('tools-search-input');
+    if (input) { input.value = ''; input.focus(); }
+    filterTools('');
 }
 
 function toggleCategory(idx) {
@@ -457,45 +477,30 @@ async function loadTool(toolId, fileName, btnElement) {
 
 function renderWelcomeGrid() {
     const welcome = document.getElementById('tools-welcome');
-    if(!welcome) return;
-    
-    let gridHtml = `<div class="w-full max-w-6xl mx-auto p-6 flex flex-col gap-8">
-        <div class="text-center mb-4">
-            <h2 class="text-3xl font-bold font-mono text-themeText"><i class="fa-solid fa-toolbox text-themeAccent mr-3"></i>Engineering Toolkit</h2>
-            <p class="text-themeMuted mt-2 text-sm max-w-2xl mx-auto">Circuit, power and RF calculators, plus practical interface cheat sheets.</p>
-            <div class="max-w-3xl mx-auto mt-6 bg-themeBorder/10 border-l-4 border-themeAccent p-4 text-left">
-                <p class="text-sm text-themeMuted leading-relaxed">
-                    Each calculator states its equations and model limits, with representative numerical checks recorded in the repository. Reference sheets link to device-vendor guidance. Use the actual component data, stackup and operating conditions for a design; these analytical checks do not establish hardware validation.
-                </p>
-            </div>
-        </div>
-    `;
-    
+    if (!welcome) return;
+    const allTools = TOOL_REGISTRY.flatMap(category => category.tools);
+    const starters = ['tool-pv-yield-simulator', 'tool-battery-suite', 'tool-smps-loop-tuner', 'tool-smith-chart'];
+    let gridHtml = `<div class="tools-directory">
+        <header class="tools-directory-intro">
+            <h2><i class="fa-solid fa-toolbox text-themeAccent" aria-hidden="true"></i> Engineering Toolkit</h2>
+            <p>Calculators for circuit, power and RF work, with practical interface references.</p>
+            <p class="tools-model-note">Each calculator explains its equations and limits, with representative numerical checks in the repository. Reference sheets link to device-vendor guidance. Use your actual component data, stackup and operating conditions; a calculation alone does not validate hardware.</p>
+        </header>
+        <nav class="tools-starting-points" aria-label="Start with a calculation"><span>Start with</span>${starters.map(id => {
+            const tool = allTools.find(item => item.id === id);
+            return tool ? `<button type="button" onclick="loadTool('${tool.id}', '${tool.file}')">${tool.name} <span aria-hidden="true">↗</span></button>` : '';
+        }).join('')}</nav>
+        <p id="tools-search-summary" class="tools-search-summary" role="status" aria-live="polite">${allTools.length} calculators and references. Browse below or search by name or topic.</p>
+        <div id="tools-empty-results" class="tools-empty-results" hidden><h3>No matching tools</h3><p>Try a broader term, such as battery, resistor or impedance.</p><button type="button" onclick="clearToolSearch()">Clear search</button></div>`;
     TOOL_REGISTRY.forEach(category => {
-        gridHtml += `
-            <div>
-                <h3 class="text-lg font-bold font-mono text-themeText border-b border-themeBorder pb-2 mb-4"><i class="fa-solid ${category.icon} mr-2 text-themeAccent"></i>${category.category}</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        `;
-        
+        gridHtml += `<section class="tools-directory-category"><h3><i class="fa-solid ${category.icon}" aria-hidden="true"></i> ${category.category}</h3><div class="tools-directory-grid">`;
         category.tools.forEach(tool => {
-            gridHtml += `
-                <button type="button" class="tool-card text-left group border border-themeBorder bg-themeContainer hover:border-themeAccent hover:shadow-[0_0_15px_rgba(var(--theme-accent-rgb),0.15)] rounded p-4 cursor-pointer transition-all flex flex-col gap-2" onclick="loadTool('${tool.id}', '${tool.file}')">
-                    <span class="text-xs text-themeMuted">${tool.type}</span><h4 class="font-bold font-mono text-themeAccent group-hover:text-themeText transition-colors">${tool.name}</h4>
-                    <p class="text-xs text-themeMuted leading-relaxed">${tool.desc || 'Interactive engineering design utility.'}</p>
-                </button>
-            `;
+            gridHtml += `<button type="button" class="tool-card" data-tool-card="${tool.id}" onclick="loadTool('${tool.id}', '${tool.file}')"><span class="tool-card-name">${tool.name}<span aria-hidden="true">↗</span></span><span class="tool-card-description">${tool.desc || 'Engineering calculation and reference.'}</span><span class="tool-card-type">${tool.type}</span></button>`;
         });
-        
-        gridHtml += `</div></div>`;
+        gridHtml += '</div></section>';
     });
-    
-    gridHtml += `</div>`;
-    
-    // Replace the default welcome content with our new grid
-    welcome.innerHTML = gridHtml;
-    // Remove the opacity classes
-    welcome.className = "absolute inset-0 overflow-y-auto bg-themeBg";
+    welcome.innerHTML = gridHtml + '</div>';
+    welcome.className = 'absolute inset-0 overflow-y-auto bg-themeBg';
 }
 
 // Call renderWelcomeGrid after initSidebar

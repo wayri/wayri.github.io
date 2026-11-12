@@ -9,7 +9,7 @@
 .lab-home [hidden] { display:none!important; }
 .lab-main { max-width:1280px; margin:auto; padding:105px 32px 60px; }
 .lab-hero { display:grid; grid-template-columns:.95fr 1.05fr; gap:48px; align-items:center; padding:24px 0 44px; }
-.lab-eyebrow { color:var(--accent-color); font:11px/1.6 ui-monospace,'Courier New',monospace; letter-spacing:.11em; text-transform:uppercase; margin:0 0 12px; }
+.lab-eyebrow { color:var(--accent-color); font:500 12px/1.6 system-ui,sans-serif; letter-spacing:.02em; text-transform:none; margin:0 0 12px; }
 .lab-intro h1 { font-size:clamp(2.8rem,5.1vw,4.6rem); letter-spacing:-.04em; line-height:1.1; font-weight:550; margin:18px 0 24px; }
 .lab-intro > .lab-eyebrow { font:12px/1.6 system-ui,sans-serif; letter-spacing:.025em; text-transform:none; }
 .lab-home .lab-intro > .lab-text-link { font:14px/1.7 system-ui,sans-serif; }
@@ -48,10 +48,10 @@
 @media(max-width:760px) { .lab-project-heading { padding:18px 20px 14px; } }
 .lab-project h3 { font-size:26px; font-weight:600; line-height:1.2; letter-spacing:-.03em; margin:4px 0 12px; }
 .lab-project h3 small { display:inline-block; font-size:12px; font-weight:400; color:var(--muted-text); letter-spacing:0; }
-.lab-project-body>p:not(.lab-eyebrow):not(.lab-caption) { color:var(--muted-text); font-size:14px; line-height:1.75; margin:0 0 12px; }
-.lab-caption { font:11px/1.65 ui-monospace,'Courier New',monospace; color:var(--muted-text); margin:8px 0; }
+.lab-project-body>p:not(.lab-eyebrow):not(.lab-caption) { color:var(--muted-text); font-size:15px; line-height:1.75; margin:0 0 12px; }
+.lab-caption { font:12px/1.65 system-ui,sans-serif; color:var(--muted-text); margin:8px 0; }
 .lab-project-links { display:flex; flex-wrap:wrap; gap:10px 18px; padding-top:18px; margin-top:auto; }
-.lab-project-links a { color:var(--accent-color); text-decoration:none; font:12px/1.6 ui-monospace,monospace; }
+.lab-project-links a { color:var(--accent-color); text-decoration:none; font:13px/1.6 system-ui,sans-serif; }
 .lab-project-links a:hover { text-decoration:underline; }
 .lab-anchor { position:absolute; top:0; scroll-margin-top:85px; }
 .lab-toolbox { display:grid; grid-template-columns:1fr 1fr; gap:50px; border-block:1px solid var(--border-color); padding:38px 0; }
@@ -143,3 +143,9 @@
     .lab-footer nav { gap:4px 20px; }
     .lab-intro blockquote { margin-top:16px; }
 }
+
+.lab-project-links a { display:inline-flex; align-items:center; min-height:40px; text-underline-offset:4px; }
+.lab-project-links a:first-child { font-weight:600; text-decoration:underline; }
+.lab-project-heading .lab-eyebrow { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.lab-home .lab-section-heading h2 { text-wrap:balance; }
+@media(max-width:760px) { .lab-project-links a { min-height:44px; } }

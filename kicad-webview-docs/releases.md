@@ -30,7 +30,7 @@ The 0.5.0 SDK adds a read-only BoM panel linked to a native KiCad drawing, group
 Reports describe saved source data; overlapping fill polygons are counted repeatedly, holes are not subtracted and placement candidates do not prove containment. No copper refill, clearance check or solver is performed. See the guide for source limits and interpretation.
 ## 0.4.0 — results directly on the 3D PCB
 
-At its publication, 0.4.0 was available as the **self-hosted SDK and GitHub download**, while npm/CDN remained at 0.3.0. The current release status is shown above; immutable0.4.0 files retain these additions.
+At its publication, 0.4.0 was available as the **self-hosted SDK and GitHub download**, while npm/CDN remained at 0.3.0. The current release status is shown above; immutable 0.4.0 files retain these additions.
 
 - Register supported WayriCAD PI and thermal fields on the matching native **2D/3D PCB**. The through-board presentation is labelled; hidden PCB layers hide their field.
 - Choose **Saved result layer** while retaining the quantity where available. Link spatial probe markers between result plots and the board; native saved-part and trace selection remains usable.

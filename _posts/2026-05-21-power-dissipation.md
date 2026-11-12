@@ -10,7 +10,7 @@ Power lost in a component appears mostly as heat. Estimating that loss and the p
 
 ## The Fundamentals
 
-Power dissipation in a resistive element is defined by:
+Power dissipation in a resistive element is:
 
 ```
 P = I² × R  =  V² / R  =  V × I
@@ -20,7 +20,7 @@ For a 10 V to 5 V linear regulator supplying 1 A, the IC dissipates about 5 W. A
 
 ## Where Power Actually Goes
 
-In a real system, losses appear across multiple domains:
+In a real system, losses appear in several places:
 
 | Domain | Primary Loss Mechanism |
 |--------|----------------------|

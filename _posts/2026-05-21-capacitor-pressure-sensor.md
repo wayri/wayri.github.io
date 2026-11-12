@@ -10,7 +10,7 @@ A capacitor's value depends on its geometry and dielectric. If pressure deflects
 
 ## The Governing Physics
 
-Capacitance of a parallel-plate capacitor:
+The capacitance of a parallel-plate capacitor is:
 
 ```
 C = ε₀ × εᵣ × A / d
@@ -26,7 +26,7 @@ With a fixed plate area and dielectric, reducing a 10 µm gap to 9 µm raises th
 ## Two Structural Approaches
 
 ### 1. Diaphragm-Type (MEMS Style)
-A thin conductive membrane suspended over a fixed plate. Applied pressure deflects the membrane, decreasing the air gap:
+A thin conductive membrane is suspended over a fixed plate. Applied pressure deflects the membrane, decreasing the air gap:
 
 ```
 ΔC / C₀ ≈ -Δd / d₀    (for small changes in gap)
