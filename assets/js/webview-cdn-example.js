@@ -1,5 +1,5 @@
 /* Copyright (c) 2026 wayri. SPDX-License-Identifier: MPL-2.0 */
-window.startWebViewCDNExample = async function(Viewer,version='') {
+window.startWebViewCDNExample = async function(Viewer,version) {
   'use strict';
   const project='https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json';
   const status=document.querySelector('#demo-status'),buttons=[...document.querySelectorAll('[data-cdn-view]')],fit=document.querySelector('#cdn-fit'),appearance=document.querySelector('#cdn-appearance');
