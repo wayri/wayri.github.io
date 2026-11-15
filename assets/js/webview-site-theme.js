@@ -38,7 +38,7 @@
     if (watched.has(root) || watched.size >= 64) return;
     const observer = new MutationObserver(records => {
       for (const record of records) for (const node of record.addedNodes) if (node.nodeType === 1) pending.add(node);
-      pending.add(root);
+      if (root instanceof ShadowRoot) pending.add(root);
       if (!scheduled) { scheduled = true; queueMicrotask(flush); }
     });
     watched.set(root, observer); observer.observe(root, {childList:true, subtree:true}); scan(root);
