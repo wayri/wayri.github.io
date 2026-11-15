@@ -21,8 +21,19 @@
   function scan(node) {
     if (!(node instanceof Element || node instanceof Document || node instanceof ShadowRoot)) return;
     if (node instanceof Element && node.shadowRoot) watch(node.shadowRoot);
+    if (node instanceof Element && node.matches('.wv-wayricad .kw-results')) compactResults(node);
+    node.querySelectorAll('.wv-wayricad .kw-results').forEach(compactResults);
     node.querySelectorAll('*').forEach(el => { if (el.shadowRoot) watch(el.shadowRoot); });
     if (node instanceof ShadowRoot) theme(node);
+  }
+  function compactResults(root) {
+    if (root.querySelector('.kw-result-actions')) return;
+    const tools=root.querySelector('.kw-result-tools'), viewport=root.querySelector('.kw-result-viewport');
+    const buttons=tools && Array.from(tools.children).filter(el=>el.tagName==='BUTTON');
+    if (!viewport || !buttons?.length) return;
+    const details=document.createElement('details'),summary=document.createElement('summary'),actions=document.createElement('div');
+    details.className='kw-result-actions';summary.textContent='Result actions';actions.className='kw-result-action-buttons';
+    actions.append(...buttons);details.append(summary,actions);viewport.after(details);
   }
   function theme(node) {
     if (!node.querySelector(`style[${marker}]`) && node.querySelector('.viewer-toolbar,.viewer-inspector,.shell,.project-shell')) {
