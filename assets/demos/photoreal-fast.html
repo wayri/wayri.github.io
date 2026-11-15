@@ -1,0 +1,31 @@
+---
+layout: webview-embed
+title: Photoreal Fast — OLIMEX and IRCA
+description: Inspect two real public board examples with compact controls and a fast studio rendering preset.
+permalink: /assets/demos/photoreal-fast.html
+---
+<link rel="stylesheet" href="{{ '/assets/css/webview-photoreal-fast.css' | relative_url }}?v=1">
+<main class="wv-demo-page wv-photoreal">
+{% include webview-breadcrumbs.html section_url='/kicad-webview/docs/examples/' section_label='Examples' %}
+<header><p class="wv-eyebrow">KiCad WebView · studio preview</p><h1>Let the board take the stage.</h1><p>OLIMEX and IRCA, with physically based materials, studio reflections and cached shadows. Orbit, inspect and compare render modes in the same viewer.</p></header>
+<div class="photo-controls" role="group" aria-label="Board and render controls">
+<label>Board<select id="photo-board"><option value="olimex">OLIMEX · ESP32-P4 DevKit</option><option value="irca">IRCA · thermal camera</option></select></label>
+<label>Render<select id="photo-quality"><option value="photoreal-fast">Photoreal Fast</option><option value="balanced">Standard</option><option value="presentation">Presentation · enhanced</option></select></label>
+<button id="photo-iso" type="button">Isometric</button><button id="photo-bottom" type="button">Bottom</button><button id="photo-fit" type="button">Fit</button>
+</div>
+<p id="photo-status" role="status">Opening the selected board…</p>
+<div id="photo-viewer" aria-label="Photoreal board viewer"></div>
+<details class="photo-details"><summary>How it works, source &amp; credits</summary>
+<p>This opt-in <strong>0.8.0-preview.1</strong> website SDK uses an invisible shadow catcher, environment reflections and cached 1024-pixel shadows. The backdrop follows the site theme. Fast mode skips ambient occlusion, SMAA and supersampling, and caps the framebuffer at two million pixels (one million on constrained devices). Rendering pauses when idle or hidden. Frame rate depends on your device and source complexity.</p>
+<pre><code>await viewer.load('/designs/project.json', {view: '3d'});
+viewer.setRenderQuality('photoreal-fast');</code></pre>
+<p>No Node.js runtime, rendering server or downloaded HDR environment is needed. This is rasterized PBR presentation, not path tracing. Supplied models determine fidelity; missing models remain labelled stand-ins. The stable npm/CDN release remains 0.7.0.</p>
+<p><button id="photo-stats" type="button">Read rendering stats</button></p><pre id="photo-stats-output" aria-live="polite">Read stats to inspect the active preset, memory estimate and render activity.</pre>
+<p><strong>OLIMEX:</strong> ESP32-P4-DevKit Rev.D1, pinned 26705d3; © OLIMEX Ltd and contributors, CERN-OHL-S-2.0. <a href="{{ '/assets/demos/public-hardware/PROVENANCE.json' | relative_url }}">Source &amp; conversion provenance</a> · <a href="{{ '/assets/demos/public-hardware/MODEL-PROVENANCE.json' | relative_url }}">Model coverage and licenses</a>. No affiliation or endorsement is implied.</p>
+<p><strong>IRCA:</strong> approved public review geometry and display models for the IRCA thermal camera. This projection is not an original editable project. <a href="{{ '/kicad-webview/#project-irca' | relative_url }}">Project and acknowledgements</a>.</p>
+<p><a href="{{ '/kicad-webview/docs/photoreal-fast/' | relative_url }}">Preset API and limits</a> · <a href="{{ '/kicad-webview/docs/acknowledgements/' | relative_url }}">Development acknowledgements, including AI assistance</a></p>
+</details>
+</main>
+<script defer src="{{ '/assets/lib/kicad-webview/previews/photoreal-fast-0.8.0-preview.1/kicad-webview.min.js' | relative_url }}"></script>
+<script defer src="{{ '/assets/js/irca-project.js' | relative_url }}"></script>
+<script defer src="{{ '/assets/js/webview-photoreal-fast.js' | relative_url }}?v=1"></script>

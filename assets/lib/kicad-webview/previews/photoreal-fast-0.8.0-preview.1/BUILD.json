@@ -1,0 +1,11 @@
+{
+  "version": "0.8.0-preview.1",
+  "channel": "website-preview",
+  "stableNpm": "0.7.0",
+  "source": "https://github.com/wayri/kicad-webview/tree/v0.8.0-preview.1",
+  "sourceCommit": "f9dbef2872b2add63e6088acaa4c9022cbe37bfc",
+  "sha256": "efc700a1141af951cb6071257740d26b0acc0124710aab48e751b71c2ab7e947",
+  "bytes": 1729296,
+  "tests": 557,
+  "description": "Opt-in Photoreal Fast; no visible gray studio floor. Raster PBR, not path tracing."
+}

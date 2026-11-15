@@ -9,6 +9,10 @@ The CDN examples use the **{{ site.data.webview_release.npm }}** ES module from 
 
 For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/kicad-webview/docs/quick-start/). The release uses [MPL-2.0](/kicad-webview/docs/license/); input designs and model files have separate terms.
 
+## Fast photoreal board presentation
+
+[Open OLIMEX and IRCA in Photoreal Fast](/assets/demos/photoreal-fast.html). This labelled **0.8.0-preview.1** website SDK adds studio reflections, cached shadows and a backdrop that follows the site theme. Compact controls leave the board as the focus. [Direct-script integration and limits](/kicad-webview/docs/photoreal-fast/). The stable npm/CDN release remains 0.7.0.
+
 ## Drawing styles and text context
 
 [Open the drawing fidelity demo](/assets/demos/drawing-fidelity.html) for a small generated formatting sample. Saved graphics and text work with the published SDK; variable, expression and table examples run with the 0.7.0 SDK. [Read the constraints and browser-only code](/kicad-webview/docs/drawing-fidelity/). The IRCA and credited public-board integrations below remain unchanged.
