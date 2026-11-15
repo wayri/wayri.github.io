@@ -1,0 +1,26 @@
+/* Shared WebView product presentation, deliberately separate from SDK assets. */
+.wv-demo-page,.webview-product{--wv-gold:var(--link);font-family:system-ui,sans-serif}
+.webview-product .wv-hero{gap:clamp(24px,4vw,64px);padding-bottom:48px}
+.webview-product .wv-lead{line-height:1.75}
+.webview-product :is(.wv-demo-frame,.wv-note,.wv-code-panel pre,.wv-simple-board){border-radius:12px}
+.webview-product .wv-note{background:color-mix(in srgb,var(--link) 3%,var(--paper));padding:clamp(20px,3vw,32px)}
+.webview-product :is(button,.wv-file){min-height:44px;border-radius:7px;padding:9px 13px}
+.webview-product .wv-view-switch{gap:8px;padding:12px}
+.webview-product .wv-section{padding-block:clamp(32px,5vw,64px)}
+.webview-product .wv-caption{font-size:13px;line-height:1.7}
+.webview-product :is(.wv-note h3,.wv-note>p:not(.wv-eyebrow):not(.wv-caption)){font-family:inherit}
+.webview-product .wv-actions .wv-action{border-radius:8px;box-shadow:none}
+.wv-demo-page{max-width:1440px;margin-inline:auto;padding:clamp(18px,3vw,40px);line-height:1.6}
+.wv-demo-page header{margin-bottom:24px}
+.wv-demo-page header p{color:var(--muted-ink,var(--body-ink));max-width:72ch}
+.wv-demo-page :is(button,select,input){border-radius:7px}
+.wv-demo-page button{transition:background .15s,border-color .15s}
+.wv-demo-page button:hover:not(:disabled){border-color:var(--link)}
+.wv-demo-page .wv-caption{font-size:13px;line-height:1.65;opacity:.88}
+.wv-release-strip{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;padding:12px 16px;margin:24px 0;border:1px solid var(--rule);border-radius:10px;font-size:13px;background:var(--paper)}
+.wv-release-strip strong{font-weight:650;white-space:nowrap}
+.wv-release-strip a{text-underline-offset:3px}
+.wv-wayricad .wayricad-primary-controls #wayricad-load{background:var(--wv-gold);border-color:var(--wv-gold);color:var(--wv-surface)}
+.wv-wayricad .wayricad-primary-controls #wayricad-load:hover{filter:brightness(1.08);background:var(--wv-gold)}
+@media(prefers-reduced-motion:reduce){.wv-demo-page button{transition:none}}
+@media(max-width:600px){.wv-demo-page{padding:18px 14px}.wv-release-strip{gap:6px 14px;padding:12px}.wv-demo-page h1{font-size:clamp(2rem,9vw,3rem)}}

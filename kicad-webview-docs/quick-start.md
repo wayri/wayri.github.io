@@ -12,7 +12,7 @@ Add KiCad WebView to a plain HTML page with a script tag or browser ES module. *
 
 ## Self-hosted 0.7.0 SDK
 
-The **0.7.0 SDK** is available self-hosted and from its [GitHub release](https://github.com/wayri/kicad-webview/releases/tag/v0.7.0). npm/CDN remains **{{ site.data.webview_release.npm }}** pending separate npm publication approval; its basic examples below remain usable. Use the matching self-hosted 0.7.0 files for the new APIs. It adds stable Properties, contextual previews, result palettes, explicit text variables, numeric expressions and horizontal tables. [Drawing examples](/kicad-webview/docs/drawing-fidelity/) · [Panel API](/kicad-webview/docs/panels-and-insets/).
+The **0.7.0 SDK** is available self-hosted and from its [GitHub release](https://github.com/wayri/kicad-webview/releases/tag/v0.7.0). The same **0.7.0** release is published on [npm](https://www.npmjs.com/package/@wayrisignals/kicad-webview/v/0.7.0), [jsDelivr](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@0.7.0/dist/kicad-webview.min.js) and [UNPKG](https://unpkg.com/@wayrisignals/kicad-webview@0.7.0/dist/kicad-webview.min.js). Both direct scripts and browser modules work without Node.js. It adds stable Properties, contextual previews, result palettes, explicit text variables, numeric expressions and horizontal tables. [Drawing examples](/kicad-webview/docs/drawing-fidelity/) · [Panel API](/kicad-webview/docs/panels-and-insets/).
 
 Host the complete matching 0.7.0 release directory, including its dependencies and license notices. A direct script needs no npm installation, Node.js runtime or build step:
 

@@ -12,7 +12,7 @@ The published **{{ site.data.webview_release.self_hosted }} SDK** already previe
 
 ## 0.7.0 text context
 
-These additions are released in the **self-hosted 0.7.0 SDK** and its [GitHub release](https://github.com/wayri/kicad-webview/releases/tag/v0.7.0). npm/CDN is **{{ site.data.webview_release.npm }}** pending separate npm publication approval. The live sample uses the matching self-hosted SDK and enables supported modes automatically.
+These additions are released in the **self-hosted 0.7.0 SDK** and its [GitHub release](https://github.com/wayri/kicad-webview/releases/tag/v0.7.0). The same **0.7.0** release is available from npm, jsDelivr and UNPKG. The live sample uses the matching self-hosted SDK and enables supported modes automatically.
 
 ```js
 // A matching 0.7 build is required. This code runs directly in a browser.

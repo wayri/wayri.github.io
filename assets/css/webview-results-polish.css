@@ -1,0 +1,102 @@
+/* Website-only presentation for the WayriCAD results demo. */
+.wv-wayricad {
+  width: 100%;
+  box-sizing: border-box;
+  container: wayricad / inline-size;
+  --wv-surface: #f7f5ee;
+  --wv-raised: #fff;
+  --wv-ink: #292821;
+  --wv-muted: #615e53;
+  --wv-border: #d3cfc1;
+  --wv-gold: #805b08;
+  --wv-hover: #f0ead9;
+}
+[data-theme="dark"] .wv-wayricad {
+  --wv-surface: #171715;
+  --wv-raised: #20201d;
+  --wv-ink: #f0eee5;
+  --wv-muted: #b5b2a5;
+  --wv-border: #45453c;
+  --wv-gold: #e7c35b;
+  --wv-hover: #333127;
+}
+.wv-wayricad .wayricad-primary-controls {
+  padding: 20px;
+  gap: 12px;
+  background: var(--wv-surface);
+  border-color: var(--wv-border);
+  border-radius: 12px;
+}
+.wv-wayricad .wayricad-primary-controls label { color: var(--wv-ink); }
+.wv-wayricad .wayricad-primary-controls :is(button, select, input[type="file"]) {
+  min-height: 44px;
+  max-width: 100%;
+  border: 1px solid var(--wv-border);
+  border-radius: 7px;
+  background: var(--wv-raised);
+  color: var(--wv-ink);
+  font: inherit;
+}
+.wv-wayricad .wayricad-primary-controls :is(button, select) { padding: 9px 12px; }
+.wv-wayricad .wayricad-primary-controls button { cursor: pointer; }
+.wv-wayricad .wayricad-primary-controls button:hover:not(:disabled) { background: var(--wv-hover); }
+.wv-wayricad :is(button, select, input, summary, a):focus-visible {
+  outline: 2px solid var(--wv-gold);
+  outline-offset: 3px;
+}
+.wv-wayricad #wayricad-status { color: var(--wv-muted); margin-top: 12px; }
+.wv-wayricad .wayricad-result-layout {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+  margin-block: 28px;
+}
+.wv-wayricad .wayricad-panel-heading { min-height: 0; margin-bottom: 12px; }
+.wv-wayricad .wayricad-panel-heading h2 { font-size: 1.2rem; margin-bottom: 5px; }
+.wv-wayricad .wayricad-panel-heading p { color: var(--wv-muted); margin-bottom: 0; }
+.wv-wayricad #wayricad-board { height: clamp(400px, 60vh, 620px); border-color: var(--wv-border); border-radius: 12px; }
+@container wayricad (min-width: 980px) {
+  .wv-wayricad .wayricad-result-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; }
+}
+.wv-wayricad .kw-results,
+.wv-wayricad .kw-results[data-theme="light"] {
+  --bg: var(--wv-surface);
+  --panel: var(--wv-raised);
+  --ink: var(--wv-ink);
+  --muted: var(--wv-muted);
+  --line: var(--wv-border);
+  --accent: var(--wv-gold);
+  padding: clamp(14px, 2vw, 20px);
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  color-scheme: light;
+}
+[data-theme="dark"] .wv-wayricad .kw-results { color-scheme: dark; }
+.wv-wayricad .kw-results > strong { display: block; font-size: 1rem; margin-bottom: 14px; }
+.wv-wayricad .kw-result-tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; align-items: stretch; }
+.wv-wayricad .kw-result-tools > :first-child { grid-column: 1 / -1; }
+.wv-wayricad .kw-result-tools > * { width: 100%; min-width: 0; }
+.wv-wayricad .kw-results :is(button, select, input:not([type="checkbox"]):not([type="range"])) {
+  min-height: 44px;
+  border-radius: 7px;
+  padding: 9px 11px;
+}
+.wv-wayricad .kw-results button:hover:not(:disabled) { background: var(--wv-hover); }
+.wv-wayricad .kw-results :is(button, select, input):disabled { opacity: .55; cursor: not-allowed; }
+.wv-wayricad .kw-results :is(input[type="checkbox"], input[type="range"]) { accent-color: var(--wv-gold); }
+.wv-wayricad .kw-results :is(p, output) { overflow-wrap: anywhere; }
+.wv-wayricad .kw-result-status { margin-top: 16px; }
+.wv-wayricad .kw-result-small { font-size: 13px; }
+.wv-wayricad .kw-result-viewport { height: clamp(300px, 44vh, 500px); min-height: 300px; margin: 16px 0 12px; border-radius: 8px; }
+.wv-wayricad .kw-result-controls { gap: 10px; margin-block: 12px; }
+.wv-wayricad .kw-result-series { gap: 6px 14px; }
+.wv-wayricad .kw-result-series label { min-height: 44px; }
+.wv-wayricad .kw-results details { margin-top: 14px; padding-top: 10px; }
+.wv-wayricad .kw-results summary { min-height: 44px; display: flex; align-items: center; }
+.wv-wayricad .kw-results pre { border-radius: 7px; padding: 12px; }
+@container wayricad (max-width: 460px) {
+  .wv-wayricad .wayricad-primary-controls { padding: 14px; }
+  .wv-wayricad .kw-result-tools { grid-template-columns: minmax(0, 1fr); }
+  .wv-wayricad .kw-result-tools > :first-child { grid-column: auto; }
+}
