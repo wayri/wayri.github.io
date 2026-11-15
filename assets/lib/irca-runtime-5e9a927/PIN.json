@@ -1,0 +1,63 @@
+{
+  "schema": "irca.runtime-pin/v1",
+  "websiteRevision": "5e9a927ec72b8e5620598ca02ff4f187fe52d221",
+  "websiteSource": "https://github.com/wayri/wayri.github.io/tree/5e9a927ec72b8e5620598ca02ff4f187fe52d221/assets/lib/kicad-webview",
+  "reason": "The IRCA host requires modelsready, setDemoInteraction and bounded automatic face selection. The independently upgraded SDK bundle does not supply this host contract.",
+  "files": [
+    {
+      "path": "kicad-webview.min.js",
+      "bytes": 1525667,
+      "sha256": "ecad25e4a1f9dd7755163444e3dc3b13592075d0a6c9dd4f9b7229bae6d54976"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 7594,
+      "sha256": "59cba7940c679ec3a577eb6e622b0eddc5dc117e923a018342319e59339fb7f3"
+    },
+    {
+      "path": "LICENSING.md",
+      "bytes": 5002,
+      "sha256": "2d60fd961f3177b2057dfc94ae67648280455a6a53d2159229f6f153c27a94d3"
+    },
+    {
+      "path": "SOURCE-PROVENANCE.json",
+      "bytes": 17743,
+      "sha256": "03e1d6054018769832fed61a393244c00b98d0461183c42bc7fbd60a9de15814"
+    },
+    {
+      "path": "SPIKE-ENGINE-NOTICE.md",
+      "bytes": 1185,
+      "sha256": "9029113aa63d0f490a023f46ed4570ea8427a11131c4f7184c8833134fae2ca0"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "bytes": 983,
+      "sha256": "11bee10aa6225f2e1b2e7e71616f3ccece1309d13f0aa3b8fb9813fae4a8be14"
+    },
+    {
+      "path": "THREE-LICENSE",
+      "bytes": 1081,
+      "sha256": "4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454"
+    },
+    {
+      "path": "FZSTD-LICENSE",
+      "bytes": 1069,
+      "sha256": "62249119bb7df6e54300f37a37145c26a6d4420410aac8881a119c5b427cf751"
+    },
+    {
+      "path": "ORIGINAL-BUNDLE-MANIFEST.json",
+      "bytes": 6456,
+      "sha256": "1847e7ddc0b8823f1ba54970114ecb86084e938444220df7c6a14440bb01aa93"
+    },
+    {
+      "path": "licenses/Pocket-KiView-Source-Available-1.0.txt",
+      "bytes": 5836,
+      "sha256": "6e0b3232c49c4aee1afd5b97e39c45d0eecc4071a2f69fc23f733b8aa12e6fc8"
+    },
+    {
+      "path": "licenses/kicad-web-view-Source-Available-1.0.txt",
+      "bytes": 6548,
+      "sha256": "3f31d57ed802b4c7419d3b3e027926383239ec0fc08d6af68d29614da606362e"
+    }
+  ]
+}
