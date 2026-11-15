@@ -10,6 +10,10 @@ KiCad WebView is a browser library for read-only inspection of saved electronics
 
 The self-hosted **0.4.0 SDK** is available, with native 3D WayriCAD overlays, saved result layers and linked spatial probes. [Download and matching source](https://github.com/wayri/kicad-webview/releases/tag/v0.4.0) · [Versioned files and checksums](/assets/lib/kicad-webview/releases/0.4.0/RELEASE.json). The published npm/CDN **0.3.0** files are available, with translucent 3D appearance and matching [public source](https://github.com/wayri/kicad-webview/tree/v0.3.0). [Use a direct script, browser module or npm package](/kicad-webview/docs/quick-start/). The historical hosted **0.1.0-beta.2 SDK** remains archived separately. The historical beta.2 [release manifest](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) records its file checksums and classic script integrity hash; its [matching source](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.2) remains public.
 
+## 0.7.0: keep detail linked to the design
+
+Resizable Properties, contextual previews, shared field palettes, explicit variables, bounded numeric expressions and horizontal tables are released in the matching SDK. [Try the drawing demo](/assets/demos/drawing-fidelity.html), [inspect a linked preview](/kicad-webview/docs/panels-and-insets/) or [read the release evidence](/kicad-webview/docs/releases/).
+
 ## WayriCAD results on the 3D board
 
 Open saved Quick PI fields, Quick SI curves and QuickTherm frames beside their matching PCB. In self-hosted 0.4.0, exact source hashes gate native 2D/3D PCB registration. Choose a saved result layer, link field probes with board selections and inspect recorded thermal frames. Exported names/UUIDs enable supported net/route cross-highlighting. The independent 3D field scene remains available separately; unsupported elevation or placement stays explicit. [Try the demo](/assets/demos/wayricad-results.html) or [read the integration guide and limits](/kicad-webview/docs/wayricad-results/). No solver runs in the browser.
@@ -51,3 +55,4 @@ The current [IRCA product demonstrations](/kicad-webview/) and [capability demos
 Use a [classic script or ES module](/kicad-webview/docs/quick-start/), or open the [browser-only HTML exporter](/assets/demos/export.html). The [historical beta.2 ZIP](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.2.zip) is also available. The public [npm package](https://www.npmjs.com/package/@wayrisignals/kicad-webview) is available as `0.3.0`. [Direct CDN examples](/kicad-webview/docs/quick-start/#classic-script) need no Node.js or npm installation. The npm package excludes legacy board fixtures and fixture-backed demo pages.
 
 The owner-authored software in this release is open source under **MPL-2.0**. Commercial use and integration do not need individual approval. Preserve license notices and provide the matching covered source as required when distributing builds. Design files and third-party components retain their separate terms. Read [License & release files](/kicad-webview/docs/license/) and [Acknowledgements](/kicad-webview/docs/acknowledgements/).
+

@@ -90,4 +90,4 @@ Original sample arrays and metadata spelling are retained, including legacy enco
 
 ## Field palettes
 
-A matching 0.7 build adds WayriCAD, Viridis, Inferno and Grayscale choices shared by the 2D plot, standalone 3D field and registered board overlays. Palette changes retain supplied scalar values, units, ranges, probes and source association. Missing samples stay missing. This source addition is not yet published; the live results demo uses the published SDK. See [release availability](/kicad-webview/docs/releases/).
+A matching 0.7 build adds WayriCAD, Viridis, Inferno and Grayscale choices shared by the 2D plot, standalone 3D field and registered board overlays. Palette changes retain supplied scalar values, units, ranges, probes and source association. Missing samples stay missing. These palettes are released in 0.7.0; the live results demo uses the matching SDK. See [release availability](/kicad-webview/docs/releases/).

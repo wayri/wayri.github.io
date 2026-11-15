@@ -1,4 +1,4 @@
-import {Viewer,WayriCADResultsViewer} from '/assets/lib/kicad-webview/releases/0.6.0/kivi-viewer.js';
+import {Viewer,WayriCADResultsViewer} from '/assets/lib/kicad-webview/releases/0.7.0/kivi-viewer.js';
 const host=document.querySelector('#wayricad-layout'),status=document.querySelector('#wayricad-status'),choose=document.querySelector('#wayricad-case'),load=document.querySelector('#wayricad-load');
 const theme=()=>document.documentElement.dataset.theme==='dark'?'dark':'light';
 const board=new Viewer('#wayricad-board',{theme:theme(),inspectOnSelect:false}),results=new WayriCADResultsViewer('#wayricad-results',{theme:theme(),boardViewer:board});
@@ -10,3 +10,4 @@ async function localFile(event,kind){const file=event.target.files?.[0];if(!file
 document.querySelector('#wayricad-pcb-file').addEventListener('change',e=>localFile(e,'pcb'));document.querySelector('#wayricad-result-file').addEventListener('change',e=>localFile(e,'result'));document.querySelector('#wayricad-clear').addEventListener('click',()=>{stop();results.clear();status.textContent='Saved results cleared.';load.disabled=false;});
 window.addEventListener('themeChanged',()=>{board.setTheme(theme());results.setTheme(theme());});window.addEventListener('pagehide',()=>{disposed=true;stop();observer?.disconnect();results.dispose();board.dispose();},{once:true});
 if(typeof IntersectionObserver==='function'){observer=new IntersectionObserver(entries=>{if(!started&&entries.some(entry=>entry.isIntersecting))void example();},{rootMargin:'200px'});observer.observe(host);}else void example();
+

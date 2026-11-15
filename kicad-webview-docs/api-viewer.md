@@ -197,4 +197,4 @@ Translucent mode shows the board and models transparently, copper in layer color
 
 ## Text context and loading in 0.7
 
-These APIs are prepared in source, not published. A matching build accepts `LoadOptions.textVariables` (at most 256 strings, keys up to 200 characters, values up to 8,192 characters) and an exact saved `instancePath`. One locally supplied `.kicad_pro` can provide project text variables. Explicit values override them and persist through navigation and contextual previews. No project or ancestor is fetched implicitly. [Examples, numeric subset and table limits](/kicad-webview/docs/drawing-fidelity/).
+The 0.7.0 SDK accepts `LoadOptions.textVariables` (at most 256 strings, keys up to 200 characters, values up to 8,192 characters) and an exact saved `instancePath`. One locally supplied `.kicad_pro` can provide project text variables. Explicit values override them and persist through navigation and contextual previews. No project or ancestor is fetched implicitly. [Examples, numeric subset and table limits](/kicad-webview/docs/drawing-fidelity/).

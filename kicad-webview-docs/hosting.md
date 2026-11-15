@@ -13,10 +13,10 @@ The release runs on a static HTTP(S) host. Retain the versioned directory and it
 Use the immutable self-hosted 0.5.0 browser files under:
 
 ```text
-https://wayri.github.io/assets/lib/kicad-webview/releases/0.5.0/
+https://wayri.github.io/assets/lib/kicad-webview/releases/0.7.0/
 ```
 
-[0.5.0 file checksums](/assets/lib/kicad-webview/releases/0.5.0/RELEASE.json) · [Matching source and download](https://github.com/wayri/kicad-webview/releases/tag/v0.5.0). The current npm/CDN version is {{ site.data.webview_release.npm }}; the [hosted 0.3.0 compatibility files](/assets/lib/kicad-webview/releases/0.3.0/RELEASE.json) stay available.
+[0.5.0 file checksums](/assets/lib/kicad-webview/releases/0.7.0/RELEASE.json) · [Matching source and download](https://github.com/wayri/kicad-webview/releases/tag/v0.5.0). The current npm/CDN version is {{ site.data.webview_release.npm }}; the [hosted 0.3.0 compatibility files](/assets/lib/kicad-webview/releases/0.3.0/RELEASE.json) stay available.
 
 The [beta.2 ZIP](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.2.zip) and its [hosted files](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) remain available as a historical archive.
 
@@ -113,3 +113,4 @@ The release records responsive browser checks. Those checks do not establish phy
 | npm or a public package CDN | Not published as part of this release. Use the versioned static files or ZIP. |
 
 The retired hosted preview service is not a dependency of the bundled HTML. No Forge login, app installation or platform account connection is needed to use the static release on this site.
+

@@ -4,7 +4,7 @@ let board,bom,controller,disposed=false;
 button.addEventListener('click',async()=>{
   button.disabled=true;status.textContent='Loading the viewer and saved OLIMEX drawing…';
   try {
-    const {Viewer,BOMViewer}=await import('/assets/lib/kicad-webview/releases/0.6.0/kivi-viewer.js');
+    const {Viewer,BOMViewer}=await import('/assets/lib/kicad-webview/releases/0.7.0/kivi-viewer.js');
     if(disposed)return;
     board=new Viewer('#bom-board',{theme:theme(),inspectOnSelect:false});
     bom=new BOMViewer('#bom',{viewer:board,theme:theme()});
@@ -19,3 +19,4 @@ button.addEventListener('click',async()=>{
 });
 window.addEventListener('themeChanged',()=>{board?.setTheme(theme());bom?.setTheme(theme());});
 window.addEventListener('pagehide',()=>{disposed=true;controller?.abort();bom?.dispose();board?.dispose();},{once:true});
+

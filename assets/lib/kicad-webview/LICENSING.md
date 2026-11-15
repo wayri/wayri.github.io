@@ -1,45 +1,23 @@
 # Licensing
 
-**Use the viewer freely in the community and in ordinary business work.** Permission is required when selling the viewer/SDK itself or operating a paid viewer-focused service.
+KiCad WebView's owner-authored software is licensed under the **Mozilla Public License 2.0 (MPL-2.0)**. Copyright © 2026 wayri. The unmodified [LICENSE](LICENSE) is authoritative. Commercial use, sale, self-hosting and integration into proprietary applications are permitted; individual approval is not required.
 
-The controlling terms are [kicad-web-view Source-Available License 1.1](LICENSE), effective **5 November 2026**, identifier LicenseRef-Kicad-Web-View-Source-Available-1.1. Copyright owner/licensor: **Yawar B (wayri)**, for material in which the licensor holds the necessary rights. This is a custom source-available license, **not an OSI-approved open-source license**.
+## Distribution and modifications
 
-## What is permitted without asking?
+MPL applies at the source-file level. When distributing covered software, keep its license notices and make the covered source, including your modifications, available as required by MPL. Separate host-application files do not become MPL merely because they use this library. MPL does not require you to submit a pull request, and it does not prevent paid competing offerings.
 
-| Use | Default permission |
-| --- | --- |
-| Personal, educational, research, nonprofit and community use | Free |
-| Internal business tools, private repositories and company portals | Free |
-| Paid engineering, consulting, customization, integration, training and support | Free; charge for your work |
-| Product documentation and company website embeds, including ads or sponsorship | Free |
-| Free or paid applications with substantial functionality independent of this viewer | Free |
-| Community forks and redistribution without charging for the Software | Free; retain legal notices and identify material changes |
-| Selling your hardware, designs, reports and other outputs | Free; your work remains yours |
-| Selling a standalone viewer, viewer SDK or viewer-focused software bundle | Prior written commercial agreement |
-| Paid hosted/managed service principally selling electronic-design viewing or embedding | Prior written commercial agreement |
+Minified JavaScript and bundled HTML are not the preferred form for editing the library. Tell recipients where to obtain the corresponding source. This release's matching source is [v0.2.0](https://github.com/wayri/kicad-webview/tree/v0.2.0); source archives are available from that tag. Keep the source link, LICENSE, THIRD-PARTY-NOTICES.md and dependency notices with distributed builds. If you modify a build, supply your matching modified covered source rather than pointing only to an unmodified upstream release. The build scripts carry this source offer in their banners and distribution metadata.
 
-There are no company-size or revenue thresholds, mandatory registration, usage reports or royalties for permitted uses. You may keep your host application and modifications private. Preserve legal notices, but no visible logo, backlink or promotional attribution is required. Interface customization and your own branding are permitted; do not imply original authorship or endorsement.
+## Scope and exceptions
 
-## Examples of the boundary
+- Three.js and fzstd retain their MIT licenses and credits. Other external dependencies retain their own terms; see [third-party notices](THIRD-PARTY-NOTICES.md).
+- The Forge integration uses external Atlassian packages under their supplied terms. MPL covers our adapter code, not Atlassian's SDK or services.
+- The inverter PCB, schematics and fabrication examples are separately authorized demonstration data, **not an open-hardware grant**. Their provenance and redistribution conditions remain in fixtures/inverter and fixtures/inverter-cam. The software license does not license users' designs, model libraries or analysis results.
+- This grant covers the owner-authored subset supplied here, not the rest of SPIKE, Pocket KiView or other parent projects. Historical extraction identities and hashes remain in SOURCE-PROVENANCE.json.
+- Earlier source-available copies retain their valid grants. Texts in licenses/ are historical unless a dependency notice explicitly applies them; they impose no additional commercial restriction on the software released here under MPL.
 
-- An electronics company embeds its board in product documentation: **permitted**, even when the website sells hardware or carries advertising.
-- A consultant charges to install or customize a customer portal: **permitted**. The customer may run that portal internally without a separate viewer fee.
-- A paid training platform includes interactive boards alongside its courses, or a broader engineering application includes a design panel: **permitted** when it supplies substantial independent functionality.
-- A vendor sells a renamed viewer/SDK, a viewer-focused paid plugin, or a subscription principally for viewing/embedding designs: **commercial agreement required**. Mandatory bundled support fees do not bypass this boundary.
-- Voluntary sponsorship of a freely available community fork: **permitted**. A payment that buys access to a restricted viewer offering requires an agreement.
+## Brand and contributions
 
-A paid service principally selling viewing or embedding remains a restricted viewer offering. Incidental accounts, storage, sharing, billing or branding alone do not establish substantial independent functionality.
+The code license does not grant rights to impersonate the project or imply endorsement. See [project name policy](TRADEMARKS.md). Contributors retain copyright and submit their contributions under MPL-2.0; no copyright assignment or proprietary relicensing permission is implied. See [contributing](CONTRIBUTING.md).
 
-The complete LICENSE controls these examples. It does not impose source disclosure or grant rights to others' design files. Browser-delivered JavaScript in a permitted website/application is permitted redistribution subject to its notice conditions.
-
-## Commercial agreements and support
-
-Contact **[support.kivi@sigharmonic.com](mailto:support.kivi@sigharmonic.com)** for a restricted commercial viewer offering, alternative redistribution terms or contracted support. Describe whether you distribute a library/product, operate a viewer service or need integration assistance. Routine permitted use does not require an inquiry. No pricing, exclusivity, support obligation or additional rights are promised by an inquiry or payment alone.
-
-## Earlier copies and third parties
-
-Three.js and fzstd retain their MIT licenses. The license does not relicense the rest of SPIKE or revoke valid earlier grants. Original extraction identities and hashes remain in SOURCE-PROVENANCE.json. The [previous standalone license 1.0](licenses/kicad-web-view-Source-Available-1.0.txt) and [inherited Pocket KiView license](licenses/Pocket-KiView-Source-Available-1.0.txt) remain as historical evidence. Version 1.1 governs material supplied under it; this update does not change the parent Pocket KiView application's license or rewrite rights already granted for earlier copies.
-
-See [third-party notices](THIRD-PARTY-NOTICES.md). Commercial grants can cover only material the licensor owns or is authorized to license. Contributors keep their copyright; alternative licensing of outside contributions requires an explicit contributor grant. Publication remains separate from licensing: these terms do not publish a package or change repository visibility.
-
-This summary is not a legal opinion. Have the custom terms and customer/contributor agreements reviewed for the relevant jurisdiction before relying on them in a transaction.
+The library is free to use, including commercially, under MPL-2.0. No payment or individual commercial-use approval is required. Need help embedding or customizing KiCad WebView? Optional paid implementation, maintenance, and support are available at [support.kivi@sigharmonic.com](mailto:support.kivi@sigharmonic.com). You do not need to buy these services to use or integrate the library. Paid services do not change the open-source license. For explanatory guidance, see the [Mozilla MPL FAQ](https://www.mozilla.org/en-US/MPL/2.0/FAQ/).

@@ -6,11 +6,13 @@ doc_section: releases
 description: KiCad WebView release notes, WayriCAD saved results, layer inspection and mobile integrations.
 ---
 
-## Prepared 0.7.0 source refresh — not published
+## 0.7.0 — linked inspection and native text previews
 
-The source integrates stable resizable Properties, bounded linked contextual previews, shared saved-result palettes, safer preview replacement and an accessible cancellable loading surface. Drawing additions include explicit project-variable context, bounded deterministic numeric expressions, horizontal schematic tables and orientation fixes.
+**Self-hosted SDK and GitHub release: 0.7.0.** npm/CDN remains **{{ site.data.webview_release.npm }}** pending npm publication approval. Website demos use the new self-hosted build; CDN examples keep the published registry version.
 
-The integrated source recorded 554 passing tests and successful bundled builds; final context/diagnostic corrections passed 23 focused checks afterward. Final rebuild, browser acceptance and package audit remain pending. These are source checks, not installed-app or physical-phone acceptance. Published SDK/npm versions remain those shown above.
+This release integrates stable resizable Properties, bounded linked contextual previews, shared saved-result palettes, safer preview replacement and an accessible cancellable loading surface. Drawing additions include explicit project-variable context, bounded deterministic numeric expressions, horizontal schematic tables and orientation fixes.
+
+The final source passed 555 tests, pinned ESM/classic/lite/3D builds, desktop Chromium acceptance and the exact package privacy/license/source audit. OLIMEX checks covered 168 parts, 141 loaded models, linked selection and mounting-side focus; numerical-test fixtures covered GPU palettes and exploded overlay restoration. Physical-phone and universal GPU acceptance are not claimed. [Detailed QA evidence](https://github.com/wayri/kicad-webview/blob/v0.7.0/docs/QA-0.7.0.md).
 
 [Drawing demo](/assets/demos/drawing-fidelity.html) · [Text, graphics and table limits](/kicad-webview/docs/drawing-fidelity/) · [Panel and inset API](/kicad-webview/docs/panels-and-insets/).
 

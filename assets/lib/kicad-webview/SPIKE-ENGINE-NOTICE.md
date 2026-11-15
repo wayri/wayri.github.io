@@ -1,11 +1,11 @@
 # SPIKE browser geometry bundle
 
-Built from the owner-provided subset retained in engine/spike-source and the adapters in engine/spike. Owner-authored material supplied under this release is covered by kicad-web-view Source-Available License 1.1 (see LICENSE); Ordinary business and community use are permitted; commercial viewer offerings require permission under LICENSE. The inherited license is preserved in licenses/Pocket-KiView-Source-Available-1.0.txt and valid earlier grants remain effective, to the extent of the licensor's rights. This does not relicense the rest of SPIKE or revoke earlier grants.
+Built from the owner-provided subset in engine/spike-source and adapters in engine/spike. This supplied owner-authored subset is MPL-2.0; see LICENSE and LICENSING.md. Other SPIKE software is not relicensed. Matching source: https://github.com/wayri/kicad-webview/tree/v0.7.0 . Original extraction provenance and valid earlier grants remain intact.
 
-boardParser.ts: 5591024b53acbb272b3ae2997fc20af212d85e7e98e99ab8cd9e55226305e9b6
-numericRange.ts: f0220dae11ef29b7d2093ed9e0655e5cbbb16c606d2c5b02a13836db9a323ead
-layerPalette.ts: cb1daf87b07b7f5b7295c2c70f85530b8a1cf92979d6b6e9f03c562e1f2b47b6
-trackGeometry.ts: 99879473120331418f1969dec8fa7b972fdb2694b7b7c4e6272803ce9f995da6
-viewportScenePolicy.ts: 16f676f4b73d0b417ab5856a72064458377774e20cd02ebd615c83fe9d8b2564
+boardParser.ts: 6b9cfad531123aed7cb61518bf9c90c3a29df588ff5932abe5cd152945d19bf6
+numericRange.ts: a64c4bf094de8ea734f04cb05eabfe9e8dbe7c6ce023649328c7528771854dc7
+layerPalette.ts: 8ea2f855f5371be2a0ba162e4b7ac35aa37d7c0fb3b4a5c88a2f1e13eac89038
+trackGeometry.ts: 62bb3eb5c6706382e0985494aecffe478988cf587e9ef534f5127f4b9071f7cc
+viewportScenePolicy.ts: ce051060af0a65f3445adb51c686abdadfe0c4df6724c9d124749f2f60980cc0
 
 Includes Three.js 0.171.0 (MIT; THREE-LICENSE) and fzstd 0.1.1 (MIT; fzstd/LICENSE). Original extraction provenance is retained in SOURCE-PROVENANCE.json.

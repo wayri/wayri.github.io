@@ -9,8 +9,8 @@
   const marble = '/assets/demos/public-hardware/marble-project.json';
   const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
   const definitions = {
-    fidelity: ['Drawing fidelity', 'Try saved styles now; see prepared variable, expression and table examples with explicit version limits.', 'drawing-fidelity/'],
-    contextual: ['Properties and contextual detail', 'Inspect the IRCA review without losing the main camera. New preview controls require a supporting 0.7 SDK.', 'panels-and-insets/'],
+    fidelity: ['Drawing fidelity', 'Try saved styles now; try variable, expression and table examples with explicit rendering limits.', 'drawing-fidelity/'],
+    contextual: ['Properties and contextual detail', 'Inspect the IRCA review without losing the main camera. Preview controls use the 0.7 SDK.', 'panels-and-insets/'],
     compact: ['Compact embed', 'IRCA in a single read-only viewer. Switch drawings in its toolbar, fit, inspect and change theme.', 'quick-start/'],
     project: ['Advanced project', 'Navigate the approved IRCA files in split or single panes. The active pane controls file, part and net navigation.', 'api-project/'],
     inspection: ['Parts, pads and nets', 'Select saved geometry in the canvas or use the part/net lists. Hidden layers remain hidden during highlighting.', 'user-guide/#inspect-parts-pads-pins-and-nets'],
@@ -136,7 +136,7 @@
     message(ctx, 'Opening panel…');
     try {
       if (!api || !project) throw Error('The viewer runtime is unavailable. Reload the page to retry.');
-      if (key === 'fidelity') { stage.classList.add('is-info');const link=element('a','Open drawing fidelity demo ↗',stage);link.href='/assets/demos/drawing-fidelity.html';element('p','The live sample uses the published SDK. Prepared 0.7 features are version-gated and shown as source examples until publication.',stage); }
+      if (key === 'fidelity') { stage.classList.add('is-info');const link=element('a','Open drawing fidelity demo ↗',stage);link.href='/assets/demos/drawing-fidelity.html';element('p','The live sample uses the published SDK. The sample checks SDK capabilities and keeps unsupported modes disabled.',stage); }
       else if (key === 'wayricad') { const frame=element('iframe','',stage);frame.title='WayriCAD saved PI, SI and thermal results';frame.src='/assets/demos/wayricad-results.html'; }
       else if (key === 'export') { const frame = element('iframe', '', stage); frame.title = 'Export your own interactive HTML locally'; frame.src = '/assets/demos/export.html'; }
       else if (key === 'integrations') {

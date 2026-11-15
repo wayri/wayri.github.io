@@ -5,7 +5,7 @@ if(host){
   const api=window.KiCadWebView,capabilities=fidelityCapabilities(api),abort=new AbortController();
   let viewer,ticket=0,disposed=false;
   const notes=document.querySelector('#fidelity-availability');
-  notes.textContent=capabilities.advanced?'The loaded SDK exposes the 0.7 API. Try variables, numeric expressions and horizontal tables.':'This page is serving the published 0.6 SDK. Saved graphics, text and overbars run now; the prepared 0.7 variable, expression and table example is available as source below. Its live mode enables when a supporting SDK is released.';
+  notes.textContent=capabilities.advanced?'The loaded SDK exposes the 0.7 API. Try variables, numeric expressions and horizontal tables.':'This page is serving the published 0.6 SDK. Saved graphics, text and overbars run now; load SDK 0.7.0 to enable variables, numeric expressions and horizontal tables.';
   document.querySelector('#fidelity-advanced').disabled=!capabilities.advanced;
   async function render(){
     if(disposed||!api?.Viewer)return;const current=++ticket;
@@ -24,5 +24,6 @@ if(host){
   const themeObserver=new MutationObserver(()=>viewer?.setTheme(document.documentElement.dataset.theme==='dark'?'dark':'light'));
   themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
   window.addEventListener('pagehide',()=>{disposed=true;++ticket;abort.abort();themeObserver.disconnect();viewer?.dispose();},{once:true});
+  if(capabilities.advanced)mode.value='advanced';
   render();
 }

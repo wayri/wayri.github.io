@@ -11,7 +11,7 @@ For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/ki
 
 ## Drawing styles and text context
 
-[Open the drawing fidelity demo](/assets/demos/drawing-fidelity.html) for a small generated formatting sample. Saved graphics and text work with the published SDK; prepared variable, expression and table examples enable only with a supporting build. [Read the constraints and browser-only code](/kicad-webview/docs/drawing-fidelity/). The IRCA and credited public-board integrations below remain unchanged.
+[Open the drawing fidelity demo](/assets/demos/drawing-fidelity.html) for a small generated formatting sample. Saved graphics and text work with the published SDK; variable, expression and table examples run with the 0.7.0 SDK. [Read the constraints and browser-only code](/kicad-webview/docs/drawing-fidelity/). The IRCA and credited public-board integrations below remain unchanged.
 
 ## Try the new inspection controls
 

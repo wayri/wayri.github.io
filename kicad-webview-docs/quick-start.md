@@ -6,22 +6,20 @@ permalink: /kicad-webview/docs/quick-start/
 doc_section: quick-start
 ---
 
-Add KiCad WebView to a plain HTML page with a script tag or browser ES module. **No Node.js, npm installation or build step is needed.** You only need an HTTP(S) host, such as GitHub Pages. The npm and CDN examples use the published `{{ site.data.webview_release.npm }}` package. The current self-hosted SDK is **{{ site.data.webview_release.self_hosted }}**. For exploded 3D inspection and the sheet browser, see the [0.6.0 self-hosting example](#self-hosted-060-sdk); saved BoM and board data were introduced in [0.5.0](#self-hosted-050-sdk). The archived website SDK retains its immutable `0.1.0-beta.2` URLs. The examples below load the credited OLIMEX public project, including its PCB, schematic and 28 supplied model assets. Unresolved models remain labelled stand-ins.
+Add KiCad WebView to a plain HTML page with a script tag or browser ES module. **No Node.js, npm installation or build step is needed.** You only need an HTTP(S) host, such as GitHub Pages. The npm and CDN examples use the published `{{ site.data.webview_release.npm }}` package. The current self-hosted SDK is **{{ site.data.webview_release.self_hosted }}**. For exploded 3D inspection and the sheet browser, see the [current self-hosting example](#self-hosted-070-sdk); saved BoM and board data were introduced in [0.5.0](#self-hosted-050-sdk). The archived website SDK retains its immutable `0.1.0-beta.2` URLs. The examples below load the credited OLIMEX public project, including its PCB, schematic and 28 supplied model assets. Unresolved models remain labelled stand-ins.
 
-## Self-hosted 0.6.0 SDK
+<span id="self-hosted-060-sdk"></span>
 
-{% if site.data.webview_release.self_hosted == '0.6.0' %}
-The self-hosted **0.6.0 SDK** includes these additions. npm/CDN remains at **{{ site.data.webview_release.npm }}**; use the matching self-hosted files for the APIs below.
-{% else %}
-This guide describes the **0.6.0 source refresh**. The currently listed self-hosted SDK is **{{ site.data.webview_release.self_hosted }}**, and npm/CDN is **{{ site.data.webview_release.npm }}**. Use a matching 0.6.0 build for these additions; this page does not announce an npm/CDN publication.
-{% endif %}
+## Self-hosted 0.7.0 SDK
 
-Host the complete matching 0.6.0 release directory, including its dependencies and license notices. A direct script needs no npm installation, Node.js runtime or build step:
+The **0.7.0 SDK** is available self-hosted and from its [GitHub release](https://github.com/wayri/kicad-webview/releases/tag/v0.7.0). npm/CDN remains **{{ site.data.webview_release.npm }}** pending separate npm publication approval; its basic examples below remain usable. Use the matching self-hosted 0.7.0 files for the new APIs. It adds stable Properties, contextual previews, result palettes, explicit text variables, numeric expressions and horizontal tables. [Drawing examples](/kicad-webview/docs/drawing-fidelity/) · [Panel API](/kicad-webview/docs/panels-and-insets/).
+
+Host the complete matching 0.7.0 release directory, including its dependencies and license notices. A direct script needs no npm installation, Node.js runtime or build step:
 
 ```html
 <div id="board" style="height:70dvh;min-height:360px"></div>
 <p id="status" role="status">Opening board…</p>
-<script src="/assets/lib/kicad-webview/releases/0.6.0/kicad-webview.min.js"></script>
+<script src="/assets/lib/kicad-webview/releases/0.7.0/kicad-webview.min.js"></script>
 <script>
 const viewer = new KiCadWebView.Viewer('#board', {theme:'dark'});
 window.addEventListener('pagehide', () => viewer.dispose(), {once:true});
@@ -42,10 +40,10 @@ These paths assume that you host the SDK and sample manifest at the shown locati
 Use a version-pinned browser script without Node.js:
 
 ```html
-<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.5.0/kicad-webview.min.js"></script>
+<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.7.0/kicad-webview.min.js"></script>
 ```
 
-The same release provides an [ES module](/assets/lib/kicad-webview/releases/0.5.0/kivi-viewer.js), [checksums](/assets/lib/kicad-webview/releases/0.5.0/RELEASE.json) and [source/download](https://github.com/wayri/kicad-webview/releases/tag/v0.5.0). Use the [WayriCAD integration example](/kicad-webview/docs/wayricad-results/#embed-both-views-without-nodejs) for result layers, native 3D registration and linked probes. Keep the complete matching release directory and notices when self-hosting.
+The same release provides an [ES module](/assets/lib/kicad-webview/releases/0.7.0/kivi-viewer.js), [checksums](/assets/lib/kicad-webview/releases/0.7.0/RELEASE.json) and [source/download](https://github.com/wayri/kicad-webview/releases/tag/v0.5.0). Use the [WayriCAD integration example](/kicad-webview/docs/wayricad-results/#embed-both-views-without-nodejs) for result layers, native 3D registration and linked probes. Keep the complete matching release directory and notices when self-hosting.
 
 ## npm installation
 
@@ -184,3 +182,4 @@ For a ready interactive design, visit the [IRCA product demonstration](/kicad-we
 ## Next steps
 
 Use the [user guide](/kicad-webview/docs/user-guide/) for controls and interpretation, the [examples](/kicad-webview/docs/examples/) for application patterns, and the [API reference](/kicad-webview/docs/api/) for signatures, options and cleanup. Keep the [MPL-2.0 license, notices and matching-source link](/kicad-webview/docs/license/) with distributed builds.
+

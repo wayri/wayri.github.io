@@ -1,0 +1,310 @@
+{
+  "version": "0.7.0",
+  "license": "MPL-2.0",
+  "source": "https://github.com/wayri/kicad-webview/tree/v0.7.0",
+  "sourceCommit": "a54a440d66481a2c5db12fe6699ebd109c70a967",
+  "packageIntegrity": "sha512-+ucigS7+LSsM1B8O9cs74AEmEPPQcbFD815OQyfJoLY6QlWeL5JmTu/dIw6hATduQmsoF1NhB2Y9qNjrD4fOdg==",
+  "classicIntegrity": "sha384-g3oUjll6+FOnvB/f63XO0dl1N46vTgBt0yvEB0hNsFYJvLb/HZXHymsYsB2dZYCA",
+  "files": [
+    {
+      "path": "ADVANCED-VIEWER.md",
+      "bytes": 3983,
+      "sha256": "bef53847e559ae28aa47728d05b7f44d0ec8f4df1d0927c92a1a3ff925a949d0"
+    },
+    {
+      "path": "ALTIUM-BETA.md",
+      "bytes": 5568,
+      "sha256": "e09dfdba87648779be58db2a01b1d489bb4c4674d8bd139de68aabe4216905ed"
+    },
+    {
+      "path": "ANALYSIS.md",
+      "bytes": 3692,
+      "sha256": "d62012a7df01a80f517d8a9f9e9b9447fd65a3056e8da13f598cafa17936829f"
+    },
+    {
+      "path": "APP-INTEGRATIONS-BETA.md",
+      "bytes": 11065,
+      "sha256": "181bd12a41aaee8cad42383298d9ddf26f41fbef61a2a84ca1a389084ca1c4b8"
+    },
+    {
+      "path": "BOM-ANALYTICS.md",
+      "bytes": 4357,
+      "sha256": "1ba16bce0c619d09252694369fcaa709d5e4130adfc6055596659c59596ee8ca"
+    },
+    {
+      "path": "bom-viewer.js",
+      "bytes": 35693,
+      "sha256": "ff2980b9f49adda0bbd48ac84d48e409773ce563668150c3067e554e68fe07a6"
+    },
+    {
+      "path": "BROWSER-CHECKS.md",
+      "bytes": 1211,
+      "sha256": "a90f260dfd483e2aeadb774c92f2c0a3f0dd3bd0cd224cbebcb2c61ce9c73ae5"
+    },
+    {
+      "path": "CAROUSEL.md",
+      "bytes": 5523,
+      "sha256": "bad45a678a7213b8f128efecaf5a5a1a7ff5067fc21bf49b9194cb0c492c4c03"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 1428,
+      "sha256": "c87e062f2eb780f726df3b813f8e7d3190d6b6f6f9eb1c48c91f7fc30e28d3ab"
+    },
+    {
+      "path": "embed.html",
+      "bytes": 514,
+      "sha256": "7b80b0187ec0767946f4b2b86fa07c860f5c68bb4363c3b1d67b59bacbf41b10"
+    },
+    {
+      "path": "embed.mjs",
+      "bytes": 1280,
+      "sha256": "f8afb897c6ff9d5dcbf140abc58e1190b5418c54dc067597a502ae04b0799af0"
+    },
+    {
+      "path": "EXTENSION-REFRESH.md",
+      "bytes": 5372,
+      "sha256": "bbe64e0a1054b7d17b136db836e62fc0957e8b5b189ce2e5355adb21d425bf4b"
+    },
+    {
+      "path": "FZSTD-LICENSE",
+      "bytes": 1089,
+      "sha256": "1d72133b15f05101411c4f53e34af38adce3ecf7a78959d3d28b1e4d41a4fc92"
+    },
+    {
+      "path": "HOSTING.md",
+      "bytes": 6030,
+      "sha256": "d3cea8613b830c44322b2242ad74552e9d51ca878d7f44fb4125c7fd6f804ead"
+    },
+    {
+      "path": "INSPECTION-CONTROLS.md",
+      "bytes": 4188,
+      "sha256": "bb336c9604df7047fe91d1be5824fb06d19f46f87610cff09f15fb59e3f52130"
+    },
+    {
+      "path": "INTERACTIVE-DEMO.md",
+      "bytes": 9593,
+      "sha256": "be9d727c9e613d5be0785009781b528d82f5e54303d9472c8178d32a622f5cb0"
+    },
+    {
+      "path": "KICAD-COMPATIBILITY.md",
+      "bytes": 3280,
+      "sha256": "3afa26a9f6bc9c90742d58d69fcc34b8932aaacc010a387a3084467b3f321cd4"
+    },
+    {
+      "path": "kicad-webview.min.js",
+      "bytes": 1728552,
+      "sha256": "72baa0b1d97789481a148e57097bc3b571851bd7978951a0c509b7308d1a53b4"
+    },
+    {
+      "path": "kivi-viewer.js",
+      "bytes": 1728404,
+      "sha256": "83d748878f749facd4b1c65221b17adc555fa42753c6e88f913aeba9420d8ae1"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 16726,
+      "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04"
+    },
+    {
+      "path": "licenses/Pocket-KiView-Source-Available-1.0.txt",
+      "bytes": 5836,
+      "sha256": "6e0b3232c49c4aee1afd5b97e39c45d0eecc4071a2f69fc23f733b8aa12e6fc8"
+    },
+    {
+      "path": "LICENSING.md",
+      "bytes": 3336,
+      "sha256": "98dc1c39eaa49058e04b5891a6d4d0e3d0d89cc6a8e74e2128a749359cfc5b89"
+    },
+    {
+      "path": "LIGHTWEIGHT.md",
+      "bytes": 4688,
+      "sha256": "51593352f38b4e09af327c26197d278153f517367d3f44272d830f09b31dd24a"
+    },
+    {
+      "path": "LINKED-VIEWS.md",
+      "bytes": 4088,
+      "sha256": "2ade2517cb11f91fd74d84a34e82e8eae7abef07f4da097ef635ad92380b0460"
+    },
+    {
+      "path": "lite/chunks/analysis-layer-KIXZ5S37.js",
+      "bytes": 5030,
+      "sha256": "c2f07829a43dc1fa483c810875fdacb2ab4376aa9ae6b0ef870737492a0ff7d3"
+    },
+    {
+      "path": "lite/chunks/analysis-results-KO4JRDAK.js",
+      "bytes": 452,
+      "sha256": "0121a44a94ac2b9a04ceef0ccf249f0df60097d709e4c93a158c8e90512dc56a"
+    },
+    {
+      "path": "lite/chunks/board3d-QNTYHKBP.js",
+      "bytes": 1227949,
+      "sha256": "bad5f5985933c20a8383c828eb8c7199ed029854b056d30c3eac6eeef0e1cd92"
+    },
+    {
+      "path": "lite/chunks/chunk-BIO2SY3G.js",
+      "bytes": 13373,
+      "sha256": "e1cf12472c4d3ed95d8114531d5fe2afdced4ddcabab8d7370ece0315b30e8f8"
+    },
+    {
+      "path": "lite/chunks/chunk-CGBMZFDO.js",
+      "bytes": 1370,
+      "sha256": "360544b3b479ac5786099f131c9fef5fd0c0d1960911cc49b91c6f382d34c670"
+    },
+    {
+      "path": "lite/chunks/chunk-CTNBH7GQ.js",
+      "bytes": 260225,
+      "sha256": "6ba811d7a8c8dc3ffd4694d9c0becd46745eb395b2e4654ff5e13ceb340ddd0d"
+    },
+    {
+      "path": "lite/chunks/chunk-ENQKMMU7.js",
+      "bytes": 3605,
+      "sha256": "3b47cfc4441fd2367d7318945ac29debcb1ff4d039e117e9d28e9803c3fb7e4f"
+    },
+    {
+      "path": "lite/chunks/chunk-L5365FZ5.js",
+      "bytes": 3325,
+      "sha256": "26e3607f47659dc325990ac751d274989793335833a6d2bfd69980dedf9dcbe7"
+    },
+    {
+      "path": "lite/chunks/chunk-TPSNX3TM.js",
+      "bytes": 798,
+      "sha256": "33276354fdf1e1978cf44e16aea1594dcec23392e42cd5a01f91cd5f2e47c670"
+    },
+    {
+      "path": "lite/chunks/chunk-WZWONQZN.js",
+      "bytes": 1098,
+      "sha256": "6073b551b243436082ceb0377011deb69fd92c94fc17ab244dbe087ee1da75e6"
+    },
+    {
+      "path": "lite/chunks/kicad-viewer-Y3FDIX47.js",
+      "bytes": 391,
+      "sha256": "7aa1f19080fd2adcca74e880ebb7ff022d455be052dd560bd1d37db8fc1ff120"
+    },
+    {
+      "path": "lite/chunks/three-runtime-QCHAW2SP.js",
+      "bytes": 341,
+      "sha256": "5892cef578659c4f97c23eb6eaa35c0dd4b2b08cab1c675adc9b6eb90ea7920a"
+    },
+    {
+      "path": "lite/chunks/viewer-inset-7I7CO2EH.js",
+      "bytes": 5067,
+      "sha256": "c07fe1cc3efd58185b8a5111aa0b62187dd58233d111b55ebc40ccd0507577f4"
+    },
+    {
+      "path": "lite/kicad-webview-lite.js",
+      "bytes": 41032,
+      "sha256": "00810462bed216840f98a458d3a148acdb1edb204f83eb8ba5433389c4e6db3e"
+    },
+    {
+      "path": "lite/manifest.json",
+      "bytes": 7154,
+      "sha256": "95ea42c50bf3174be536c3f7235b8fabe4a712b2c4051a844e965558b3f9f5b7"
+    },
+    {
+      "path": "MANUFACTURING-BETA.md",
+      "bytes": 7618,
+      "sha256": "ffe914494d9e84440aefaffedc1e5dd4eff32932dc4e8b5c1bf5d70feda46596"
+    },
+    {
+      "path": "MOBILE-PERFORMANCE.md",
+      "bytes": 3828,
+      "sha256": "f529f6050d0fa05ff909d923dbf8cc8733d300958ba849e948fee19ba8c59acd"
+    },
+    {
+      "path": "NET-MODEL-PROVENANCE.md",
+      "bytes": 917,
+      "sha256": "6c0fb30f61196a676853e0ba4832765f00bf656935f0c9dbbad1897c8c5c61d6"
+    },
+    {
+      "path": "PANELS-AND-INSETS.md",
+      "bytes": 5229,
+      "sha256": "2c61cf89116491b8a8b7f5de760aec2591cb7b52b638a7072a83f3d35460c934"
+    },
+    {
+      "path": "PRESENTATION.md",
+      "bytes": 2791,
+      "sha256": "0c452b4a02d9625ef39fae6e1ae160e76300044b7ca499f8ae3bbbc5fb6ca0e8"
+    },
+    {
+      "path": "PROJECT-TREE.md",
+      "bytes": 6547,
+      "sha256": "3ba7b2fd3f479cbc88c072bb5eda314c4c40b37dd071e15c02b378fef46acc30"
+    },
+    {
+      "path": "PUBLIC-API.md",
+      "bytes": 11796,
+      "sha256": "7aedfa3bce2cf142fcad5ee05b72a60d49091aed86a4523a110cbc2c56d578b0"
+    },
+    {
+      "path": "README.md",
+      "bytes": 12442,
+      "sha256": "75b24629a9a0044299ce8e73f9941f2353ac0b524df851ea525c85a261cbc77c"
+    },
+    {
+      "path": "RELEASING.md",
+      "bytes": 766,
+      "sha256": "9cb003de4f83b94206226bcce6363ad90815614e0f712dc785f9889962e918a1"
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 671,
+      "sha256": "d3ada3e887e24964101d86966a86dc051fc865db80f535b958dd0d77e185f373"
+    },
+    {
+      "path": "SOURCE-PROVENANCE.json",
+      "bytes": 23522,
+      "sha256": "3b91ca4b55d561e71ae877b3e6399b559e35a1b08fd18242abb1857a43af7905"
+    },
+    {
+      "path": "SPIKE-ENGINE-NOTICE.md",
+      "bytes": 956,
+      "sha256": "ee9cc9dca00782131caeea41afe90777af3408590c7008c14140579bad93f99e"
+    },
+    {
+      "path": "standalone-html.mjs",
+      "bytes": 5005,
+      "sha256": "a03b37d3fe041bb0736b87a08577d4a2a5f38c77fc64ea77d3697c2765133b04"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "bytes": 2001,
+      "sha256": "637797c6f1c4f515ab5275807f60aa421763362cc3edbac588d3ce7595efadee"
+    },
+    {
+      "path": "THREE-LICENSE",
+      "bytes": 1102,
+      "sha256": "f57eb9202058667d12aebd854fe8a86d6feaeab51078180df5615bfdbd5cff05"
+    },
+    {
+      "path": "TRADEMARKS.md",
+      "bytes": 642,
+      "sha256": "d13122983ee2ef88d3bc5240dc51b711c12d783c3daf43ba66cfdbdb24969821"
+    },
+    {
+      "path": "UPSTREAM-SYNC.md",
+      "bytes": 3149,
+      "sha256": "bdc975b04f24662b5fbbdbb3f9b52990acc10b5969ab7fc580be3943faa3792f"
+    },
+    {
+      "path": "VIEW-LINKS.md",
+      "bytes": 4415,
+      "sha256": "adecce06425f986eea2a6da07e2d5731bf0ced53391ae75358e8da058031088e"
+    },
+    {
+      "path": "VIEW-NAVIGATION.md",
+      "bytes": 3254,
+      "sha256": "a4ecea14023f5b54a128985a7a331a13577c04bfc2ed38965bdbf3bee986b1ed"
+    },
+    {
+      "path": "wayricad-results.js",
+      "bytes": 1323097,
+      "sha256": "d13f80610ae77cc0afc4314fc0c5aeaef8f40593d879df969c6b85e0be9dd4ab"
+    },
+    {
+      "path": "WAYRICAD-RESULTS.md",
+      "bytes": 11081,
+      "sha256": "1078fb07519bbfbee50a7dc919847b4c8ed01686e4ee9bfb1f1bdb931e2905ff"
+    }
+  ]
+}
