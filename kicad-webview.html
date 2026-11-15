@@ -19,6 +19,8 @@ permalink: /kicad-webview/
         <section class="wv-irca-showcase" aria-label="IRCA assembly and Fast PI demonstration">{% include irca-demo.html %}</section>
     </header>
 
+    {% include webview-latest.html %}
+
     <section id="viewer-refresh" class="wv-capabilities" aria-labelledby="viewer-refresh-title">
         <div class="wv-section-heading"><div><p class="wv-eyebrow">Viewer refresh / 0.6.0</p><h2 id="viewer-refresh-title">Inspect assemblies and navigate schematics</h2></div><p>Exploded 3D inspection, saved drawing styles and a floating schematic browser in the 0.6 viewer refresh.</p></div>
         <div class="wv-feature-grid">
@@ -243,3 +245,4 @@ await viewer.load('https://wayri.github.io/assets/demos/public-hardware/olimex-p
 <script src="{{ '/assets/js/webview-capability-gallery.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 
 <script src="{{ '/assets/js/webview-bom-panel.js' | relative_url }}" defer></script>
+

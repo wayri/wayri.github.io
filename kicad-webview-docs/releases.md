@@ -6,6 +6,14 @@ doc_section: releases
 description: KiCad WebView release notes, WayriCAD saved results, layer inspection and mobile integrations.
 ---
 
+## Prepared 0.7.0 source refresh — not published
+
+The source integrates stable resizable Properties, bounded linked contextual previews, shared saved-result palettes, safer preview replacement and an accessible cancellable loading surface. Drawing additions include explicit project-variable context, bounded deterministic numeric expressions, horizontal schematic tables and orientation fixes.
+
+The integrated source recorded 554 passing tests and successful bundled builds; final context/diagnostic corrections passed 23 focused checks afterward. Final rebuild, browser acceptance and package audit remain pending. These are source checks, not installed-app or physical-phone acceptance. Published SDK/npm versions remain those shown above.
+
+[Drawing demo](/assets/demos/drawing-fidelity.html) · [Text, graphics and table limits](/kicad-webview/docs/drawing-fidelity/) · [Panel and inset API](/kicad-webview/docs/panels-and-insets/).
+
 ## 0.6.0 — viewer refresh
 
 {% if site.data.webview_release.self_hosted == '0.6.0' %}
@@ -134,3 +142,4 @@ The product page’s approved IRCA demonstrations use a separate site runtime. T
 The OLIMEX example belongs to OLIMEX Ltd and upstream contributors, pinned to [26705d3](https://github.com/OLIMEX/ESP32-P4-DevKit/tree/26705d36407a07324348927dfd30fbf4ffc1d94c), with hardware under CERN-OHL-S-2.0. Display adaptations, model coverage and omissions are recorded in the [public-hardware provenance](/assets/demos/public-hardware/PROVENANCE.json). No affiliation or endorsement is implied. Viewer licensing does not replace hardware, model or third-party terms.
 
 [Read all acknowledgements, including AI assistance](/kicad-webview/docs/acknowledgements/) · [Matching 0.2.1 source](https://github.com/wayri/kicad-webview/tree/v0.2.1) · [License and notices](/kicad-webview/docs/license/).
+

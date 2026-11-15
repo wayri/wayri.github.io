@@ -1,0 +1,20 @@
+---
+layout: product
+title: Drawing fidelity and text context
+description: Explore saved schematic graphics and text, with a version-aware preview of project variables, numeric expressions and horizontal tables.
+permalink: /assets/demos/drawing-fidelity.html
+---
+<link rel="stylesheet" href="{{ '/assets/css/webview-demo-pages.css' | relative_url }}">
+<style>.wv-fidelity .demo-controls{display:flex;gap:12px;flex-wrap:wrap}.wv-fidelity label{display:grid;gap:6px;flex:1 1 200px}.wv-fidelity :is(input,select,button){min-height:44px;font:inherit;max-width:100%;box-sizing:border-box}.wv-fidelity #fidelity-viewer{height:60dvh;min-height:300px;max-height:680px;border:1px solid var(--rule);border-radius:6px;overflow:hidden}.wv-fidelity pre{max-width:100%;max-height:420px;overflow:auto;white-space:pre;font-size:12px}.wv-fidelity details{margin-block:18px}.wv-fidelity summary{cursor:pointer;min-height:44px;align-content:center}.wv-fidelity code{overflow-wrap:anywhere}@media(max-width:600px){.wv-fidelity #fidelity-viewer{height:55dvh;min-height:280px}.wv-fidelity .demo-controls button{flex:1 1 130px}}</style>
+<main class="webview-product wv-demo-page wv-fidelity">
+<header>{% include webview-breadcrumbs.html section_url='/kicad-webview/docs/examples/' section_label='Live examples' %}<h1>Keep the drawing’s meaning.</h1><p>Inspect saved colors, dashes, overbars and non-square text. Explore how explicit project variables, bounded numeric expressions and horizontal tables work in a supporting build.</p><nav class="wv-actions" aria-label="Drawing demo navigation"><a href="{{ '/kicad-webview/' | relative_url }}">Product page ↗</a><a href="{{ '/kicad-webview/docs/drawing-fidelity/' | relative_url }}">Drawing fidelity guide ↗</a><a href="{{ '/assets/demos/direct.html' | relative_url }}">IRCA and credited public boards ↗</a></nav></header>
+<p id="fidelity-availability" role="note">Published SDK: {{ site.data.webview_release.self_hosted }}. The 0.7 source refresh has not been published.</p>
+<div class="demo-controls"><label>Preview mode<select id="fidelity-mode"><option value="graphics">Saved graphics and text</option id="fidelity-advanced" value="advanced" disabled>0.7 variables, expressions and tables</option></select></label><label>Explicit ORG variable<input id="fidelity-org" value="Wayri" maxlength="80"></label><button id="fidelity-render" type="button">Render sample</button><button id="fidelity-fit" type="button">Fit drawing</button></div>
+<div id="fidelity-viewer" aria-label="Read-only schematic formatting sample"></div><p id="fidelity-status" role="status">Opening the saved graphics sample…</p>
+<p class="wv-caption">This owner-authored formatting sample is not a circuit or a third-party hardware design. Browser font metrics may differ from KiCad; exact embedded fonts, rotated tables, units in expressions and arbitrary LaTeX are unsupported. Missing context stays literal with diagnostics. The viewer never executes expression text as JavaScript.</p>
+<details><summary>Source currently displayed</summary><pre><code id="fidelity-source"></code></pre></details>
+<details><summary>Prepared 0.7 format sample</summary><p>Requires a matching released SDK. Expected project text: <code>Project: Wayri</code>; numeric expression: <code>12</code>. This is a preview contract, not a live-release announcement.</p><pre><code id="fidelity-preview-source"></code></pre></details>
+<noscript><p>JavaScript is needed for the live sample. Read the drawing-fidelity guide for examples and limits.</p></noscript>
+</main>
+<script src="{{ '/assets/lib/kicad-webview/kicad-webview.min.js' | relative_url }}"></script>
+<script type="module" src="{{ '/assets/js/webview-fidelity-demo.mjs' | relative_url }}"></script>

@@ -9,6 +9,10 @@ The CDN examples use the **{{ site.data.webview_release.npm }}** ES module from 
 
 For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/kicad-webview/docs/quick-start/). The release uses [MPL-2.0](/kicad-webview/docs/license/); input designs and model files have separate terms.
 
+## Drawing styles and text context
+
+[Open the drawing fidelity demo](/assets/demos/drawing-fidelity.html) for a small generated formatting sample. Saved graphics and text work with the published SDK; prepared variable, expression and table examples enable only with a supporting build. [Read the constraints and browser-only code](/kicad-webview/docs/drawing-fidelity/). The IRCA and credited public-board integrations below remain unchanged.
+
 ## Try the new inspection controls
 
 Open the [released PCB viewer](/assets/demos/embed.html?example=olimex&view=pcb&theme=dark), then use **Highlight settings** and **Layers**. Select a trace or part to compare highlighting modes; search for a copper layer and try Focus, Fit and Restore. In the [released 3D viewer](/assets/demos/embed.html?example=olimex&view=3d&theme=dark), open Layers and choose Reveal internal copper to enter Translucent appearance. The [project workspace](/assets/demos/embed.html?example=olimex&workspace=true&view=pcb&theme=dark) adds a Layers navigator tab for the active pane.
@@ -270,3 +274,4 @@ The [drawing provenance](/assets/demos/public-hardware/PROVENANCE.json) and [mod
 - [Export your own design as HTML](/assets/demos/export.html)
 
 Older hosted demonstration URLs forward to these current pages. The original versioned SDK files and downloadable ZIP archives retain their release contents and notices; they are not the current website showcases.
+

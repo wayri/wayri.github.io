@@ -86,3 +86,8 @@ The demo uses public WayriCAD saved-board examples pinned to [0617fd2](https://g
 Original sample arrays and metadata spelling are retained, including legacy encoded unit strings; known plot labels follow the producer’s field conventions. No numerical unit conversion occurs. See [the original assumptions and producer provenance](https://github.com/wayri/WayriCAD/blob/0617fd201c0817d95648cec639744138aa59fe20/docs/examples/pocket-kivi/README.md), [retained demo credits](/assets/demos/wayricad-results/CREDITS.md) and [upstream example notice](/assets/demos/wayricad-results/UPSTREAM-LICENSE). Upstream design/example terms remain separate from WebView’s MPL-2.0 license.
 
 [Development acknowledgements, including AI assistance](/kicad-webview/docs/acknowledgements/) · [License and optional support](/kicad-webview/docs/license/) · [Library result API](https://github.com/wayri/kicad-webview/blob/v0.4.0/docs/WAYRICAD-RESULTS.md).
+
+
+## Field palettes
+
+A matching 0.7 build adds WayriCAD, Viridis, Inferno and Grayscale choices shared by the 2D plot, standalone 3D field and registered board overlays. Palette changes retain supplied scalar values, units, ranges, probes and source association. Missing samples stay missing. This source addition is not yet published; the live results demo uses the published SDK. See [release availability](/kicad-webview/docs/releases/).

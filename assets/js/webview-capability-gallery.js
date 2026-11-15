@@ -9,6 +9,8 @@
   const marble = '/assets/demos/public-hardware/marble-project.json';
   const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
   const definitions = {
+    fidelity: ['Drawing fidelity', 'Try saved styles now; see prepared variable, expression and table examples with explicit version limits.', 'drawing-fidelity/'],
+    contextual: ['Properties and contextual detail', 'Inspect the IRCA review without losing the main camera. New preview controls require a supporting 0.7 SDK.', 'panels-and-insets/'],
     compact: ['Compact embed', 'IRCA in a single read-only viewer. Switch drawings in its toolbar, fit, inspect and change theme.', 'quick-start/'],
     project: ['Advanced project', 'Navigate the approved IRCA files in split or single panes. The active pane controls file, part and net navigation.', 'api-project/'],
     inspection: ['Parts, pads and nets', 'Select saved geometry in the canvas or use the part/net lists. Hidden layers remain hidden during highlighting.', 'user-guide/#inspect-parts-pads-pins-and-nets'],
@@ -134,7 +136,8 @@
     message(ctx, 'Opening panel…');
     try {
       if (!api || !project) throw Error('The viewer runtime is unavailable. Reload the page to retry.');
-      if (key === 'wayricad') { const frame=element('iframe','',stage);frame.title='WayriCAD saved PI, SI and thermal results';frame.src='/assets/demos/wayricad-results.html'; }
+      if (key === 'fidelity') { stage.classList.add('is-info');const link=element('a','Open drawing fidelity demo ↗',stage);link.href='/assets/demos/drawing-fidelity.html';element('p','The live sample uses the published SDK. Prepared 0.7 features are version-gated and shown as source examples until publication.',stage); }
+      else if (key === 'wayricad') { const frame=element('iframe','',stage);frame.title='WayriCAD saved PI, SI and thermal results';frame.src='/assets/demos/wayricad-results.html'; }
       else if (key === 'export') { const frame = element('iframe', '', stage); frame.title = 'Export your own interactive HTML locally'; frame.src = '/assets/demos/export.html'; }
       else if (key === 'integrations') {
         stage.classList.add('is-info');
@@ -175,10 +178,19 @@
       }
       else {
         const viewer = await irca(ctx, ['assembly', 'presentation'].includes(key) ? '3d' : 'pcb'); if (!viewer) return; common(ctx, viewer);
-        if (['inspection', 'assembly'].includes(key)) partsNets(ctx, viewer);
+        if (['inspection', 'assembly', 'contextual'].includes(key)) partsNets(ctx, viewer);
+        if (['inspection','assembly','contextual'].includes(key) && typeof viewer.setHighlightStyle==='function') select(ctx,'Highlight style',[['dim','Dim surroundings'],['bright','Bright selection'],['isolate','Selection only']],value=>viewer.setHighlightStyle(value));
+        if(key==='contextual') {
+          if(typeof viewer.setInspectorWidth==='function') select(ctx,'Properties width',[['300','300 px'],['360','360 px'],['420','420 px']],value=>viewer.setInspectorWidth(Number(value)));
+          if(typeof viewer.openInset==='function') {
+            button(ctx,'Open contextual preview',async()=>{const preview=await viewer.openInset();if(preview)own(ctx,preview);});
+          } else element('p','Contextual previews and width controls are prepared for 0.7. The published SDK still supports Properties, saved selection and highlighting.',stage);
+        }
         if (key === 'layers') layerControls(ctx, viewer);
         if (key === 'compact') { button(ctx, 'Schematic', () => project.load(viewer, { file: 'IRCA.kicad_sch', view: 'schematic', signal: ctx.abort.signal })); button(ctx, 'PCB', () => project.load(viewer, { view: 'pcb', signal: ctx.abort.signal })); }
         if (key === 'assembly' || key === 'presentation') {
+          if(typeof viewer.setAppearance==='function') select(ctx,'Board appearance',[['realistic','Realistic'],['layers','Layer colors'],['translucent','Translucent copper']],value=>viewer.setAppearance(value));
+          if(typeof viewer.setExplode==='function') select(ctx,'Assembly spacing',[['0','Assembled'],['25','Explode 25%'],['60','Explode 60%']],value=>viewer.setExplode(Number(value)));
           for (const side of ['top', 'bottom', 'isometric']) button(ctx, side[0].toUpperCase() + side.slice(1), () => viewer.setCamera3D(side));
           select(ctx, 'Render quality', [['balanced', 'Balanced'], ['high', 'High'], ['presentation', 'Presentation']], quality => message(ctx, 'Active render quality: ' + viewer.setRenderQuality(quality) + '. This is raster presentation, not path tracing or model validation.'));
         }
@@ -206,3 +218,4 @@
   window.addEventListener('pagehide', dispose, { once: true });
   if (new URLSearchParams(location.search).get('demo-panel') === 'linked') { try { const state = api?.parseViewLink(location.href); if (state) show('linked', state).then(() => panel.scrollIntoView({block:'start'})); } catch (error) { panel.hidden = false; status.textContent = error.message; } }
 })();
+

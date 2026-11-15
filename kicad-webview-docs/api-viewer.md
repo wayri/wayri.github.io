@@ -193,3 +193,8 @@ Supported attributes are `src`, `theme`, `view`, `file`, `ref` and `inspect-on-s
 `setAppearance(mode)` requires a loaded 3D view and returns the active mode. `getAppearance()` returns that mode or `null` outside 3D. `getRenderStats()` returns a copied snapshot or `null` outside 3D, including appearance, draw calls, render count, loaded model and component counts, and model update counts and CPU milliseconds.
 
 Translucent mode shows the board and models transparently, copper in layer colors, and faint fills. Saved XY positions are exact; internal elevations are illustrative when stackup data is unavailable, with a diagnostic. Transparent raster sorting can produce visual ordering artifacts. Layers remain independently hideable and clearing a selection restores translucency.
+
+
+## Text context and loading in 0.7
+
+These APIs are prepared in source, not published. A matching build accepts `LoadOptions.textVariables` (at most 256 strings, keys up to 200 characters, values up to 8,192 characters) and an exact saved `instancePath`. One locally supplied `.kicad_pro` can provide project text variables. Explicit values override them and persist through navigation and contextual previews. No project or ancestor is fetched implicitly. [Examples, numeric subset and table limits](/kicad-webview/docs/drawing-fidelity/).

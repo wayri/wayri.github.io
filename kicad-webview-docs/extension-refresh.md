@@ -88,3 +88,8 @@ viewer.load('/assets/demos/public-hardware/olimex-p4-project.json', {view:'3d'})
 ```
 
 Replace the project URL with your own supported project; cross-origin sources need CORS. The OLIMEX project and models retain their upstream credits and licenses. KiCad WebView remains free to use commercially under MPL-2.0; paid implementation and support are optional.
+
+
+## Prepared 0.7 drawing refresh
+
+New source work adds explicit text context, bounded numeric expressions, horizontal schematic tables, orientation fixes, and a local staged loading surface with Stop. Existing saved graphics and browser-font behavior are retained. [Try the version-aware sample](/assets/demos/drawing-fidelity.html), read [supported constructs and limits](/kicad-webview/docs/drawing-fidelity/), or explore [stable panels and linked previews](/kicad-webview/docs/panels-and-insets/). The published SDK remains {{ site.data.webview_release.self_hosted }}; this source preview is not a release announcement.

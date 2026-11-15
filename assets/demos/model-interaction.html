@@ -9,6 +9,8 @@ permalink: /assets/demos/model-interaction.html
 </style>
 <main class="webview-product wv-model-page">
 <header>{% include webview-breadcrumbs.html section_url='/kicad-webview/docs/model-interaction/' section_label='Virtual controls' %}<h1>Interactive model controls.</h1><p>Use the same IRCA review integration and display models as the product page. Choose a planar model face, then attach a virtual TFT, LED, button or knob. Your JavaScript supplies the behavior; this is not firmware or circuit simulation.</p><nav class="wv-actions" aria-label="Model demo navigation"><a href="{{ '/kicad-webview/' | relative_url }}">KiCad WebView ↗</a><a href="{{ '/kicad-webview/docs/model-interaction/' | relative_url }}">Interaction guide ↗</a><a href="{{ '/kicad-webview/#capability-demos' | relative_url }}">All demo panels ↗</a></nav></header>
+{% include webview-demo-update.html %}
+
 <div id="board" aria-label="Approved IRCA interactive model"></div>
 <p id="status" role="status">Opening the approved IRCA review…</p>
 <div class="controls">
@@ -143,3 +145,4 @@ window.addEventListener('pagehide', () => {
   abort.abort(); demo?.dispose(); viewer.dispose();
 }, {once:true});
 </script>
+
