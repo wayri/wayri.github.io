@@ -1,0 +1,11 @@
+{
+  "version": "0.8.0-preview.2",
+  "channel": "website-preview",
+  "stableNpm": "0.7.0",
+  "source": "https://github.com/wayri/kicad-webview/tree/v0.8.0-preview.2",
+  "sourceCommit": "bf5a7bca95f698400276c6dde92c9bf0e51e332f",
+  "sha256": "23faf21088a503b47df4fce887f0a4c9328dcfe89a3509580ab85be5e26c216b",
+  "bytes": 1735680,
+  "tests": 565,
+  "description": "Photoreal Fast, animated two-stage Expand mode and source-net shine-through. No visible gray studio floor. Raster PBR, not path tracing."
+}

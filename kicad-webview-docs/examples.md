@@ -11,7 +11,9 @@ For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/ki
 
 ## Fast photoreal board presentation
 
-[Open OLIMEX and IRCA in Photoreal Fast](/assets/demos/photoreal-fast.html). This labelled **0.8.0-preview.1** website SDK adds studio reflections, cached shadows and a backdrop that follows the site theme. Compact controls leave the board as the focus. [Direct-script integration and limits](/kicad-webview/docs/photoreal-fast/). The stable npm/CDN release remains 0.7.0.
+[Open OLIMEX and IRCA in Photoreal Fast](/assets/demos/photoreal-fast.html). This labelled **0.8.0-preview.2** website SDK adds studio reflections, cached shadows and a backdrop that follows the site theme. Compact controls leave the board as the focus. [Direct-script integration and limits](/kicad-webview/docs/photoreal-fast/). The stable npm/CDN release remains 0.7.0.
+
+[Expand mode and net shine-through](/kicad-webview/docs/expand-mode/) add two-stage assembly motion, fading substrate, stretched vias and bright source-bound highlights.
 
 ## Drawing styles and text context
 

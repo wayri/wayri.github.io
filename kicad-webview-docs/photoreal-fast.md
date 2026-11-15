@@ -8,13 +8,13 @@ doc_section: examples
 
 [Inspect OLIMEX](/assets/demos/photoreal-fast.html?board=olimex) · [Inspect IRCA](/assets/demos/photoreal-fast.html?board=irca)
 
-Photoreal Fast is available in the separately hosted **0.8.0-preview.1** website SDK. It is not part of the stable npm/CDN 0.7.0 package. The demo keeps its controls compact and lets you compare Standard, Photoreal Fast and enhanced Presentation in one viewer.
+Photoreal Fast is available in the separately hosted **0.8.0-preview.2** website SDK. It is not part of the stable npm/CDN 0.7.0 package. The demo keeps its controls compact and lets you compare Standard, Photoreal Fast and enhanced Presentation in one viewer.
 
 ## Embed without Node.js
 
 ```html
 <div id="board" style="height:70dvh;min-height:380px"></div>
-<script src="https://wayri.github.io/assets/lib/kicad-webview/previews/photoreal-fast-0.8.0-preview.1/kicad-webview.min.js"></script>
+<script src="https://wayri.github.io/assets/lib/kicad-webview/previews/photoreal-fast-0.8.0-preview.2/kicad-webview.min.js"></script>
 <script>
 const viewer = new KiCadWebView.Viewer('#board', {theme:'dark'});
 viewer.load('https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json', {view:'3d'})
@@ -24,7 +24,7 @@ window.addEventListener('pagehide', () => viewer.dispose(), {once:true});
 </script>
 ```
 
-Your host needs normal HTTP(S) access and CORS permission for the supplied project and models. No rendering service, build system or runtime Node.js installation is required. To self-host, retain the matching script, source attribution, LICENSE and third-party notices from the [preview SDK directory](/assets/lib/kicad-webview/previews/photoreal-fast-0.8.0-preview.1/BUILD.json).
+Your host needs normal HTTP(S) access and CORS permission for the supplied project and models. No rendering service, build system or runtime Node.js installation is required. To self-host, retain the matching script, source attribution, LICENSE and third-party notices from the [preview SDK directory](/assets/lib/kicad-webview/previews/photoreal-fast-0.8.0-preview.2/BUILD.json).
 
 ## Rendering and interaction
 
@@ -33,6 +33,10 @@ Select **Display → Quality → Photoreal Fast**, or call `viewer.setRenderQual
 Fast mode skips screen-space ambient occlusion, SMAA and supersampling. Its framebuffer is capped at two million pixels, or one million on constrained graphics devices. These are allocation limits rather than frame-rate guarantees. Rendering is demand-driven; orbit, pan, camera buttons, source picking and cross-highlighting remain available. Translucent inspection disables shadows and hides the catcher until opaque appearance is restored.
 
 `viewer.setRenderQuality('balanced')` restores ordinary rendering. `presentation` remains the optional, more expensive studio mode. GPU context recovery can return to Balanced with a visible diagnostic. Fast mode is opt-in and does not become a saved default for other embeds.
+
+## Expand mode and highlighted nets
+
+[Expand the assembly and inspect bright nets through the board](/kicad-webview/docs/expand-mode/). The preview adds two-stage component/layer motion, fading substrate, stretched vias, source-layer colors and a source-bound shine-through overlay. These are display changes; source geometry and electrical data remain unchanged.
 
 ## Fidelity and credits
 

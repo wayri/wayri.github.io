@@ -17,7 +17,9 @@
       else await next.load('/assets/demos/public-hardware/olimex-p4-project.json',{view:'3d',signal:abort.signal});
       if(disposed||id!==request)return;
       next.setCamera3D('isometric');renderQuality();
-      next.addEventListener('viewchange',()=>{if(viewer===next&&next.view==='3d')renderQuality();});
+      document.querySelector('#photo-expand').setAttribute('aria-pressed','false');
+      next.addEventListener('expandchange',event=>{if(viewer===next)document.querySelector('#photo-expand').setAttribute('aria-pressed',String(event.detail.amount>0));});
+      next.addEventListener('viewchange',()=>{if(viewer!==next)return;const enabled=next.view==='3d';quality.disabled=!enabled;buttons.forEach(b=>b.disabled=!enabled);if(enabled)renderQuality();});
       quality.disabled=false;buttons.forEach(b=>b.disabled=false);
       const url=new URL(location.href);url.searchParams.set('board',selected);history.replaceState(null,'',url);
     }catch(error){if(id===request&&!disposed&&error.name!=='AbortError')status.textContent='Could not open this board: '+error.message;}
@@ -26,6 +28,7 @@
   document.querySelector('#photo-iso').onclick=()=>viewer?.setCamera3D('isometric');
   document.querySelector('#photo-bottom').onclick=()=>viewer?.setCamera3D('bottom');
   document.querySelector('#photo-fit').onclick=()=>viewer?.fit();
+  document.querySelector('#photo-expand').onclick=()=>viewer?.setExpand(viewer.getExpand()>0?0:100);
   document.querySelector('#photo-stats').onclick=()=>{document.querySelector('#photo-stats-output').textContent=JSON.stringify(viewer?.getRenderStats()||{status:'No loaded 3D view'},null,2);};
   const observer=new MutationObserver(()=>viewer?.setTheme(theme()));observer.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
   addEventListener('pagehide',()=>{disposed=true;++request;abort?.abort();viewer?.dispose();observer.disconnect();},{once:true});
