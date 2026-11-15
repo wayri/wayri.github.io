@@ -1,0 +1,65 @@
+{
+  "checked_on": "2026-11-15",
+  "wayricad": {
+    "name": "WayriCAD",
+    "version": "4.8.4",
+    "channel": "Release",
+    "released_on": "2026-11-15",
+    "repo": "wayri/WayriCAD",
+    "summary": "Portable exports now recheck saved sources before publishing, while retaining the electrothermal and fabrication-review tools.",
+    "changes": [
+      "Portable Web Export rejects stale component metadata and rechecks saved PCB, schematic and supported-model hashes before publishing an export.",
+      "Original-source hashes and exact embedded-byte hashes remain separate, including model-path transformations.",
+      "The suite retains shared steady rectilinear 3D electrothermal studies, primary-winding thermal feedback and imported fabrication-net short/open comparisons from 4.8.3."
+    ],
+    "note": "Export checks describe saved snapshots, not unsaved editor state or an operating-system file lock. Electrothermal and fabrication model limits remain in force.",
+    "guide": "https://github.com/wayri/WayriCAD/blob/v4.8.4/docs/RELEASE_NOTES_4.8.4.md"
+  },
+  "spike": {
+    "name": "SPIKE",
+    "version": "0.4.3",
+    "channel": "Source-only experimental preview",
+    "released_on": "2026-10-27",
+    "repo": "wayri/SPIKE",
+    "summary": "A clearer power-tree overview and a Geometry → basic PI handoff to the existing PCB resistive-network solver.",
+    "changes": [
+      "Power-tree branches have direction, collapse, fit and zoom, with selection and evidence details. Inferred electrical paths still need review.",
+      "Geometry → basic PI passes normalized PCB copper to the existing routed DC solver and returns geometry-linked fields; it does not infer electrical properties from arbitrary STEP solids.",
+      "Saved thermal studies reopen in thermal setup. Workspace search, board-net controls and axis rotation rings have been refined."
+    ],
+    "note": "This source-only hotfix adds no installer or numerical kernel. Numerical review remains incomplete and the full Python suite does not pass; use the release record for the exact limits.",
+    "guide": "https://github.com/wayri/SPIKE/blob/v0.4.3/docs/GEOMETRY_PI_HANDOFF.md"
+  },
+  "kicad_online": {
+    "name": "KiCad Online",
+    "version": "0.12.100",
+    "android": "1.98",
+    "channel": "GitHub preview",
+    "released_on": "2026-11-15",
+    "repo": "wayri/KiCad-Online",
+    "summary": "More focused review conversations, source-linked replies and a clearer sheet browser with Root and saved page badges.",
+    "changes": [
+      "Compact review conversations keep comment content prominent, navigate to anchored drawings and show source-linked reply markers and areas.",
+      "The schematic explorer opens on Sheets, with Root and saved page badges. The minimap returns to its compact view after a sheet is chosen.",
+      "Project loading shows real stages with cancellation where supported. Manual extension update checks link to stores without reloading active review work.",
+      "Private-project discovery and authenticated website reads are improved; uncertain issue/discussion creation retains its receipt to guard against duplicate sends."
+    ],
+    "note": "GitHub preview packages and store releases are separate. Android 1.98 is a development-signed APK for manual installation; it is not a Google Play release.",
+    "guide": "https://github.com/wayri/KiCad-Online/blob/v0.12.100/USER-GUIDE.md"
+  },
+  "webview": {
+    "name": "KiCad WebView",
+    "channel": "Stable SDK and npm/CDN",
+    "released_on": "2026-11-15",
+    "repo": "wayri/kicad-webview",
+    "summary": "Resizable Properties, linked contextual previews and matching saved-result palettes across 2D and 3D.",
+    "changes": [
+      "Resize Properties without losing its scroll or focus, and inspect source-linked contextual previews with independent cameras.",
+      "Exact saved identities connect selections across views and focus 3D parts on their saved mounting side.",
+      "Saved-result palettes match across 2D fields, independent 3D scenes and registered board overlays.",
+      "Explicit text variables, bounded numeric expressions, horizontal schematic tables and cancellable staged loading are included."
+    ],
+    "note": "Read-only inspection of supported saved data. The viewer does not run a solver or establish physical-phone, universal GPU or numerical qualification. WayriCAD 4.8.4 portable exports retain their separately pinned WebView 0.6.0.",
+    "guide": "https://github.com/wayri/kicad-webview/blob/v0.7.0/docs/QA-0.7.0.md"
+  }
+}

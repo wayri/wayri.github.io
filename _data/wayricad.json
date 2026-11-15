@@ -1,6 +1,6 @@
 {
-  "reviewed": "2026-11-11",
-  "source": "https://github.com/wayri/WayriCAD/tree/develop",
+  "reviewed": "2026-11-15",
+  "source": "https://github.com/wayri/WayriCAD/tree/v4.8.4",
   "groups": [
     {"id":"analysis", "title":"Electrical, thermal and electromagnetic analysis", "tools":[
       {"name":"Quick PI", "guide":"quick_pi_plugin/README.md", "description":"Inspect power integrity: DC paths, voltage drop, current density, copper losses and supported PDN studies with explicit sources and loads."},
@@ -23,7 +23,7 @@
     {"id":"documentation", "title":"Connectivity, harnesses and engineering documentation", "tools":[
       {"name":"Pin Extractor", "guide":"extract_pins_plugin/ReadMe.md", "description":"Extract connector and component pins, net maps and supported endpoint paths for interface, firmware and test documentation."},
       {"name":"Harness Workbench", "guide":"harness_workbench_plugin/ReadMe.md", "description":"Review cross-board connector/pin mappings, external wire links and harness documentation with explicit connection rules."},
-      {"name":"Portable Web Export", "guide":"portable_web_export_plugin/README.md", "description":"Package reviewed schematic, PCB and supported model views into self-contained offline HTML for sharing and review."},
+      {"name":"Portable Web Export", "guide":"portable_web_export_plugin/README.md", "description":"Share supported schematic, PCB and model views as offline HTML, with saved-source freshness checks and separate original/embedded hashes."},
       {"name":"Review Comments", "guide":"review_comments_plugin/README.md", "description":"Keep structured engineering review comments alongside supported project and review workflows."}
     ]},
     {"id":"project", "title":"Project preparation and assembly data", "tools":[

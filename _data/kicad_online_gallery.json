@@ -1,0 +1,204 @@
+{
+  "slides": [
+    {
+      "title": "Selected nets keep their layer colours",
+      "description": "Follow selected copper across both layers while the surrounding board stays nearly gray.",
+      "image": "/assets/images/projects/kicad-online/preview-2026-11-13/kero-layer-net-gray-dark.jpg",
+      "width": 1315,
+      "height": 887,
+      "alt": "KERO selected net in red and blue layer colours against a nearly gray PCB context",
+      "group": "latest",
+      "capture_version": "0.12.95"
+    },
+    {
+      "title": "Keep the same selection in 3D",
+      "description": "The selected saved net remains visible through the translucent assembly context.",
+      "image": "/assets/images/projects/kicad-online/preview-2026-11-13/kero-net-3d-gray.jpg",
+      "width": 1315,
+      "height": 887,
+      "alt": "KERO selected net retained in the 3D assembly with translucent gray context",
+      "group": "3d",
+      "capture_version": "0.12.95"
+    },
+    {
+      "title": "Model-backed 3D assembly",
+      "description": "Inspect the encoder assembly in the browser; the viewer reports 79 of 79 linked component models. Material preview is not a mechanical fit qualification.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/03-3d-assembly.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Model-backed 3D assembly — Inspect the encoder assembly in the browser; the viewer reports 79 of 79 linked component models. Material preview is not a mechanical fit qualification.",
+      "group": "3d",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Hierarchical schematic review",
+      "description": "Read the wired RC timing bank and navigate the six-sheet encoder project.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/01-schematic.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Hierarchical schematic review — Read the wired RC timing bank and navigate the six-sheet encoder project.",
+      "group": "design",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Routed PCB review",
+      "description": "Explore the saved two-layer PCB with copper, vias and pad numbers. This image shows the layout, not an assembly table.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/05-pcb-layout.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Routed PCB review — Explore the saved two-layer PCB with copper, vias and pad numbers. This image shows the layout, not an assembly table.",
+      "group": "design",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Paired schematic and layout",
+      "description": "Keep a timing sheet and board open together for design review.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/12-paired-review.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Paired schematic and layout — Keep a timing sheet and board open together for design review.",
+      "group": "design",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Net highlighting",
+      "description": "Highlight the VBAT copper network while retaining the rest of the board as context.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/09-net-highlighting.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Net highlighting — Highlight the VBAT copper network while retaining the rest of the board as context.",
+      "group": "design",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Source-bound net inspection",
+      "description": "Inspect the selected net, saved identity, pad count and routing statistics alongside highlighted copper.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/10-net-properties.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Source-bound net inspection — Inspect the selected net, saved identity, pad count and routing statistics alongside highlighted copper.",
+      "group": "design",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Schematic and PCB cross-probing",
+      "description": "Inspect the corresponding VBAT selection across schematic and PCB panes. Only the selected network remains bright.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/11-cross-probing.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Schematic and PCB cross-probing — Inspect the corresponding VBAT selection across schematic and PCB panes. Only the selected network remains bright.",
+      "group": "design",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "PCB-linked BoM manager",
+      "description": "Inspect the saved 79-part PCB BoM and local assembly checklist. Progress is unstarted demonstration state.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/06-bom-manager.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "PCB-linked BoM manager — Inspect the saved 79-part PCB BoM and local assembly checklist. Progress is unstarted demonstration state.",
+      "group": "bom",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Grouped parts table",
+      "description": "Group equivalent parts by value and footprint while keeping individual references accessible.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/07-bom-grouping.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Grouped parts table — Group equivalent parts by value and footprint while keeping individual references accessible.",
+      "group": "bom",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Resolved project variables",
+      "description": "Inspect saved project variables, resolved values and their sources.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/02-project-variables.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Resolved project variables — Inspect saved project variables, resolved values and their sources.",
+      "group": "design",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Bottom-side inspection",
+      "description": "Switch to the reverse side to inspect the CR2032 holder and nominal cell model.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/04-3d-bottom.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Bottom-side inspection — Switch to the reverse side to inspect the CR2032 holder and nominal cell model.",
+      "group": "3d",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Snapped board measurement",
+      "description": "Measure the saved board outline: 40.000 mm wide. A drawing measurement does not establish fabrication tolerance.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/13-board-measurement.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Snapped board measurement — Measure the saved board outline: 40.000 mm wide. A drawing measurement does not establish fabrication tolerance.",
+      "group": "design",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Layer visibility controls",
+      "description": "Choose copper layers, overview, fills, outlines, worksheet, pad numbers and net names.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/14-layer-controls.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Layer visibility controls — Choose copper layers, overview, fills, outlines, worksheet, pad numbers and net names.",
+      "group": "design",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Two-sided Draftsman sheet",
+      "description": "Compose top and bottom mechanical views with automatic 40 mm board dimensions. The local document is a demonstration draft; no GitHub documentation branch or PDF was published.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/15-draftsman.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Two-sided Draftsman sheet — Compose top and bottom mechanical views with automatic 40 mm board dimensions. The local document is a demonstration draft; no GitHub documentation branch or PDF was published.",
+      "group": "review",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Review anchors and issue browser",
+      "description": "Inspect the existing source-linked annotation marker, local review cards and repository issue list. Local notes remain distinct from published issues.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/16-review-anchors.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Review anchors and issue browser — Inspect the existing source-linked annotation marker, local review cards and repository issue list. Local notes remain distinct from published issues.",
+      "group": "review",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "GitHub conversation and design context",
+      "description": "Read existing GitHub issue 17 in the extension with severity, state, revision, file and sheet metadata. The legacy metadata table is displayed as plain text in this build. No new comment was posted during capture.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/17-review-metadata.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "GitHub conversation and design context — Read existing GitHub issue 17 in the extension with severity, state, revision, file and sheet metadata. The legacy metadata table is displayed as plain text in this build. No new comment was posted during capture.",
+      "group": "review",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Commit history and ancestry",
+      "description": "Browse 20 loaded commits, verified parent links and base/head comparison controls. This capture demonstrates the graph, not a completed PR comparison.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/18-history.webp",
+      "width": 1920,
+      "height": 1079,
+      "alt": "Commit history and ancestry — Browse 20 loaded commits, verified parent links and base/head comparison controls. This capture demonstrates the graph, not a completed PR comparison.",
+      "group": "review",
+      "capture_version": "0.12.92"
+    },
+    {
+      "title": "Saved board analytics",
+      "description": "Review saved pad, via and track statistics. Candidate airwires are explicitly incomplete screening data, not native KiCad open-connection results.",
+      "image": "/assets/images/projects/kicad-online/announcement-2026-11-11/08-board-analytics.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Saved board analytics — Review saved pad, via and track statistics. Candidate airwires are explicitly incomplete screening data, not native KiCad open-connection results.",
+      "group": "bom",
+      "capture_version": "0.12.92"
+    }
+  ]
+}

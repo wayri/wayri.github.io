@@ -1,0 +1,10 @@
+{% assign release = site.data.software_releases[include.product] %}{% assign release_version = release.version %}{% if include.product == 'webview' %}{% assign release_version = site.data.webview_release.self_hosted %}{% endif %}{% capture release_url %}https://github.com/{{ release.repo }}/releases/tag/v{{ release_version }}{% endcapture %}
+<link rel="stylesheet" href="{{ '/assets/css/software-releases.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+{% if include.compact %}
+<p class="software-release-compact" data-software-release="{{ include.product }}"><a href="{{ release_url }}">{{ release_version }}{% if release.android %} · Android {{ release.android }}{% endif %}</a>{% if include.product == 'webview' %}<span>SDK · npm/CDN {{ site.data.webview_release.npm }}</span>{% else %}<span>{{ release.channel }}</span>{% endif %}<span class="software-release-summary">{{ release.summary }}</span></p>
+{% else %}
+<section class="software-release-update" data-software-release="{{ include.product }}" aria-label="{{ release.name }} release update">
+    <header><div><p class="software-release-channel">{{ release.channel }} · {{ release.released_on | date: '%d %b %Y' }}</p><h2>{{ release.name }} {{ release_version }}{% if release.android %}<small>Android {{ release.android }}</small>{% endif %}</h2></div><a href="{{ release_url }}">Release notes &amp; downloads ↗</a></header>
+    <p>{{ release.summary }}</p><ul>{% for change in release.changes %}<li>{{ change }}</li>{% endfor %}</ul><p class="software-release-limit">{{ release.note }} <a href="{{ release.guide }}">Details &amp; scope ↗</a></p>
+</section>
+{% endif %}

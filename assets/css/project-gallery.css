@@ -70,3 +70,42 @@
  .kicad-online-page .kicad-online-intro .software-lead { font-size:14px; line-height:1.5; margin:8px 0 0; }
  .kicad-online-page > header > .project-gallery { width:100%; max-width:min(100%,calc((100svh - 350px) * 16 / 9)); align-self:center; }
 }
+
+/* One themed presentation for captures, release highlights and source context. */
+.project-gallery-presentation { background:var(--container-bg,var(--paper,#fff)); color:var(--text-color,var(--ink,#202020)); border:0; border-radius:0; overflow:hidden; }
+.project-gallery-presentation .project-gallery-heading { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 12px; padding:12px 16px; border-bottom:1px solid var(--border-color,var(--rule)); font:12px/1.5 system-ui,sans-serif; }
+.project-gallery-presentation .project-gallery-heading a { color:var(--accent-color,var(--link)); text-decoration:underline; text-underline-offset:3px; }
+.project-gallery-presentation .project-gallery-heading > span { color:var(--muted-text,var(--muted,#666)); }
+.project-gallery-presentation .project-gallery-topics { display:flex; flex-wrap:wrap; gap:6px; padding:10px 12px; border-bottom:1px solid var(--border-color,var(--rule)); }
+.project-gallery-presentation .project-gallery-topics button { padding:7px 10px; min-height:36px; border:1px solid transparent; border-radius:4px; background:transparent; color:var(--muted-text,var(--muted,#666)); font:13px/1.4 system-ui,sans-serif; cursor:pointer; }
+.project-gallery-presentation .project-gallery-topics button[aria-pressed="true"] { border-color:var(--accent-color,var(--link)); color:var(--accent-color,var(--link)); background:var(--input-bg,var(--code)); }
+.project-gallery-presentation .project-gallery-topics button:hover { color:var(--accent-color,var(--link)); }
+.project-gallery-presentation :is(a,button):focus-visible,.project-gallery-presentation:focus-visible { outline:2px solid var(--accent-color,var(--link)); outline-offset:-3px; }
+.project-gallery-presentation .project-gallery-stage figure { background:var(--container-bg,var(--paper,#fff)); }
+.project-gallery-presentation .project-gallery-stage img { width:100%; height:auto; aspect-ratio:16/10; max-height:640px; object-fit:contain; background:#141d27; }
+.project-gallery-presentation .project-gallery-stage figcaption { position:static; min-height:100px; padding:16px; background:none; color:var(--muted-text,var(--muted,#666)); font:13px/1.6 system-ui,sans-serif; pointer-events:auto; text-shadow:none; }
+.project-gallery-presentation figcaption strong { display:block; margin:0 0 6px; color:var(--text-color,var(--ink)); font:600 clamp(17px,2vw,22px)/1.25 system-ui,sans-serif; }
+.project-gallery-presentation figcaption span { display:block; color:inherit; }
+.project-gallery-presentation figcaption small { display:block; margin-top:8px; color:var(--muted-text,var(--muted,#666)); font-size:11px; }
+.project-gallery-presentation .project-gallery-info { min-height:360px; max-height:640px; padding:clamp(18px,3vw,28px); overflow:auto; background:var(--container-bg,var(--paper)); color:var(--text-color,var(--ink)); font:14px/1.7 system-ui,sans-serif; }
+.project-gallery-presentation .project-gallery-info h3 { margin:4px 0 18px; color:inherit; font:600 clamp(21px,3vw,28px)/1.2 system-ui,sans-serif; }
+.project-gallery-presentation .project-gallery-info p { margin:12px 0; }
+.project-gallery-presentation .project-gallery-info .project-gallery-info-kicker { margin-top:0; color:var(--accent-color,var(--link)); font-size:12px; }
+.project-gallery-presentation .project-gallery-info ul { list-style:disc; padding-left:20px; margin:12px 0; }
+.project-gallery-presentation .project-gallery-info li { margin:10px 0; }
+.project-gallery-presentation .project-gallery-info a { color:var(--accent-color,var(--link)); text-decoration:underline; text-underline-offset:3px; }
+.project-gallery-presentation .project-gallery-controls { gap:8px; padding:12px; border-top:1px solid var(--border-color,var(--rule)); }
+.project-gallery-presentation .project-gallery-controls button { min-width:0; min-height:44px; padding:9px 12px; font:600 12px/1.4 system-ui,sans-serif; }
+.project-gallery-presentation .project-gallery-controls [role="status"] { flex-basis:100%; order:4; min-height:2.8em; text-align:center; color:var(--muted-text,var(--muted,#666)); font:12px/1.5 system-ui,sans-serif; }
+.project-gallery-presentation .project-gallery-credit { padding:0 16px 14px; color:var(--muted-text,var(--muted,#666)); font:12px/1.6 system-ui,sans-serif; }
+.project-gallery-presentation .project-gallery-static { list-style:disc; padding:0 16px 16px 36px; font:13px/1.6 system-ui,sans-serif; }
+@media(max-width:600px) { .project-gallery-presentation .project-gallery-topics button { min-height:44px; padding:8px; } .project-gallery-presentation .project-gallery-heading { padding:12px; } .project-gallery-presentation .project-gallery-info { max-height:none; min-height:0; } .project-gallery-presentation .project-gallery-stage figcaption { padding:14px 12px; } }
+
+.project-gallery-presentation .project-gallery-stage { height:520px; height:clamp(420px,calc(62.5cqw + 140px),720px); }
+.project-gallery-presentation .project-gallery-stage figure { display:flex; flex-direction:column; height:100%; }
+.project-gallery-presentation .project-gallery-stage figure > a { flex:1; min-height:0; display:flex; align-items:center; justify-content:center; background:#141d27; }
+.project-gallery-presentation .project-gallery-stage img { height:100%; max-height:100%; aspect-ratio:auto; }
+.project-gallery-presentation .project-gallery-stage figcaption { flex:none; }
+.project-gallery-presentation .project-gallery-stage .project-gallery-info { height:100%; min-height:0; max-height:none; overflow:auto; }
+
+.kicad-online-page > header > .project-gallery-presentation { max-width:100%; }
