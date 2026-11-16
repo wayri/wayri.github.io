@@ -1,0 +1,271 @@
+{
+  "schema": "kicad-webview.lite/v1",
+  "entry": "kicad-webview-lite.js",
+  "initial": {
+    "files": [
+      "chunks/chunk-6DW2HTT7.js",
+      "chunks/chunk-BIVSABXU.js",
+      "chunks/chunk-IGGEQY7X.js",
+      "chunks/chunk-LTRYSBJJ.js",
+      "chunks/chunk-SWJL4AGD.js",
+      "kicad-webview-lite.js"
+    ],
+    "rawBytes": 324329,
+    "gzipBytes": 113477
+  },
+  "optional": {
+    "three": {
+      "files": [
+        "chunks/board3d-6FBWURQO.js",
+        "chunks/chunk-XBHA5OUZ.js",
+        "chunks/three-runtime-36QTQVSO.js"
+      ],
+      "rawBytes": 1239100,
+      "gzipBytes": 362907
+    },
+    "analysis": {
+      "files": [
+        "chunks/analysis-layer-GX7YK25I.js",
+        "chunks/analysis-results-6KQBPKVQ.js",
+        "chunks/chunk-DAB6XJUS.js",
+        "chunks/chunk-XBHA5OUZ.js"
+      ],
+      "rawBytes": 10457,
+      "gzipBytes": 5206
+    }
+  },
+  "files": [
+    {
+      "path": "kicad-webview-lite.js",
+      "rawBytes": 40986,
+      "gzipBytes": 13953,
+      "sha256": "7ee86492417838c5593f9acb0e7e1306e42db5144a4bf5f9f3f6c7f486352752",
+      "imports": [
+        {
+          "path": "chunks/chunk-IGGEQY7X.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-SWJL4AGD.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-6DW2HTT7.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-BIVSABXU.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-LTRYSBJJ.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    {
+      "path": "chunks/board3d-6FBWURQO.js",
+      "rawBytes": 1237389,
+      "gzipBytes": 361842,
+      "sha256": "98ff2187ae4e0b063dc2cffeeba93f8ec517644c5f0064a25fc85599d32a3985",
+      "imports": [
+        {
+          "path": "chunks/chunk-IGGEQY7X.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-XBHA5OUZ.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-BIVSABXU.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-LTRYSBJJ.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    {
+      "path": "chunks/chunk-IGGEQY7X.js",
+      "rawBytes": 798,
+      "gzipBytes": 548,
+      "sha256": "e233869bc2602d9c5db986910f99c3560f8d2af99d0e3f6a6bfed1b8b375ffdc",
+      "imports": []
+    },
+    {
+      "path": "chunks/three-runtime-36QTQVSO.js",
+      "rawBytes": 341,
+      "gzipBytes": 290,
+      "sha256": "fbfac4666e97bbd5d4556eb54717238f5d498b108b63e4c68f04dd3d680d3238",
+      "imports": [
+        {
+          "path": "chunks/chunk-LTRYSBJJ.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/board3d-6FBWURQO.js",
+          "kind": "dynamic-import"
+        }
+      ]
+    },
+    {
+      "path": "chunks/analysis-results-6KQBPKVQ.js",
+      "rawBytes": 452,
+      "gzipBytes": 332,
+      "sha256": "24b512b04315e96acd013ab9511b86f96d4030c170c4ecc489c0791d989994b6",
+      "imports": [
+        {
+          "path": "chunks/chunk-DAB6XJUS.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-XBHA5OUZ.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-LTRYSBJJ.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    {
+      "path": "chunks/analysis-layer-GX7YK25I.js",
+      "rawBytes": 5030,
+      "gzipBytes": 2402,
+      "sha256": "38344090b62c16298ee35a035606e446664d219ef1e0992e67c935cd1e0bf1b5",
+      "imports": [
+        {
+          "path": "chunks/chunk-DAB6XJUS.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-XBHA5OUZ.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-LTRYSBJJ.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    {
+      "path": "chunks/chunk-DAB6XJUS.js",
+      "rawBytes": 3605,
+      "gzipBytes": 1697,
+      "sha256": "7860a07131029d585924c3ff0cf0658c58a7f76c70436d9a4608d8236c6ae598",
+      "imports": [
+        {
+          "path": "chunks/chunk-XBHA5OUZ.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    {
+      "path": "chunks/chunk-XBHA5OUZ.js",
+      "rawBytes": 1370,
+      "gzipBytes": 775,
+      "sha256": "abb0a0a330347ddaea301fe803c6f45f82b480196afbd3c8e67afcab5a4b5590",
+      "imports": []
+    },
+    {
+      "path": "chunks/viewer-inset-72FAD7CT.js",
+      "rawBytes": 5665,
+      "gzipBytes": 2505,
+      "sha256": "40fee4a505d2ca95beefaf881bf8dbfaaae905b31dc5fdc34cded88cd7818d18",
+      "imports": [
+        {
+          "path": "chunks/chunk-SWJL4AGD.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-LTRYSBJJ.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/kicad-viewer-DQ5AP6GU.js",
+          "kind": "dynamic-import"
+        }
+      ]
+    },
+    {
+      "path": "chunks/chunk-SWJL4AGD.js",
+      "rawBytes": 3325,
+      "gzipBytes": 1519,
+      "sha256": "a6c29ee4c56eca313f0087a4748c2b058f88cbbf2d568c3203e7f010288e618a",
+      "imports": []
+    },
+    {
+      "path": "chunks/kicad-viewer-DQ5AP6GU.js",
+      "rawBytes": 391,
+      "gzipBytes": 303,
+      "sha256": "88589b333c8ea2ba765f1112a3e220d7450ff4cfdca1d03c52abdf43ec4df2ee",
+      "imports": [
+        {
+          "path": "chunks/chunk-6DW2HTT7.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-BIVSABXU.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-LTRYSBJJ.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    {
+      "path": "chunks/chunk-6DW2HTT7.js",
+      "rawBytes": 264770,
+      "gzipBytes": 91271,
+      "sha256": "185c8a622524b13e48088abe9a320be46e14b3050d404383199f87d6608d49b7",
+      "imports": [
+        {
+          "path": "chunks/chunk-BIVSABXU.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/chunk-LTRYSBJJ.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunks/three-runtime-36QTQVSO.js",
+          "kind": "dynamic-import"
+        },
+        {
+          "path": "chunks/analysis-results-6KQBPKVQ.js",
+          "kind": "dynamic-import"
+        },
+        {
+          "path": "chunks/analysis-layer-GX7YK25I.js",
+          "kind": "dynamic-import"
+        },
+        {
+          "path": "chunks/viewer-inset-72FAD7CT.js",
+          "kind": "dynamic-import"
+        }
+      ]
+    },
+    {
+      "path": "chunks/chunk-BIVSABXU.js",
+      "rawBytes": 13352,
+      "gzipBytes": 5519,
+      "sha256": "80811f1b73d730583e3d0991528ca7c0efb30bdd3ae81cebdb60cc7a65e8fdac",
+      "imports": [
+        {
+          "path": "chunks/chunk-LTRYSBJJ.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    {
+      "path": "chunks/chunk-LTRYSBJJ.js",
+      "rawBytes": 1098,
+      "gzipBytes": 667,
+      "sha256": "3f41a1693bc11d66e59e7dd36893ec85dd5afd038c1b652532817f28d1b1222e",
+      "imports": []
+    }
+  ]
+}

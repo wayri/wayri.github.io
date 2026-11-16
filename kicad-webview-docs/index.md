@@ -10,7 +10,7 @@ KiCad WebView is a browser library for read-only inspection of saved electronics
 
 The current self-hosted **{{ site.data.webview_release.self_hosted }} SDK** and npm/CDN **{{ site.data.webview_release.npm }} package** are available. They include resizable Properties, contextual previews, shared saved-result palettes, text-variable and horizontal-table support. [SDK release and matching source](https://github.com/wayri/kicad-webview/releases/tag/v{{ site.data.webview_release.self_hosted }}) · [Versioned files and checksums](/assets/lib/kicad-webview/releases/{{ site.data.webview_release.self_hosted }}/RELEASE.json) · [npm/CDN source](https://github.com/wayri/kicad-webview/tree/v{{ site.data.webview_release.npm }}). [Use a direct script, browser module or npm package](/kicad-webview/docs/quick-start/). The historical **0.1.0-beta.2 SDK** remains archived with its [release manifest](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) and [matching source](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.2).
 
-## 0.7.0: keep detail linked to the design
+## 0.8.0: keep detail linked to the design
 
 Resizable Properties, contextual previews, shared field palettes, explicit variables, bounded numeric expressions and horizontal tables are released in the matching SDK. [Try the drawing demo](/assets/demos/drawing-fidelity.html), [inspect a linked preview](/kicad-webview/docs/panels-and-insets/) or [read the release evidence](/kicad-webview/docs/releases/).
 

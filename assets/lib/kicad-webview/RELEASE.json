@@ -1,10 +1,6 @@
 {
-  "version": "0.7.0",
-  "license": "MPL-2.0",
-  "source": "https://github.com/wayri/kicad-webview/tree/v0.7.0",
-  "sourceCommit": "a54a440d66481a2c5db12fe6699ebd109c70a967",
-  "packageIntegrity": "sha512-+ucigS7+LSsM1B8O9cs74AEmEPPQcbFD815OQyfJoLY6QlWeL5JmTu/dIw6hATduQmsoF1NhB2Y9qNjrD4fOdg==",
-  "classicIntegrity": "sha384-g3oUjll6+FOnvB/f63XO0dl1N46vTgBt0yvEB0hNsFYJvLb/HZXHymsYsB2dZYCA",
+  "version": "0.8.0",
+  "source": "https://github.com/wayri/kicad-webview/tree/v0.8.0",
   "files": [
     {
       "path": "ADVANCED-VIEWER.md",
@@ -28,13 +24,13 @@
     },
     {
       "path": "BOM-ANALYTICS.md",
-      "bytes": 4357,
-      "sha256": "1ba16bce0c619d09252694369fcaa709d5e4130adfc6055596659c59596ee8ca"
+      "bytes": 4359,
+      "sha256": "1e896a71ff71fcadfe5672117067e056b06dfb0ebc59cb0ff57eddb01c14c608"
     },
     {
       "path": "bom-viewer.js",
-      "bytes": 35693,
-      "sha256": "ff2980b9f49adda0bbd48ac84d48e409773ce563668150c3067e554e68fe07a6"
+      "bytes": 35776,
+      "sha256": "3980e3b20ba0f68c5f94b4e6403b986dd99fda940c1186788b723e8c668781bb"
     },
     {
       "path": "BROWSER-CHECKS.md",
@@ -52,14 +48,14 @@
       "sha256": "c87e062f2eb780f726df3b813f8e7d3190d6b6f6f9eb1c48c91f7fc30e28d3ab"
     },
     {
-      "path": "embed.html",
-      "bytes": 514,
-      "sha256": "7b80b0187ec0767946f4b2b86fa07c860f5c68bb4363c3b1d67b59bacbf41b10"
-    },
-    {
       "path": "embed.mjs",
       "bytes": 1280,
-      "sha256": "f8afb897c6ff9d5dcbf140abc58e1190b5418c54dc067597a502ae04b0799af0"
+      "sha256": "64c326412ad2cd8e0d2d074969bcd811d6534d7c470b29dcfae39b08595deb98"
+    },
+    {
+      "path": "EXPAND-MODE.md",
+      "bytes": 3666,
+      "sha256": "725f6d0432073236078b524b9662daa74889d5714bab3641821d0a68c0632032"
     },
     {
       "path": "EXTENSION-REFRESH.md",
@@ -78,8 +74,8 @@
     },
     {
       "path": "INSPECTION-CONTROLS.md",
-      "bytes": 4188,
-      "sha256": "bb336c9604df7047fe91d1be5824fb06d19f46f87610cff09f15fb59e3f52130"
+      "bytes": 4562,
+      "sha256": "9fe5c8de58b8625931e092e22e12c17d6a12b378d0ffe139b993921b7264f113"
     },
     {
       "path": "INTERACTIVE-DEMO.md",
@@ -93,23 +89,23 @@
     },
     {
       "path": "kicad-webview.min.js",
-      "bytes": 1728552,
-      "sha256": "72baa0b1d97789481a148e57097bc3b571851bd7978951a0c509b7308d1a53b4"
+      "bytes": 1743166,
+      "sha256": "900e199761b7716bdfdf4a05afd478ff74bc91954ccd1106f144c0bebf974449"
     },
     {
       "path": "kivi-viewer.js",
-      "bytes": 1728404,
-      "sha256": "83d748878f749facd4b1c65221b17adc555fa42753c6e88f913aeba9420d8ae1"
+      "bytes": 1743018,
+      "sha256": "950ccd1f9a3317a73e02719edc52117c96d1f4083fc7c669b04494b9d9c1367c"
+    },
+    {
+      "path": "LARGE-PROJECTS.md",
+      "bytes": 2054,
+      "sha256": "2deeb8c098708682d9ebf57b792c762eea6b7b88b404b384adfb8e74540585ce"
     },
     {
       "path": "LICENSE",
       "bytes": 16726,
       "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04"
-    },
-    {
-      "path": "licenses/Pocket-KiView-Source-Available-1.0.txt",
-      "bytes": 5836,
-      "sha256": "6e0b3232c49c4aee1afd5b97e39c45d0eecc4071a2f69fc23f733b8aa12e6fc8"
     },
     {
       "path": "LICENSING.md",
@@ -125,81 +121,6 @@
       "path": "LINKED-VIEWS.md",
       "bytes": 4088,
       "sha256": "2ade2517cb11f91fd74d84a34e82e8eae7abef07f4da097ef635ad92380b0460"
-    },
-    {
-      "path": "lite/chunks/analysis-layer-KIXZ5S37.js",
-      "bytes": 5030,
-      "sha256": "c2f07829a43dc1fa483c810875fdacb2ab4376aa9ae6b0ef870737492a0ff7d3"
-    },
-    {
-      "path": "lite/chunks/analysis-results-KO4JRDAK.js",
-      "bytes": 452,
-      "sha256": "0121a44a94ac2b9a04ceef0ccf249f0df60097d709e4c93a158c8e90512dc56a"
-    },
-    {
-      "path": "lite/chunks/board3d-QNTYHKBP.js",
-      "bytes": 1227949,
-      "sha256": "bad5f5985933c20a8383c828eb8c7199ed029854b056d30c3eac6eeef0e1cd92"
-    },
-    {
-      "path": "lite/chunks/chunk-BIO2SY3G.js",
-      "bytes": 13373,
-      "sha256": "e1cf12472c4d3ed95d8114531d5fe2afdced4ddcabab8d7370ece0315b30e8f8"
-    },
-    {
-      "path": "lite/chunks/chunk-CGBMZFDO.js",
-      "bytes": 1370,
-      "sha256": "360544b3b479ac5786099f131c9fef5fd0c0d1960911cc49b91c6f382d34c670"
-    },
-    {
-      "path": "lite/chunks/chunk-CTNBH7GQ.js",
-      "bytes": 260225,
-      "sha256": "6ba811d7a8c8dc3ffd4694d9c0becd46745eb395b2e4654ff5e13ceb340ddd0d"
-    },
-    {
-      "path": "lite/chunks/chunk-ENQKMMU7.js",
-      "bytes": 3605,
-      "sha256": "3b47cfc4441fd2367d7318945ac29debcb1ff4d039e117e9d28e9803c3fb7e4f"
-    },
-    {
-      "path": "lite/chunks/chunk-L5365FZ5.js",
-      "bytes": 3325,
-      "sha256": "26e3607f47659dc325990ac751d274989793335833a6d2bfd69980dedf9dcbe7"
-    },
-    {
-      "path": "lite/chunks/chunk-TPSNX3TM.js",
-      "bytes": 798,
-      "sha256": "33276354fdf1e1978cf44e16aea1594dcec23392e42cd5a01f91cd5f2e47c670"
-    },
-    {
-      "path": "lite/chunks/chunk-WZWONQZN.js",
-      "bytes": 1098,
-      "sha256": "6073b551b243436082ceb0377011deb69fd92c94fc17ab244dbe087ee1da75e6"
-    },
-    {
-      "path": "lite/chunks/kicad-viewer-Y3FDIX47.js",
-      "bytes": 391,
-      "sha256": "7aa1f19080fd2adcca74e880ebb7ff022d455be052dd560bd1d37db8fc1ff120"
-    },
-    {
-      "path": "lite/chunks/three-runtime-QCHAW2SP.js",
-      "bytes": 341,
-      "sha256": "5892cef578659c4f97c23eb6eaa35c0dd4b2b08cab1c675adc9b6eb90ea7920a"
-    },
-    {
-      "path": "lite/chunks/viewer-inset-7I7CO2EH.js",
-      "bytes": 5067,
-      "sha256": "c07fe1cc3efd58185b8a5111aa0b62187dd58233d111b55ebc40ccd0507577f4"
-    },
-    {
-      "path": "lite/kicad-webview-lite.js",
-      "bytes": 41032,
-      "sha256": "00810462bed216840f98a458d3a148acdb1edb204f83eb8ba5433389c4e6db3e"
-    },
-    {
-      "path": "lite/manifest.json",
-      "bytes": 7154,
-      "sha256": "95ea42c50bf3174be536c3f7235b8fabe4a712b2c4051a844e965558b3f9f5b7"
     },
     {
       "path": "MANUFACTURING-BETA.md",
@@ -222,9 +143,14 @@
       "sha256": "2c61cf89116491b8a8b7f5de760aec2591cb7b52b638a7072a83f3d35460c934"
     },
     {
+      "path": "PHOTOREAL-FAST.md",
+      "bytes": 2199,
+      "sha256": "b333919945b8dc549c99b3aa361bf1c65f6a54bdab17b735a87e63962bf4ae98"
+    },
+    {
       "path": "PRESENTATION.md",
-      "bytes": 2791,
-      "sha256": "0c452b4a02d9625ef39fae6e1ae160e76300044b7ca499f8ae3bbbc5fb6ca0e8"
+      "bytes": 3272,
+      "sha256": "8816c785a0d5dec56bc341df676a8e95914bbdab7f68fba1fa27922600c917fd"
     },
     {
       "path": "PROJECT-TREE.md",
@@ -237,9 +163,19 @@
       "sha256": "7aedfa3bce2cf142fcad5ee05b72a60d49091aed86a4523a110cbc2c56d578b0"
     },
     {
+      "path": "QA-0.8.0.md",
+      "bytes": 1000,
+      "sha256": "ac02a86bb022977b6e902f1eda1910805c240e312901846c48c4e198a5bef6dd"
+    },
+    {
       "path": "README.md",
-      "bytes": 12442,
-      "sha256": "75b24629a9a0044299ce8e73f9941f2353ac0b524df851ea525c85a261cbc77c"
+      "bytes": 13072,
+      "sha256": "bbac92e706e9610e4ad70e559abdba0b3ebd01a738b60e308849726b4eb14edf"
+    },
+    {
+      "path": "RELEASE-0.8.0.md",
+      "bytes": 1185,
+      "sha256": "fdf9b25b4e1063f316fd7b9055e6aae8e61f1f513bad418fe57f166754a1cde1"
     },
     {
       "path": "RELEASING.md",
@@ -259,12 +195,12 @@
     {
       "path": "SPIKE-ENGINE-NOTICE.md",
       "bytes": 956,
-      "sha256": "ee9cc9dca00782131caeea41afe90777af3408590c7008c14140579bad93f99e"
+      "sha256": "ace84cacafd3afe5b3ad074ee8a650c461608e355d504fa5ae3447b2cb3ffb63"
     },
     {
       "path": "standalone-html.mjs",
       "bytes": 5005,
-      "sha256": "a03b37d3fe041bb0736b87a08577d4a2a5f38c77fc64ea77d3697c2765133b04"
+      "sha256": "9dff7658228656db931c9203a0dc8d6eea3695f4f3480b23a215919262a7ba4d"
     },
     {
       "path": "THIRD-PARTY-NOTICES.md",
@@ -298,13 +234,103 @@
     },
     {
       "path": "wayricad-results.js",
-      "bytes": 1323097,
-      "sha256": "d13f80610ae77cc0afc4314fc0c5aeaef8f40593d879df969c6b85e0be9dd4ab"
+      "bytes": 1342603,
+      "sha256": "ec72d10c75150301fc63690b8db65f2a1eef0ba3f9246bf773f6184be3faeeb9"
     },
     {
       "path": "WAYRICAD-RESULTS.md",
       "bytes": 11081,
       "sha256": "1078fb07519bbfbee50a7dc919847b4c8ed01686e4ee9bfb1f1bdb931e2905ff"
+    },
+    {
+      "path": "licenses/Pocket-KiView-Source-Available-1.0.txt",
+      "bytes": 5836,
+      "sha256": "6e0b3232c49c4aee1afd5b97e39c45d0eecc4071a2f69fc23f733b8aa12e6fc8"
+    },
+    {
+      "path": "lite/kicad-webview-lite.js",
+      "bytes": 40986,
+      "sha256": "7ee86492417838c5593f9acb0e7e1306e42db5144a4bf5f9f3f6c7f486352752"
+    },
+    {
+      "path": "lite/manifest.json",
+      "bytes": 7154,
+      "sha256": "06bf62a072f1bd174d18b165e53a515d5477a0ebaa2f7f26dbcca279f49bced8"
+    },
+    {
+      "path": "BUILD.json",
+      "bytes": 207,
+      "sha256": "201dc2f40a53e3e7636b56873661cd77a54260311d5686978c8b839341721897"
+    },
+    {
+      "path": "lite/chunks/analysis-layer-GX7YK25I.js",
+      "bytes": 5030,
+      "sha256": "38344090b62c16298ee35a035606e446664d219ef1e0992e67c935cd1e0bf1b5"
+    },
+    {
+      "path": "lite/chunks/analysis-results-6KQBPKVQ.js",
+      "bytes": 452,
+      "sha256": "24b512b04315e96acd013ab9511b86f96d4030c170c4ecc489c0791d989994b6"
+    },
+    {
+      "path": "lite/chunks/chunk-BIVSABXU.js",
+      "bytes": 13352,
+      "sha256": "80811f1b73d730583e3d0991528ca7c0efb30bdd3ae81cebdb60cc7a65e8fdac"
+    },
+    {
+      "path": "lite/chunks/chunk-DAB6XJUS.js",
+      "bytes": 3605,
+      "sha256": "7860a07131029d585924c3ff0cf0658c58a7f76c70436d9a4608d8236c6ae598"
+    },
+    {
+      "path": "lite/chunks/chunk-IGGEQY7X.js",
+      "bytes": 798,
+      "sha256": "e233869bc2602d9c5db986910f99c3560f8d2af99d0e3f6a6bfed1b8b375ffdc"
+    },
+    {
+      "path": "lite/chunks/chunk-LTRYSBJJ.js",
+      "bytes": 1098,
+      "sha256": "3f41a1693bc11d66e59e7dd36893ec85dd5afd038c1b652532817f28d1b1222e"
+    },
+    {
+      "path": "lite/chunks/chunk-SWJL4AGD.js",
+      "bytes": 3325,
+      "sha256": "a6c29ee4c56eca313f0087a4748c2b058f88cbbf2d568c3203e7f010288e618a"
+    },
+    {
+      "path": "lite/chunks/chunk-XBHA5OUZ.js",
+      "bytes": 1370,
+      "sha256": "abb0a0a330347ddaea301fe803c6f45f82b480196afbd3c8e67afcab5a4b5590"
+    },
+    {
+      "path": "direct.html",
+      "bytes": 587,
+      "sha256": "5116d2d2d266bd89af067b38d1f57525cdd99527be1e0fa576f8043f1f5ef27e"
+    },
+    {
+      "path": "lite/chunks/board3d-6FBWURQO.js",
+      "bytes": 1237389,
+      "sha256": "98ff2187ae4e0b063dc2cffeeba93f8ec517644c5f0064a25fc85599d32a3985"
+    },
+    {
+      "path": "lite/chunks/three-runtime-36QTQVSO.js",
+      "bytes": 341,
+      "sha256": "fbfac4666e97bbd5d4556eb54717238f5d498b108b63e4c68f04dd3d680d3238"
+    },
+    {
+      "path": "lite/chunks/chunk-6DW2HTT7.js",
+      "bytes": 264770,
+      "sha256": "185c8a622524b13e48088abe9a320be46e14b3050d404383199f87d6608d49b7"
+    },
+    {
+      "path": "lite/chunks/kicad-viewer-DQ5AP6GU.js",
+      "bytes": 391,
+      "sha256": "88589b333c8ea2ba765f1112a3e220d7450ff4cfdca1d03c52abdf43ec4df2ee"
+    },
+    {
+      "path": "lite/chunks/viewer-inset-72FAD7CT.js",
+      "bytes": 5665,
+      "sha256": "40fee4a505d2ca95beefaf881bf8dbfaaae905b31dc5fdc34cded88cd7818d18"
     }
   ]
 }

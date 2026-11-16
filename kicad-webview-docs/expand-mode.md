@@ -6,7 +6,7 @@ permalink: /kicad-webview/docs/expand-mode/
 doc_section: examples
 ---
 
-[Try OLIMEX and IRCA](/assets/demos/photoreal-fast.html). These additions use the separately hosted **0.8.0-preview.2** SDK; stable npm/CDN remains 0.7.0.
+[Try OLIMEX and IRCA](/assets/demos/photoreal-fast.html). These additions are included in stable **0.8.0** from npm, CDN and the self-hosted SDK.
 
 ## A two-stage assembly view
 
@@ -34,4 +34,6 @@ The overlay follows expansion, respects hidden layers and the existing accent/so
 
 The overlay has bounded instance, source-mesh and edge budgets; a visible notice identifies truncation. Open the demo’s optional **Read rendering stats** control to inspect `expansion`, `netGlow` and actual rendered pixels. Source models and retained results keep their original limits and provenance.
 
-[Photoreal Fast integration](/kicad-webview/docs/photoreal-fast/) · [Source preset notes](/assets/lib/kicad-webview/previews/photoreal-fast-0.8.0-preview.2/EXPAND-MODE.md) · [Credits and development acknowledgements](/kicad-webview/docs/acknowledgements/)
+[Photoreal Fast integration](/kicad-webview/docs/photoreal-fast/) · [Source preset notes](/assets/lib/kicad-webview/releases/0.8.0/EXPAND-MODE.md) · [Credits and development acknowledgements](/kicad-webview/docs/acknowledgements/)
+
+Copper clicks highlight the full saved net by default in its layer colors. Plated vias stay gold; the optional accent style remains available.

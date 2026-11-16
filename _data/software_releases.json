@@ -57,16 +57,17 @@
   "webview": {
     "name": "KiCad WebView",
     "channel": "Stable SDK and npm/CDN",
-    "released_on": "2026-11-15",
+    "released_on": "2026-11-16",
     "repo": "wayri/kicad-webview",
-    "summary": "Resizable Properties, linked contextual previews and matching saved-result palettes across 2D and 3D.",
+    "summary": "Photoreal Fast, smooth Expand mode, compact controls and full-net layer colors with gold vias.",
     "changes": [
-      "Resize Properties without losing its scroll or focus, and inspect source-linked contextual previews with independent cameras.",
-      "Exact saved identities connect selections across views and focus 3D parts on their saved mounting side.",
-      "Saved-result palettes match across 2D fields, independent 3D scenes and registered board overlays.",
-      "Explicit text variables, bounded numeric expressions, horizontal schematic tables and cancellable staged loading are included."
+      "Fast PBR studio rendering without a visible floor; no Node.js server is required.",
+      "Models lift, copper layers separate, substrate fades and through vias stretch while saved cross-selection remains intact.",
+      "Copper clicks highlight complete saved nets by default in their layer colors, with gold plated vias and an explicit scope indicator.",
+      "Compact ribbon and inset controls, native schematic text placement and bounded large-project loading and late-part inspection."
     ],
-    "note": "Read-only inspection of supported saved data. The viewer does not run a solver or establish physical-phone, universal GPU or numerical qualification. WayriCAD 4.8.4 portable exports retain their separately pinned WebView 0.6.0.",
-    "guide": "https://github.com/wayri/kicad-webview/blob/v0.7.0/docs/QA-0.7.0.md"
+    "note": "Read-only visualization; missing models and rendering approximations remain disclosed. Large-project acceptance ceilings do not qualify maximum-size 3D rendering, physical-phone speed or solver accuracy. Other products retain separately pinned WebView versions.",
+    "guide": "https://github.com/wayri/kicad-webview/blob/v0.8.0/docs/QA-0.8.0.md",
+    "version": "0.8.0"
   }
 }

@@ -6,6 +6,14 @@ doc_section: releases
 description: KiCad WebView release notes, WayriCAD saved results, layer inspection and mobile integrations.
 ---
 
+## 0.8.0 — Photoreal Fast, Expand mode and compact inspection
+
+The stable 0.8.0 library adds fast PBR studio rendering without a visible floor, smooth two-stage assembly expansion, layer-colored net shine-through and gold via plating. Copper clicks highlight the complete saved net by default; the inspector states that scope while retaining the clicked object properties. Compact ribbon and inset controls keep the drawing in focus.
+
+Native schematic text placement and bounded loading/index handling are refreshed from KiCad Online. The synthetic 20,001-part test exercises late lookup; it does not qualify maximum-size 32-layer 3D performance or a physical phone.
+
+[Photoreal Fast demo](/assets/demos/photoreal-fast.html) · [Expand mode](/kicad-webview/docs/expand-mode/) · [Large-project limits](/kicad-webview/docs/large-projects/) · [Release source and downloads](https://github.com/wayri/kicad-webview/releases/tag/v0.8.0).
+
 ## 0.7.0 — linked inspection and native text previews
 
 **0.7.0 is published on npm, jsDelivr, UNPKG and GitHub.** Website demos and direct-script examples use the matching 0.7.0 SDK. Registry integrity and CDN files were checked against the release package.

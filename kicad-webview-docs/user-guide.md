@@ -159,3 +159,9 @@ The downloadable software uses [MPL-2.0](/kicad-webview/docs/license/), includin
 ## Mobile performance
 
 The optimization work introduced in 0.2.1 reuses named-source parsing, suspends off-screen 3D drawing and reduces net-selection and toolbar work. The website demo loads as its viewer approaches the screen; Load starts it immediately. In three bounded desktop Chromium samples at 340 px using the supplied OLIMEX proxy fixture, median source-to-PCB load and 3D mount times were approximately 42% lower; source download was excluded. This is not a physical-phone benchmark; physical phone performance remains unverified. For integrations use lazy-loading iframes with a stable responsive height, mount once per container, dispose on unmount, and choose Low or Balanced rendering on constrained devices. Keep large board/model downloads behind a Load button when appropriate.
+
+## Full-net inspection in 0.8.0
+
+Saved copper clicks highlight the complete net by default in layer colors; plated vias remain gold. Properties retain the clicked object and show “Full net highlighted” with its scope. Turn off **Highlight entire net** for individual objects. Accent colors remain optional through `setHighlightStyle("dim", {color:"accent"})`.
+
+Use `viewer.setRenderQuality("photoreal-fast")` for fast studio rendering and `viewer.setExpand(100)` / `viewer.setExpand(0)` for smooth assembly expansion. Source-linked selection survives PCB/3D switches and project changes keep their source-bound net index. [Photoreal demo](/assets/demos/photoreal-fast.html) · [Expansion and limits](/kicad-webview/docs/expand-mode/).

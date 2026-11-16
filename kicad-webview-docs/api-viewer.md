@@ -197,4 +197,10 @@ Translucent mode shows the board and models transparently, copper in layer color
 
 ## Text context and loading in 0.7
 
-The 0.7.0 SDK accepts `LoadOptions.textVariables` (at most 256 strings, keys up to 200 characters, values up to 8,192 characters) and an exact saved `instancePath`. One locally supplied `.kicad_pro` can provide project text variables. Explicit values override them and persist through navigation and contextual previews. No project or ancestor is fetched implicitly. [Examples, numeric subset and table limits](/kicad-webview/docs/drawing-fidelity/).
+The 0.8.0 SDK accepts `LoadOptions.textVariables` (at most 256 strings, keys up to 200 characters, values up to 8,192 characters) and an exact saved `instancePath`. One locally supplied `.kicad_pro` can provide project text variables. Explicit values override them and persist through navigation and contextual previews. No project or ancestor is fetched implicitly. [Examples, numeric subset and table limits](/kicad-webview/docs/drawing-fidelity/).
+
+## Full-net inspection in 0.8.0
+
+Saved copper clicks highlight the complete net by default in layer colors; plated vias remain gold. Properties retain the clicked object and show “Full net highlighted” with its scope. Turn off **Highlight entire net** for individual objects. Accent colors remain optional through `setHighlightStyle("dim", {color:"accent"})`.
+
+Use `viewer.setRenderQuality("photoreal-fast")` for fast studio rendering and `viewer.setExpand(100)` / `viewer.setExpand(0)` for smooth assembly expansion. Source-linked selection survives PCB/3D switches and project changes keep their source-bound net index. [Photoreal demo](/assets/demos/photoreal-fast.html) · [Expansion and limits](/kicad-webview/docs/expand-mode/).

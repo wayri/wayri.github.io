@@ -28,7 +28,7 @@ Independent 3D field views use only supplied XYZ or an explicit saved layer elev
 ```html
 <div id="board" style="height:420px"></div>
 <div id="results"></div>
-<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.7.0/kicad-webview.min.js"></script>
+<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.8.0/kicad-webview.min.js"></script>
 <script type="module">
   const board = new KiCadWebView.Viewer('#board', {theme:'dark'});
   await board.load('/designs/board.kicad_pcb');

@@ -8,13 +8,13 @@ doc_section: examples
 
 [Inspect OLIMEX](/assets/demos/photoreal-fast.html?board=olimex) · [Inspect IRCA](/assets/demos/photoreal-fast.html?board=irca)
 
-Photoreal Fast is available in the separately hosted **0.8.0-preview.2** website SDK. It is not part of the stable npm/CDN 0.7.0 package. The demo keeps its controls compact and lets you compare Standard, Photoreal Fast and enhanced Presentation in one viewer.
+Photoreal Fast is available in stable **0.8.0** from npm, CDN and the self-hosted SDK. The demo keeps its controls compact and lets you compare Standard, Photoreal Fast and enhanced Presentation in one viewer.
 
 ## Embed without Node.js
 
 ```html
 <div id="board" style="height:70dvh;min-height:380px"></div>
-<script src="https://wayri.github.io/assets/lib/kicad-webview/previews/photoreal-fast-0.8.0-preview.2/kicad-webview.min.js"></script>
+<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.8.0/kicad-webview.min.js"></script>
 <script>
 const viewer = new KiCadWebView.Viewer('#board', {theme:'dark'});
 viewer.load('https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json', {view:'3d'})
@@ -24,7 +24,7 @@ window.addEventListener('pagehide', () => viewer.dispose(), {once:true});
 </script>
 ```
 
-Your host needs normal HTTP(S) access and CORS permission for the supplied project and models. No rendering service, build system or runtime Node.js installation is required. To self-host, retain the matching script, source attribution, LICENSE and third-party notices from the [preview SDK directory](/assets/lib/kicad-webview/previews/photoreal-fast-0.8.0-preview.2/BUILD.json).
+Your host needs normal HTTP(S) access and CORS permission for the supplied project and models. No rendering service, build system or runtime Node.js installation is required. To self-host, retain the matching script, source attribution, LICENSE and third-party notices from the [preview SDK directory](/assets/lib/kicad-webview/releases/0.8.0/BUILD.json).
 
 ## Rendering and interaction
 
@@ -45,3 +45,5 @@ This is real-time rasterized PBR rendering, not path tracing or a photographic r
 The OLIMEX ESP32-P4-DevKit Rev.D1 package is pinned to 26705d3, © OLIMEX Ltd and upstream contributors, CERN-OHL-S-2.0. Read the retained [source/conversion provenance](/assets/demos/public-hardware/PROVENANCE.json) and [model coverage and licenses](/assets/demos/public-hardware/MODEL-PROVENANCE.json). No affiliation or endorsement is implied.
 
 IRCA uses approved public review geometry and display models for the thermal-camera project, not original editable CAD. See [IRCA project context](/kicad-webview/#project-irca). Design and model terms are separate from the viewer’s MPL-2.0 license. [Development acknowledgements, including AI assistance](/kicad-webview/docs/acknowledgements/).
+
+Copper clicks highlight the full saved net by default in its layer colors. Plated vias stay gold; the optional accent style remains available.

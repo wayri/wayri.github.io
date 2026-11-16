@@ -10,9 +10,9 @@ The published **{{ site.data.webview_release.self_hosted }} SDK** already previe
 
 [Open the version-aware drawing demo](/assets/demos/drawing-fidelity.html). Its generated formatting sample is separate from the [approved IRCA and credited OLIMEX/Marble boards](/assets/demos/direct.html); it is not a circuit or hardware validation.
 
-## 0.7.0 text context
+## 0.8.0 text context
 
-These additions are released in the **self-hosted 0.7.0 SDK** and its [GitHub release](https://github.com/wayri/kicad-webview/releases/tag/v0.7.0). The same **0.7.0** release is available from npm, jsDelivr and UNPKG. The live sample uses the matching self-hosted SDK and enables supported modes automatically.
+These additions are released in the **self-hosted 0.8.0 SDK** and its [GitHub release](https://github.com/wayri/kicad-webview/releases/tag/v0.8.0). The same **0.8.0** release is available from npm, jsDelivr and UNPKG. The live sample uses the matching self-hosted SDK and enables supported modes automatically.
 
 ```js
 // A matching 0.7 build is required. This code runs directly in a browser.
@@ -38,6 +38,6 @@ Horizontal schematic tables retain saved cells, merged regions, border and separ
 
 ## Inspect without disrupting the view
 
-The 0.7.0 refresh also adds resizable Properties, bounded source-linked previews and selectable saved-result palettes. Panels retain the main camera and their scroll state; failed or overlapping preview requests preserve the accepted preview. Loading has host-local stages and Stop, and stale completions cannot replace newer work.
+The 0.8.0 refresh also adds resizable Properties, bounded source-linked previews and selectable saved-result palettes. Panels retain the main camera and their scroll state; failed or overlapping preview requests preserve the accepted preview. Loading has host-local stages and Stop, and stale completions cannot replace newer work.
 
 [Panels and preview examples](/kicad-webview/docs/panels-and-insets/) · [Saved-result palettes](/kicad-webview/docs/wayricad-results/) · [Release availability](/kicad-webview/docs/releases/).
