@@ -4,30 +4,36 @@ title: WayriCAD results in KiCad WebView
 description: Explore saved Quick PI fields, Quick SI graphs and QuickTherm frames on their matching PCB.
 permalink: /assets/demos/wayricad-results.html
 ---
-<link rel="stylesheet" href="{{ '/assets/css/webview-wayricad-results.css' | relative_url }}?v=0.4.0">
+<link rel="stylesheet" href="{{ '/assets/css/webview-wayricad-results.css' | relative_url }}?v=public-gallery-1">
 <link rel="stylesheet" href="{{ '/assets/css/webview-results-polish.css' | relative_url }}?v=070-compact-1">
 <main class="wv-demo-page wv-wayricad">
 {% include webview-breadcrumbs.html section_url='/kicad-webview/docs/wayricad-results/' section_label='WayriCAD result guide' %}
 <header class="wayricad-intro">
   <p class="wv-eyebrow">WayriCAD × KiCad WebView</p>
-  <h1>See the result on the design.</h1>
+  <h1>WayriCAD results</h1>
   <p>Explore retained PI, SI and thermal results with their matching PCB. Select a result layer, then inspect the board in 2D or 3D. No solver runs here.</p>
   <details class="wayricad-resources"><summary>Guide, sources &amp; credits</summary><nav class="wv-actions" aria-label="WayriCAD integration resources"><a href="{{ '/kicad-webview/docs/wayricad-results/' | relative_url }}">Integration guide ↗</a><a href="{{ '/wayricad/' | relative_url }}">WayriCAD tools ↗</a><a href="{{ '/kicad-webview/' | relative_url }}">WebView &amp; other demos ↗</a><a href="https://github.com/wayri/WayriCAD/tree/0617fd201c0817d95648cec639744138aa59fe20/docs/examples/pocket-kivi">Example source &amp; assumptions ↗</a></nav></details>
 </header>
 {% include webview-demo-update.html %}
 
 <div class="demo-controls wayricad-primary-controls" role="group" aria-label="Choose saved results">
-  <label>Saved example <select id="wayricad-case"><option value="quick-pi">Quick PI · copper fields</option><option value="quick-si">Quick SI · route, step &amp; eye</option><option value="quick-therm">QuickTherm · steady field</option><option value="quick-therm-transient" selected>QuickTherm · saved time frames</option></select></label>
+  <label>Board <select id="wayricad-board-choice"><option value="fixtures">Generated fixtures · small examples</option></select></label>
+  <label>Saved case <select id="wayricad-case"><option value="quick-pi">Quick PI · copper fields</option><option value="quick-si">Quick SI · route, step &amp; eye</option><option value="quick-therm">QuickTherm · steady field</option><option value="quick-therm-transient" selected>QuickTherm · saved time frames</option></select></label>
+  <label>PCB view <select id="wayricad-view"><option value="pcb">2D</option><option value="3d" selected>3D</option></select></label>
   <button type="button" id="wayricad-load">Load saved example</button><button type="button" id="wayricad-clear">Clear results</button>
   <details class="wayricad-local"><summary>Open your own PCB / results</summary><div class="demo-controls"><label>Open PCB<input id="wayricad-pcb-file" type="file" accept=".kicad_pcb"></label><label>Open results<input id="wayricad-result-file" type="file" accept=".json"></label></div></details>
 </div>
+<p id="wayricad-catalogue-status" role="status">Public-board catalogue pending. Large PCBs and public-board results require an explicit Load click.</p>
 <p id="wayricad-status" role="status">The example loads when the viewer approaches the screen, or choose Load.</p>
+<noscript><p>The interactive viewer needs JavaScript. <a href="{{ '/assets/demos/wayricad-results/public-boards/manifest.json' | relative_url }}">Public-board case manifest</a> · <a href="{{ '/kicad-webview/docs/wayricad-results/' | relative_url }}">Result and provenance guide</a>. PCB/result downloads are not started automatically.</p></noscript>
+<p id="wayricad-source-identity" hidden></p>
+<details class="wayricad-case-evidence"><summary id="wayricad-evidence-toggle">Case status, assumptions and provenance</summary><section id="wayricad-evidence" aria-label="Selected case evidence"><p>Choose a case to inspect its retained evidence.</p></section></details>
 <div class="wayricad-result-layout" id="wayricad-layout">
   <section aria-labelledby="wayricad-board-title"><div class="wayricad-panel-heading"><h2 id="wayricad-board-title">PCB view</h2><p>Inspect the board and selected result.</p></div><div id="wayricad-board" aria-label="Matching saved example PCB"></div></section>
   <section aria-labelledby="wayricad-fields-title"><div class="wayricad-panel-heading"><h2 id="wayricad-fields-title">Retained results</h2><p>Select a result layer to explore it on the board.</p></div><div id="wayricad-results"></div></section>
 </div>
-<p class="wv-caption">Public WayriCAD generated example inputs, pinned 0617fd2. Computed producer outputs under declared assumptions; the eye display is illustrative. These are not measurements or a production design. Unknown values remain missing. The original source data and models are not changed by viewing.</p>
+<p class="wv-caption">Generated fixtures use WayriCAD example inputs pinned 0617fd2; their eye display is illustrative, not measured. Public-board cases retain their own source, producer status, assumptions and license above. Unknown values remain missing. Viewing does not change the source data or models and does not run a solver.</p>
 <details class="wayricad-limits"><summary>Credits, evidence and display limits</summary><p>The example is a public two-layer 30 × 15 mm board; SI uses the saved complete-channel derivative. Matching-PCB 2D and 3D overlays require the exact source PCB and a supported saved layer or elevation. Unknown values and unsupported placements are omitted. Grid preview cells are not clipped to copper or board cutouts. The independent 3D field view retains declared source coordinates and elevations and can be explored separately from the PCB.</p><p>Full result arrays remain in the numerical data browser and JSON download. Display selection and point limits remain visible. Local files stay in your browser; source paths inside results are never fetched. Review metadata before sharing.</p><p><a href="{{ '/assets/demos/wayricad-results/provenance.json' | relative_url }}">Producer execution provenance</a> · <a href="{{ '/assets/demos/wayricad-results/CREDITS.md' | relative_url }}">Retained example credits</a> · <a href="{{ '/assets/demos/wayricad-results/UPSTREAM-LICENSE' | relative_url }}">Upstream example notice</a> · <a href="{{ '/kicad-webview/docs/acknowledgements/' | relative_url }}">Development acknowledgements</a></p></details>
 </main>
-<script type="module" src="{{ '/assets/js/webview-wayricad-results.mjs' | relative_url }}?v=0.4.0"></script>
+<script type="module" src="{{ '/assets/js/webview-wayricad-results.mjs' | relative_url }}?v=public-gallery-1"></script>
 

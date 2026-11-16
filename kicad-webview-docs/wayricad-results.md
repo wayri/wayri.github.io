@@ -6,11 +6,11 @@ doc_section: wayricad-results
 description: Bring retained Quick PI, Quick SI and QuickTherm output into an interactive WebView with source identity and original numerical data.
 ---
 
-[Open the saved-result demo](/assets/demos/wayricad-results.html) · [WayriCAD tools](/wayricad/) · [Complete library API and limits](https://github.com/wayri/kicad-webview/blob/v0.4.0/docs/WAYRICAD-RESULTS.md)
+[Open the saved-result demo](/assets/demos/wayricad-results.html) · [Public-board cases](/assets/demos/wayricad-results.html?gallery=public) · [WayriCAD tools](/wayricad/) · [Complete library API and limits](https://github.com/wayri/kicad-webview/blob/v0.7.0/docs/WAYRICAD-RESULTS.md)
 
 ## From native tools to a browser
 
-Use WayriCAD to compute the study, then use **Save results / Pocket KiVi** to retain its portable companion. The self-hosted KiCad WebView **0.4.0** SDK reads those existing JSON structures and displays the saved values beside the matching native PCB. It does not run the solver, execute a report, modify a design or fetch source paths found inside a result.
+Use WayriCAD to compute the study, then use **Save results / Pocket KiVi** to retain its portable companion. This demo uses the self-hosted KiCad WebView **0.7.0** SDK to read those existing JSON structures and display the saved values beside the matching native PCB. It does not run the solver, execute a report, modify a design or fetch source paths found inside a result.
 
 Keep the **original solve-time saved PCB fingerprint** and its corresponding PCB. A fresh hash of a changed board cannot establish where an older result came from. See [WayriCAD’s pinned export contract](https://github.com/wayri/WayriCAD/blob/0617fd201c0817d95648cec639744138aa59fe20/docs/POCKET_KIVI_EXPORT.md).
 
@@ -28,7 +28,7 @@ Independent 3D field views use only supplied XYZ or an explicit saved layer elev
 ```html
 <div id="board" style="height:420px"></div>
 <div id="results"></div>
-<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.4.0/kicad-webview.min.js"></script>
+<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/0.7.0/kicad-webview.min.js"></script>
 <script type="module">
   const board = new KiCadWebView.Viewer('#board', {theme:'dark'});
   await board.load('/designs/board.kicad_pcb');
@@ -79,7 +79,95 @@ The default graph selects up to four ordinary series or 32 eye traces and shows 
 
 3D rendering is demand-driven and pauses when unavailable/off-screen. Keep a stable mount height, dispose on unmount, and test representative files on the intended host/device. Physical-phone performance and compatibility with every application sandbox are not established by the desktop browser checks.
 
-## Example evidence and acknowledgements
+## Public-board cases and source identity
+
+The demo separates **Generated fixtures** from manifest-listed public boards.
+Choose a board and retained case to see the producer status, assumptions,
+limitations, original summary, source size, full SHA-256, upstream link,
+license and execution-provenance link. Status is copied from the manifest,
+not promoted to a pass verdict. Nulls and unknowns are not replaced by made-up
+measurements, current ratings, plots or units.
+
+**Load case + PCB** explicitly downloads both retained data and the matching
+saved board. Public-board files do not auto-load on scroll, selection or a
+deep link, including large Marble PCBs. The **2D / 3D** selector uses the same
+board viewer. Supported PI/thermal fields, declared layer/elevation overlays,
+SI curves, thermal histories and full numerical data use the existing result
+renderer; unavailable structures remain explicit rather than being fabricated.
+
+In the retained public-board cases, PI fields register on the exact PCB in 2D
+and 3D. The 0.7.0 steady-thermal adapter displays independent 2D temperature maps
+but does not propagate their saved layer/Z metadata into a board overlay or a
+standalone 3D field. Correct hashes are not a placement guarantee. The SI cases
+retain route-impedance screens; incomplete channel evidence leaves the eye
+unavailable. These limits are visible in the case evidence and full JSON.
+
+The displayed source hash belongs to the **case-specific saved PCB**. A native
+copy, for example one with model-path normalization, can differ from the raw
+upstream Marble file. An upstream repository URL and a model-provenance entry
+are not interchangeable byte-identity evidence. Only load the saved copy whose
+bytes match the solve-time fingerprint in the retained result. A fresh hash
+must not be attached to an older result to force association. The SDK's matching,
+stale and unverified states still gate registration and source actions.
+
+Each case's provenance links to its producer inputs and limitations. The native
+generation workflow is documented in [WayriCAD's public-board example guide](https://github.com/wayri/WayriCAD/blob/develop/docs/examples/public-boards/README.md).
+Hardware, copied sources, generated results, third-party models and the viewer
+retain their separately declared licenses; public availability is not itself
+a license or a claim of validation. Public-board studies are retained native
+producer outputs under explicit assumptions, not browser calculations or
+hardware measurements. Failed, provisional or unavailable cases remain labelled.
+
+### Actual Public-Board Captures
+
+![Olimex P4 PI fields and the matching 3D PCB](/assets/demos/wayricad-results/public-boards/olimex-pi-webview.jpg)
+
+![Marble PI fields and the matching 3D PCB](/assets/demos/wayricad-results/public-boards/marble-pi-webview.jpg)
+
+Unmodified local source-preview captures using the published 0.7.0 SDK; not
+hardware measurements or evidence of every host/device. The retained numerical
+arrays, producer inputs and source hashes are available from each gallery case.
+
+### Site Manifest Contract
+
+The UI loads only the small, site-owned catalogue at
+`assets/demos/wayricad-results/public-boards/manifest.json` (maximum 512 KiB).
+Its schema is `wayricad.integration-gallery/v1`, with `boards` (maximum 64) and
+flat `cases` (maximum 512). Board records require unique string `id` and `name`.
+Additional board metadata is allowed but is not used to guess operating inputs.
+
+Every case requires the following fields:
+
+| Field | Contract |
+| --- | --- |
+| `id`, `board_id` | Unique case ID, and an existing board ID. IDs match `[a-z0-9][a-z0-9_-]{0,95}`. `fixtures` is a reserved board ID; the four generated fixture IDs are reserved case IDs. |
+| `label`, `kind`, `status` | Nonempty display strings; label <=256 characters, kind/status <=80. Status is displayed verbatim without inferring success. |
+| `result_path` | Relative `.json` path under the manifest directory, or `null` when no retained result is available. Null disables Load. |
+| `source_path` | Relative `.kicad_pcb` path under the manifest directory, or under `../../public-hardware/`. This names the exact case-specific saved copy. |
+| `source_sha256`, `source_bytes` | 64 hexadecimal characters and a positive integer size <=64 MiB. The manifest hash is displayed as declared identity, not independently substituted into the result. |
+| `assumptions`, `limitations` | Arrays of strings, each <=128 entries, each string <=4096 characters. Empty arrays are allowed and labelled as no declarations. |
+| `summary` | A string <=8192 characters, a JSON object with <=64 top-level keys / depth <=8 / serialized length <=16384 characters, or `null`. Numbers must be finite; keys, nulls and values are displayed without inventing units. |
+| `provenance_path` | Relative `.json`, `.md` or `.txt` under the manifest directory. |
+| `upstream_url` | Absolute HTTP(S) link without embedded credentials; displayed only as an explicit outbound link. |
+| `license` | A nonempty string, or `{name, url}` with an HTTP(S) license link. String-only licenses are displayed without inventing a license URL. |
+
+Asset paths are <=512 characters and use only ASCII letters, digits, `_`, `-`,
+`.` and `/`. They resolve relative to the **manifest URL**, not a result's
+metadata. Absolute paths, schemes, query/fragment components, backslashes,
+percent-encoded paths and escapes outside the approved directories are rejected.
+Upstream/license links never become PCB or result fetch destinations. Result
+JSON cannot control a source URL fetched by this demo.
+
+`?case=ID` preselects only a case ID from the validated catalogue, without
+downloading its PCB/result. Unknown IDs do not become paths or URLs.
+`?gallery=public` selects the first available public board from the catalogue;
+it also requires an explicit Load click. A late catalogue response cannot
+replace local files or a newer user selection. Selection changes abort pending
+loads and clear stale result overlays. Closing the page aborts catalogue and
+case loads and disposes both viewers. If the catalogue is missing or invalid,
+the four generated fixtures and local-file mode remain available.
+
+## Generated fixture evidence and acknowledgements
 
 The demo uses public WayriCAD saved-board examples pinned to [0617fd2](https://github.com/wayri/WayriCAD/tree/0617fd201c0817d95648cec639744138aa59fe20/docs/examples/pocket-kivi). PI/thermal use the included generated two-layer PCB; SI uses its documented complete-channel derivative. These are computed example producer outputs under declared assumptions, **not measured hardware or production designs**. The eye display is illustrative. No solver was rerun for this WebView integration.
 
