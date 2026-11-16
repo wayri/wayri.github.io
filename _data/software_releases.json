@@ -1,5 +1,5 @@
 {
-  "checked_on": "2026-11-15",
+  "checked_on": "2026-11-16",
   "wayricad": {
     "name": "WayriCAD",
     "version": "4.8.4",
@@ -32,20 +32,27 @@
   },
   "kicad_online": {
     "name": "KiCad Online",
-    "version": "0.12.100",
-    "android": "1.98",
+    "version": "0.12.101",
+    "android": "1.99",
     "channel": "GitHub preview",
-    "released_on": "2026-11-15",
+    "released_on": "2026-11-16",
     "repo": "wayri/KiCad-Online",
-    "summary": "More focused review conversations, source-linked replies and a clearer sheet browser with Root and saved page badges.",
+    "summary": "Larger desktop projects, quicker repeat loading, compact 3D previews and corrected schematic text orientation.",
     "changes": [
-      "Compact review conversations keep comment content prominent, navigate to anchored drawings and show source-linked reply markers and areas.",
-      "The schematic explorer opens on Sheets, with Root and saved page badges. The minimap returns to its compact view after a sheet is chosen.",
-      "Project loading shows real stages with cancellation where supported. Manual extension update checks link to stores without reloading active review work.",
-      "Private-project discovery and authenticated website reads are improved; uncertain issue/discussion creation retains its receipt to guard against duplicate sends."
+      "Modern desktop schematics and PCBs support larger bounded reads: up to 256 MiB per file and 512 MiB of project source, with chunked browser-session transfers.",
+      "Quick realistic 3D is the first-use default. Expand mode separates copper and components, stretches vias and retains linked selection; narrow previews keep secondary tools behind More.",
+      "Native KiCad exports checked rotated and mirrored schematic fields and test-point placements. Saved anchors are retained; browser font metrics remain approximate.",
+      "Source-linked issue conversations, drawing markers, grouped BoM review and sheet navigation remain available alongside the simpler mobile Search, Inspect, Fit and Tools controls."
     ],
-    "note": "GitHub preview packages and store releases are separate. Android 1.98 is a development-signed APK for manual installation; it is not a Google Play release.",
-    "guide": "https://github.com/wayri/KiCad-Online/blob/v0.12.100/USER-GUIDE.md"
+    "note": "Desktop and Android use different limits; maximum budgets are not device-capacity guarantees. Android 1.99 is a development-signed APK, not a Google Play release. Altium beta remains separate.",
+    "guide": "https://github.com/wayri/KiCad-Online/blob/v0.12.101/docs/releases/v0.12.101.md",
+    "distribution": {
+      "checked_on": "2026-11-16",
+      "github": "0.12.101 / Android 1.99 available",
+      "vscode": "0.12.101 public",
+      "chrome": "0.12.100 published; 0.12.101 pending review",
+      "firefox": "0.12.101 awaiting review"
+    }
   },
   "webview": {
     "name": "KiCad WebView",

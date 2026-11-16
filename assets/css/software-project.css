@@ -35,3 +35,9 @@
     .software-grid article { padding: 1rem; }
     .software-related a { display: inline-flex; align-items: center; min-height: 44px; }
 }
+
+.kicad-online-page .software-distribution { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:20px 0; }
+.kicad-online-page .software-distribution > div { min-width:0; padding:16px; border:1px solid var(--rule); border-radius:6px; overflow-wrap:anywhere; }
+.kicad-online-page .software-distribution dt { font-weight:600; }
+.kicad-online-page .software-distribution dd { margin:6px 0 0; color:var(--muted); }
+@media(max-width:600px) { .kicad-online-page .software-distribution { grid-template-columns:1fr; } }
