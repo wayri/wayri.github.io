@@ -1,19 +1,21 @@
 {
-  "checked_on": "2026-11-16",
+  "checked_on": "2026-11-19",
   "wayricad": {
     "name": "WayriCAD",
-    "version": "4.8.4",
+    "version": "4.8.6",
     "channel": "Release",
-    "released_on": "2026-11-15",
+    "released_on": "2026-11-18",
     "repo": "wayri/WayriCAD",
-    "summary": "Portable exports now recheck saved sources before publishing, while retaining the electrothermal and fabrication-review tools.",
+    "summary": "Follow PCB selections into PI/SI studies, review explicit power paths and explore bounded AC impedance models, with more reliable thermal solves.",
     "changes": [
-      "Portable Web Export rejects stale component metadata and rechecks saved PCB, schematic and supported-model hashes before publishing an export.",
-      "Original-source hashes and exact embedded-byte hashes remain separate, including model-path transformations.",
-      "The suite retains shared steady rectilinear 3D electrothermal studies, primary-winding thermal feedback and imported fabrication-net short/open comparisons from 4.8.3."
+      "Quick PI and Quick SI follow idle PCB selection with explicit source/load roles and saved-geometry checks. Power-path diagrams and named bundle cases make the study setup easier to review.",
+      "Two separate AC tools cover straight rectangular-conductor MQS two-port impedance and an explicitly meshed quasi-TEM planar PDN cavity. Each retains its own return-path and geometry assumptions.",
+      "QuickTherm includes known source power when no sources are selected, handles compatible shared-cell temperature fixtures, and improves sparse-solve and radiation-step reliability.",
+      "Optional Windows CalculiX setup can provision a pinned, checksum-verified solver. Explicit solver paths and offline operation remain available.",
+      "Portable Web Export retains saved-source freshness checks and separate original/embedded hashes; its bundled WebView version is independently pinned."
     ],
-    "note": "Export checks describe saved snapshots, not unsaved editor state or an operating-system file lock. Electrothermal and fabrication model limits remain in force.",
-    "guide": "https://github.com/wayri/WayriCAD/blob/v4.8.4/docs/RELEASE_NOTES_4.8.4.md"
+    "note": "Selection following uses saved geometry. Power-path previews are topology, not solved results. AC models have explicit conductor/reference-plane limits; thermal changes improve solver reliability without establishing measured accuracy.",
+    "guide": "https://github.com/wayri/WayriCAD/blob/v4.8.6/docs/RELEASE_NOTES_4.8.6.md"
   },
   "spike": {
     "name": "SPIKE",
@@ -37,13 +39,15 @@
     "channel": "GitHub preview",
     "released_on": "2026-11-18",
     "repo": "wayri/KiCad-Online",
-    "summary": "Refined saved drawing text, shared project navigation and multilayer inspection.",
+    "summary": "Read saved drawing details more faithfully, navigate repeated sheets and inspect multilayer boards without losing the selected net.",
     "changes": [
-      "Saved text variables, embedded symbol overrides, graphics and sheet markers follow the drawing source.",
-      "Project navigation, linked inspection, internal copper selection and reversible expanded assemblies share the refreshed viewer controls.",
-      "KERO is the public demonstration project; missing models and unsupported geometry stay disclosed."
+      "Scoped text variables, embedded symbol overrides, sheet-pin markers, supported images and internal sheet links follow the saved drawing.",
+      "Repeated sheet instances have readable explorer rows and a shared hierarchy map. Selected-net connectivity refreshes as sheets load.",
+      "Inner copper can be isolated and restored. Expanded 3D inspection keeps saved artwork and substrate materials; selected copper keeps its layer colors and vias remain gold.",
+      "Review comments use a simpler placement toolbar, severity bubbles and corrected capture offsets. Website-session replies retain their conversation context.",
+      "Metadata parsing reuses board data and reduces retained geometry in project caches; the release makes no universal memory or device-speed guarantee."
     ],
-    "note": "GitHub artifacts are available. Android 1.100 is development-signed and GitHub-only; no Google Play or physical-phone acceptance is claimed. Native visual-review CI required a retry after an upstream KiCad PPA outage; package/release CI passed.",
+    "note": "GitHub preview and store versions can differ; recorded channel states are listed below. Android 1.100 is a development-signed, manually updated GitHub APK. Installed comment round trips and physical-phone acceptance remain incomplete for this version.",
     "guide": "https://github.com/wayri/KiCad-Online/blob/v0.12.102/docs/releases/v0.12.102.md",
     "distribution": {
       "checked_on": "2026-11-18",

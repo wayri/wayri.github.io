@@ -9,7 +9,7 @@ This guide covers the common 0.3.0 viewer APIs and the self-hosted WayriCAD addi
 
 ## 0.6 inspection and navigation
 
-The [0.6 viewer refresh](/kicad-webview/docs/extension-refresh/) adds **Explode** to the 3D tools and **Show sheet browser** to the advanced project workspace. Use a matching 0.6 build for these controls; release availability is shown above. Explode spacing is display-only. Registered result overlays and probes are hidden while exploded, and measurement is disabled; return the slider to zero to restore the assembled display and overlay visibility.
+The [0.6 viewer refresh](/kicad-webview/docs/extension-refresh/) adds **Explode** to the 3D tools and **Show sheet browser** to the advanced project workspace. These controls were introduced in 0.6 and remain in the current SDK; release availability is shown above. Explode spacing is display-only. Registered result overlays and probes are hidden while exploded, and measurement is disabled; return the slider to zero to restore the assembled display and overlay visibility.
 
 The floating sheet browser retains its tree view when closed and reopened. Drag its heading or use its zoom/fit controls. Searching the navigator for “sheet tree”, “sheet browser”, “sheet navigator” or “minimap” reveals the reopen command. The browser reads only the loaded project's listed schematic files.
 
@@ -19,7 +19,7 @@ View switching restores a bounded cache of four snapshots for matching exact sou
 
 ## WayriCAD fields on the native 3D board
 
-Use the self-hosted **0.4.0 SDK** to open the [WayriCAD demo](/assets/demos/wayricad-results.html), select a result and enable **Show on matching PCB**. The example enables supported fields automatically. Choose **Saved result layer** to change the layer; use the PCB Layers panel to control its visibility. Switch Layout/3D without losing the enabled overlay on the same source. Click a result or board field to link probe markers; selecting a saved part probes its source anchor, and a saved segment uses its midpoint. Native selection remains available. The chosen result layer stays pinned while its overlay is active.
+Open the [WayriCAD demo](/assets/demos/wayricad-results.html), select a result and enable **Show on matching PCB**. The example enables supported fields automatically. Choose **Saved result layer** to change the layer; use the PCB Layers panel to control its visibility. Switch Layout/3D without losing the enabled overlay on the same source. Click a result or board field to link probe markers; selecting a saved part probes its source anchor, and a saved segment uses its midpoint. Native selection remains available. The chosen result layer stays pinned while its overlay is active.
 
 Fields show through the board and components, with that presentation labelled. Stale sources, missing values and unsupported placement remain explicit. SI uses exported net/segment identities for electrical links; a spatial marker does not infer connectivity. [Import guide, API and limits](/kicad-webview/docs/wayricad-results/).
 

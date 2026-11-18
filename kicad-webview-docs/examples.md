@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/examples/
 doc_section: examples
 ---
 
-The CDN examples use the **{{ site.data.webview_release.npm }}** ES module from the pinned npm release; the explicitly labelled hosted 0.3.0 example retains its original compatibility pin. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The OLIMEX manifest includes its PCB, schematic and 28 component assets. Its display PCB remaps model paths and normalizes equivalent legacy footprint identity fields; electrical and physical geometry is unchanged. Original upstream sources, model coverage, conversions and licensing are linked below.
+The CDN examples use the **{{ site.data.webview_release.npm }}** ES module from the pinned npm release; the hosted example below uses the versioned 1.0.0 SDK. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The OLIMEX manifest includes its PCB, schematic and 28 component assets. Its display PCB remaps model paths and normalizes equivalent legacy footprint identity fields; electrical and physical geometry is unchanged. Original upstream sources, model coverage, conversions and licensing are linked below.
 
 For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/kicad-webview/docs/quick-start/). The release uses [MPL-2.0](/kicad-webview/docs/license/); input designs and model files have separate terms.
 
@@ -34,9 +34,11 @@ The [product page’s public examples](/kicad-webview/#public-examples) add two 
 
 Explore the [capability demos](/kicad-webview/#capability-demos) and use [Interactive models & displays](/kicad-webview/docs/model-interaction/) for a complete face-picking example with virtual LEDs, displays, buttons and knobs.
 
-## Hosted 0.3.0 inspection
+<span id="hosted-030-inspection"></span>
 
-The following uses the site-hosted 0.3.0 module. The npm/CDN examples below use the current package version shown above.
+## Hosted 1.0.0 inspection
+
+The following uses the site-hosted 1.0.0 module. The npm/CDN examples below use the current package version shown above.
 
 ```js
 import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/1.0.0/kivi-viewer.js';

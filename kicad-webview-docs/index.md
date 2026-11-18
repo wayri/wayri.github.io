@@ -10,7 +10,15 @@ KiCad WebView is a browser library for read-only inspection of saved electronics
 
 The current self-hosted **{{ site.data.webview_release.self_hosted }} SDK** and npm/CDN **{{ site.data.webview_release.npm }} package** are available. They include resizable Properties, contextual previews, shared saved-result palettes, text-variable and horizontal-table support. [SDK release and matching source](https://github.com/wayri/kicad-webview/releases/tag/v{{ site.data.webview_release.self_hosted }}) · [Versioned files and checksums](/assets/lib/kicad-webview/releases/{{ site.data.webview_release.self_hosted }}/RELEASE.json) · [npm/CDN source](https://github.com/wayri/kicad-webview/tree/v{{ site.data.webview_release.npm }}). [Use a direct script, browser module or npm package](/kicad-webview/docs/quick-start/). The historical **0.1.0-beta.2 SDK** remains archived with its [release manifest](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) and [matching source](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.2).
 
-## 0.8.0: keep detail linked to the design
+## Stable core embed API 1.0
+
+KiCad WebView 1.0.0 establishes the documented core embed API as stable. Classic scripts, ES modules, lite builds, iframes and self-contained HTML retain their integration paths. When upgrading from 0.8.0, change exact `EMBED_API_VERSION` checks from `1.0-beta` to `1.0`; existing documented method signatures and saved-state/result schema versions are retained. [Upgrade notes and stability policy](https://github.com/wayri/kicad-webview/blob/v1.0.0/docs/API-STABILITY.md).
+
+Net and pad cross-selection preserve the 3D camera; explicit part selection still frames the part. Cleaner copper-depth smoothing and selected-net gold vias make assembled and expanded Dim views easier to read. [Try Photoreal Fast](/assets/demos/photoreal-fast.html) or [read the release evidence](/kicad-webview/docs/releases/).
+
+<span id="080-keep-detail-linked-to-the-design"></span>
+
+## Keep detail linked to the design
 
 Resizable Properties, contextual previews, shared field palettes, explicit variables, bounded numeric expressions and horizontal tables are released in the matching SDK. [Try the drawing demo](/assets/demos/drawing-fidelity.html), [inspect a linked preview](/kicad-webview/docs/panels-and-insets/) or [read the release evidence](/kicad-webview/docs/releases/).
 
@@ -58,4 +66,4 @@ The owner-authored software in this release is open source under **MPL-2.0**. Co
 
 
 
-[Try the latest merged-source preview: KERO linked schematic, PCB and 3D](/kicad-webview/docs/source-preview/). Stable npm/CDN remains 0.8.0.
+[Try the KERO linked schematic, PCB and 3D workspace](/kicad-webview/docs/source-preview/). Stable npm/CDN: {{ site.data.webview_release.npm }}.

@@ -38,7 +38,9 @@ viewer.load('/assets/demos/public-hardware/olimex-p4-project.json', {view:'3d'})
 
 These paths assume that you host the SDK and sample manifest at the shown locations. Replace the manifest with your own supported project URL; remote sources must permit CORS. Return explode to zero before inspecting registered result overlays or taking measurements. [Full 0.6 guide and limits](/kicad-webview/docs/extension-refresh/).
 
-## Self-hosted 0.5.0 SDK
+<span id="self-hosted-050-sdk"></span>
+
+## Self-hosted 1.0.0 SDK
 
 Use a version-pinned browser script without Node.js:
 
@@ -46,7 +48,7 @@ Use a version-pinned browser script without Node.js:
 <script src="https://wayri.github.io/assets/lib/kicad-webview/releases/1.0.0/kicad-webview.min.js"></script>
 ```
 
-The same release provides an [ES module](/assets/lib/kicad-webview/releases/1.0.0/kivi-viewer.js), [checksums](/assets/lib/kicad-webview/releases/1.0.0/RELEASE.json) and [source/download](https://github.com/wayri/kicad-webview/releases/tag/v0.5.0). Use the [WayriCAD integration example](/kicad-webview/docs/wayricad-results/#embed-both-views-without-nodejs) for result layers, native 3D registration and linked probes. Keep the complete matching release directory and notices when self-hosting.
+The same release provides an [ES module](/assets/lib/kicad-webview/releases/1.0.0/kivi-viewer.js), [checksums](/assets/lib/kicad-webview/releases/1.0.0/RELEASE.json) and [source/download](https://github.com/wayri/kicad-webview/releases/tag/v1.0.0). Use the [WayriCAD integration example](/kicad-webview/docs/wayricad-results/#embed-both-views-without-nodejs) for result layers, native 3D registration and linked probes. Keep the complete matching release directory and notices when self-hosting.
 
 ## npm installation
 

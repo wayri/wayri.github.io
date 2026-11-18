@@ -53,7 +53,7 @@ Host the script, source and result yourself, or use the versioned self-hosted sc
 
 Choose **Saved result layer** to retain the quantity while moving between saved layers. Use the PCB Layers panel to show or hide copper; hidden layers hide the corresponding overlay. The active result layer stays pinned while inspecting the board. Click a saved field or a PCB part/trace to link probe markers. Registered 3D clicks retain their exact hit value and elevation. Spatial probe links do not infer electrical connectivity.
 
-The 0.4.0 SDK adds `getResultLayers()`, `setLayer(name)`, `setBoardOverlay(boolean)` and `getBoardOverlayState()`. `Viewer.getSelectionPosition()` exposes a saved anchor or segment midpoint, or null. npm/CDN 0.3.0 remains available for the prior APIs; use the self-hosted 0.4.0 files for these additions.
+The 0.4.0 SDK adds `getResultLayers()`, `setLayer(name)`, `setBoardOverlay(boolean)` and `getBoardOverlayState()`. `Viewer.getSelectionPosition()` exposes a saved anchor or segment midpoint, or null. These additions are retained in the current self-hosted SDK and npm/CDN package.
 
 ## Inspect, probe and cross-select
 

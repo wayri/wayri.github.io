@@ -28,7 +28,7 @@ Native schematic text placement and bounded loading/index handling are refreshed
 
 ## 0.7.0 — linked inspection and native text previews
 
-**0.7.0 is published on npm, jsDelivr, UNPKG and GitHub.** Website demos and direct-script examples use the matching 0.7.0 SDK. Registry integrity and CDN files were checked against the release package.
+**0.7.0 is published on npm, jsDelivr, UNPKG and GitHub.** At that release, website demos and direct-script examples used the matching 0.7.0 SDK. Registry integrity and CDN files were checked against the release package.
 
 This release integrates stable resizable Properties, bounded linked contextual previews, shared saved-result palettes, safer preview replacement and an accessible cancellable loading surface. Drawing additions include explicit project-variable context, bounded deterministic numeric expressions, horizontal schematic tables and orientation fixes.
 

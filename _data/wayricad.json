@@ -1,12 +1,12 @@
 {
-  "reviewed": "2026-11-15",
-  "source": "https://github.com/wayri/WayriCAD/tree/v4.8.4",
+  "reviewed": "2026-11-19",
+  "source": "https://github.com/wayri/WayriCAD/tree/v4.8.6",
   "groups": [
     {"id":"analysis", "title":"Electrical, thermal and electromagnetic analysis", "tools":[
-      {"name":"Quick PI", "guide":"quick_pi_plugin/README.md", "description":"Inspect power integrity: DC paths, voltage drop, current density, copper losses and supported PDN studies with explicit sources and loads."},
-      {"name":"Quick SI", "guide":"signal_integrity_advisor_plugin/ReadMe.md", "description":"Screen signal integrity, routed paths, reflections, return paths and pair timing using declared driver, load and stackup assumptions."},
-      {"name":"QuickTherm", "guide":"quick_therm_plugin/README.md", "description":"Study declared component dissipation, cooling, steady-state and supported transient PCB temperature models."},
-      {"name":"Trace RLC / Impedance", "guide":"trace_impedance_plugin/ReadMe.md", "description":"Extract trace, via and supported plane geometry; inspect resistance, inductance, capacitance and section impedance with model coverage."},
+      {"name":"Quick PI", "guide":"quick_pi_plugin/README.md", "description":"Follow saved PCB net selections into DC drop and copper-loss studies. Review explicit source/load pads, power-path diagrams and named cases; separate bounded MQS two-port and planar PDN models cover AC impedance."},
+      {"name":"Quick SI", "guide":"signal_integrity_advisor_plugin/ReadMe.md", "description":"Follow PCB selections into routed-path screening for reflections, termination, return paths and pair timing, with explicit endpoints, saved geometry and driver/load assumptions."},
+      {"name":"QuickTherm", "guide":"quick_therm_plugin/README.md", "description":"Study declared dissipation and supported steady/transient PCB models, with known-power source setup, compatible shared-cell fixtures and guarded sparse/radiation solves. Optional CalculiX has its own geometry and runtime requirements."},
+      {"name":"Trace RLC / Impedance", "guide":"trace_impedance_plugin/ReadMe.md", "description":"Extract supported trace, via and plane geometry with model coverage. Saved stackup separates physical, traversed and residual via barrel lengths; missing return paths or stub models remain unresolved."},
       {"name":"Quick EMerge (beta)", "guide":"quick_emerge_plugin/README.md", "description":"Set up supported electromagnetic and antenna studies, inspect fields and reports, and follow documented solver and research-example limitations."},
       {"name":"Planar Magnetics", "guide":"planar_magnetics_plugin/ReadMe.md", "description":"Explore PCB coils, windings, magnetic equivalents and supported motor/actuator estimates with declared materials and drive conditions."},
       {"name":"Heater Designer", "guide":"heater_designer_plugin/ReadMe.md", "description":"Generate reviewed PCB heater patterns and explore resistance and thermal behavior under explicit geometry and boundary assumptions."}

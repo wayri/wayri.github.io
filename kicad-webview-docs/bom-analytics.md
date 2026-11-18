@@ -8,11 +8,11 @@ description: Link a read-only bill of materials and saved PCB statistics to a Ki
 
 The **0.5.0** BoM viewer groups saved parts by value, footprint and population, searches references and fields, and exports the eligible full BoM as CSV. A linked viewer locates a uniquely identified saved part in the current PCB, schematic or 3D view. The Board data tab summarizes a saved PCB's counts, track centreline lengths and saved zone polygons. [Open the credited OLIMEX demo](/assets/demos/bom.html).
 
-The [0.6 viewer refresh](/kicad-webview/docs/extension-refresh/) retains these BoM APIs and adds exploded 3D inspection and sheet navigation. BoM selection still requires exact saved identity; display-only explode spacing does not change analytics. The 0.5 example below remains version-pinned to the release that introduced the panel. Current self-hosted and npm/CDN availability is shown above.
+The [0.6 viewer refresh](/kicad-webview/docs/extension-refresh/) retains these BoM APIs and adds exploded 3D inspection and sheet navigation. BoM selection still requires exact saved identity; display-only explode spacing does not change analytics. The example below uses the versioned 1.0.0 SDK; the panel was introduced in 0.5.0. Current self-hosted and npm/CDN availability is shown above.
 
 ## Link the drawing and panel
 
-The example below uses the self-hosted 0.5.0 module path; host that release and its dependencies together. Give the drawing an explicit height. `BOMViewer` listens for the viewer's native-source `ready` event, so it updates when a supported drawing changes. A schematic has BoM data; board statistics are available for PCBs only.
+The example below uses the self-hosted 1.0.0 module path; host that release and its dependencies together. Give the drawing an explicit height. `BOMViewer` listens for the viewer's native-source `ready` event, so it updates when a supported drawing changes. A schematic has BoM data; board statistics are available for PCBs only.
 
 ```html
 <div id="board" style="height:500px"></div>

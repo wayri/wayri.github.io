@@ -6,9 +6,11 @@ permalink: /kicad-webview/docs/license/
 doc_section: license
 ---
 
-## Self-hosted SDK 0.8.0
+<span id="self-hosted-sdk-080"></span>
 
-[Versioned files and checksums](/assets/lib/kicad-webview/releases/0.8.0/RELEASE.json) · [Download and matching source](https://github.com/wayri/kicad-webview/releases/tag/v0.8.0) · [Third-party notices](/assets/lib/kicad-webview/releases/0.8.0/THIRD-PARTY-NOTICES.md). This release adds stable contextual inspection, field palettes, explicit text context, bounded expressions and horizontal tables, alongside saved BoM and native 3D WayriCAD fields. The npm/CDN package version is {{ site.data.webview_release.npm }}.
+## Self-hosted SDK 1.0.0
+
+[Versioned files and checksums](/assets/lib/kicad-webview/releases/1.0.0/RELEASE.json) · [Download and matching source](https://github.com/wayri/kicad-webview/releases/tag/v1.0.0) · [Third-party notices](/assets/lib/kicad-webview/releases/1.0.0/THIRD-PARTY-NOTICES.md). This release establishes the stable core embed API 1.0 and retains contextual inspection, field palettes, saved BoM and native 3D WayriCAD fields. The npm/CDN package version is {{ site.data.webview_release.npm }}.
 
 ## Published npm and CDN release
 
@@ -29,11 +31,11 @@ KiCad WebView `{{ site.data.webview_release.npm }}` is public on [npm](https://w
 
 ## Software license and matching source
 
-KiCad WebView’s owner-authored software is released under the [Mozilla Public License 2.0](/assets/lib/kicad-webview/releases/0.8.0/LICENSE). Commercial use, self-hosting and integration into a proprietary application do not require individual approval. The complete license is authoritative; this summary does not replace it.
+KiCad WebView’s owner-authored software is released under the [Mozilla Public License 2.0](/assets/lib/kicad-webview/releases/1.0.0/LICENSE). Commercial use, self-hosting and integration into a proprietary application do not require individual approval. The complete license is authoritative; this summary does not replace it.
 
-MPL uses source-file-level copyleft. When distributing covered software, preserve its notices and make the covered source, including covered modifications, available as the license requires. Separate host-application files do not become MPL merely because they use this library. Distributing minified JavaScript or a bundled HTML viewer also needs a way for recipients to obtain the corresponding source. See the [release’s licensing guide](/assets/lib/kicad-webview/releases/0.8.0/LICENSING.md) and [Mozilla’s FAQ](https://www.mozilla.org/en-US/MPL/2.0/FAQ/).
+MPL uses source-file-level copyleft. When distributing covered software, preserve its notices and make the covered source, including covered modifications, available as the license requires. Separate host-application files do not become MPL merely because they use this library. Distributing minified JavaScript or a bundled HTML viewer also needs a way for recipients to obtain the corresponding source. See the [release’s licensing guide](/assets/lib/kicad-webview/releases/1.0.0/LICENSING.md) and [Mozilla’s FAQ](https://www.mozilla.org/en-US/MPL/2.0/FAQ/).
 
-The [public source repository](https://github.com/wayri/kicad-webview) contains the preferred source. Use [v0.8.0](https://github.com/wayri/kicad-webview/tree/v0.8.0) for the current self-hosted SDK, [v{{ site.data.webview_release.npm }}](https://github.com/wayri/kicad-webview/tree/v{{ site.data.webview_release.npm }}) for npm/CDN {{ site.data.webview_release.npm }}, and [v0.1.0-beta.2](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.2) only for the archived beta.2 files. If you modify the covered software, provide the matching modified source rather than pointing only to the unmodified upstream tag. The library is **free to use, including commercially, under MPL-2.0**. No payment or individual commercial-use approval is required. Need help embedding or customizing KiCad WebView? Optional paid implementation, maintenance, and support are available at [support.kivi@sigharmonic.com](mailto:support.kivi@sigharmonic.com). You do not need to buy these services to use or integrate the library.
+The [public source repository](https://github.com/wayri/kicad-webview) contains the preferred source. Use [v{{ site.data.webview_release.self_hosted }}](https://github.com/wayri/kicad-webview/tree/v{{ site.data.webview_release.self_hosted }}) for the current self-hosted SDK, [v{{ site.data.webview_release.npm }}](https://github.com/wayri/kicad-webview/tree/v{{ site.data.webview_release.npm }}) for npm/CDN {{ site.data.webview_release.npm }}, and [v0.1.0-beta.2](https://github.com/wayri/kicad-webview/tree/v0.1.0-beta.2) only for the archived beta.2 files. If you modify the covered software, provide the matching modified source rather than pointing only to the unmodified upstream tag. The library is **free to use, including commercially, under MPL-2.0**. No payment or individual commercial-use approval is required. Need help embedding or customizing KiCad WebView? Optional paid implementation, maintenance, and support are available at [support.kivi@sigharmonic.com](mailto:support.kivi@sigharmonic.com). You do not need to buy these services to use or integrate the library.
 
 ## Third-party components and hardware
 
