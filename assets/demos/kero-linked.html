@@ -1,0 +1,15 @@
+---
+layout: product
+title: KERO linked design workspace
+description: Explore pinned KERO drawings in linked schematic, layout and 3D source-preview views.
+permalink: /assets/demos/kero-linked.html
+---
+<link rel="stylesheet" href="{{ '/assets/css/webview-demo-pages.css' | relative_url }}">
+<main class="webview-product wv-demo-page kero-preview">
+<header>{% include webview-breadcrumbs.html section_url='/kicad-webview/docs/source-preview/' section_label='Source preview' %}<h1>One design. Linked views.</h1><p>KERO Encoder · select a part or copper in a view to follow it across the others. Each camera stays independent. Navigate saved schematic sheets with the file selector.</p><p class="wv-caption">Source preview 48f79a6 · stable npm/CDN 0.8.0 unchanged · no original 3D models bundled.</p></header>
+<div class="demo-controls"><button id="part" type="button" disabled>Focus D1</button><button id="net" type="button" disabled>Follow VBAT</button><button id="clear" type="button" disabled>Clear</button><button id="fit" type="button" disabled>Fit views</button></div>
+<div class="kero-views"><section><h2>Schematic &amp; sheets</h2><div id="schematic" class="kero-mount"></div></section><section><h2>PCB &amp; layers</h2><div id="layout" class="kero-mount"></div></section><section><h2>3D &amp; part focus</h2><div id="assembly" class="kero-mount"></div></section></div>
+<p id="status" role="status">Loading pinned KERO drawings…</p><p class="wv-caption">Read only. Missing models use labelled stand-ins. <a href="{{ '/kicad-webview/docs/source-preview/' | relative_url }}">Source, credits &amp; integration guide ↗</a> · <a href="{{ '/assets/lib/kicad-webview/previews/copper-depth-48f79a6/demo/PROVENANCE.json' | relative_url }}">Design hashes ↗</a></p>
+</main>
+<style>.kero-preview{--accent:#e2c264;--border-color:#49483f}.kero-views{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.kero-views section{min-width:0}.kero-views h2{font-size:13px;margin:8px 0}.kero-mount{height:clamp(390px,67dvh,720px);border:1px solid #49483f;border-radius:10px;overflow:hidden}.webview-product.wv-demo-page.kero-preview .demo-controls{display:flex;flex-flow:row wrap;gap:6px;align-items:center}.webview-product.wv-demo-page.kero-preview .demo-controls button{flex:0 0 auto;padding:5px 9px;min-height:30px;font-size:12px;width:auto;background:#282923;color:#f0eee7;border:1px solid #55564a;border-radius:6px}.kero-preview header p,.kero-preview .wv-caption{color:#b5b3a8}.kero-preview [data-kicad-viewer]{color-scheme:dark}@media(max-width:1000px){.kero-views{grid-template-columns:1fr}.kero-mount{height:410px}}@media(max-width:450px){.kero-mount{height:350px}}</style>
+<script type="module" src="{{ '/assets/js/kero-linked-preview.mjs' | relative_url }}"></script>

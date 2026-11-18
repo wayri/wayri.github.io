@@ -66,6 +66,14 @@ permalink: /kicad-webview/
 
     {% include webview-capability-gallery.html %}
 
+    
+    <section id="kero-preview" class="wv-showcase" aria-labelledby="kero-preview-title">
+        <div class="wv-section-heading"><div><p class="wv-eyebrow">Latest shared rendering improvements · source preview</p><h2 id="kero-preview-title">Explore KERO in linked views.</h2></div><p>Saved schematic, copper and 3D selection. Stable npm/CDN remains 0.8.0.</p></div>
+        <p>Updated drawing text and saved variables, graphics, sheet navigation and multilayer inspection. Copper uses its layer colors; plated vias stay gold. Stable overlapping copper uses resolved edge smoothing instead of multisample depth. Approximate models remain labelled.</p>
+        <nav class="wv-actions"><a class="wv-action" href="{{ '/assets/demos/kero-linked.html' | relative_url }}">Open linked KERO workspace ↗</a><a class="wv-action" href="{{ '/kicad-webview/docs/source-preview/' | relative_url }}">Source preview guide ↗</a></nav>
+        <iframe title="KERO linked schematic, PCB and 3D source preview" src="{{ '/assets/demos/kero-linked.html' | relative_url }}?embedded=1" loading="lazy" style="width:100%;height:clamp(500px,78dvh,900px);border:1px solid var(--border-color,#49483f);border-radius:12px" allow="fullscreen"></iframe>
+    </section>
+
     <section id="demo" class="wv-showcase" aria-labelledby="demo-title">
         <div class="wv-section-heading"><div><p class="wv-eyebrow">Interactive design workspace</p><h2 id="demo-title">Inspect the design.</h2></div><p><span data-irca-part-count>IRCA review geometry · PCB, schematic and full assembly</span></p></div>
         <div class="wv-pi-result" aria-label="Computed Fast PI result"><div><p class="wv-eyebrow"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Fast PI / IRCA copper</p><h3>See the voltage drop along the copper.</h3><p>Computed 3.3 V rail study · normalized 1 A load</p></div><div class="wv-pi-metric"><strong data-pi-drop>—</strong><span>maximum drop · mV</span></div><div class="wv-pi-metric"><strong data-pi-loss>—</strong><span>copper loss · mW</span></div><div class="wv-control-row"><button type="button" data-field="voltage-drop-front">Explore front gradient</button><button type="button" data-field="voltage-drop-back">Explore back gradient</button><a href="#analysis">Study &amp; assumptions ↓</a></div></div>

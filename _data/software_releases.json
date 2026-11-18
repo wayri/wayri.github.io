@@ -32,26 +32,25 @@
   },
   "kicad_online": {
     "name": "KiCad Online",
-    "version": "0.12.101",
-    "android": "1.99",
+    "version": "0.12.102",
+    "android": "1.100",
     "channel": "GitHub preview",
-    "released_on": "2026-11-16",
+    "released_on": "2026-11-18",
     "repo": "wayri/KiCad-Online",
-    "summary": "Larger desktop projects, quicker repeat loading, compact 3D previews and corrected schematic text orientation.",
+    "summary": "Refined saved drawing text, shared project navigation and multilayer inspection.",
     "changes": [
-      "Modern desktop schematics and PCBs support larger bounded reads: up to 256 MiB per file and 512 MiB of project source, with chunked browser-session transfers.",
-      "Quick realistic 3D is the first-use default. Expand mode separates copper and components, stretches vias and retains linked selection; narrow previews keep secondary tools behind More.",
-      "Native KiCad exports checked rotated and mirrored schematic fields and test-point placements. Saved anchors are retained; browser font metrics remain approximate.",
-      "Source-linked issue conversations, drawing markers, grouped BoM review and sheet navigation remain available alongside the simpler mobile Search, Inspect, Fit and Tools controls."
+      "Saved text variables, embedded symbol overrides, graphics and sheet markers follow the drawing source.",
+      "Project navigation, linked inspection, internal copper selection and reversible expanded assemblies share the refreshed viewer controls.",
+      "KERO is the public demonstration project; missing models and unsupported geometry stay disclosed."
     ],
-    "note": "Desktop and Android use different limits; maximum budgets are not device-capacity guarantees. Android 1.99 is a development-signed APK, not a Google Play release. Altium beta remains separate.",
-    "guide": "https://github.com/wayri/KiCad-Online/blob/v0.12.101/docs/releases/v0.12.101.md",
+    "note": "GitHub artifacts are available. Android 1.100 is development-signed and GitHub-only; no Google Play or physical-phone acceptance is claimed. Native visual-review CI required a retry after an upstream KiCad PPA outage; package/release CI passed.",
+    "guide": "https://github.com/wayri/KiCad-Online/blob/v0.12.102/docs/releases/v0.12.102.md",
     "distribution": {
-      "checked_on": "2026-11-16",
-      "github": "0.12.101 / Android 1.99 available",
-      "vscode": "0.12.101 public",
-      "chrome": "0.12.100 published; 0.12.101 pending review",
-      "firefox": "0.12.101 awaiting review"
+      "checked_on": "2026-11-18",
+      "github": "0.12.102 / Android 1.100 available",
+      "vscode": "0.12.102 public",
+      "chrome": "0.12.101 published; 0.12.102 pending review with automatic publication",
+      "firefox": "0.12.102 awaiting review"
     }
   },
   "webview": {

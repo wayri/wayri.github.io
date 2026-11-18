@@ -1,0 +1,6 @@
+{
+  "channel": "Source preview, not a new npm release",
+  "source": "https://github.com/wayri/kicad-webview/tree/48f79a6ae8b44f2238b974fa92157872c54b1c11",
+  "npm": "0.8.0",
+  "upstreamMain": "48f79a6ae8b44f2238b974fa92157872c54b1c11"
+}

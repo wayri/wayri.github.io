@@ -56,3 +56,6 @@ Use a [classic script or ES module](/kicad-webview/docs/quick-start/), or open t
 
 The owner-authored software in this release is open source under **MPL-2.0**. Commercial use and integration do not need individual approval. Preserve license notices and provide the matching covered source as required when distributing builds. Design files and third-party components retain their separate terms. Read [License & release files](/kicad-webview/docs/license/) and [Acknowledgements](/kicad-webview/docs/acknowledgements/).
 
+
+
+[Try the latest merged-source preview: KERO linked schematic, PCB and 3D](/kicad-webview/docs/source-preview/). Stable npm/CDN remains 0.8.0.
