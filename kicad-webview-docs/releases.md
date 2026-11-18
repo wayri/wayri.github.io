@@ -6,6 +6,18 @@ doc_section: releases
 description: KiCad WebView release notes, WayriCAD saved results, layer inspection and mobile integrations.
 ---
 
+## 1.0.0 — stable core API and camera-preserving inspection
+
+**1.0.0 is published on npm and GitHub.** Direct script and ES-module CDN examples, self-hosted files and the website demos use this version.
+
+Net and pad selection retain the 3D camera. In assembled and expanded Dim net views, only matching vias remain gold; unrelated copper, model bodies and structures fade to translucent gray. Copper-depth smoothing, saved drawing improvements, linked sheets and compact controls retain the viewer's own UI style.
+
+The core API marker changes from `1.0-beta` to `1.0`; existing documented methods, saved-state schemas and Expand aliases remain. [API stability and migration](/kicad-webview/docs/api-stability/).
+
+Validation: 650 automated tests, CI, strict TypeScript 5.9.3 packed-consumer checks (NodeNext, Bundler and classic globals), archive/privacy/license checks and KERO browser acceptance. Physical-phone speed, universal GPU/driver coverage and live Forge installation are not newly qualified.
+
+[GitHub release and downloads](https://github.com/wayri/kicad-webview/releases/tag/v1.0.0) · [npm](https://www.npmjs.com/package/@wayrisignals/kicad-webview/v/1.0.0) · [KERO linked demo](/assets/demos/kero-linked.html)
+
 ## 0.8.0 — Photoreal Fast, Expand mode and compact inspection
 
 The stable 0.8.0 library adds fast PBR studio rendering without a visible floor, smooth two-stage assembly expansion, layer-colored net shine-through and gold via plating. Copper clicks highlight the complete saved net by default; the inspector states that scope while retaining the clicked object properties. Compact ribbon and inset controls keep the drawing in focus.

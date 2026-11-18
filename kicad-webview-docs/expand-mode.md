@@ -6,7 +6,7 @@ permalink: /kicad-webview/docs/expand-mode/
 doc_section: examples
 ---
 
-[Try OLIMEX and IRCA](/assets/demos/photoreal-fast.html). These additions are included in stable **0.8.0** from npm, CDN and the self-hosted SDK.
+[Try OLIMEX and IRCA](/assets/demos/photoreal-fast.html). These additions are included in stable **1.0.0** from npm, CDN and the self-hosted SDK.
 
 ## A two-stage assembly view
 
@@ -34,6 +34,21 @@ The overlay follows expansion, respects hidden layers and the existing accent/so
 
 The overlay has bounded instance, source-mesh and edge budgets; a visible notice identifies truncation. Open the demo’s optional **Read rendering stats** control to inspect `expansion`, `netGlow` and actual rendered pixels. Source models and retained results keep their original limits and provenance.
 
-[Photoreal Fast integration](/kicad-webview/docs/photoreal-fast/) · [Source preset notes](/assets/lib/kicad-webview/releases/0.8.0/EXPAND-MODE.md) · [Credits and development acknowledgements](/kicad-webview/docs/acknowledgements/)
+[Photoreal Fast integration](/kicad-webview/docs/photoreal-fast/) · [Source preset notes](/assets/lib/kicad-webview/releases/1.0.0/EXPAND-MODE.md) · [Credits and development acknowledgements](/kicad-webview/docs/acknowledgements/)
 
-Copper clicks highlight the full saved net by default in its layer colors. Plated vias stay gold; the optional accent style remains available.
+Copper clicks highlight the full saved net by default in its layer colors. Only selected-net plated vias stay gold during Dim net focus; the optional accent style remains available.
+
+
+## Camera-preserving net focus in 1.0.0
+
+Selecting a net, trace or pad with **Highlight entire net** enabled keeps the current 3D camera position, target and orientation, including selections coming from linked PCB views. It does not switch to Top. Explicit part selection still centers the part and shows its mounting side.
+
+In the default **Dim + source colors** style, the selected net retains its layer colors, and only its via caps and barrels stay gold. Unrelated copper, all component bodies and board structures become gray and translucent in both assembled and expanded views. Clear restores their original appearance. Bright and Isolate remain explicit alternative styles.
+
+```js
+viewer.setHighlightStyle('dim', {color: 'source'});
+viewer.selectNet('/VBAT'); // camera unchanged
+viewer.setExpand(85);     // optional animated assembly separation
+// viewer.clearSelection();
+// viewer.setExpand(0);
+```

@@ -21,10 +21,10 @@
     "channel": "Source-only experimental preview",
     "released_on": "2026-10-27",
     "repo": "wayri/SPIKE",
-    "summary": "A clearer power-tree overview and a Geometry → basic PI handoff to the existing PCB resistive-network solver.",
+    "summary": "A clearer power-tree overview and a Geometry \u2192 basic PI handoff to the existing PCB resistive-network solver.",
     "changes": [
       "Power-tree branches have direction, collapse, fit and zoom, with selection and evidence details. Inferred electrical paths still need review.",
-      "Geometry → basic PI passes normalized PCB copper to the existing routed DC solver and returns geometry-linked fields; it does not infer electrical properties from arbitrary STEP solids.",
+      "Geometry \u2192 basic PI passes normalized PCB copper to the existing routed DC solver and returns geometry-linked fields; it does not infer electrical properties from arbitrary STEP solids.",
       "Saved thermal studies reopen in thermal setup. Workspace search, board-net controls and axis rotation rings have been refined."
     ],
     "note": "This source-only hotfix adds no installer or numerical kernel. Numerical review remains incomplete and the full Python suite does not pass; use the release record for the exact limits.",
@@ -56,17 +56,17 @@
   "webview": {
     "name": "KiCad WebView",
     "channel": "Stable SDK and npm/CDN",
-    "released_on": "2026-11-16",
+    "released_on": "2026-11-18",
     "repo": "wayri/kicad-webview",
-    "summary": "Photoreal Fast, smooth Expand mode, compact controls and full-net layer colors with gold vias.",
+    "summary": "Stable embed API 1.0, camera-preserving net focus and cleaner 3D rendering.",
     "changes": [
-      "Fast PBR studio rendering without a visible floor; no Node.js server is required.",
-      "Models lift, copper layers separate, substrate fades and through vias stretch while saved cross-selection remains intact.",
-      "Copper clicks highlight complete saved nets by default in their layer colors, with gold plated vias and an explicit scope indicator.",
-      "Compact ribbon and inset controls, native schematic text placement and bounded large-project loading and late-part inspection."
+      "Core embed API 1.0 with typed classic, ES module and lite entry points; no Node.js needed in browser embeds.",
+      "Net and pad cross-selection preserve the 3D camera. Explicit part selection still frames the mounting side.",
+      "Selected-net vias stay gold; unrelated copper, models and structure fade to gray/translucent in assembled and expanded Dim views.",
+      "Resolved copper-depth smoothing, compact inspection controls, linked sheets, results layers and source-bound project navigation."
     ],
     "note": "Read-only visualization; missing models and rendering approximations remain disclosed. Large-project acceptance ceilings do not qualify maximum-size 3D rendering, physical-phone speed or solver accuracy. Other products retain separately pinned WebView versions.",
-    "guide": "https://github.com/wayri/kicad-webview/blob/v0.8.0/docs/QA-0.8.0.md",
-    "version": "0.8.0"
+    "guide": "https://github.com/wayri/kicad-webview/blob/v1.0.0/docs/RELEASE-1.0.0.md",
+    "version": "1.0.0"
   }
 }

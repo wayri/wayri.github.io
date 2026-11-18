@@ -10,7 +10,7 @@
   const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
   const definitions = {
     fidelity: ['Drawing fidelity', 'Try saved styles now; try variable, expression and table examples with explicit rendering limits.', 'drawing-fidelity/'],
-    contextual: ['Properties and contextual detail', 'Inspect the IRCA review without losing the main camera. Preview controls use the 0.7 SDK.', 'panels-and-insets/'],
+    contextual: ['Properties and contextual detail', 'Inspect the IRCA review without losing the main camera. Preview controls use the 1.0.0 SDK.', 'panels-and-insets/'],
     compact: ['Compact embed', 'IRCA in a single read-only viewer. Switch drawings in its toolbar, fit, inspect and change theme.', 'quick-start/'],
     project: ['Advanced project', 'Navigate the approved IRCA files in split or single panes. The active pane controls file, part and net navigation.', 'api-project/'],
     inspection: ['Parts, pads and nets', 'Select saved geometry in the canvas or use the part/net lists. Hidden layers remain hidden during highlighting.', 'user-guide/#inspect-parts-pads-pins-and-nets'],
@@ -184,7 +184,7 @@
           if(typeof viewer.setInspectorWidth==='function') select(ctx,'Properties width',[['300','300 px'],['360','360 px'],['420','420 px']],value=>viewer.setInspectorWidth(Number(value)));
           if(typeof viewer.openInset==='function') {
             button(ctx,'Open contextual preview',async()=>{const preview=await viewer.openInset();if(preview)own(ctx,preview);});
-          } else element('p','Contextual previews and width controls are prepared for 0.7. The published SDK still supports Properties, saved selection and highlighting.',stage);
+          } else element('p','This viewer does not expose contextual previews; use the matching 1.0.0 SDK.',stage);
         }
         if (key === 'layers') layerControls(ctx, viewer);
         if (key === 'compact') { button(ctx, 'Schematic', () => project.load(viewer, { file: 'IRCA.kicad_sch', view: 'schematic', signal: ctx.abort.signal })); button(ctx, 'PCB', () => project.load(viewer, { view: 'pcb', signal: ctx.abort.signal })); }

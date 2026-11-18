@@ -10,7 +10,7 @@ This reference describes the **0.3.0** base API and later self-hosted additions.
 ```js
 import { Viewer, EMBED_API_VERSION } from
   'https://unpkg.com/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kivi-viewer.js';
-console.log(EMBED_API_VERSION); // '1.0-beta'
+console.log(EMBED_API_VERSION); // '1.0'
 ```
 
 No package manager is required. Types in this reference use TypeScript notation to explain the JavaScript inputs; they do not require a TypeScript build.
@@ -58,7 +58,7 @@ The table includes the base exports and identifies later additions by version. T
 ## Embed API version
 
 ```ts
-const EMBED_API_VERSION: '1.0-beta'
+const EMBED_API_VERSION: '1.0'
 ```
 
 This legacy embedding-contract identifier is retained for compatibility. It is separate from the SDK/package release version. Reading it has no side effects and does not test browser capabilities, source compatibility or solver validity. Pin the complete release directory when integrating; this identifier alone does not freeze every future beta implementation.

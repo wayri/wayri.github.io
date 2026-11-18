@@ -1,46 +1,44 @@
 ---
 layout: webview-docs
-title: Latest source preview
+title: KERO linked workspace
 permalink: /kicad-webview/docs/source-preview/
 doc_section: examples
 ---
 
-The [KERO linked workspace](/assets/demos/kero-linked.html) uses the shared source updates from KiCad Online 0.12.102 plus the WebView copper-depth correction. It demonstrates saved sheet navigation, linked part/net selection and 3D focus with compact controls in the site's warm palette. Browser text metrics, unavailable component models and unsupported geometry remain approximations.
+The [KERO linked workspace](/assets/demos/kero-linked.html) now uses stable **KiCad WebView 1.0.0**, available from npm, jsDelivr, UNPKG and self-hosted files. The former source-preview URL is retained for existing links. [Release and migration notes](/kicad-webview/docs/api-stability/).
 
-This is a **source preview**, built from [exact revision 6deefae](https://github.com/wayri/kicad-webview/tree/6deefaea8a3473614939ba6358950b9c66ed5b15), checked in the public source fix. Stable npm and jsDelivr/unpkg remain **0.8.0**; this preview is not a replacement for the published version. Existing versioned release assets are unchanged.
+Select a sheet, part, pad or saved net to cross-highlight the other panes. Each camera remains independent. Net selection retains the 3D camera; explicit part selection frames its mounting side. Compact controls and the website's warm palette remain unchanged. On phones, panes stack; use the page gutter to scroll.
 
-## Direct script: no Node.js required
-
-Give the container a real height, serve your design from your own HTTPS site, and add:
+## Direct script without Node.js
 
 ```html
 <div id="board" style="height:70dvh;min-height:340px"></div>
-<script src="https://wayri.github.io/assets/lib/kicad-webview/previews/expanded-vias-6deefae/kicad-webview.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@1.0.0/dist/kicad-webview.min.js"></script>
 <script>
 const viewer = new KiCadWebView.Viewer('#board', {
-  theme: 'dark', inspectOnSelect: false
+  theme:'dark', inspectOnSelect:false
 });
-viewer.load('/designs/project.zip', {view: '3d'});
+viewer.load('/designs/project.zip', {view:'3d'});
 </script>
 ```
 
-Keep the notices and [matching covered source](https://github.com/wayri/kicad-webview/tree/6deefaea8a3473614939ba6358950b9c66ed5b15) when redistributing. Cross-origin design links require CORS; browser authorization is not bypassed. The library is free to use, including commercially, under MPL-2.0. Paid integration or support help is optional.
+Self-host the [versioned distribution](/assets/lib/kicad-webview/releases/1.0.0/RELEASE.json) and its notices, or [download the static SDK ZIP](https://github.com/wayri/kicad-webview/releases/download/v1.0.0/kicad-webview-1.0.0.zip). Cross-origin designs require CORS. The library is free to use, including commercially, under MPL-2.0; paid customization and support help is optional.
 
-## Try the saved design
+## Design provenance
 
-Select a part in any pane to cross-select its saved counterpart; 3D focuses the selected part. Choose a schematic from its sheet selector to navigate the project hierarchy. Select copper to highlight its saved net across layout and 3D. Layer visibility and each camera remain independent. Copper highlights follow layer colors and vias retain gold. Use Fit to restore framing. On phones, panes stack vertically; use the page gutter to scroll.
-
-KERO Encoder drawings are pinned to [wayri/KERO revision 7be8fef](https://github.com/wayri/KERO/tree/7be8fef589bc28eee149323e3790ef95b0873032/encoder), supplied by Yawar Badri (wayri). The [provenance manifest](/assets/lib/kicad-webview/previews/expanded-vias-6deefae/demo/PROVENANCE.json) records exact paths, sizes and hashes. External component models are not bundled; labelled stand-ins are not the original mechanical models. Consult the upstream project for hardware terms. Viewer software remains MPL-2.0. [Development acknowledgements](/kicad-webview/docs/acknowledgements/).
+KERO Encoder drawings are pinned to [wayri/KERO revision 7be8fef](https://github.com/wayri/KERO/tree/7be8fef589bc28eee149323e3790ef95b0873032/encoder), supplied by Yawar Badri (wayri). The [provenance manifest](/assets/lib/kicad-webview/releases/1.0.0/demo/PROVENANCE.json) records exact paths, sizes and hashes. External component models are not bundled; labelled stand-ins are not original mechanical models. Consult upstream for hardware terms. Viewer software is MPL-2.0. [Development acknowledgements, including AI assistance](/kicad-webview/docs/acknowledgements/).
 
 
-## Expanded net focus
+## Camera-preserving net focus in 1.0.0
 
-Select **Follow VBAT**, then **Expand** in the linked workspace. Only the selected net's via caps and stretched barrels remain gold; unrelated vias become gray and translucent in Dim mode. Select another net to move that emphasis, choose Expand again to reassemble, or Clear to restore the original colors. Source coordinates, layer spans and visibility remain unchanged.
+Selecting a net, trace or pad with **Highlight entire net** enabled keeps the current 3D camera position, target and orientation, including selections coming from linked PCB views. It does not switch to Top. Explicit part selection still centers the part and shows its mounting side.
+
+In the default **Dim + source colors** style, the selected net retains its layer colors, and only its via caps and barrels stay gold. Unrelated copper, all component bodies and board structures become gray and translucent in both assembled and expanded views. Clear restores their original appearance. Bright and Isolate remain explicit alternative styles.
 
 ```js
 viewer.setHighlightStyle('dim', {color: 'source'});
-viewer.selectNet('/VBAT');
-viewer.setExpand(85);
+viewer.selectNet('/VBAT'); // camera unchanged
+viewer.setExpand(85);     // optional animated assembly separation
 // viewer.clearSelection();
 // viewer.setExpand(0);
 ```

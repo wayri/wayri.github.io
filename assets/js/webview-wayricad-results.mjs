@@ -1,4 +1,4 @@
-import {Viewer,WayriCADResultsViewer} from '/assets/lib/kicad-webview/releases/0.8.0/kivi-viewer.js';
+import {Viewer,WayriCADResultsViewer} from '/assets/lib/kicad-webview/releases/1.0.0/kivi-viewer.js';
 import {fetchGallery,requestedCase} from './webview-wayricad-gallery.mjs';
 
 const $=selector=>document.querySelector(selector);
@@ -57,7 +57,7 @@ function showEvidence(row){
         element('pre',typeof row.summary==='string'?row.summary:JSON.stringify(row.summary,null,2),evidence);
     }
     list(evidence,'Assumptions',row.assumptions);list(evidence,'Limitations',row.limitations);
-    if(row.kind==='quick-therm')element('p','WebView 0.7.0 displays these steady temperature maps independently in 2D. The saved layer/Z metadata is not yet used for PCB placement or standalone 3D; a matching source hash is not a placement guarantee.',evidence);
+    if(row.kind==='quick-therm')element('p','This retained example displays these steady temperature maps independently in 2D. The saved layer/Z metadata is not yet used for PCB placement or standalone 3D; a matching source hash is not a placement guarantee.',evidence);
 }
 function selectionChanged(){
     stop();started=true;observer?.disconnect();results.clear();

@@ -11,13 +11,13 @@ For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/ki
 
 ## Fast photoreal board presentation
 
-[Open OLIMEX and IRCA in Photoreal Fast](/assets/demos/photoreal-fast.html). This labelled **0.8.0-preview.2** website SDK adds studio reflections, cached shadows and a backdrop that follows the site theme. Compact controls leave the board as the focus. [Direct-script integration and limits](/kicad-webview/docs/photoreal-fast/). The stable npm/CDN release remains 0.8.0.
+[Open OLIMEX and IRCA in Photoreal Fast](/assets/demos/photoreal-fast.html). The stable **1.0.0** SDK adds studio reflections, cached shadows and a background that follows the site theme. Compact controls leave the board as the focus. [Direct-script integration and limits](/kicad-webview/docs/photoreal-fast/). The stable npm/CDN release remains 1.0.0.
 
 [Expand mode and net shine-through](/kicad-webview/docs/expand-mode/) add two-stage assembly motion, fading substrate, stretched vias and bright source-bound highlights.
 
 ## Drawing styles and text context
 
-[Open the drawing fidelity demo](/assets/demos/drawing-fidelity.html) for a small generated formatting sample. Saved graphics and text work with the published SDK; variable, expression and table examples run with the 0.8.0 SDK. [Read the constraints and browser-only code](/kicad-webview/docs/drawing-fidelity/). The IRCA and credited public-board integrations below remain unchanged.
+[Open the drawing fidelity demo](/assets/demos/drawing-fidelity.html) for a small generated formatting sample. Saved graphics and text work with the published SDK; variable, expression and table examples run with the 1.0.0 SDK. [Read the constraints and browser-only code](/kicad-webview/docs/drawing-fidelity/). The IRCA and credited public-board integrations below remain unchanged.
 
 ## Try the new inspection controls
 
@@ -39,7 +39,7 @@ Explore the [capability demos](/kicad-webview/#capability-demos) and use [Intera
 The following uses the site-hosted 0.3.0 module. The npm/CDN examples below use the current package version shown above.
 
 ```js
-import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/0.3.0/kivi-viewer.js';
+import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/1.0.0/kivi-viewer.js';
 const viewer = new Viewer('#board', {highlightStyle: 'dim', highlightColor: 'accent'});
 await viewer.load('/designs/project.zip', {view: 'pcb'});
 viewer.setHighlightStyle('isolate', {color: 'source'});
@@ -282,8 +282,23 @@ The [drawing provenance](/assets/demos/public-hardware/PROVENANCE.json) and [mod
 Older hosted demonstration URLs forward to these current pages. The original versioned SDK files and downloadable ZIP archives retain their release contents and notices; they are not the current website showcases.
 
 
-## Full-net inspection in 0.8.0
+## Full-net inspection in 1.0.0
 
 Saved copper clicks highlight the complete net by default in layer colors; plated vias remain gold. Properties retain the clicked object and show “Full net highlighted” with its scope. Turn off **Highlight entire net** for individual objects. Accent colors remain optional through `setHighlightStyle("dim", {color:"accent"})`.
 
 Use `viewer.setRenderQuality("photoreal-fast")` for fast studio rendering and `viewer.setExpand(100)` / `viewer.setExpand(0)` for smooth assembly expansion. Source-linked selection survives PCB/3D switches and project changes keep their source-bound net index. [Photoreal demo](/assets/demos/photoreal-fast.html) · [Expansion and limits](/kicad-webview/docs/expand-mode/).
+
+
+## Camera-preserving net focus in 1.0.0
+
+Selecting a net, trace or pad with **Highlight entire net** enabled keeps the current 3D camera position, target and orientation, including selections coming from linked PCB views. It does not switch to Top. Explicit part selection still centers the part and shows its mounting side.
+
+In the default **Dim + source colors** style, the selected net retains its layer colors, and only its via caps and barrels stay gold. Unrelated copper, all component bodies and board structures become gray and translucent in both assembled and expanded views. Clear restores their original appearance. Bright and Isolate remain explicit alternative styles.
+
+```js
+viewer.setHighlightStyle('dim', {color: 'source'});
+viewer.selectNet('/VBAT'); // camera unchanged
+viewer.setExpand(85);     // optional animated assembly separation
+// viewer.clearSelection();
+// viewer.setExpand(0);
+```

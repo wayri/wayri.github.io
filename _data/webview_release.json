@@ -1,5 +1,5 @@
 {
-  "self_hosted": "0.8.0",
-  "npm": "0.8.0",
-  "embed_contract": "1.0-beta"
+  "self_hosted": "1.0.0",
+  "npm": "1.0.0",
+  "embed_contract": "1.0"
 }

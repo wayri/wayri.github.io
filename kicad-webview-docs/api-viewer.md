@@ -103,7 +103,7 @@ Hidden layers remain hidden during net highlighting. Schematic connectivity uses
 
 ### Inspection controls
 
-These controls are available in the [hosted 0.3.0 module](/assets/lib/kicad-webview/releases/0.3.0/kivi-viewer.js) and npm/CDN 0.3.0. Each viewer keeps its own highlight and layer state.
+These controls are available in the [hosted 0.3.0 module](/assets/lib/kicad-webview/releases/1.0.0/kivi-viewer.js) and npm/CDN 0.3.0. Each viewer keeps its own highlight and layer state.
 
 | Method | Return and behavior |
 | --- | --- |
@@ -197,10 +197,25 @@ Translucent mode shows the board and models transparently, copper in layer color
 
 ## Text context and loading in 0.7
 
-The 0.8.0 SDK accepts `LoadOptions.textVariables` (at most 256 strings, keys up to 200 characters, values up to 8,192 characters) and an exact saved `instancePath`. One locally supplied `.kicad_pro` can provide project text variables. Explicit values override them and persist through navigation and contextual previews. No project or ancestor is fetched implicitly. [Examples, numeric subset and table limits](/kicad-webview/docs/drawing-fidelity/).
+The 1.0.0 SDK accepts `LoadOptions.textVariables` (at most 256 strings, keys up to 200 characters, values up to 8,192 characters) and an exact saved `instancePath`. One locally supplied `.kicad_pro` can provide project text variables. Explicit values override them and persist through navigation and contextual previews. No project or ancestor is fetched implicitly. [Examples, numeric subset and table limits](/kicad-webview/docs/drawing-fidelity/).
 
-## Full-net inspection in 0.8.0
+## Full-net inspection in 1.0.0
 
-Saved copper clicks highlight the complete net by default in layer colors; plated vias remain gold. Properties retain the clicked object and show “Full net highlighted” with its scope. Turn off **Highlight entire net** for individual objects. Accent colors remain optional through `setHighlightStyle("dim", {color:"accent"})`.
+Saved copper clicks highlight the complete net by default in layer colors; selected-net vias remain gold in Dim net focus. Properties retain the clicked object and show “Full net highlighted” with its scope. Turn off **Highlight entire net** for individual objects. Accent colors remain optional through `setHighlightStyle("dim", {color:"accent"})`.
 
 Use `viewer.setRenderQuality("photoreal-fast")` for fast studio rendering and `viewer.setExpand(100)` / `viewer.setExpand(0)` for smooth assembly expansion. Source-linked selection survives PCB/3D switches and project changes keep their source-bound net index. [Photoreal demo](/assets/demos/photoreal-fast.html) · [Expansion and limits](/kicad-webview/docs/expand-mode/).
+
+
+## Camera-preserving net focus in 1.0.0
+
+Selecting a net, trace or pad with **Highlight entire net** enabled keeps the current 3D camera position, target and orientation, including selections coming from linked PCB views. It does not switch to Top. Explicit part selection still centers the part and shows its mounting side.
+
+In the default **Dim + source colors** style, the selected net retains its layer colors, and only its via caps and barrels stay gold. Unrelated copper, all component bodies and board structures become gray and translucent in both assembled and expanded views. Clear restores their original appearance. Bright and Isolate remain explicit alternative styles.
+
+```js
+viewer.setHighlightStyle('dim', {color: 'source'});
+viewer.selectNet('/VBAT'); // camera unchanged
+viewer.setExpand(85);     // optional animated assembly separation
+// viewer.clearSelection();
+// viewer.setExpand(0);
+```

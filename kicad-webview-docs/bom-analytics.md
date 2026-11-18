@@ -18,7 +18,7 @@ The example below uses the self-hosted 0.5.0 module path; host that release and 
 <div id="board" style="height:500px"></div>
 <div id="bom"></div>
 <script type="module">
-import {Viewer, BOMViewer} from '/assets/lib/kicad-webview/releases/0.5.0/kivi-viewer.js';
+import {Viewer, BOMViewer} from '/assets/lib/kicad-webview/releases/1.0.0/kivi-viewer.js';
 const board = new Viewer('#board', {theme:'dark'});
 const bom = new BOMViewer('#bom', {viewer:board, theme:'dark'});
 await board.load('/assets/demos/public-hardware/olimex-p4-project.json', {view:'pcb'});

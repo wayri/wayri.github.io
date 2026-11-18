@@ -73,7 +73,7 @@ Host the complete matching 0.6.0 release directory and its notices at the path u
 ```html
 <div id="board" style="height:70dvh;min-height:360px"></div>
 <p id="status" role="status">Opening board…</p>
-<script src="/assets/lib/kicad-webview/releases/0.6.0/kicad-webview.min.js"></script>
+<script src="/assets/lib/kicad-webview/releases/1.0.0/kicad-webview.min.js"></script>
 <script>
 const viewer = new KiCadWebView.Viewer('#board', {theme:'dark'});
 window.addEventListener('pagehide', () => viewer.dispose(), {once:true});

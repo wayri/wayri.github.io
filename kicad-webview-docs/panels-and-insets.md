@@ -6,11 +6,7 @@ doc_section: panels-and-insets
 description: Keep the main camera steady, inspect saved selections in bounded contextual previews and choose a saved-result palette.
 ---
 
-{% if site.data.webview_release.self_hosted == '0.8.0' %}
-The self-hosted **0.8.0 SDK** includes these features. {% if site.data.webview_release.npm == '0.8.0' %}The matching package is also available from npm/CDN.{% else %}npm/CDN is **{{ site.data.webview_release.npm }}**; use the matching self-hosted build for these APIs.{% endif %}
-{% else %}
-This guide describes the upcoming **0.8.0 source refresh**. Published self-hosted and npm/CDN versions remain **{{ site.data.webview_release.self_hosted }}** and **{{ site.data.webview_release.npm }}**. Use a matching locally built distribution for the new APIs; publication is not announced here.
-{% endif %}
+The **1.0.0** SDK includes these features through npm, CDN and the self-hosted distribution. Keep matching files and notices together.
 
 The viewer keeps its own ribbon, popup styling, theme and visible controls. **Open contextual preview**, **Fit selection**, **Close** and the palette selector remain explicit actions. Saved identities automate locate, cross-selection and preview focus; they do not turn the viewer into an editor or a solver.
 
@@ -51,13 +47,13 @@ Each parent owns at most **two insets**. Insets close and release listeners/rend
 
 ## Add a host-managed inset without Node.js
 
-Host the complete matching 0.8.0 distribution and notices at the local path in this example. A static HTTP(S) page needs no npm installation or Node.js runtime. This example uses the credited OLIMEX project; replace the manifest with your own supported project URL when integrating. Remote files require CORS.
+Host the complete matching 1.0.0 distribution and notices at the local path in this example. A static HTTP(S) page needs no npm installation or Node.js runtime. This example uses the credited OLIMEX project; replace the manifest with your own supported project URL when integrating. Remote files require CORS.
 
 ```html
 <div id="board" style="height:70dvh;min-height:360px"></div>
 <div id="context" style="height:360px"></div>
 <p id="status" role="status">Opening project…</p>
-<script src="/vendor/kicad-webview-0.8.0/kicad-webview.min.js"></script>
+<script src="/vendor/kicad-webview-1.0.0/kicad-webview.min.js"></script>
 <script>
 const board = new KiCadWebView.Viewer('#board', {
   theme:'dark', inspectOnSelect:false
