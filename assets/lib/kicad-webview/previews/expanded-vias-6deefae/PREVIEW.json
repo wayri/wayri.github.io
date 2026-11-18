@@ -1,0 +1,6 @@
+{
+  "channel": "Source preview; stable npm 0.8.0 unchanged",
+  "revision": "6deefaea8a3473614939ba6358950b9c66ed5b15",
+  "source": "https://github.com/wayri/kicad-webview/tree/6deefaea8a3473614939ba6358950b9c66ed5b15",
+  "changes": "Expanded Dim net focus: selected via plating gold; unrelated vias gray and translucent"
+}
