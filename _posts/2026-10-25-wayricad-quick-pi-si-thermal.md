@@ -59,6 +59,8 @@ There is also a directed aggressor/victim workflow for supported local straight-
 
 QuickTherm is installed separately from Quick PI. It reads saved footprint properties or reviewed table overrides for power, thermal resistance, and temperature limits. The important input is the component’s operating dissipation, not its maximum power rating.
 
+**Update for WayriCAD 4.8.8:** new studies enable **Automatic setup**. Save the PCB, review actual component dissipation, then click **Run**. The built-in solver chooses a supported saved-stackup model or a labelled thin-sheet screen and sizes the mesh; normal screening needs no CalculiX install. Edited inputs and explicit source scope remain yours. Older studies retain advanced choices. [Read the 4.8.8 workflow and download guide](/wayricad/releases/4.8.8/). Defaults are illustrative, and automatic meshing is not a convergence check.
+
 At the simplest level, it provides a lumped thermal screen. Optional board models add thin-sheet or layer-resolved temperature fields, with supported steady-state and transient studies. Ambient conditions, materials, contacts and heat-rejection paths must be supplied for the selected model. Prescribed cooling conditions do not mean airflow has been solved.
 
 <figure>

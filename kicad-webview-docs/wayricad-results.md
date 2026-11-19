@@ -6,13 +6,13 @@ doc_section: wayricad-results
 description: Bring retained Quick PI, Quick SI and QuickTherm output into an interactive WebView with source identity and original numerical data.
 ---
 
-[Open the saved-result demo](/assets/demos/wayricad-results.html) · [Public-board cases](/assets/demos/wayricad-results.html?gallery=public) · [WayriCAD tools](/wayricad/) · [Complete library API and limits](https://github.com/wayri/kicad-webview/blob/v0.7.0/docs/WAYRICAD-RESULTS.md)
+[Open the saved-result demo](/assets/demos/wayricad-results.html) · [Public-board cases](/assets/demos/wayricad-results.html?gallery=public) · [WayriCAD tools](/wayricad/) · [Complete library API and limits](https://github.com/wayri/kicad-webview/blob/v{{ site.data.webview_release.self_hosted }}/docs/WAYRICAD-RESULTS.md)
 
 ## From native tools to a browser
 
-Use WayriCAD to compute the study, then use **Save results / Pocket KiVi** to retain its portable companion. This demo uses the self-hosted KiCad WebView **0.7.0** SDK to read those existing JSON structures and display the saved values beside the matching native PCB. It does not run the solver, execute a report, modify a design or fetch source paths found inside a result.
+Use WayriCAD to compute the study, then use **Save results / Pocket KiVi** to retain its portable companion. This demo uses the self-hosted KiCad WebView **{{ site.data.webview_release.self_hosted }}** SDK to read those existing JSON structures and display the saved values beside the matching native PCB. It does not run the solver, execute a report, modify a design or fetch source paths found inside a result.
 
-Keep the **original solve-time saved PCB fingerprint** and its corresponding PCB. A fresh hash of a changed board cannot establish where an older result came from. See [WayriCAD’s pinned export contract](https://github.com/wayri/WayriCAD/blob/0617fd201c0817d95648cec639744138aa59fe20/docs/POCKET_KIVI_EXPORT.md).
+Keep the **original solve-time saved PCB fingerprint** and its corresponding PCB. A fresh hash of a changed board cannot establish where an older result came from. See [WayriCAD’s pinned export contract](https://github.com/wayri/WayriCAD/blob/v4.8.8/docs/POCKET_KIVI_EXPORT.md).
 
 | Tool | Visualize retained output | Connection to the design |
 | --- | --- | --- |
@@ -22,6 +22,12 @@ Keep the **original solve-time saved PCB fingerprint** and its corresponding PCB
 | Other/unsupported structures | Complete paged numerical data and JSON download | No fabricated plot, geometry, unit conversion or source binding is added. |
 
 Independent 3D field views use only supplied XYZ or an explicit saved layer elevation. They retain source coordinates, the producer’s elevation basis and source-unit probes. Values are not turned into invented heights. Unknown elevation stays in the 2D view. Use **Show on matching PCB** to register the field on the native 2D/3D board. Supported front-depth/board-center elevations map onto the actual board; without saved Z only explicitly named F.Cu/B.Cu surfaces are placed. Fields show through the substrate and models, with that presentation labelled. PCB layer visibility is respected.
+
+## Producing results with WayriCAD 4.8.8
+
+[Install or upgrade WayriCAD 4.8.8](/wayricad/releases/4.8.8/). In QuickTherm, save the PCB, review actual dissipated watts and component scope, then use **Run** with **Automatic setup**. The built-in solver chooses a supported physical saved-stackup model or an explicitly labelled thin-sheet screen and sizes the mesh. Review illustrative material/cooling defaults before interpreting the result.
+
+Use **Files** to retain computed results and their portable companion alongside the original solve-time PCB. Import those saved files into the viewer; browser selection and layer controls inspect the retained study and do not rerun Automatic setup or the solver. Missing package data still leaves junction temperatures unknown. See the [version-matched QuickTherm guide](https://github.com/wayri/WayriCAD/blob/v4.8.8/quick_therm_plugin/QUICK_THERM_USER_GUIDE.md).
 
 ## Embed both views without Node.js
 

@@ -1,5 +1,5 @@
 // Explicit browser QA: NODE_PATH must expose an existing Playwright installation.
-const {chromium} = require('playwright');
+const {chromium} = require(process.env.WAYRICAD_PLAYWRIGHT_MODULE || 'playwright');
 const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
@@ -21,9 +21,19 @@ const expectedTools = require('../_data/wayricad.json').groups.flatMap(group=>gr
             const errors = [];
             page.on('pageerror',error=>errors.push(error.message));
             await page.goto(pathToFileURL(html).href,{waitUntil:'networkidle',timeout:30000});
+            const gallery = page.locator('[data-project-gallery]');
+            // Hidden carousel images are intentionally lazy; reveal each through its real control.
+            if (await gallery.count()) {
+                await gallery.locator('[data-gallery-toggle]').click();
+                const slides = await gallery.locator('[data-gallery-slide]').count();
+                for (let index=0; index<slides; index++) {
+                    await gallery.locator('[data-gallery-slide]:visible img').evaluate(img=>img.decode());
+                    await gallery.locator('[data-gallery-next]').click();
+                }
+            }
             assert.equal(await page.locator('.wayricad-tool:visible').count(),expectedTools);
             for (const image of await page.locator('main img').all()) {
-                await image.scrollIntoViewIfNeeded();
+                if (await image.isVisible()) await image.scrollIntoViewIfNeeded();
                 await image.evaluate(img=>img.decode());
             }
             await page.evaluate(()=>scrollTo(0,0));

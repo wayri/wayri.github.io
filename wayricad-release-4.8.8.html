@@ -1,0 +1,66 @@
+---
+layout: product
+title: "WayriCAD 4.8.8: Automatic Run and linked design views"
+description: "Install WayriCAD 4.8.8, run QuickTherm with automatic setup, explore linked schematic and PCB views, and download verified plugin packages."
+permalink: /wayricad/releases/4.8.8/
+image: /assets/images/projects/wayricad-quick-therm.png
+---
+<link rel="stylesheet" href="{{ '/assets/css/software-project.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/wayricad.css' | relative_url }}">
+<main class="software-project wayricad-project" id="main-content">
+  <header>
+    <p class="software-kicker">Release guide · 19 November 2026</p>
+    <h1>WayriCAD 4.8.8</h1>
+    <p class="software-lead">Enter actual component dissipation and run a thermal screen with automatic setup. Navigate saved schematics, PCB layouts and 3D views with the linked viewer improvements retained from 4.8.7.</p>
+    <nav class="wayricad-sections" aria-label="Release guide sections"><a href="{{ '/wayricad/' | relative_url }}">WayriCAD overview</a><a href="#install">Install / upgrade</a><a href="#automatic-run">QuickTherm workflow</a><a href="#linked-views">Linked views</a><a href="#downloads">Downloads</a><a href="#evidence">Evidence and limits</a></nav>
+  </header>
+  <section aria-labelledby="install">
+    <h2 id="install">Install or upgrade through KiCad</h2>
+    <ol class="wayricad-steps">
+      <li>Open KiCad Manager’s <strong>Plugin and Content Manager</strong>. Under <strong>Manage Repositories</strong>, add the <a href="https://raw.githubusercontent.com/wayri/WayriCAD/develop/pcm/repo.json">WayriCAD repository feed</a>. Its address stays the same between releases.</li>
+      <li>Refresh the repository and install or update the individual tools you need. For this release, choose <strong>4.8.8</strong>. You do not need to install every plugin.</li>
+      <li>For a manual install, download the matching <strong>-PCM.zip</strong> below and use <strong>Install from File</strong>. Do not unpack a PCM ZIP into a second plugin folder.</li>
+      <li>Restart the affected KiCad editor and verify the installed version. Save the intended board before launching an analysis; unsaved changes are not included.</li>
+    </ol>
+    <p>KiCad 10 is the documented baseline. Follow the <a href="https://github.com/wayri/WayriCAD/blob/v4.8.8/docs/INSTALLATION.md">version-matched installation guide</a> and <a href="https://github.com/wayri/WayriCAD/blob/v4.8.8/docs/COMPATIBILITY.md">compatibility matrix</a> for your plugin and OS. A PCM installation is separate from a full suite CLI installation.</p>
+  </section>
+  <section aria-labelledby="automatic-run">
+    <h2 id="automatic-run">QuickTherm: powers, then Run</h2>
+    <ol class="wayricad-steps">
+      <li>Save the PCB, including its current zone fills. Open <strong>WayriCAD QuickTherm</strong>.</li>
+      <li>In <strong>Components</strong>, review actual dissipated watts and the parts included in the study. A maximum rated power is not operating dissipation. Unknown selected powers remain actionable errors.</li>
+      <li>Leave <strong>Automatic setup</strong> enabled and click <strong>Run</strong>. The built-in solver chooses the supported layered model when a physical saved stackup is available; otherwise it uses an explicitly labelled thin-sheet screen. It also chooses the starting mesh. Normal screening does not require CalculiX.</li>
+      <li>Review ambient, material and cooling assumptions. Blank starting values use documented illustrative defaults, including 20 °C ambient. Edited values and explicit component scope are retained; no selection includes available valid known powers.</li>
+      <li>Inspect solved/selected counts, excluded or unknown inputs, board temperatures and heat balance. Use <strong>Files</strong> to save the study, reports and computed results. Thermal workspace inputs do not change the source PCB.</li>
+    </ol>
+    <p>Choosing an explicit model or manual mesh leaves automatic mode. Older saved studies reopen with their advanced choices preserved; re-enable Automatic setup to use the normal flow. Unsupported layer-dependent physics and conflicting boundaries are errors, rather than silent model substitutions.</p>
+    <p><a href="https://github.com/wayri/WayriCAD/blob/v4.8.8/quick_therm_plugin/QUICK_THERM_USER_GUIDE.md">Full QuickTherm user guide ↗</a> · <a href="https://github.com/wayri/WayriCAD/blob/v4.8.8/quick_therm_plugin/ONE_CLICK_VALIDATION.md">Automatic Run validation ↗</a></p>
+  </section>
+  <section aria-labelledby="linked-views">
+    <h2 id="linked-views">Explore and share the same saved design</h2>
+    <p>4.8.8 retains the 4.8.7 <strong>Review</strong> and <strong>Portable Web Export</strong> refresh: occurrence-aware schematic hierarchy, BoM and part lookup, linked PCB/3D selection, Photoreal Fast, expanded-board net inspection and improved orbit/pan behavior. Narrow embedded views were checked at 390 pixels; that is browser-layout evidence, not a physical-phone speed guarantee.</p>
+    <p>Portable HTML keeps saved-source freshness checks and separate original/embedded hashes. The embedded viewer uses an independently pinned WebView source build; installing a newer standalone npm SDK does not change the plugin’s bundled runtime. Component stand-ins and missing model data remain approximate.</p>
+    <p><a href="https://github.com/wayri/WayriCAD/blob/v4.8.8/portable_web_export_plugin/README.md">Portable Web Export guide ↗</a> · <a href="https://github.com/wayri/WayriCAD/blob/v4.8.8/review_comments_plugin/README.md">Review guide ↗</a> · <a href="https://github.com/wayri/WayriCAD/releases/tag/v4.8.7">4.8.7 viewer release evidence ↗</a></p>
+    <h3>Take a computed study into a browser</h3>
+    <p>Retain the result’s portable companion with the original solve-time PCB, then load both into KiCad WebView. Supported saved Quick PI, Quick SI and QuickTherm results can be inspected alongside PCB/3D views with layers and source-bound cross-highlighting. This displays retained output; it does not run the native solver or establish measurement accuracy.</p>
+    <p><a href="{{ '/kicad-webview/docs/wayricad-results/' | relative_url }}">Saved-result integration guide →</a> · <a href="{{ '/assets/demos/wayricad-results.html' | relative_url }}?gallery=public">Credited public-board results →</a></p>
+  </section>
+  <section aria-labelledby="downloads">
+    <h2 id="downloads">Version-matched downloads</h2>
+    <ul>
+      <li><a href="https://github.com/wayri/WayriCAD/releases/download/v4.8.8/WayriCAD-quick-therm-4.8.8-PCM.zip">QuickTherm 4.8.8 PCM ZIP</a></li>
+      <li><a href="https://github.com/wayri/WayriCAD/releases/download/v4.8.8/WayriCAD-portable-web-export-4.8.8-PCM.zip">Portable Web Export 4.8.8 PCM ZIP</a></li>
+      <li><a href="https://github.com/wayri/WayriCAD/releases/download/v4.8.8/WayriCAD-review-comments-4.8.8-PCM.zip">Review 4.8.8 PCM ZIP</a></li>
+      <li><a href="https://github.com/wayri/WayriCAD/releases/tag/v4.8.8">All 27 independently installable plugins and release notes</a></li>
+      <li><a href="https://github.com/wayri/WayriCAD/releases/download/v4.8.8/wayricad-4.8.8-py3-none-any.whl">Suite Python wheel</a> · <a href="https://github.com/wayri/WayriCAD/releases/download/v4.8.8/wayricad-4.8.8.tar.gz">Source distribution</a> · <a href="https://github.com/wayri/WayriCAD/blob/v4.8.8/docs/CLI_USER_GUIDE.md">CLI setup and commands</a></li>
+      <li><a href="https://github.com/wayri/WayriCAD/releases/download/v4.8.8/SHA256SUMS-4.8.8.txt">SHA-256 checksums</a> · <a href="https://github.com/wayri/WayriCAD/releases/download/v4.8.8/validation-4.8.8.json">Release validation receipt</a></li>
+    </ul>
+    <p>The library and plugins remain free and open source under their respective licenses. WayriCAD is GPL-3.0. Follow the declared interpreter and scientific/native dependencies; a wheel does not supply every runtime.</p>
+  </section>
+  <section aria-labelledby="evidence">
+    <h2 id="evidence">What was checked, and what remains unknown</h2>
+    <p>The 4.8.8 release records all eight hosted CI jobs passing and 326 native QuickTherm tests plus 223 subtests passing, with three optional CalculiX/Gmsh integration skips. The public thermal example and real KERO Encoder PCB passed the normal native window/worker Run flow with illustrative powers and ambient. All 27 installed plugin payloads were hash-verified; the installed QuickTherm run used its own runtime rather than a source-checkout fallback.</p>
+    <p>These checks establish execution and conservation evidence for those cases, not measured thermal accuracy. Automatic mesh sizing does not establish convergence. Board temperature is not junction temperature; junction values remain unknown without package thermal data. Layer-dependent physics still needs physical stackup information. STEP geometry and board colors do not supply missing material or cooling properties.</p>
+    <p><a href="https://github.com/wayri/WayriCAD/releases/tag/v4.8.8">Exact release source, CI and immutable assets ↗</a> · <a href="https://github.com/wayri/WayriCAD/blob/v4.8.8/ACKNOWLEDGEMENTS.md">Acknowledgements and development assistance ↗</a></p>
+  </section>
+</main>

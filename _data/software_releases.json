@@ -2,20 +2,19 @@
   "checked_on": "2026-11-19",
   "wayricad": {
     "name": "WayriCAD",
-    "version": "4.8.6",
+    "version": "4.8.8",
     "channel": "Release",
-    "released_on": "2026-11-18",
+    "released_on": "2026-11-19",
     "repo": "wayri/WayriCAD",
-    "summary": "Follow PCB selections into PI/SI studies, review explicit power paths and explore bounded AC impedance models, with more reliable thermal solves.",
+    "summary": "Enter dissipated watts and run QuickTherm with automatic setup; inspect and share saved designs with the refreshed linked viewer.",
     "changes": [
-      "Quick PI and Quick SI follow idle PCB selection with explicit source/load roles and saved-geometry checks. Power-path diagrams and named bundle cases make the study setup easier to review.",
-      "Two separate AC tools cover straight rectangular-conductor MQS two-port impedance and an explicitly meshed quasi-TEM planar PDN cavity. Each retains its own return-path and geometry assumptions.",
-      "QuickTherm includes known source power when no sources are selected, handles compatible shared-cell temperature fixtures, and improves sparse-solve and radiation-step reliability.",
-      "Optional Windows CalculiX setup can provision a pinned, checksum-verified solver. Explicit solver paths and offline operation remain available.",
-      "Portable Web Export retains saved-source freshness checks and separate original/embedded hashes; its bundled WebView version is independently pinned."
+      "QuickTherm Automatic setup chooses the built-in solver, a supported saved-stackup model or labelled thin-sheet screen, and an automatic mesh. Normal screening needs no CalculiX installation.",
+      "Edited inputs and explicit component scope are retained. Manual model/mesh choices remain available; older saved studies keep their advanced settings.",
+      "The inherited 4.8.7 Review and Portable Web Export update adds occurrence-aware hierarchy navigation, BoM/part cross-selection, Photoreal Fast, expanded-net inspection and checked narrow embeds.",
+      "Saved-source freshness checks, original/embedded hashes and actionable errors for unknown powers or unsupported physics remain in place. The bundled viewer has its own source pin."
     ],
-    "note": "Selection following uses saved geometry. Power-path previews are topology, not solved results. AC models have explicit conductor/reference-plane limits; thermal changes improve solver reliability without establishing measured accuracy.",
-    "guide": "https://github.com/wayri/WayriCAD/blob/v4.8.6/docs/RELEASE_NOTES_4.8.6.md"
+    "note": "Automatic material and cooling defaults are illustrative. Automatic meshing does not establish convergence; computed board temperature is not measured accuracy, and junction temperature remains unknown without package data.",
+    "guide": "https://wayri.github.io/wayricad/releases/4.8.8/"
   },
   "spike": {
     "name": "SPIKE",

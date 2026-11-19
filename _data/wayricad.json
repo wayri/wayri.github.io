@@ -1,11 +1,11 @@
 {
   "reviewed": "2026-11-19",
-  "source": "https://github.com/wayri/WayriCAD/tree/v4.8.6",
+  "source": "https://github.com/wayri/WayriCAD/tree/v4.8.8",
   "groups": [
     {"id":"analysis", "title":"Electrical, thermal and electromagnetic analysis", "tools":[
       {"name":"Quick PI", "guide":"quick_pi_plugin/README.md", "description":"Follow saved PCB net selections into DC drop and copper-loss studies. Review explicit source/load pads, power-path diagrams and named cases; separate bounded MQS two-port and planar PDN models cover AC impedance."},
       {"name":"Quick SI", "guide":"signal_integrity_advisor_plugin/ReadMe.md", "description":"Follow PCB selections into routed-path screening for reflections, termination, return paths and pair timing, with explicit endpoints, saved geometry and driver/load assumptions."},
-      {"name":"QuickTherm", "guide":"quick_therm_plugin/README.md", "description":"Study declared dissipation and supported steady/transient PCB models, with known-power source setup, compatible shared-cell fixtures and guarded sparse/radiation solves. Optional CalculiX has its own geometry and runtime requirements."},
+      {"name":"QuickTherm", "guide":"quick_therm_plugin/README.md", "description":"Enter actual dissipated watts and Run with automatic built-in solver/model/mesh setup. Retain edited inputs, inspect board temperature and saved transient results; defaults are illustrative and junction data remains explicit."},
       {"name":"Trace RLC / Impedance", "guide":"trace_impedance_plugin/ReadMe.md", "description":"Extract supported trace, via and plane geometry with model coverage. Saved stackup separates physical, traversed and residual via barrel lengths; missing return paths or stub models remain unresolved."},
       {"name":"Quick EMerge (beta)", "guide":"quick_emerge_plugin/README.md", "description":"Set up supported electromagnetic and antenna studies, inspect fields and reports, and follow documented solver and research-example limitations."},
       {"name":"Planar Magnetics", "guide":"planar_magnetics_plugin/ReadMe.md", "description":"Explore PCB coils, windings, magnetic equivalents and supported motor/actuator estimates with declared materials and drive conditions."},
@@ -23,8 +23,8 @@
     {"id":"documentation", "title":"Connectivity, harnesses and engineering documentation", "tools":[
       {"name":"Pin Extractor", "guide":"extract_pins_plugin/ReadMe.md", "description":"Extract connector and component pins, net maps and supported endpoint paths for interface, firmware and test documentation."},
       {"name":"Harness Workbench", "guide":"harness_workbench_plugin/ReadMe.md", "description":"Review cross-board connector/pin mappings, external wire links and harness documentation with explicit connection rules."},
-      {"name":"Portable Web Export", "guide":"portable_web_export_plugin/README.md", "description":"Share supported schematic, PCB and model views as offline HTML, with saved-source freshness checks and separate original/embedded hashes."},
-      {"name":"Review Comments", "guide":"review_comments_plugin/README.md", "description":"Keep structured engineering review comments alongside supported project and review workflows."}
+      {"name":"Portable Web Export", "guide":"portable_web_export_plugin/README.md", "description":"Share offline HTML with occurrence-aware schematic hierarchy, BoM/part cross-selection and interactive PCB/3D inspection, retaining source freshness and separate original/embedded hashes."},
+      {"name":"Review Comments", "guide":"review_comments_plugin/README.md", "description":"Review saved projects with occurrence-aware hierarchy, linked part selection and refreshed PCB/3D inspection; keep structured engineering comments alongside the review workflow."}
     ]},
     {"id":"project", "title":"Project preparation and assembly data", "tools":[
       {"name":"Project Fusion", "guide":"project_fusion_plugin/README.md", "description":"Stage guided schematic and PCB imports/merges while reviewing project identity, hierarchy and native-file safeguards."},

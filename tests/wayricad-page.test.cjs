@@ -25,7 +25,7 @@ test('product identity and search/social metadata have one maintained owner', ()
     assert.equal(app.url, 'https://wayri.github.io/wayricad/');
     assert.equal(app.name, 'WayriCAD');
     assert.equal(app.alternateName, 'KiWay');
-    assert.equal(app.downloadUrl, 'https://github.com/wayri/WayriCAD/releases');
+    assert.equal(app.downloadUrl, 'https://github.com/wayri/WayriCAD/releases/latest');
     assert.ok(!('aggregateRating' in app));
     assert.ok(!('softwareVersion' in app));
     assert.equal((page.match(/<h1\b/g) || []).length, 1);
