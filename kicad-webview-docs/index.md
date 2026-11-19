@@ -12,7 +12,7 @@ The current self-hosted **{{ site.data.webview_release.self_hosted }} SDK** and 
 
 ## Stable core embed API 1.0
 
-KiCad WebView 1.0.0 establishes the documented core embed API as stable. Classic scripts, ES modules, lite builds, iframes and self-contained HTML retain their integration paths. When upgrading from 0.8.0, change exact `EMBED_API_VERSION` checks from `1.0-beta` to `1.0`; existing documented method signatures and saved-state/result schema versions are retained. [Upgrade notes and stability policy](https://github.com/wayri/kicad-webview/blob/v1.0.0/docs/API-STABILITY.md).
+KiCad WebView 1.0.0 establishes the documented core embed API as stable. Classic scripts, ES modules, lite builds, iframes and self-contained HTML retain their integration paths. When upgrading from 0.8.0, change exact `EMBED_API_VERSION` checks from `1.0-beta` to `1.0`; existing documented method signatures and saved-state/result schema versions are retained. [Upgrade notes and stability policy](https://github.com/wayri/kicad-webview/blob/v1.1.0/docs/API-STABILITY.md).
 
 Net and pad cross-selection preserve the 3D camera; explicit part selection still frames the part. Cleaner copper-depth smoothing and selected-net gold vias make assembled and expanded Dim views easier to read. [Try Photoreal Fast](/assets/demos/photoreal-fast.html) or [read the release evidence](/kicad-webview/docs/releases/).
 

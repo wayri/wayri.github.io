@@ -73,7 +73,7 @@ Save this HTML on an HTTP(S) host. It opens the public OLIMEX project using pinn
   and Up/Down change the knob. Page controls remain usable with a keyboard.</p>
 <script type="module">
 import { Viewer, DemoController } from
-  'https://unpkg.com/@wayrisignals/kicad-webview@0.3.0/dist/kivi-viewer.js';
+  'https://unpkg.com/@wayrisignals/kicad-webview@1.1.0/dist/kivi-viewer.js';
 
 const status = document.querySelector('#status');
 const viewer = new Viewer('#board', {theme:'dark'});

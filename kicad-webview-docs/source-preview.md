@@ -13,7 +13,7 @@ Select a sheet, part, pad or saved net to cross-highlight the other panes. Each 
 
 ```html
 <div id="board" style="height:70dvh;min-height:340px"></div>
-<script src="https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@1.0.0/dist/kicad-webview.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@1.1.0/dist/kicad-webview.min.js"></script>
 <script>
 const viewer = new KiCadWebView.Viewer('#board', {
   theme:'dark', inspectOnSelect:false
@@ -22,11 +22,11 @@ viewer.load('/designs/project.zip', {view:'3d'});
 </script>
 ```
 
-Self-host the [versioned distribution](/assets/lib/kicad-webview/releases/1.0.0/RELEASE.json) and its notices, or [download the static SDK ZIP](https://github.com/wayri/kicad-webview/releases/download/v1.0.0/kicad-webview-1.0.0.zip). Cross-origin designs require CORS. The library is free to use, including commercially, under MPL-2.0; paid customization and support help is optional.
+Self-host the [versioned distribution](/assets/lib/kicad-webview/releases/1.1.0/RELEASE.json) and its notices, or [download the static SDK ZIP](https://github.com/wayri/kicad-webview/releases/download/v1.1.0/kicad-webview-1.1.0.zip). Cross-origin designs require CORS. The library is free to use, including commercially, under MPL-2.0; paid customization and support help is optional.
 
 ## Design provenance
 
-KERO Encoder drawings are pinned to [wayri/KERO revision 7be8fef](https://github.com/wayri/KERO/tree/7be8fef589bc28eee149323e3790ef95b0873032/encoder), supplied by Yawar Badri (wayri). The [provenance manifest](/assets/lib/kicad-webview/releases/1.0.0/demo/PROVENANCE.json) records exact paths, sizes and hashes. External component models are not bundled; labelled stand-ins are not original mechanical models. Consult upstream for hardware terms. Viewer software is MPL-2.0. [Development acknowledgements, including AI assistance](/kicad-webview/docs/acknowledgements/).
+KERO Encoder drawings are pinned to [wayri/KERO revision 7be8fef](https://github.com/wayri/KERO/tree/7be8fef589bc28eee149323e3790ef95b0873032/encoder), supplied by Yawar Badri (wayri). The [provenance manifest](/assets/lib/kicad-webview/releases/1.1.0/demo/PROVENANCE.json) records exact paths, sizes and hashes. External component models are not bundled; labelled stand-ins are not original mechanical models. Consult upstream for hardware terms. Viewer software is MPL-2.0. [Development acknowledgements, including AI assistance](/kicad-webview/docs/acknowledgements/).
 
 
 ## Camera-preserving net focus in 1.0.0

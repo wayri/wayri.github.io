@@ -34,7 +34,7 @@ The overlay follows expansion, respects hidden layers and the existing accent/so
 
 The overlay has bounded instance, source-mesh and edge budgets; a visible notice identifies truncation. Open the demo’s optional **Read rendering stats** control to inspect `expansion`, `netGlow` and actual rendered pixels. Source models and retained results keep their original limits and provenance.
 
-[Photoreal Fast integration](/kicad-webview/docs/photoreal-fast/) · [Source preset notes](/assets/lib/kicad-webview/releases/1.0.0/EXPAND-MODE.md) · [Credits and development acknowledgements](/kicad-webview/docs/acknowledgements/)
+[Photoreal Fast integration](/kicad-webview/docs/photoreal-fast/) · [Source preset notes](/assets/lib/kicad-webview/releases/1.1.0/EXPAND-MODE.md) · [Credits and development acknowledgements](/kicad-webview/docs/acknowledgements/)
 
 Copper clicks highlight the full saved net by default in its layer colors. Only selected-net plated vias stay gold during Dim net focus; the optional accent style remains available.
 

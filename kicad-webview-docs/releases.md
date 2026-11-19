@@ -6,9 +6,22 @@ doc_section: releases
 description: KiCad WebView release notes, WayriCAD saved results, layer inspection and mobile integrations.
 ---
 
+## 1.1.0 — large-project memory and saved copper fidelity
+
+**1.1.0 is available on npm and GitHub.** The website demos, self-hosted SDK and version-pinned jsDelivr/UNPKG examples use this release. The core embed API remains **1.0-compatible**.
+
+- Lower-memory source preparation, shared 2D/3D parsing, bounded model residency and direct typed zone geometry.
+- Correct UUID/legacy pad identity joins, separate repeated pads and rounded IRCA JP5/JP6 copper. All **139 saved Marble copper contours** now render without the former point-copy omissions.
+- Camera-safe linked net selection, layer-colored copper, selected-net gold vias, saved expansion and sheet-occurrence navigation.
+- Compact desktop/narrow-embed examples, render diagnostics and public TypeScript declarations.
+
+Validation: **713 automated tests**, canonical builds, CI, extracted-package type/import checks and archive audits passed. Marble and IRCA passed desktop and 340px iframe checks. Marble source-preparation additional retained heap fell **38.6%** in the documented comparison; this is not a total-browser/GPU RAM ceiling or physical-phone qualification. Unsupported geometry and missing/proxy models remain disclosed.
+
+[GitHub release and ZIP](https://github.com/wayri/kicad-webview/releases/tag/v1.1.0) · [npm 1.1.0](https://www.npmjs.com/package/@wayrisignals/kicad-webview/v/1.1.0) · [Large-project guide](/kicad-webview/docs/large-projects/) · [Large-board lab](/assets/lib/kicad-webview/releases/1.1.0/large-projects.html) · [Narrow embed lab](/assets/lib/kicad-webview/releases/1.1.0/large-projects-embed.html)
+
 ## 1.0.0 — stable core API and camera-preserving inspection
 
-**1.0.0 is published on npm and GitHub.** Direct script and ES-module CDN examples, self-hosted files and the website demos use this version.
+**1.0.0 is published on npm and GitHub.** Those immutable 1.0.0 assets remain available; current examples use the release shown above.
 
 Net and pad selection retain the 3D camera. In assembled and expanded Dim net views, only matching vias remain gold; unrelated copper, model bodies and structures fade to translucent gray. Copper-depth smoothing, saved drawing improvements, linked sheets and compact controls retain the viewer's own UI style.
 

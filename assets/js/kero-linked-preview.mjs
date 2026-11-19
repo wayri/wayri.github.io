@@ -1,9 +1,9 @@
-import {Viewer,linkViewers} from '/assets/lib/kicad-webview/releases/1.0.0/kivi-viewer.js';
+import {Viewer,linkViewers} from '/assets/lib/kicad-webview/releases/1.1.0/kivi-viewer.js';
 const status=document.querySelector('#status'),buttons=[...document.querySelectorAll('.demo-controls button')];
 const viewers=['schematic','layout','assembly'].map(id=>new Viewer('#'+id,{theme:'dark',inspectOnSelect:false}));
 for(const viewer of viewers){for(const [name,value] of Object.entries({bg:'#181917',bar:'#21221f',ink:'#f0eee7',muted:'#b5b3a8',border:'#49483f',hover:'#32342c',accent:'#e2c264',active:'#3a3524'}))viewer.root.style.setProperty('--viewer-'+name,value);const style=document.createElement('style');style.textContent=':host([data-theme="dark"]) .viewer-picker select option{background:#21221f;color:#f0eee7}';viewer.surface.append(style);}
 let link;try{
- await Promise.all(viewers.map((viewer,i)=>viewer.load('/assets/lib/kicad-webview/releases/1.0.0/demo/project.json',i===0?{file:'decoder.kicad_sch'}:i===2?{view:'3d'}:{})));
+ await Promise.all(viewers.map((viewer,i)=>viewer.load('/assets/lib/kicad-webview/releases/1.1.0/demo/project.json',i===0?{file:'decoder.kicad_sch'}:i===2?{view:'3d'}:{})));
  link=linkViewers(viewers);link.addEventListener('link',()=>status.textContent='Selection linked · 3D focuses parts; net highlighting retains its camera.');
  link.addEventListener('linkerror',e=>status.textContent=e.detail.error.message);
  buttons.forEach(button=>button.disabled=false);status.textContent='Ready · choose a sheet, part, net or layer.';
