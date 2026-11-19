@@ -1,0 +1,130 @@
+{
+  "wayricad": {
+    "name": "WayriCAD",
+    "url": "/wayricad/",
+    "slides": [
+      {
+        "image": "/assets/images/projects/capabilities-2026-11-19/wayricad-series-console.png",
+        "title": "Trace the source-to-load path",
+        "description": "Review an explicit series circuit beside its copper voltage-drop field, source/sink markers and retained console evidence.",
+        "alt": "Trace the source-to-load path — Review an explicit series circuit beside its copper voltage-drop field, source/sink markers and retained console evidence.",
+        "width": 1180,
+        "height": 800,
+        "context": "Documentation capture shipped with 4.8.6; example solve, convergence unverified",
+        "source": "https://github.com/wayri/WayriCAD/blob/v4.8.6/quick_pi_plugin/README.md"
+      },
+      {
+        "image": "/assets/images/projects/capabilities-2026-11-19/wayricad-power-path.png",
+        "title": "Look inside a power rail",
+        "description": "Inspect the Marble board’s saved inner-layer copper, mesh and voltage-drop gradient under a declared 1 V / 1 A example.",
+        "alt": "Look inside a power rail — Inspect the Marble board’s saved inner-layer copper, mesh and voltage-drop gradient under a declared 1 V / 1 A example.",
+        "width": 2360,
+        "height": 1600,
+        "context": "Documentation capture shipped with 4.8.6; not a new 4.8.6 validation run",
+        "source": "https://github.com/wayri/WayriCAD/blob/v4.8.6/docs/images/SHOWCASE_SOURCES.md"
+      },
+      {
+        "image": "/assets/images/projects/wayricad-quick-pi.png",
+        "title": "Saved copper, explicit terminals",
+        "description": "The existing native Quick PI view shows extracted public Marble copper with source and load controls.",
+        "context": "Earlier showcase capture retained for geometry context; no solved field",
+        "source": "https://github.com/wayri/WayriCAD/blob/v4.8.6/docs/images/SHOWCASE_SOURCES.md",
+        "alt": "Saved copper, explicit terminals — The existing native Quick PI view shows extracted public Marble copper with source and load controls.",
+        "width": 1344,
+        "height": 821
+      }
+    ]
+  },
+  "spike": {
+    "name": "SPIKE",
+    "url": "/spike/",
+    "slides": [
+      {
+        "image": "/assets/images/projects/capabilities-2026-11-19/spike-pi-geometry.jpg",
+        "title": "Start a PI study from the board",
+        "description": "Choose the imported copper domain and an analysis path while keeping the PCB assembly in view.",
+        "alt": "Start a PI study from the board — Choose the imported copper domain and an analysis path while keeping the PCB assembly in view.",
+        "width": 1707,
+        "height": 960,
+        "context": "Development UI · 23 Oct 2026 · shipped in 0.4.3 docs; no solve",
+        "source": "https://github.com/wayri/SPIKE/blob/v0.4.3/app/public/help/guides-current/manifest.json"
+      },
+      {
+        "image": "/assets/images/projects/capabilities-2026-11-19/spike-pi-terminals.jpg",
+        "title": "Put sources and loads on copper",
+        "description": "The PI setup separates source and sink terminals, exact-point picking and reviewed electrical values.",
+        "alt": "Put sources and loads on copper — The PI setup separates source and sink terminals, exact-point picking and reviewed electrical values.",
+        "width": 1707,
+        "height": 960,
+        "context": "Development UI · 23 Oct 2026 · no native-worker execution",
+        "source": "https://github.com/wayri/SPIKE/blob/v0.4.3/app/public/help/guides-current/manifest.json"
+      },
+      {
+        "image": "/assets/images/projects/capabilities-2026-11-19/spike-pi-review.jpg",
+        "title": "Review before running",
+        "description": "The final setup step keeps missing terminals and convergence status visible beside the assembly.",
+        "alt": "Review before running — The final setup step keeps missing terminals and convergence status visible beside the assembly.",
+        "width": 1707,
+        "height": 960,
+        "context": "Development UI · 23 Oct 2026 · setup, not solved results",
+        "source": "https://github.com/wayri/SPIKE/blob/v0.4.3/app/public/help/guides-current/manifest.json"
+      },
+      {
+        "image": "/assets/images/projects/spike-workspace.jpg",
+        "title": "Inspect an imported assembly",
+        "description": "The development workbench keeps imported PCB and assembly geometry in a shared 3D workspace.",
+        "context": "Earlier development capture retained; not solved results",
+        "source": "https://github.com/wayri/SPIKE/blob/v0.4.3/docs/UI_QUICKSTART.md",
+        "alt": "Inspect an imported assembly — The development workbench keeps imported PCB and assembly geometry in a shared 3D workspace.",
+        "width": 1707,
+        "height": 960
+      }
+    ]
+  },
+  "webview": {
+    "name": "KiCad WebView",
+    "url": "/kicad-webview/",
+    "slides": [
+      {
+        "image": "/assets/images/projects/capabilities-2026-11-19/webview-photoreal.jpg",
+        "title": "Photoreal Fast, on a real board",
+        "description": "Inspect the public OLIMEX ESP32-P4 DevKit with supplied component models and studio materials.",
+        "alt": "Photoreal Fast, on a real board — Inspect the public OLIMEX ESP32-P4 DevKit with supplied component models and studio materials.",
+        "width": 1425,
+        "height": 891,
+        "context": "Live site capture · 19 Nov 2026 · rendering preview",
+        "source": "https://wayri.github.io/assets/demos/photoreal-fast.html"
+      },
+      {
+        "image": "/assets/images/projects/capabilities-2026-11-19/webview-expanded.jpg",
+        "title": "Separate the assembly and copper",
+        "description": "Expand components and saved copper layers to see the structure beneath them. Spacing is for inspection.",
+        "alt": "Separate the assembly and copper — Expand components and saved copper layers to see the structure beneath them. Spacing is for inspection.",
+        "width": 1265,
+        "height": 712,
+        "context": "Live site capture · 19 Nov 2026 · display-only expansion",
+        "source": "https://wayri.github.io/assets/demos/photoreal-fast.html"
+      },
+      {
+        "image": "/assets/images/projects/capabilities-2026-11-19/webview-linked-net.jpg",
+        "title": "One selection across three views",
+        "description": "Follow VBAT across KERO’s schematic, PCB and 3D copper while each view keeps its own camera.",
+        "alt": "One selection across three views — Follow VBAT across KERO’s schematic, PCB and 3D copper while each view keeps its own camera.",
+        "width": 1425,
+        "height": 891,
+        "context": "WebView 1.0.0 live demo · 19 Nov 2026 · labelled model stand-ins",
+        "source": "https://wayri.github.io/assets/demos/kero-linked.html"
+      },
+      {
+        "image": "/assets/demos/irca/assembly-preview.png",
+        "title": "Explore IRCA’s assembly",
+        "description": "The IRCA showcase keeps the controller, display and camera together in a display-only assembly.",
+        "context": "Existing IRCA render retained; one IC uses a nominal package model",
+        "source": "https://wayri.github.io/kicad-webview/#project-irca",
+        "alt": "Explore IRCA’s assembly — The IRCA showcase keeps the controller, display and camera together in a display-only assembly.",
+        "width": 1376,
+        "height": 984
+      }
+    ]
+  }
+}

@@ -1,6 +1,42 @@
 {
   "slides": [
     {
+      "image": "/assets/images/projects/capabilities-2026-11-19/online-sheet-explorer.jpg",
+      "title": "Navigate the saved sheet hierarchy",
+      "description": "Follow the root, saved page numbers and six-sheet structure in the refreshed explorer and all-sheet map.",
+      "alt": "Navigate the saved sheet hierarchy — Follow the root, saved page numbers and six-sheet structure in the refreshed explorer and all-sheet map.",
+      "width": 2133,
+      "height": 1333,
+      "source": "https://github.com/wayri/KiCad-Online/blob/v0.12.102/docs/releases/v0.12.102.md",
+      "group": "latest",
+      "capture_version": "0.12.102",
+      "capture_context": "0.12.102 source harness · 19 Nov 2026"
+    },
+    {
+      "image": "/assets/images/projects/capabilities-2026-11-19/online-linked-sheets.jpg",
+      "title": "Follow a signal between sheets",
+      "description": "Select ST01_OUT and see the matching sheets, hierarchy links and source-bound properties together.",
+      "alt": "Follow a signal between sheets — Select ST01_OUT and see the matching sheets, hierarchy links and source-bound properties together.",
+      "width": 2133,
+      "height": 1333,
+      "source": "https://github.com/wayri/KiCad-Online/blob/v0.12.102/docs/releases/v0.12.102.md",
+      "group": "latest",
+      "capture_version": "0.12.102",
+      "capture_context": "0.12.102 source harness · 19 Nov 2026"
+    },
+    {
+      "image": "/assets/images/projects/capabilities-2026-11-19/online-expanded.jpg",
+      "title": "Inspect separated copper and parts",
+      "description": "Explore the saved board layers and via structure in Expand mode. This capture uses labelled component stand-ins.",
+      "alt": "Inspect separated copper and parts — Explore the saved board layers and via structure in Expand mode. This capture uses labelled component stand-ins.",
+      "width": 2133,
+      "height": 1333,
+      "source": "https://github.com/wayri/KiCad-Online/blob/v0.12.102/docs/releases/v0.12.102.md",
+      "group": "3d",
+      "capture_version": "0.12.102",
+      "capture_context": "0.12.102 source harness · 19 Nov 2026 · models not loaded"
+    },
+    {
       "title": "Selected nets keep their layer colours",
       "description": "Follow selected copper across both layers while the surrounding board stays nearly gray.",
       "image": "/assets/images/projects/kicad-online/preview-2026-11-13/kero-layer-net-gray-dark.jpg",

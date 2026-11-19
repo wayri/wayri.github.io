@@ -1,0 +1,67 @@
+[
+  {
+    "file": "assets/images/projects/capabilities-2026-11-19/wayricad-power-path.png",
+    "source": "https://github.com/wayri/WayriCAD/blob/v4.8.6/quick_pi_plugin/help-power-rail.png",
+    "sha": "e0d97e4b3f0c78aebe0b0f23bf5fe9e6c3e0f146",
+    "bytes": 242176,
+    "context": "Release-tagged documentation capture; original capture predates the release."
+  },
+  {
+    "file": "assets/images/projects/capabilities-2026-11-19/wayricad-series-console.png",
+    "source": "https://github.com/wayri/WayriCAD/blob/v4.8.6/quick_pi_plugin/help-series-console.png",
+    "sha": "1886f12e1fc67c38b03f43ad57c6d9de4ce60322",
+    "bytes": 64436,
+    "context": "Release-tagged documentation capture; original capture predates the release."
+  },
+  {
+    "file": "assets/images/projects/capabilities-2026-11-19/spike-pi-geometry.jpg",
+    "source": "https://github.com/wayri/SPIKE/blob/v0.4.3/app/public/help/guides-current/pi-geometry.jpg",
+    "sha": "1a811b70bc67894bd1dc141be617aaf9bfbc5881",
+    "bytes": 115870,
+    "context": "Release-tagged documentation capture; original capture predates the release."
+  },
+  {
+    "file": "assets/images/projects/capabilities-2026-11-19/spike-pi-terminals.jpg",
+    "source": "https://github.com/wayri/SPIKE/blob/v0.4.3/app/public/help/guides-current/pi-terminals.jpg",
+    "sha": "b8d7068af02bc97a10ac61732b0cdeae465724ec",
+    "bytes": 151268,
+    "context": "Release-tagged documentation capture; original capture predates the release."
+  },
+  {
+    "file": "assets/images/projects/capabilities-2026-11-19/spike-pi-review.jpg",
+    "source": "https://github.com/wayri/SPIKE/blob/v0.4.3/app/public/help/guides-current/pi-review.jpg",
+    "sha": "23a1915bd5e232da9870327e1e85e2316473008b",
+    "bytes": 133229,
+    "context": "Release-tagged documentation capture; original capture predates the release."
+  },
+  {
+    "file": "assets/images/projects/capabilities-2026-11-19/online-sheet-explorer.jpg",
+    "source": "https://github.com/wayri/KiCad-Online/tree/v0.12.102",
+    "context": "KiCad Online 0.12.102 source harness, 19 Nov 2026; public KERO saved files; no live account transport."
+  },
+  {
+    "file": "assets/images/projects/capabilities-2026-11-19/online-linked-sheets.jpg",
+    "source": "https://github.com/wayri/KiCad-Online/tree/v0.12.102",
+    "context": "KiCad Online 0.12.102 source harness, 19 Nov 2026; ST01_OUT across saved sheets."
+  },
+  {
+    "file": "assets/images/projects/capabilities-2026-11-19/online-expanded.jpg",
+    "source": "https://github.com/wayri/KiCad-Online/tree/v0.12.102",
+    "context": "KiCad Online 0.12.102 source harness, 19 Nov 2026; balanced rendering, labelled model stand-ins, display-only spacing."
+  },
+  {
+    "file": "assets/images/projects/capabilities-2026-11-19/webview-photoreal.jpg",
+    "source": "https://wayri.github.io/assets/demos/photoreal-fast.html",
+    "context": "Live site Photoreal Fast capture, 19 Nov 2026; supplied public OLIMEX models."
+  },
+  {
+    "file": "assets/images/projects/capabilities-2026-11-19/webview-expanded.jpg",
+    "source": "https://wayri.github.io/assets/demos/photoreal-fast.html",
+    "context": "Live site capture, 19 Nov 2026; display-only expansion."
+  },
+  {
+    "file": "assets/images/projects/capabilities-2026-11-19/webview-linked-net.jpg",
+    "source": "https://wayri.github.io/assets/demos/kero-linked.html",
+    "context": "Live WebView 1.0.0 linked KERO capture, 19 Nov 2026; model stand-ins."
+  }
+]

@@ -1,0 +1,17 @@
+{% assign media = site.data.product_capability_media[include.product] %}
+<link rel="stylesheet" href="{{ '/assets/css/project-gallery.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+<section class="project-gallery project-gallery-presentation product-capability-gallery" data-project-gallery data-gallery-autoplay role="region" aria-roledescription="carousel" aria-label="{{ media.name | escape }} capability screenshots" tabindex="0">
+    <header class="project-gallery-heading"><a href="{{ media.url | relative_url }}">{{ media.name }} · in use</a><span>Actual product captures</span></header>
+    <div class="project-gallery-stage">
+        {% for slide in media.slides %}
+        <figure data-gallery-slide data-label="{{ slide.title | escape }}"{% unless forloop.first %} hidden{% endunless %}>
+            <a href="{{ slide.image | relative_url }}" target="_blank" rel="noopener" aria-label="Enlarge: {{ slide.title | escape }}"><img src="{{ slide.image | relative_url }}" width="{{ slide.width }}" height="{{ slide.height }}" loading="lazy" alt="{{ slide.alt | escape }}"></a>
+            <figcaption><strong>{{ slide.title | escape }}</strong><span>{{ slide.description | escape }}</span><small>{{ slide.context | escape }} · <a href="{{ slide.source }}">Source &amp; context ↗</a></small></figcaption>
+        </figure>
+        {% endfor %}
+    </div>
+    <div class="project-gallery-controls"><button type="button" data-gallery-previous aria-label="Previous capability screenshot">← Previous</button><button type="button" data-gallery-toggle aria-label="Pause presentation">Pause</button><span data-gallery-status role="status" aria-live="off" aria-atomic="true">1 / {{ media.slides.size }} · {{ media.slides.first.title }}</span><button type="button" data-gallery-next aria-label="Next capability screenshot">Next →</button></div>
+    <p class="project-gallery-credit">Open an image to see the detail. Arrow keys move between screenshots; manual navigation pauses playback.</p>
+    <noscript><ul class="project-gallery-static">{% for slide in media.slides %}<li><a href="{{ slide.image | relative_url }}">{{ slide.title }}</a> — {{ slide.description }}</li>{% endfor %}</ul></noscript>
+</section>
+<script src="{{ '/assets/js/project-gallery.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
