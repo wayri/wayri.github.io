@@ -1,4 +1,4 @@
-import {Viewer,WayriCADResultsViewer} from '/assets/lib/kicad-webview/releases/1.0.0/kivi-viewer.js';
+import {Viewer,WayriCADResultsViewer} from '/assets/lib/kicad-webview/releases/1.1.0/kivi-viewer.js';
 import {fetchGallery,requestedCase} from './webview-wayricad-gallery.mjs';
 
 const $=selector=>document.querySelector(selector);

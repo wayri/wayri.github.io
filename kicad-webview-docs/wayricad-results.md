@@ -34,7 +34,7 @@ Use **Files** to retain computed results and their portable companion alongside 
 ```html
 <div id="board" style="height:420px"></div>
 <div id="results"></div>
-<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/1.0.0/kicad-webview.min.js"></script>
+<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/1.1.0/kicad-webview.min.js"></script>
 <script type="module">
   const board = new KiCadWebView.Viewer('#board', {theme:'dark'});
   await board.load('/designs/board.kicad_pcb');

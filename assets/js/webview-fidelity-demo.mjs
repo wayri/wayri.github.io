@@ -5,7 +5,7 @@ if(host){
   const api=window.KiCadWebView,capabilities=fidelityCapabilities(api),abort=new AbortController();
   let viewer,ticket=0,disposed=false;
   const notes=document.querySelector('#fidelity-availability');
-  notes.textContent=capabilities.advanced?'The loaded SDK exposes the 1.0 API. Try variables, numeric expressions and horizontal tables.':'This page is serving the published 0.6 SDK. Saved graphics, text and overbars run now; load SDK 1.0.0 to enable variables, numeric expressions and horizontal tables.';
+  notes.textContent=capabilities.advanced?'The loaded SDK exposes the 1.0 API. Try variables, numeric expressions and horizontal tables.':'This page is serving the published 0.6 SDK. Saved graphics, text and overbars run now; load SDK 1.1.0 to enable variables, numeric expressions and horizontal tables.';
   document.querySelector('#fidelity-advanced').disabled=!capabilities.advanced;
   async function render(){
     if(disposed||!api?.Viewer)return;const current=++ticket;

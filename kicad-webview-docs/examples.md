@@ -41,7 +41,7 @@ Explore the [capability demos](/kicad-webview/#capability-demos) and use [Intera
 The following uses the site-hosted 1.0.0 module. The npm/CDN examples below use the current package version shown above.
 
 ```js
-import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/1.0.0/kivi-viewer.js';
+import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/1.1.0/kivi-viewer.js';
 const viewer = new Viewer('#board', {highlightStyle: 'dim', highlightColor: 'accent'});
 await viewer.load('/designs/project.zip', {view: 'pcb'});
 viewer.setHighlightStyle('isolate', {color: 'source'});

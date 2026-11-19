@@ -14,7 +14,7 @@ Photoreal Fast is available in stable **1.0.0** from npm, CDN and the self-hoste
 
 ```html
 <div id="board" style="height:70dvh;min-height:380px"></div>
-<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/1.0.0/kicad-webview.min.js"></script>
+<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/1.1.0/kicad-webview.min.js"></script>
 <script>
 const viewer = new KiCadWebView.Viewer('#board', {theme:'dark'});
 viewer.load('https://wayri.github.io/assets/demos/public-hardware/olimex-p4-project.json', {view:'3d'})
@@ -24,7 +24,7 @@ window.addEventListener('pagehide', () => viewer.dispose(), {once:true});
 </script>
 ```
 
-Your host needs normal HTTP(S) access and CORS permission for the supplied project and models. No rendering service, build system or runtime Node.js installation is required. To self-host, retain the matching script, source attribution, LICENSE and third-party notices from the [versioned SDK directory](/assets/lib/kicad-webview/releases/1.0.0/BUILD.json).
+Your host needs normal HTTP(S) access and CORS permission for the supplied project and models. No rendering service, build system or runtime Node.js installation is required. To self-host, retain the matching script, source attribution, LICENSE and third-party notices from the [versioned SDK directory](/assets/lib/kicad-webview/releases/1.1.0/BUILD.json).
 
 ## Rendering and interaction
 
