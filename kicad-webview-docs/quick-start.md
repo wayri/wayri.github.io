@@ -42,6 +42,8 @@ These paths assume that you host the SDK and sample manifest at the shown locati
 
 <span id="self-hosted-050-sdk"></span>
 
+For 1.2.0 drawing sheets and board outlines, [try the KERO demo](/assets/demos/worksheets.html) or [see the worksheet API](/kicad-webview/docs/api-viewer/#worksheets-and-pcb-outlines).
+
 ## Versioned browser files
 
 Use a version-pinned browser script without Node.js:

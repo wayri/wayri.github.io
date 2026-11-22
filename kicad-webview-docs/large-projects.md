@@ -5,6 +5,8 @@ permalink: /kicad-webview/docs/large-projects/
 doc_section: api
 ---
 
+In WebView 1.2.0, Marble’s peak working set fell from about 562 to 513 MiB (8.6%) in the parser, drawing and connectivity benchmark. See the [benchmark scope and release notes](/kicad-webview/docs/releases/#webview-120).
+
 # Large-project performance
 
 The browser loader and saved-source parser accept a single modern KiCad drawing up to 256 MiB and 12 million S-expression nodes. Comparison and connectivity accept up to 512 MiB of source across 128 files. The connectivity cache retains only 96 MiB of source and metadata; larger valid inputs rebuild without caching. These are acceptance ceilings, not a promise that a device has enough memory for every drawing at the ceiling.

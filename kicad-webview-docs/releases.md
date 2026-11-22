@@ -10,15 +10,15 @@ description: KiCad WebView release notes, WayriCAD saved results, layer inspecti
 
 ## 1.2.0 — large boards and drawing sheets
 
-**1.2.0 is available on this site and GitHub.** The latest npm/CDN package is **{{ site.data.webview_release.npm }}**. The core embed API remains 1.0-compatible.
+**1.2.0 is available on this site, GitHub and npm.** The pinned jsDelivr and UNPKG files match the npm release. The core embed API remains 1.0-compatible.
 
 - 2D drawing and picking share saved filled-zone coordinates. Dense views batch opaque copper strokes and restore full detail after motion.
 - Overlapping traces give picking priority to the viewed side. 3D net expansion updates selected geometry with less repeated board traversal.
 - Open standalone KiCad worksheets or apply one to a drawing. Fit page shows the paper and title block, and the PCB Outline preset displays saved cutouts.
 
-On Berkeley Lab’s public Marble board, the median peak working set for parsing, the drawing model and connectivity fell from 575,116 to 525,472 KiB versus the preceding compact-tree candidate. Both produced 205,702 drawing primitives and 1,374 nets. The upstream browser checks covered KERO and mobile-width IRCA and Marble embeds. Device frame times and total browser or GPU memory vary.
+On Berkeley Lab’s public Marble board, the median peak working set for parsing, the drawing model and connectivity fell from 575,116 to 525,472 KiB (about 562 to 513 MiB, down 8.6%) versus the preceding compact-tree candidate, over three runs per version. Both produced 205,702 drawing primitives and 1,374 nets. The upstream browser checks covered KERO and mobile-width IRCA and Marble embeds. Median import times were 1.36 and 1.45 seconds respectively, with overlapping samples. The memory figure is process working set for that benchmark. Device frame times and total browser or GPU memory vary.
 
-[GitHub release and ZIP](https://github.com/wayri/kicad-webview/releases/tag/v1.2.0) · [Hosted file checksums](/assets/lib/kicad-webview/releases/1.2.0/RELEASE.json) · [Try KERO with 1.2.0](/assets/lib/kicad-webview/releases/1.2.0/embed.html?src=demo%2Fproject.json)
+[GitHub release and ZIP](https://github.com/wayri/kicad-webview/releases/tag/v1.2.0) · [Hosted file checksums](/assets/lib/kicad-webview/releases/1.2.0/RELEASE.json) · [npm 1.2.0](https://www.npmjs.com/package/@wayrisignals/kicad-webview/v/1.2.0) · [Try the worksheet and PCB outline](/assets/demos/worksheets.html) · [Try KERO with 1.2.0](/assets/lib/kicad-webview/releases/1.2.0/embed.html?src=demo%2Fproject.json)
 
 ## 1.1.0 — large-project memory and saved copper fidelity
 

@@ -1,0 +1,95 @@
+---
+layout: product
+title: KiCad worksheets and PCB outlines
+description: Explore a saved KiCad worksheet and the KERO Encoder layout and board outline with KiCad WebView.
+permalink: /assets/demos/worksheets.html
+---
+{% include webview-breadcrumbs.html section_url='/kicad-webview/docs/examples/' section_label='Examples' %}
+<style>
+  .worksheet-demo { max-width: 72rem; margin: 0 auto; padding: 0 clamp(.75rem, 2.5vw, 2rem) 2rem; }
+  .worksheet-demo h1 { margin-bottom: .35rem; }
+  .worksheet-demo .wv-actions { display: flex; flex-wrap: wrap; gap: .35rem; margin: .8rem 0 .5rem; }
+  .worksheet-demo button.wv-action { min-height: 2.25rem; padding: .25rem .65rem; font: inherit; font-size: .875rem; }
+  .worksheet-demo button[aria-pressed="true"] { outline: 1px solid currentColor; outline-offset: -2px; }
+  #worksheet-drawing { width: 100%; min-width: 0; height: 34rem; height: clamp(22rem, 65dvh, 39rem); }
+  #worksheet-status { margin: .5rem 0; }
+</style>
+<main class="worksheet-demo">
+  <h1>Drawing sheets and PCB outlines</h1>
+  <p>Explore the KERO Encoder with a custom worksheet, its saved board outline, or the full layout.</p>
+  <div class="wv-actions" role="group" aria-label="Drawing view">
+    <button class="wv-action wv-action-primary" type="button" data-mode="sheet" aria-pressed="true" disabled>Drawing sheet</button>
+    <button class="wv-action" type="button" data-mode="outline" aria-pressed="false" disabled>PCB outline</button>
+    <button class="wv-action" type="button" data-mode="layout" aria-pressed="false" disabled>PCB layout</button>
+    <button class="wv-action" type="button" data-mode="template" aria-pressed="false" disabled>Template alone</button>
+  </div>
+  <div id="worksheet-drawing" aria-label="Interactive KiCad drawing"></div>
+  <p id="worksheet-status" role="status">Loading the KERO Encoder…</p>
+  <p><a href="https://github.com/wayri/KERO/tree/7be8fef589bc28eee149323e3790ef95b0873032/encoder">KERO Encoder source and hardware terms</a> · <a href="{{ '/assets/demos/worksheets/review.kicad_wks' | relative_url }}">Download the sample worksheet</a> · <a href="{{ '/kicad-webview/docs/api-viewer/#worksheets-and-pcb-outlines' | relative_url }}">Worksheet API</a></p>
+</main>
+<script type="module">
+const host = document.querySelector('#worksheet-drawing');
+const status = document.querySelector('#worksheet-status');
+const controls = [...document.querySelectorAll('.worksheet-demo [data-mode]')];
+const template = '{{ "/assets/demos/worksheets/review.kicad_wks" | relative_url }}';
+const project = {
+  entry: 'Encoder.kicad_pcb',
+  worksheet: 'review.kicad_wks',
+  files: [
+    { path: 'Encoder.kicad_pcb', url: '{{ "/assets/lib/kicad-webview/releases/1.2.0/demo/Encoder.kicad_pcb" | relative_url }}' },
+    { path: 'review.kicad_wks', url: template }
+  ]
+};
+const descriptions = {
+  sheet: 'Custom drawing sheet fitted to the page.',
+  outline: 'Saved Edge.Cuts and routed cutouts.',
+  layout: 'PCB copper, silkscreen and outline.',
+  template: 'Standalone KiCad worksheet fitted to the page.'
+};
+let viewer;
+let templateOpen;
+let active = 'sheet';
+const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+
+async function draw(mode) {
+  for (const button of controls) button.disabled = true;
+  host.setAttribute('aria-busy', 'true');
+  try {
+    if (mode === 'template' && templateOpen !== true) {
+      await viewer.load(template);
+      templateOpen = true;
+    } else if (mode !== 'template' && templateOpen !== false) {
+      await viewer.load(project, { view: 'pcb' });
+      templateOpen = false;
+    } else if (mode !== 'template') {
+      await viewer.setView('pcb');
+    }
+    if (mode !== 'template') viewer.setLayerPreset(mode === 'outline' ? 'outline' : 'overview');
+    if (mode === 'sheet' || mode === 'template') viewer.fitPage();
+    else viewer.fit();
+    active = mode;
+    status.textContent = descriptions[mode];
+  } catch (error) {
+    status.textContent = 'Could not open the drawing. ' + error.message;
+  } finally {
+    host.removeAttribute('aria-busy');
+    for (const button of controls) {
+      const pressed = button.dataset.mode === active;
+      button.disabled = false;
+      button.setAttribute('aria-pressed', String(pressed));
+      button.classList.toggle('wv-action-primary', pressed);
+    }
+  }
+}
+
+try {
+  const { Viewer } = await import('https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kivi-viewer.js');
+  viewer = new Viewer(host, { theme: theme() });
+  for (const button of controls) button.addEventListener('click', () => draw(button.dataset.mode));
+  window.addEventListener('themeChanged', () => viewer.setTheme(theme()));
+  window.addEventListener('pagehide', () => viewer.dispose(), { once: true });
+  await draw(active);
+} catch (error) {
+  status.textContent = 'Could not load WebView. ' + error.message;
+}
+</script>

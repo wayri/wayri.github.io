@@ -11,7 +11,7 @@
   let viewer, currentRuntime;
   async function ircaProject() {
     if (window.IRCAProject) return window.IRCAProject;
-    for (const src of ['/assets/lib/kicad-webview/releases/1.1.0/kicad-webview.min.js','/assets/js/irca-project.js']) {
+    for (const src of ['/assets/lib/kicad-webview/releases/1.2.0/kicad-webview.min.js','/assets/js/irca-project.js']) {
       await new Promise((resolve,reject)=>{
         const script=document.createElement('script');script.src=src;
         script.onload=()=>{script.remove();resolve();};
@@ -57,7 +57,7 @@
         viewer.addEventListener('ready',()=>layers?.replaceChildren());
         await project.load(viewer,{view:query.get('view') || '3d',file:query.get('file') || undefined});
       } else {
-        const api = await import('https://wayri.github.io/assets/lib/kicad-webview/releases/1.1.0/kivi-viewer.js');
+        const api = await import('https://wayri.github.io/assets/lib/kicad-webview/releases/1.2.0/kivi-viewer.js');
         if (provider === 'altium' && !source) throw Error('Supply an approved public Altium source URL. This beta uses an external online provider.');
         viewer = provider === 'altium' ? new api.AltiumViewer(host) : workspace ? new api.AdvancedKiCadViewer(host,{...options,layout:'single'}) : new api.KiCadViewer(host,options);
         viewer.addEventListener('ready',()=>layers?.replaceChildren());

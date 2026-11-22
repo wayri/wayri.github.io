@@ -5,25 +5,29 @@ permalink: /kicad-webview/docs/examples/
 doc_section: examples
 ---
 
-The CDN examples use the **{{ site.data.webview_release.npm }}** ES module from the pinned npm release; the hosted example below uses the versioned 1.0.0 SDK. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The OLIMEX manifest includes its PCB, schematic and 28 component assets. Its display PCB remaps model paths and normalizes equivalent legacy footprint identity fields; electrical and physical geometry is unchanged. Original upstream sources, model coverage, conversions and licensing are linked below.
+The CDN examples use the **{{ site.data.webview_release.npm }}** ES module from the pinned npm release; the hosted example below uses the versioned 1.2.0 SDK. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The OLIMEX manifest includes its PCB, schematic and 28 component assets. Its display PCB remaps model paths and normalizes equivalent legacy footprint identity fields; electrical and physical geometry is unchanged. Original upstream sources, model coverage, conversions and licensing are linked below.
 
 For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/kicad-webview/docs/quick-start/). The release uses [MPL-2.0](/kicad-webview/docs/license/); input designs and model files have separate terms.
 
 ## Fast photoreal board presentation
 
-[Open OLIMEX and IRCA in Photoreal Fast](/assets/demos/photoreal-fast.html). The stable **1.0.0** SDK adds studio reflections, cached shadows and a background that follows the site theme. Compact controls leave the board as the focus. [Direct-script integration and limits](/kicad-webview/docs/photoreal-fast/). The stable npm/CDN release remains 1.0.0.
+[Open OLIMEX and IRCA in Photoreal Fast](/assets/demos/photoreal-fast.html). The current SDK includes studio reflections, cached shadows and a background that follows the site theme. Compact controls leave the board as the focus. [Direct-script integration and limits](/kicad-webview/docs/photoreal-fast/).
 
 [Expand mode and net shine-through](/kicad-webview/docs/expand-mode/) add two-stage assembly motion, fading substrate, stretched vias and bright source-bound highlights.
 
 ## Drawing styles and text context
 
-[Open the drawing fidelity demo](/assets/demos/drawing-fidelity.html) for a small generated formatting sample. Saved graphics and text work with the published SDK; variable, expression and table examples run with the 1.0.0 SDK. [Read the constraints and browser-only code](/kicad-webview/docs/drawing-fidelity/). The IRCA and credited public-board integrations below remain unchanged.
+[Open the drawing fidelity demo](/assets/demos/drawing-fidelity.html) for a small generated formatting sample. Saved graphics and text work with the published SDK; variable, expression and table examples run with the current SDK. [Read the constraints and browser-only code](/kicad-webview/docs/drawing-fidelity/). The IRCA and credited public-board integrations below remain unchanged.
 
 ## Try the new inspection controls
 
 Open the [released PCB viewer](/assets/demos/embed.html?example=olimex&view=pcb&theme=dark), then use **Highlight settings** and **Layers**. Select a trace or part to compare highlighting modes; search for a copper layer and try Focus, Fit and Restore. In the [released 3D viewer](/assets/demos/embed.html?example=olimex&view=3d&theme=dark), open Layers and choose Reveal internal copper to enter Translucent appearance. The [project workspace](/assets/demos/embed.html?example=olimex&workspace=true&view=pcb&theme=dark) adds a Layers navigator tab for the active pane.
 
 The [0.3.0 release guide](/kicad-webview/docs/releases/) explains the new options, mobile lifecycle behavior and bounded performance measurements. These links use the released SDK; the approved IRCA demonstrations keep their separately maintained site runtime.
+
+## Drawing sheets and PCB outlines
+
+[Open the KERO drawing demo](/assets/demos/worksheets.html) to switch between a custom worksheet, the saved Edge.Cuts outline, and the full layout. The same template opens independently. [Worksheet setup and controls](/kicad-webview/docs/api-viewer/#worksheets-and-pcb-outlines).
 
 ## Public hardware examples
 
@@ -36,12 +40,12 @@ Explore the [capability demos](/kicad-webview/#capability-demos) and use [Intera
 
 <span id="hosted-030-inspection"></span>
 
-## Hosted 1.0.0 inspection
+## Hosted 1.2.0 inspection
 
-The following uses the site-hosted 1.0.0 module. The npm/CDN examples below use the current package version shown above.
+The following uses the site-hosted 1.2.0 module. The npm/CDN examples below use the current package version shown above.
 
 ```js
-import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/1.1.0/kivi-viewer.js';
+import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/1.2.0/kivi-viewer.js';
 const viewer = new Viewer('#board', {highlightStyle: 'dim', highlightColor: 'accent'});
 await viewer.load('/designs/project.zip', {view: 'pcb'});
 viewer.setHighlightStyle('isolate', {color: 'source'});

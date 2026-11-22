@@ -103,7 +103,7 @@ Hidden layers remain hidden during net highlighting. Schematic connectivity uses
 
 ### Inspection controls
 
-These controls are available in the [hosted 1.0.0 module](/assets/lib/kicad-webview/releases/1.1.0/kivi-viewer.js) and npm/CDN 1.0.0. Each viewer keeps its own highlight and layer state.
+These controls are available in the [hosted 1.2.0 module](/assets/lib/kicad-webview/releases/1.2.0/kivi-viewer.js) and npm/CDN. Each viewer keeps its own highlight and layer state.
 
 | Method | Return and behavior |
 | --- | --- |
@@ -116,6 +116,31 @@ These controls are available in the [hosted 1.0.0 module](/assets/lib/kicad-webv
 | `clearLayerFocus()` / `restoreLayerView()` | Clear focus or restore the saved pre-focus/preset visibility; each returns layer state. |
 
 Invalid styles or layers are rejected before state changes. Highlight settings persist for the viewer instance; reopening a drawing resets renderer-local layer state. `highlightstylechange` and `layerschange` report host-API updates. In 3D, layers control saved copper; internal layers are shown in Translucent appearance. Focus and fit are 2D PCB operations.
+
+## Worksheets and PCB outlines
+
+Load a standalone `.kicad_wks`, or list it alongside a saved board or schematic and select it for the drawing. `LoadOptions.worksheetSource` also accepts the text of a template. A matching local `.kicad_pro` can select a worksheet already included in the file list. WebView supports frames, lines, text, polygons and repeated items. Bitmap worksheet items are reported and skipped.
+
+```js
+await viewer.load({
+  entry: 'board.kicad_pcb',
+  worksheet: 'review.kicad_wks',
+  files: [
+    { path: 'board.kicad_pcb', url: './board.kicad_pcb' },
+    { path: 'review.kicad_wks', url: './review.kicad_wks' }
+  ]
+}, { view: 'pcb' });
+viewer.fitPage(); // Frame the paper, worksheet and title block.
+
+// For an outline-only board view:
+viewer.setLayerPreset('outline');
+viewer.fit();
+
+// To open the worksheet by itself:
+await viewer.load('./review.kicad_wks');
+```
+
+The Outline preset keeps the saved `Edge.Cuts` layer, including routed cutouts. Use `viewer.setLayerPreset('overview')` to return to the standard PCB layers. [Try all four views](/assets/demos/worksheets.html).
 
 ## Cameras
 
@@ -197,7 +222,7 @@ Translucent mode shows the board and models transparently, copper in layer color
 
 ## Text context and loading in 0.7
 
-The 1.0.0 SDK accepts `LoadOptions.textVariables` (at most 256 strings, keys up to 200 characters, values up to 8,192 characters) and an exact saved `instancePath`. One locally supplied `.kicad_pro` can provide project text variables. Explicit values override them and persist through navigation and contextual previews. No project or ancestor is fetched implicitly. [Examples, numeric subset and table limits](/kicad-webview/docs/drawing-fidelity/).
+The SDK accepts `LoadOptions.textVariables` (at most 256 strings, keys up to 200 characters, values up to 8,192 characters) and an exact saved `instancePath`. One locally supplied `.kicad_pro` can provide project text variables. Explicit values override them and persist through navigation and contextual previews. No project or ancestor is fetched implicitly. [Examples, numeric subset and table limits](/kicad-webview/docs/drawing-fidelity/).
 
 ## Full-net inspection in 1.0.0
 

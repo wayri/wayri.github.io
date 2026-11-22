@@ -5,7 +5,7 @@ description: Import the interactive viewer directly from UNPKG in a browser modu
 permalink: /assets/demos/cdn-module.html
 ---
 {% include webview-cdn-example.html %}
-<script src="{{ '/assets/js/webview-cdn-example.js' | relative_url }}?v=110-release"></script>
+<script src="{{ '/assets/js/webview-cdn-example.js' | relative_url }}?v={{ site.data.webview_release.self_hosted }}"></script>
 <script type="module">
 try {
   const { Viewer } = await import('https://unpkg.com/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kivi-viewer.js');
