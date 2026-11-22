@@ -57,3 +57,14 @@
     .project-gallery.project-gallery-card .project-gallery-stage figcaption { min-height: 160px; }
     .project-gallery.project-gallery-card .project-gallery-controls button { min-height: 44px; }
 }
+
+/* Status badges may move below a heading, but must not split individual words. */
+.project-catalogue .flex.justify-between.items-start { flex-wrap: wrap; gap: 8px 12px; }
+.project-catalogue .flex.justify-between.items-start > :is(h3,h4) { min-width: 0; }
+.project-catalogue .flex.justify-between.items-start > span {
+    flex-shrink: 0;
+    white-space: nowrap;
+    word-break: normal;
+    overflow-wrap: normal;
+    max-width: 100%;
+}
