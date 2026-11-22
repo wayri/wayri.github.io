@@ -34,26 +34,26 @@
   },
   "kicad_online": {
     "name": "KiCad Online",
-    "version": "0.12.105",
-    "android": "1.103",
+    "version": "0.20.0",
+    "android": "1.104",
     "channel": "GitHub preview",
-    "released_on": "2026-11-20",
+    "released_on": "2026-11-22",
     "repo": "wayri/KiCad-Online",
-    "summary": "Trace highlighted nets across connected sheets, pick back-side pads in 3D and review drawings with a more compact comment composer.",
+    "summary": "Explore connected schematic sheets, jump to parts with project-scoped search and compare saved revisions without leaving the drawing.",
     "changes": [
-      "Back-side 3D footprints retain saved pad positions. Picking a pad highlights its saved net, including where geometry overlaps.",
-      "The highlighted-net overview shows connected sheet instances. Clear the highlight to see the full sheet hierarchy.",
-      "New comments and replies use compact controls above the editor. If repository-policy verification fails before posting, the editor keeps the draft.",
-      "Repository discovery distinguishes a completed GitHub website fallback from an incomplete scan that needs a retry."
+      "Search indexes the open KiCad project across views and focuses results in the loaded drawing.",
+      "History and drawing export open over the drawing. The commit chart links each commit node to its card.",
+      "The sheet overview follows hierarchy depth and draws directional arrows for highlighted nets. Press M to toggle the minimap or press it twice quickly to maximize or restore it.",
+      "PCB net hover uses the display color of each visible copper layer. Large-board navigation reduces background detail while preserving selected geometry."
     ],
-    "note": "Store and GitHub versions can differ. Android 1.103 is a development-signed GitHub APK for manual installation. An isolated Chrome renderer check and saved KERO connectivity check cover parts of this release. Physical-phone acceptance remains unverified.",
-    "guide": "https://github.com/wayri/KiCad-Online/releases/tag/v0.12.105",
+    "note": "GitHub includes the Android 1.104 development APK and Safari ZIP. The APK can update the development-signed 1.102 build. The GitHub Actions 1.103 APK uses a different certificate and requires a separate installation procedure.",
+    "guide": "https://github.com/wayri/KiCad-Online/releases/tag/v0.20.0",
     "distribution": {
       "checked_on": "2026-11-22",
-      "github": "0.12.105 preview and Android 1.103 APK available",
+      "github": "0.20.0 preview, Android 1.104 APK and Safari ZIP available",
       "vscode": "See the Marketplace version history",
       "chrome": "See the Chrome Web Store listing",
-      "firefox": "0.12.105 available"
+      "firefox": "See the Mozilla Add-ons version history"
     }
   },
   "webview": {
