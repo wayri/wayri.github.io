@@ -1,7 +1,7 @@
 {% assign media = site.data.product_capability_media[include.product] %}
 <link rel="stylesheet" href="{{ '/assets/css/project-gallery.css' | relative_url }}?v={{ site.time | date: '%s' }}">
-<section class="project-gallery project-gallery-presentation product-capability-gallery" data-project-gallery data-gallery-autoplay role="region" aria-roledescription="carousel" aria-label="{{ media.name | escape }} capability screenshots" tabindex="0">
-    <header class="project-gallery-heading"><a href="{{ media.url | relative_url }}">{{ media.name }} · in use</a><span>Actual product captures</span></header>
+<section class="project-gallery project-gallery-presentation product-capability-gallery{% if include.compact %} project-gallery-card{% endif %}" data-project-gallery data-gallery-autoplay role="region" aria-roledescription="carousel" aria-label="{{ media.name | escape }} capability screenshots" tabindex="0">
+    {% unless include.compact %}<header class="project-gallery-heading"><a href="{{ media.url | relative_url }}">{{ media.name }} · in use</a><span>Actual product captures</span></header>{% endunless %}
     <div class="project-gallery-stage">
         {% for slide in media.slides %}
         <figure data-gallery-slide data-label="{{ slide.title | escape }}"{% unless forloop.first %} hidden{% endunless %}>

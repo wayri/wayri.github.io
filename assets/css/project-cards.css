@@ -1,0 +1,59 @@
+/* Compact presentations belong to cards; product-page galleries keep their full layout. */
+.software-project-card {
+    min-width: 0;
+    align-self: start;
+    scroll-margin-top: 80px;
+}
+.software-project-card > .flex:first-child { flex-wrap: wrap; gap: 6px 12px; }
+.software-project-card > .flex:first-child h4 { margin: 0; font-size: 22px; line-height: 1.25; }
+.software-project-card > .flex:first-child > span { flex-shrink: 0; }
+.software-project-card > .software-release-compact { margin: 12px 0 16px; }
+.software-project-card > p { overflow-wrap: anywhere; }
+.software-project-card .project-links { gap: 8px 14px; }
+.software-project-card .project-availability { margin: 12px 0 0; color: var(--muted-text); font-size: 12px; line-height: 1.6; }
+.software-project-card .webview-card-controls { margin: 12px 0 16px; gap: 8px; }
+.software-project-card .webview-card-controls button { min-height: 40px; padding: 7px 10px; }
+.software-project-card .webview-card-board { height: 390px; margin: 0; }
+.project-gallery.project-gallery-card { margin: 0; min-width: 0; }
+.project-gallery.project-gallery-card .project-gallery-stage { height: auto; }
+.project-gallery.project-gallery-card .project-gallery-stage figure { height: auto; }
+.project-gallery.project-gallery-card .project-gallery-stage figure > a {
+    flex: none;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    min-height: 0;
+}
+.project-gallery.project-gallery-card .project-gallery-stage img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: contain;
+}
+.project-gallery.project-gallery-card .project-gallery-stage figcaption {
+    min-height: 150px;
+    padding: 14px 12px;
+    font: 13px/1.55 system-ui, sans-serif;
+}
+.project-gallery.project-gallery-card figcaption strong { font-size: 18px; line-height: 1.3; }
+.project-gallery.project-gallery-card figcaption small { font-size: 11px; line-height: 1.5; }
+.project-gallery.project-gallery-card .project-gallery-topics {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    padding: 6px;
+    gap: 2px;
+}
+.project-gallery.project-gallery-card .project-gallery-topics button { flex: none; padding: 6px 8px; font-size: 12px; }
+.project-gallery.project-gallery-card .project-gallery-info { min-height: 0; max-height: 450px; overflow: auto; }
+.project-gallery.project-gallery-card .project-gallery-controls { padding: 10px; gap: 6px; }
+.project-gallery.project-gallery-card .project-gallery-controls button { flex: 1 1 0; min-width: 0; padding: 8px 6px; font-size: 12px; }
+.project-gallery.project-gallery-card .project-gallery-controls [role="status"] { min-height: 0; font-size: 11px; }
+.project-gallery.project-gallery-card .project-gallery-credit { padding: 0 12px 12px; font: 11px/1.5 system-ui, sans-serif; }
+.project-gallery.project-gallery-card [data-gallery-slide][hidden] { display: none !important; }
+@media (max-width: 600px) {
+    .software-project-card > .flex:first-child h4 { font-size: 21px; }
+    .software-project-card .webview-card-board { height: 380px; }
+    .project-gallery.project-gallery-card .project-gallery-stage figcaption { min-height: 160px; }
+    .project-gallery.project-gallery-card .project-gallery-controls button { min-height: 44px; }
+}
