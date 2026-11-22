@@ -18,6 +18,12 @@ PCB and schematic geometry extraction and connectivity each admit up to 1.5 mill
 A focused synthetic check covers the last of 20,001 saved parts and geometry after 1.2 million frame entries on a 32-layer board. That proves late lookup in the bounded index, not full drawing speed for 1.2 million distinct primitives. Large files can use substantially more browser memory than their source size during parsing and rendering. The final 1.1.0 Marble and IRCA checks below qualify those retained fixtures; they do not establish complete fidelity at every acceptance ceiling.
 
 
+## 1.2.0 large-board rendering
+
+Saved fills use shared typed coordinates for drawing and picking. Dense views batch copper strokes and restore full detail when movement stops. See the [1.2.0 release measurements](/kicad-webview/docs/releases/#webview-120).
+
+[Large-board lab](/assets/lib/kicad-webview/releases/1.2.0/large-projects.html) · [Narrow embed lab](/assets/lib/kicad-webview/releases/1.2.0/large-projects-embed.html)
+
 ## 1.1.0 measured large-board checks
 
 The pinned BerkeleyLab Marble board is about 44 MB: 1,006 parts, 5,272 pads, 37,380 parsed track pieces and 12 copper layers. The renderer admits all **139 saved copper contours**, using 19,329,951 retained geometry bytes, with zero rejected copper pads/zones. Nineteen NPTH drill-only pads correctly keep holes without fabricated copper. IRCA's mirrored and rotated JP5/JP6 custom copper also passed geometry and visual checks.
@@ -32,7 +38,7 @@ Public hardware keeps its upstream license and attribution. Marble uses disclose
 
 ```html
 <div id="board" style="height:65dvh;min-height:320px"></div>
-<script src="https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@1.1.0/dist/kicad-webview.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@{{ site.data.webview_release.npm }}/dist/kicad-webview.min.js"></script>
 <script>
 (async () => {
 const viewer = new KiCadWebView.Viewer('#board', {theme:'dark'});

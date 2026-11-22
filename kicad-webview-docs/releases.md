@@ -6,9 +6,23 @@ doc_section: releases
 description: KiCad WebView release notes, WayriCAD saved results, layer inspection and mobile integrations.
 ---
 
+<span id="webview-120"></span>
+
+## 1.2.0 — large boards and drawing sheets
+
+**1.2.0 is available on this site and GitHub.** The latest npm/CDN package is **{{ site.data.webview_release.npm }}**. The core embed API remains 1.0-compatible.
+
+- 2D drawing and picking share saved filled-zone coordinates. Dense views batch opaque copper strokes and restore full detail after motion.
+- Overlapping traces give picking priority to the viewed side. 3D net expansion updates selected geometry with less repeated board traversal.
+- Open standalone KiCad worksheets or apply one to a drawing. Fit page shows the paper and title block, and the PCB Outline preset displays saved cutouts.
+
+On Berkeley Lab’s public Marble board, the median peak working set for parsing, the drawing model and connectivity fell from 575,116 to 525,472 KiB versus the preceding compact-tree candidate. Both produced 205,702 drawing primitives and 1,374 nets. The upstream browser checks covered KERO and mobile-width IRCA and Marble embeds. Device frame times and total browser or GPU memory vary.
+
+[GitHub release and ZIP](https://github.com/wayri/kicad-webview/releases/tag/v1.2.0) · [Hosted file checksums](/assets/lib/kicad-webview/releases/1.2.0/RELEASE.json) · [Try KERO with 1.2.0](/assets/lib/kicad-webview/releases/1.2.0/embed.html?src=demo%2Fproject.json)
+
 ## 1.1.0 — large-project memory and saved copper fidelity
 
-**1.1.0 is available on npm and GitHub.** The website demos, self-hosted SDK and version-pinned jsDelivr/UNPKG examples use this release. The core embed API remains **1.0-compatible**.
+**1.1.0 remains available on npm and GitHub.** The core embed API remains **1.0-compatible**.
 
 - Lower-memory source preparation, shared 2D/3D parsing, bounded model residency and direct typed zone geometry.
 - Correct UUID/legacy pad identity joins, separate repeated pads and rounded IRCA JP5/JP6 copper. All **139 saved Marble copper contours** now render without the former point-copy omissions.

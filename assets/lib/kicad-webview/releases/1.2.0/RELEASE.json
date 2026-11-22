@@ -1,0 +1,258 @@
+{
+  "version": "1.2.0",
+  "revision": "b93b0aa40ddbfb720c8270805b2b9f49ea69a3ce",
+  "licenseSHA256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+  "classicSRI": "sha384-wSrcgzWyKRAOCQQguxx4c4QQdwAbHmkD0x0zBIqhwPrqLmWMkle5eTWCLzDuRm3x",
+  "files": [
+    {
+      "path": "API-STABILITY.md",
+      "bytes": 4219,
+      "sha256": "96771fdb92d0c3dd4d56a93bb200397335b07daf1e31d99b812c093b7b13d4d9"
+    },
+    {
+      "path": "demo/bank1.kicad_sch",
+      "bytes": 65884,
+      "sha256": "f810c0e654ed2c0e514641a30d0615ee6d94b068b1d6a444891e92edc9b664e4"
+    },
+    {
+      "path": "demo/bank2.kicad_sch",
+      "bytes": 66118,
+      "sha256": "66709dfe3f674b9388b96f932c32dd997e28426cfd0d431340ae855de3da0600"
+    },
+    {
+      "path": "demo/bank3.kicad_sch",
+      "bytes": 54049,
+      "sha256": "00372ade10aaf8aa68b33aee8660868a83b4fb1656f6b0bbce3c37fdfc097056"
+    },
+    {
+      "path": "demo/decoder.kicad_sch",
+      "bytes": 50319,
+      "sha256": "cee1e80dc3f17177ef4850e5dcf0f244e89684c27955da5f65a9f9c8457737c9"
+    },
+    {
+      "path": "demo/Encoder.kicad_pcb",
+      "bytes": 726156,
+      "sha256": "08437dcfd8f304786d4f3444a26bd56c443661ea22bd25d69c3900906c6ef109"
+    },
+    {
+      "path": "demo/Encoder.kicad_sch",
+      "bytes": 37683,
+      "sha256": "c8170889000416e7d5da67348e48b579efc1122663ecbd89017244313ada52bb"
+    },
+    {
+      "path": "demo/power.kicad_sch",
+      "bytes": 31814,
+      "sha256": "0bec3885bb39580414061264e16563cadb00f14aada47738c9326b078104a9ae"
+    },
+    {
+      "path": "demo/project.json",
+      "bytes": 617,
+      "sha256": "bdf3f87e03e4bef85a78b924cd0b7437f3cf00e8eb5d0ef701f8a8275f53b998"
+    },
+    {
+      "path": "demo/PROVENANCE.json",
+      "bytes": 1590,
+      "sha256": "d84a7ce02f237b43fdd717819e899833c593e7c7d0744cb3d35116945c37a8f4"
+    },
+    {
+      "path": "demo/README.md",
+      "bytes": 482,
+      "sha256": "014781371a2ebd64afe7427f12cae60d04e5b4efc853c28ae180c22e57c725bc"
+    },
+    {
+      "path": "direct.html",
+      "bytes": 758,
+      "sha256": "d620596a972c01963e9e09ec07ea05a1f729cfdb4414acb2e51f49300bcfcfbe"
+    },
+    {
+      "path": "embed.html",
+      "bytes": 505,
+      "sha256": "b7f81cdeaaf36dd1d2fcd4cdbd6487591ef48618566ce01a90af68a17eead937"
+    },
+    {
+      "path": "embed.mjs",
+      "bytes": 1280,
+      "sha256": "64c326412ad2cd8e0d2d074969bcd811d6534d7c470b29dcfae39b08595deb98"
+    },
+    {
+      "path": "EXPAND-MODE.md",
+      "bytes": 4537,
+      "sha256": "6d1fe360611270dc34d77c0deba943757fa5c263a67447ac2749b05f79a0d519"
+    },
+    {
+      "path": "export.html",
+      "bytes": 1726,
+      "sha256": "40854bb7e8debbfc14cfbe3d7ad6b583fbccd5cdd8cc74b7be9a9cd650aac323"
+    },
+    {
+      "path": "export.mjs",
+      "bytes": 1880,
+      "sha256": "746426eb39e8462f753f79bd7b181b0a16b0432bdc91720fc7faea8f47454d60"
+    },
+    {
+      "path": "FZSTD-LICENSE",
+      "bytes": 1069,
+      "sha256": "62249119bb7df6e54300f37a37145c26a6d4420410aac8881a119c5b427cf751"
+    },
+    {
+      "path": "kero-encoder-project.html",
+      "bytes": 3245572,
+      "sha256": "48d3c89400a3552757e4ec5ed4f5495bc18c50de02cdfd5398b9b9bb4705326b"
+    },
+    {
+      "path": "kicad-webview.min.js",
+      "bytes": 1834885,
+      "sha256": "a15907d6f7b28e5bbbb13c518f7a2ca5eaf90bb6408e7b82d6533e0be699cb61"
+    },
+    {
+      "path": "kivi-viewer.js",
+      "bytes": 1834737,
+      "sha256": "d1b4081d7b20eb216fc1413fd1651157da458197914c83000a13251327372c46"
+    },
+    {
+      "path": "LARGE-PROJECT-VALIDATION.md",
+      "bytes": 7445,
+      "sha256": "30e5a0f448b66c0db0ef45713f7edff4a350dd6913ca35d3a09c6427d3228c02"
+    },
+    {
+      "path": "large-projects-embed.html",
+      "bytes": 1131,
+      "sha256": "3f6a5dd0bef35d3fe623a4674a1e788f3a6ed6d06b9a40a7925f6f4b45ded2bb"
+    },
+    {
+      "path": "large-projects.html",
+      "bytes": 2750,
+      "sha256": "1d4b04dc2fba5074a7774926e4ccafd96aaa816e8aeb60aaf2973c8621f233cf"
+    },
+    {
+      "path": "LARGE-PROJECTS.md",
+      "bytes": 4651,
+      "sha256": "dfb6a4ecaea280a127c20695a44c0dca6a227fb2a2ea35da86218a2c8465e568"
+    },
+    {
+      "path": "large-projects.mjs",
+      "bytes": 5271,
+      "sha256": "d577491b2c1b8f8c078178583e6a950969522172d8a1bd0fd13ea5deb27d83ce"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 16726,
+      "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04"
+    },
+    {
+      "path": "licenses/Pocket-KiView-Source-Available-1.0.txt",
+      "bytes": 5744,
+      "sha256": "b5069bb7cb986953874001f75ee8e6a1a97501a3f7adbc2d4cee96cbca5d5cf1"
+    },
+    {
+      "path": "LICENSING.md",
+      "bytes": 3404,
+      "sha256": "11b307a38dcbc120585950cf15dbb86b764c86ea38ab4487ff5121b582629403"
+    },
+    {
+      "path": "MEMORY-OPTIMIZATION.md",
+      "bytes": 9286,
+      "sha256": "3902ac11d0b222dcedbc89d7193109a04ddd45401deb2fcfb69ff557771c2e8e"
+    },
+    {
+      "path": "MOBILE-EMBEDS.md",
+      "bytes": 2441,
+      "sha256": "3a565e6cab682995818dc0142860a1c523fc47caf0625e1db7cd62be6c77ff3b"
+    },
+    {
+      "path": "PAD-ZONE-REFINEMENT.md",
+      "bytes": 5555,
+      "sha256": "f9742e351c130ffd75522a75024b467445d0c2e8e20a4ab658ba4165e71f2603"
+    },
+    {
+      "path": "PANELS-AND-INSETS.md",
+      "bytes": 5511,
+      "sha256": "781394a63122f9c53b05dec35511de454ad07f0362aa5e2bb7b8d468615ac064"
+    },
+    {
+      "path": "PERFORMANCE-FOLLOWUP.md",
+      "bytes": 9334,
+      "sha256": "c785a9fe7f9ae600f7acb5b520158e05cc7fd0f30d2655591a2c56c863a16c11"
+    },
+    {
+      "path": "QA-1.1.0.md",
+      "bytes": 5005,
+      "sha256": "e10f56995eb8d97023d7cdfa26b826df988d0eef7cff9cd8ea9091bc4e0e04ca"
+    },
+    {
+      "path": "QA-STABILITY-NEXT.md",
+      "bytes": 3781,
+      "sha256": "b5fe07e5c45ec2371a1313c5831e169ba86237060415ac16b01d1b80583a32aa"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1909,
+      "sha256": "1eed1626c0a4c2b9cdfe565061d014d240c48c6a777344c48370f7ee92eb449d"
+    },
+    {
+      "path": "RELEASE-1.1.0.md",
+      "bytes": 4878,
+      "sha256": "1c6a93dd4b2b684add0b6569f6c11c9c4983a2100ba24e48e3535ec192d447d6"
+    },
+    {
+      "path": "RELEASE-1.1.1.md",
+      "bytes": 614,
+      "sha256": "59b49cdee52b1c8f10bc9a94f65dda6487d58984e16af4ea500f15a594b3b23f"
+    },
+    {
+      "path": "RELEASE-1.2.0.md",
+      "bytes": 2024,
+      "sha256": "ed17b20da41f795e987f2ec3158e27dd172e39f3c8956c28a1d2ff8c1f27bac8"
+    },
+    {
+      "path": "SOURCE-PROVENANCE.json",
+      "bytes": 28419,
+      "sha256": "a70b3e4212c556f7147f3008a0d2f9a94208dd4aee142d2e5c9223e03b749285"
+    },
+    {
+      "path": "SPIKE-ENGINE-NOTICE.md",
+      "bytes": 956,
+      "sha256": "9ba57f998b7898866dd16572609a76cc4b3b47eefba542e5f2ee5c54c8370862"
+    },
+    {
+      "path": "stability-embed.html",
+      "bytes": 1255,
+      "sha256": "aecb7d1f7ff93b340b43f91e3c7ec3539372ee66cd60c4470a36c9d9fb5dc9c5"
+    },
+    {
+      "path": "STABILITY-NEXT.md",
+      "bytes": 2692,
+      "sha256": "7b4e90769c9c31645da627adec96b708d4a43237602b65095a91125ee42ddaa9"
+    },
+    {
+      "path": "stability.html",
+      "bytes": 2937,
+      "sha256": "1005262b005244a0c1da4ff3ac6008d9da493b38a43c4b43026d5c47374cb612"
+    },
+    {
+      "path": "stability.mjs",
+      "bytes": 7505,
+      "sha256": "67653999c74793d7d39e7220a7bc7a79ba4cdf8f1d57286ed971a0cdd5269df8"
+    },
+    {
+      "path": "standalone-html.mjs",
+      "bytes": 4768,
+      "sha256": "7e4639bd2d283ca5a1918361a0c361d28a49128d759837a90d1e8c1ffad7d41a"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "bytes": 2111,
+      "sha256": "81a2a534e7b4ed3b32aa0a32c674d321aaa516f22c56e1e18283b2c17c35f5ca"
+    },
+    {
+      "path": "THREE-LICENSE",
+      "bytes": 1081,
+      "sha256": "4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454"
+    },
+    {
+      "path": "VIEW-LINKS.md",
+      "bytes": 5476,
+      "sha256": "46539053e88ba6d5bc133f88bc4c94f2dc370c9341fac6df4104ec65e95baae3"
+    }
+  ]
+}

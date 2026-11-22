@@ -13,16 +13,18 @@ Add KiCad WebView to a plain HTML page with a script tag or browser ES module. *
 <span id="self-hosted-070-sdk"></span>
 <span id="self-hosted-080-sdk"></span>
 
-## Self-hosted 1.1.0 SDK
+<span id="self-hosted-110-sdk"></span>
 
-The **1.1.0 SDK** is available self-hosted and from its [GitHub release](https://github.com/wayri/kicad-webview/releases/tag/v1.1.0). The same **1.1.0** release is published on [npm](https://www.npmjs.com/package/@wayrisignals/kicad-webview/v/1.1.0), [jsDelivr](https://cdn.jsdelivr.net/npm/@wayrisignals/kicad-webview@1.1.0/dist/kicad-webview.min.js) and [UNPKG](https://unpkg.com/@wayrisignals/kicad-webview@1.1.0/dist/kicad-webview.min.js). Both direct scripts and browser modules work without Node.js. It retains stable Properties, contextual previews, result palettes, explicit text variables, numeric expressions and horizontal tables. [Drawing examples](/kicad-webview/docs/drawing-fidelity/) · [Panel API](/kicad-webview/docs/panels-and-insets/).
+## Self-hosted 1.2.0 SDK
 
-Host the complete matching 1.1.0 release directory, including its dependencies and license notices. A direct script needs no npm installation, Node.js runtime or build step:
+Download the **1.2.0 SDK** from its [GitHub release](https://github.com/wayri/kicad-webview/releases/tag/v1.2.0). For package manager or CDN installs, use the published **{{ site.data.webview_release.npm }}** version below. Both distributions run as classic scripts or browser modules.
+
+Host the complete matching 1.2.0 release directory, including its dependencies and license notices. A direct script needs no npm installation, Node.js runtime or build step:
 
 ```html
 <div id="board" style="height:70dvh;min-height:360px"></div>
 <p id="status" role="status">Opening board…</p>
-<script src="/assets/lib/kicad-webview/releases/1.1.0/kicad-webview.min.js"></script>
+<script src="/assets/lib/kicad-webview/releases/1.2.0/kicad-webview.min.js"></script>
 <script>
 const viewer = new KiCadWebView.Viewer('#board', {theme:'dark'});
 window.addEventListener('pagehide', () => viewer.dispose(), {once:true});
@@ -40,15 +42,15 @@ These paths assume that you host the SDK and sample manifest at the shown locati
 
 <span id="self-hosted-050-sdk"></span>
 
-## Self-hosted 1.1.0 SDK
+## Versioned browser files
 
 Use a version-pinned browser script without Node.js:
 
 ```html
-<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/1.1.0/kicad-webview.min.js"></script>
+<script src="https://wayri.github.io/assets/lib/kicad-webview/releases/1.2.0/kicad-webview.min.js"></script>
 ```
 
-The same release provides an [ES module](/assets/lib/kicad-webview/releases/1.1.0/kivi-viewer.js), [checksums](/assets/lib/kicad-webview/releases/1.1.0/RELEASE.json) and [source/download](https://github.com/wayri/kicad-webview/releases/tag/v1.1.0). Use the [WayriCAD integration example](/kicad-webview/docs/wayricad-results/#embed-both-views-without-nodejs) for result layers, native 3D registration and linked probes. Keep the complete matching release directory and notices when self-hosting.
+The same release provides an [ES module](/assets/lib/kicad-webview/releases/1.2.0/kivi-viewer.js), [checksums](/assets/lib/kicad-webview/releases/1.2.0/RELEASE.json) and [source/download](https://github.com/wayri/kicad-webview/releases/tag/v1.2.0). Use the [WayriCAD integration example](/kicad-webview/docs/wayricad-results/#embed-both-views-without-nodejs) for result layers, native 3D registration and linked probes. Keep the complete matching release directory and notices when self-hosting.
 
 ## npm installation
 

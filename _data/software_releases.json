@@ -34,43 +34,41 @@
   },
   "kicad_online": {
     "name": "KiCad Online",
-    "version": "0.12.102",
-    "android": "1.100",
+    "version": "0.12.105",
+    "android": "1.103",
     "channel": "GitHub preview",
-    "released_on": "2026-11-18",
+    "released_on": "2026-11-20",
     "repo": "wayri/KiCad-Online",
-    "summary": "Read saved drawing details more faithfully, navigate repeated sheets and inspect multilayer boards without losing the selected net.",
+    "summary": "Trace highlighted nets across connected sheets, pick back-side pads in 3D and review drawings with a more compact comment composer.",
     "changes": [
-      "Scoped text variables, embedded symbol overrides, sheet-pin markers, supported images and internal sheet links follow the saved drawing.",
-      "Repeated sheet instances have readable explorer rows and a shared hierarchy map. Selected-net connectivity refreshes as sheets load.",
-      "Inner copper can be isolated and restored. Expanded 3D inspection keeps saved artwork and substrate materials; selected copper keeps its layer colors and vias remain gold.",
-      "Review comments use a simpler placement toolbar, severity bubbles and corrected capture offsets. Website-session replies retain their conversation context.",
-      "Metadata parsing reuses board data and reduces retained geometry in project caches; the release makes no universal memory or device-speed guarantee."
+      "Back-side 3D footprints retain saved pad positions. Picking a pad highlights its saved net, including where geometry overlaps.",
+      "The highlighted-net overview shows connected sheet instances. Clear the highlight to see the full sheet hierarchy.",
+      "New comments and replies use compact controls above the editor. If repository-policy verification fails before posting, the editor keeps the draft.",
+      "Repository discovery distinguishes a completed GitHub website fallback from an incomplete scan that needs a retry."
     ],
-    "note": "GitHub preview and store versions can differ; recorded channel states are listed below. Android 1.100 is a development-signed, manually updated GitHub APK. Installed comment round trips and physical-phone acceptance remain incomplete for this version.",
-    "guide": "https://github.com/wayri/KiCad-Online/blob/v0.12.102/docs/releases/v0.12.102.md",
+    "note": "Store and GitHub versions can differ. Android 1.103 is a development-signed GitHub APK for manual installation. An isolated Chrome renderer check and saved KERO connectivity check cover parts of this release. Physical-phone acceptance remains unverified.",
+    "guide": "https://github.com/wayri/KiCad-Online/releases/tag/v0.12.105",
     "distribution": {
-      "checked_on": "2026-11-18",
-      "github": "0.12.102 / Android 1.100 available",
-      "vscode": "0.12.102 public",
-      "chrome": "0.12.101 published; 0.12.102 pending review with automatic publication",
-      "firefox": "0.12.102 awaiting review"
+      "checked_on": "2026-11-22",
+      "github": "0.12.105 preview and Android 1.103 APK available",
+      "vscode": "See the Marketplace version history",
+      "chrome": "See the Chrome Web Store listing",
+      "firefox": "0.12.105 available"
     }
   },
   "webview": {
     "name": "KiCad WebView",
-    "channel": "Stable SDK and npm/CDN",
-    "released_on": "2026-11-18",
+    "channel": "Stable self-hosted SDK",
+    "released_on": "2026-11-22",
     "repo": "wayri/kicad-webview",
-    "summary": "Stable embed API 1.0, camera-preserving net focus and cleaner 3D rendering.",
+    "version": "1.2.0",
+    "summary": "Inspect large boards with less copper-processing overhead, more responsive 2D movement and support for saved drawing sheets.",
     "changes": [
-      "Core embed API 1.0 with typed classic, ES module and lite entry points; no Node.js needed in browser embeds.",
-      "Net and pad cross-selection preserve the 3D camera. Explicit part selection still frames the mounting side.",
-      "Selected-net vias stay gold; unrelated copper, models and structure fade to gray/translucent in assembled and expanded Dim views.",
-      "Resolved copper-depth smoothing, compact inspection controls, linked sheets, results layers and source-bound project navigation."
+      "Saved copper fills use shared 64-bit coordinate buffers for drawing and picking. Dense views batch copper strokes and simplify the preview during camera movement.",
+      "When eligible traces overlap, the viewed side gets picking priority. 3D net expansion updates selected geometry without repeatedly scanning board-wide net membership.",
+      "Open a saved KiCad worksheet on its own or apply it to a drawing. Fit page shows the paper and title block. Layout’s Outline preset isolates saved Edge.Cuts, including routed cutouts."
     ],
-    "note": "Read-only visualization; missing models and rendering approximations remain disclosed. Large-project acceptance ceilings do not qualify maximum-size 3D rendering, physical-phone speed or solver accuracy. Other products retain separately pinned WebView versions.",
-    "guide": "https://github.com/wayri/kicad-webview/blob/v1.0.0/docs/RELEASE-1.0.0.md",
-    "version": "1.0.0"
+    "note": "Self-hosted and GitHub SDK 1.2.0 is available. npm and CDN examples are pinned to the published 1.1.1 package. Benchmark results describe the measured fixtures and stages.",
+    "guide": "https://github.com/wayri/kicad-webview/releases/tag/v1.2.0"
   }
 }
