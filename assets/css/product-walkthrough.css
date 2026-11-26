@@ -1,6 +1,9 @@
 .product-walkthrough{min-width:0;margin-block:2rem}
-.product-walkthrough video{display:block;width:100%;height:auto;aspect-ratio:16/9;border:1px solid color-mix(in srgb,currentColor 26%,transparent);border-radius:10px;background:#101820}
-.product-walkthrough-download{margin-block:.5rem 1.5rem}
+.product-walkthrough-demo{margin:0 0 1.5rem}
+.product-walkthrough-demo img{display:block;width:100%;height:auto;aspect-ratio:16/9;border:1px solid color-mix(in srgb,currentColor 26%,transparent);border-radius:10px;background:#101820}
+.product-walkthrough-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem;margin-block-start:.65rem}
+.product-walkthrough-controls button{padding:.35rem .65rem;color:inherit;background:transparent;border:1px solid currentColor;border-radius:.3rem;font:inherit;cursor:pointer}
+.product-walkthrough-controls :focus-visible{outline:2px solid currentColor;outline-offset:3px}
 .product-walkthrough-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));gap:.8rem;margin:0 0 1.5rem}
 .product-walkthrough-features div{min-width:0;padding:.9rem;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:7px}
 .product-walkthrough-features dt{font-size:1.08rem;font-weight:700;margin-block-end:.35rem;line-height:1.3}

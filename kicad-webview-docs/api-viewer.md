@@ -103,7 +103,7 @@ Hidden layers remain hidden during net highlighting. Schematic connectivity uses
 
 ### Inspection controls
 
-These controls are available in the [hosted 1.2.0 module](/assets/lib/kicad-webview/releases/1.2.0/kivi-viewer.js) and npm/CDN. Each viewer keeps its own highlight and layer state.
+These controls are available in the [hosted {{ site.data.webview_release.self_hosted }} module](/assets/lib/kicad-webview/releases/{{ site.data.webview_release.self_hosted }}/kivi-viewer.js) and npm/CDN. Each viewer keeps its own highlight and layer state.
 
 | Method | Return and behavior |
 | --- | --- |

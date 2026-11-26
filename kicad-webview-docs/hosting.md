@@ -10,13 +10,13 @@ doc_section: hosting
 
 The release runs on a static HTTP(S) host. Retain the versioned directory and its notices. Keep your original design permissions separate from software licensing. Public runtime files and design URLs remain retrievable by visitors; a read-only interface is not access control.
 
-Use the immutable self-hosted 1.2.0 browser files under:
+Use the immutable self-hosted {{ site.data.webview_release.self_hosted }} browser files under:
 
 ```text
-https://wayri.github.io/assets/lib/kicad-webview/releases/1.2.0/
+https://wayri.github.io/assets/lib/kicad-webview/releases/{{ site.data.webview_release.self_hosted }}/
 ```
 
-[1.2.0 file checksums](/assets/lib/kicad-webview/releases/1.2.0/RELEASE.json) · [Matching source and download](https://github.com/wayri/kicad-webview/releases/tag/v1.2.0). The current npm/CDN version is {{ site.data.webview_release.npm }}; the [hosted 0.3.0 compatibility files](/assets/lib/kicad-webview/releases/0.3.0/RELEASE.json) stay available.
+[{{ site.data.webview_release.self_hosted }} file checksums](/assets/lib/kicad-webview/releases/{{ site.data.webview_release.self_hosted }}/RELEASE.json) · [Matching source and download](https://github.com/wayri/kicad-webview/releases/tag/v{{ site.data.webview_release.self_hosted }}). The current npm/CDN version is {{ site.data.webview_release.npm }}; the [hosted 0.3.0 compatibility files](/assets/lib/kicad-webview/releases/0.3.0/RELEASE.json) stay available.
 
 The [beta.2 ZIP](/assets/lib/kicad-webview/downloads/kicad-webview-0.1.0-beta.2.zip) and its [hosted files](/assets/lib/kicad-webview/releases/0.1.0-beta.2/RELEASE.json) remain available as a historical archive.
 

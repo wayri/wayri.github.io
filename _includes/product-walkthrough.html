@@ -1,18 +1,27 @@
 {% if include.product == 'online' %}
     {% assign walkthrough_title = 'KiCad Online product tour' %}
-    {% assign walkthrough_video = '/assets/videos/kicad-online-0.20.3-compatibility.mp4' %}
+    {% assign walkthrough_asset = '/assets/videos/kicad-online-0.20.3-walkthrough' %}
+    {% assign walkthrough_description = 'A walkthrough of opening a repository, inspecting schematics and PCB layers, reviewing design comments and browsing engineering results.' %}
+    {% assign walkthrough_build = 'KiCad Online 0.20.3' %}
 {% else %}
     {% assign walkthrough_title = 'KiCad WebView product tour' %}
-    {% assign walkthrough_video = '/assets/videos/kicad-webview-1.2.0-tour.mp4' %}
+    {% assign walkthrough_asset = '/assets/videos/kicad-webview-1.2.0-walkthrough' %}
+    {% assign walkthrough_description = 'A walkthrough of embedded KiCad drawings, linked selections and 3D assemblies, and saved simulation results.' %}
+    {% assign walkthrough_build = 'KiCad WebView 1.2.0' %}
 {% endif %}
 <link rel="stylesheet" href="{{ '/assets/css/product-walkthrough.css' | relative_url }}">
 <section class="product-walkthrough" aria-labelledby="walkthrough-{{ include.product }}">
     <h2 id="walkthrough-{{ include.product }}">{{ walkthrough_title }}</h2>
-    <video controls playsinline preload="metadata" width="1920" height="1080" aria-labelledby="walkthrough-{{ include.product }}">
-        <source src="{{ walkthrough_video | relative_url }}" type="video/mp4">
-        <a href="{{ walkthrough_video | relative_url }}">Open the MP4</a>
-    </video>
-    <p class="product-walkthrough-download"><a href="{{ walkthrough_video | relative_url }}">Open video directly</a></p>
+    <figure class="product-walkthrough-demo" data-walkthrough>
+        <img src="{{ walkthrough_asset | append: '.jpg' | relative_url }}"
+             data-animation="{{ walkthrough_asset | append: '.gif' | relative_url }}"
+             alt="{{ walkthrough_description }}" width="1440" height="810" loading="lazy">
+        <figcaption class="product-walkthrough-controls">
+            <button type="button" hidden>Play animation</button>
+            <a href="{{ walkthrough_asset | append: '.gif' | relative_url }}">Open full-size GIF</a>
+            <span>Recorded in {{ walkthrough_build }}</span>
+        </figcaption>
+    </figure>
     {% if include.product == 'online' %}
     <h3>What you can do in KiCad Online</h3>
     <dl class="product-walkthrough-features">
@@ -46,3 +55,4 @@
     </dl>
     {% endif %}
 </section>
+<script src="{{ '/assets/js/product-walkthrough.js' | relative_url }}" defer></script>

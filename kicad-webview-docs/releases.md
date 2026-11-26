@@ -6,6 +6,20 @@ doc_section: releases
 description: KiCad WebView release notes, WayriCAD saved results, layer inspection and mobile integrations.
 ---
 
+<span id="webview-121"></span>
+
+## 1.2.1 — motion, saved classes and linked BoM
+
+**1.2.1 is the current self-hosted SDK and npm/CDN release.**
+
+- Pan or zoom a dense 2D drawing with the current frame reused during the gesture. The viewer also reduces work during 3D camera movement. Both restore full detail when movement stops.
+- Inspect saved component classes and schematic rule-area directives. Highlight nets assigned to a class in the current sheet.
+- Hover over a component in the 2D drawing or the linked BoM to preview it in amber in both. Supported embedded fonts load on demand, and the viewer decodes embedded PCB models referenced by the board.
+
+Dynamic PCB class rules, custom DRC expressions and cross-sheet rule resolution require native KiCad.
+
+[GitHub release and ZIP](https://github.com/wayri/kicad-webview/releases/tag/v1.2.1) · [Hosted file checksums](/assets/lib/kicad-webview/releases/1.2.1/RELEASE.json) · [npm 1.2.1](https://www.npmjs.com/package/@wayrisignals/kicad-webview/v/1.2.1) · [Try KERO with 1.2.1](/assets/lib/kicad-webview/releases/1.2.1/embed.html?src=demo%2Fproject.json)
+
 <span id="webview-120"></span>
 
 ## 1.2.0 — large boards and drawing sheets

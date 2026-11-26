@@ -168,7 +168,7 @@ await IRCAProject.load(project);
         <div class="wv-section-heading"><div><p class="wv-eyebrow">02 / Simple</p><h2 id="embed-title">A board in a blog post.</h2></div><p>Keep the article simple. Let the drawing do the explaining.</p></div>
         <div class="wv-simple-grid">
             <article class="wv-note"><p class="wv-eyebrow">From the bench / IRCA layout</p><h3>Follow the copper.</h3><p>A static picture gives an overview. An embedded drawing lets readers zoom into routing, inspect saved component properties and choose the layers they want to see.</p><div id="simple-board" class="wv-simple-board" aria-label="Simple inline IRCA embed"></div><p class="wv-caption">The same IRCA layout, embedded in the article. Click a part to inspect it.</p></article>
-            <div class="wv-code-panel"><h3>Embed the same IRCA review.</h3><p>This example uses the viewer plus this site’s IRCA review adapter. The adapter loads derived review geometry and display models; it is separate from the native viewer API.</p><pre><code id="html-snippet">&lt;script src="https://wayri.github.io/assets/lib/kicad-webview/releases/1.2.0/kicad-webview.min.js"&gt;&lt;/script&gt;
+            <div class="wv-code-panel"><h3>Embed the same IRCA review.</h3><p>This example uses the viewer plus this site’s IRCA review adapter. The adapter loads derived review geometry and display models; it is separate from the native viewer API.</p><pre><code id="html-snippet">&lt;script src="https://wayri.github.io/assets/lib/kicad-webview/releases/{{ site.data.webview_release.self_hosted }}/kicad-webview.min.js"&gt;&lt;/script&gt;
 &lt;script src="https://wayri.github.io/assets/js/irca-project.js"&gt;&lt;/script&gt;
 &lt;div id="board" style="height:500px"&gt;&lt;/div&gt;
 &lt;script&gt;

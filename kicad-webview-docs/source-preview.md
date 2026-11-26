@@ -22,7 +22,7 @@ viewer.load('/designs/project.zip', {view:'3d'});
 </script>
 ```
 
-Self-host the [versioned distribution](/assets/lib/kicad-webview/releases/1.2.0/RELEASE.json) and its notices, or [download the static SDK ZIP](https://github.com/wayri/kicad-webview/releases/download/v1.2.0/kicad-webview-1.2.0.zip). Cross-origin designs require CORS. The library is free to use, including commercially, under MPL-2.0; paid customization and support help is optional.
+Self-host the [versioned distribution](/assets/lib/kicad-webview/releases/{{ site.data.webview_release.self_hosted }}/RELEASE.json) and its notices, or [download the static SDK ZIP](https://github.com/wayri/kicad-webview/releases/download/v{{ site.data.webview_release.self_hosted }}/kicad-webview-{{ site.data.webview_release.self_hosted }}.zip). Cross-origin designs require CORS. The library is free to use, including commercially, under MPL-2.0; paid customization and support help is optional.
 
 ## Design provenance
 

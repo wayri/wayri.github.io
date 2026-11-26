@@ -5,7 +5,7 @@ permalink: /kicad-webview/docs/examples/
 doc_section: examples
 ---
 
-The CDN examples use the **{{ site.data.webview_release.npm }}** ES module from the pinned npm release; the hosted example below uses the versioned 1.2.0 SDK. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The OLIMEX manifest includes its PCB, schematic and 28 component assets. Its display PCB remaps model paths and normalizes equivalent legacy footprint identity fields; electrical and physical geometry is unchanged. Original upstream sources, model coverage, conversions and licensing are linked below.
+The CDN examples use the **{{ site.data.webview_release.npm }}** ES module from the pinned npm release; the hosted example below uses the versioned {{ site.data.webview_release.self_hosted }} SDK. Paste one example into its own HTML page served over HTTPS or localhost. No package manager or build step is needed. The OLIMEX manifest includes its PCB, schematic and 28 component assets. Its display PCB remaps model paths and normalizes equivalent legacy footprint identity fields; electrical and physical geometry is unchanged. Original upstream sources, model coverage, conversions and licensing are linked below.
 
 For a first classic-script embed, ZIP self-host or iframe, use [Quick start](/kicad-webview/docs/quick-start/). The release uses [MPL-2.0](/kicad-webview/docs/license/); input designs and model files have separate terms.
 
@@ -40,12 +40,12 @@ Explore the [capability demos](/kicad-webview/#capability-demos) and use [Intera
 
 <span id="hosted-030-inspection"></span>
 
-## Hosted 1.2.0 inspection
+## Hosted {{ site.data.webview_release.self_hosted }} inspection
 
-The following uses the site-hosted 1.2.0 module. The npm/CDN examples below use the current package version shown above.
+The following uses the site-hosted {{ site.data.webview_release.self_hosted }} module. The npm/CDN examples below use the current package version shown above.
 
 ```js
-import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/1.2.0/kivi-viewer.js';
+import { Viewer } from 'https://wayri.github.io/assets/lib/kicad-webview/releases/{{ site.data.webview_release.self_hosted }}/kivi-viewer.js';
 const viewer = new Viewer('#board', {highlightStyle: 'dim', highlightColor: 'accent'});
 await viewer.load('/designs/project.zip', {view: 'pcb'});
 viewer.setHighlightStyle('isolate', {color: 'source'});
