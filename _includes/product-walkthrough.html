@@ -1,0 +1,48 @@
+{% if include.product == 'online' %}
+    {% assign walkthrough_title = 'KiCad Online product tour' %}
+    {% assign walkthrough_video = '/assets/videos/kicad-online-0.20.3-compatibility.mp4' %}
+{% else %}
+    {% assign walkthrough_title = 'KiCad WebView product tour' %}
+    {% assign walkthrough_video = '/assets/videos/kicad-webview-1.2.0-tour.mp4' %}
+{% endif %}
+<link rel="stylesheet" href="{{ '/assets/css/product-walkthrough.css' | relative_url }}">
+<section class="product-walkthrough" aria-labelledby="walkthrough-{{ include.product }}">
+    <h2 id="walkthrough-{{ include.product }}">{{ walkthrough_title }}</h2>
+    <video controls playsinline preload="metadata" width="1920" height="1080" aria-labelledby="walkthrough-{{ include.product }}">
+        <source src="{{ walkthrough_video | relative_url }}" type="video/mp4">
+        <a href="{{ walkthrough_video | relative_url }}">Open the MP4</a>
+    </video>
+    <p class="product-walkthrough-download"><a href="{{ walkthrough_video | relative_url }}">Open video directly</a></p>
+    {% if include.product == 'online' %}
+    <h3>What you can do in KiCad Online</h3>
+    <dl class="product-walkthrough-features">
+        <div><dt>Open repository projects or local files</dt><dd>Start from GitHub, GitLab, or a local file or folder. Use the project chooser to find the drawing you need in a repository with several hardware projects.</dd></div>
+        <div><dt>Trace a net through the design</dt><dd>Follow a selected signal through saved schematic sheets and copper layers, then inspect the matching pads in 3D. Focus a single layer when overlapping copper hides the route.</dd></div>
+        <div><dt>Make review findings easy to locate</dt><dd>Anchor comments to a drawing, part or region so reviewers can return to the same place. Use the grouped BoM to check fitted parts and assembly information.</dd></div>
+        <div><dt>Review fabrication and simulation outputs</dt><dd>Inspect Gerber copper, outlines and Excellon drills before handoff. Open saved waveform samples, compare cursor readings and keep the result with its source design.</dd></div>
+    </dl>
+    <h3 id="kicad-compatibility">KiCad saved-file compatibility</h3>
+    <p>These rows describe browser and VS Code coverage for saved files. Model-based 3D depends on accessible, supported model files. Fabrication and simulation review depend on the saved exports supplied.</p>
+    <div class="product-walkthrough-table" tabindex="0" role="region" aria-labelledby="kicad-compatibility">
+        <table>
+            <thead><tr><th scope="col">Saved source</th><th scope="col">Schematic</th><th scope="col">PCB layout</th><th scope="col">Validation</th></tr></thead>
+            <tbody>
+                <tr><th scope="row">KiCad 4–7 and legacy .sch</th><td>Restricted preview</td><td>Restricted preview</td><td>Retained legacy fixtures. Old .brd files require conversion.</td></tr>
+                <tr><th scope="row">KiCad 8</th><td>Recognized constructs</td><td>Recognized constructs</td><td>Header, geometry, fields and older-format fixtures.</td></tr>
+                <tr><th scope="row">KiCad 9</th><td>Recognized constructs</td><td>Recognized constructs</td><td>Generator-header and geometry tests.</td></tr>
+                <tr><th scope="row">KiCad 10</th><td>Recognized constructs</td><td>Recognized constructs</td><td>Header, geometry and KiCad 10 native-reference fixtures.</td></tr>
+                <tr><th scope="row">KiCad 11</th><td>Unverified forward preview</td><td>Unverified forward preview</td><td>Forward-format warnings. Native version acceptance is unverified.</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p><a href="https://github.com/wayri/KiCad-Online/blob/v0.20.3/docs/KICAD-COMPATIBILITY.md">Read the complete file-format and feature limits</a></p>
+    {% else %}
+    <h3>What you can build with KiCad WebView</h3>
+    <dl class="product-walkthrough-features">
+        <div><dt>Put a saved design in a webpage</dt><dd>Embed a compact PCB viewer in documentation or expand it into a wider workspace. Readers can zoom, inspect saved layers, and switch between the worksheet, board outline, and full layout.</dd></div>
+        <div><dt>Connect drawings and page controls</dt><dd>Link schematic and PCB selections so one click locates the same component in both. Wire page controls to WebView so a hover can highlight a part and a click can show its saved properties.</dd></div>
+        <div><dt>Explore the assembly in 3D</dt><dd>Orbit a model-backed board to inspect the underside and component spacing. Explode the display to see how copper layers and components sit relative to one another.</dd></div>
+        <div><dt>Bring saved results into a review page</dt><dd>Pair an embedded schematic with a host plot of retained KiCad SPICE outputs. With WayriCAD results, show saved copper voltage and temperature fields on the matching PCB.</dd></div>
+    </dl>
+    {% endif %}
+</section>

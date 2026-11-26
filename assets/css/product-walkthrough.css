@@ -1,0 +1,11 @@
+.product-walkthrough{min-width:0;margin-block:2rem}
+.product-walkthrough video{display:block;width:100%;height:auto;aspect-ratio:16/9;border:1px solid color-mix(in srgb,currentColor 26%,transparent);border-radius:10px;background:#101820}
+.product-walkthrough-download{margin-block:.5rem 1.5rem}
+.product-walkthrough-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));gap:.8rem;margin:0 0 1.5rem}
+.product-walkthrough-features div{min-width:0;padding:.9rem;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:7px}
+.product-walkthrough-features dt{font-size:1.08rem;font-weight:700;margin-block-end:.35rem;line-height:1.3}
+.product-walkthrough-features dd{margin:0;max-width:48ch;line-height:1.55}
+.product-walkthrough-table{max-width:100%;overflow-x:auto}
+.product-walkthrough-table table{width:100%;min-width:39rem;border-collapse:collapse;text-align:left}
+.product-walkthrough-table :is(td,th){padding:.6rem;border-bottom:1px solid color-mix(in srgb,currentColor 25%,transparent)}
+.product-walkthrough-table :is(td,th){vertical-align:top}
