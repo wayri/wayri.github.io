@@ -1,0 +1,62 @@
+{
+  "online": {
+    "title": "KiCad Online in action",
+    "capture": "Screenshots from the KiCad Online 0.20.3 walkthrough using the public KERO encoder.",
+    "features": [
+      {
+        "image": "online-project-chooser.webp",
+        "alt": "KiCad Online repository chooser listing the KERO projects.",
+        "title": "Find the drawing you need",
+        "detail": "Open a project from GitHub, GitLab, or a local file or folder. When a repository contains several designs, filter the chooser by project or drawing name to get to the right schematic or board."
+      },
+      {
+        "image": "online-sheet-overview.webp",
+        "alt": "KERO schematic overview showing connected sheets and the highlighted signal.",
+        "title": "Follow a signal across sheets and layers",
+        "detail": "Use the all-sheets overview to see where a signal crosses the hierarchy. Carry the selection to the layout, isolate a copper layer, or inspect matching pads in 3D."
+      },
+      {
+        "image": "online-review-draft.webp",
+        "alt": "Highlighted KERO battery net in the PCB beside an open review draft.",
+        "title": "Attach the finding to the drawing",
+        "detail": "Anchor a note to the affected part, net, or region so another reviewer can open the same context. The KERO example shows a local draft. Supported GitHub issues can be reviewed and replied to from the viewer."
+      },
+      {
+        "image": "online-fabrication.webp",
+        "alt": "Fabrication viewer showing saved copper and drill geometry from KERO.",
+        "title": "Check fabrication files before handoff",
+        "detail": "Inspect Gerber copper and outlines alongside Excellon drills to check what the manufacturer receives. Open saved simulation traces separately to compare waveform samples with the cursor tools."
+      }
+    ]
+  },
+  "webview": {
+    "title": "KiCad WebView in action",
+    "capture": "Screenshots from the KiCad WebView 1.2.0 walkthrough. The live examples use the current SDK where indicated.",
+    "features": [
+      {
+        "image": "webview-worksheet.webp",
+        "alt": "An embedded KERO board fitted to a KiCad worksheet with a border and title block.",
+        "title": "Embed a drawing at the right scale",
+        "detail": "Place a compact board viewer in a documentation page or give it a full-width workspace. Fit a saved drawing to its worksheet for page context, or switch to the board outline or copper when inspecting the layout."
+      },
+      {
+        "image": "webview-linked-drawings.webp",
+        "alt": "A KERO PCB and schematic shown side by side in a linked webpage embed.",
+        "title": "Link selections and webpage controls",
+        "detail": "Connect the PCB and schematic so a selection in one can locate the same component in the other. Use webpage controls to preview a part on hover or inspect its saved properties on click."
+      },
+      {
+        "image": "webview-irca-assembly.webp",
+        "alt": "Angled 3D view of the IRCA thermal camera board with its display installed.",
+        "title": "Inspect a model-backed assembly",
+        "detail": "Orbit the IRCA review model to see component placement and the underside. Use the exploded view to see how the board, copper and components fit together visually."
+      },
+      {
+        "image": "webview-saved-quick-pi.webp",
+        "alt": "Embedded KERO board beside a saved WayriCAD Quick PI voltage field.",
+        "title": "Show saved results alongside the design",
+        "detail": "Pair a schematic with a webpage plot of saved KiCad SPICE traces, or overlay saved WayriCAD voltage and temperature fields on the matching PCB. Readers can interpret the result with its design and units in view."
+      }
+    ]
+  }
+}
